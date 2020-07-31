@@ -10,8 +10,6 @@ use Lemuria\Model\Lemuria\Vessel;
 
 abstract class AbstractVesselMessage extends AbstractMessage
 {
-	private ?Vessel $vessel = null;
-
 	/**
 	 * @return int
 	 */
@@ -20,19 +18,9 @@ abstract class AbstractVesselMessage extends AbstractMessage
 	}
 
 	/**
-	 * @return Vessel
-	 */
-	protected function Vessel(): Vessel {
-		if (!$this->vessel) {
-			throw new MessageEntityException(Vessel::class);
-		}
-		return $this->vessel;
-	}
-
-	/**
 	 * @param LemuriaMessage $message
 	 */
-	protected function getEntities(LemuriaMessage $message): void {
+	protected function getData(LemuriaMessage $message): void {
 		$this->vessel = Vessel::get($message->get(Vessel::class));
 	}
 }

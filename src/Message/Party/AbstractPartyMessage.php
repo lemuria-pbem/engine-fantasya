@@ -10,8 +10,6 @@ use Lemuria\Model\Lemuria\Party;
 
 abstract class AbstractPartyMessage extends AbstractMessage
 {
-	private ?Party $party = null;
-
 	/**
 	 * @return int
 	 */
@@ -20,19 +18,9 @@ abstract class AbstractPartyMessage extends AbstractMessage
 	}
 
 	/**
-	 * @return Party
-	 */
-	protected function Party(): Party {
-		if (!$this->party) {
-			throw new MessageEntityException(Party::class);
-		}
-		return $this->party;
-	}
-
-	/**
 	 * @param LemuriaMessage $message
 	 */
-	protected function getEntities(LemuriaMessage $message): void {
+	protected function getData(LemuriaMessage $message): void {
 		$this->party = Party::get($message->get(Party::class));
 	}
 }

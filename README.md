@@ -20,6 +20,14 @@ auch die anderen Gegenstände.
 
 Lemuria fügt den von Eressea et al. geerbten Konzepten weitere Aspekte hinzu.
 
+### Befehlsschreibweisen
+
+Einheitenbefehle müssen nicht in einer genau festgelegten Weise geschrieben
+werden, solange sie nicht mehrdeutig sind. Beispielsweise kann der Befehl zum
+Eintreiben von Steuern als TREIBEN oder EINTREIBEN geschrieben werden, aber auch
+abgekürzt mit einem Präfix dieser Worte wie TREIBE, TREIB oder EINTR, solange
+der Befehl eindeutig von anderen Befehlen unterschieden werden kann.
+
 ### Weniger Mikromanagement
 
 Einige Routinetätigkeiten wie zum Beispiel das Eintreiben von Steuern oder die

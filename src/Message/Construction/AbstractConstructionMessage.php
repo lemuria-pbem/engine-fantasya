@@ -10,8 +10,6 @@ use Lemuria\Model\Lemuria\Construction;
 
 abstract class AbstractConstructionMessage extends AbstractMessage
 {
-	private ?Construction $construction = null;
-
 	/**
 	 * @return int
 	 */
@@ -20,19 +18,9 @@ abstract class AbstractConstructionMessage extends AbstractMessage
 	}
 
 	/**
-	 * @return Construction
-	 */
-	protected function Construction(): Construction {
-		if (!$this->construction) {
-			throw new MessageEntityException(Construction::class);
-		}
-		return $this->construction;
-	}
-
-	/**
 	 * @param LemuriaMessage $message
 	 */
-	protected function getEntities(LemuriaMessage $message): void {
+	protected function getData(LemuriaMessage $message): void {
 		$this->construction = Construction::get($message->get(Construction::class));
 	}
 }

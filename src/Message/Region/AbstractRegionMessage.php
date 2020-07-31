@@ -10,8 +10,6 @@ use Lemuria\Model\Lemuria\Region;
 
 abstract class AbstractRegionMessage extends AbstractMessage
 {
-	private ?Region $region = null;
-
 	/**
 	 * @return int
 	 */
@@ -20,19 +18,9 @@ abstract class AbstractRegionMessage extends AbstractMessage
 	}
 
 	/**
-	 * @return Region
-	 */
-	protected function Region(): Region {
-		if (!$this->region) {
-			throw new MessageEntityException(Region::class);
-		}
-		return $this->region;
-	}
-
-	/**
 	 * @param LemuriaMessage $message
 	 */
-	protected function getEntities(LemuriaMessage $message): void {
+	protected function getData(LemuriaMessage $message): void {
 		$this->region = Region::get($message->get(Region::class));
 	}
 }

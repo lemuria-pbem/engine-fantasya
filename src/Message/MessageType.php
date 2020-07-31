@@ -2,8 +2,15 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Message;
 
-interface MessageType
+use Lemuria\Singleton;
+
+interface MessageType extends Singleton
 {
+	/**
+	 * @return string
+	 */
+	public function Level(): string;
+
 	/**
 	 * @return int
 	 */
