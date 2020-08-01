@@ -7,6 +7,7 @@ use Lemuria\Engine\Lemuria\Command\UnitCommand;
 use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Exception\CommandException;
 use Lemuria\Engine\Lemuria\Immediate;
+use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\TempMessage;
 use Lemuria\Engine\Lemuria\Phrase;
 use Lemuria\Exception\IdException;
@@ -113,6 +114,13 @@ final class Temp extends UnitCommand implements Immediate
 	 */
 	public function getTempNumber(): string {
 		return strtolower($this->phrase->getParameter(2));
+	}
+
+	/**
+	 * @param LemuriaMessage $message
+	 */
+	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
+		return $message;
 	}
 
 	/**

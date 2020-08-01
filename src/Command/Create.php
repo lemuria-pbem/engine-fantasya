@@ -19,8 +19,8 @@ use Lemuria\Engine\Lemuria\Command\Exception\UnknownCommandException;
  * - MACHEN Temp
  * - MACHEN Temp <id>
  */
-final class Create extends DelegatedCommand {
-
+final class Create extends DelegatedCommand
+{
 	/**
 	 * Create the delegate.
 	 *

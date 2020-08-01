@@ -15,7 +15,7 @@ class TeachExceptionMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' cannot teach. ' . $this->error;
+		return 'Unit ' . $this->id . ' cannot teach. ' . $this->error;
 	}
 
 	/**

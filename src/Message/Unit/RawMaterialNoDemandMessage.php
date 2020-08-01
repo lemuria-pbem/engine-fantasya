@@ -12,6 +12,6 @@ class RawMaterialNoDemandMessage extends RawMaterialResourcesMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' cannot produce ' . $this->material . ', no demand.';
+		return 'Unit ' . $this->id . ' cannot produce ' . $this->material . ', no demand.';
 	}
 }

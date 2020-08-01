@@ -12,6 +12,6 @@ class ProductMaterialOnlyMessage extends ProductOutputMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' can only produce ' . $this->output . ' with ' . $this->talent . '.';
+		return 'Unit ' . $this->id . ' can only produce ' . $this->output . ' with ' . $this->talent . '.';
 	}
 }

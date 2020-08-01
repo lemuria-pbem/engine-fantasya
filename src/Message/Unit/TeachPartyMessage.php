@@ -21,7 +21,7 @@ class TeachPartyMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' cannot teach unit ' . $this->unit . ' of party ' . $this->party . '.';
+		return 'Unit ' . $this->id . ' cannot teach unit ' . $this->unit . ' of party ' . $this->party . '.';
 	}
 
 	/**

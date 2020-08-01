@@ -18,7 +18,7 @@ class TeachBonusMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' has ' . $this->students . ' students (bonus: ' . $this->bonus . ').';
+		return 'Unit ' . $this->id . ' has ' . $this->students . ' students (bonus: ' . $this->bonus . ').';
 	}
 
 	/**

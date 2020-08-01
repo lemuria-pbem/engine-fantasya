@@ -18,7 +18,7 @@ class LearnProgressMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' learns ' . $this->talent . ' with ' . $this->experience . ' experience.';
+		return 'Unit ' . $this->id . ' learns ' . $this->talent . ' with ' . $this->experience . ' experience.';
 	}
 
 	/**

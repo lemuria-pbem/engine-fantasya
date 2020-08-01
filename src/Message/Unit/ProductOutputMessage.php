@@ -19,7 +19,7 @@ class ProductOutputMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' produces ' . $this->output . ' with ' . $this->talent . '.';
+		return 'Unit ' . $this->id . ' produces ' . $this->output . ' with ' . $this->talent . '.';
 	}
 
 	/**

@@ -12,7 +12,7 @@ class LearnTeachersMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' has ' . $this->teachers . ' teachers.';
+		return 'Unit ' . $this->id . ' has ' . $this->teachers . ' teachers.';
 	}
 
 	/**

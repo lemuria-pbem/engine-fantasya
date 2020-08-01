@@ -18,7 +18,7 @@ class TeachRegionMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' cannot teach unit ' . $this->unit . ': Not in our region.';
+		return 'Unit ' . $this->id . ' cannot teach unit ' . $this->unit . ': Not in our region.';
 	}
 
 	/**

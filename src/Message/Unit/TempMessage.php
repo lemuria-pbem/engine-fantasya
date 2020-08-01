@@ -12,6 +12,6 @@ class TempMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'New unit ' . $this->Id() . ' created.';
+		return 'New unit ' . $this->id . ' created.';
 	}
 }

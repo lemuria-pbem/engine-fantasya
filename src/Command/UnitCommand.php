@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Calculus;
 use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Exception\ActivityException;
+use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Phrase;
 use Lemuria\Model\Lemuria\Unit;
 
@@ -52,6 +53,13 @@ abstract class UnitCommand extends AbstractCommand
 		if (!$protocol->commit($this)) {
 			throw new ActivityException($this);
 		}
+	}
+
+	/**
+	 * @param LemuriaMessage $message
+	 */
+	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
+		return $message->e($this->unit);
 	}
 
 	/**

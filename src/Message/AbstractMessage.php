@@ -31,13 +31,6 @@ abstract class AbstractMessage implements MessageType
 	}
 
 	/**
-	 * @return Id
-	 */
-	protected function Id(): Id {
-		return $this->id;
-	}
-
-	/**
 	 * @param LemuriaMessage $message
 	 */
 	abstract protected function getData(LemuriaMessage $message): void;

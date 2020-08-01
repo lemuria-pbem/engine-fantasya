@@ -15,7 +15,7 @@ class RawMaterialWantsMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' wants to produce ' . $this->production . ' ' . $this->commodity . '.';
+		return 'Unit ' . $this->id . ' wants to produce ' . $this->production . ' ' . $this->commodity . '.';
 	}
 
 	/**

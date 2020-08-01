@@ -22,7 +22,7 @@ class RawMaterialExperienceMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' has not enough experience in ' . $this->talent . ' to produce ' . $this->material . '.';
+		return 'Unit ' . $this->id . ' has not enough experience in ' . $this->talent . ' to produce ' . $this->material . '.';
 	}
 
 	/**

@@ -18,7 +18,7 @@ class TeachStudentMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' teaches unit ' . $this->student . '.';
+		return 'Unit ' . $this->id . ' teaches unit ' . $this->student . '.';
 	}
 
 	/**

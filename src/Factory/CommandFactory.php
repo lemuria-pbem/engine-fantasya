@@ -277,10 +277,12 @@ class CommandFactory
 				return new Enter($phrase);
 			case 'BEWACHEN' :
 				return new Sentinel($phrase);
+			*/
 			case 'EINHEIT' :
-				return new Unit($phrase);
+				return new Unit($phrase, $this->context);
 			case 'ENDE' :
-				return new End($phrase);
+				return new End($phrase, $this->context);
+			/*
 			case 'GIB' :
 				return new Handover($phrase);
 			case 'HELFEN' :
@@ -289,8 +291,10 @@ class CommandFactory
 				return new Fight($phrase);
 			case 'KOMMANDO' :
 				return new Grant($phrase);
+			*/
 			case 'KOMMENTAR' :
-				return new Comment($phrase);
+				return new Comment($phrase,$this->context);
+			/*
 			case 'KONTAKTIEREN' :
 				return new Contact($phrase);
 			*/
@@ -303,12 +307,16 @@ class CommandFactory
 			/*
 			case 'NAME' :
 				return new Name($phrase);
+			*/
 			case 'NÄCHSTER' :
-				return new Next($phrase);
+				return new Next($phrase, $this->context);
+			/*
 			case 'NUMMER' :
 				return new Number($phrase);
+			*/
 			case 'PARTEI' :
-				return new Party($phrase);
+				return new Party($phrase, $this->context);
+			/*
 			case 'REKRUTIEREN' :
 				return new Recruit($phrase);
 			case 'RESERVIEREN' :

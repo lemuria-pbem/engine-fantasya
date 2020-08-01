@@ -9,8 +9,8 @@ use Lemuria\Engine\Lemuria\Phrase;
 /**
  * Base class for all complex commands that delegate to simpler commands.
  */
-abstract class DelegatedCommand extends UnitCommand {
-
+abstract class DelegatedCommand extends UnitCommand
+{
 	/**
 	 * @var Command
 	 */

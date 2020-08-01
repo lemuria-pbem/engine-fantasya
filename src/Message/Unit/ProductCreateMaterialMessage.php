@@ -16,7 +16,7 @@ class ProductCreateMaterialMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' has no material to create ' . $this->artifact . '.';
+		return 'Unit ' . $this->id . ' has no material to create ' . $this->artifact . '.';
 	}
 
 	/**

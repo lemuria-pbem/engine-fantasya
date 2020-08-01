@@ -18,7 +18,7 @@ class TeachUnableMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' cannot teach unit ' . $this->student . ' anymore.';
+		return 'Unit ' . $this->id . ' cannot teach unit ' . $this->student . ' anymore.';
 	}
 
 	/**

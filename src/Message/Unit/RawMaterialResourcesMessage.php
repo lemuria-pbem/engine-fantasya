@@ -16,7 +16,7 @@ class RawMaterialResourcesMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' cannot find any ' . $this->material . '.';
+		return 'Unit ' . $this->id . ' cannot find any ' . $this->material . '.';
 	}
 
 	/**

@@ -7,8 +7,8 @@ use Lemuria\Engine\Lemuria\Exception\CommandException;
 /**
  * This exception is thrown when an invalid reference to a TEMP Unit is found.
  */
-class TempUnitException extends CommandException {
-
+class TempUnitException extends CommandException
+{
 	/**
 	 * Create exception.
 	 *

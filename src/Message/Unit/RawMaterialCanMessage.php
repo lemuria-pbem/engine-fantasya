@@ -8,6 +8,6 @@ class RawMaterialCanMessage extends RawMaterialWantsMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' can produce ' . $this->production . ' ' . $this->commodity . '.';
+		return 'Unit ' . $this->id . ' can produce ' . $this->production . ' ' . $this->commodity . '.';
 	}
 }

@@ -12,6 +12,6 @@ class TeachSelfMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->Id() . ' cannot teach itself.';
+		return 'Unit ' . $this->id . ' cannot teach itself.';
 	}
 }
