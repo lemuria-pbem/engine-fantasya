@@ -88,7 +88,7 @@ final class RawMaterial extends AllocationCommand implements Activity
 	 */
 	protected function createDemand(): void {
 		$resource         = $this->phrase->getParameter(0);
-		$this->commodity  = self::createCommodity($resource);
+		$this->commodity  = $this->context->Factory()->commodity($resource);
 		$this->knowledge  = $this->calculus()->knowledge($this->getRequiredTalent());
 		$this->production = $this->unit->Size() * $this->knowledge->Level();
 		if ($this->production > 0) {

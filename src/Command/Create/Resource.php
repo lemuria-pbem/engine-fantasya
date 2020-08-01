@@ -24,7 +24,7 @@ final class Resource extends DelegatedCommand
 	 */
 	protected function createDelegate(): Command {
 		$resource  = $this->phrase->getParameter(0);
-		$commodity = self::createCommodity($resource);
+		$commodity = $this->context->Factory()->commodity($resource);
 		if ($commodity instanceof Artifact || $commodity instanceof Material) {
 			return new Product($this->phrase, $this->context);
 		}

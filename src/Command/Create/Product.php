@@ -43,7 +43,7 @@ final class Product extends UnitCommand implements Activity
 			$this->demand = (int)$this->phrase->getParameter(1);
 		}
 
-		$commodity = self::createCommodity($resource);
+		$commodity = $this->context->Factory()->commodity($resource);
 		if ($commodity instanceof Material) {
 			$this->produceMaterial($commodity);
 		} elseif ($commodity instanceof Artifact) {

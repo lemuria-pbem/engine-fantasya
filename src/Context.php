@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria;
 
-use Lemuria\Engine\ActivityProtocol;
 use Lemuria\Engine\Lemuria\Exception\CommandParserException;
 use Lemuria\Engine\Lemuria\Factory\CommandFactory;
 use Lemuria\Model\Lemuria\Party;
@@ -14,17 +13,17 @@ use Lemuria\Model\Lemuria\Unit;
  */
 final class Context
 {
-	private static ?CommandFactory $factory = null;
-
 	private LemuriaTurn $turn;
 
 	private Parser $parser;
 
-	private Party $party;
-
-	private Unit $unit;
+	private CommandFactory $factory;
 
 	private UnitMapper $mapper;
+
+	private ?Party $party = null;
+
+	private ?Unit $unit = null;
 
 	/**
 	 * @var array(int=>Calculus)
@@ -55,12 +54,10 @@ final class Context
 	 * @param LemuriaTurn $turn
 	 */
 	public function __construct(LemuriaTurn $turn) {
-		$this->turn   = $turn;
-		$this->parser = new Parser($this);
-		$this->mapper = new UnitMapper();
-		if (!self::$factory) {
-			self::$factory = new CommandFactory($this);
-		}
+		$this->turn    = $turn;
+		$this->parser  = new Parser($this);
+		$this->factory = new CommandFactory($this);
+		$this->mapper  = new UnitMapper();
 	}
 
 	/**
@@ -95,7 +92,7 @@ final class Context
 	 * @return CommandFactory
 	 */
 	public function Factory(): CommandFactory {
-		return self::$factory;
+		return $this->factory;
 	}
 
 	/**

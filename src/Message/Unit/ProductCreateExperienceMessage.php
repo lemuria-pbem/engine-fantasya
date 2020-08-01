@@ -8,9 +8,9 @@ use Lemuria\Singleton;
 
 class ProductCreateExperienceMessage extends AbstractUnitMessage
 {
-	public const TALENT = 'talent';
+	public const TALENT = 't';
 
-	public const ARTIFACT = 'artifact';
+	public const ARTIFACT = 'a';
 
 	protected string $level = Message::FAILURE;
 

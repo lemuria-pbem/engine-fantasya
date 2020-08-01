@@ -3,7 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
 use Lemuria\Engine\Lemuria\Immediate;
-use Lemuria\Engine\Lemuria\Message\EndMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\EndMessage;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 
 /**
@@ -32,13 +32,14 @@ final class End extends UnitCommand implements Immediate
 		$temp    = $this->context->UnitMapper()->find($this->unit);
 		$creator = $temp->getCreator();
 		$this->context->setUnit($creator);
-		$this->message(EndMessage::class)->p($temp->getTempNumber())->e($creator);
+		$this->message(EndMessage::class)->p($temp->getTempNumber());
 	}
 
 	/**
 	 * @param LemuriaMessage $message
+	 * @return LemuriaMessage
 	 */
 	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
-		return $message;
+		return $message->e($this->context->Unit());
 	}
 }

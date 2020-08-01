@@ -13,10 +13,10 @@ class UnknownCommandException extends CommandException
 	/**
 	 * Create exception.
 	 *
-	 * @param string|Command $command
-	 * @param CommandException $exception
+	 * @param Command|string|null $command
+	 * @param CommandException|null $exception
 	 */
-	public function __construct($command = null, CommandException $exception = null) {
+	public function __construct($command = null, ?CommandException $exception = null) {
 		$message = 'Unknown command' . ($command ? ': "' . $command . '"' : '.');
 		parent::__construct($message, 0, $exception);
 	}

@@ -76,7 +76,7 @@ class DefaultReport implements Report
 		$namespace = $identifiable->Catalog();
 		$id        = $identifiable->Id()->Id();
 		if (!isset($this->report[$namespace][$id])) {
-			throw new NotRegisteredException($identifiable->Id());
+			return [];
 		}
 		return $this->report[$namespace][$id];
 	}
@@ -125,8 +125,9 @@ class DefaultReport implements Report
 		if (isset($this->message[$id])) {
 			throw new DuplicateMessageException($message);
 		}
+		$entity = $message->Entity()->Id();
 
-		$this->report[$namespace][$id] = $message;
+		$this->report[$namespace][$entity][] = $message;
 		$this->message[$id] = $message;
 		if ($this->nextId === $id) {
 			$this->searchNextId();

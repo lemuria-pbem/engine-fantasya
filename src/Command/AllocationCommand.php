@@ -22,7 +22,7 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 
 	protected Resources $resources;
 
-	protected ?array $lastCheck;
+	protected ?array $lastCheck = null;
 
 	/**
 	 * Create a new command for given Phrase.

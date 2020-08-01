@@ -1,8 +1,8 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message;
+namespace Lemuria\Engine\Lemuria\Message\Unit;
 
-use Lemuria\Engine\Lemuria\Message\Unit\UnitMessage;
+use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 
 class CommentMessage extends UnitMessage
 {

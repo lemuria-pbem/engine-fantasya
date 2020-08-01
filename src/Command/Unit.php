@@ -2,9 +2,10 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
-use Lemuria\Engine\Exception\Command\UnitException;
+use Lemuria\Engine\Lemuria\Command\Exception\UnitException;
 use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Immediate;
+use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\UnitMessage;
 use Lemuria\Engine\Lemuria\Phrase;
 use Lemuria\Id;
@@ -59,5 +60,13 @@ final class Unit extends AbstractCommand implements Immediate
 		}
 		$this->context->setUnit($unit);
 		$this->message(UnitMessage::class)->e($unit);
+	}
+
+	/**
+	 * @param LemuriaMessage $message
+	 * @return LemuriaMessage
+	 */
+	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
+		return $message->e($this->context->Unit());
 	}
 }

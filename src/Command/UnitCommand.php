@@ -57,6 +57,7 @@ abstract class UnitCommand extends AbstractCommand
 
 	/**
 	 * @param LemuriaMessage $message
+	 * @return LemuriaMessage
 	 */
 	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
 		return $message->e($this->unit);

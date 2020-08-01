@@ -1,6 +1,6 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Exception\Command;
+namespace Lemuria\Engine\Lemuria\Command\Exception;
 
 use Lemuria\Engine\Lemuria\Exception\CommandException;
 use Lemuria\Model\Lemuria\Party;

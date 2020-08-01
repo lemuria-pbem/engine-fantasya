@@ -5,5 +5,5 @@ namespace Lemuria\Engine\Lemuria\Exception;
 /**
  * This exception is thrown when the engine parser encounters an error.
  */
-class ParserException extends EngineException {
+class CommandParserException extends EngineException {
 }

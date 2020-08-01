@@ -24,6 +24,7 @@ final class Learn extends UnitCommand implements Activity
 	 * Create a new command for given Phrase.
 	 *
 	 * @param Phrase $phrase
+	 * @param Context $context
 	 */
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
@@ -45,9 +46,9 @@ final class Learn extends UnitCommand implements Activity
 	 * The command implementation.
 	 */
 	protected function run(): void {
-		$this->message(LearnTeachersMessage::class)->e($this->unit)->p(count($this->calculus()->getTeachers()));
+		$this->message(LearnTeachersMessage::class)->p(count($this->calculus()->getTeachers()));
 		$progress = $this->calculus()->progress($this->talent);
 		$this->unit->Knowledge()->add($progress);
-		$this->message(LearnProgressMessage::class)->e($this->unit)->s($this->talent)->p($progress->Experience());
+		$this->message(LearnProgressMessage::class)->s($this->talent)->p($progress->Experience());
 	}
 }

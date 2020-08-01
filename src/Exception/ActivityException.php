@@ -15,6 +15,6 @@ class ActivityException extends CommandException
 	 * @param UnitCommand $command
 	 */
 	public function __construct(UnitCommand $command) {
-		parent::__construct('Unit ' . $command->getUnit()->Id() . ' cannot have more than one activity.');
+		parent::__construct('Unit ' . $command->Unit()->Id() . ' cannot have more than one activity.');
 	}
 }

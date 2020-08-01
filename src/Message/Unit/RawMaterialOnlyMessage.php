@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Message\Unit;
 
-use Lemuria\Engine\Message;
-
-class RawMaterialOnlyMessage extends ProductOutputMessage
+class RawMaterialOnlyMessage extends ProductMaterialOnlyMessage
 {
-	protected string $level = Message::FAILURE;
 }

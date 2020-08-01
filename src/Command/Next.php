@@ -4,7 +4,8 @@ namespace Lemuria\Engine\Lemuria\Command;
 
 use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Immediate;
-use Lemuria\Engine\Lemuria\Message\Unit\NextMessage;
+use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
+use Lemuria\Engine\Lemuria\Message\Party\NextMessage;
 use Lemuria\Engine\Lemuria\Phrase;
 
 /**
@@ -41,6 +42,14 @@ final class Next extends AbstractCommand implements Immediate
 	 */
 	protected function run(): void {
 		$this->context->Parser()->finish();
-		$this->message(NextMessage::class)->e($this->context->Party());
+		$this->message(NextMessage::class);
+	}
+
+	/**
+	 * @param LemuriaMessage $message
+	 * @return LemuriaMessage
+	 */
+	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
+		return $message->e($this->context->Party());
 	}
 }

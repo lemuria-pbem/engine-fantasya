@@ -6,13 +6,13 @@ use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 
 class TeachBonusMessage extends AbstractUnitMessage
 {
-	public const STUDENTS = 'students';
+	public const STUDENTS = 's';
 
-	public const BONUS = 'bonus';
+	public const BONUS = 'b';
 
 	private int $students;
 
-	private int $bonus;
+	private float $bonus;
 
 	/**
 	 * @return string

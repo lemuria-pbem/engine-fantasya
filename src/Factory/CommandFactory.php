@@ -393,7 +393,7 @@ class CommandFactory
 	 * @param array $map
 	 * @return string
 	 */
-	protected function identifySingleton(string $singleton, array &$map): string {
+	protected function identifySingleton(string $singleton, array $map): string {
 		$singleton  = ucfirst(strtolower($singleton));
 		$candidates = [];
 		foreach ($map as $candidate => $singletonClass) {

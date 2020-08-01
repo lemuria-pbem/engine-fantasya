@@ -78,7 +78,7 @@ final class Temp extends UnitCommand implements Immediate
 		$this->context->UnitMapper()->map($this);
 		$this->context->setUnit($this->createdUnit);
 
-		$this->message(TempMessage::class)->e($this->createdUnit);
+		$this->message(TempMessage::class);
 	}
 
 	/**
@@ -118,9 +118,10 @@ final class Temp extends UnitCommand implements Immediate
 
 	/**
 	 * @param LemuriaMessage $message
+	 * @return LemuriaMessage
 	 */
 	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
-		return $message;
+		return $message->e($this->createdUnit);
 	}
 
 	/**

@@ -59,7 +59,7 @@ final class Teach extends UnitCommand implements Activity
 						break;
 					}
 				} catch (CommandException $e) {
-					$this->message(TeachExceptionMessage::class)->e($this->unit)->p($e->getMessage());
+					$this->message(TeachExceptionMessage::class)->p($e->getMessage());
 				}
 			}
 		} else {
@@ -69,7 +69,7 @@ final class Teach extends UnitCommand implements Activity
 			}
 		}
 		$this->calculateBonuses();
-		$this->message(TeachBonusMessage::class)->e($this->unit)->p(TeachBonusMessage::STUDENTS, $n)->p(TeachBonusMessage::BONUS, $this->bonus);
+		$this->message(TeachBonusMessage::class)->p($n, TeachBonusMessage::STUDENTS)->p($this->bonus, TeachBonusMessage::BONUS);
 	}
 
 	/**
@@ -89,19 +89,19 @@ final class Teach extends UnitCommand implements Activity
 						return $size;
 					}
 					if ($check) {
-						$this->message(TeachStudentMessage::class)->e($this->unit)->e($unit, TeachStudentMessage::STUDENT);
+						$this->message(TeachStudentMessage::class)->e($unit, TeachStudentMessage::STUDENT);
 						$size = $unit->Size();
 					} elseif ($log) {
-						$this->message(TeachUnableMessage::class)->e($this->unit)->e($unit, TeachUnableMessage::STUDENT);
+						$this->message(TeachUnableMessage::class)->e($unit, TeachUnableMessage::STUDENT);
 					}
 				} elseif ($log) {
-					$this->message(TeachPartyMessage::class)->e($this->unit)->e($unit, TeachPartyMessage::UNIT)->e($unit->Party());
+					$this->message(TeachPartyMessage::class)->e($unit, TeachPartyMessage::UNIT)->e($unit->Party());
 				}
 			} else {
-				$this->message(TeachRegionMessage::class)->e($this->unit)->e($unit, TeachRegionMessage::UNIT);
+				$this->message(TeachRegionMessage::class)->e($unit, TeachRegionMessage::STUDENT);
 			}
 		} elseif ($log) {
-			$this->message(TeachSelfMessage::class)->e($this->unit);
+			$this->message(TeachSelfMessage::class);
 		}
 		return $size;
 	}
@@ -136,7 +136,7 @@ final class Teach extends UnitCommand implements Activity
 	private function calculateBonuses(): void {
 		$people = 0;
 		foreach ($this->students as $id => $learn /* @var Learn $learn */) {
-			$people += $learn->getUnit()->Size();
+			$people += $learn->Unit()->Size();
 		}
 		$this->bonus = $people > 0 ? min(self::MAX_STUDENTS / $people, 1.0) ** 2 : 1.0;
 	}

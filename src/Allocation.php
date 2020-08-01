@@ -17,50 +17,41 @@ final class Allocation
 {
 	use BuilderTrait;
 
-	/**
-	 * @var Region
-	 */
-	private $region;
+	private Region $region;
 
-	/**
-	 * @var CommandPriority
-	 */
-	private $priority;
+	private CommandPriority $priority;
 
 	/**
 	 * @var array(int=>Consumer)
 	 */
-	private $consumers = [];
+	private array $consumers = [];
 
 	/**
 	 * @var array(int=>bool)
 	 */
-	private $consumersLeft = [];
+	private array $consumersLeft = [];
 
 	/**
 	 * @var array(int=>array)
 	 */
-	private $rounds = [];
+	private array $rounds = [];
 
 	/**
 	 * @var array(int=>Resources)
 	 */
-	private $allocations = [];
+	private array $allocations = [];
 
 	/**
 	 * @var array(string=>Quantity)
 	 */
-	private $resources = [];
+	private array $resources = [];
 
 	/**
 	 * @var array(string=>array)
 	 */
-	private $distribution;
+	private array $distribution;
 
-	/**
-	 * @var int
-	 */
-	private $round = 0;
+	private int $round = 0;
 
 	/**
 	 * Create new allocation.

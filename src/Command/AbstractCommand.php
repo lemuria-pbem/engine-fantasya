@@ -7,7 +7,6 @@ use Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Factory\BuilderTrait;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
-use Lemuria\Engine\Lemuria\Message\MessageType;
 use Lemuria\Engine\Lemuria\Phrase;
 use Lemuria\Engine\Lemuria\Exception\CommandException;
 use Lemuria\Exception\LemuriaException;
@@ -144,14 +143,14 @@ abstract class AbstractCommand implements Command
 	 * @return LemuriaMessage
 	 */
 	protected function message(string $messageType): LemuriaMessage {
+		$id      = Lemuria::Report()->nextId();
 		$message = new LemuriaMessage();
-		$message->setId(Lemuria::Report()->nextId())->setType(self::createMessageType($messageType));
-		Lemuria::Report()->register($message);
-		return $this->initMessage($message);
+		return $this->initMessage($message)->setType(self::createMessageType($messageType))->setId($id);
 	}
 
 	/**
 	 * @param LemuriaMessage $message
+	 * @return LemuriaMessage
 	 */
 	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
 		return $message;

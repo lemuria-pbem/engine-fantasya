@@ -103,7 +103,7 @@ class ResourcePool
 	 * Make a reservation of one commodity.
 	 *
 	 * @param Unit $unit
-	 * @param Quantity $quantity
+	 * @param Quantity|null $quantity
 	 * @return Quantity
 	 */
 	public function reserve(Unit $unit, Quantity $quantity = null): Quantity {

@@ -26,7 +26,6 @@ class Parser
 
 	/**
 	 * @param Context $context
-	 * @param Move $commands
 	 */
 	public function __construct(Context $context) {
 		$this->context = $context;

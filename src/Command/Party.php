@@ -3,7 +3,8 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
 use Lemuria\Engine\Lemuria\Immediate;
-use Lemuria\Engine\Lemuria\Message\Unit\PartyMessage;
+use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
+use Lemuria\Engine\Lemuria\Message\Party\PartyMessage;
 use Lemuria\Id;
 use Lemuria\Model\Lemuria\Party as PartyModel;
 
@@ -30,6 +31,15 @@ final class Party extends AbstractCommand implements Immediate
 		$id    = Id::fromId($this->phrase->getParameter());
 		$party = PartyModel::get($id);
 		$this->context->setParty($party);
-		$this->message(PartyMessage::class)->e($party);
+		$this->message(PartyMessage::class);
+	}
+
+
+	/**
+	 * @param LemuriaMessage $message
+	 * @return LemuriaMessage
+	 */
+	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
+		return $message->e($this->context->Party());
 	}
 }

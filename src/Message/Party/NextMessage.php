@@ -1,8 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Unit;
-
-use Lemuria\Engine\Lemuria\Message\Party\AbstractPartyMessage;
+namespace Lemuria\Engine\Lemuria\Message\Party;
 
 class NextMessage extends AbstractPartyMessage
 {

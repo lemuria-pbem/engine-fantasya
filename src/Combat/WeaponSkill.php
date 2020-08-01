@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Lemuria\Combat;
 use Lemuria\Model\Lemuria\Ability;
 use Lemuria\Model\Lemuria\Factory\BuilderTrait;
 use Lemuria\Model\Lemuria\Quantity;
+use Lemuria\Model\Lemuria\Talent;
 use Lemuria\Model\Lemuria\Talent\Archery;
 use Lemuria\Model\Lemuria\Talent\Bladefighting;
 use Lemuria\Model\Lemuria\Talent\Catapulting;
@@ -19,17 +20,17 @@ class WeaponSkill
 {
 	use BuilderTrait;
 
-	private static ?Archery $archery = null;
+	private static ?Talent $archery = null;
 
-	private static Bladefighting $bladefighting;
+	private static Talent $bladefighting;
 
-	private static Catapulting $catapulting;
+	private static Talent $catapulting;
 
-	private static Crossbowing $crossbowing;
+	private static Talent $crossbowing;
 
-	private static Fistfight $fistfight;
+	private static Talent $fistfight;
 
-	private static Spearfighting $spearfighting;
+	private static Talent $spearfighting;
 
 	private Ability $skill;
 
@@ -120,6 +121,7 @@ class WeaponSkill
 			self::$archery       = self::createTalent(Archery::class);
 			self::$bladefighting = self::createTalent(Bladefighting::class);
 			self::$catapulting   = self::createTalent(Catapulting::class);
+			self::$crossbowing   = self::createTalent(Crossbowing::class);
 			self::$fistfight     = self::createTalent(Fistfight::class);
 			self::$spearfighting = self::createTalent(Spearfighting::class);
 		}

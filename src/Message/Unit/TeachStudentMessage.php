@@ -12,7 +12,7 @@ class TeachStudentMessage extends AbstractUnitMessage
 
 	protected string $level = Message::SUCCESS;
 
-	private Id $student;
+	protected Id $student;
 
 	/**
 	 * @return string

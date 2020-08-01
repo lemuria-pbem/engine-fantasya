@@ -4,7 +4,7 @@ namespace Lemuria\Engine\Lemuria;
 
 use Lemuria\Engine\Lemuria\Exception\ActionException;
 use Lemuria\Engine\Lemuria\Exception\CommandException;
-use Lemuria\Engine\Lemuria\Exception\ParserException;
+use Lemuria\Engine\Lemuria\Exception\CommandParserException;
 use Lemuria\Engine\Move;
 use Lemuria\Engine\Turn;
 use Lemuria\Exception\LemuriaException;
@@ -52,7 +52,7 @@ class LemuriaTurn implements Turn
 			} catch (UnknownCommandException $e) {
 				Lemuria::Log()->error($e->getMessage(), ['exception' => $e]);
 				continue;
-			} catch (ParserException $e) {
+			} catch (CommandParserException $e) {
 				if ($parser->isSkip()) {
 					Lemuria::Log()->warning('Skipping command: ' . $phrase);
 					continue;

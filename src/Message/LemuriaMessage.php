@@ -26,7 +26,13 @@ class LemuriaMessage implements Message
 	use ModelBuilderTrait;
 	use SerializableTrait;
 
-	private const PARAMETER = 'parameter';
+	private const ENTITY = 'e';
+
+	private const SINGLETON = 's';
+
+	private const ITEM = 'i';
+
+	private const PARAMETER = 'p';
 
 	/**
 	 * @var Id|null
@@ -41,22 +47,22 @@ class LemuriaMessage implements Message
 	/**
 	 * @var array(string=>int)|null
 	 */
-	private ?array $entities;
+	private ?array $entities = null;
 
 	/**
 	 * @var array(string=>string)|null
 	 */
-	private ?array $singletons;
+	private ?array $singletons = null;
 
 	/**
 	 * @var array(string=>array)|null
 	 */
-	private ?array $items;
+	private ?array $items = null;
 
 	/**
 	 * @var array(string=>mixed)|null
 	 */
-	private ?array $parameters;
+	private ?array $parameters = null;
 
 	/**
 	 * Get the ID.
@@ -81,6 +87,13 @@ class LemuriaMessage implements Message
 	 */
 	public function Level(): string {
 		return $this->type->Level();
+	}
+
+	/**
+	 * @return Id
+	 */
+	public function Entity(): Id {
+		return $this->get();
 	}
 
 	/**
@@ -164,12 +177,14 @@ class LemuriaMessage implements Message
 	}
 
 	/**
-	 * @param string $name
+	 * @param string|null $name
 	 * @return Id
 	 * @throws EntityNotSetException
 	 */
-	public function get(string $name): Id {
-		$name = getClass($name);
+	public function get(?string $name = null): Id {
+		if (!$name) {
+			$name = self::ENTITY;
+		}
 		if (!isset($this->entities[$name])) {
 			throw new EntityNotSetException($this, $name);
 		}
@@ -182,7 +197,7 @@ class LemuriaMessage implements Message
 	 */
 	public function getQuantity(?string $name = null): Quantity {
 		if (!$name) {
-			$name = getClass(Quantity::class);
+			$name = self::ITEM;
 		}
 		if (!isset($this->items[$name])) {
 			throw new ItemNotSetException($this, $name);
@@ -201,13 +216,10 @@ class LemuriaMessage implements Message
 	 * @return Singleton
 	 */
 	public function getSingleton(?string $name = null): Singleton {
-		if ($name) {
-			$singleton = getClass($name);
-		} else {
-			reset($this->singletons);
-			$singleton = key($this->singletons);
+		if (!$name) {
+			$name = self::SINGLETON;
 		}
-		if (!isset($this->singletons[$singleton])) {
+		if (!isset($this->singletons[$name])) {
 			throw new SingletonNotSetException($this, $name);
 		}
 		return Lemuria::Builder()->create($this->singletons[$name]);
@@ -231,12 +243,12 @@ class LemuriaMessage implements Message
 	 * Set an entity.
 	 *
 	 * @param Entity $entity
-	 * @param string $name
+	 * @param string|null $name
 	 * @return LemuriaMessage
 	 */
-	public function e(Entity $entity, string $name = ''): LemuriaMessage {
+	public function e(Entity $entity, ?string $name = null): LemuriaMessage {
 		if (!$name) {
-			$name = getClass($entity);
+			$name = self::ENTITY;
 		}
 		if (!$this->entities) {
 			$this->entities = [];
@@ -249,12 +261,12 @@ class LemuriaMessage implements Message
 	 * Set an item.
 	 *
 	 * @param Item $item
-	 * @param string $name
+	 * @param string|null $name
 	 * @return LemuriaMessage
 	 */
-	public function i(Item $item, string $name = ''): LemuriaMessage {
+	public function i(Item $item, ?string $name = null): LemuriaMessage {
 		if (!$name) {
-			$name = getClass($item);
+			$name = self::ITEM;
 		}
 		$this->items[$name] = [getClass($item->getObject()) => $item->Count()];
 		return $this;
@@ -264,12 +276,12 @@ class LemuriaMessage implements Message
 	 * Set a Singleton.
 	 *
 	 * @param Singleton $singleton
-	 * @param string $name
+	 * @param string|null $name
 	 * @return LemuriaMessage
 	 */
-	public function s(Singleton $singleton, string $name = ''): LemuriaMessage {
+	public function s(Singleton $singleton, ?string $name = null): LemuriaMessage {
 		if (!$name) {
-			$name = getClass($singleton);
+			$name = self::SINGLETON;
 		}
 		if (!$this->singletons) {
 			$this->singletons = [];
@@ -281,19 +293,18 @@ class LemuriaMessage implements Message
 	/**
 	 * Set a parameter.
 	 *
-	 * @param mixed $nameOrValue
-	 * @param mixed $value
+	 * @param bool|float|int|string $value
+	 * @param string|null $name
 	 * @return LemuriaMessage
 	 */
-	public function p($nameOrValue, $value = null): LemuriaMessage {
-		if ($value === null) {
-			$value       = $nameOrValue;
-			$nameOrValue = self::PARAMETER;
+	public function p($value, ?string $name = null): LemuriaMessage {
+		if (!$name) {
+			$name = self::PARAMETER;
 		}
 		if (!$this->parameters) {
 			$this->parameters = [];
 		}
-		$this->parameters[$nameOrValue] = $value;
+		$this->parameters[$name] = $value;
 		return $this;
 	}
 
