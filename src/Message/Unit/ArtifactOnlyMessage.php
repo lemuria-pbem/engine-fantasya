@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Message\Unit;
 
-class ProductCreateOnlyMessage extends ProductMaterialOnlyMessage
+class ArtifactOnlyMessage extends MaterialOnlyMessage
 {
 	/**
 	 * @return string

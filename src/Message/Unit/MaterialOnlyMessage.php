@@ -4,7 +4,7 @@ namespace Lemuria\Engine\Lemuria\Message\Unit;
 
 use Lemuria\Engine\Message;
 
-class ProductMaterialOnlyMessage extends ProductOutputMessage
+class MaterialOnlyMessage extends MaterialOutputMessage
 {
 	protected string $level = Message::FAILURE;
 

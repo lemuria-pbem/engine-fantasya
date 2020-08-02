@@ -6,7 +6,7 @@ use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 use Lemuria\Singleton;
 
-class ProductCreateMaterialMessage extends AbstractUnitMessage
+class ArtifactResourcesMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 

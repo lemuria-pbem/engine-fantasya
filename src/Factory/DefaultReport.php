@@ -39,16 +39,12 @@ class DefaultReport implements Report
 	 * Init the report.
 	 */
 	public function __construct() {
-		try {
-			$reflection = new \ReflectionClass(Report::class);
-			foreach ($reflection->getConstants() as $namespace) {
-				if (!is_int($namespace)) {
-					throw new LemuriaException('Expected integer report namespace.');
-				}
-				$this->report[$namespace] = [];
+		$reflection = new \ReflectionClass(Report::class);
+		foreach ($reflection->getConstants() as $namespace) {
+			if (!is_int($namespace)) {
+				throw new LemuriaException('Expected integer report namespace.');
 			}
-		} catch (\ReflectionException $e) {
-			throw new LemuriaException('Interface Report not found.', $e);
+			$this->report[$namespace] = [];
 		}
 	}
 

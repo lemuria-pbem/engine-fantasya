@@ -45,22 +45,22 @@ class LemuriaMessage implements Message
 	private MessageType $type;
 
 	/**
-	 * @var array(string=>int)|null
+	 * @var array|null
 	 */
 	private ?array $entities = null;
 
 	/**
-	 * @var array(string=>string)|null
+	 * @var array|null
 	 */
 	private ?array $singletons = null;
 
 	/**
-	 * @var array(string=>array)|null
+	 * @var array|null
 	 */
 	private ?array $items = null;
 
 	/**
-	 * @var array(string=>mixed)|null
+	 * @var array|null
 	 */
 	private ?array $parameters = null;
 

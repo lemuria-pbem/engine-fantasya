@@ -4,19 +4,22 @@ namespace Lemuria\Engine\Lemuria\Message\Unit;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
+use Lemuria\Item;
 use Lemuria\Singleton;
 
-class ProductOutputMaterialMessage extends AbstractUnitMessage
+class MaterialOutputMessage extends AbstractUnitMessage
 {
-	protected string $level = Message::FAILURE;
+	protected string $level = Message::SUCCESS;
 
-	private Singleton $material;
+	protected Item $output;
+
+	protected Singleton $talent;
 
 	/**
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' has no resources to produce ' . $this->material . '.';
+		return 'Unit ' . $this->id . ' produces ' . $this->output . ' with ' . $this->talent . '.';
 	}
 
 	/**
@@ -24,6 +27,7 @@ class ProductOutputMaterialMessage extends AbstractUnitMessage
 	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->material = $message->getSingleton();
+		$this->output = $message->getQuantity();
+		$this->talent = $message->getSingleton();
 	}
 }
