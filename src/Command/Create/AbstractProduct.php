@@ -25,9 +25,10 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 	protected int $capability = 0;
 
 	/**
-	 * The command implementation.
+	 * Make preparations before running the command.
 	 */
-	protected function run(): void {
+	protected function initialize(): void {
+		parent::initialize();
 		$this->resource = $this->phrase->getParameter(0);
 		if (count($this->phrase) === 2) {
 			$this->demand = (int)$this->phrase->getParameter(1);

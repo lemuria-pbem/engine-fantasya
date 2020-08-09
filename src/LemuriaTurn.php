@@ -112,9 +112,20 @@ class LemuriaTurn implements Turn
 			Lemuria::Log()->debug('Queue ' . $priority . ' has ' . count($actions) . ' actions.');
 			foreach ($actions as $action /* @var Action $action */) {
 				try {
-					$action->execute();
+					$action->prepare();
 				} catch (ActionException $e) {
-					Lemuria::Log()->error($e->getMessage(), ['action' => $action]);
+					Lemuria::Log()->error($e->getMessage(), ['stage' => 'prepare', 'action' => $action]);
+				}
+			}
+			foreach ($actions as $action /* @var Action $action */) {
+				try {
+					if ($action->isPrepared()) {
+						$action->execute();
+					} else {
+						Lemuria::Log()->debug('Unprepared action skipped.', ['action' => $action]);
+					}
+				} catch (ActionException $e) {
+					Lemuria::Log()->error($e->getMessage(), ['stage' => 'execute', 'action' => $action]);
 				}
 			}
 		}

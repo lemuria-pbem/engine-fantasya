@@ -32,6 +32,8 @@ abstract class AbstractCommand implements Command
 
 	private int $id;
 
+	private bool $isPrepared = false;
+
 	/**
 	 * Create a new command for given Phrase.
 	 *
@@ -63,6 +65,34 @@ abstract class AbstractCommand implements Command
 	}
 
 	/**
+	 * Check if the action has been prepared and is ready to execute.
+	 *
+	 * @return bool
+	 */
+	public function isPrepared(): bool {
+		return $this->isPrepared;
+	}
+
+	/**
+	 * Prepare the execution of the command.
+	 *
+	 * @return Action
+	 * @throws CommandException
+	 */
+	public function prepare(): Action {
+		Lemuria::Log()->debug('Preparing command ' . $this->phrase . '.', ['command' => $this]);
+		try {
+			$this->initialize();
+			$this->isPrepared = true;
+		} catch (CommandException $e) {
+			throw $e;
+		} catch (\Exception $e) {
+			throw new CommandException($e->getMessage(), $e->getCode(), $e);
+		}
+		return $this;
+	}
+
+	/**
 	 * Execute the command.
 	 *
 	 * @return Action
@@ -71,7 +101,6 @@ abstract class AbstractCommand implements Command
 	public function execute(): Action {
 		Lemuria::Log()->debug('Executing command ' . $this->phrase . '.', ['command' => $this]);
 		try {
-			$this->prepare();
 			$this->run();
 		} catch (CommandException $e) {
 			throw $e;
@@ -102,7 +131,7 @@ abstract class AbstractCommand implements Command
 	/**
 	 * Make preparations before running the command.
 	 */
-	protected function prepare(): void {
+	protected function initialize(): void {
 	}
 
 	/**

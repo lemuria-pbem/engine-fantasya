@@ -7,6 +7,8 @@ use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Message\Unit\LearnProgressMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\LearnTeachersMessage;
 use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Exception\LemuriaException;
+use Lemuria\Model\Lemuria\Ability;
 use Lemuria\Model\Lemuria\Talent;
 
 /**
@@ -19,6 +21,8 @@ use Lemuria\Model\Lemuria\Talent;
 final class Learn extends UnitCommand implements Activity
 {
 	private Talent $talent;
+
+	private ?Ability $progress = null;
 
 	/**
 	 * Create a new command for given Phrase.
@@ -43,12 +47,23 @@ final class Learn extends UnitCommand implements Activity
 	}
 
 	/**
+	 * Make preparations before running the command.
+	 */
+	protected function initialize(): void {
+		parent::initialize();
+		$this->message(LearnTeachersMessage::class)->p(count($this->calculus()->getTeachers()));
+		$this->progress = $this->calculus()->progress($this->talent);
+	}
+
+	/**
 	 * The command implementation.
 	 */
 	protected function run(): void {
-		$this->message(LearnTeachersMessage::class)->p(count($this->calculus()->getTeachers()));
-		$progress = $this->calculus()->progress($this->talent);
-		$this->unit->Knowledge()->add($progress);
-		$this->message(LearnProgressMessage::class)->s($this->talent)->p($progress->Experience());
+		if (!$this->progress) {
+			throw new LemuriaException('No progress initialized.');
+		}
+
+		$this->unit->Knowledge()->add($this->progress);
+		$this->message(LearnProgressMessage::class)->s($this->talent)->p($this->progress->Experience());
 	}
 }

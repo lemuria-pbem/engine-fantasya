@@ -30,6 +30,20 @@ interface Action
 	public function Priority(): int;
 
 	/**
+	 * Check if the action has been prepared and is ready to execute.
+	 *
+	 * @return bool
+	 */
+	public function isPrepared(): bool;
+
+	/**
+	 * Prepare execution of the action.
+	 *
+	 * @return Action
+	 */
+	public function prepare(): Action;
+
+	/**
 	 * Execute the action.
 	 *
 	 * @return Action

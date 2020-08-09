@@ -45,6 +45,7 @@ final class RawMaterial extends AllocationCommand implements Activity
 	 * The command implementation.
 	 */
 	protected function run(): void {
+		parent::run();
 		$talent     = $this->knowledge->Talent();
 		$production = $this->getResource(getClass($this->commodity))->Count();
 		if ($production <= 0) {

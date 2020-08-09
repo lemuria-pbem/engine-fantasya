@@ -33,14 +33,6 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		$this->resources = new Resources();
-		if (!$context->Parser()->isSkip()) {
-			$this->createDemand();
-			if (count($this->resources)) {
-				$context->getAllocation($this->unit->Region())->register($this);
-			} else {
-				Lemuria::Log()->debug('Allocation registration skipped due to empty demand.', ['command' => $this]);
-			}
-		}
 	}
 
 	/**
@@ -93,8 +85,20 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	/**
 	 * Make preparations before running the command.
 	 */
-	protected function prepare(): void {
-		parent::prepare();
+	protected function initialize(): void {
+		parent::initialize();
+		$this->createDemand();
+		if (count($this->resources)) {
+			$this->context->getAllocation($this->unit->Region())->register($this);
+		} else {
+			Lemuria::Log()->debug('Allocation registration skipped due to empty demand.', ['command' => $this]);
+		}
+	}
+
+	/**
+	 * The command implementation.
+	 */
+	protected function run(): void {
 		if (count($this->resources)) {
 			$this->context->getAllocation($this->unit->Region())->distribute($this);
 		}

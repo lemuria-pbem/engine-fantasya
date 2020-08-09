@@ -31,6 +31,8 @@ final class Teach extends UnitCommand implements Activity
 	 */
 	private array $students = [];
 
+	private int $size = 0;
+
 	private float $bonus = 0.0;
 
 	/**
@@ -43,18 +45,18 @@ final class Teach extends UnitCommand implements Activity
 	}
 
 	/**
-	 * The command implementation.
+	 * Make preparations before running the command.
 	 */
-	protected function run(): void {
+	protected function initialize(): void {
+		parent::initialize();
 		$i = 1;
-		$n = 0;
 		if (count($this->phrase) >= $i) {
 			// Add specific students.
 			while (true) {
 				try {
 					$unit = $this->nextId($i);
 					if ($unit) {
-						$n += $this->teach($unit, true);
+						$this->size += $this->teach($unit, true);
 					} else {
 						break;
 					}
@@ -65,11 +67,17 @@ final class Teach extends UnitCommand implements Activity
 		} else {
 			// Add all units in region as possible students.
 			foreach ($this->unit->Region()->Residents() as $unit /* @var Unit $unit */) {
-				$n += $this->teach($unit);
+				$this->size += $this->teach($unit);
 			}
 		}
+	}
+
+	/**
+	 * The command implementation.
+	 */
+	protected function run(): void {
 		$this->calculateBonuses();
-		$this->message(TeachBonusMessage::class)->p($n, TeachBonusMessage::STUDENTS)->p($this->bonus, TeachBonusMessage::BONUS);
+		$this->message(TeachBonusMessage::class)->p($this->size, TeachBonusMessage::STUDENTS)->p($this->bonus, TeachBonusMessage::BONUS);
 	}
 
 	/**

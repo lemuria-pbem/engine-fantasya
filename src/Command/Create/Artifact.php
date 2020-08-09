@@ -25,7 +25,6 @@ final class Artifact extends AbstractProduct
 	 * The command implementation.
 	 */
 	protected function run(): void {
-		parent::run();
 		$artifact         = $this->getArtifact();
 		$talent           = $artifact->getCraft()->Talent();
 		$this->capability = $this->calculateProduction($artifact->getCraft());

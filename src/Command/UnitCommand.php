@@ -48,7 +48,7 @@ abstract class UnitCommand extends AbstractCommand
 	/**
 	 * Make preparations before running the command.
 	 */
-	protected function prepare(): void {
+	protected function initialize(): void {
 		$protocol = $this->context->getProtocol($this->unit);
 		if (!$protocol->commit($this)) {
 			throw new ActivityException($this);

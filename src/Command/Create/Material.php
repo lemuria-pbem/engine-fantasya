@@ -25,7 +25,6 @@ final class Material extends AbstractProduct
 	 * The command implementation.
 	 */
 	protected function run(): void {
-		parent::run();
 		$material         = $this->getMaterial();
 		$talent           = $material->getCraft()->Talent();
 		$this->capability = $this->calculateProduction($material->getCraft());
