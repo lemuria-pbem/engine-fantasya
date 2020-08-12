@@ -91,7 +91,7 @@ final class Allocation
 		if (!isset($this->consumers[$id])) {
 			throw new AllocationException($consumer, $this->region);
 		}
-		if (!$consumer->checkBeforeAllocation()) {
+		if ($consumer->checkBeforeAllocation()) {
 			$this->unregister($consumer);
 		}
 		unset($this->consumersLeft[$id]);

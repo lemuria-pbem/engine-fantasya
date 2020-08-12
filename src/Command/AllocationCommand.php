@@ -64,7 +64,7 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	public function checkBeforeAllocation(): array {
 		if ($this->lastCheck === null) {
 			$this->lastCheck = $this->getCheckBeforeAllocation();
-			if (empty($this->lastCheck)) {
+			if (!empty($this->lastCheck)) {
 				$this->resources->clear();
 			}
 		}

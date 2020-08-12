@@ -19,7 +19,7 @@ class LemuriaTurn implements Turn
 	protected CommandPriority $priority;
 
 	/**
-	 * @var array(int=>Action)
+	 * @var array(int=>array)
 	 */
 	protected array $queue = [];
 
