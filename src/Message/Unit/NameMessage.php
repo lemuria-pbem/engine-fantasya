@@ -3,16 +3,19 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Message\Unit;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
+use Lemuria\Engine\Message;
 
-class CommentMessage extends AbstractUnitMessage
+class NameMessage extends AbstractUnitMessage
 {
-	private string $comment;
+	protected string $level = Message::SUCCESS;
+
+	private string $name;
 
 	/**
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Comment for unit ' . $this->id . ': ' . $this->comment;
+		return 'Unit ' . $this->id . ' is now known as ' . $this->name . '.';
 	}
 
 	/**
@@ -20,6 +23,6 @@ class CommentMessage extends AbstractUnitMessage
 	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->comment = $message->getParameter();
+		$this->name = $message->getParameter();
 	}
 }

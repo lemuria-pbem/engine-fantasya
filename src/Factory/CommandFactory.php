@@ -5,9 +5,12 @@ namespace Lemuria\Engine\Lemuria\Factory;
 use Lemuria\Engine\Lemuria\Command\AbstractCommand;
 use Lemuria\Engine\Lemuria\Command\Comment;
 use Lemuria\Engine\Lemuria\Command\Create;
+use Lemuria\Engine\Lemuria\Command\Describe;
 use Lemuria\Engine\Lemuria\Command\End;
 use Lemuria\Engine\Lemuria\Command\Learn;
+use Lemuria\Engine\Lemuria\Command\Name;
 use Lemuria\Engine\Lemuria\Command\Next;
+use Lemuria\Engine\Lemuria\Command\Number;
 use Lemuria\Engine\Lemuria\Command\Party;
 use Lemuria\Engine\Lemuria\Command\Teach;
 use Lemuria\Engine\Lemuria\Command\Unit;
@@ -249,9 +252,9 @@ class CommandFactory
 	public function create(Phrase $phrase): AbstractCommand {
 		$verb = $this->identifyVerb(strtoupper($phrase->getVerb()));
 		switch ($verb) {
-			/*
 			case 'BESCHREIBEN';
-				return new Describe($phrase);
+				return new Describe($phrase, $this->context);
+			/*
 			case 'BESTEIGEN' :
 				return new Board($phrase);
 			case 'BETRETEN' :
@@ -285,16 +288,12 @@ class CommandFactory
 				return new Learn($phrase, $this->context);
 			case 'MACHEN' :
 				return new Create($phrase, $this->context);
-			/*
 			case 'NAME' :
-				return new Name($phrase);
-			*/
+				return new Name($phrase, $this->context);
 			case 'NÄCHSTER' :
 				return new Next($phrase, $this->context);
-			/*
 			case 'NUMMER' :
-				return new Number($phrase);
-			*/
+				return new Number($phrase, $this->context);
 			case 'PARTEI' :
 				return new Party($phrase, $this->context);
 			/*

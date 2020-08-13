@@ -1,0 +1,17 @@
+<?php
+declare(strict_types = 1);
+namespace Lemuria\Engine\Lemuria\Message\Vessel;
+
+use Lemuria\Engine\Message;
+
+class DescribeMessage extends AbstractVesselMessage
+{
+	protected string $level = Message::SUCCESS;
+
+	/**
+	 * @return string
+	 */
+	protected function create(): string {
+		return 'Vessel ' . $this->id . ' now has a new description.';
+	}
+}

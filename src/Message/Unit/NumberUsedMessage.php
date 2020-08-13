@@ -3,16 +3,20 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Message\Unit;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
+use Lemuria\Engine\Message;
+use Lemuria\Id;
 
-class CommentMessage extends AbstractUnitMessage
+class NumberUsedMessage extends AbstractUnitMessage
 {
-	private string $comment;
+	protected string $level = Message::FAILURE;
+
+	private Id $newId;
 
 	/**
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Comment for unit ' . $this->id . ': ' . $this->comment;
+		return 'ID of unit ' . $this->id . ' not changed. ID ' . $this->newId . ' is used already.';
 	}
 
 	/**
@@ -20,6 +24,6 @@ class CommentMessage extends AbstractUnitMessage
 	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->comment = $message->getParameter();
+		$this->newId = new Id($message->getParameter());
 	}
 }

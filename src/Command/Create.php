@@ -7,7 +7,7 @@ use function Lemuria\isInt;
 use Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Command\Create\Resource;
 use Lemuria\Engine\Lemuria\Command\Create\Temp;
-use Lemuria\Engine\Lemuria\Command\Exception\UnknownCommandException;
+use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
 
 /**
  * Implementation of command MACHEN.
