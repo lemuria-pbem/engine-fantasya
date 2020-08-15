@@ -4,14 +4,14 @@ namespace Lemuria\Engine\Lemuria\Command;
 
 use Lemuria\Engine\Lemuria\Exception\CommandException;
 use Lemuria\Engine\Lemuria\Message\Construction\DescribeCastleMessage;
-use Lemuria\Engine\Lemuria\Message\Construction\DescribeMessage as ConstructionDescribeMessage;
+use Lemuria\Engine\Lemuria\Message\Construction\DescribeConstructionMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\DescribeOwnerMessage;
-use Lemuria\Engine\Lemuria\Message\Region\DescribeMessage as RegionDescribeMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DescribeMessage as UnitDescribeMessage;
+use Lemuria\Engine\Lemuria\Message\Region\DescribeRegionMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\DescribeUnitMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\DescribeNotInConstructionMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\DescribeNotInVesselMessage;
 use Lemuria\Engine\Lemuria\Message\Vessel\DescribeCaptainMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\DescribeMessage as VesselDescribeMessage;
+use Lemuria\Engine\Lemuria\Message\Vessel\DescribeVesselMessage;
 use Lemuria\Model\Lemuria\Building\Castle;
 use Lemuria\Model\Lemuria\Construction;
 
@@ -68,7 +68,7 @@ final class Describe extends UnitCommand {
 	 */
 	private function describeUnit(string $description): void {
 		$this->unit->setDescription($description);
-		$this->message(UnitDescribeMessage::class);
+		$this->message(DescribeUnitMessage::class);
 	}
 
 	/**
@@ -82,7 +82,7 @@ final class Describe extends UnitCommand {
 			$owner = $construction->Inhabitants()->Owner();
 			if ($owner && $owner === $this->unit) {
 				$construction->setDescription($description);
-				$this->message(ConstructionDescribeMessage::class)->e($construction);
+				$this->message(DescribeConstructionMessage::class)->e($construction);
 				return;
 			}
 			$this->message(DescribeOwnerMessage::class)->e($construction)->e($this->unit, DescribeOwnerMessage::OWNER);
@@ -110,7 +110,7 @@ final class Describe extends UnitCommand {
 			}
 			if ($castle === $home && $home->Inhabitants()->Owner() === $this->unit) {
 				$region->setDescription($description);
-				$this->message(RegionDescribeMessage::class)->e($region);
+				$this->message(DescribeRegionMessage::class)->e($region);
 				return;
 			}
 		}
@@ -128,7 +128,7 @@ final class Describe extends UnitCommand {
 			$captain = $vessel->Passengers()->Owner();
 			if ($captain && $captain === $this->unit) {
 				$vessel->setDescription($description);
-				$this->message(VesselDescribeMessage::class)->e($vessel);
+				$this->message(DescribeVesselMessage::class)->e($vessel);
 				return;
 			}
 			$this->message(DescribeCaptainMessage::class)->e($vessel)->e($this->unit, DescribeCaptainMessage::CAPTAIN);

@@ -1,21 +1,22 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Region;
+namespace Lemuria\Engine\Lemuria\Message\Unit;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
+use Lemuria\Id;
 
-class NameMessage extends AbstractRegionMessage
+class NumberUnitUsedMessage extends AbstractUnitMessage
 {
-	protected string $level = Message::SUCCESS;
+	protected string $level = Message::FAILURE;
 
-	private string $name;
+	private Id $newId;
 
 	/**
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Region ' . $this->id . ' is now known as ' . $this->name . '.';
+		return 'ID of unit ' . $this->id . ' not changed. ID ' . $this->newId . ' is used already.';
 	}
 
 	/**
@@ -23,6 +24,6 @@ class NameMessage extends AbstractRegionMessage
 	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->name = $message->getParameter();
+		$this->newId = new Id($message->getParameter());
 	}
 }

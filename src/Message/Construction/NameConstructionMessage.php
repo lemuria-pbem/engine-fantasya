@@ -1,22 +1,21 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Unit;
+namespace Lemuria\Engine\Lemuria\Message\Construction;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
-use Lemuria\Id;
 
-class NumberUsedMessage extends AbstractUnitMessage
+class NameConstructionMessage extends AbstractConstructionMessage
 {
-	protected string $level = Message::FAILURE;
+	protected string $level = Message::SUCCESS;
 
-	private Id $newId;
+	private string $name;
 
 	/**
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'ID of unit ' . $this->id . ' not changed. ID ' . $this->newId . ' is used already.';
+		return 'Construction ' . $this->id . ' is now known as ' . $this->name . '.';
 	}
 
 	/**
@@ -24,6 +23,6 @@ class NumberUsedMessage extends AbstractUnitMessage
 	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->newId = new Id($message->getParameter());
+		$this->name = $message->getParameter();
 	}
 }

@@ -4,14 +4,14 @@ namespace Lemuria\Engine\Lemuria\Command;
 
 use Lemuria\Engine\Lemuria\Exception\CommandException;
 use Lemuria\Engine\Lemuria\Message\Construction\NameCastleMessage;
-use Lemuria\Engine\Lemuria\Message\Construction\NameMessage as ConstructionNameMessage;
+use Lemuria\Engine\Lemuria\Message\Construction\NameConstructionMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\NameOwnerMessage;
-use Lemuria\Engine\Lemuria\Message\Region\NameMessage as RegionNameMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\NameMessage as UnitNameMessage;
+use Lemuria\Engine\Lemuria\Message\Region\NameRegionMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\NameUnitMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\NameNotInConstructionMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\NameNotInVesselMessage;
 use Lemuria\Engine\Lemuria\Message\Vessel\NameCaptainMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\NameMessage as VesselNameMessage;
+use Lemuria\Engine\Lemuria\Message\Vessel\NameVesselMessage;
 use Lemuria\Model\Lemuria\Building\Castle;
 use Lemuria\Model\Lemuria\Construction;
 
@@ -68,7 +68,7 @@ final class Name extends UnitCommand
 	 */
 	private function renameUnit(string $name): void {
 		$this->unit->setName($name);
-		$this->message(UnitNameMessage::class)->p($name);
+		$this->message(NameUnitMessage::class)->p($name);
 	}
 
 	/**
@@ -82,7 +82,7 @@ final class Name extends UnitCommand
 			$owner = $construction->Inhabitants()->Owner();
 			if ($owner && $owner === $this->unit) {
 				$construction->setName($name);
-				$this->message(ConstructionNameMessage::class)->e($construction)->p($name);
+				$this->message(NameConstructionMessage::class)->e($construction)->p($name);
 				return;
 			}
 			$this->message(NameOwnerMessage::OWNER)->e($construction)->e($this->unit, NameOwnerMessage::OWNER);
@@ -110,7 +110,7 @@ final class Name extends UnitCommand
 			}
 			if ($castle === $home && $home->Inhabitants()->Owner() === $this->unit) {
 				$region->setName($name);
-				$this->message(RegionNameMessage::class)->e($region)->p($name);
+				$this->message(NameRegionMessage::class)->e($region)->p($name);
 				return;
 			}
 		}
@@ -128,7 +128,7 @@ final class Name extends UnitCommand
 			$captain = $vessel->Passengers()->Owner();
 			if ($captain && $captain === $this->unit) {
 				$vessel->setName($name);
-				$this->message(VesselNameMessage::class)->e($vessel)->p($name);
+				$this->message(NameVesselMessage::class)->e($vessel)->p($name);
 				return;
 			}
 			$this->message(NameCaptainMessage::class)->e($vessel)->e($this->unit, NameCaptainMessage::CAPTAIN);

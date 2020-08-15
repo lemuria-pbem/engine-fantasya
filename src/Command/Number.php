@@ -2,16 +2,16 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
-use Lemuria\Engine\Lemuria\Message\Construction\NumberMessage as ConstructionNumberMessage;
+use Lemuria\Engine\Lemuria\Message\Construction\NumberConstructionMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\NumberOwnerMessage;
-use Lemuria\Engine\Lemuria\Message\Construction\NumberUsedMessage as ConstructionNumberUsedMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\NumberMessage as UnitNumberMessage;
+use Lemuria\Engine\Lemuria\Message\Construction\NumberConstructionUsedMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\NumberUnitMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\NumberNotInConstructionMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\NumberNotInVesselMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\NumberUsedMessage as UnitNumberUsedMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\NumberUnitUsedMessage;
 use Lemuria\Engine\Lemuria\Message\Vessel\NumberCaptainMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\NumberMessage as VesselNumberMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\NumberUsedMessage as VesselNumberUsedMessage;
+use Lemuria\Engine\Lemuria\Message\Vessel\NumberVesselMessage;
+use Lemuria\Engine\Lemuria\Message\Vessel\NumberVesselUsedMessage;
 use Lemuria\Model\Catalog;
 use Lemuria\Engine\Lemuria\Exception\CommandException;
 use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
@@ -74,7 +74,7 @@ final class Number extends UnitCommand {
 	 */
 	private function setUnitId(Id $id): void {
 		if (Lemuria::Catalog()->has($id, Catalog::UNITS)) {
-			$this->message(UnitNumberUsedMessage::class)->p($id->Id());
+			$this->message(NumberUnitUsedMessage::class)->p($id->Id());
 			return;
 		}
 
@@ -99,7 +99,7 @@ final class Number extends UnitCommand {
 				$inhabitants->setOwner($this->unit);
 			}
 		}
-		$this->message(UnitNumberMessage::class)->p($oldId);
+		$this->message(NumberUnitMessage::class)->p($oldId);
 	}
 
 	/**
@@ -114,7 +114,7 @@ final class Number extends UnitCommand {
 			return;
 		}
 		if (Lemuria::Catalog()->has($id, Catalog::CONSTRUCTIONS)) {
-			$this->message(ConstructionNumberUsedMessage::class)->e($construction)->p($id->Id());
+			$this->message(NumberConstructionUsedMessage::class)->e($construction)->p($id->Id());
 			return;
 		}
 		if ($construction->Inhabitants()->Owner() !== $this->unit) {
@@ -129,7 +129,7 @@ final class Number extends UnitCommand {
 
 		$construction->setId($id);
 		$estate->add($construction);
-		$this->message(ConstructionNumberMessage::class)->e($construction)->p($oldId);
+		$this->message(NumberConstructionMessage::class)->e($construction)->p($oldId);
 	}
 
 	/**
@@ -144,7 +144,7 @@ final class Number extends UnitCommand {
 			return;
 		}
 		if (Lemuria::Catalog()->has($id, Catalog::VESSELS)) {
-			$this->message(VesselNumberUsedMessage::class)->e($vessel)->p($id->Id());
+			$this->message(NumberVesselUsedMessage::class)->e($vessel)->p($id->Id());
 			return;
 		}
 		if ($vessel->Passengers()->Owner() !== $this->unit) {
@@ -159,6 +159,6 @@ final class Number extends UnitCommand {
 
 		$vessel->setId($id);
 		$fleet->add($vessel);
-		$this->message(VesselNumberMessage::class)->e($vessel)->p($oldId);
+		$this->message(NumberVesselMessage::class)->e($vessel)->p($oldId);
 	}
 }

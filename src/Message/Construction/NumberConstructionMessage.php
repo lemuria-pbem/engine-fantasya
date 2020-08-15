@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Vessel;
+namespace Lemuria\Engine\Lemuria\Message\Construction;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 use Lemuria\Id;
 
-class NumberMessage extends AbstractVesselMessage
+class NumberConstructionMessage extends AbstractConstructionMessage
 {
 	protected string $level = Message::SUCCESS;
 
@@ -16,7 +16,7 @@ class NumberMessage extends AbstractVesselMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'New ID of vessel ' . $this->oldId . ' is ' . $this->id . '.';
+		return 'New ID of construction ' . $this->oldId . ' is ' . $this->id . '.';
 	}
 
 	/**

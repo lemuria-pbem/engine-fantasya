@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Construction;
+namespace Lemuria\Engine\Lemuria\Message\Region;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 
-class NameMessage extends AbstractConstructionMessage
+class NameRegionMessage extends AbstractRegionMessage
 {
 	protected string $level = Message::SUCCESS;
 
@@ -15,7 +15,7 @@ class NameMessage extends AbstractConstructionMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Construction ' . $this->id . ' is now known as ' . $this->name . '.';
+		return 'Region ' . $this->id . ' is now known as ' . $this->name . '.';
 	}
 
 	/**

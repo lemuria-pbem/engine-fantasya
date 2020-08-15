@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Unit;
+namespace Lemuria\Engine\Lemuria\Message\Vessel;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 
-class NameMessage extends AbstractUnitMessage
+class NameVesselMessage extends AbstractVesselMessage
 {
 	protected string $level = Message::SUCCESS;
 
@@ -15,7 +15,7 @@ class NameMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' is now known as ' . $this->name . '.';
+		return 'Vessel ' . $this->id . ' is now known as ' . $this->name . '.';
 	}
 
 	/**

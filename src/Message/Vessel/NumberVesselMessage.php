@@ -1,22 +1,22 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Construction;
+namespace Lemuria\Engine\Lemuria\Message\Vessel;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 use Lemuria\Id;
 
-class NumberUsedMessage extends AbstractConstructionMessage
+class NumberVesselMessage extends AbstractVesselMessage
 {
-	protected string $level = Message::FAILURE;
+	protected string $level = Message::SUCCESS;
 
-	private Id $newId;
+	private Id $oldId;
 
 	/**
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'ID of construction ' . $this->id . ' not changed. ID ' . $this->newId . ' is used already.';
+		return 'New ID of vessel ' . $this->oldId . ' is ' . $this->id . '.';
 	}
 
 	/**
@@ -24,6 +24,6 @@ class NumberUsedMessage extends AbstractConstructionMessage
 	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->newId = new Id($message->getParameter());
+		$this->oldId = new Id($message->getParameter());
 	}
 }

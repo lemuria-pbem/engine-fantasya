@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Unit;
+namespace Lemuria\Engine\Lemuria\Message\Region;
 
 use Lemuria\Engine\Message;
 
-class DescribeMessage extends AbstractUnitMessage
+class DescribeRegionMessage extends AbstractRegionMessage
 {
 	protected string $level = Message::SUCCESS;
 
@@ -12,6 +12,6 @@ class DescribeMessage extends AbstractUnitMessage
 	 * @return string
 	 */
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' now has a new description.';
+		return 'Region ' . $this->id . ' now has a new description.';
 	}
 }
