@@ -7,6 +7,7 @@ use Lemuria\Engine\Lemuria\Command\Comment;
 use Lemuria\Engine\Lemuria\Command\Create;
 use Lemuria\Engine\Lemuria\Command\Describe;
 use Lemuria\Engine\Lemuria\Command\End;
+use Lemuria\Engine\Lemuria\Command\Fight;
 use Lemuria\Engine\Lemuria\Command\Learn;
 use Lemuria\Engine\Lemuria\Command\Name;
 use Lemuria\Engine\Lemuria\Command\Next;
@@ -271,8 +272,10 @@ class CommandFactory
 				return new Handover($phrase);
 			case 'HELFEN' :
 				return new Help($phrase);
+			*/
 			case 'KÄMPFEN' :
-				return new Fight($phrase);
+				return new Fight($phrase, $this->context);
+			/*
 			case 'KOMMANDO' :
 				return new Grant($phrase);
 			*/
