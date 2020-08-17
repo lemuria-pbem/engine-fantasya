@@ -12,7 +12,7 @@ class NumberOwnerMessage extends AbstractConstructionMessage
 
 	protected string $level = Message::FAILURE;
 
-	private Id $owner;
+	protected Id $owner;
 
 	/**
 	 * @return string

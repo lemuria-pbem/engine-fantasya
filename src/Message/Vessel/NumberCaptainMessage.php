@@ -12,7 +12,7 @@ class NumberCaptainMessage extends AbstractVesselMessage
 
 	protected string $level = Message::FAILURE;
 
-	private Id $captain;
+	protected Id $captain;
 
 	/**
 	 * @return string

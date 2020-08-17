@@ -9,7 +9,7 @@ class NameUnitMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	private string $name;
+	protected string $name;
 
 	/**
 	 * @return string

@@ -10,9 +10,9 @@ class TeachBonusMessage extends AbstractUnitMessage
 
 	public const BONUS = 'b';
 
-	private int $students;
+	protected int $students;
 
-	private float $bonus;
+	protected float $bonus;
 
 	/**
 	 * @return string

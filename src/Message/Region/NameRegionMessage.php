@@ -9,7 +9,7 @@ class NameRegionMessage extends AbstractRegionMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	private string $name;
+	protected string $name;
 
 	/**
 	 * @return string

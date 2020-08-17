@@ -10,9 +10,9 @@ class LearnProgressMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	private Singleton $talent;
+	protected Singleton $talent;
 
-	private int $experience;
+	protected int $experience;
 
 	/**
 	 * @return string

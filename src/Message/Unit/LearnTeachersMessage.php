@@ -6,7 +6,7 @@ use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 
 class LearnTeachersMessage extends AbstractUnitMessage
 {
-	private int $teachers;
+	protected int $teachers;
 
 	/**
 	 * @return string

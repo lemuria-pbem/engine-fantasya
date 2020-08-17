@@ -10,7 +10,7 @@ class NumberConstructionUsedMessage extends AbstractConstructionMessage
 {
 	protected string $level = Message::FAILURE;
 
-	private Id $newId;
+	protected Id $newId;
 
 	/**
 	 * @return string

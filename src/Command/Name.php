@@ -3,9 +3,9 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
 use Lemuria\Engine\Lemuria\Exception\CommandException;
-use Lemuria\Engine\Lemuria\Message\Construction\NameCastleMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\NameConstructionMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\NameOwnerMessage;
+use Lemuria\Engine\Lemuria\Message\Region\NameCastleMessage;
 use Lemuria\Engine\Lemuria\Message\Region\NameRegionMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\NameUnitMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\NameNotInConstructionMessage;
@@ -85,7 +85,7 @@ final class Name extends UnitCommand
 				$this->message(NameConstructionMessage::class)->e($construction)->p($name);
 				return;
 			}
-			$this->message(NameOwnerMessage::OWNER)->e($construction)->e($this->unit, NameOwnerMessage::OWNER);
+			$this->message(NameOwnerMessage::class)->e($construction)->e($this->unit, NameOwnerMessage::OWNER);
 			return;
 		}
 		$this->message(NameNotInConstructionMessage::class);

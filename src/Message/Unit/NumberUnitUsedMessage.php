@@ -10,7 +10,7 @@ class NumberUnitUsedMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	private Id $newId;
+	protected Id $newId;
 
 	/**
 	 * @return string

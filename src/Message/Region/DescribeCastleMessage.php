@@ -1,18 +1,18 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Construction;
+namespace Lemuria\Engine\Lemuria\Message\Region;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 use Lemuria\Id;
 
-class DescribeCastleMessage extends AbstractConstructionMessage
+class DescribeCastleMessage extends AbstractRegionMessage
 {
 	public const OWNER = 'owner';
 
 	protected string $level = Message::FAILURE;
 
-	private Id $owner;
+	protected Id $owner;
 
 	/**
 	 * @return string

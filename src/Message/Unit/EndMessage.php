@@ -6,7 +6,7 @@ use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 
 class EndMessage extends UnitMessage
 {
-	private string $tempNumber;
+	protected string $tempNumber;
 
 	/**
 	 * @return string

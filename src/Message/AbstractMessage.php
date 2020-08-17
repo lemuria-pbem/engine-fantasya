@@ -2,8 +2,10 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Message;
 
+use function Lemuria\getClass;
 use Lemuria\Engine\Message;
 use Lemuria\Id;
+use Lemuria\Model\Dictionary;
 use Lemuria\SingletonTrait;
 
 abstract class AbstractMessage implements MessageType
@@ -27,7 +29,7 @@ abstract class AbstractMessage implements MessageType
 	 */
 	public function render(LemuriaMessage $message): string {
 		$this->getData($message);
-		return $this->create();
+		return  $this->translate() ?? $this->create();
 	}
 
 	/**
@@ -40,5 +42,37 @@ abstract class AbstractMessage implements MessageType
 	 */
 	protected function getData(LemuriaMessage $message): void {
 		$this->id = $message->get();
+	}
+
+	/**
+	 * @return string|null
+	 */
+	protected function translate(): ?string {
+		$dictionary  = new Dictionary();
+		$keyPath     = 'message.' . getClass($this);
+		$translation = $dictionary->get($keyPath);
+		if ($translation === $keyPath) {
+			return null;
+		}
+
+		foreach ($this->getVariables() as $name) {
+			$translation = str_replace('$' . $name, (string)$this->$name, $translation);
+		}
+		return $translation;
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function getVariables(): array {
+		$properties = [];
+		$reflection = new \ReflectionClass($this);
+		foreach ($reflection->getProperties() as $property) {
+			$name = $property->getName();
+			if ($name !== 'level') {
+				$properties[] = $name;
+			}
+		}
+		return $properties;
 	}
 }

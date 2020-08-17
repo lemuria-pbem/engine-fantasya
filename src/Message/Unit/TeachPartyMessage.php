@@ -13,9 +13,9 @@ class TeachPartyMessage extends AbstractUnitMessage
 
 	protected string $level = Message::FAILURE;
 
-	private Id $party;
+	protected Id $party;
 
-	private Id $unit;
+	protected Id $unit;
 
 	/**
 	 * @return string

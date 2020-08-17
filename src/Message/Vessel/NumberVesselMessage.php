@@ -10,7 +10,7 @@ class NumberVesselMessage extends AbstractVesselMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	private Id $oldId;
+	protected Id $oldId;
 
 	/**
 	 * @return string

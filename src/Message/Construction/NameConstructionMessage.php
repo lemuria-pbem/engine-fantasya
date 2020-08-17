@@ -9,7 +9,7 @@ class NameConstructionMessage extends AbstractConstructionMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	private string $name;
+	protected string $name;
 
 	/**
 	 * @return string

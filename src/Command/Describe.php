@@ -3,9 +3,9 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
 use Lemuria\Engine\Lemuria\Exception\CommandException;
-use Lemuria\Engine\Lemuria\Message\Construction\DescribeCastleMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\DescribeConstructionMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\DescribeOwnerMessage;
+use Lemuria\Engine\Lemuria\Message\Region\DescribeCastleMessage;
 use Lemuria\Engine\Lemuria\Message\Region\DescribeRegionMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\DescribeUnitMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\DescribeNotInConstructionMessage;

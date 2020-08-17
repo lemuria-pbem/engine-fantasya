@@ -6,7 +6,7 @@ use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 
 class CommentMessage extends AbstractUnitMessage
 {
-	private string $comment;
+	protected string $comment;
 
 	/**
 	 * @return string

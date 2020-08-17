@@ -10,7 +10,7 @@ class ArtifactResourcesMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	private Singleton $artifact;
+	protected Singleton $artifact;
 
 	/**
 	 * @return string

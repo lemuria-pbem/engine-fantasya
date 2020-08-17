@@ -9,7 +9,7 @@ class TeachExceptionMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	private string $error;
+	protected string $error;
 
 	/**
 	 * @return string

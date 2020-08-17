@@ -10,7 +10,7 @@ class FightMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	private int $position;
+	protected int $position;
 
 	/**
 	 * @return string
