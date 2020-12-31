@@ -13,11 +13,8 @@ use Lemuria\Engine\Lemuria\Message\Unit\UnguardNotGuardingMessage;
  *
  * - BEWACHEN Nicht
  */
-final class Unguard extends UnitCommand {
-
-	/**
-	 * The command implementation.
-	 */
+final class Unguard extends UnitCommand
+{
 	protected function run(): void {
 		if ($this->unit->IsGuarding()) {
 			$this->unit->setIsGuarding(false);

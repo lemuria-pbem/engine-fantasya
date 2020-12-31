@@ -22,11 +22,8 @@ use Lemuria\Model\Lemuria\Party;
  * - TARNEN Nein|Nicht
  * - TARNEN Partei [<Party>]
  */
-final class Disguise extends UnitCommand {
-
-	/**
-	 * The command implementation.
-	 */
+final class Disguise extends UnitCommand
+{
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n <= 0) {

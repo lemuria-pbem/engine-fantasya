@@ -276,10 +276,8 @@ class CommandFactory
 			*/
 			case 'KOMMENTAR' :
 				return new Comment($phrase,$this->context);
-			/*
 			case 'KONTAKTIEREN' :
-				return new Contact($phrase);
-			*/
+				return new Contact($phrase, $this->context);
 			case 'LEHREN' :
 				return new Teach($phrase, $this->context);
 			case 'LERNEN' :

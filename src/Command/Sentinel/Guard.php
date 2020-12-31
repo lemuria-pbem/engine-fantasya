@@ -14,11 +14,8 @@ use Lemuria\Engine\Lemuria\Message\Unit\GuardWithoutWeaponMessage;
  *
  * - BEWACHEN
  */
-final class Guard extends UnitCommand {
-
-	/**
-	 * The command implementation.
-	 */
+final class Guard extends UnitCommand
+{
 	protected function run(): void {
 		if ($this->unit->IsGuarding()) {
 			$this->message(GuardAlreadyMessage::class);
