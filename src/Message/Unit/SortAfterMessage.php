@@ -10,8 +10,6 @@ class SortAfterMessage extends AbstractUnitMessage
 {
 	public const OTHER = 'other';
 
-	protected string $level = Message::DEBUG;
-
 	protected Id $other;
 
 	protected function create(): string {

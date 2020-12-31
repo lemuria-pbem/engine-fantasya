@@ -6,8 +6,6 @@ use Lemuria\Engine\Message;
 
 class SortFirstMessage extends AbstractUnitMessage
 {
-	protected string $level = Message::DEBUG;
-
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' reordered as first.';
 	}

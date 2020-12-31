@@ -13,6 +13,7 @@ use Lemuria\Engine\Lemuria\Command\Name;
 use Lemuria\Engine\Lemuria\Command\Next;
 use Lemuria\Engine\Lemuria\Command\Number;
 use Lemuria\Engine\Lemuria\Command\Party;
+use Lemuria\Engine\Lemuria\Command\Sentinel;
 use Lemuria\Engine\Lemuria\Command\Sort;
 use Lemuria\Engine\Lemuria\Command\Teach;
 use Lemuria\Engine\Lemuria\Command\Unit;
@@ -253,9 +254,9 @@ class CommandFactory
 				return new Board($phrase);
 			case 'BETRETEN' :
 				return new Enter($phrase);
-			case 'BEWACHEN' :
-				return new Sentinel($phrase);
 			*/
+			case 'BEWACHEN' :
+				return new Sentinel($phrase, $this->context);
 			case 'EINHEIT' :
 				return new Unit($phrase, $this->context);
 			case 'ENDE' :

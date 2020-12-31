@@ -4,9 +4,11 @@ namespace Lemuria\Engine\Lemuria\Message\Unit;
 
 use Lemuria\Engine\Message;
 
-class SortLastMessage extends AbstractUnitMessage
+class GuardMessage extends AbstractUnitMessage
 {
+	protected string $level = Message::SUCCESS;
+
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' reordered as last.';
+		return 'Unit ' . $this->id . ' guards the region.';
 	}
 }
