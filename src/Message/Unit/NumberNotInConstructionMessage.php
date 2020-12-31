@@ -8,9 +8,6 @@ class NumberNotInConstructionMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is not in any construction, it cannot change an ID.';
 	}

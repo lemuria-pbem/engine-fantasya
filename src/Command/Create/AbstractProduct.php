@@ -20,13 +20,10 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 {
 	protected string $resource;
 
-	protected ?int $demand = null;
+	protected ?int $demand;
 
 	protected int $capability = 0;
 
-	/**
-	 * Make preparations before running the command.
-	 */
 	protected function initialize(): void {
 		parent::initialize();
 		$this->resource = $this->phrase->getParameter(0);
@@ -37,9 +34,6 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 
 	/**
 	 * Get maximum amount that can be produced by knowledge.
-	 *
-	 * @param Requirement $craft
-	 * @return int
 	 */
 	protected function calculateProduction(Requirement $craft): int {
 		$production = 0;
@@ -54,9 +48,6 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 
 	/**
 	 * Get maximum amount that can be produced by resources.
-	 *
-	 * @param Resources $resources
-	 * @return int
 	 */
 	protected function calculateResources(Resources $resources): int {
 		$reserves   = $this->unit->Inventory();

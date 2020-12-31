@@ -27,11 +27,8 @@ use Lemuria\Lemuria;
  * - NUMMER Burg|Gebäude <ID>
  * - NUMMER Schiff <ID>
  */
-final class Number extends UnitCommand {
-
-	/**
-	 * The command implementation.
-	 */
+final class Number extends UnitCommand
+{
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n <= 0) {
@@ -69,8 +66,6 @@ final class Number extends UnitCommand {
 
 	/**
 	 * Set name of unit.
-	 *
-	 * @param Id $id
 	 */
 	private function setUnitId(Id $id): void {
 		if (Lemuria::Catalog()->has($id, Catalog::UNITS)) {
@@ -104,8 +99,6 @@ final class Number extends UnitCommand {
 
 	/**
 	 * Set name of construction the unit controls.
-	 *
-	 * @param Id $id
 	 */
 	private function setConstructionId(Id $id): void {
 		$construction = $this->unit->Construction();
@@ -134,8 +127,6 @@ final class Number extends UnitCommand {
 
 	/**
 	 * Set name of vessel the unit controls.
-	 *
-	 * @param Id $id
 	 */
 	private function setVesselId(Id $id): void {
 		$vessel = $this->unit->Vessel();

@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Combat;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Calculus;
 use Lemuria\Model\Lemuria\Commodity\Weapon\Fists;
 use Lemuria\Model\Lemuria\Factory\BuilderTrait;
@@ -16,35 +18,23 @@ class Combatant
 {
 	use BuilderTrait;
 
-	private Unit $unit;
-
 	private int $size;
 
 	private WeaponSkill $weapon;
 
 	/**
 	 * Create a combatant for a unit.
-	 *
-	 * @param Unit $unit
 	 */
-	public function __construct(Unit $unit) {
-		$this->unit = $unit;
+	#[Pure] public function __construct(private Unit $unit) {
 		$this->size = $unit->Size();
 	}
 
-	/**
-	 * Get the unit.
-	 *
-	 * @return Unit
-	 */
-	public function Unit(): Unit {
+	#[Pure] public function Unit(): Unit {
 		return $this->unit;
 	}
 
 	/**
 	 * Get the weapon skill.
-	 *
-	 * @return WeaponSkill
 	 */
 	public function Weapon(): WeaponSkill {
 		if (!$this->weapon) {
@@ -57,30 +47,23 @@ class Combatant
 
 	/**
 	 * Get the number of persons.
-	 *
-	 * @return int
 	 */
-	public function Size(): int {
+	#[Pure] public function Size(): int {
 		return $this->size;
 	}
 
 	/**
 	 * Set a weapon filter.
-	 *
-	 * @param WeaponSkill $weaponSkill
-	 * @return self
 	 */
-	public function setWeapon(WeaponSkill $weaponSkill): self {
+	public function setWeapon(WeaponSkill $weaponSkill): Combatant {
 		$this->weapon = $weaponSkill;
 		return $this->calculateSize();
 	}
 
 	/**
 	 * Calculates the size based on the filters set.
-	 *
-	 * @return Combatant
 	 */
-	protected function calculateSize(): self {
+	protected function calculateSize(): Combatant {
 		$this->size = $this->Weapon()->Weapon()->Count();
 
 		return $this;

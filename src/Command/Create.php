@@ -21,11 +21,6 @@ use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
  */
 final class Create extends DelegatedCommand
 {
-	/**
-	 * Create the delegate.
-	 *
-	 * @return Command
-	 */
 	protected function createDelegate(): Command {
 		if (count($this->phrase) > 2) {
 			throw new UnknownCommandException($this);

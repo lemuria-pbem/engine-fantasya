@@ -12,16 +12,10 @@ class NumberUnitUsedMessage extends AbstractUnitMessage
 
 	protected Id $newId;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'ID of unit ' . $this->id . ' not changed. ID ' . $this->newId . ' is used already.';
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
 		$this->newId = new Id($message->getParameter());

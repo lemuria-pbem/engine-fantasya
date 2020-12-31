@@ -8,16 +8,10 @@ class LearnTeachersMessage extends AbstractUnitMessage
 {
 	protected int $teachers;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has ' . $this->teachers . ' teachers.';
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
 		$this->teachers = $message->getParameter();

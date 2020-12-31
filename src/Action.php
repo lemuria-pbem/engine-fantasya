@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Exception\ActionException;
 
 /**
@@ -17,36 +19,24 @@ interface Action
 
 	/**
 	 * Get action as string.
-	 *
-	 * @return string
 	 */
-	public function __toString(): string;
+	#[Pure] public function __toString(): string;
 
-	/**
-	 * Get the priority;
-	 *
-	 * @return int
-	 */
-	public function Priority(): int;
+	#[Pure] public function Priority(): int;
 
 	/**
 	 * Check if the action has been prepared and is ready to execute.
-	 *
-	 * @return bool
 	 */
 	public function isPrepared(): bool;
 
 	/**
 	 * Prepare execution of the action.
-	 *
-	 * @return Action
 	 */
 	public function prepare(): Action;
 
 	/**
 	 * Execute the action.
 	 *
-	 * @return Action
 	 * @throws ActionException
 	 */
 	public function execute(): Action;

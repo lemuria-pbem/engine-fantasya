@@ -37,13 +37,10 @@ final class RawMaterial extends AllocationCommand implements Activity
 
 	private Ability $knowledge;
 
-	private ?int $demand = null;
+	private ?int $demand;
 
 	private int $production = 0;
 
-	/**
-	 * The command implementation.
-	 */
 	protected function run(): void {
 		parent::run();
 		$talent     = $this->knowledge->Talent();
@@ -112,8 +109,6 @@ final class RawMaterial extends AllocationCommand implements Activity
 
 	/**
 	 * Determine the required talent.
-	 *
-	 * @return Talent
 	 */
 	private function getRequiredTalent(): Talent {
 		if ($this->commodity instanceof RawMaterialInterface) {

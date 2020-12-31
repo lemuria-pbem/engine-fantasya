@@ -35,9 +35,6 @@ class LemuriaTurn implements Turn
 
 	/**
 	 * Add commands.
-	 *
-	 * @param Move $move
-	 * @return Turn
 	 */
 	public function add(Move $move): Turn {
 		Lemuria::Log()->debug('Adding party move.', ['move' => $move]);
@@ -78,10 +75,6 @@ class LemuriaTurn implements Turn
 	}
 
 	/**
-	 * Add an event.
-	 *
-	 * @param Event $event
-	 * @return Turn
 	 * @throws LemuriaException
 	 */
 	public function addEvent(Event $event): Turn {
@@ -90,10 +83,6 @@ class LemuriaTurn implements Turn
 	}
 
 	/**
-	 * Add an effect.
-	 *
-	 * @param Effect $effect
-	 * @return Turn
 	 * @throws LemuriaException
 	 */
 	public function addEffect(Effect $effect): Turn {
@@ -103,8 +92,6 @@ class LemuriaTurn implements Turn
 
 	/**
 	 * Evaluate the whole turn.
-	 *
-	 * @return Turn
 	 */
 	public function evaluate(): Turn {
 		Lemuria::Log()->debug('Executing queued actions.', ['queues' => count($this->queue)]);
@@ -136,7 +123,6 @@ class LemuriaTurn implements Turn
 	/**
 	 * Add action to the right queue.
 	 *
-	 * @param Action $action
 	 * @throws LemuriaException
 	 */
 	protected function enqueue(Action $action): void {

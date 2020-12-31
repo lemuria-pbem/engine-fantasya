@@ -1,4 +1,5 @@
 <?php
+/** @noinspection DuplicatedCode */
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria;
 
@@ -29,11 +30,6 @@ class ResourcePool
 	 */
 	protected array $reservations = [];
 
-	/**
-	 * ResourcePool constructor.
-	 *
-	 * @param Unit $unit
-	 */
 	public function __construct(Unit $unit) {
 		$this->party  = $unit->Party();
 		$this->region = $unit->Region();
@@ -48,10 +44,6 @@ class ResourcePool
 
 	/**
 	 * Take a quantity out of the pool without reserving it.
-	 *
-	 * @param Unit $unit
-	 * @param Quantity $quantity
-	 * @return Quantity
 	 */
 	public function take(Unit $unit, Quantity $quantity): Quantity {
 		$id = $unit->Id();
@@ -101,12 +93,8 @@ class ResourcePool
 
 	/**
 	 * Make a reservation of one commodity.
-	 *
-	 * @param Unit $unit
-	 * @param Quantity|null $quantity
-	 * @return Quantity
 	 */
-	public function reserve(Unit $unit, Quantity $quantity = null): Quantity {
+	public function reserve(Unit $unit, Quantity $quantity): Quantity {
 		$id = $unit->Id();
 		if (!$this->units->has($id)) {
 			throw new LemuriaException('Unit ' . $unit . ' is not a pool member.');
@@ -173,9 +161,6 @@ class ResourcePool
 
 	/**
 	 * Make a reservation of everything that is available in the pool.
-	 *
-	 * @param Unit $unit
-	 * @return ResourcePool
 	 */
 	public function reserveEverything(Unit $unit): ResourcePool {
 		$id = $unit->Id();

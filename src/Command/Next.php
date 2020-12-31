@@ -15,12 +15,6 @@ use Lemuria\Engine\Lemuria\Phrase;
  */
 final class Next extends AbstractCommand implements Immediate
 {
-	/**
-	 * Create a new command for given Phrase.
-	 *
-	 * @param Phrase $phrase
-	 * @param Context $context
-	 */
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		while ($context->Parser()->isSkip()) {
@@ -28,27 +22,15 @@ final class Next extends AbstractCommand implements Immediate
 		}
 	}
 
-	/**
-	 * Skip the command.
-	 *
-	 * @return Immediate
-	 */
 	public function skip(): Immediate {
 		return $this;
 	}
 
-	/**
-	 * The command implementation.
-	 */
 	protected function run(): void {
 		$this->context->Parser()->finish();
 		$this->message(NextMessage::class);
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 * @return LemuriaMessage
-	 */
 	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
 		return $message->e($this->context->Party());
 	}

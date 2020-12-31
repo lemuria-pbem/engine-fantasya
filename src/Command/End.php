@@ -15,19 +15,11 @@ use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
  */
 final class End extends UnitCommand implements Immediate
 {
-	/**
-	 * Skip the command.
-	 *
-	 * @return Immediate
-	 */
 	public function skip(): Immediate {
 		$this->context->Parser()->skip(false);
 		return $this;
 	}
 
-	/**
-	 * The command implementation.
-	 */
 	protected function run(): void {
 		$temp    = $this->context->UnitMapper()->find($this->unit);
 		$creator = $temp->getCreator();
@@ -35,10 +27,6 @@ final class End extends UnitCommand implements Immediate
 		$this->message(EndMessage::class)->p($temp->getTempNumber());
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 * @return LemuriaMessage
-	 */
 	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
 		return $message->e($this->context->Unit());
 	}

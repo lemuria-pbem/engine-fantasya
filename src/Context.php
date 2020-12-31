@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Exception\CommandParserException;
 use Lemuria\Engine\Lemuria\Factory\CommandFactory;
 use Lemuria\Model\Lemuria\Party;
@@ -13,8 +15,6 @@ use Lemuria\Model\Lemuria\Unit;
  */
 final class Context
 {
-	private LemuriaTurn $turn;
-
 	private Parser $parser;
 
 	private CommandFactory $factory;
@@ -50,11 +50,7 @@ final class Context
 	 */
 	private array $resourcePool = [];
 
-	/**
-	 * @param LemuriaTurn $turn
-	 */
-	public function __construct(LemuriaTurn $turn) {
-		$this->turn    = $turn;
+	#[Pure] public function __construct(private LemuriaTurn $turn) {
 		$this->parser  = new Parser($this);
 		$this->factory = new CommandFactory($this);
 		$this->mapper  = new UnitMapper();
@@ -63,7 +59,6 @@ final class Context
 	/**
 	 * Get the Party whose commands are parsed.
 	 *
-	 * @return Party
 	 * @throws CommandParserException
 	 */
 	public function Party(): Party {
@@ -76,7 +71,6 @@ final class Context
 	/**
 	 * Get current parsed Unit.
 	 *
-	 * @return Unit
 	 * @throws CommandParserException
 	 */
 	public function Unit(): Unit {
@@ -88,41 +82,25 @@ final class Context
 
 	/**
 	 * Get the command factory.
-	 *
-	 * @return CommandFactory
 	 */
-	public function Factory(): CommandFactory {
+	#[Pure] public function Factory(): CommandFactory {
 		return $this->factory;
 	}
 
-	/**
-	 * @return Parser
-	 */
-	public function Parser(): Parser {
+	#[Pure] public function Parser(): Parser {
 		return $this->parser;
 	}
 
-	/**
-	 * Get the unit mapper.
-	 *
-	 * @return UnitMapper
-	 */
-	public function UnitMapper(): UnitMapper {
+	#[Pure] public function UnitMapper(): UnitMapper {
 		return $this->mapper;
 	}
 
-	/**
-	 * @return LemuriaTurn
-	 */
-	public function Turn(): LemuriaTurn {
+	#[Pure] public function Turn(): LemuriaTurn {
 		return $this->turn;
 	}
 
 	/**
 	 * Get a unit's calculus.
-	 *
-	 * @param Unit $unit
-	 * @return Calculus
 	 */
 	public function getCalculus(Unit $unit): Calculus {
 		$id = $unit->Id()->Id();
@@ -134,9 +112,6 @@ final class Context
 
 	/**
 	 * Get a unit's activity protocol.
-	 *
-	 * @param Unit $unit
-	 * @return mixed
 	 */
 	public function getProtocol(Unit $unit): ActivityProtocol {
 		$id = $unit->Id()->Id();
@@ -148,9 +123,6 @@ final class Context
 
 	/**
 	 * Get a region's allocation.
-	 *
-	 * @param Region $region
-	 * @return Allocation
 	 */
 	public function getAllocation(Region $region): Allocation {
 		$id = $region->Id()->Id();
@@ -162,9 +134,6 @@ final class Context
 
 	/**
 	 * Get a resource pool.
-	 *
-	 * @param Unit $unit
-	 * @return ResourcePool
 	 */
 	public function getResourcePool(Unit $unit): ResourcePool {
 		$id = $unit->Party()->Id()->Id() . '-' . $unit->Region()->Id()->Id();
@@ -176,9 +145,6 @@ final class Context
 
 	/**
 	 * Get a region's intelligence.
-	 *
-	 * @param Region $region
-	 * @return Intelligence
 	 */
 	public function getIntelligence(Region $region): Intelligence {
 		$id = $region->Id()->Id();
@@ -191,8 +157,6 @@ final class Context
 	/**
 	 * Set the Party whose commands are parsed.
 	 *
-	 * @param Party $party
-	 * @return Context
 	 * @throws CommandParserException
 	 */
 	public function setParty(Party $party): Context {
@@ -205,9 +169,6 @@ final class Context
 
 	/**
 	 * Set current parsed Unit.
-	 *
-	 * @param Unit $unit
-	 * @return Context
 	 */
 	public function setUnit(Unit $unit): Context {
 		$this->unit = $unit;

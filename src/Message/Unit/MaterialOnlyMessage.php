@@ -8,9 +8,6 @@ class MaterialOnlyMessage extends MaterialOutputMessage
 {
 	protected string $level = Message::FAILURE;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' can only produce ' . $this->output . ' with ' . $this->talent . '.';
 	}

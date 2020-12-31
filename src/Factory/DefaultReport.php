@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Factory;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Exception\DuplicateMessageException;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
@@ -25,14 +27,8 @@ class DefaultReport implements Report
 	 */
 	private array $message = [];
 
-	/**
-	 * @var int
-	 */
 	private int $nextId = 1;
 
-	/**
-	 * @var bool
-	 */
 	private bool $isLoaded = false;
 
 	/**
@@ -51,8 +47,6 @@ class DefaultReport implements Report
 	/**
 	 * Get the specified message.
 	 *
-	 * @param Id $id
-	 * @return Message
 	 * @throws NotRegisteredException
 	 */
 	public function get(Id $id): Message {
@@ -64,11 +58,8 @@ class DefaultReport implements Report
 
 	/**
 	 * Get all messages of an entity.
-	 *
-	 * @param Identifiable $identifiable
-	 * @return array
 	 */
-	public function getAll(Identifiable $identifiable): array {
+	#[Pure] public function getAll(Identifiable $identifiable): array {
 		$namespace = $identifiable->Catalog();
 		$id        = $identifiable->Id()->Id();
 		if (!isset($this->report[$namespace][$id])) {
@@ -79,8 +70,6 @@ class DefaultReport implements Report
 
 	/**
 	 * Load message data into report.
-	 *
-	 * @return Report
 	 */
 	public function load(): Report {
 		if (!$this->isLoaded) {
@@ -95,8 +84,6 @@ class DefaultReport implements Report
 
 	/**
 	 * Save game data from report.
-	 *
-	 * @return Report
 	 */
 	public function save(): Report {
 		$messages = [];
@@ -110,8 +97,6 @@ class DefaultReport implements Report
 	/**
 	 * Register a message.
 	 *
-	 * @param Message $message
-	 * @return Report
 	 * @throws DuplicateIdException
 	 */
 	public function register(Message $message): Report {
@@ -133,8 +118,6 @@ class DefaultReport implements Report
 
 	/**
 	 * Reserve the next ID.
-	 *
-	 * @return Id
 	 */
 	public function nextId(): Id {
 		$id = new Id($this->nextId);
@@ -145,7 +128,6 @@ class DefaultReport implements Report
 	/**
 	 * Check if namespace is valid.
 	 *
-	 * @param int $namespace
 	 * @throws LemuriaException
 	 */
 	private function checkNamespace(int $namespace): void {

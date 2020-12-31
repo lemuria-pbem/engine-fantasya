@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria;
 
+use JetBrains\PhpStorm\Pure;
+
 /**
  * Commands are executed by a Unit.
  */
@@ -12,7 +14,7 @@ interface Command extends Action
 	 *
 	 * @return int
 	 */
-	public function getId(): int;
+	#[Pure] public function getId(): int;
 
 	/**
 	 * Get the delegate to execute.

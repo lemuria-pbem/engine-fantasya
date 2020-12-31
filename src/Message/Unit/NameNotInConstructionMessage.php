@@ -8,9 +8,6 @@ class NameNotInConstructionMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is not in any construction and thus cannot rename it.';
 	}

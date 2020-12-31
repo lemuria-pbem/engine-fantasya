@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
+use JetBrains\PhpStorm\Pure;
+
 use function Lemuria\getClass;
 use Lemuria\Engine\Lemuria\Message\Unit\TeachPartyMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\TeachRegionMessage;
@@ -37,16 +39,11 @@ final class Teach extends UnitCommand implements Activity
 
 	/**
 	 * Get learning bonus.
-	 *
-	 * @return float
 	 */
-	public function getBonus(): float {
+	#[Pure] public function getBonus(): float {
 		return $this->bonus;
 	}
 
-	/**
-	 * Make preparations before running the command.
-	 */
 	protected function initialize(): void {
 		parent::initialize();
 		$i = 1;
@@ -72,9 +69,6 @@ final class Teach extends UnitCommand implements Activity
 		}
 	}
 
-	/**
-	 * The command implementation.
-	 */
 	protected function run(): void {
 		$this->calculateBonuses();
 		$this->message(TeachBonusMessage::class)->p($this->size, TeachBonusMessage::STUDENTS)->p($this->bonus, TeachBonusMessage::BONUS);
@@ -82,10 +76,6 @@ final class Teach extends UnitCommand implements Activity
 
 	/**
 	 * Add student/teacher for given unit.
-	 *
-	 * @param Unit $unit
-	 * @param bool $log
-	 * @return int
 	 */
 	private function teach(Unit $unit, bool $log = false): int {
 		$size = 0;
@@ -116,11 +106,8 @@ final class Teach extends UnitCommand implements Activity
 
 	/**
 	 * Check if teacher has more experience than student candidate.
-	 *
-	 * @param Unit $unit
-	 * @return bool|null
 	 */
-	private function hasGreaterLevelThan(Unit $unit) {
+	private function hasGreaterLevelThan(Unit $unit): ?bool {
 		$calculus = $this->context->getCalculus($unit);
 		$learn    = $calculus->getStudent();
 		if ($learn) {

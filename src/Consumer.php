@@ -12,15 +12,11 @@ interface Consumer extends Command
 {
 	/**
 	 * Get the requested resources.
-	 *
-	 * @return Resources
 	 */
 	public function getDemand(): Resources;
 
 	/**
 	 * Get the requested resource quota that is available for allocation.
-	 *
-	 * @return float
 	 */
 	public function getQuota(): float;
 
@@ -36,9 +32,6 @@ interface Consumer extends Command
 
 	/**
 	 * Allocate resources.
-	 *
-	 * @param Resources $resources
-	 * @return bool
 	 */
 	public function allocate(Resources $resources): bool;
 }

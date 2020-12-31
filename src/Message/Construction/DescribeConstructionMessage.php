@@ -8,9 +8,6 @@ class DescribeConstructionMessage extends AbstractConstructionMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Construction ' . $this->id . ' now has a new description.';
 	}

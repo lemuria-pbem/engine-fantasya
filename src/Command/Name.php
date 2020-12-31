@@ -25,9 +25,6 @@ use Lemuria\Model\Lemuria\Construction;
  */
 final class Name extends UnitCommand
 {
-	/**
-	 * The command implementation.
-	 */
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n <= 0) {
@@ -63,8 +60,6 @@ final class Name extends UnitCommand
 
 	/**
 	 * Set name of unit.
-	 *
-	 * @param string $name
 	 */
 	private function renameUnit(string $name): void {
 		$this->unit->setName($name);
@@ -73,8 +68,6 @@ final class Name extends UnitCommand
 
 	/**
 	 * Set name of construction the unit controls.
-	 *
-	 * @param string $name
 	 */
 	private function renameConstruction(string $name): void {
 		$construction = $this->unit->Construction();
@@ -93,8 +86,6 @@ final class Name extends UnitCommand
 
 	/**
 	 * Set name of region the unit controls.
-	 *
-	 * @param string $name
 	 */
 	private function renameRegion(string $name): void {
 		$region = $this->unit->Region();
@@ -119,8 +110,6 @@ final class Name extends UnitCommand
 
 	/**
 	 * Set name of vessel the unit controls.
-	 *
-	 * @param string $name
 	 */
 	private function renameVessel(string $name): void {
 		$vessel = $this->unit->Vessel();
@@ -139,9 +128,6 @@ final class Name extends UnitCommand
 
 	/**
 	 * Trim special characters from name.
-	 *
-	 * @param string $name
-	 * @return string
 	 */
 	private function trimName(string $name): string {
 		return trim($name, "\"'`'^°!§$%&/()=?{[]}\\+*~#<>|,.-;:_ ");

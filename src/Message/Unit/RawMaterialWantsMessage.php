@@ -11,16 +11,10 @@ class RawMaterialWantsMessage extends AbstractUnitMessage
 
 	protected int $production;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' wants to produce ' . $this->production . ' ' . $this->commodity . '.';
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
 		$this->commodity = $message->getSingleton();

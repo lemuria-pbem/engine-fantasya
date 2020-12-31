@@ -8,9 +8,6 @@ class TeachSelfMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot teach itself.';
 	}

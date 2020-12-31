@@ -2,6 +2,10 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Message;
 
+use JetBrains\PhpStorm\ExpectedValues;
+use JetBrains\PhpStorm\Pure;
+
+use Lemuria\Engine\Report;
 use function Lemuria\getClass;
 use Lemuria\Engine\Message;
 use Lemuria\Id;
@@ -16,37 +20,22 @@ abstract class AbstractMessage implements MessageType
 
 	protected Id $id;
 
-	/**
-	 * @return string
-	 */
-	public function Level(): string {
+	#[ExpectedValues(valuesFromClass: Report::class)]
+	#[Pure] public function Level(): string {
 		return $this->level;
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 * @return string
-	 */
 	public function render(LemuriaMessage $message): string {
 		$this->getData($message);
 		return  $this->translate() ?? $this->create();
 	}
 
-	/**
-	 * @return string
-	 */
 	abstract protected function create(): string;
 
-	/**
-	 * @param LemuriaMessage $message
-	 */
 	protected function getData(LemuriaMessage $message): void {
 		$this->id = $message->get();
 	}
 
-	/**
-	 * @return string|null
-	 */
 	protected function translate(): ?string {
 		$dictionary  = new Dictionary();
 		$keyPath     = 'message.' . getClass($this);
@@ -61,9 +50,6 @@ abstract class AbstractMessage implements MessageType
 		return $translation;
 	}
 
-	/**
-	 * @return array
-	 */
 	protected function getVariables(): array {
 		$properties = [];
 		$reflection = new \ReflectionClass($this);

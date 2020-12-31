@@ -9,8 +9,6 @@ interface Immediate extends Command
 {
 	/**
 	 * Skip the command.
-	 *
-	 * @return Immediate
 	 */
 	public function skip(): Immediate;
 }

@@ -15,18 +15,10 @@ use Lemuria\Model\Lemuria\Party as PartyModel;
  */
 final class Party extends AbstractCommand implements Immediate
 {
-	/**
-	 * Skip the command.
-	 *
-	 * @return Immediate
-	 */
 	public function skip(): Immediate {
 		return $this;
 	}
 
-	/**
-	 * The command implementation.
-	 */
 	protected function run(): void {
 		$id    = Id::fromId($this->phrase->getParameter());
 		$party = PartyModel::get($id);
@@ -34,11 +26,6 @@ final class Party extends AbstractCommand implements Immediate
 		$this->message(PartyMessage::class);
 	}
 
-
-	/**
-	 * @param LemuriaMessage $message
-	 * @return LemuriaMessage
-	 */
 	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
 		return $message->e($this->context->Party());
 	}

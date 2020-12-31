@@ -12,16 +12,10 @@ class NumberVesselUsedMessage extends AbstractVesselMessage
 
 	protected Id $newId;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'ID of vessel ' . $this->id . ' not changed. ID ' . $this->newId . ' is used already.';
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
 		$this->newId = new Id($message->getParameter());

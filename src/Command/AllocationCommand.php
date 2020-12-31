@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Consumer;
 use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Phrase;
@@ -26,9 +28,6 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 
 	/**
 	 * Create a new command for given Phrase.
-	 *
-	 * @param Phrase $phrase
-	 * @param Context $context
 	 */
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
@@ -37,19 +36,15 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 
 	/**
 	 * Get the requested resources.
-	 *
-	 * @return Resources
 	 */
-	public function getDemand(): Resources {
+	#[Pure] public function getDemand(): Resources {
 		return $this->resources;
 	}
 
 	/**
 	 * Get the requested resource quota that is available for allocation.
-	 *
-	 * @return float
 	 */
-	public function getQuota(): float {
+	#[Pure] public function getQuota(): float {
 		return self::QUOTA;
 	}
 
@@ -73,9 +68,6 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 
 	/**
 	 * Allocate resources.
-	 *
-	 * @param Resources $resources
-	 * @return bool
 	 */
 	public function allocate(Resources $resources) : bool {
 		$this->resources = $resources;
@@ -106,9 +98,6 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 
 	/**
 	 * Get a resource.
-	 *
-	 * @param string $class
-	 * @return Quantity
 	 */
 	protected function getResource(string $class): Quantity {
 		if (!isset($this->resources[$class])) {
@@ -136,7 +125,6 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	 * If region is guarded by other parties and there are no specific agreements, this unit may only produce if it is
 	 * not in a building and has better camouflage than all the blocking guards' perception.
 	 *
-	 * @param int $agreement
 	 * @return Party[]
 	 */
 	protected function getCheckByAgreement(int $agreement): array {

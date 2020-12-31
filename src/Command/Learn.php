@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Activity;
 use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Message\Unit\LearnProgressMessage;
@@ -24,12 +26,6 @@ final class Learn extends UnitCommand implements Activity
 
 	private ?Ability $progress = null;
 
-	/**
-	 * Create a new command for given Phrase.
-	 *
-	 * @param Phrase $phrase
-	 * @param Context $context
-	 */
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		$topic        = $this->phrase->getParameter();
@@ -37,27 +33,16 @@ final class Learn extends UnitCommand implements Activity
 		$this->calculus()->setStudent($this);
 	}
 
-	/**
-	 * Get the Talent.
-	 *
-	 * @return Talent
-	 */
-	public function getTalent(): Talent {
+	#[Pure] public function getTalent(): Talent {
 		return $this->talent;
 	}
 
-	/**
-	 * Make preparations before running the command.
-	 */
 	protected function initialize(): void {
 		parent::initialize();
 		$this->message(LearnTeachersMessage::class)->p(count($this->calculus()->getTeachers()));
 		$this->progress = $this->calculus()->progress($this->talent);
 	}
 
-	/**
-	 * The command implementation.
-	 */
 	protected function run(): void {
 		if (!$this->progress) {
 			throw new LemuriaException('No progress initialized.');

@@ -19,11 +19,6 @@ use Lemuria\Model\Lemuria\RawMaterial as RawMaterialInterface;
  */
 final class Resource extends DelegatedCommand
 {
-	/**
-	 * Create the delegate.
-	 *
-	 * @return Command
-	 */
 	protected function createDelegate(): Command {
 		$resource  = $this->phrase->getParameter(0);
 		$commodity = $this->context->Factory()->commodity($resource);

@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Command\Create\Temp;
 use Lemuria\Engine\Lemuria\Exception\CommandException;
 use Lemuria\Engine\Lemuria\Command\Exception\TempUnitException;
@@ -24,19 +26,14 @@ class UnitMapper
 
 	/**
 	 * Check if temp unit is already mapped.
-	 *
-	 * @param string $tempNumber
-	 * @return bool
 	 */
-	public function has(string $tempNumber): bool {
+	#[Pure] public function has(string $tempNumber): bool {
 		return isset($this->map[$tempNumber]);
 	}
 
 	/**
 	 * Add newly created Unit to mapper.
 	 *
-	 * @param Temp $command
-	 * @return UnitMapper
 	 * @throws TempUnitException
 	 */
 	public function map(Temp $command): UnitMapper {
@@ -59,8 +56,6 @@ class UnitMapper
 	/**
 	 * Get newly created Unit by TEMP number.
 	 *
-	 * @param string $temp
-	 * @return Temp
 	 * @throws TempUnitException
 	 */
 	public function get(string $temp): Temp {
@@ -77,8 +72,6 @@ class UnitMapper
 	/**
 	 * Find newly created Unit.
 	 *
-	 * @param Unit $unit
-	 * @return Temp
 	 * @throws TempUnitException
 	 */
 	public function find(Unit $unit): Temp {

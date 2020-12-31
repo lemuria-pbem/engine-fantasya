@@ -8,9 +8,6 @@ class FightUnguardMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' does not guard the region anymore.';
 	}

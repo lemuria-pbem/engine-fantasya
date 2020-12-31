@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Combat\WeaponSkill;
 use Lemuria\Engine\Lemuria\Command\Learn;
 use Lemuria\Engine\Lemuria\Command\Teach;
@@ -23,8 +25,6 @@ final class Calculus
 {
 	use BuilderTrait;
 
-	private Unit $unit;
-
 	private ?Learn $student = null;
 
 	/**
@@ -32,33 +32,21 @@ final class Calculus
 	 */
 	private array $teachers = [];
 
-	/**
-	 * Create new calculus.
-	 *
-	 * @param Unit $unit
-	 */
-	public function __construct(Unit $unit) {
-		$this->unit = $unit;
+	public function __construct(private Unit $unit) {
 	}
 
 	/**
 	 * Set student status for teaching.
-	 *
-	 * @param Learn $student
-	 * @return Calculus
 	 */
-	public function setStudent(Learn $student): self {
+	public function setStudent(Learn $student): Calculus {
 		$this->student = $student;
 		return $this;
 	}
 
 	/**
 	 * Add a teacher unit for learning.
-	 *
-	 * @param Teach $teacher
-	 * @return Calculus
 	 */
-	public function addTeacher(Teach $teacher): self {
+	public function addTeacher(Teach $teacher): Calculus {
 		$id                  = $teacher->Unit()->Id()->Id();
 		$this->teachers[$id] = $teacher;
 		return $this;
@@ -66,10 +54,8 @@ final class Calculus
 
 	/**
 	 * Get student status.
-	 *
-	 * @return Learn
 	 */
-	public function getStudent(): ?Learn {
+	#[Pure] public function getStudent(): ?Learn {
 		return $this->student;
 	}
 
@@ -78,17 +64,14 @@ final class Calculus
 	 *
 	 * @return array(int=>Teach)
 	 */
-	public function getTeachers(): array {
+	#[Pure] public function getTeachers(): array {
 		return $this->teachers;
 	}
 
 	/**
 	 * Calculate Ability in given Talent.
-	 *
-	 * @param Talent|string $talent
-	 * @return Ability
 	 */
-	public function knowledge($talent): Ability {
+	public function knowledge(Talent|string $talent): Ability {
 		if (is_string($talent)) {
 			$talent = self::createTalent($talent);
 		}
@@ -110,11 +93,8 @@ final class Calculus
 
 	/**
 	 * Get learning progress.
-	 *
-	 * @param Talent $talent
-	 * @return Ability
 	 */
-	public function progress(Talent $talent): Ability {
+	#[Pure] public function progress(Talent $talent): Ability {
 		$teachBonus = 0.0;
 		foreach ($this->teachers as $teach /* @var Teach $teach */) {
 			$teachBonus += $teach->getBonus();
@@ -127,8 +107,6 @@ final class Calculus
 
 	/**
 	 * Calculate best fighting ability for the unit's talents and inventory.
-	 *
-	 * @return WeaponSkill
 	 */
 	public function weaponSkill(): WeaponSkill {
 		$bestSkill = $this->knowledge(Fistfight::class);

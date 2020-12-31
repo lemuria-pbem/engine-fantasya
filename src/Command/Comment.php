@@ -9,11 +9,8 @@ use Lemuria\Engine\Lemuria\Message\Unit\CommentMessage;
  * - //
  * - KOMMENTAR
  */
-final class Comment extends UnitCommand {
-
-	/**
-	 * The command implementation.
-	 */
+final class Comment extends UnitCommand
+{
 	protected function run(): void {
 		$this->message(CommentMessage::class)->p($this->phrase->getLine());
 	}

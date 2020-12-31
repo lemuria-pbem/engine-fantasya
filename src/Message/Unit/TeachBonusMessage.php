@@ -14,16 +14,10 @@ class TeachBonusMessage extends AbstractUnitMessage
 
 	protected float $bonus;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has ' . $this->students . ' students (bonus: ' . $this->bonus . ').';
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
 		$this->students = $message->getParameter(self::STUDENTS);

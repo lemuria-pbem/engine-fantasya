@@ -11,16 +11,10 @@ class NameVesselMessage extends AbstractVesselMessage
 
 	protected string $name;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Vessel ' . $this->id . ' is now known as ' . $this->name . '.';
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
 		$this->name = $message->getParameter();

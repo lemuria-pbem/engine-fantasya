@@ -89,8 +89,6 @@ class CommandFactory
 {
 	use BuilderTrait;
 
-	protected Context $context;
-
 	/**
 	 * @var array(string=>mixed)
 	 */
@@ -236,18 +234,12 @@ class CommandFactory
 		'Wagenbau'          => Carriagemaking::class
 	];
 
-	/**
-	 * @param Context $context
-	 */
-	public function __construct(Context $context) {
-		$this->context = $context;
+	public function __construct(protected Context $context) {
 	}
 
 	/**
 	 * Create a Command.
 	 *
-	 * @param Phrase $phrase
-	 * @return AbstractCommand
 	 * @throws UnknownCommandException
 	 */
 	public function create(Phrase $phrase): AbstractCommand {
@@ -323,8 +315,6 @@ class CommandFactory
 	/**
 	 * Create a Commodity.
 	 *
-	 * @param string $commodity
-	 * @return Commodity
 	 * @throws UnknownCommandException
 	 */
 	public function commodity(string $commodity): Commodity {
@@ -335,8 +325,7 @@ class CommandFactory
 	/**
 	 * Create a Talent.
 	 *
-	 * @param string $talent
-	 * @return Talent
+	 * @throws UnknownCommandException
 	 */
 	public function talent(string $talent): Talent {
 		$talentClass = $this->identifySingleton($talent, $this->talents);
@@ -346,8 +335,6 @@ class CommandFactory
 	/**
 	 * Match the command verb with a defined verb.
 	 *
-	 * @param string $verb
-	 * @return string
 	 * @throws UnknownCommandException
 	 */
 	protected function identifyVerb(string $verb): string {
@@ -371,10 +358,6 @@ class CommandFactory
 
 	/**
 	 * Match a Singleton.
-	 *
-	 * @param string $singleton
-	 * @param array $map
-	 * @return string
 	 */
 	protected function identifySingleton(string $singleton, array $map): string {
 		$singleton  = ucfirst(strtolower($singleton));

@@ -8,9 +8,6 @@ class NumberNotInVesselMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is not in any vessel, it cannot change an ID.';
 	}

@@ -12,11 +12,8 @@ use Lemuria\Model\Lemuria\Combat;
  *
  * - KÄMPFEN [Agressiv|Defensiv|Fliehe|Fliehen|Flucht|Hinten|Nicht|Vorn|Vorne]
  */
-final class Fight extends UnitCommand {
-
-	/**
-	 * The command implementation.
-	 */
+final class Fight extends UnitCommand
+{
 	protected function run(): void {
 		$n = count($this->phrase);
 		if ($n === 0) {

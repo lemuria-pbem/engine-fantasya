@@ -8,9 +8,6 @@ class DescribeRegionMessage extends AbstractRegionMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Region ' . $this->id . ' now has a new description.';
 	}

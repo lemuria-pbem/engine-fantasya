@@ -8,9 +8,6 @@ class RawMaterialNoDemandMessage extends RawMaterialResourcesMessage
 {
 	protected string $level = Message::DEBUG;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot produce ' . $this->material . ', no demand.';
 	}

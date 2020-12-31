@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Combat;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Calculus;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Lemuria\Party;
@@ -13,8 +15,6 @@ use Lemuria\Model\Lemuria\Unit;
  */
 class Army
 {
-	private Party $party;
-
 	/**
 	 * @var Combatant[]
 	 */
@@ -22,11 +22,8 @@ class Army
 
 	/**
 	 * Create a parties' army.
-	 *
-	 * @param Party $party
 	 */
-	public function __construct(Party $party) {
-		$this->party = $party;
+	#[Pure] public function __construct(private Party $party) {
 	}
 
 	/**
@@ -34,26 +31,18 @@ class Army
 	 *
 	 * @return Combatant[]
 	 */
-	public function Combatants(): array {
+	#[Pure] public function Combatants(): array {
 		return $this->combatants;
 	}
 
-	/**
-	 * Get the party.
-	 *
-	 * @return Party
-	 */
-	public function Party(): Party {
+	#[Pure] public function Party(): Party {
 		return $this->party;
 	}
 
 	/**
 	 * Add a unit from the party.
-	 *
-	 * @param Unit $unit
-	 * @return self
 	 */
-	public function add(Unit $unit): self {
+	public function add(Unit $unit): Army {
 		if ($unit->Party()->Id() !== $this->party->Id()) {
 			throw new LemuriaException('Only units from the same party can build an army.');
 		}

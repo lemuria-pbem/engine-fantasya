@@ -19,12 +19,6 @@ use Lemuria\Model\Lemuria\Unit as UnitModel;
  */
 final class Unit extends AbstractCommand implements Immediate
 {
-	/**
-	 * Create a new command for given Phrase.
-	 *
-	 * @param Phrase $phrase
-	 * @param Context $context
-	 */
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		if ($context->Parser()->isSkip()) {
@@ -32,18 +26,11 @@ final class Unit extends AbstractCommand implements Immediate
 		}
 	}
 
-	/**
-	 * Skip the command.
-	 *
-	 * @return Immediate
-	 */
 	public function skip(): Immediate {
 		return $this;
 	}
 
 	/**
-	 * The command implementation.
-	 *
 	 * @throws UnitException
 	 */
 	protected function run(): void {
@@ -62,10 +49,6 @@ final class Unit extends AbstractCommand implements Immediate
 		$this->message(UnitMessage::class)->e($unit);
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 * @return LemuriaMessage
-	 */
 	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
 		return $message->e($this->context->Unit());
 	}

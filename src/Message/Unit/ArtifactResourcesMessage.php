@@ -12,16 +12,10 @@ class ArtifactResourcesMessage extends AbstractUnitMessage
 
 	protected Singleton $artifact;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has no material to create ' . $this->artifact . '.';
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
 		$this->artifact = $message->getSingleton();

@@ -11,8 +11,6 @@ trait BuilderTrait
 	/**
 	 * Create a message type singleton.
 	 *
-	 * @param string $class
-	 * @return MessageType
 	 * @throws SingletonException
 	 */
 	protected static function createMessageType(string $class): MessageType {

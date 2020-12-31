@@ -14,16 +14,10 @@ class TeachStudentMessage extends AbstractUnitMessage
 
 	protected Id $student;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' teaches unit ' . $this->student . '.';
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
 		$this->student = $message->get(self::STUDENT);

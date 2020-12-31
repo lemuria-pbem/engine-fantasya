@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Command\UnitCommand;
 use Lemuria\Model\Lemuria\Unit;
 
@@ -10,33 +12,23 @@ use Lemuria\Model\Lemuria\Unit;
  */
 final class ActivityProtocol
 {
-	private Unit $unit;
-
 	private bool $hasActivity = false;
 
 	/**
 	 * Create new activity protocol for a unit.
-	 *
-	 * @param Unit $unit
 	 */
-	public function __construct(Unit $unit) {
-		$this->unit = $unit;
+	#[Pure] public function __construct(private Unit $unit) {
 	}
 
 	/**
 	 * Check if unit has an activity already.
-	 *
-	 * @return bool
 	 */
-	public function hasActivity(): bool {
+	#[Pure] public function hasActivity(): bool {
 		return $this->hasActivity;
 	}
 
 	/**
 	 * Add a command to the protocol.
-	 *
-	 * @param UnitCommand $command
-	 * @return bool
 	 */
 	public function commit(UnitCommand $command): bool {
 		if ($command instanceof Activity) {

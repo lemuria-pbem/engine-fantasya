@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command\Create;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Command\Exception\TempUnitException;
 use Lemuria\Engine\Lemuria\Command\UnitCommand;
 use Lemuria\Engine\Lemuria\Context;
@@ -30,12 +32,6 @@ final class Temp extends UnitCommand implements Immediate
 
 	private Unit $creator;
 
-	/**
-	 * Create a new command for given Phrase.
-	 *
-	 * @param Phrase $phrase
-	 * @param Context $context
-	 */
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		if ($context->Parser()->isSkip()) {
@@ -43,18 +39,10 @@ final class Temp extends UnitCommand implements Immediate
 		}
 	}
 
-	/**
-	 * Skip the command.
-	 *
-	 * @return Immediate
-	 */
 	public function skip(): Immediate {
 		return $this;
 	}
 
-	/**
-	 * The command implementation.
-	 */
 	protected function run(): void {
 		if ($this->context->UnitMapper()->has($this->getTempNumber())) {
 			$this->context->Parser()->skip();
@@ -84,7 +72,6 @@ final class Temp extends UnitCommand implements Immediate
 	/**
 	 * Get creator Unit.
 	 *
-	 * @return Unit
 	 * @throws CommandException
 	 */
 	public function getCreator(): Unit {
@@ -97,7 +84,6 @@ final class Temp extends UnitCommand implements Immediate
 	/**
 	 * Get created Unit.
 	 *
-	 * @return Unit
 	 * @throws CommandException
 	 */
 	public function getUnit(): Unit {
@@ -109,25 +95,17 @@ final class Temp extends UnitCommand implements Immediate
 
 	/**
 	 * Get TEMP number.
-	 *
-	 * @return string
 	 */
-	public function getTempNumber(): string {
+	#[Pure] public function getTempNumber(): string {
 		return strtolower($this->phrase->getParameter(2));
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 * @return LemuriaMessage
-	 */
 	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
 		return $message->e($this->createdUnit);
 	}
 
 	/**
 	 * Create new ID for created Unit.
-	 *
-	 * @return Id
 	 */
 	private function createId(): Id {
 		$id     = null;

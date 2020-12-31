@@ -12,24 +12,15 @@ class FightMessage extends AbstractUnitMessage
 
 	protected int $position;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' will ' . $this->getPosition() . '.';
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
 		$this->position = $message->getParameter();
 	}
 
-	/**
-	 * @return string
-	 */
 	private function getPosition(): string {
 		switch ($this->position) {
 			case Combat::AGGRESSIVE :

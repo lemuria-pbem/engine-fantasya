@@ -14,16 +14,10 @@ class NameOwnerMessage extends AbstractConstructionMessage
 
 	protected Id $owner;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->owner . ' is not owner of construction ' . $this->id . ' and thus cannot rename it.';
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
 		$this->owner = $message->get(self::OWNER);

@@ -2,6 +2,10 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Message;
 
+use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\ExpectedValues;
+use JetBrains\PhpStorm\Pure;
+
 use function Lemuria\getClass;
 use Lemuria\Singleton;
 use Lemuria\Engine\Lemuria\Factory\BuilderTrait as EngineBuilderTrait;
@@ -34,74 +38,37 @@ class LemuriaMessage implements Message
 
 	private const PARAMETER = 'p';
 
-	/**
-	 * @var Id|null
-	 */
-	private ?Id $id = null;
+	private ?Id $id;
 
-	/**
-	 * @var MessageType
-	 */
 	private MessageType $type;
 
-	/**
-	 * @var array|null
-	 */
-	private ?array $entities = null;
+	private ?array $entities;
 
-	/**
-	 * @var array|null
-	 */
-	private ?array $singletons = null;
+	private ?array $singletons;
 
-	/**
-	 * @var array|null
-	 */
-	private ?array $items = null;
+	private ?array $items;
 
-	/**
-	 * @var array|null
-	 */
-	private ?array $parameters = null;
+	private ?array $parameters;
 
-	/**
-	 * Get the ID.
-	 *
-	 * @return Id
-	 */
-	public function Id(): Id {
+	#[Pure] public function Id(): Id {
 		return $this->id;
 	}
 
-	/**
-	 * Get the report namespace.
-	 *
-	 * @return int
-	 */
-	public function Report(): int {
+	#[Pure] public function Report(): int {
 		return $this->type->Report();
 	}
 
-	/**
-	 * @return string
-	 */
+	#[ExpectedValues(valuesFromClass: Message::class)]
+	#[Pure]
 	public function Level(): string {
 		return $this->type->Level();
 	}
 
-	/**
-	 * @return Id
-	 */
+	#[Pure]
 	public function Entity(): Id {
 		return $this->get();
 	}
 
-	/**
-	 * Set the ID.
-	 *
-	 * @param Id $id
-	 * @return Message
-	 */
 	public function setId(Id $id): Message {
 		if ($this->id) {
 			throw new LemuriaException('Cannot set ID twice.');
@@ -114,8 +81,6 @@ class LemuriaMessage implements Message
 
 	/**
 	 * Get the message text.
-	 *
-	 * @return string
 	 */
 	public function __toString(): string {
 		return $this->type->render($this);
@@ -123,9 +88,9 @@ class LemuriaMessage implements Message
 
 	/**
 	 * Get a plain data array of the model's data.
-	 *
-	 * @return array
 	 */
+	#[ArrayShape(['id' => 'int', 'type' => 'string', 'parameters' => 'array|null', 'items' => 'array|null', 'singletons' => 'array|null', 'entities' => 'array|null'])]
+	#[Pure]
 	public function serialize(): array {
 		$data = ['id' => $this->Id()->Id(), 'type' => getClass($this->type)];
 		if ($this->entities) {
@@ -145,9 +110,6 @@ class LemuriaMessage implements Message
 
 	/**
 	 * Restore the model's data from serialized data.
-	 *
-	 * @param array $data
-	 * @return Serializable
 	 */
 	public function unserialize(array $data): Serializable {
 		$this->validateSerializedData($data);
@@ -167,18 +129,12 @@ class LemuriaMessage implements Message
 		return $this;
 	}
 
-	/**
-	 * @param MessageType $type
-	 * @return LemuriaMessage
-	 */
 	public function setType(MessageType $type): LemuriaMessage {
 		$this->type = $type;
 		return $this;
 	}
 
 	/**
-	 * @param string|null $name
-	 * @return Id
 	 * @throws EntityNotSetException
 	 */
 	public function get(?string $name = null): Id {
@@ -191,10 +147,6 @@ class LemuriaMessage implements Message
 		return new Id($this->entities[$name]);
 	}
 
-	/**
-	 * @param string|null $name
-	 * @return Quantity
-	 */
 	public function getQuantity(?string $name = null): Quantity {
 		if (!$name) {
 			$name = self::ITEM;
@@ -211,10 +163,6 @@ class LemuriaMessage implements Message
 		return new Quantity(self::createCommodity($class), $count);
 	}
 
-	/**
-	 * @param string|null $name
-	 * @return Singleton
-	 */
 	public function getSingleton(?string $name = null): Singleton {
 		if (!$name) {
 			$name = self::SINGLETON;
@@ -225,11 +173,7 @@ class LemuriaMessage implements Message
 		return Lemuria::Builder()->create($this->singletons[$name]);
 	}
 
-	/**
-	 * @param string|null $name
-	 * @return mixed
-	 */
-	public function getParameter(?string $name = null) {
+	public function getParameter(?string $name = null): mixed {
 		if (!$name) {
 			$name = self::PARAMETER;
 		}
@@ -241,10 +185,6 @@ class LemuriaMessage implements Message
 
 	/**
 	 * Set an entity.
-	 *
-	 * @param Entity $entity
-	 * @param string|null $name
-	 * @return LemuriaMessage
 	 */
 	public function e(Entity $entity, ?string $name = null): LemuriaMessage {
 		if (!$name) {
@@ -259,10 +199,6 @@ class LemuriaMessage implements Message
 
 	/**
 	 * Set an item.
-	 *
-	 * @param Item $item
-	 * @param string|null $name
-	 * @return LemuriaMessage
 	 */
 	public function i(Item $item, ?string $name = null): LemuriaMessage {
 		if (!$name) {
@@ -274,10 +210,6 @@ class LemuriaMessage implements Message
 
 	/**
 	 * Set a Singleton.
-	 *
-	 * @param Singleton $singleton
-	 * @param string|null $name
-	 * @return LemuriaMessage
 	 */
 	public function s(Singleton $singleton, ?string $name = null): LemuriaMessage {
 		if (!$name) {
@@ -292,10 +224,6 @@ class LemuriaMessage implements Message
 
 	/**
 	 * Set a parameter.
-	 *
-	 * @param bool|float|int|string $value
-	 * @param string|null $name
-	 * @return LemuriaMessage
 	 */
 	public function p($value, ?string $name = null): LemuriaMessage {
 		if (!$name) {
@@ -311,9 +239,9 @@ class LemuriaMessage implements Message
 	/**
 	 * Check that a serialized data array is valid.
 	 *
-	 * @param array (string=>mixed) &$data
+	 * @param array (string=>mixed) $data
 	 */
-	protected function validateSerializedData(&$data): void {
+	protected function validateSerializedData(array &$data): void {
 		$this->validate($data, 'id', 'int');
 		$this->validate($data, 'type', 'string');
 		$this->validateIfExists($data, 'entities', 'array');

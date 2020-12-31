@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Combat;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Model\Lemuria\Ability;
 use Lemuria\Model\Lemuria\Factory\BuilderTrait;
 use Lemuria\Model\Lemuria\Quantity;
@@ -20,7 +22,7 @@ class WeaponSkill
 {
 	use BuilderTrait;
 
-	private static ?Talent $archery = null;
+	private static ?Talent $archery;
 
 	private static Talent $bladefighting;
 
@@ -32,84 +34,52 @@ class WeaponSkill
 
 	private static Talent $spearfighting;
 
-	private Ability $skill;
-
-	private Quantity $weapon;
-
-	/**
-	 * Create a weapon skill object.
-	 *
-	 * @param Ability $skill
-	 * @param Quantity $weapon
-	 */
-	public function __construct(Ability $skill, Quantity $weapon) {
-		$this->skill  = $skill;
-		$this->weapon = $weapon;
+	public function __construct(private Ability $skill, private Quantity $weapon) {
 		$this->initTalents();
 	}
 
-	/**
-	 * Get the skill.
-	 *
-	 * @return Ability
-	 */
-	public function Skill(): Ability {
+	#[Pure] public function Skill(): Ability {
 		return $this->skill;
 	}
 
-	/**
-	 * Get the weapon.
-	 *
-	 * @return Quantity
-	 */
-	public function Weapon(): Quantity {
+	#[Pure] public function Weapon(): Quantity {
 		return $this->weapon;
 	}
 
 	/**
 	 * Check if weapon skill is suitable for short distance combat.
-	 *
-	 * @return bool
 	 */
-	public function isMelee(): bool {
+	#[Pure] public function isMelee(): bool {
 		$talent = $this->skill->Talent();
 		return $talent === self::$bladefighting || $talent === self::$spearfighting;
 	}
 
 	/**
 	 * Check if weapon skill is suitable for long distance combat.
-	 *
-	 * @return bool
 	 */
-	public function isDistant(): bool {
+	#[Pure] public function isDistant(): bool {
 		$talent = $this->skill->Talent();
 		return $talent === self::$archery || $talent === self::$crossbowing || $talent === self::$catapulting;
 	}
 
 	/**
 	 * Check if weapon skill is suitable for guards or tax collectors.
-	 *
-	 * @return bool
 	 */
-	public function isGuard(): bool {
+	#[Pure] public function isGuard(): bool {
 		return !$this->isUnarmed() && !$this->isSiege();
 	}
 
 	/**
 	 * Check if weapon skill is suitable for siege.
-	 *
-	 * @return bool
 	 */
-	public function isSiege(): bool {
+	#[Pure] public function isSiege(): bool {
 		return $this->skill->Talent() === self::$catapulting;
 	}
 
 	/**
 	 * Check if weapon skill is unarmed fist fight.
-	 *
-	 * @return bool
 	 */
-	public function isUnarmed(): bool {
+	#[Pure] public function isUnarmed(): bool {
 		return $this->skill->Talent() === self::$fistfight;
 	}
 

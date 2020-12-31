@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Exception\CommandParserException;
 use Lemuria\Engine\Move;
 use Lemuria\Lemuria;
@@ -11,8 +13,6 @@ use Lemuria\Lemuria;
  */
 class Parser
 {
-	protected Context $context;
-
 	/**
 	 * @var Phrase[]
 	 */
@@ -24,17 +24,9 @@ class Parser
 
 	private int $skipLevel = 0;
 
-	/**
-	 * @param Context $context
-	 */
-	public function __construct(Context $context) {
-		$this->context = $context;
+	public function __construct(protected Context $context) {
 	}
 
-	/**
-	 * @param Move $commands
-	 * @return Parser
-	 */
 	public function parse(Move $commands): Parser {
 		foreach ($commands as $command) {
 			$phrase = new Phrase($command);
@@ -48,26 +40,20 @@ class Parser
 
 	/**
 	 * Check if parser has more commands.
-	 *
-	 * @return bool
 	 */
-	public function hasMore(): bool {
+	#[Pure] public function hasMore(): bool {
 		return $this->index < $this->count;
 	}
 
 	/**
 	 * Check if current command shall be skipped.
-	 *
-	 * @return bool
 	 */
-	public function isSkip(): bool {
+	#[Pure] public function isSkip(): bool {
 		return $this->skipLevel > 0;
 	}
 
 	/**
 	 * Request end of command parsing.
-	 *
-	 * @return Parser
 	 */
 	public function finish(): Parser {
 		$this->index = $this->count;
@@ -77,7 +63,6 @@ class Parser
 	/**
 	 * Set pointer to next phrase.
 	 *
-	 * @return Phrase
 	 * @throws CommandParserException
 	 */
 	public function next(): Phrase {
@@ -89,9 +74,6 @@ class Parser
 
 	/**
 	 * Set or reset skipping mode.
-	 *
-	 * @param bool $skip
-	 * @return Parser
 	 */
 	public function skip(bool $skip = true): Parser {
 		if ($skip) {

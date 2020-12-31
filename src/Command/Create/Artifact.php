@@ -21,9 +21,6 @@ use Lemuria\Model\Lemuria\Quantity;
  */
 final class Artifact extends AbstractProduct
 {
-	/**
-	 * The command implementation.
-	 */
 	protected function run(): void {
 		$artifact         = $this->getArtifact();
 		$talent           = $artifact->getCraft()->Talent();
@@ -60,9 +57,6 @@ final class Artifact extends AbstractProduct
 		}
 	}
 
-	/**
-	 * @return ArtifactInterface
-	 */
 	private function getArtifact(): ArtifactInterface {
 		$artifact = $this->context->Factory()->commodity($this->resource);
 		if ($artifact instanceof ArtifactInterface) {

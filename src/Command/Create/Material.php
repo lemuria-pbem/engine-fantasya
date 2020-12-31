@@ -21,9 +21,6 @@ use Lemuria\Model\Lemuria\Resources;
  */
 final class Material extends AbstractProduct
 {
-	/**
-	 * The command implementation.
-	 */
 	protected function run(): void {
 		$material         = $this->getMaterial();
 		$talent           = $material->getCraft()->Talent();
@@ -56,9 +53,6 @@ final class Material extends AbstractProduct
 		}
 	}
 
-	/**
-	 * @return MaterialInterface
-	 */
 	private function getMaterial(): MaterialInterface {
 		$material = $this->context->Factory()->commodity($this->resource);
 		if ($material instanceof MaterialInterface) {

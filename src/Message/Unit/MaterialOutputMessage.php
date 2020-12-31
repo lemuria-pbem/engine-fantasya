@@ -15,16 +15,10 @@ class MaterialOutputMessage extends AbstractUnitMessage
 
 	protected Singleton $talent;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' produces ' . $this->output . ' with ' . $this->talent . '.';
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
 		$this->output = $message->getQuantity();

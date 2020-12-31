@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Action;
 use Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Context;
@@ -24,10 +26,6 @@ abstract class AbstractCommand implements Command
 	use BuilderTrait;
 	use ModelBuilderTrait;
 
-	protected Phrase $phrase;
-
-	protected Context $context;
-
 	private static int $nextId = 0;
 
 	private int $id;
@@ -36,47 +34,32 @@ abstract class AbstractCommand implements Command
 
 	/**
 	 * Create a new command for given Phrase.
-	 *
-	 * @param Phrase $phrase
-	 * @param Context $context
 	 */
-	public function __construct(Phrase $phrase, Context $context) {
-		$this->phrase  = $phrase;
-		$this->context = $context;
-		$this->id      = self::$nextId++;
+	public function __construct(protected Phrase $phrase, protected Context $context) {
+		$this->id = self::$nextId++;
 	}
 
 	/**
 	 * Get command as string.
-	 *
-	 * @return string
 	 */
-	public function __toString(): string {
+	#[Pure] public function __toString(): string {
 		return (string)$this->phrase;
 	}
 
-	/**
-	 * Get the priority.
-	 *
-	 * @return int
-	 */
-	public function Priority(): int {
+	#[Pure] public function Priority(): int {
 		return Action::MIDDLE;
 	}
 
 	/**
 	 * Check if the action has been prepared and is ready to execute.
-	 *
-	 * @return bool
 	 */
-	public function isPrepared(): bool {
+	#[Pure] public function isPrepared(): bool {
 		return $this->isPrepared;
 	}
 
 	/**
 	 * Prepare the execution of the command.
 	 *
-	 * @return Action
 	 * @throws CommandException
 	 */
 	public function prepare(): Action {
@@ -95,7 +78,6 @@ abstract class AbstractCommand implements Command
 	/**
 	 * Execute the command.
 	 *
-	 * @return Action
 	 * @throws CommandException
 	 */
 	public function execute(): Action {
@@ -112,19 +94,15 @@ abstract class AbstractCommand implements Command
 
 	/**
 	 * Get the command ID.
-	 *
-	 * @return int
 	 */
-	public function getId(): int {
+	#[Pure] public function getId(): int {
 		return $this->id;
 	}
 
 	/**
 	 * Get the delegate to execute.
-	 *
-	 * @return Command
 	 */
-	public function getDelegate(): Command {
+	#[Pure] public function getDelegate(): Command {
 		return $this;
 	}
 
@@ -144,8 +122,6 @@ abstract class AbstractCommand implements Command
 	/**
 	 * Get Unit from phrase parameter.
 	 *
-	 * @param int $i
-	 * @return Unit|null
 	 * @throws CommandException
 	 */
 	protected function nextId(int &$i): ?Unit {
@@ -167,20 +143,12 @@ abstract class AbstractCommand implements Command
 		}
 	}
 
-	/**
-	 * @param string $messageType
-	 * @return LemuriaMessage
-	 */
 	protected function message(string $messageType): LemuriaMessage {
 		$id      = Lemuria::Report()->nextId();
 		$message = new LemuriaMessage();
 		return $this->initMessage($message)->setType(self::createMessageType($messageType))->setId($id);
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 * @return LemuriaMessage
-	 */
 	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
 		return $message;
 	}

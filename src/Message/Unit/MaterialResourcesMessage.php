@@ -12,16 +12,10 @@ class MaterialResourcesMessage extends AbstractUnitMessage
 
 	protected Singleton $material;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has no resources to produce ' . $this->material . '.';
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
 		$this->material = $message->getSingleton();

@@ -79,11 +79,8 @@ final class CommandPriority
 	 */
 	private const LOWEST = 100;
 
-	private static ?CommandPriority $instance = null;
+	private static ?CommandPriority $instance;
 
-	/**
-	 * @return CommandPriority
-	 */
 	public static function getInstance(): CommandPriority {
 		if (!self::$instance) {
 			self::$instance = new self();
@@ -94,8 +91,6 @@ final class CommandPriority
 	/**
 	 * Get the priority of an Action.
 	 *
-	 * @param Action $action
-	 * @return int
 	 * @throws LemuriaException
 	 */
 	public function getPriority(Action $action): int {
@@ -131,10 +126,6 @@ final class CommandPriority
 
 	/**
 	 * Determine execution order.
-	 *
-	 * @param Command $command1
-	 * @param Command $command2
-	 * @return int
 	 */
 	public function compare(Command $command1, Command $command2): int {
 		$priority1 = $this->getPriority($command1);

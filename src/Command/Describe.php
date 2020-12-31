@@ -23,11 +23,8 @@ use Lemuria\Model\Lemuria\Construction;
  * - BESCHREIBE Region <Name>
  * - BESCHREIBE Schiff <Name>
  */
-final class Describe extends UnitCommand {
-
-	/**
-	 * The command implementation.
-	 */
+final class Describe extends UnitCommand
+{
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n <= 0) {
@@ -63,8 +60,6 @@ final class Describe extends UnitCommand {
 
 	/**
 	 * Set description of unit.
-	 *
-	 * @param string $description
 	 */
 	private function describeUnit(string $description): void {
 		$this->unit->setDescription($description);
@@ -73,8 +68,6 @@ final class Describe extends UnitCommand {
 
 	/**
 	 * Set description of construction the unit controls.
-	 *
-	 * @param string $description
 	 */
 	private function describeConstruction(string $description): void {
 		$construction = $this->unit->Construction();
@@ -93,8 +86,6 @@ final class Describe extends UnitCommand {
 
 	/**
 	 * Set description of region the unit controls.
-	 *
-	 * @param string $description
 	 */
 	private function describeRegion(string $description): void {
 		$region = $this->unit->Region();
@@ -119,8 +110,6 @@ final class Describe extends UnitCommand {
 
 	/**
 	 * Set description of vessel the unit controls.
-	 *
-	 * @param string $description
 	 */
 	private function describeVessel(string $description): void {
 		$vessel = $this->unit->Vessel();
@@ -139,9 +128,6 @@ final class Describe extends UnitCommand {
 
 	/**
 	 * Trim special characters from description.
-	 *
-	 * @param string $description
-	 * @return string
 	 */
 	private function trimDescription(string $description): string {
 		return trim($description, "\"'`'^°§$%&/()={[]}\\+*~#<>|,-;:_ ");

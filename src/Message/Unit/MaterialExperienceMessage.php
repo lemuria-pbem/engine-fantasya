@@ -18,16 +18,10 @@ class MaterialExperienceMessage extends AbstractUnitMessage
 
 	protected Singleton $material;
 
-	/**
-	 * @return string
-	 */
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has not enough experience in ' . $this->talent . ' to produce ' . $this->material . '.';
 	}
 
-	/**
-	 * @param LemuriaMessage $message
-	 */
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
 		$this->talent = $message->getSingleton(self::TALENT);

@@ -17,8 +17,6 @@ final class Allocation
 {
 	use BuilderTrait;
 
-	private Region $region;
-
 	private CommandPriority $priority;
 
 	/**
@@ -53,24 +51,15 @@ final class Allocation
 
 	private int $round = 0;
 
-	/**
-	 * Create new allocation.
-	 *
-	 * @param Region $region
-	 */
-	public function __construct(Region $region) {
-		$this->region = $region;
+	public function __construct(private Region $region) {
 		Lemuria::Log()->debug('New allocation helper for region ' . $region->Id() . '.', ['allocation' => $this]);
 		$this->priority = CommandPriority::getInstance();
 	}
 
 	/**
 	 * Register a Consumer.
-	 *
-	 * @param Consumer $consumer
-	 * @return Allocation
 	 */
-	public function register(Consumer $consumer): self {
+	public function register(Consumer $consumer): Allocation {
 		$id                           = $consumer->getId();
 		$priority                     = $this->priority->getPriority($consumer);
 		$this->rounds[$priority][$id] = $id;
@@ -83,8 +72,6 @@ final class Allocation
 
 	/**
 	 * Start resource distribution.
-	 *
-	 * @param Consumer $consumer
 	 */
 	public function distribute(Consumer $consumer): void {
 		$id = $consumer->getId();
@@ -114,11 +101,8 @@ final class Allocation
 
 	/**
 	 * Remove a Consumer.
-	 *
-	 * @param Consumer $consumer
-	 * @return Allocation
 	 */
-	private function unregister(Consumer $consumer): self {
+	private function unregister(Consumer $consumer): Allocation {
 		$id       = $consumer->getId();
 		$priority = $this->priority->getPriority($consumer);
 		unset($this->rounds[$priority][$id]);
@@ -130,8 +114,6 @@ final class Allocation
 
 	/**
 	 * Analyze the demand.
-	 *
-	 * @param int $round
 	 */
 	private function analyze(int $round): void {
 		$this->distribution = [];
@@ -156,8 +138,6 @@ final class Allocation
 
 	/**
 	 * Fill every demand.
-	 *
-	 * @param string $class
 	 */
 	private function fillDemand(string $class): void {
 		$reserve = $this->getReserve($class)->Count();
@@ -194,10 +174,6 @@ final class Allocation
 
 	/**
 	 * Give equal allocation to all demands.
-	 *
-	 * @param string $class
-	 * @param int $count
-	 * @return int
 	 */
 	private function giveDemand(string $class, int $count): int {
 		$given = 0;
@@ -215,9 +191,6 @@ final class Allocation
 
 	/**
 	 * Give one item randomly to a limited number of consumers.
-	 *
-	 * @param string $class
-	 * @param int $count
 	 */
 	private function giveRandom(string $class, int $count): void {
 		$consumers = array_keys($this->distribution[$class]['demand']);
@@ -248,8 +221,6 @@ final class Allocation
 
 	/**
 	 * Allocate distributed resources to a specific consumer.
-	 *
-	 * @param Consumer $consumer
 	 */
 	private function allocate(Consumer $consumer): void {
 		$id = $consumer->getId();
@@ -269,9 +240,6 @@ final class Allocation
 
 	/**
 	 * Get current region reserve of given commodity.
-	 *
-	 * @param string $class
-	 * @return Quantity
 	 */
 	private function getReserve(string $class): Quantity {
 		if (!isset($this->resources[$class])){
@@ -288,9 +256,6 @@ final class Allocation
 
 	/**
 	 * Update a region reserve of given commodity.
-	 *
-	 * @param string $class
-	 * @param int $count
 	 */
 	private function reduceReserve(string $class, int $count): void {
 		if (!isset($this->resources[$class])) {
@@ -307,9 +272,6 @@ final class Allocation
 
 	/**
 	 * Debug consumer demand.
-	 *
-	 * @param Consumer $consumer
-	 * @return string
 	 */
 	private function debugDemand(Consumer $consumer): string {
 		$demand = [];
