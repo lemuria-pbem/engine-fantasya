@@ -14,6 +14,7 @@ class ContactMessage extends AbstractUnitMessage
 	}
 
 	protected function getData(LemuriaMessage $message): void {
+		parent::getData($message);
 		$this->unit = $message->get();
 	}
 }
