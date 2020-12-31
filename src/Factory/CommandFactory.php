@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Lemuria\Factory;
 
 use Lemuria\Engine\Lemuria\Command\AbstractCommand;
 use Lemuria\Engine\Lemuria\Command\Comment;
+use Lemuria\Engine\Lemuria\Command\Contact;
 use Lemuria\Engine\Lemuria\Command\Create;
 use Lemuria\Engine\Lemuria\Command\Describe;
 use Lemuria\Engine\Lemuria\Command\Disguise;
