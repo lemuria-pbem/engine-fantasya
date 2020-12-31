@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Lemuria\Message\Unit;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
+use Lemuria\Id;
 
 class ContactNotFoundMessage extends ContactMessage
 {
@@ -14,6 +15,6 @@ class ContactNotFoundMessage extends ContactMessage
 	}
 
 	protected function getData(LemuriaMessage $message): void {
-		$this->unit = $message->getParameter();
+		$this->unit = new Id($message->getParameter());
 	}
 }

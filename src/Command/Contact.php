@@ -36,7 +36,7 @@ final class Contact extends UnitCommand
 				$diplomacy->contact($unit);
 				$this->message(ContactMessage::class)->e($unit);
 			} else {
-				$this->message(ContactNotFoundMessage::class)->p($id);
+				$this->message(ContactNotFoundMessage::class)->p($id->Id());
 			}
 		}
 	}
