@@ -225,7 +225,7 @@ class LemuriaMessage implements Message
 	/**
 	 * Set a parameter.
 	 */
-	public function p($value, ?string $name = null): LemuriaMessage {
+	public function p(mixed $value, ?string $name = null): LemuriaMessage {
 		if (!$name) {
 			$name = self::PARAMETER;
 		}

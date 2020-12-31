@@ -5,7 +5,7 @@ namespace Lemuria\Engine\Lemuria\Message\Unit;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Id;
 
-class ContactMessage extends UnitMessage
+class ContactMessage extends AbstractUnitMessage
 {
 	protected Id $unit;
 
