@@ -22,7 +22,7 @@ class WeaponSkill
 {
 	use BuilderTrait;
 
-	private static ?Talent $archery;
+	private static ?Talent $archery = null;
 
 	private static Talent $bladefighting;
 
