@@ -6,6 +6,7 @@ use Lemuria\Engine\Lemuria\Command\AbstractCommand;
 use Lemuria\Engine\Lemuria\Command\Comment;
 use Lemuria\Engine\Lemuria\Command\Create;
 use Lemuria\Engine\Lemuria\Command\Describe;
+use Lemuria\Engine\Lemuria\Command\Disguise;
 use Lemuria\Engine\Lemuria\Command\End;
 use Lemuria\Engine\Lemuria\Command\Fight;
 use Lemuria\Engine\Lemuria\Command\Learn;
@@ -301,9 +302,9 @@ class CommandFactory
 			*/
 			case 'SORTIEREN' :
 				return new Sort($phrase, $this->context);
-			/*
 			case 'TARNEN' :
-				return new Disguise($phrase);
+				return new Disguise($phrase, $this->context);
+			/*
 			case 'TREIBEN' :
 				return new CollectTaxes($phrase);
 			case 'UNTERHALTEN' :
