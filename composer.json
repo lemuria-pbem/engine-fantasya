@@ -10,7 +10,7 @@
 		"lemuria",
 		"pbem"
 	],
-	"time": "2020-12-30",
+	"time": "2020-12-31",
 	"license": "GPL-3.0",
 	"authors": [
 		{
@@ -27,7 +27,7 @@
 	},
 	"require-dev": {
 		"jetbrains/phpstorm-attributes": "~1.0",
-		"phpunit/phpunit": "~9.4"
+		"phpunit/phpunit": "~9.5"
 	},
 	"repositories": [
 		{
@@ -42,7 +42,8 @@
 
 	"autoload": {
 		"psr-4": {
-			"Lemuria\\Engine\\Lemuria\\": "src/"
+			"Lemuria\\Engine\\Lemuria\\": "src/",
+			"Lemuria\\Tests\\Engine\\Lemuria\\": "tests/"
 		}
 	}
 }

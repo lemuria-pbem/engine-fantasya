@@ -79,7 +79,7 @@ final class CommandPriority
 	 */
 	private const LOWEST = 100;
 
-	private static ?CommandPriority $instance;
+	private static ?CommandPriority $instance = null;
 
 	public static function getInstance(): CommandPriority {
 		if (!self::$instance) {

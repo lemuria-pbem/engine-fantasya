@@ -20,7 +20,7 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 {
 	protected string $resource;
 
-	protected ?int $demand;
+	protected ?int $demand = null;
 
 	protected int $capability = 0;
 

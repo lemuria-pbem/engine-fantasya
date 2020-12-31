@@ -38,17 +38,17 @@ class LemuriaMessage implements Message
 
 	private const PARAMETER = 'p';
 
-	private ?Id $id;
+	private ?Id $id = null;
 
 	private MessageType $type;
 
-	private ?array $entities;
+	private ?array $entities = null;
 
-	private ?array $singletons;
+	private ?array $singletons = null;
 
-	private ?array $items;
+	private ?array $items = null;
 
-	private ?array $parameters;
+	private ?array $parameters = null;
 
 	#[Pure] public function Id(): Id {
 		return $this->id;
