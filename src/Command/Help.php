@@ -179,9 +179,9 @@ final class Help extends UnitCommand
 				}
 			} else {
 				if ($isNot) {
-					$this->message(HelpPartyRegionNotMessage::class)->e($party)->e($region, HelpPartyRegionMessage::REGION);
+					$this->message(HelpPartyRegionNotMessage::class)->e($party)->e($region, HelpPartyRegionMessage::REGION)->p($agreement);
 				} else {
-					$this->message(HelpPartyRegionMessage::class)->e($party)->e($region, HelpPartyRegionMessage::REGION);
+					$this->message(HelpPartyRegionMessage::class)->e($party)->e($region, HelpPartyRegionMessage::REGION)->p($agreement);
 				}
 			}
 		} else {
