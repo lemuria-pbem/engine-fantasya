@@ -27,7 +27,7 @@ abstract class AbstractMessage implements MessageType
 
 	public function render(LemuriaMessage $message): string {
 		$this->getData($message);
-		return  $this->translate() ?? $this->create();
+		return $this->translate() ?? $this->create();
 	}
 
 	abstract protected function create(): string;
@@ -37,17 +37,20 @@ abstract class AbstractMessage implements MessageType
 	}
 
 	protected function translate(): ?string {
-		$dictionary  = new Dictionary();
-		$keyPath     = 'message.' . getClass($this);
-		$translation = $dictionary->get($keyPath);
-		if ($translation === $keyPath) {
+		$translation = $this->translateKey('message.' . getClass($this));
+		if ($translation === null) {
 			return null;
 		}
-
 		foreach ($this->getVariables() as $name) {
-			$translation = str_replace('$' . $name, (string)$this->$name, $translation);
+			$translation = str_replace('$' . $name, $this->getTranslation($name), $translation);
 		}
 		return $translation;
+	}
+
+	protected function translateKey(string $keyPath): ?string {
+		$dictionary  = new Dictionary();
+		$translation = $dictionary->get($keyPath);
+		return $translation === $keyPath ? null : $translation;
 	}
 
 	protected function getVariables(): array {
@@ -60,5 +63,9 @@ abstract class AbstractMessage implements MessageType
 			}
 		}
 		return $properties;
+	}
+
+	protected function getTranslation(string $name): string {
+		return (string)$this->$name;
 	}
 }
