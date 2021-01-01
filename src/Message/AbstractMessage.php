@@ -75,7 +75,7 @@ abstract class AbstractMessage implements MessageType
 	protected function commodity(string $property, string $name): ?string {
 		if ($property === $name) {
 			$commodity = getClass($this->$name);
-			$commodity = $this->translateKey('resource.' . $commodity);
+			$commodity = $this->translateKey('resource.' . $commodity, 1);
 			if ($commodity) {
 				return $commodity;
 			}

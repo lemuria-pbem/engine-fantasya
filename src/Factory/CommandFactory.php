@@ -20,6 +20,7 @@ use Lemuria\Engine\Lemuria\Command\Next;
 use Lemuria\Engine\Lemuria\Command\Number;
 use Lemuria\Engine\Lemuria\Command\Party;
 use Lemuria\Engine\Lemuria\Command\Recruit;
+use Lemuria\Engine\Lemuria\Command\Reserve;
 use Lemuria\Engine\Lemuria\Command\Sentinel;
 use Lemuria\Engine\Lemuria\Command\Sort;
 use Lemuria\Engine\Lemuria\Command\Teach;
@@ -298,10 +299,8 @@ class CommandFactory
 				return new Party($phrase, $this->context);
 			case 'REKRUTIEREN' :
 				return new Recruit($phrase, $this->context);
-			/*
 			case 'RESERVIEREN' :
-				return new Reserve($phrase);
-			*/
+				return new Reserve($phrase, $this->context);
 			case 'SORTIEREN' :
 				return new Sort($phrase, $this->context);
 			case 'TARNEN' :
