@@ -19,4 +19,8 @@ class RecruitMessage extends AbstractUnitMessage
 		parent::getData($message);
 		$this->size = $message->getParameter();
 	}
+
+	protected function getTranslation(string $name): string {
+		return $this->number($name, 'size') ?? parent::getTranslation($name);
+	}
 }

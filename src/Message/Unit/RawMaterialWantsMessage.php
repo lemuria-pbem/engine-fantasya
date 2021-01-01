@@ -22,6 +22,14 @@ class RawMaterialWantsMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'commodity') ?? parent::getTranslation($name);
+		$commodity = $this->commodity($name, 'commodity');
+		if ($commodity) {
+			return $commodity;
+		}
+		$production = $this->number($name, 'production');
+		if ($production) {
+			return $production;
+		}
+		return parent::getTranslation($name);
 	}
 }

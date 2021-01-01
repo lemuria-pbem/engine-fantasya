@@ -25,6 +25,14 @@ class LearnProgressMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->talent($name, 'talent') ?? parent::getTranslation($name);
+		$experience = $this->number($name, 'experience');
+		if ($experience) {
+			return $experience;
+		}
+		$talent = $this->talent($name, 'talent');
+		if ($talent) {
+			return $talent;
+		}
+		return parent::getTranslation($name);
 	}
 }

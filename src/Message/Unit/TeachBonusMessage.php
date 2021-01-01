@@ -23,4 +23,16 @@ class TeachBonusMessage extends AbstractUnitMessage
 		$this->students = $message->getParameter(self::STUDENTS);
 		$this->bonus = $message->getParameter(self::BONUS);
 	}
+
+	protected function getTranslation(string $name): string {
+		$students = $this->number($name, 'students');
+		if ($students) {
+			return $students;
+		}
+		$bonus = $this->number($name, 'bonus');
+		if ($bonus) {
+			return $bonus;
+		}
+		return parent::getTranslation($name);
+	}
 }

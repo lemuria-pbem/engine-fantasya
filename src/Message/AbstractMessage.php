@@ -106,4 +106,8 @@ abstract class AbstractMessage implements MessageType
 		}
 		return null;
 	}
+
+	protected function number(string $property, string $name): ?string {
+		return $property === $name ? number($this->$name) : null;
+	}
 }

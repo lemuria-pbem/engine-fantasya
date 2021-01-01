@@ -16,4 +16,8 @@ class LearnTeachersMessage extends AbstractUnitMessage
 		parent::getData($message);
 		$this->teachers = $message->getParameter();
 	}
+
+	protected function getTranslation(string $name): string {
+		return $this->number($name, 'teachers') ?? parent::getTranslation($name);
+	}
 }
