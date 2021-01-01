@@ -21,10 +21,10 @@ final class Leave extends UnitCommand
 		$construction = $this->unit->Construction();
 		if ($construction) {
 			$construction->Inhabitants()->remove($this->unit);
-			$this->message(LeaveConstructionMessage::class)->e($construction);
+			$this->message(LeaveConstructionMessage::class)->e($construction, LeaveConstructionMessage::CONSTRUCTION);
 			$newOwner = $construction->Inhabitants()->Owner();
 			if ($newOwner) {
-				$this->message(LeaveNewOwnerMessage::class)->e($newOwner);
+				$this->message(LeaveNewOwnerMessage::class)->e($newOwner, LeaveNewOwnerMessage::OWNER);
 			} else {
 				$this->message(LeaveNoOwnerMessage::class);
 			}
@@ -32,10 +32,10 @@ final class Leave extends UnitCommand
 			$vessel = $this->unit->Vessel();
 			if ($vessel) {
 				$vessel->Passengers()->remove($this->unit);
-				$this->message(LeaveVesselMessage::class)->e($vessel);
+				$this->message(LeaveVesselMessage::class)->e($vessel, LeaveVesselMessage::VESSEL);
 				$newCaptain = $vessel->Passengers()->Owner();
 				if ($newCaptain) {
-					$this->message(LeaveNewCaptainMessage::class)->e($newCaptain);
+					$this->message(LeaveNewCaptainMessage::class)->e($newCaptain, LeaveNewCaptainMessage::CAPTAIN);
 				} else {
 					$this->message(LeaveNoCaptainMessage::class);
 				}

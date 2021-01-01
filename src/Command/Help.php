@@ -173,15 +173,15 @@ final class Help extends UnitCommand
 		if ($inRegion) {
 			if ($party === $this->unit->Party()) {
 				if ($isNot) {
-					$this->message(HelpRegionNotMessage::class)->e($region)->p($agreement);
+					$this->message(HelpRegionNotMessage::class)->e($region, HelpRegionNotMessage::REGION)->p($agreement);
 				} else {
-					$this->message(HelpRegionMessage::class)->e($region)->p($agreement);
+					$this->message(HelpRegionMessage::class)->e($region, HelpRegionMessage::REGION)->p($agreement);
 				}
 			} else {
 				if ($isNot) {
-					$this->message(HelpPartyRegionNotMessage::class)->e($party)->e($region, HelpPartyRegionMessage::REGION)->p($agreement);
+					$this->message(HelpPartyRegionNotMessage::class)->e($party, HelpPartyRegionNotMessage::PARTY)->e($region, HelpPartyRegionMessage::REGION)->p($agreement);
 				} else {
-					$this->message(HelpPartyRegionMessage::class)->e($party)->e($region, HelpPartyRegionMessage::REGION)->p($agreement);
+					$this->message(HelpPartyRegionMessage::class)->e($party, HelpPartyRegionMessage::PARTY)->e($region, HelpPartyRegionMessage::REGION)->p($agreement);
 				}
 			}
 		} else {
@@ -193,9 +193,9 @@ final class Help extends UnitCommand
 				}
 			} else {
 				if ($isNot) {
-					$this->message(HelpPartyNotMessage::class)->e($party)->p($agreement);
+					$this->message(HelpPartyNotMessage::class)->e($party, HelpPartyNotMessage::PARTY)->p($agreement);
 				} else {
-					$this->message(HelpPartyMessage::class)->e($party)->p($agreement);
+					$this->message(HelpPartyMessage::class)->e($party, HelpPartyMessage::PARTY)->p($agreement);
 				}
 			}
 		}

@@ -8,6 +8,8 @@ use Lemuria\Id;
 
 class BoardMessage extends AbstractUnitMessage
 {
+	public const VESSEL = 'vessel';
+
 	protected string $level = Message::SUCCESS;
 
 	protected Id $vessel;
@@ -18,6 +20,6 @@ class BoardMessage extends AbstractUnitMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->vessel = $message->get();
+		$this->vessel = $message->get(self::VESSEL);
 	}
 }

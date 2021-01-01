@@ -8,6 +8,8 @@ use Lemuria\Id;
 
 class DisguiseKnownPartyMessage extends AbstractUnitMessage
 {
+	public const PARTY = 'party';
+
 	protected string $level = Message::SUCCESS;
 
 	protected Id $party;
@@ -18,6 +20,6 @@ class DisguiseKnownPartyMessage extends AbstractUnitMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->party = $message->get();
+		$this->party = $message->get(self::PARTY);
 	}
 }

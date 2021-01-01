@@ -28,7 +28,7 @@ class RecruitPaymentMessage extends RecruitMessage
 			$index     = $this->cost->Count() > 1 ? 1 : 0;
 			$cost = $this->translateKey('resource.' . $commodity, $index);
 			if ($cost) {
-				return $cost;
+				return $this->cost->Count() . ' ' . $cost;
 			}
 		}
 		return parent::getTranslation($name);

@@ -45,16 +45,16 @@ final class Disguise extends UnitCommand
 					$party = Party::get($partyId);
 					if (!$this->unit->Party()->Diplomacy()->isKnown($party)) {
 						$party = null;
-						$this->message(DisguiseDoesNotKnowMessage::class)->e($party);
+						$this->message(DisguiseDoesNotKnowMessage::class)->e($party, DisguiseDoesNotKnowMessage::PARTY);
 					}
 				} catch (NotRegisteredException) {
 					$party = null;
 				}
 				if ($party) {
 					$this->unit->setDisguise($party);
-					$this->message(DisguiseKnownPartyMessage::class)->e($party);
+					$this->message(DisguiseKnownPartyMessage::class)->e($party, DisguiseKnownPartyMessage::PARTY);
 				} else {
-					$this->message(DisguiseUnknownPartyMessage::class)->e($party);
+					$this->message(DisguiseUnknownPartyMessage::class)->e($party, DisguiseUnknownPartyMessage::PARTY);
 				}
 				return;
 			}

@@ -7,6 +7,8 @@ use Lemuria\Id;
 
 class LeaveNewOwnerMessage extends AbstractConstructionMessage
 {
+	public const OWNER = 'owner';
+
 	protected Id $owner;
 
 	protected function create(): string {
@@ -15,6 +17,6 @@ class LeaveNewOwnerMessage extends AbstractConstructionMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->owner = $message->get();
+		$this->owner = $message->get(self::OWNER);
 	}
 }

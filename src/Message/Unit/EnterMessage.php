@@ -8,6 +8,8 @@ use Lemuria\Id;
 
 class EnterMessage extends AbstractUnitMessage
 {
+	public const CONSTRUCTION = 'construction';
+
 	protected string $level = Message::SUCCESS;
 
 	protected Id $construction;
@@ -18,6 +20,6 @@ class EnterMessage extends AbstractUnitMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->construction = $message->get();
+		$this->construction = $message->get(self::CONSTRUCTION);
 	}
 }
