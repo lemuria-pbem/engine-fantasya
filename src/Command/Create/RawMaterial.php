@@ -37,7 +37,7 @@ final class RawMaterial extends AllocationCommand implements Activity
 
 	private Ability $knowledge;
 
-	private ?int $demand;
+	private ?int $demand = null;
 
 	private int $production = 0;
 

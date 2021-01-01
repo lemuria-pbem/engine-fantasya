@@ -22,7 +22,7 @@ class HelpMessage extends AbstractUnitMessage
 
 	protected function getTranslation(string $name): string {
 		if ($name === 'agreement') {
-			$agreement = $this->translateKey('relation.agreement_' . $this->agreement);
+			$agreement = $this->translateKey('diplomacy.relation.agreement_' . $this->agreement);
 			if ($agreement) {
 				return $agreement;
 			}
