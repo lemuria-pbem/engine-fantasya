@@ -3,15 +3,18 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Factory;
 
 use Lemuria\Engine\Lemuria\Command\AbstractCommand;
+use Lemuria\Engine\Lemuria\Command\Board;
 use Lemuria\Engine\Lemuria\Command\Comment;
 use Lemuria\Engine\Lemuria\Command\Contact;
 use Lemuria\Engine\Lemuria\Command\Create;
 use Lemuria\Engine\Lemuria\Command\Describe;
 use Lemuria\Engine\Lemuria\Command\Disguise;
 use Lemuria\Engine\Lemuria\Command\End;
+use Lemuria\Engine\Lemuria\Command\Enter;
 use Lemuria\Engine\Lemuria\Command\Fight;
 use Lemuria\Engine\Lemuria\Command\Help;
 use Lemuria\Engine\Lemuria\Command\Learn;
+use Lemuria\Engine\Lemuria\Command\Leave;
 use Lemuria\Engine\Lemuria\Command\Name;
 use Lemuria\Engine\Lemuria\Command\Next;
 use Lemuria\Engine\Lemuria\Command\Number;
@@ -252,12 +255,10 @@ class CommandFactory
 		switch ($verb) {
 			case 'BESCHREIBEN';
 				return new Describe($phrase, $this->context);
-			/*
 			case 'BESTEIGEN' :
-				return new Board($phrase);
+				return new Board($phrase, $this->context);
 			case 'BETRETEN' :
-				return new Enter($phrase);
-			*/
+				return new Enter($phrase, $this->context);
 			case 'BEWACHEN' :
 				return new Sentinel($phrase, $this->context);
 			case 'EINHEIT' :
@@ -309,9 +310,9 @@ class CommandFactory
 				return new CollectTaxes($phrase);
 			case 'UNTERHALTEN' :
 				return new Entertain($phrase);
-			case 'VERLASSEN' :
-				return new Leave($phrase);
 			*/
+			case 'VERLASSEN' :
+				return new Leave($phrase, $this->context);
 			default :
 				throw new UnknownCommandException($phrase);
 		}
