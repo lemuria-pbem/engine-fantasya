@@ -5,8 +5,8 @@ namespace Lemuria\Engine\Lemuria\Message;
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Report;
 use function Lemuria\getClass;
+use Lemuria\Engine\Report;
 use Lemuria\Engine\Message;
 use Lemuria\Id;
 use Lemuria\Model\Dictionary;
@@ -70,5 +70,39 @@ abstract class AbstractMessage implements MessageType
 
 	protected function getTranslation(string $name): string {
 		return (string)$this->$name;
+	}
+
+	protected function commodity(string $property, string $name): ?string {
+		if ($property === $name) {
+			$commodity = getClass($this->$name);
+			$commodity = $this->translateKey('resource.' . $commodity);
+			if ($commodity) {
+				return $commodity;
+			}
+		}
+		return null;
+	}
+
+	protected function item(string $property, string $name): ?string {
+		if ($property === $name) {
+			$commodity = getClass($this->$name->Commodity());
+			$count     = $this->$name->Count();
+			$item      = $this->translateKey('resource.' . $commodity, $count > 1 ? 1 : 0);
+			if ($item) {
+				return $count . ' ' . $item;
+			}
+		}
+		return null;
+	}
+
+	protected function talent(string $property, string $name): ?string {
+		if ($property === $name) {
+			$talent = getClass($this->$name);
+			$talent = $this->translateKey('talent.' . $talent);
+			if ($talent) {
+				return $talent;
+			}
+		}
+		return null;
 	}
 }

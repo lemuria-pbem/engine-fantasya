@@ -23,4 +23,8 @@ class LearnProgressMessage extends AbstractUnitMessage
 		$this->talent = $message->getSingleton();
 		$this->experience = $message->getParameter();
 	}
+
+	protected function getTranslation(string $name): string {
+		return $this->talent($name, 'talent') ?? parent::getTranslation($name);
+	}
 }

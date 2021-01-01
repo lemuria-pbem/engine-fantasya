@@ -27,4 +27,16 @@ class MaterialExperienceMessage extends AbstractUnitMessage
 		$this->talent = $message->getSingleton(self::TALENT);
 		$this->material = $message->getSingleton(self::MATERIAL);
 	}
+
+	protected function getTranslation(string $name): string {
+		$material = $this->commodity($name, 'material');
+		if ($material) {
+			return $material;
+		}
+		$talent = $this->talent($name, 'talent');
+		if ($talent) {
+			return $talent;
+		}
+		return parent::getTranslation($name);
+	}
 }

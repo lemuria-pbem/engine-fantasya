@@ -24,4 +24,16 @@ class MaterialOutputMessage extends AbstractUnitMessage
 		$this->output = $message->getQuantity();
 		$this->talent = $message->getSingleton();
 	}
+
+	protected function getTranslation(string $name): string {
+		$output = $this->item($name, 'output');
+		if ($output) {
+			return $output;
+		}
+		$talent = $this->talent($name, 'talent');
+		if ($talent) {
+			return $talent;
+		}
+		return parent::getTranslation($name);
+	}
 }

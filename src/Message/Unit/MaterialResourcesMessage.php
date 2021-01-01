@@ -20,4 +20,8 @@ class MaterialResourcesMessage extends AbstractUnitMessage
 		parent::getData($message);
 		$this->material = $message->getSingleton();
 	}
+
+	protected function getTranslation(string $name): string {
+		return $this->commodity($name, 'material') ?? parent::getTranslation($name);
+	}
 }

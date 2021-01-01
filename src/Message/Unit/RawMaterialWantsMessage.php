@@ -20,4 +20,8 @@ class RawMaterialWantsMessage extends AbstractUnitMessage
 		$this->commodity = $message->getSingleton();
 		$this->production = $message->getParameter();
 	}
+
+	protected function getTranslation(string $name): string {
+		return $this->commodity($name, 'commodity') ?? parent::getTranslation($name);
+	}
 }
