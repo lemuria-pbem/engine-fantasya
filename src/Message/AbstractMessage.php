@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
+use function Lemuria\number;
 use Lemuria\Engine\Report;
 use Lemuria\Engine\Message;
 use Lemuria\Id;
@@ -89,7 +90,7 @@ abstract class AbstractMessage implements MessageType
 			$count     = $this->$name->Count();
 			$item      = $this->translateKey('resource.' . $commodity, $count > 1 ? 1 : 0);
 			if ($item) {
-				return $count . ' ' . $item;
+				return number($count) . ' ' . $item;
 			}
 		}
 		return null;
