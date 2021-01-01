@@ -4,14 +4,15 @@ namespace Lemuria\Engine\Lemuria\Command;
 
 use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Message\Party\RecruitPreventMessage;
-use Lemuria\Engine\Lemuria\Message\RecruitGuardedMessage;
-use Lemuria\Engine\Lemuria\Message\RecruitLessMessage;
-use Lemuria\Engine\Lemuria\Message\RecruitMessage;
-use Lemuria\Engine\Lemuria\Message\RecruitPaymentMessage;
-use Lemuria\Engine\Lemuria\Message\RecruitTooExpensiveMessage;
-use Lemuria\Model\Lemuria\Commodity\Silver;
-use Lemuria\Model\Lemuria\Quantity;
+use Lemuria\Engine\Lemuria\Message\Unit\RecruitGuardedMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\RecruitLessMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\RecruitMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\RecruitPaymentMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\RecruitTooExpensiveMessage;
 use Lemuria\Model\Lemuria\Commodity\Peasant;
+use Lemuria\Model\Lemuria\Commodity\Silver;
+use Lemuria\Model\Lemuria\Factory\BuilderTrait;
+use Lemuria\Model\Lemuria\Quantity;
 use Lemuria\Model\Lemuria\Relation;
 
 /**
@@ -23,6 +24,8 @@ use Lemuria\Model\Lemuria\Relation;
  */
 final class Recruit extends AllocationCommand
 {
+	use BuilderTrait;
+
 	private int $size;
 
 	protected function run(): void {
@@ -67,7 +70,7 @@ final class Recruit extends AllocationCommand
 			throw new InvalidCommandException('Invalid size "' . $size . '".');
 		}
 		$this->size = $size;
-		$peasant    = $this->context->Factory()->commodity(Peasant::class);
+		$peasant    = self::createCommodity(Peasant::class);
 		$this->resources->add(new Quantity($peasant, $size));
 	}
 
@@ -76,7 +79,7 @@ final class Recruit extends AllocationCommand
 	 */
 	private function getMaximumPayable(): int {
 		$payable      = $this->size;
-		$silver       = $this->context->Factory()->commodity(Silver::class);
+		$silver       = self::createCommodity(Silver::class);
 		$price        = $this->unit->Party()->Race()->Recruiting();
 		$inventory    = $this->unit->Inventory();
 		$ownSilver    = $inventory->offsetGet($silver)->Count();

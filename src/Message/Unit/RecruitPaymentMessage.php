@@ -1,8 +1,9 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message;
+namespace Lemuria\Engine\Lemuria\Message\Unit;
 
 use function Lemuria\getClass;
+use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 use Lemuria\Model\Lemuria\Quantity;
 
