@@ -47,9 +47,12 @@ abstract class AbstractMessage implements MessageType
 		return $translation;
 	}
 
-	protected function translateKey(string $keyPath): ?string {
+	protected function translateKey(string $keyPath, ?int $index = null): ?string {
 		$dictionary  = new Dictionary();
-		$translation = $dictionary->get($keyPath);
+		$translation = $dictionary->get($keyPath, $index);
+		if ($index !== null) {
+			$keyPath .= '.' . $index;
+		}
 		return $translation === $keyPath ? null : $translation;
 	}
 

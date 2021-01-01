@@ -19,6 +19,7 @@ use Lemuria\Engine\Lemuria\Command\Name;
 use Lemuria\Engine\Lemuria\Command\Next;
 use Lemuria\Engine\Lemuria\Command\Number;
 use Lemuria\Engine\Lemuria\Command\Party;
+use Lemuria\Engine\Lemuria\Command\Recruit;
 use Lemuria\Engine\Lemuria\Command\Sentinel;
 use Lemuria\Engine\Lemuria\Command\Sort;
 use Lemuria\Engine\Lemuria\Command\Teach;
@@ -295,9 +296,9 @@ class CommandFactory
 				return new Number($phrase, $this->context);
 			case 'PARTEI' :
 				return new Party($phrase, $this->context);
-			/*
 			case 'REKRUTIEREN' :
-				return new Recruit($phrase);
+				return new Recruit($phrase, $this->context);
+			/*
 			case 'RESERVIEREN' :
 				return new Reserve($phrase);
 			*/

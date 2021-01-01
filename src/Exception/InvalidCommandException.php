@@ -12,7 +12,7 @@ use Lemuria\Engine\Lemuria\Command;
 class InvalidCommandException extends CommandException
 {
 	#[Pure] public function __construct(Command|string $command, ?string $explanation = null, ?\Throwable $previous = null) {
-		$message = 'Error in command "' . $command . '"' . $explanation ? ': ' . $explanation : '.';
+		$message = 'Error in command "' . $command . '"' . ($explanation ? ': ' . $explanation : '.');
 		parent::__construct($message, 0, $previous);
 	}
 }
