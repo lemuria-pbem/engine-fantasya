@@ -2,7 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
+use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Message\Unit\EnterAlreadyMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\EnterDeniedMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\EnterMessage;
@@ -23,7 +23,7 @@ final class Enter extends UnitCommand
 {
 	protected function run(): void {
 		if ($this->phrase->count() < 1) {
-			throw new UnknownCommandException($this);
+			throw new InvalidCommandException($this);
 		}
 		$id = Id::fromId($this->phrase->getParameter());
 

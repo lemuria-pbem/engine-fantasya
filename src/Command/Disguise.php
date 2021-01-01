@@ -2,7 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
+use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Message\Unit\DisguiseDoesNotKnowMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\DisguiseKnownPartyMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\DisguiseLevelMessage;
@@ -73,6 +73,6 @@ final class Disguise extends UnitCommand
 				}
 			}
 		}
-		throw new UnknownCommandException($this);
+		throw new InvalidCommandException($this);
 	}
 }

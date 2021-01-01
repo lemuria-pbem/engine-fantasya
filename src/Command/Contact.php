@@ -2,7 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
+use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Message\Unit\ContactMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\ContactNotFoundMessage;
 use Lemuria\Id;
@@ -20,7 +20,7 @@ final class Contact extends UnitCommand
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n < 1) {
-			throw new UnknownCommandException($this);
+			throw new InvalidCommandException($this);
 		}
 
 		$region    = $this->unit->Region();

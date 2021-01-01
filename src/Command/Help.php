@@ -2,7 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
+use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Message\Unit\HelpMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\HelpNotMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\HelpPartyMessage;
@@ -40,7 +40,7 @@ final class Help extends UnitCommand
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n < 2) {
-			throw new UnknownCommandException($this);
+			throw new InvalidCommandException($this);
 		}
 
 		$party = null;
@@ -69,7 +69,7 @@ final class Help extends UnitCommand
 		$p         = $this->phrase->getParameter(2);
 		$agreement = $this->getAgreement($p);
 		if ($agreement === null) {
-			throw new UnknownCommandException($this);
+			throw new InvalidCommandException($this, 'Invalid agreement.');
 		}
 
 		$isNot    = false;
@@ -83,7 +83,7 @@ final class Help extends UnitCommand
 			$this->parseAdditionalParameter($p, $isNot, $inRegion);
 		}
 		if ($n > 4 || $agreement === Relation::NONE && $isNot) {
-			throw new UnknownCommandException($this);
+			throw new InvalidCommandException($this, 'Invalid negation of agreement NONE.');
 		}
 
 		$this->updateDiplomacy($party, $inRegion, $agreement, $isNot);
@@ -139,7 +139,7 @@ final class Help extends UnitCommand
 	}
 
 	/**
-	 * @throws UnknownCommandException
+	 * @throws InvalidCommandException
 	 */
 	private function parseAdditionalParameter(string $p, bool &$isNot, bool &$inRegion): void {
 		switch (strtolower($p)) {
@@ -150,7 +150,7 @@ final class Help extends UnitCommand
 				$inRegion = true;
 				break;
 			default :
-				throw new UnknownCommandException($this);
+				throw new InvalidCommandException($this);
 		}
 	}
 

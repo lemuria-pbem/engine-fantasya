@@ -2,7 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
+use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Message\Unit\FightMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\FightUnguardMessage;
 use Lemuria\Model\Lemuria\Combat;
@@ -21,7 +21,7 @@ final class Fight extends UnitCommand
 		} elseif ($n === 1) {
 			$position = strtolower($this->phrase->getParameter());
 		} else {
-			throw new UnknownCommandException($this);
+			throw new InvalidCommandException($this);
 		}
 
 		switch ($position) {
@@ -51,7 +51,7 @@ final class Fight extends UnitCommand
 				$this->unit->setBattleRow(Combat::FRONT);
 				break;
 			default :
-				throw new UnknownCommandException($this);
+				throw new InvalidCommandException($this, 'Invalid position "' . $position . '".');
 		}
 		$this->message(FightMessage::class)->p($this->unit->BattleRow());
 	}

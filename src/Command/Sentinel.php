@@ -5,7 +5,7 @@ namespace Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Command\Sentinel\Guard;
 use Lemuria\Engine\Lemuria\Command\Sentinel\Unguard;
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
+use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 
 /**
  * Implementation of command BEWACHEN.
@@ -28,6 +28,6 @@ final class Sentinel extends DelegatedCommand
 				return new Unguard($this->phrase, $this->context);
 			}
 		}
-		throw new UnknownCommandException($this);
+		throw new InvalidCommandException($this);
 	}
 }

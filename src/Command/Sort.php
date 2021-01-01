@@ -2,8 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
-use Lemuria\Engine\Lemuria\Exception\CommandException;
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
+use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Message\Unit\SortAfterMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\SortAfterInConstructionMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\SortAfterOwnerMessage;
@@ -38,7 +37,7 @@ final class Sort extends UnitCommand
 		$with = null;
 		$n    = $this->phrase->count();
 		if ($n <= 0) {
-			throw new CommandException('No sort details given.');
+			throw new InvalidCommandException($this, 'No sort details given.');
 		}
 		if ($n === 1) {
 			$type = $this->phrase->getParameter();
@@ -48,7 +47,7 @@ final class Sort extends UnitCommand
 			try {
 				$withId = Id::fromId($id);
 			} catch (IdException $e) {
-				throw new CommandException('Invalid ID given.', 0, $e);
+				throw new InvalidCommandException($this, 'Invalid ID given.', $e);
 			}
 			try {
 				$with = Unit::get($withId);
@@ -96,7 +95,7 @@ final class Sort extends UnitCommand
 				$this->exchangeWith($with);
 				break;
 			default :
-				throw new UnknownCommandException($this);
+				throw new InvalidCommandException($this, 'Invalid type "' . $type . '".');
 		}
 	}
 

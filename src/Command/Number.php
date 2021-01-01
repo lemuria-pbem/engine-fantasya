@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
+use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Message\Construction\NumberConstructionMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\NumberOwnerMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\NumberConstructionUsedMessage;
@@ -13,8 +14,6 @@ use Lemuria\Engine\Lemuria\Message\Vessel\NumberCaptainMessage;
 use Lemuria\Engine\Lemuria\Message\Vessel\NumberVesselMessage;
 use Lemuria\Engine\Lemuria\Message\Vessel\NumberVesselUsedMessage;
 use Lemuria\Model\Catalog;
-use Lemuria\Engine\Lemuria\Exception\CommandException;
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
 use Lemuria\Exception\IdException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
@@ -32,7 +31,7 @@ final class Number extends UnitCommand
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n <= 0) {
-			throw new CommandException('No ID given.');
+			throw new InvalidCommandException($this, 'No ID given.');
 		}
 		if ($n === 1) {
 			$type = 'Einheit';
@@ -44,7 +43,7 @@ final class Number extends UnitCommand
 		try {
 			$newId = Id::fromId($id);
 		} catch (IdException $e) {
-			throw new CommandException('Invalid ID given.', 0, $e);
+			throw new InvalidCommandException($this, 'Invalid ID given.', $e);
 		}
 
 		switch (strtolower($type)) {
@@ -60,7 +59,7 @@ final class Number extends UnitCommand
 				$this->setVesselId($newId);
 				break;
 			default :
-				throw new UnknownCommandException($this);
+				throw new InvalidCommandException($this, 'Invalid type "' . $type . '".');
 		}
 	}
 

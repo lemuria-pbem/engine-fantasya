@@ -7,7 +7,7 @@ use function Lemuria\isInt;
 use Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Command\Create\Resource;
 use Lemuria\Engine\Lemuria\Command\Create\Temp;
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
+use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 
 /**
  * Implementation of command MACHEN.
@@ -23,7 +23,7 @@ final class Create extends DelegatedCommand
 {
 	protected function createDelegate(): Command {
 		if (count($this->phrase) > 2) {
-			throw new UnknownCommandException($this);
+			throw new InvalidCommandException($this);
 		}
 
 		$param = $this->phrase->getParameter();

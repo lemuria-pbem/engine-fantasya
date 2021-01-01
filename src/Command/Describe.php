@@ -2,7 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
-use Lemuria\Engine\Lemuria\Exception\CommandException;
+use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Message\Construction\DescribeConstructionMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\DescribeOwnerMessage;
 use Lemuria\Engine\Lemuria\Message\Region\DescribeCastleMessage;
@@ -28,7 +28,7 @@ final class Describe extends UnitCommand
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n <= 0) {
-			throw new CommandException('No description given.');
+			throw new InvalidCommandException($this, 'No description given.');
 		}
 		if ($n === 1) {
 			$type        = 'Einheit';
