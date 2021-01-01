@@ -34,7 +34,7 @@ final class Contact extends UnitCommand
 			}
 			if ($unit && $unit->Region() === $region) {
 				$diplomacy->contact($unit);
-				$this->message(ContactMessage::class)->e($unit);
+				$this->message(ContactMessage::class)->e($unit, ContactMessage::UNIT);
 			} else {
 				$this->message(ContactNotFoundMessage::class)->p($id->Id());
 			}

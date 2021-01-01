@@ -7,6 +7,8 @@ use Lemuria\Id;
 
 class ContactMessage extends AbstractUnitMessage
 {
+	public const UNIT = 'unit';
+
 	protected Id $unit;
 
 	protected function create(): string {
@@ -15,6 +17,6 @@ class ContactMessage extends AbstractUnitMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->unit = $message->get();
+		$this->unit = $message->get(self::UNIT);
 	}
 }
