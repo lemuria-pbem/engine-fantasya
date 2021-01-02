@@ -11,7 +11,10 @@ use Lemuria\Engine\Lemuria\Command\Describe;
 use Lemuria\Engine\Lemuria\Command\Disguise;
 use Lemuria\Engine\Lemuria\Command\End;
 use Lemuria\Engine\Lemuria\Command\Enter;
+use Lemuria\Engine\Lemuria\Command\Entertain;
 use Lemuria\Engine\Lemuria\Command\Fight;
+use Lemuria\Engine\Lemuria\Command\Handover;
+use Lemuria\Engine\Lemuria\Command\Handover\Grant;
 use Lemuria\Engine\Lemuria\Command\Help;
 use Lemuria\Engine\Lemuria\Command\Learn;
 use Lemuria\Engine\Lemuria\Command\Leave;
@@ -23,6 +26,7 @@ use Lemuria\Engine\Lemuria\Command\Recruit;
 use Lemuria\Engine\Lemuria\Command\Reserve;
 use Lemuria\Engine\Lemuria\Command\Sentinel;
 use Lemuria\Engine\Lemuria\Command\Sort;
+use Lemuria\Engine\Lemuria\Command\Tax;
 use Lemuria\Engine\Lemuria\Command\Teach;
 use Lemuria\Engine\Lemuria\Command\Unit;
 use Lemuria\Engine\Lemuria\Context;
@@ -267,18 +271,14 @@ class CommandFactory
 				return new Unit($phrase, $this->context);
 			case 'ENDE' :
 				return new End($phrase, $this->context);
-			/*
 			case 'GIB' :
-				return new Handover($phrase);
-			*/
+				return new Handover($phrase, $this->context);
 			case 'HELFEN' :
 				return new Help($phrase, $this->context);
 			case 'KÄMPFEN' :
 				return new Fight($phrase, $this->context);
-			/*
 			case 'KOMMANDO' :
-				return new Grant($phrase);
-			*/
+				return new Grant($phrase, $this->context);
 			case 'KOMMENTAR' :
 				return new Comment($phrase,$this->context);
 			case 'KONTAKTIEREN' :
@@ -305,12 +305,10 @@ class CommandFactory
 				return new Sort($phrase, $this->context);
 			case 'TARNEN' :
 				return new Disguise($phrase, $this->context);
-			/*
 			case 'TREIBEN' :
-				return new CollectTaxes($phrase);
+				return new Tax($phrase, $this->context);
 			case 'UNTERHALTEN' :
-				return new Entertain($phrase);
-			*/
+				return new Entertain($phrase, $this->context);
 			case 'VERLASSEN' :
 				return new Leave($phrase, $this->context);
 			default :

@@ -2,9 +2,9 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Message\Unit;
 
-class RecruitGuardedMessage extends AbstractGuardedMessage
+class TaxNoDemandMessage extends AbstractNoDemandMessage
 {
 	protected function createActivity(): string {
-		return 'recruit';
+		return 'collect taxes';
 	}
 }
