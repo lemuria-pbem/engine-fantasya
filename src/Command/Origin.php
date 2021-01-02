@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
 use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
+use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Message\Party\OriginMessage;
 use Lemuria\Id;
 use Lemuria\Model\Lemuria\Region;
@@ -37,6 +38,10 @@ final class Origin extends UnitCommand
 		} else {
 			throw new InvalidCommandException($this);
 		}
+	}
+
+	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
+		return $message->e($this->context->Party());
 	}
 
 	private function setFromParty(Id $id): void {
