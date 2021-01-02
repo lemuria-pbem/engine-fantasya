@@ -22,7 +22,7 @@ final class CommandPriority
 		'Describe'     => 8,
 		'Disguise'     => 10,
 		'Unguard'      => 12,
-		// URSPRUNG => 14,
+		'Origin'       => 14,
 		'Fight'        => 16,
 		'Help'         => 20,
 		'Contact'      => 22,

@@ -21,6 +21,7 @@ use Lemuria\Engine\Lemuria\Command\Leave;
 use Lemuria\Engine\Lemuria\Command\Name;
 use Lemuria\Engine\Lemuria\Command\Next;
 use Lemuria\Engine\Lemuria\Command\Number;
+use Lemuria\Engine\Lemuria\Command\Origin;
 use Lemuria\Engine\Lemuria\Command\Party;
 use Lemuria\Engine\Lemuria\Command\Recruit;
 use Lemuria\Engine\Lemuria\Command\Reserve;
@@ -142,6 +143,7 @@ class CommandFactory
 		'TEXT'         => 'BESCHREIBEN',
 		'TREIBEN'      => true,
 		'UNTERHALTEN'  => true,
+		'URSPRUNG'     => true,
 		'ÜBERGEBEN'    => 'GIB',
 		'VERLASSEN'    => true
 	];
@@ -309,6 +311,8 @@ class CommandFactory
 				return new Tax($phrase, $this->context);
 			case 'UNTERHALTEN' :
 				return new Entertain($phrase, $this->context);
+			case 'URSPRUNG' :
+				return new Origin($phrase, $this->context);
 			case 'VERLASSEN' :
 				return new Leave($phrase, $this->context);
 			default :
