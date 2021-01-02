@@ -26,4 +26,16 @@ class TaxDemandMessage extends AbstractUnitMessage
 		$this->collectors = $message->getParameter(self::COLLECTORS);
 		$this->rate = $message->getParameter(self::RATE);
 	}
+
+	protected function getTranslation(string $name): string {
+		$collectors = $this->number($name, self::COLLECTORS);
+		if ($collectors) {
+			return $collectors;
+		}
+		$rate = $this->number($name, self::RATE);
+		if ($rate) {
+			return $rate;
+		}
+		return parent::getTranslation($name);
+	}
 }
