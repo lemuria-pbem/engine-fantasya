@@ -234,6 +234,7 @@ class CommandFactory
 		'Speerkampf'        => Spearfighting::class,
 		'Spionage'          => Espionage::class,
 		'Spionieren'        => Espionage::class,
+		'Stangenwaffen'     => Spearfighting::class,
 		'Steinbau'          => Quarrying::class,
 		'Steuereintreiben'  => Taxcollecting::class,
 		'Steuereintreibung' => Taxcollecting::class,
