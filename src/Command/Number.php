@@ -76,23 +76,41 @@ final class Number extends UnitCommand
 		$party        = $this->unit->Party();
 		$region       = $this->unit->Region();
 		$construction = $this->unit->Construction();
+		$vessel       = $this->unit->Vessel();
+
 		$inhabitants  = $construction ? $construction->Inhabitants() : null;
 		$isOwner      = $inhabitants ? $inhabitants->Owner() === $this->unit : false;
 		if ($inhabitants) {
 			$inhabitants->remove($this->unit);
 		}
+
+		$passengers = $vessel ? $vessel->Passengers() : null;
+		$isCaptain  = $passengers ? $passengers->Owner() === $this->unit : false;
+		if ($passengers) {
+			$passengers->remove($this->unit);
+		}
+
 		$region->Residents()->remove($this->unit);
 		$party->People()->remove($this->unit);
 
 		$this->unit->setId($id);
 		$party->People()->add($this->unit);
 		$region->Residents()->add($this->unit);
+
 		if ($inhabitants) {
 			$inhabitants->add($this->unit);
 			if ($isOwner) {
 				$inhabitants->setOwner($this->unit);
 			}
 		}
+
+		if ($passengers) {
+			$passengers->add($this->unit);
+			if ($isCaptain) {
+				$passengers->setOwner($this->unit);
+			}
+		}
+
 		$this->message(NumberUnitMessage::class)->p($oldId);
 	}
 
