@@ -13,7 +13,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen
 
-- Sauberes kleines Testspiel erstellen, mit dem alle Befehle getestet werden können 
 - URSPRUNG: Prüfung auf bekannte Parteien/Regionen (benötigt den Atlas)
 - Weltentwicklung (Wachstum, Unterhalt)
 - NACH
@@ -25,9 +24,12 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Kampf (ATTACKIEREN/BELAGERN)
 - Magie (KAMPFZAUBER/ZAUBERN)
 - Geschlossene Spielwelt
+- JsonGame: Messages und Strings gesondert ablegen (siehe Fehler)
 
 ## Fehler
 
 - GEBEN 2e2 350 Eisen funktioniert nicht (Unknown command)
 - Allocation muss in distribute() zuerst alle Checks der Consumer durchführen und deregistrieren
 - Allocation deckt nur die eigene Partei ab, muss von Context nach LemuriaTurn verschoben werden
+- Spiel laden: Report-Messages passen nicht mehr zu den Einheiten-IDs
+- Spiel speichern: Strings fehlen
