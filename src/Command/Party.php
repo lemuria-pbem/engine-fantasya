@@ -5,7 +5,7 @@ namespace Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Immediate;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Message\Party\PartyMessage;
-use Lemuria\Engine\Lemuria\Message\Party\PartyVisitedMessage;
+use Lemuria\Engine\Lemuria\Message\Party\PartyVisitMessage;
 use Lemuria\Id;
 use Lemuria\Model\Lemuria\Party as PartyModel;
 use Lemuria\Model\Lemuria\Party\Census;
@@ -41,6 +41,6 @@ final class Party extends AbstractCommand implements Immediate
 		foreach ($atlas as $region /* @var Region $region */) {
 			$party->Chronicle()->add($region);
 		}
-		$this->message(PartyVisitedMessage::class)->p($atlas->count());
+		$this->message(PartyVisitMessage::class)->p($atlas->count());
 	}
 }

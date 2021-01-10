@@ -4,7 +4,7 @@ namespace Lemuria\Engine\Lemuria\Message\Party;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 
-class PartyVisitedMessage extends AbstractPartyMessage
+class PartyVisitMessage extends AbstractPartyMessage
 {
 	protected int $regions;
 
