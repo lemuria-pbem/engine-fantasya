@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
-- Atlas mit Besuchszeit im Parteidatensatz speichern
 - Befehlsvorlage für Einheiten (lange Befehle)
 - Nahrung statt Silber
 - Marktfunktionen
@@ -13,7 +12,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen
 
-- URSPRUNG: Prüfung auf bekannte Parteien/Regionen (benötigt den Atlas)
+- URSPRUNG: Prüfung auf bekannte Parteien/Regionen
 - Weltentwicklung (Wachstum, Unterhalt)
 - NACH
 - ROUTE (benötigt die Befehlsvorlage)
