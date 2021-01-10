@@ -18,6 +18,6 @@ class PartyVisitMessage extends AbstractPartyMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->number($name, 'regions');
+		return $this->number($name, 'regions') ?? parent::getTranslation($name);
 	}
 }
