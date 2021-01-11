@@ -113,7 +113,6 @@ class LemuriaMessage implements Message
 	 */
 	public function unserialize(array $data): Serializable {
 		$this->validateSerializedData($data);
-		$this->setType(self::createMessageType($data['type']))->setId(new Id($data['id']));
 		if (isset($data['entities'])) {
 			$this->entities = $data['entities'];
 		}
@@ -126,6 +125,7 @@ class LemuriaMessage implements Message
 		if (isset($data['parameters'])) {
 			$this->parameters = $data['parameters'];
 		}
+		$this->setType(self::createMessageType($data['type']))->setId(new Id($data['id']));
 		return $this;
 	}
 

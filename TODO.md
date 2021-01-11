@@ -22,13 +22,12 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Handel (KAUFE/VERKAUFE)
 - Kampf (ATTACKIEREN/BELAGERN)
 - Magie (KAMPFZAUBER/ZAUBERN)
+- Alchemie (Kräuter und Tränke, BENUTZE) 
 - Geschlossene Spielwelt
-- JsonGame: Messages und Strings gesondert ablegen (siehe Fehler)
+- JsonGame: Strings in der Engine ablegen
+- Meldungen in den Reporten ausgeben
 
 ## Fehler
 
-- GEBEN 2e2 350 Eisen funktioniert nicht (Unknown command)
 - Allocation muss in distribute() zuerst alle Checks der Consumer durchführen und deregistrieren
 - Allocation deckt nur die eigene Partei ab, muss von Context nach LemuriaTurn verschoben werden
-- Spiel laden: Report-Messages passen nicht mehr zu den Einheiten-IDs
-- Spiel speichern: Strings fehlen
