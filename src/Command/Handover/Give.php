@@ -4,10 +4,12 @@ namespace Lemuria\Engine\Lemuria\Command\Handover;
 
 use Lemuria\Engine\Lemuria\Command\UnitCommand;
 use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
+use Lemuria\Engine\Lemuria\Factory\Model\Everything;
 use Lemuria\Engine\Lemuria\Message\Unit\GiveMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\GiveNoInventoryMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\GiveFailedMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\GiveRejectedMessage;
+use Lemuria\Model\Lemuria\Commodity;
 use Lemuria\Model\Lemuria\Relation;
 use Lemuria\Model\Lemuria\Unit;
 use Lemuria\Model\Lemuria\Quantity;
@@ -35,28 +37,32 @@ final class Give extends UnitCommand
 			throw new InvalidCommandException($this, 'No recipient parameter.');
 		}
 
-		$amount = (int)$count; // GIB <Unit> <amount> <resource>
-		if ((string)$amount !== $count) {
-			if (strpos('alles', strtolower($count)) !== 0) { // GIB <Unit> Alles
-				$commodity = $count; // GIB <Unit> <commodity> (all of commodity)
+		if (strtolower($count) === 'alles') {
+			$amount = PHP_INT_MAX; // GIB <Unit> Alles [<commodity>]
+		} else {
+			$amount = (int)$count; // GIB <Unit> <amount> <commodity>
+			if ((string)$amount === $count) {
+				if (!$commodity) {
+					throw new InvalidCommandException($this, 'No commodity parameter.');
+				}
+			} else {
+				$amount = PHP_INT_MAX;
+				$commodity = $count; // GIB <Unit> <commodity>
 			}
-			$amount = PHP_INT_MAX;
 		}
-		if (!$commodity && $amount < PHP_INT_MAX) { // GIB <Unit> Alles <commodity>
-			throw new InvalidCommandException($this, 'No resource parameter.');
-		}
+		$commodity = $commodity ? $this->context->Factory()->commodity($commodity) : new Everything();
 
 		if (!$this->checkPermission()) {
 			$this->message(GiveFailedMessage::class)->e($this->recipient, GiveFailedMessage::RECIPIENT);
-			$gift = $commodity ? new Quantity($this->context->Factory()->commodity($commodity), $amount) : 'all its property';
+			$gift = new Quantity($commodity, $amount);
 			$this->message(GiveRejectedMessage::class)->e($this->recipient)->e($this->unit, GiveRejectedMessage::RECIPIENT)->i($gift);
 			return;
 		}
 
-		if ($commodity) {
-			$this->give($commodity, $amount);
-		} else {
+		if ($commodity instanceof Everything) {
 			$this->giveEverything();
+		} else {
+			$this->give($commodity, $amount);
 		}
 	}
 
@@ -76,14 +82,13 @@ final class Give extends UnitCommand
 	}
 
 	/**
-	 * Give a single resource.
+	 * Give a single commodity.
 	 *
-	 * @param string $resource
+	 * @param Commodity $commodity
 	 * @param int $amount
 	 */
-	private function give(string $resource, int $amount = PHP_INT_MAX): void {
-		$commodity = $this->context->Factory()->commodity($resource);
-		$quantity  = $this->unit->Inventory()->offsetGet($commodity);
+	private function give(Commodity $commodity, int $amount): void {
+		$quantity = $this->unit->Inventory()->offsetGet($commodity);
 		if ($quantity instanceof Quantity) {
 			$gift = new Quantity($commodity, min($quantity->Count(), $amount));
 			$this->giveQuantity($gift);

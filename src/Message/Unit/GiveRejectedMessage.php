@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Message\Unit;
 
+use Lemuria\Engine\Lemuria\Factory\Model\Everything;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Item;
 
@@ -10,7 +11,8 @@ class GiveRejectedMessage extends GiveFailedMessage
 	protected Item $gift;
 
 	protected function create(): string {
-		return 'Unit ' . $this->recipient . ' wanted to give ' . $this->id . ' ' . $this->gift . '.';
+		$gift = $this->gift->getObject() instanceof Everything ? 'all its property' : $this->gift;
+		return 'Unit ' . $this->recipient . ' wanted to give ' . $this->id . ' ' . $gift . '.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
