@@ -24,7 +24,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Magie (KAMPFZAUBER/ZAUBERN)
 - Alchemie (Kräuter und Tränke, BENUTZE) 
 - Geschlossene Spielwelt
-- JsonGame: Strings in der Engine ablegen
 - Meldungen in den Reporten ausgeben
 
 ## Fehler
