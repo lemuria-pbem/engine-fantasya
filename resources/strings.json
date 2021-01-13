@@ -170,6 +170,8 @@
 		"NumberVesselMessage": "Die neue Nummer des Schiffes $oldId ist $id.",
 		"NumberVesselUsedMessage": "Die Nummer des Schiffes $id wurde nicht geändert. Die Nummer $newId ist schon belegt.",
 		"OriginMessage": "Der neue Kartenursprung liegt nun in der Region $name [$region].",
+		"OriginNotVisitedMessage": "Der Kartenursprung kann nicht auf die Region $region gesetzt werden - wir haben sie noch nicht besucht.",
+		"OriginUntoldMessage": "Der Kartenursprung kann nicht auf die Partei $party gesetzt werden - wir wissen nichts über sie.",
 		"PartyMessage": "Runde für Partei $id begonnen.",
 		"PartyVisitMessage": "Die Partei $id besucht $regions Regionen.",
 		"RawMaterialCanMessage": "Die Einheit $id kann $production $commodity produzieren.",

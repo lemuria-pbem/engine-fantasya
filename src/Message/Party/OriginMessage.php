@@ -4,16 +4,11 @@ namespace Lemuria\Engine\Lemuria\Message\Party;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
-use Lemuria\Id;
 use Lemuria\Model\Lemuria\Region;
 
-class OriginMessage extends AbstractPartyMessage
+class OriginMessage extends OriginNotVisitedMessage
 {
-	public const REGION = 'region';
-
 	protected string $level = Message::SUCCESS;
-
-	protected Id $region;
 
 	protected string $name;
 
@@ -23,7 +18,6 @@ class OriginMessage extends AbstractPartyMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->region = $message->get(self::REGION);
-		$this->name   = Region::get($this->region)->Name();
+		$this->name = Region::get($this->region)->Name();
 	}
 }

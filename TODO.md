@@ -12,7 +12,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen
 
-- URSPRUNG: Prüfung auf bekannte Parteien/Regionen
 - Weltentwicklung (Wachstum, Unterhalt)
 - NACH
 - ROUTE (benötigt die Befehlsvorlage)

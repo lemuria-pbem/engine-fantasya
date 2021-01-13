@@ -5,6 +5,8 @@ namespace Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Message\Party\OriginMessage;
+use Lemuria\Engine\Lemuria\Message\Party\OriginNotVisitedMessage;
+use Lemuria\Engine\Lemuria\Message\Party\OriginUntoldMessage;
 use Lemuria\Id;
 use Lemuria\Model\Lemuria\Region;
 use Lemuria\Model\Lemuria\Party;
@@ -30,7 +32,7 @@ final class Origin extends UnitCommand
 					$this->setFromParty($id);
 					break;
 				case 'region' :
-					$this->setToRegion(Region::get($id));
+					$this->setFromRegion(Region::get($id));
 					break;
 				default :
 					throw new InvalidCommandException($this);
@@ -44,14 +46,30 @@ final class Origin extends UnitCommand
 		return $message->e($this->context->Party());
 	}
 
+	/**
+	 * A parties' origin can be set if that party has told us about it.
+	 */
 	private function setFromParty(Id $id): void {
-		// TODO: Check if we have TELL relation to party.
 		$party = Party::get($id);
-		$this->setToRegion($party->Origin());
+		if ($this->unit->Party()->Diplomacy()->Acquaintances()->isTold($party)) {
+			$this->setToRegion($party->Origin());
+		} else {
+			$this->message(OriginUntoldMessage::class)->e($party, OriginUntoldMessage::PARTY);
+		}
+	}
+
+	/**
+	 * A region can be set as origin if we have visited it.
+	 */
+	private function setFromRegion(Region $region): void {
+		if ($this->unit->Party()->Chronicle()->has($region->Id())) {
+			$this->setToRegion($region);
+		} else {
+			$this->message(OriginNotVisitedMessage::class)->e($region, OriginNotVisitedMessage::REGION);
+		}
 	}
 
 	private function setToRegion(Region $region): void {
-		// TODO: Check if region is known.
 		$this->unit->Party()->setOrigin($region);
 		$this->message(OriginMessage::class)->e($region, OriginMessage::REGION);
 	}
