@@ -6,6 +6,8 @@ use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Message\Construction\NumberConstructionMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\NumberOwnerMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\NumberConstructionUsedMessage;
+use Lemuria\Engine\Lemuria\Message\Party\NumberPartyMessage;
+use Lemuria\Engine\Lemuria\Message\Party\NumberPartyUsedMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\NumberUnitMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\NumberNotInConstructionMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\NumberNotInVesselMessage;
@@ -58,65 +60,25 @@ final class Number extends UnitCommand
 			case 'schiff' :
 				$this->setVesselId($newId);
 				break;
+			case 'partei' :
+				$this->setPartyId($newId);
+				break;
 			default :
 				throw new InvalidCommandException($this, 'Invalid type "' . $type . '".');
 		}
 	}
 
-	/**
-	 * Set name of unit.
-	 */
 	private function setUnitId(Id $id): void {
 		if (Lemuria::Catalog()->has($id, Catalog::UNITS)) {
 			$this->message(NumberUnitUsedMessage::class)->p($id->Id());
 			return;
 		}
 
-		$oldId        = $this->unit->Id()->Id();
-		$party        = $this->unit->Party();
-		$region       = $this->unit->Region();
-		$construction = $this->unit->Construction();
-		$vessel       = $this->unit->Vessel();
-
-		$inhabitants  = $construction ? $construction->Inhabitants() : null;
-		$isOwner      = $inhabitants ? $inhabitants->Owner() === $this->unit : false;
-		if ($inhabitants) {
-			$inhabitants->remove($this->unit);
-		}
-
-		$passengers = $vessel ? $vessel->Passengers() : null;
-		$isCaptain  = $passengers ? $passengers->Owner() === $this->unit : false;
-		if ($passengers) {
-			$passengers->remove($this->unit);
-		}
-
-		$region->Residents()->remove($this->unit);
-		$party->People()->remove($this->unit);
-
-		$this->unit->setId($id);
-		$party->People()->add($this->unit);
-		$region->Residents()->add($this->unit);
-
-		if ($inhabitants) {
-			$inhabitants->add($this->unit);
-			if ($isOwner) {
-				$inhabitants->setOwner($this->unit);
-			}
-		}
-
-		if ($passengers) {
-			$passengers->add($this->unit);
-			if ($isCaptain) {
-				$passengers->setOwner($this->unit);
-			}
-		}
-
-		$this->message(NumberUnitMessage::class)->p($oldId);
+		$oldId = $this->unit->Id();
+		$this->unit->replaceId($id);
+		$this->message(NumberUnitMessage::class)->p($oldId->Id());
 	}
 
-	/**
-	 * Set name of construction the unit controls.
-	 */
 	private function setConstructionId(Id $id): void {
 		$construction = $this->unit->Construction();
 		if (!$construction) {
@@ -132,19 +94,12 @@ final class Number extends UnitCommand
 			return;
 		}
 
-		$oldId  = $construction->Id()->Id();
-		$region = $construction->Region();
-		$estate = $region->Estate();
-		$estate->remove($construction);
-
+		$oldId = $construction->Id();
 		$construction->setId($id);
-		$estate->add($construction);
-		$this->message(NumberConstructionMessage::class)->e($construction)->p($oldId);
+		$construction->Region()->Estate()->replace($oldId, $id);
+		$this->message(NumberConstructionMessage::class)->e($construction)->p($oldId->Id());
 	}
 
-	/**
-	 * Set name of vessel the unit controls.
-	 */
 	private function setVesselId(Id $id): void {
 		$vessel = $this->unit->Vessel();
 		if (!$vessel) {
@@ -160,13 +115,21 @@ final class Number extends UnitCommand
 			return;
 		}
 
-		$oldId  = $vessel->Id()->Id();
-		$region = $vessel->Region();
-		$fleet  = $region->Fleet();
-		$fleet->remove($vessel);
-
+		$oldId = $vessel->Id();
+		$vessel->Region()->Fleet()->replace($oldId, $id);
 		$vessel->setId($id);
-		$fleet->add($vessel);
-		$this->message(NumberVesselMessage::class)->e($vessel)->p($oldId);
+		$this->message(NumberVesselMessage::class)->e($vessel)->p($oldId->Id());
+	}
+
+	private function setPartyId(Id $id): void {
+		$party = $this->unit->Party();
+		if (Lemuria::Catalog()->has($id, Catalog::PARTIES)) {
+			$this->message(NumberPartyUsedMessage::class)->e($party)->p($id->Id());
+			return;
+		}
+
+		$oldId = $party->Id()->Id();
+		$this->unit->Party()->setId($id);
+		$this->message(NumberPartyMessage::class)->e($party)->p($oldId);
 	}
 }
