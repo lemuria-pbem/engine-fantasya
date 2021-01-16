@@ -8,8 +8,6 @@ use Lemuria\Id;
 
 class TeachStudentMessage extends AbstractUnitMessage
 {
-	public const STUDENT = 'student';
-
 	protected string $level = Message::SUCCESS;
 
 	protected Id $student;
@@ -20,6 +18,6 @@ class TeachStudentMessage extends AbstractUnitMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->student = $message->get(self::STUDENT);
+		$this->student = $message->get();
 	}
 }

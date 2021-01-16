@@ -8,8 +8,6 @@ use Lemuria\Id;
 
 class OriginNotVisitedMessage extends AbstractPartyMessage
 {
-	public const REGION = 'region';
-
 	protected string $level = Message::FAILURE;
 
 	protected Id $region;
@@ -20,6 +18,6 @@ class OriginNotVisitedMessage extends AbstractPartyMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->region = $message->get(self::REGION);
+		$this->region = $message->get();
 	}
 }

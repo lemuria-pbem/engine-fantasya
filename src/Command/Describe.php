@@ -78,7 +78,7 @@ final class Describe extends UnitCommand
 				$this->message(DescribeConstructionMessage::class)->e($construction);
 				return;
 			}
-			$this->message(DescribeOwnerMessage::class)->e($construction)->e($this->unit, DescribeOwnerMessage::OWNER);
+			$this->message(DescribeOwnerMessage::class)->setAssignee($construction)->e($this->unit);
 			return;
 		}
 		$this->message(DescribeNotInConstructionMessage::class);
@@ -105,7 +105,7 @@ final class Describe extends UnitCommand
 				return;
 			}
 		}
-		$this->message(DescribeCastleMessage::class)->e($region)->e($this->unit, DescribeCastleMessage::OWNER);
+		$this->message(DescribeCastleMessage::class)->setAssignee($region)->e($this->unit);
 	}
 
 	/**
@@ -120,7 +120,7 @@ final class Describe extends UnitCommand
 				$this->message(DescribeVesselMessage::class)->e($vessel);
 				return;
 			}
-			$this->message(DescribeCaptainMessage::class)->e($vessel)->e($this->unit, DescribeCaptainMessage::CAPTAIN);
+			$this->message(DescribeCaptainMessage::class)->setAssignee($vessel)->e($this->unit);
 			return;
 		}
 		$this->message(DescribeNotInVesselMessage::class);

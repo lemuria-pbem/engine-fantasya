@@ -46,7 +46,7 @@ final class Entertain extends AllocationCommand implements Activity
 			} else {
 				$this->message(EntertainGuardedMessage::class);
 				foreach ($guardParties as $party) {
-					$this->message(EntertainPreventMessage::class)->e($party)->e($this->unit, EntertainPreventMessage::UNIT);
+					$this->message(EntertainPreventMessage::class)->e($party)->e($this->unit);
 				}
 			}
 		} else {

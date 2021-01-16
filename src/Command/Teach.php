@@ -87,16 +87,16 @@ final class Teach extends UnitCommand implements Activity
 						return $size;
 					}
 					if ($check) {
-						$this->message(TeachStudentMessage::class)->e($unit, TeachStudentMessage::STUDENT);
+						$this->message(TeachStudentMessage::class)->e($unit);
 						$size = $unit->Size();
 					} elseif ($log) {
-						$this->message(TeachUnableMessage::class)->e($unit, TeachUnableMessage::STUDENT);
+						$this->message(TeachUnableMessage::class)->e($unit);
 					}
 				} elseif ($log) {
 					$this->message(TeachPartyMessage::class)->e($unit, TeachPartyMessage::UNIT)->e($unit->Party());
 				}
 			} else {
-				$this->message(TeachRegionMessage::class)->e($unit, TeachRegionMessage::STUDENT);
+				$this->message(TeachRegionMessage::class)->e($unit);
 			}
 		} elseif ($log) {
 			$this->message(TeachSelfMessage::class);

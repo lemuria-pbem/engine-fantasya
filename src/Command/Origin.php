@@ -44,7 +44,7 @@ final class Origin extends UnitCommand
 	}
 
 	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
-		return $message->e($this->unit->Party());
+		return $message->setAssignee($this->unit->Party()->Id());
 	}
 
 	/**
@@ -55,7 +55,7 @@ final class Origin extends UnitCommand
 		if ($this->unit->Party()->Diplomacy()->Acquaintances()->isTold($party)) {
 			$this->setToRegion($party->Origin());
 		} else {
-			$this->message(OriginUntoldMessage::class)->e($party, OriginUntoldMessage::PARTY);
+			$this->message(OriginUntoldMessage::class)->e($party);
 		}
 	}
 
@@ -66,12 +66,12 @@ final class Origin extends UnitCommand
 		if ($this->unit->Party()->Chronicle()->has($region->Id())) {
 			$this->setToRegion($region);
 		} else {
-			$this->message(OriginNotVisitedMessage::class)->e($region, OriginNotVisitedMessage::REGION);
+			$this->message(OriginNotVisitedMessage::class)->e($region);
 		}
 	}
 
 	private function setToRegion(Region $region): void {
 		$this->unit->Party()->setOrigin($region);
-		$this->message(OriginMessage::class)->e($region, OriginMessage::REGION);
+		$this->message(OriginMessage::class)->e($region);
 	}
 }

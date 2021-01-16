@@ -44,7 +44,7 @@ final class Tax extends AllocationCommand implements Activity
 				if (!empty($guardParties)) {
 					$this->message(TaxGuardedMessage::class);
 					foreach ($guardParties as $party) {
-						$this->message(TaxPreventMessage::class)->e($party)->e($this->unit, TaxPreventMessage::UNIT);
+						$this->message(TaxPreventMessage::class, $party)->e($this->unit);
 					}
 				} else {
 					$this->message(TaxWithoutWeaponMessage::class);

@@ -53,9 +53,9 @@ final class Give extends UnitCommand
 		$commodity = $commodity ? $this->context->Factory()->commodity($commodity) : new Everything();
 
 		if (!$this->checkPermission()) {
-			$this->message(GiveFailedMessage::class)->e($this->recipient, GiveFailedMessage::RECIPIENT);
+			$this->message(GiveFailedMessage::class)->e($this->recipient);
 			$gift = new Quantity($commodity, $amount);
-			$this->message(GiveRejectedMessage::class)->e($this->recipient)->e($this->unit, GiveRejectedMessage::RECIPIENT)->i($gift);
+			$this->message(GiveRejectedMessage::class, $this->recipient)->e($this->unit)->i($gift);
 			return;
 		}
 
@@ -126,6 +126,6 @@ final class Give extends UnitCommand
 	 */
 	private function giveOnly(Quantity $gift): void {
 		$this->recipient->Inventory()->add($gift);
-		$this->message(GiveMessage::class)->e($this->recipient, GiveMessage::RECIPIENT)->i($gift);
+		$this->message(GiveMessage::class)->e($this->recipient)->i($gift);
 	}
 }

@@ -49,7 +49,7 @@ final class Recruit extends AllocationCommand
 		} else {
 			$this->message(RecruitGuardedMessage::class);
 			foreach ($guardParties as $party) {
-				$this->message(RecruitPreventMessage::class)->e($party)->e($this->unit, RecruitPreventMessage::UNIT);
+				$this->message(RecruitPreventMessage::class, $party)->e($this->unit);
 			}
 		}
 	}

@@ -8,8 +8,6 @@ use Lemuria\Id;
 
 class NameCastleMessage extends AbstractRegionMessage
 {
-	public const OWNER = 'owner';
-
 	protected string $level = Message::FAILURE;
 
 	protected Id $owner;
@@ -20,6 +18,6 @@ class NameCastleMessage extends AbstractRegionMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->owner = $message->get(self::OWNER);
+		$this->owner = $message->get();
 	}
 }

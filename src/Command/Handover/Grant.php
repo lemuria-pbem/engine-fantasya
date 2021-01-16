@@ -34,7 +34,7 @@ final class Grant extends UnitCommand
 				if ($inhabitants->has($id)) {
 					$unit = Lemuria::Catalog()->get($id, Catalog::UNITS); /* @var Unit $unit */
 					$inhabitants->setOwner($unit);
-					$this->message(GrantMessage::class)->e($unit, GrantMessage::TARGET);
+					$this->message(GrantMessage::class)->e($unit);
 				} else {
 					$this->message(GrantNotInsideMessage::class)->p($id->Id());
 				}

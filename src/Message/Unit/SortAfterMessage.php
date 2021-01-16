@@ -8,8 +8,6 @@ use Lemuria\Id;
 
 class SortAfterMessage extends AbstractUnitMessage
 {
-	public const OTHER = 'other';
-
 	protected Id $other;
 
 	protected function create(): string {
@@ -18,6 +16,6 @@ class SortAfterMessage extends AbstractUnitMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->other = $message->get(self::OTHER);
+		$this->other = $message->get();
 	}
 }

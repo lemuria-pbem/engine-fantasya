@@ -152,6 +152,6 @@ abstract class AbstractCommand implements Command
 	}
 
 	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
-		return $target ? $message->e($target) : $message;
+		return $target ? $message->setAssignee($target->Id()) : $message;
 	}
 }

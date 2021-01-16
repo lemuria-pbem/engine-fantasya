@@ -49,7 +49,7 @@ abstract class UnitCommand extends AbstractCommand
 	}
 
 	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
-		return $message->e($target ? $target : $this->unit);
+		return $message->setAssignee($target ? $target->Id() : $this->unit->Id());
 	}
 
 	/**

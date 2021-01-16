@@ -7,8 +7,6 @@ use Lemuria\Id;
 
 class HelpPartyMessage extends HelpMessage
 {
-	public const PARTY = 'party';
-
 	protected Id $party;
 
 	protected function create(): string {
@@ -17,6 +15,6 @@ class HelpPartyMessage extends HelpMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->party = $message->get(self::PARTY);
+		$this->party = $message->get();
 	}
 }

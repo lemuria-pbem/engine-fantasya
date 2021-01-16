@@ -7,8 +7,6 @@ use Lemuria\Id;
 
 class HelpRegionMessage extends HelpMessage
 {
-	public const REGION = 'region';
-
 	protected Id $region;
 
 	protected function create(): string {
@@ -17,6 +15,6 @@ class HelpRegionMessage extends HelpMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->region = $message->get(self::REGION);
+		$this->region = $message->get();
 	}
 }

@@ -8,8 +8,6 @@ use Lemuria\Id;
 
 class LeaveVesselMessage extends AbstractUnitMessage
 {
-	public const VESSEL = 'vessel';
-
 	protected string $level = Message::SUCCESS;
 
 	protected Id $vessel;
@@ -20,6 +18,6 @@ class LeaveVesselMessage extends AbstractUnitMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->vessel = $message->get(self::VESSEL);
+		$this->vessel = $message->get();
 	}
 }

@@ -8,8 +8,6 @@ use Lemuria\Id;
 
 class GrantMessage extends AbstractUnitMessage
 {
-	public const TARGET = 'target';
-
 	protected string $level = Message::SUCCESS;
 
 	protected Id $target;
@@ -20,6 +18,6 @@ class GrantMessage extends AbstractUnitMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->target = $message->get(self::TARGET);
+		$this->target = $message->get();
 	}
 }

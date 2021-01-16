@@ -91,7 +91,7 @@ final class Number extends UnitCommand
 			return;
 		}
 		if ($construction->Inhabitants()->Owner() !== $this->unit) {
-			$this->message(NumberOwnerMessage::class, $construction)->e($this->unit, NumberOwnerMessage::OWNER);
+			$this->message(NumberOwnerMessage::class, $construction)->e($this->unit);
 			return;
 		}
 
@@ -113,7 +113,7 @@ final class Number extends UnitCommand
 			return;
 		}
 		if ($vessel->Passengers()->Owner() !== $this->unit) {
-			$this->message(NumberCaptainMessage::class, $vessel)->e($this->unit, NumberCaptainMessage::CAPTAIN);
+			$this->message(NumberCaptainMessage::class, $vessel)->e($this->unit);
 			return;
 		}
 

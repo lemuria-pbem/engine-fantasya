@@ -8,8 +8,6 @@ use Lemuria\Id;
 
 class GiveFailedMessage extends AbstractUnitMessage
 {
-	public const RECIPIENT = 'recipient';
-
 	protected string $level = Message::SUCCESS;
 
 	protected Id $recipient;
@@ -20,6 +18,6 @@ class GiveFailedMessage extends AbstractUnitMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->recipient = $message->get(self::RECIPIENT);
+		$this->recipient = $message->get();
 	}
 }

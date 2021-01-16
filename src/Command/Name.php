@@ -75,10 +75,10 @@ final class Name extends UnitCommand
 			$owner = $construction->Inhabitants()->Owner();
 			if ($owner && $owner === $this->unit) {
 				$construction->setName($name);
-				$this->message(NameConstructionMessage::class)->e($construction)->p($name);
+				$this->message(NameConstructionMessage::class, $construction)->p($name);
 				return;
 			}
-			$this->message(NameOwnerMessage::class)->e($construction)->e($this->unit, NameOwnerMessage::OWNER);
+			$this->message(NameOwnerMessage::class, $construction)->e($this->unit);
 			return;
 		}
 		$this->message(NameNotInConstructionMessage::class);
@@ -101,11 +101,11 @@ final class Name extends UnitCommand
 			}
 			if ($castle === $home && $home->Inhabitants()->Owner() === $this->unit) {
 				$region->setName($name);
-				$this->message(NameRegionMessage::class)->e($region)->p($name);
+				$this->message(NameRegionMessage::class, $region)->p($name);
 				return;
 			}
 		}
-		$this->message(NameCastleMessage::class)->e($region)->e($this->unit, NameCastleMessage::OWNER);
+		$this->message(NameCastleMessage::class, $region)->e($this->unit);
 	}
 
 	/**
@@ -117,10 +117,10 @@ final class Name extends UnitCommand
 			$captain = $vessel->Passengers()->Owner();
 			if ($captain && $captain === $this->unit) {
 				$vessel->setName($name);
-				$this->message(NameVesselMessage::class)->e($vessel)->p($name);
+				$this->message(NameVesselMessage::class, $vessel)->p($name);
 				return;
 			}
-			$this->message(NameCaptainMessage::class)->e($vessel)->e($this->unit, NameCaptainMessage::CAPTAIN);
+			$this->message(NameCaptainMessage::class, $vessel)->e($this->unit);
 			return;
 		}
 		$this->message(NameNotInVesselMessage::class);

@@ -8,8 +8,6 @@ use Lemuria\Id;
 
 class DescribeCaptainMessage extends AbstractVesselMessage
 {
-	public const CAPTAIN = 'captain';
-
 	protected string $level = Message::FAILURE;
 
 	protected Id $captain;
@@ -20,6 +18,6 @@ class DescribeCaptainMessage extends AbstractVesselMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->captain = $message->get(self::CAPTAIN);
+		$this->captain = $message->get();
 	}
 }

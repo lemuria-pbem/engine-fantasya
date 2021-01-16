@@ -29,7 +29,7 @@ final class Board extends UnitCommand
 
 		$vessel = $this->unit->Vessel();
 		if ($vessel && $vessel->Id()->Id() === $id->Id()) {
-			$this->message(BoardAlreadyMessage::class)->e($vessel, BoardAlreadyMessage::VESSEL);
+			$this->message(BoardAlreadyMessage::class)->e($vessel);
 			return;
 		}
 		if (!$this->unit->Region()->Fleet()->has($id)) {
@@ -39,26 +39,26 @@ final class Board extends UnitCommand
 
 		$newVessel = Vessel::get($id);
 		if ($newVessel->Space() < $this->unit->Weight()) {
-			$this->message(BoardTooHeavyMessage::class)->e($newVessel, BoardTooHeavyMessage::VESSEL);
+			$this->message(BoardTooHeavyMessage::class)->e($newVessel);
 			return;
 		}
 		if (!$this->checkPermission($newVessel)) {
-			$this->message(BoardDeniedMessage::class)->e($newVessel, BoardDeniedMessage::VESSEL);
+			$this->message(BoardDeniedMessage::class)->e($newVessel);
 			return;
 		}
 
 		if ($vessel) {
 			$vessel->Passengers()->remove($this->unit);
-			$this->message(LeaveVesselDebugMessage::class)->e($vessel, LeaveVesselDebugMessage::VESSEL);
+			$this->message(LeaveVesselDebugMessage::class)->e($vessel);
 		} else {
 			$construction = $this->unit->Construction();
 			if ($construction) {
 				$construction->Inhabitants()->remove($this->unit);
-				$this->message(LeaveConstructionDebugMessage::class)->e($construction, LeaveConstructionDebugMessage::CONSTRUCTION);
+				$this->message(LeaveConstructionDebugMessage::class)->e($construction);
 			}
 		}
 		$newVessel->Passengers()->add($this->unit);
-		$this->message(BoardMessage::class)->e($newVessel, BoardMessage::VESSEL);
+		$this->message(BoardMessage::class)->e($newVessel);
 	}
 
 	private function checkPermission(Vessel $vessel): bool {

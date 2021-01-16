@@ -8,8 +8,6 @@ use Lemuria\Id;
 
 abstract class AbstractPreventMessage extends AbstractPartyMessage
 {
-	public const UNIT = 'unit';
-
 	protected string $level = Message::SUCCESS;
 
 	protected Id $unit;
@@ -20,7 +18,7 @@ abstract class AbstractPreventMessage extends AbstractPartyMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->unit = $message->get(self::UNIT);
+		$this->unit = $message->get();
 	}
 
 	abstract protected function createActivity(): string;

@@ -8,8 +8,6 @@ use Lemuria\Id;
 
 class OriginUntoldMessage extends AbstractPartyMessage
 {
-	public const PARTY = 'party';
-
 	protected string $level = Message::FAILURE;
 
 	protected Id $party;
@@ -20,6 +18,6 @@ class OriginUntoldMessage extends AbstractPartyMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->party = $message->get(self::PARTY);
+		$this->party = $message->get();
 	}
 }

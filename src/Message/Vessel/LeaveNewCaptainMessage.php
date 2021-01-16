@@ -7,8 +7,6 @@ use Lemuria\Id;
 
 class LeaveNewCaptainMessage extends AbstractVesselMessage
 {
-	public const CAPTAIN = 'captain';
-
 	protected Id $captain;
 
 	protected function create(): string {
@@ -17,6 +15,6 @@ class LeaveNewCaptainMessage extends AbstractVesselMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->captain = $message->get(self::CAPTAIN);
+		$this->captain = $message->get();
 	}
 }

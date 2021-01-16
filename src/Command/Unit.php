@@ -51,6 +51,6 @@ final class Unit extends AbstractCommand implements Immediate
 	}
 
 	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
-		return $message->e($this->context->Unit());
+		return $message->setAssignee($this->context->Unit()->Id());
 	}
 }

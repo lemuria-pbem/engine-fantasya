@@ -42,6 +42,8 @@ class LemuriaMessage implements Message
 
 	private MessageType $type;
 
+	private Id $assignee;
+
 	private ?array $entities = null;
 
 	private ?array $singletons = null;
@@ -66,7 +68,7 @@ class LemuriaMessage implements Message
 
 	#[Pure]
 	public function Entity(): Id {
-		return $this->get();
+		return $this->assignee;
 	}
 
 	public function setId(Id $id): Message {
@@ -89,10 +91,10 @@ class LemuriaMessage implements Message
 	/**
 	 * Get a plain data array of the model's data.
 	 */
-	#[ArrayShape(['id' => 'int', 'type' => 'string', 'parameters' => 'array|null', 'items' => 'array|null', 'singletons' => 'array|null', 'entities' => 'array|null'])]
+	#[ArrayShape(['id' => 'int', 'type' => 'string', 'assignee' => 'int', 'parameters' => 'array|null', 'items' => 'array|null', 'singletons' => 'array|null', 'entities' => 'array|null'])]
 	#[Pure]
 	public function serialize(): array {
-		$data = ['id' => $this->Id()->Id(), 'type' => getClass($this->type)];
+		$data = ['id' => $this->Id()->Id(), 'type' => getClass($this->type), 'assignee' => $this->assignee->Id()];
 		if ($this->entities) {
 			$data['entities'] = $this->entities;
 		}
@@ -125,12 +127,18 @@ class LemuriaMessage implements Message
 		if (isset($data['parameters'])) {
 			$this->parameters = $data['parameters'];
 		}
-		$this->setType(self::createMessageType($data['type']))->setId(new Id($data['id']));
+		$message = self::createMessageType($data['type']);
+		$this->setType($message)->setAssignee(new Id($data['assignee']))->setId(new Id($data['id']));
 		return $this;
 	}
 
 	public function setType(MessageType $type): LemuriaMessage {
 		$this->type = $type;
+		return $this;
+	}
+
+	public function setAssignee(Entity|Id $assignee): LemuriaMessage {
+		$this->assignee = $assignee instanceof Entity ? $assignee->Id() : $assignee;
 		return $this;
 	}
 
@@ -244,6 +252,7 @@ class LemuriaMessage implements Message
 	protected function validateSerializedData(array &$data): void {
 		$this->validate($data, 'id', 'int');
 		$this->validate($data, 'type', 'string');
+		$this->validate($data, 'assignee', 'int');
 		$this->validateIfExists($data, 'entities', 'array');
 		$this->validateIfExists($data, 'singletons', 'array');
 		$this->validateIfExists($data, 'items', 'array');

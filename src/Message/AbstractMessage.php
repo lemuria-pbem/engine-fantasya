@@ -34,7 +34,7 @@ abstract class AbstractMessage implements MessageType
 	abstract protected function create(): string;
 
 	protected function getData(LemuriaMessage $message): void {
-		$this->id = $message->get();
+		$this->id = $message->Entity();
 	}
 
 	protected function translate(): ?string {

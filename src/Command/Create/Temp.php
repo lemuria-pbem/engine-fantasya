@@ -102,7 +102,7 @@ final class Temp extends UnitCommand implements Immediate
 	}
 
 	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
-		return $message->e($this->createdUnit);
+		return $message->setAssignee($this->createdUnit->Id());
 	}
 
 	/**

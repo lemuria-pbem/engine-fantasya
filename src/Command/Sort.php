@@ -54,11 +54,11 @@ final class Sort extends UnitCommand
 			} catch (NotRegisteredException) {
 			}
 			if (!$with || $with->Party() !== $this->unit->Party() ) {
-				$this->message(SortWithForeignerMessage::class)->e($with, SortWithForeignerMessage::OTHER);
+				$this->message(SortWithForeignerMessage::class)->e($with);
 				return;
 			}
 			if ($with->Region() !== $this->unit->Region()) {
-				$this->message(SortNotInRegionMessage::class)->e($with, SortNotInRegionMessage::OTHER);
+				$this->message(SortNotInRegionMessage::class)->e($with);
 				return;
 			}
 		}
@@ -147,7 +147,7 @@ final class Sort extends UnitCommand
 			$residents = $this->unit->Region()->Residents();
 			$residents->reorder($this->unit, $unit, Reorder::BEFORE);
 		}
-		$this->message(SortBeforeMessage::class)->e($unit, SortBeforeMessage::OTHER);
+		$this->message(SortBeforeMessage::class)->e($unit);
 
 		$construction = $this->unit->Construction();
 		if ($construction && $unit->Construction() === $construction) {
@@ -159,7 +159,7 @@ final class Sort extends UnitCommand
 					$this->message(SortAfterOwnerMessage::class);
 				} else {
 					$inhabitants->reorder($this->unit, $unit, Reorder::BEFORE);
-					$this->message(SortBeforeInConstructionMessage::class)->e($unit, SortBeforeInConstructionMessage::OTHER);
+					$this->message(SortBeforeInConstructionMessage::class)->e($unit);
 				}
 			}
 		}
@@ -170,14 +170,14 @@ final class Sort extends UnitCommand
 		if ($this->checkIdentity($unit)) {
 			$residents = $this->unit->Region()->Residents();
 			$residents->reorder($this->unit, $unit, Reorder::AFTER);
-			$this->message(SortAfterMessage::class)->e($unit, SortAfterMessage::OTHER);
+			$this->message(SortAfterMessage::class)->e($unit);
 
 			$construction = $this->unit->Construction();
 			if ($construction && $unit->Construction() === $construction) {
 				$inhabitants = $construction->Inhabitants();
 				if ($this->unit !== $inhabitants->Owner()) {
 					$inhabitants->reorder($this->unit, $unit, Reorder::AFTER);
-					$this->message(SortAfterInConstructionMessage::class)->e($unit, SortAfterInConstructionMessage::OTHER);
+					$this->message(SortAfterInConstructionMessage::class)->e($unit);
 				}
 			}
 
@@ -188,7 +188,7 @@ final class Sort extends UnitCommand
 		if ($this->checkIdentity($unit)) {
 			$residents = $this->unit->Region()->Residents();
 			$residents->reorder($this->unit, $unit, Reorder::FLIP);
-			$this->message(SortFlipMessage::class)->e($unit, SortFlipMessage::OTHER);
+			$this->message(SortFlipMessage::class)->e($unit);
 
 			$construction = $this->unit->Construction();
 			if ($construction && $unit->Construction() === $construction) {
@@ -200,7 +200,7 @@ final class Sort extends UnitCommand
 						$this->message(SortAfterOwnerMessage::class);
 					} else {
 						$inhabitants->reorder($this->unit, $unit, Reorder::FLIP);
-						$this->message(SortFlipInConstructionMessage::class)->e($unit, SortFlipInConstructionMessage::OTHER);
+						$this->message(SortFlipInConstructionMessage::class)->e($unit);
 					}
 				}
 			}
