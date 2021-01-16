@@ -6,7 +6,6 @@ use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Message\Construction\NumberConstructionMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\NumberOwnerMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\NumberConstructionUsedMessage;
-use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Message\Party\NumberPartyMessage;
 use Lemuria\Engine\Lemuria\Message\Party\NumberPartyUsedMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\NumberUnitMessage;
@@ -76,7 +75,7 @@ final class Number extends UnitCommand
 		}
 
 		$oldId = $this->unit->Id();
-		Lemuria::Report()->reassign($oldId, $this->unit->replaceId($id));
+		Lemuria::Catalog()->reassign($oldId, $this->unit->replaceId($id));
 		$this->message(NumberUnitMessage::class)->p($oldId->Id());
 	}
 
@@ -98,7 +97,7 @@ final class Number extends UnitCommand
 		$oldId = $construction->Id();
 		$construction->setId($id);
 		$construction->Region()->Estate()->replace($oldId, $id);
-		Lemuria::Report()->reassign($oldId, $construction);
+		Lemuria::Catalog()->reassign($oldId, $construction);
 		$this->message(NumberConstructionMessage::class, $construction)->p($oldId->Id());
 	}
 
@@ -120,7 +119,7 @@ final class Number extends UnitCommand
 		$oldId = $vessel->Id();
 		$vessel->setId($id);
 		$vessel->Region()->Fleet()->replace($oldId, $id);
-		Lemuria::Report()->reassign($oldId, $vessel);
+		Lemuria::Catalog()->reassign($oldId, $vessel);
 		$this->message(NumberVesselMessage::class, $vessel)->p($oldId->Id());
 	}
 
@@ -132,7 +131,7 @@ final class Number extends UnitCommand
 		}
 
 		$oldId = $party->Id();
-		Lemuria::Report()->reassign($oldId, $party->setId($id));
+		Lemuria::Catalog()->reassign($oldId, $party->setId($id));
 		$this->message(NumberPartyMessage::class, $party)->p($oldId->Id());
 	}
 }

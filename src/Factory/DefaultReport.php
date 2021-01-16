@@ -14,9 +14,10 @@ use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Exception\DuplicateIdException;
 use Lemuria\Model\Exception\NotRegisteredException;
+use Lemuria\Model\Reassignment;
 use Lemuria\SerializableTrait;
 
-class DefaultReport implements Report
+class DefaultReport implements Reassignment, Report
 {
 	use SerializableTrait;
 
@@ -38,6 +39,7 @@ class DefaultReport implements Report
 	 * Init the report.
 	 */
 	public function __construct() {
+		Lemuria::Catalog()->addReassignment($this);
 		$reflection = new \ReflectionClass(Report::class);
 		foreach ($reflection->getConstants() as $namespace) {
 			if (!is_int($namespace)) {
