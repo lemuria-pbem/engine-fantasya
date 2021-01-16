@@ -7,6 +7,7 @@ use Lemuria\Engine\Lemuria\Immediate;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Message\Party\NextMessage;
 use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Entity;
 
 /**
  * Implementation of command NÄCHSTER (this should be the final command in a party's turn).
@@ -31,7 +32,7 @@ final class Next extends AbstractCommand implements Immediate
 		$this->message(NextMessage::class);
 	}
 
-	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
+	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
 		return $message->e($this->context->Party());
 	}
 }

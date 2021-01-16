@@ -6,6 +6,7 @@ use Lemuria\Engine\Lemuria\Immediate;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Message\Party\PartyMessage;
 use Lemuria\Engine\Lemuria\Message\Party\PartyVisitMessage;
+use Lemuria\Entity;
 use Lemuria\Id;
 use Lemuria\Model\Lemuria\Party as PartyModel;
 use Lemuria\Model\Lemuria\Party\Census;
@@ -31,7 +32,7 @@ final class Party extends AbstractCommand implements Immediate
 		$this->visitAllRegions($party);
 	}
 
-	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
+	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
 		return $message->e($this->context->Party());
 	}
 

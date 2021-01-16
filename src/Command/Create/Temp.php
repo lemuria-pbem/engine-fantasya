@@ -12,6 +12,7 @@ use Lemuria\Engine\Lemuria\Immediate;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\TempMessage;
 use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Entity;
 use Lemuria\Exception\IdException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
@@ -100,7 +101,7 @@ final class Temp extends UnitCommand implements Immediate
 		return strtolower($this->phrase->getParameter(2));
 	}
 
-	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
+	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
 		return $message->e($this->createdUnit);
 	}
 

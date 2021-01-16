@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Immediate;
 use Lemuria\Engine\Lemuria\Message\Unit\EndMessage;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
+use Lemuria\Entity;
 
 /**
  * Implementation of command ENDE (this should be the final command in a newly created unit's command block).
@@ -27,7 +28,7 @@ final class End extends UnitCommand implements Immediate
 		$this->message(EndMessage::class)->p($temp->getTempNumber());
 	}
 
-	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
+	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
 		return $message->e($this->context->Unit());
 	}
 }

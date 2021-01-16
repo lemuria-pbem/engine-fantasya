@@ -23,7 +23,7 @@ class DefaultReport implements Report
 	private array $report = [];
 
 	/**
-	 * @var array(int=>LemuriaMessage)
+	 * @var LemuriaMessage[]
 	 */
 	private array $message = [];
 
@@ -50,10 +50,11 @@ class DefaultReport implements Report
 	 * @throws NotRegisteredException
 	 */
 	public function get(Id $id): Message {
-		if (!isset($this->message[$id->Id()])) {
+		$i = $id->Id() - 1;
+		if (!isset($this->message[$i])) {
 			throw new NotRegisteredException($id);
 		}
-		return $this->message[$id->Id()];
+		return $this->message[$i];
 	}
 
 	/**
@@ -65,7 +66,11 @@ class DefaultReport implements Report
 		if (!isset($this->report[$namespace][$id])) {
 			return [];
 		}
-		return $this->report[$namespace][$id];
+		$messages = [];
+		foreach ($this->report[$namespace][$id] as $i) {
+			$messages[] = $this->message[$i];
+		}
+		return $messages;
 	}
 
 	/**
@@ -87,8 +92,8 @@ class DefaultReport implements Report
 	 */
 	public function save(): Report {
 		$messages = [];
-		foreach ($this->message as $id => $message /* @var LemuriaMessage $message */) {
-			$messages[$id] = $message->serialize();
+		foreach ($this->message as $message /* @var LemuriaMessage $message */) {
+			$messages[] = $message->serialize();
 		}
 		Lemuria::Game()->setMessages($messages);
 		return $this;
@@ -102,16 +107,33 @@ class DefaultReport implements Report
 	public function register(Message $message): Report {
 		$namespace = $message->Report();
 		$this->checkNamespace($namespace);
-		$id = $message->Id()->Id();
+		$id = $message->Id()->Id() - 1;
 		if (isset($this->message[$id])) {
 			throw new DuplicateMessageException($message);
 		}
 		$entity = $message->Entity()->Id();
 
-		$this->report[$namespace][$entity][] = $message;
+		$this->report[$namespace][$entity][] = $id;
 		$this->message[$id] = $message;
-		if ($this->nextId === $id) {
-			$this->searchNextId();
+		return $this;
+	}
+
+	/**
+	 * Reassign all message of an Entity to the new ID.
+	 */
+	public function reassign(Id $oldId, Identifiable $entity): Report {
+		$namespace = $entity->Catalog();
+		$id = $oldId->Id();
+		if (isset($this->report[$namespace][$id])) {
+			$messages =& $this->report[$namespace][$id];
+			unset($this->report[$namespace][$id]);
+			$id = $entity->Id()->Id();
+			if (isset($this->report[$namespace][$id])) {
+				array_push($this->report[$namespace][$id], ...$messages);
+				ksort($this->report[$namespace][$id]);
+			} else {
+				$this->report[$namespace][$id] = $messages;
+			}
 		}
 		return $this;
 	}
@@ -120,9 +142,7 @@ class DefaultReport implements Report
 	 * Reserve the next ID.
 	 */
 	public function nextId(): Id {
-		$id = new Id($this->nextId);
-		$this->searchNextId();
-		return $id;
+		return new Id($this->nextId++);
 	}
 
 	/**
@@ -135,14 +155,5 @@ class DefaultReport implements Report
 			$bug = 'Namespace ' . $namespace . ' is not a valid report namespace.';
 			throw new LemuriaException($bug, new \InvalidArgumentException());
 		}
-	}
-
-	/**
-	 * Search for next available ID.
-	 */
-	private function searchNextId(): void {
-		do {
-			$this->nextId++;
-		} while (isset($this->message[$this->nextId]));
 	}
 }

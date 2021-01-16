@@ -9,6 +9,7 @@ use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Exception\ActivityException;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Entity;
 use Lemuria\Model\Lemuria\Unit;
 
 /**
@@ -47,8 +48,8 @@ abstract class UnitCommand extends AbstractCommand
 		}
 	}
 
-	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
-		return $message->e($this->unit);
+	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
+		return $message->e($target ? $target : $this->unit);
 	}
 
 	/**

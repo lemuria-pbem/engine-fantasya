@@ -8,6 +8,7 @@ use Lemuria\Engine\Lemuria\Immediate;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\UnitMessage;
 use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Entity;
 use Lemuria\Id;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Lemuria\Unit as UnitModel;
@@ -46,10 +47,10 @@ final class Unit extends AbstractCommand implements Immediate
 			throw new UnitException($unit, $this->context->Party());
 		}
 		$this->context->setUnit($unit);
-		$this->message(UnitMessage::class)->e($unit);
+		$this->message(UnitMessage::class);
 	}
 
-	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
+	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
 		return $message->e($this->context->Unit());
 	}
 }

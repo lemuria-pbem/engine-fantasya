@@ -23,7 +23,9 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Magie (KAMPFZAUBER/ZAUBERN)
 - Alchemie (Kräuter und Tränke, BENUTZE) 
 - Geschlossene Spielwelt
+- IDs in Meldungen ersetzen
 - Meldungen in den Reporten ausgeben
+- JSON mit TAB speichern
 
 ## Fehler
 

@@ -11,7 +11,9 @@ use Lemuria\Engine\Lemuria\Factory\BuilderTrait;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Phrase;
 use Lemuria\Engine\Lemuria\Exception\CommandException;
+use Lemuria\Entity;
 use Lemuria\Exception\LemuriaException;
+use Lemuria\Identifiable;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
@@ -143,13 +145,13 @@ abstract class AbstractCommand implements Command
 		}
 	}
 
-	protected function message(string $messageType): LemuriaMessage {
+	protected function message(string $messageType, ?Entity $target = null): LemuriaMessage {
 		$id      = Lemuria::Report()->nextId();
 		$message = new LemuriaMessage();
-		return $this->initMessage($message)->setType(self::createMessageType($messageType))->setId($id);
+		return $this->initMessage($message, $target)->setType(self::createMessageType($messageType))->setId($id);
 	}
 
-	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
-		return $message;
+	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
+		return $target ? $message->e($target) : $message;
 	}
 }

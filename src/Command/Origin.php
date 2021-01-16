@@ -7,6 +7,7 @@ use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Message\Party\OriginMessage;
 use Lemuria\Engine\Lemuria\Message\Party\OriginNotVisitedMessage;
 use Lemuria\Engine\Lemuria\Message\Party\OriginUntoldMessage;
+use Lemuria\Entity;
 use Lemuria\Id;
 use Lemuria\Model\Lemuria\Region;
 use Lemuria\Model\Lemuria\Party;
@@ -42,8 +43,8 @@ final class Origin extends UnitCommand
 		}
 	}
 
-	protected function initMessage(LemuriaMessage $message): LemuriaMessage {
-		return $message->e($this->context->Party());
+	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
+		return $message->e($this->unit->Party());
 	}
 
 	/**
