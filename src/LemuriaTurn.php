@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Lemuria;
 use Lemuria\Engine\Lemuria\Exception\ActionException;
 use Lemuria\Engine\Lemuria\Exception\CommandException;
 use Lemuria\Engine\Lemuria\Exception\CommandParserException;
+use Lemuria\Engine\Lemuria\Factory\CommandPriority;
 use Lemuria\Engine\Move;
 use Lemuria\Engine\Turn;
 use Lemuria\Exception\LemuriaException;

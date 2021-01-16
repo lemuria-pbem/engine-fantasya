@@ -1,8 +1,12 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Lemuria\Factory;
 
 use function Lemuria\getClass;
+use Lemuria\Engine\Lemuria\Action;
+use Lemuria\Engine\Lemuria\Command;
+use Lemuria\Engine\Lemuria\Effect;
+use Lemuria\Engine\Lemuria\Event;
 use Lemuria\Exception\LemuriaException;
 
 /**

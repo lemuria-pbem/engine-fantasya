@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria;
 
 use Lemuria\Engine\Lemuria\Exception\AllocationException;
+use Lemuria\Engine\Lemuria\Factory\CommandPriority;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Lemuria\Factory\BuilderTrait;
