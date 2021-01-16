@@ -1,8 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Factory;
-
-use JetBrains\PhpStorm\Pure;
+namespace Lemuria\Engine\Lemuria;
 
 use Lemuria\Engine\Lemuria\Exception\DuplicateMessageException;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
@@ -17,7 +15,7 @@ use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Reassignment;
 use Lemuria\SerializableTrait;
 
-class DefaultReport implements Reassignment, Report
+class LemuriaReport implements Reassignment, Report
 {
 	use SerializableTrait;
 
@@ -65,9 +63,9 @@ class DefaultReport implements Reassignment, Report
 	/**
 	 * Get all messages of an entity.
 	 */
-	#[Pure] public function getAll(Identifiable $identifiable): array {
-		$namespace = $identifiable->Catalog();
-		$id        = $identifiable->Id()->Id();
+	public function getAll(Identifiable $entity): array {
+		$namespace = $entity->Catalog();
+		$id        = $entity->Id()->Id();
 		if (!isset($this->report[$namespace][$id])) {
 			return [];
 		}
@@ -125,16 +123,13 @@ class DefaultReport implements Reassignment, Report
 		return $this;
 	}
 
-	/**
-	 * Reassign all messages of an Entity to the new ID.
-	 */
-	public function reassign(Id $oldId, Identifiable $entity): Report {
-		$namespace = $entity->Catalog();
+	public function reassign(Id $oldId, Identifiable $identifiable): void {
+		$namespace = $identifiable->Catalog();
 		$id = $oldId->Id();
 		if (isset($this->report[$namespace][$id])) {
 			$messages =& $this->report[$namespace][$id];
 			unset($this->report[$namespace][$id]);
-			$id = $entity->Id()->Id();
+			$id = $identifiable->Id()->Id();
 			if (isset($this->report[$namespace][$id])) {
 				array_push($this->report[$namespace][$id], ...$messages);
 				ksort($this->report[$namespace][$id]);
@@ -142,7 +137,10 @@ class DefaultReport implements Reassignment, Report
 				$this->report[$namespace][$id] = $messages;
 			}
 		}
-		return $this;
+	}
+
+	public function remove(Identifiable $identifiable): void {
+		//TODO
 	}
 
 	/**

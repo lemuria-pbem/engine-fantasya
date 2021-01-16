@@ -23,8 +23,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Magie (KAMPFZAUBER/ZAUBERN)
 - Alchemie (Kräuter und Tränke, BENUTZE) 
 - Geschlossene Spielwelt
-- Meldungen zu gelöschten Entities gesondert behandeln
-- Meldungen in den Reporten ausgeben
+- Meldungen und Befehle zu gelöschten Entities gesondert behandeln
+- Meldungen und Befehle in den Reporten ausgeben
 
 ## Fehler
 
