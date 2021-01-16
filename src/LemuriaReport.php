@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria;
 
-use Lemuria\Engine\Lemuria\Exception\DuplicateMessageException;
+use Lemuria\Engine\Lemuria\Message\Exception\DuplicateMessageException;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 use Lemuria\Engine\Report;
