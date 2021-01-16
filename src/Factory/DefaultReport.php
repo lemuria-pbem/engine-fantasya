@@ -14,9 +14,12 @@ use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Exception\DuplicateIdException;
 use Lemuria\Model\Exception\NotRegisteredException;
+use Lemuria\SerializableTrait;
 
 class DefaultReport implements Report
 {
+	use SerializableTrait;
+
 	/**
 	 * @var array(int=>array)
 	 */
@@ -78,7 +81,9 @@ class DefaultReport implements Report
 	 */
 	public function load(): Report {
 		if (!$this->isLoaded) {
-			foreach (Lemuria::Game()->getMessages() as $data) {
+			$report = Lemuria::Game()->getMessages();
+			$this->validateSerializedData($report);
+			foreach ($report['messages'] as $data) {
 				$message = new LemuriaMessage();
 				$message->unserialize($data);
 			}
@@ -95,7 +100,7 @@ class DefaultReport implements Report
 		foreach ($this->message as $message /* @var LemuriaMessage $message */) {
 			$messages[] = $message->serialize();
 		}
-		Lemuria::Game()->setMessages($messages);
+		Lemuria::Game()->setMessages(['messages' => $messages]);
 		return $this;
 	}
 
@@ -119,7 +124,7 @@ class DefaultReport implements Report
 	}
 
 	/**
-	 * Reassign all message of an Entity to the new ID.
+	 * Reassign all messages of an Entity to the new ID.
 	 */
 	public function reassign(Id $oldId, Identifiable $entity): Report {
 		$namespace = $entity->Catalog();
@@ -143,6 +148,15 @@ class DefaultReport implements Report
 	 */
 	public function nextId(): Id {
 		return new Id($this->nextId++);
+	}
+
+	/**
+	 * Check that a serialized data array is valid.
+	 *
+	 * @param array (string=>mixed) $data
+	 */
+	protected function validateSerializedData(array &$data): void {
+		$this->validate($data, 'messages', 'array');
 	}
 
 	/**
