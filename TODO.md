@@ -12,6 +12,9 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen
 
+- Meldungen bei ID-Änderung umschreiben
+- Meldungen und Befehle zu gelöschten Entities gesondert behandeln
+- Befehle in den Reporten ausgeben
 - Weltentwicklung (Wachstum, Unterhalt)
 - NACH
 - ROUTE (benötigt die Befehlsvorlage)
@@ -22,8 +25,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Magie (KAMPFZAUBER/ZAUBERN)
 - Alchemie (Kräuter und Tränke, BENUTZE) 
 - Geschlossene Spielwelt
-- Meldungen und Befehle zu gelöschten Entities gesondert behandeln
-- Meldungen und Befehle in den Reporten ausgeben
 
 ## Fehler
 

@@ -28,6 +28,10 @@ class LemuriaOrders implements Orders, Reassignment
 
 	private bool $isLoaded = false;
 
+	public function __construct() {
+		Lemuria::Catalog()->addReassignment($this);
+	}
+
 	/**
 	 * Get the list of current orders for an entity.
 	 */
