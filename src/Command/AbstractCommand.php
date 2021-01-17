@@ -13,7 +13,6 @@ use Lemuria\Engine\Lemuria\Phrase;
 use Lemuria\Engine\Lemuria\Exception\CommandException;
 use Lemuria\Entity;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Identifiable;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Id;
 use Lemuria\Lemuria;

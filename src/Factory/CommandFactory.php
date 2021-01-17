@@ -7,6 +7,7 @@ use Lemuria\Engine\Lemuria\Command\Board;
 use Lemuria\Engine\Lemuria\Command\Comment;
 use Lemuria\Engine\Lemuria\Command\Contact;
 use Lemuria\Engine\Lemuria\Command\Create;
+use Lemuria\Engine\Lemuria\Command\DefaultCommand;
 use Lemuria\Engine\Lemuria\Command\Describe;
 use Lemuria\Engine\Lemuria\Command\Disguise;
 use Lemuria\Engine\Lemuria\Command\End;
@@ -115,6 +116,7 @@ class CommandFactory
 		'BESTEUERN'    => 'TREIBEN',
 		'BETRETEN'     => true,
 		'BEWACHEN'     => true,
+		'DEFAULT'      => 'VORLAGE',
 		'EINHEIT'      => true,
 		'EINTREIBEN'   => 'TREIBEN',
 		'ENDE'         => true,
@@ -145,7 +147,8 @@ class CommandFactory
 		'UNTERHALTEN'  => true,
 		'URSPRUNG'     => true,
 		'ÜBERGEBEN'    => 'GIB',
-		'VERLASSEN'    => true
+		'VERLASSEN'    => true,
+		'VORLAGE'      => true
 	];
 
 	/**
@@ -261,63 +264,40 @@ class CommandFactory
 	 */
 	public function create(Phrase $phrase): AbstractCommand {
 		$verb = $this->identifyVerb(strtoupper($phrase->getVerb()));
-		switch ($verb) {
-			case 'BESCHREIBEN';
-				return new Describe($phrase, $this->context);
-			case 'BESTEIGEN' :
-				return new Board($phrase, $this->context);
-			case 'BETRETEN' :
-				return new Enter($phrase, $this->context);
-			case 'BEWACHEN' :
-				return new Sentinel($phrase, $this->context);
-			case 'EINHEIT' :
-				return new Unit($phrase, $this->context);
-			case 'ENDE' :
-				return new End($phrase, $this->context);
-			case 'GIB' :
-				return new Handover($phrase, $this->context);
-			case 'HELFEN' :
-				return new Help($phrase, $this->context);
-			case 'KÄMPFEN' :
-				return new Fight($phrase, $this->context);
-			case 'KOMMANDO' :
-				return new Grant($phrase, $this->context);
-			case 'KOMMENTAR' :
-				return new Comment($phrase,$this->context);
-			case 'KONTAKTIEREN' :
-				return new Contact($phrase, $this->context);
-			case 'LEHREN' :
-				return new Teach($phrase, $this->context);
-			case 'LERNEN' :
-				return new Learn($phrase, $this->context);
-			case 'MACHEN' :
-				return new Create($phrase, $this->context);
-			case 'NAME' :
-				return new Name($phrase, $this->context);
-			case 'NÄCHSTER' :
-				return new Next($phrase, $this->context);
-			case 'NUMMER' :
-				return new Number($phrase, $this->context);
-			case 'PARTEI' :
-				return new Party($phrase, $this->context);
-			case 'REKRUTIEREN' :
-				return new Recruit($phrase, $this->context);
-			case 'RESERVIEREN' :
-				return new Reserve($phrase, $this->context);
-			case 'SORTIEREN' :
-				return new Sort($phrase, $this->context);
-			case 'TARNEN' :
-				return new Disguise($phrase, $this->context);
-			case 'TREIBEN' :
-				return new Tax($phrase, $this->context);
-			case 'UNTERHALTEN' :
-				return new Entertain($phrase, $this->context);
-			case 'URSPRUNG' :
-				return new Origin($phrase, $this->context);
-			case 'VERLASSEN' :
-				return new Leave($phrase, $this->context);
-			default :
-				throw new UnknownCommandException($phrase);
+		try {
+			$command = match ($verb) {
+				'BESCHREIBEN'  => Describe::class,
+				'BESTEIGEN'    => Board::class,
+				'BETRETEN'     => Enter::class,
+				'BEWACHEN'     => Sentinel::class,
+				'EINHEIT'      => Unit::class,
+				'ENDE'         => End::class,
+				'GIB'          => Handover::class,
+				'HELFEN'       => Help::class,
+				'KÄMPFEN'      => Fight::class,
+				'KOMMANDO'     => Grant::class,
+				'KOMMENTAR'    => Comment::class,
+				'KONTAKTIEREN' => Contact::class,
+				'LEHREN'       => Teach::class,
+				'LERNEN'       => Learn::class,
+				'MACHEN'       => Create::class,
+				'NAME'         => Name::class,
+				'NÄCHSTER'     => Next::class,
+				'NUMMER'       => Number::class,
+				'PARTEI'       => Party::class,
+				'REKRUTIEREN'  => Recruit::class,
+				'RESERVIEREN'  => Reserve::class,
+				'SORTIEREN'    => Sort::class,
+				'TARNEN'       => Disguise::class,
+				'TREIBEN'      => Tax::class,
+				'UNTERHALTEN'  => Entertain::class,
+				'URSPRUNG'     => Origin::class,
+				'VERLASSEN'    => Leave::class,
+				'VORLAGE'      => DefaultCommand::class
+			};
+			return new $command($phrase, $this->context);
+		} catch (\UnhandledMatchError) {
+			throw new UnknownCommandException($phrase);
 		}
 	}
 
@@ -373,6 +353,9 @@ class CommandFactory
 		$candidates = [];
 		foreach ($map as $candidate => $singletonClass) {
 			if (strpos($candidate, $singleton) === 0) {
+				if ($candidate === $singleton) {
+					return $singletonClass;
+				}
 				$candidates[] = $singletonClass;
 			}
 		}

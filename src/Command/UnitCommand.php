@@ -34,6 +34,10 @@ abstract class UnitCommand extends AbstractCommand
 		return '[' . $this->unit->Id() . '] ' . parent::__toString();
 	}
 
+	#[Pure] public function Phrase(): Phrase {
+		return $this->phrase;
+	}
+
 	#[Pure] public function Unit(): Unit {
 		return $this->unit;
 	}
@@ -42,6 +46,7 @@ abstract class UnitCommand extends AbstractCommand
 	 * Make preparations before running the command.
 	 */
 	protected function initialize(): void {
+		$this->context->setUnit($this->unit);
 		$protocol = $this->context->getProtocol($this->unit);
 		if (!$protocol->commit($this)) {
 			throw new ActivityException($this);

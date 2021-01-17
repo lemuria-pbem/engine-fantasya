@@ -78,9 +78,11 @@ class LemuriaOrders implements Orders, Reassignment
 	public function save(): Orders {
 		$current = [];
 		$default = [];
+		ksort($this->current);
 		foreach ($this->current as $id => $instructions /* @var Instructions $instructions */) {
 			$current[] = ['id' => $id, 'orders' => $instructions->serialize()];
 		}
+		ksort($this->default);
 		foreach ($this->default as $id => $instructions /* @var Instructions $instructions */) {
 			$default[] = ['id' => $id, 'orders' => $instructions->serialize()];
 		}

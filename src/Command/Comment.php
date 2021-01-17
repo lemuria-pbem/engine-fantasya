@@ -12,6 +12,7 @@ use Lemuria\Engine\Lemuria\Message\Unit\CommentMessage;
 final class Comment extends UnitCommand
 {
 	protected function run(): void {
+		$this->context->getProtocol($this->unit)->addDefault($this);
 		$this->message(CommentMessage::class)->p($this->phrase->getLine());
 	}
 }

@@ -15,7 +15,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Weltentwicklung (Wachstum, Unterhalt)
 - NACH
 - ROUTE (benötigt die Befehlsvorlage)
-- DEFAULT (benötigt die Befehlsvorlage)
 - BOTSCHAFT
 - SPIONIERE
 - Handel (KAUFE/VERKAUFE)

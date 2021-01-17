@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Lemuria;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Lemuria\Command\UnitCommand;
+use Lemuria\Lemuria;
 use Lemuria\Model\Lemuria\Unit;
 
 /**
@@ -13,6 +14,8 @@ use Lemuria\Model\Lemuria\Unit;
 final class ActivityProtocol
 {
 	private bool $hasActivity = false;
+
+	private bool $hasDefault = false;
 
 	/**
 	 * Create new activity protocol for a unit.
@@ -31,12 +34,26 @@ final class ActivityProtocol
 	 * Add a command to the protocol.
 	 */
 	public function commit(UnitCommand $command): bool {
+		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
 		if ($command instanceof Activity) {
 			if ($this->hasActivity) {
 				return false;
 			}
 			$this->hasActivity = true;
+			if (!$this->hasDefault) {
+				$this->addDefault($command);
+			}
 		}
 		return true;
+	}
+
+	/**
+	 * Add a command to the default orders.
+	 */
+	public function addDefault(UnitCommand $command): void {
+		if ($command instanceof Activity) {
+			$this->hasDefault = true;
+		}
+		Lemuria::Orders()->getDefault($this->unit->Id())[] = $command->Phrase();
 	}
 }
