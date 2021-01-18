@@ -125,11 +125,16 @@ class LemuriaReport implements Reassignment, Report
 
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
 		$namespace = $identifiable->Catalog();
-		$id = $oldId->Id();
+		$newId     = $identifiable->Id();
+		$id        = $oldId->Id();
 		if (isset($this->report[$namespace][$id])) {
 			$messages =& $this->report[$namespace][$id];
 			unset($this->report[$namespace][$id]);
-			$id = $identifiable->Id()->Id();
+			foreach ($messages as $id) {
+				$this->message[$id]->reassign($newId);
+			}
+
+			$id = $newId->Id();
 			if (isset($this->report[$namespace][$id])) {
 				array_push($this->report[$namespace][$id], ...$messages);
 				ksort($this->report[$namespace][$id]);

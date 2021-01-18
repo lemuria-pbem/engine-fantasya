@@ -9,10 +9,11 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Marktfunktionen
 - Ereignisse
 - Mikromanagement reduzieren
+- Taktik ermöglicht Strategien im Kampf, STRATEGIE
+- Monsterrasse bestimmt maximalen Übermacht-Faktor
 
 ## Verbesserungen
 
-- Meldungen bei ID-Änderung umschreiben
 - Meldungen und Befehle zu gelöschten Entities gesondert behandeln
 - Befehle in den Reporten ausgeben
 - Weltentwicklung (Wachstum, Unterhalt)

@@ -115,10 +115,11 @@ class LemuriaOrders implements Orders, Reassignment
 
 	private function replace(int $old, int $new, array &$instructions): void {
 		if (!isset($instructions[$old])) {
-			throw new NotRegisteredException(new Id($old));
+			return;
 		}
 		$oldOrders = $instructions[$old];
 		unset($instructions[$old]);
+
 		if (isset($instructions[$new])) {
 			/** @var Instructions $newOrdners */
 			$newOrders = $instructions[$new];

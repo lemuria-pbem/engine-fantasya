@@ -44,6 +44,8 @@ class LemuriaMessage implements Message
 
 	private Id $assignee;
 
+	private ?Id $newAssignee = null;
+
 	private ?array $entities = null;
 
 	private ?array $singletons = null;
@@ -66,9 +68,12 @@ class LemuriaMessage implements Message
 		return $this->type->Level();
 	}
 
-	#[Pure]
-	public function Entity(): Id {
+	#[Pure] public function Assignee(): Id {
 		return $this->assignee;
+	}
+
+	#[Pure] public function Entity(): Id {
+		return $this->newAssignee ? $this->newAssignee : $this->assignee;
 	}
 
 	public function setId(Id $id): Message {
@@ -91,10 +96,13 @@ class LemuriaMessage implements Message
 	/**
 	 * Get a plain data array of the model's data.
 	 */
-	#[ArrayShape(['id' => 'int', 'type' => 'string', 'assignee' => 'int', 'parameters' => 'array|null', 'items' => 'array|null', 'singletons' => 'array|null', 'entities' => 'array|null'])]
+	#[ArrayShape(['id' => 'int', 'type' => 'string', 'assignee' => 'int', 'newAssignee' => 'int|null', 'parameters' => 'array|null', 'items' => 'array|null', 'singletons' => 'array|null', 'entities' => 'array|null'])]
 	#[Pure]
 	public function serialize(): array {
 		$data = ['id' => $this->Id()->Id(), 'type' => getClass($this->type), 'assignee' => $this->assignee->Id()];
+		if ($this->newAssignee) {
+			$data['newAssignee'] = $this->newAssignee->Id();
+		}
 		if ($this->entities) {
 			$data['entities'] = $this->entities;
 		}
@@ -115,6 +123,9 @@ class LemuriaMessage implements Message
 	 */
 	public function unserialize(array $data): Serializable {
 		$this->validateSerializedData($data);
+		if (isset($data['newAssignee'])) {
+			$this->newAssignee = new Id($data['newAssignee']);
+		}
 		if (isset($data['entities'])) {
 			$this->entities = $data['entities'];
 		}
@@ -244,6 +255,10 @@ class LemuriaMessage implements Message
 		return $this;
 	}
 
+	public function reassign(Id $newAssignee): void {
+		$this->newAssignee = $newAssignee;
+	}
+
 	/**
 	 * Check that a serialized data array is valid.
 	 *
@@ -253,6 +268,7 @@ class LemuriaMessage implements Message
 		$this->validate($data, 'id', 'int');
 		$this->validate($data, 'type', 'string');
 		$this->validate($data, 'assignee', 'int');
+		$this->validateIfExists($data, 'newAssignee', 'int');
 		$this->validateIfExists($data, 'entities', 'array');
 		$this->validateIfExists($data, 'singletons', 'array');
 		$this->validateIfExists($data, 'items', 'array');
