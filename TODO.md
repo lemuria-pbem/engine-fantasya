@@ -14,8 +14,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen
 
-- Meldungen zu gelöschten Entities gesondert behandeln
-- Befehle in den Reporten ausgeben
 - GEBEN Personen, GEBEN Bauern, GEBEN Einheit
 - Weltentwicklung (Wachstum, Unterhalt)
 - NACH
@@ -24,6 +22,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - SPIONIERE
 - Handel (KAUFE/VERKAUFE)
 - Kampf (ATTACKIEREN/BELAGERN)
+- Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
+  Meldungen
 - Magie (KAMPFZAUBER/ZAUBERN)
 - Alchemie (Kräuter und Tränke, BENUTZE) 
 - Geschlossene Spielwelt

@@ -29,6 +29,11 @@ class LemuriaReport implements Reassignment, Report
 	 */
 	private array $message = [];
 
+	/**
+	 * @var int[]
+	 */
+	private array $removed = [];
+
 	private int $nextId = 1;
 
 	private bool $isLoaded = false;
@@ -87,6 +92,14 @@ class LemuriaReport implements Reassignment, Report
 				$message = new LemuriaMessage();
 				$message->unserialize($data);
 			}
+
+			$removed = $report['removed'];
+			foreach ($removed as $id) {
+				if (!isset($this->message[$id])) {
+					throw new \Lemuria\Engine\Exception\NotRegisteredException();
+				}
+			}
+			$this->removed  = array_fill_keys($removed, true);
 			$this->isLoaded = true;
 		}
 		return $this;
@@ -100,7 +113,9 @@ class LemuriaReport implements Reassignment, Report
 		foreach ($this->message as $message /* @var LemuriaMessage $message */) {
 			$messages[] = $message->serialize();
 		}
-		Lemuria::Game()->setMessages(['messages' => $messages]);
+		$removed = array_keys($this->removed);
+		sort($removed);
+		Lemuria::Game()->setMessages(['messages' => $messages, 'removed' => $removed]);
 		return $this;
 	}
 
@@ -145,7 +160,13 @@ class LemuriaReport implements Reassignment, Report
 	}
 
 	public function remove(Identifiable $identifiable): void {
-		//TODO
+		$namespace = $identifiable->Catalog();
+		$id        = $identifiable->Id();
+		if (isset($this->report[$namespace][$id])) {
+			foreach ($this->report[$namespace][$id] as $message /* @var LemuriaMessage $message */) {
+				$this->removed[$message->Id()->Id()] = true;
+			}
+		}
 	}
 
 	/**
@@ -162,6 +183,7 @@ class LemuriaReport implements Reassignment, Report
 	 */
 	protected function validateSerializedData(array &$data): void {
 		$this->validate($data, 'messages', 'array');
+		$this->validate($data, 'removed', 'array');
 	}
 
 	/**
