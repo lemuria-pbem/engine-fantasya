@@ -100,7 +100,9 @@ class LemuriaOrders implements Orders, Reassignment
 	}
 
 	public function remove(Identifiable $identifiable): void {
-		//TODO
+		$id = $identifiable->Id()->Id();
+		unset($this->current[$id]);
+		unset($this->default[$id]);
 	}
 
 	/**

@@ -75,7 +75,7 @@ final class Number extends UnitCommand
 		}
 
 		$oldId = $this->unit->Id();
-		Lemuria::Catalog()->reassign($oldId, $this->unit->replaceId($id));
+		Lemuria::Catalog()->reassign($this->unit->replaceId($id), $oldId);
 		$this->message(NumberUnitMessage::class)->p($oldId->Id());
 	}
 
@@ -97,7 +97,7 @@ final class Number extends UnitCommand
 		$oldId = $construction->Id();
 		$construction->setId($id);
 		$construction->Region()->Estate()->replace($oldId, $id);
-		Lemuria::Catalog()->reassign($oldId, $construction);
+		Lemuria::Catalog()->reassign($construction, $oldId);
 		$this->message(NumberConstructionMessage::class, $construction)->p($oldId->Id());
 	}
 
@@ -119,7 +119,7 @@ final class Number extends UnitCommand
 		$oldId = $vessel->Id();
 		$vessel->setId($id);
 		$vessel->Region()->Fleet()->replace($oldId, $id);
-		Lemuria::Catalog()->reassign($oldId, $vessel);
+		Lemuria::Catalog()->reassign($vessel, $oldId);
 		$this->message(NumberVesselMessage::class, $vessel)->p($oldId->Id());
 	}
 
@@ -131,7 +131,7 @@ final class Number extends UnitCommand
 		}
 
 		$oldId = $party->Id();
-		Lemuria::Catalog()->reassign($oldId, $party->setId($id));
+		Lemuria::Catalog()->reassign($party->setId($id), $oldId);
 		$this->message(NumberPartyMessage::class, $party)->p($oldId->Id());
 	}
 }

@@ -14,8 +14,9 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen
 
-- Meldungen und Befehle zu gelöschten Entities gesondert behandeln
+- Meldungen zu gelöschten Entities gesondert behandeln
 - Befehle in den Reporten ausgeben
+- GEBEN Personen, GEBEN Bauern, GEBEN Einheit
 - Weltentwicklung (Wachstum, Unterhalt)
 - NACH
 - ROUTE (benötigt die Befehlsvorlage)
