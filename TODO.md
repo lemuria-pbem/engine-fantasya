@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
-- Befehlsvorlage für Einheiten (lange Befehle)
 - Nahrung statt Silber
 - Marktfunktionen
 - Ereignisse
@@ -15,17 +14,17 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Verbesserungen
 
 - GEBEN Personen, GEBEN Bauern, GEBEN Einheit
-- Weltentwicklung (Wachstum, Unterhalt)
 - NACH
-- ROUTE (benötigt die Befehlsvorlage)
+- ROUTE
 - BOTSCHAFT
 - SPIONIERE
 - Handel (KAUFE/VERKAUFE)
 - Kampf (ATTACKIEREN/BELAGERN)
+- Magie (KAMPFZAUBER/ZAUBERN)
+- Alchemie (Kräuter und Tränke, BENUTZE)
+- Weltentwicklung (Wachstum, Unterhalt)
 - Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
   Meldungen
-- Magie (KAMPFZAUBER/ZAUBERN)
-- Alchemie (Kräuter und Tränke, BENUTZE) 
 - Geschlossene Spielwelt
 
 ## Fehler

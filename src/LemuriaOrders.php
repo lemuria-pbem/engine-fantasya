@@ -2,12 +2,12 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria;
 
-use Lemuria\Engine\Exception\NotRegisteredException;
 use Lemuria\Engine\Instructions;
 use Lemuria\Engine\Orders;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
+use Lemuria\Model\Catalog;
 use Lemuria\Model\Reassignment;
 use Lemuria\SerializableTrait;
 use Lemuria\StringList;
@@ -95,14 +95,18 @@ class LemuriaOrders implements Orders, Reassignment
 	}
 
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
-		$this->replace($oldId->Id(), $identifiable->Id()->Id(), $this->current);
-		$this->replace($oldId->Id(), $identifiable->Id()->Id(), $this->default);
+		if ($identifiable->Catalog() === Catalog::UNITS) {
+			$this->replace($oldId->Id(), $identifiable->Id()->Id(), $this->current);
+			$this->replace($oldId->Id(), $identifiable->Id()->Id(), $this->default);
+		}
 	}
 
 	public function remove(Identifiable $identifiable): void {
-		$id = $identifiable->Id()->Id();
-		unset($this->current[$id]);
-		unset($this->default[$id]);
+		if ($identifiable->Catalog() === Catalog::UNITS) {
+			$id = $identifiable->Id()->Id();
+			unset($this->current[$id]);
+			unset($this->default[$id]);
+		}
 	}
 
 	/**
