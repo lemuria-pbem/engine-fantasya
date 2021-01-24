@@ -14,14 +14,17 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Verbesserungen
 
 - GEBEN Personen, GEBEN Bauern, GEBEN Einheit
+- ZERSTÖREN (Gebäude, Schiffe)
 - NACH
 - ROUTE
 - BOTSCHAFT
-- SPIONIERE
-- Handel (KAUFE/VERKAUFE)
+- SPIONIEREN
+- VERSENKEN (Schiff vor Entern bewahren)
+- Handel (KAUFEN/VERKAUFEN)
 - Kampf (ATTACKIEREN/BELAGERN)
 - Magie (KAMPFZAUBER/ZAUBERN)
-- Alchemie (Kräuter und Tränke, BENUTZE)
+- Alchemie (Kräuter und Tränke, BENUTZEN)
+- Seekampf/Piraterie
 - Weltentwicklung (Wachstum, Unterhalt)
 - Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
   Meldungen

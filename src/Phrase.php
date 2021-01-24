@@ -46,7 +46,8 @@ class Phrase implements \Countable
 	 * Get the command verb.
 	 */
 	#[Pure] public function getVerb(): string {
-		return $this->parts[0] ?? '';
+		$verb = $this->parts[0] ?? '';
+		return strtoupper($verb);
 	}
 
 	/**

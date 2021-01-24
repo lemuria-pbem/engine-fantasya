@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Lemuria\Exception\CommandParserException;
 use Lemuria\Engine\Lemuria\Factory\CommandFactory;
+use Lemuria\Model\Lemuria\Intelligence;
 use Lemuria\Model\Lemuria\Party;
 use Lemuria\Model\Lemuria\Region;
 use Lemuria\Model\Lemuria\Unit;

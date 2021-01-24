@@ -11,7 +11,7 @@ use Lemuria\Tests\Test;
 
 class PhraseTest extends Test
 {
-	private const PHRASE = 'TESTE Klasse Phrase';
+	private const PHRASE = 'TEstE Klasse Phrase';
 
 	/**
 	 * @test

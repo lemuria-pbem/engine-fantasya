@@ -6,6 +6,8 @@ use Lemuria\Engine\Lemuria\Exception\AllocationException;
 use Lemuria\Engine\Lemuria\Factory\CommandPriority;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
+use Lemuria\Model\Lemuria\Commodity\Food;
+use Lemuria\Model\Lemuria\Commodity\Silver;
 use Lemuria\Model\Lemuria\Factory\BuilderTrait;
 use Lemuria\Model\Lemuria\Quantity;
 use Lemuria\Model\Lemuria\Region;
@@ -16,6 +18,8 @@ use Lemuria\Model\Lemuria\Resources;
  */
 final class Allocation
 {
+	public const POOL_COMMODITIES = [Food::class => true, Silver::class => true];
+
 	use BuilderTrait;
 
 	private CommandPriority $priority;
