@@ -2,9 +2,9 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command\Handover;
 
-use Lemuria\Engine\Lemuria\Command\GiftTrait;
 use Lemuria\Engine\Lemuria\Command\UnitCommand;
 use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
+use Lemuria\Engine\Lemuria\Factory\GiftTrait;
 use Lemuria\Engine\Lemuria\Factory\Model\Everything;
 use Lemuria\Engine\Lemuria\Message\Unit\GiveMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\GiveNoInventoryMessage;

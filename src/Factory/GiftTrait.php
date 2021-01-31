@@ -1,10 +1,9 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Lemuria\Factory;
 
 use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Factory\Model\Everything;
-use Lemuria\Engine\Lemuria\Factory\UnitTrait;
 use Lemuria\Engine\Lemuria\Message\Unit\DismissEverybodyMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\DismissEmptyMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\DismissPeasantsMessage;
