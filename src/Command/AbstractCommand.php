@@ -8,6 +8,7 @@ use Lemuria\Engine\Lemuria\Action;
 use Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Factory\BuilderTrait;
+use Lemuria\Engine\Lemuria\Factory\ContextTrait;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Phrase;
 use Lemuria\Engine\Lemuria\Exception\CommandException;
@@ -25,6 +26,7 @@ use Lemuria\Model\Lemuria\Unit;
 abstract class AbstractCommand implements Command
 {
 	use BuilderTrait;
+	use ContextTrait;
 	use ModelBuilderTrait;
 
 	private static int $nextId = 0;

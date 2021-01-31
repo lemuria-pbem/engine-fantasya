@@ -9,6 +9,9 @@ use Lemuria\Engine\Lemuria\Command\Contact;
 use Lemuria\Engine\Lemuria\Command\Create;
 use Lemuria\Engine\Lemuria\Command\DefaultCommand;
 use Lemuria\Engine\Lemuria\Command\Describe;
+use Lemuria\Engine\Lemuria\Command\Destroy;
+use Lemuria\Engine\Lemuria\Command\Destroy\Dismiss;
+use Lemuria\Engine\Lemuria\Command\Destroy\Lose;
 use Lemuria\Engine\Lemuria\Command\Disguise;
 use Lemuria\Engine\Lemuria\Command\End;
 use Lemuria\Engine\Lemuria\Command\Enter;
@@ -120,6 +123,7 @@ class CommandFactory
 		'EINHEIT'      => true,
 		'EINTREIBEN'   => 'TREIBEN',
 		'ENDE'         => true,
+		'ENTLASSEN'    => true,
 		'GIB'          => true,
 		'GEBEN'        => 'GIB',
 		'HELFEN'       => true,
@@ -148,7 +152,10 @@ class CommandFactory
 		'URSPRUNG'     => true,
 		'ÜBERGEBEN'    => 'GIB',
 		'VERLASSEN'    => true,
-		'VORLAGE'      => true
+		'VERLIEREN'    => true,
+		'VORLAGE'      => true,
+		'ZERSTÖREN'    => true,
+		'ZERSTOEREN'   => 'ZERSTÖREN'
 	];
 
 	/**
@@ -263,7 +270,7 @@ class CommandFactory
 	 * @throws UnknownCommandException
 	 */
 	public function create(Phrase $phrase): AbstractCommand {
-		$verb = $this->identifyVerb(strtoupper($phrase->getVerb()));
+		$verb = $this->identifyVerb($phrase->getVerb());
 		try {
 			$command = match ($verb) {
 				'BESCHREIBEN'  => Describe::class,
@@ -272,6 +279,7 @@ class CommandFactory
 				'BEWACHEN'     => Sentinel::class,
 				'EINHEIT'      => Unit::class,
 				'ENDE'         => End::class,
+				'ENTLASSEN'    => Dismiss::class,
 				'GIB'          => Handover::class,
 				'HELFEN'       => Help::class,
 				'KÄMPFEN'      => Fight::class,
@@ -293,7 +301,9 @@ class CommandFactory
 				'UNTERHALTEN'  => Entertain::class,
 				'URSPRUNG'     => Origin::class,
 				'VERLASSEN'    => Leave::class,
-				'VORLAGE'      => DefaultCommand::class
+				'VERLIEREN'    => Lose::class,
+				'VORLAGE'      => DefaultCommand::class,
+				'ZERSTÖREN'    => Destroy::class
 			};
 			return new $command($phrase, $this->context);
 		} catch (\UnhandledMatchError) {

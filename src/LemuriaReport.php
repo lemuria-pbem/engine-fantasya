@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria;
 
+use Lemuria\Engine\Exception\NotRegisteredException;
 use Lemuria\Engine\Lemuria\Message\Exception\DuplicateMessageException;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
@@ -11,7 +12,6 @@ use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Exception\DuplicateIdException;
-use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Reassignment;
 use Lemuria\SerializableTrait;
 
@@ -96,7 +96,7 @@ class LemuriaReport implements Reassignment, Report
 			$removed = $report['removed'];
 			foreach ($removed as $id) {
 				if (!isset($this->message[$id])) {
-					throw new \Lemuria\Engine\Exception\NotRegisteredException();
+					throw new NotRegisteredException($id);
 				}
 			}
 			$this->removed  = array_fill_keys($removed, true);
