@@ -1,0 +1,24 @@
+<?php
+declare(strict_types = 1);
+namespace Lemuria\Engine\Lemuria\Message\Unit;
+
+use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
+use Lemuria\Item;
+
+class SmashRegainMessage extends AbstractUnitMessage
+{
+	protected Item $regain;
+
+	protected function create(): string {
+		return 'Unit ' . $this->id . ' regains ' . $this->regain . ' from destroying.';
+	}
+
+	protected function getData(LemuriaMessage $message): void {
+		parent::getData($message);
+		$this->regain = $message->getQuantity();
+	}
+
+	protected function getTranslation(string $name): string {
+		return $this->item($name, 'regain') ?? parent::getTranslation($name);
+	}
+}

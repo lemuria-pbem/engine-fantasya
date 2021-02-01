@@ -13,8 +13,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen
 
-- GEBEN Personen, GEBEN Bauern, GEBEN Einheit
-- ZERSTÖREN (Gebäude, Schiffe)
+- MACHEN (Gebäude, Schiff)
 - NACH
 - ROUTE
 - BOTSCHAFT

@@ -21,8 +21,8 @@ use Lemuria\Engine\Lemuria\Command\Destroy\Smash;
  * - ZERSTÖREN <amount> Person|Personen
  *
  * Smash (activity):
- * - ZERSTÖREN Burg|Gebäude|Gebaeude
- * - ZERSTÖREN Schiff
+ * - ZERSTÖREN Burg|Gebäude|Gebaeude <construction>
+ * - ZERSTÖREN Schiff <vessel>
  */
 final class Destroy extends DelegatedCommand
 {
@@ -31,7 +31,7 @@ final class Destroy extends DelegatedCommand
 	 */
 	protected function createDelegate(): Command {
 		if (count($this->phrase) === 2) {
-			$param = strtolower($this->phrase->getParameter(2));
+			$param = strtolower($this->phrase->getParameter());
 			switch ($param) {
 				case 'burg' :
 				case 'gebäude' :
