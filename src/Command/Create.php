@@ -8,6 +8,7 @@ use Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Command\Create\Resource;
 use Lemuria\Engine\Lemuria\Command\Create\Temp;
 use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
+use Lemuria\Engine\Lemuria\Factory\Model\Job;
 
 /**
  * Implementation of command MACHEN.
@@ -15,6 +16,7 @@ use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
  * The command determines the create sub command and delegates to it.
  *
  * - MACHEN <Resource>
+ * - MACHEN <Resource> <size>
  * - MACHEN <amount> <Resource>
  * - MACHEN Temp
  * - MACHEN Temp <id>
@@ -31,11 +33,16 @@ final class Create extends DelegatedCommand
 		if (strtoupper($param) === 'TEMP') {
 			return new Temp($this->phrase, $this->context);
 		}
-		// MACHEN <number> <Ressource>
+
+		// MACHEN <amount> <Ressource>
 		if (isInt($param)) {
-			return new Resource($this->phrase, $this->context);
+			$what   = $this->phrase->getParameter(2);
+			$number = (int)$param;
+		} else {
+			$what   = $param;
+			$number = (int)$this->phrase->getParameter(2);
 		}
-		// MACHEN <Ressource>
-		return new Resource($this->phrase, $this->context);
+		$resource = $this->context->Factory()->resource($what);
+		return new Resource($this->phrase, $this->context, new Job($resource, $number));
 	}
 }

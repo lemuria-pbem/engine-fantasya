@@ -5,11 +5,11 @@ namespace Lemuria\Engine\Lemuria\Command\Create;
 use Lemuria\Engine\Lemuria\Activity;
 use Lemuria\Engine\Lemuria\Command\UnitCommand;
 use Lemuria\Engine\Lemuria\Context;
+use Lemuria\Engine\Lemuria\Factory\Model\Job;
 use Lemuria\Engine\Lemuria\Phrase;
 use Lemuria\Model\Lemuria\Quantity;
 use Lemuria\Model\Lemuria\Requirement;
 use Lemuria\Model\Lemuria\Resources;
-use Lemuria\Singleton;
 
 /**
  * Implementation of command MACHEN <amount> <product> (create product).
@@ -21,19 +21,10 @@ use Lemuria\Singleton;
  */
 abstract class AbstractProduct extends UnitCommand implements Activity
 {
-	protected ?int $demand = null;
-
 	protected int $capability = 0;
 
-	public function __construct(Phrase $phrase, Context $context, protected Singleton $resource) {
+	public function __construct(Phrase $phrase, Context $context, protected Job $job) {
 		parent::__construct($phrase, $context);
-	}
-
-	protected function initialize(): void {
-		parent::initialize();
-		if (count($this->phrase) === 2) {
-			$this->demand = (int)$this->phrase->getParameter(1);
-		}
 	}
 
 	/**

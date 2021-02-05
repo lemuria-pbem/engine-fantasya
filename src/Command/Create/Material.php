@@ -29,17 +29,18 @@ final class Material extends AbstractProduct
 		$reserve          = $this->calculateResources($resources->add(new Quantity($material->getResource(), 1)));
 		$production       = min($this->capability, $reserve);
 		if ($production > 0) {
+			$demand   = $this->job->Count();
 			$maxYield = $production * $material->getYield();
 			$yield    = $maxYield;
-			if ($this->demand !== null) {
-				$yield      = min($maxYield, $this->demand);
+			if ($this->job->hasCount()) {
+				$yield      = min($maxYield, $demand);
 				$production = (int)ceil($yield / $material->getYield());
 			}
 			$consumption = new Quantity($material->getResource(), $production);
 			$output      = new Quantity($material, $yield);
 			$this->unit->Inventory()->remove($consumption);
 			$this->unit->Inventory()->add($output);
-			if ($this->demand && $this->demand > $maxYield) {
+			if ($this->job->hasCount() && $demand > $maxYield) {
 				$this->message(MaterialOnlyMessage::class)->i($output)->s($talent);
 			} else {
 				$this->message(MaterialOutputMessage::class)->i($output)->s($talent);
@@ -54,8 +55,9 @@ final class Material extends AbstractProduct
 	}
 
 	private function getMaterial(): MaterialInterface {
-		if ($this->resource instanceof MaterialInterface) {
-			return $this->resource;
+		$resource = $this->job->getObject();
+		if ($resource instanceof MaterialInterface) {
+			return $resource;
 		}
 		throw new LemuriaException('Expected a material resource.');
 	}

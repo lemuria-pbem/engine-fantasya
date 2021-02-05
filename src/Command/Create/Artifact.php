@@ -6,8 +6,8 @@ use Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Command\DelegatedCommand;
 use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
+use Lemuria\Engine\Lemuria\Factory\Model\Job;
 use Lemuria\Engine\Lemuria\Phrase;
-use Lemuria\Model\Lemuria\Artifact as ArtifactInterface;
 use Lemuria\Model\Lemuria\Commodity as CommodityInterface;
 use Lemuria\Model\Lemuria\Building;
 use Lemuria\Model\Lemuria\Ship;
@@ -17,27 +17,31 @@ use Lemuria\Model\Lemuria\Ship;
  *
  * The command creates new artifacts from inventory and adds them to the executing unit's inventory.
  *
+ * - MACHEN Burg|Gebäude|Gebaeude|Schiff
+ * - MACHEN Burg|Gebäude|Gebaeude|Schiff <size>
  * - MACHEN <Building>
  * - MACHEN <Building> <size>
  * - MACHEN <Ship>
  * - MACHEN <Ship> <size>
+ * - MACHEN <Commodity>
  * - MACHEN <amount> <Commodity>
  */
 final class Artifact extends DelegatedCommand
 {
-	public function __construct(Phrase $phrase, Context $context, protected ArtifactInterface $resource) {
+	public function __construct(Phrase $phrase, Context $context, private Job $job) {
 		parent::__construct($phrase, $context);
 	}
 
 	protected function createDelegate(): Command {
-		if ($this->resource instanceof Building) {
-			return new Construction($this->phrase, $this->context, $this->resource);
+		$resource = $this->job->getObject();
+		if ($resource instanceof Building) {
+			return new Construction($this->phrase, $this->context, $this->job);
 		}
-		if ($this->resource instanceof Ship) {
-			return new Vessel($this->phrase, $this->context, $this->resource);
+		if ($resource instanceof Ship) {
+			return new Vessel($this->phrase, $this->context, $this->job);
 		}
-		if ($this->resource instanceof CommodityInterface) {
-			return new Commodity($this->phrase, $this->context, $this->resource);
+		if ($resource instanceof CommodityInterface) {
+			return new Commodity($this->phrase, $this->context, $this->job);
 		}
 		throw new UnknownCommandException($this);
 	}

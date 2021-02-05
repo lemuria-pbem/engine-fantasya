@@ -6,6 +6,7 @@ use function Lemuria\getClass;
 use Lemuria\Engine\Lemuria\Activity;
 use Lemuria\Engine\Lemuria\Command\AllocationCommand;
 use Lemuria\Engine\Lemuria\Context;
+use Lemuria\Engine\Lemuria\Factory\Model\Job;
 use Lemuria\Engine\Lemuria\Message\Unit\RawMaterialCanMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\RawMaterialCannotMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\RawMaterialExperienceMessage;
@@ -24,7 +25,6 @@ use Lemuria\Model\Lemuria\Quantity;
 use Lemuria\Model\Lemuria\RawMaterial as RawMaterialInterface;
 use Lemuria\Model\Lemuria\Relation;
 use Lemuria\Model\Lemuria\Talent;
-use Lemuria\Singleton;
 
 /**
  * Implementation of command MACHEN <amount> <RawMaterial> (create raw material).
@@ -42,23 +42,24 @@ final class RawMaterial extends AllocationCommand implements Activity
 
 	private int $production = 0;
 
-	public function __construct(Phrase $phrase, Context $context, private Singleton $resource) {
+	public function __construct(Phrase $phrase, Context $context, private Job $job) {
 		parent::__construct($phrase, $context);
 	}
 
 	protected function run(): void {
 		parent::run();
+		$resource   = $this->job->getObject();
 		$talent     = $this->knowledge->Talent();
-		$production = $this->getResource(getClass($this->resource))->Count();
+		$production = $this->getResource(getClass($resource))->Count();
 		if ($production <= 0) {
 			if ($this->knowledge->Level() <= 0) {
-				$this->message(RawMaterialExperienceMessage::class)->s($talent, RawMaterialExperienceMessage::TALENT)->s($this->resource, RawMaterialExperienceMessage::MATERIAL);
+				$this->message(RawMaterialExperienceMessage::class)->s($talent, RawMaterialExperienceMessage::TALENT)->s($resource, RawMaterialExperienceMessage::MATERIAL);
 			} else {
 				$guardParties = $this->checkBeforeAllocation();
 				if (!empty($guardParties)) {
-					$this->message(RawMaterialGuardedMessage::class)->s($this->resource);
+					$this->message(RawMaterialGuardedMessage::class)->s($resource);
 				} else {
-					$this->message(RawMaterialResourcesMessage::class)->s($this->resource);
+					$this->message(RawMaterialResourcesMessage::class)->s($resource);
 				}
 			}
 		} else {
@@ -90,6 +91,7 @@ final class RawMaterial extends AllocationCommand implements Activity
 	 * Determine the demand.
 	 */
 	protected function createDemand(): void {
+		$resource         = $this->job->getObject();
 		$this->knowledge  = $this->calculus()->knowledge($this->getRequiredTalent());
 		$this->production = $this->unit->Size() * $this->knowledge->Level();
 		if ($this->production > 0) {
@@ -97,32 +99,34 @@ final class RawMaterial extends AllocationCommand implements Activity
 				$this->demand = (int)$this->phrase->getParameter(1);
 				if ($this->demand <= $this->production) {
 					$this->production = (int)$this->demand;
-					$this->message(RawMaterialWantsMessage::class)->p($this->production)->s($this->resource);
+					$this->message(RawMaterialWantsMessage::class)->p($this->production)->s($resource);
 				} else {
-					$this->message(RawMaterialCannotMessage::class)->p($this->production)->s($this->resource);
+					$this->message(RawMaterialCannotMessage::class)->p($this->production)->s($resource);
 				}
 			} else {
-				$this->message(RawMaterialCanMessage::class)->p($this->production)->s($this->resource);
+				$this->message(RawMaterialCanMessage::class)->p($this->production)->s($resource);
 			}
 			$this->resources->add(new Quantity($this->getCommodity(), $this->production));
 		} else {
-			$this->message(RawMaterialNoDemandMessage::class)->s($this->resource);
+			$this->message(RawMaterialNoDemandMessage::class)->s($resource);
 		}
 	}
 
 	private function getCommodity(): Commodity {
-		if ($this->resource instanceof Commodity) {
-			return $this->resource;
+		$resource = $this->job->getObject();
+		if ($resource instanceof Commodity) {
+			return $resource;
 		}
-		throw new LemuriaException($this->resource . ' is not a commodity.');
+		throw new LemuriaException($resource . ' is not a commodity.');
 	}
 	/**
 	 * Determine the required talent.
 	 */
 	private function getRequiredTalent(): Talent {
-		if ($this->resource instanceof RawMaterialInterface) {
-			return $this->resource->getTalent();
+		$resource = $this->job->getObject();
+		if ($resource instanceof RawMaterialInterface) {
+			return $resource->getTalent();
 		}
-		throw new LemuriaException($this->resource . ' is not a raw material.');
+		throw new LemuriaException($resource . ' is not a raw material.');
 	}
 }

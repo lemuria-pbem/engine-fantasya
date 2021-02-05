@@ -184,6 +184,8 @@ class CommandFactory
 		'Befestigung' => Fort::class,
 		'Burg' => Site::class,
 		'Festung' => Stronghold::class,
+		'Gebäude' => Site::class,
+		'Gebaeude' => Site::class,
 		'Holzfällerhütte' => Cabin::class,
 		'Palast' => Palace::class,
 		'Sägewerk' => Sawmill::class,
@@ -252,6 +254,7 @@ class CommandFactory
 		'Galeone'       => Galleon::class,
 		'Karavelle'     => Caravel::class,
 		'Langboot'      => Longboat::class,
+		'Schiff'        => Boat::class,
 		'Trireme'       => Trireme::class
 	];
 

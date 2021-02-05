@@ -28,10 +28,8 @@ final class Commodity extends AbstractProduct
 		$reserve          = $this->calculateResources($artifact->getMaterial());
 		$production       = min($this->capability, $reserve);
 		if ($production > 0) {
-			$yield = $production;
-			if ($this->demand !== null) {
-				$yield = min($production, $this->demand);
-			}
+			$count = $this->job->Count();
+			$yield = min($production, $count);
 			foreach ($artifact->getMaterial() as $quantity /* @var Quantity $quantity */) {
 				$consumption = new Quantity($quantity->Commodity(), $yield * $quantity->Count());
 				$this->unit->Inventory()->remove($consumption);
@@ -43,7 +41,7 @@ final class Commodity extends AbstractProduct
 			}
 			$output = new Quantity($commodity, $yield);
 			$this->unit->Inventory()->add($output);
-			if ($this->demand && $this->demand > $production) {
+			if ($this->job->hasCount() && $count > $production) {
 				$this->message(CommodityOnlyMessage::class)->i($output)->s($talent);
 			} else {
 				$this->message(CommodityCreateMessage::class)->i($output)->s($talent);
@@ -58,8 +56,9 @@ final class Commodity extends AbstractProduct
 	}
 
 	private function getArtifact(): ArtifactInterface {
-		if ($this->resource instanceof ArtifactInterface) {
-			return $this->resource;
+		$resource = $this->job->getObject();
+		if ($resource instanceof ArtifactInterface) {
+			return $resource;
 		}
 		throw new LemuriaException('Expected an artifact resource.');
 	}
