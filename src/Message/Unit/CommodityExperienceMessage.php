@@ -6,7 +6,7 @@ use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 use Lemuria\Singleton;
 
-class ArtifactExperienceMessage extends AbstractUnitMessage
+class CommodityExperienceMessage extends AbstractUnitMessage
 {
 	public const TALENT = 't';
 

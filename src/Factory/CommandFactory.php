@@ -37,6 +37,16 @@ use Lemuria\Engine\Lemuria\Command\Unit;
 use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
 use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Model\Lemuria\Artifact;
+use Lemuria\Model\Lemuria\Building;
+use Lemuria\Model\Lemuria\Building\Cabin;
+use Lemuria\Model\Lemuria\Building\Citadel;
+use Lemuria\Model\Lemuria\Building\Fort;
+use Lemuria\Model\Lemuria\Building\Palace;
+use Lemuria\Model\Lemuria\Building\Sawmill;
+use Lemuria\Model\Lemuria\Building\Site;
+use Lemuria\Model\Lemuria\Building\Stronghold;
+use Lemuria\Model\Lemuria\Building\Tower;
 use Lemuria\Model\Lemuria\Commodity;
 use Lemuria\Model\Lemuria\Commodity\Armor;
 use Lemuria\Model\Lemuria\Commodity\Camel;
@@ -71,6 +81,13 @@ use Lemuria\Model\Lemuria\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Lemuria\Commodity\Wood;
 use Lemuria\Model\Lemuria\Commodity\Woodshield;
 use Lemuria\Model\Lemuria\Factory\BuilderTrait;
+use Lemuria\Model\Lemuria\Ship;
+use Lemuria\Model\Lemuria\Ship\Boat;
+use Lemuria\Model\Lemuria\Ship\Caravel;
+use Lemuria\Model\Lemuria\Ship\Dragonship;
+use Lemuria\Model\Lemuria\Ship\Galleon;
+use Lemuria\Model\Lemuria\Ship\Longboat;
+use Lemuria\Model\Lemuria\Ship\Trireme;
 use Lemuria\Model\Lemuria\Talent;
 use Lemuria\Model\Lemuria\Talent\Archery;
 use Lemuria\Model\Lemuria\Talent\Armory;
@@ -100,6 +117,7 @@ use Lemuria\Model\Lemuria\Talent\Taxcollecting;
 use Lemuria\Model\Lemuria\Talent\Trading;
 use Lemuria\Model\Lemuria\Talent\Weaponry;
 use Lemuria\Model\Lemuria\Talent\Woodchopping;
+use Lemuria\Singleton;
 
 /**
  * Parser helper class to find a command class.
@@ -161,6 +179,21 @@ class CommandFactory
 	/**
 	 * @var array(string=>string)
 	 */
+	protected array $buildings = [
+		'Baustelle' => Site::class,
+		'Befestigung' => Fort::class,
+		'Burg' => Site::class,
+		'Festung' => Stronghold::class,
+		'Holzfällerhütte' => Cabin::class,
+		'Palast' => Palace::class,
+		'Sägewerk' => Sawmill::class,
+		'Turm' => Tower::class,
+		'Zitadelle' => Citadel::class
+	];
+
+	/**
+	 * @var array(string=>string)
+	 */
 	protected array $commodities = [
 		'Armbrust'      => Crossbow::class,
 		'Armbrueste'    => Crossbow::class,
@@ -208,6 +241,18 @@ class CommandFactory
 		'Streitäxte'    => Battleaxe::class,
 		'Wagen'         => Carriage::class,
 		'Weihrauch'     => Olibanum::class
+	];
+
+	/**
+	 * @var array(string=>string)
+	 */
+	protected array $ships = [
+		'Boot'          => Boat::class,
+		'Drachenschiff' => Dragonship::class,
+		'Galeone'       => Galleon::class,
+		'Karavelle'     => Caravel::class,
+		'Langboot'      => Longboat::class,
+		'Trireme'       => Trireme::class
 	];
 
 	/**
@@ -312,6 +357,41 @@ class CommandFactory
 	}
 
 	/**
+	 * Create an artifact.
+	 *
+	 * @throws UnknownCommandException
+	 */
+	public function resource(string $artifact): Singleton {
+		$commodity = $this->getCandidate($artifact, $this->commodities);
+		if ($commodity) {
+			$artifact = self::createCommodity($commodity);
+			if ($artifact instanceof Artifact) {
+				return $artifact;
+			}
+			throw new UnknownCommandException();
+		}
+		$building = $this->getCandidate($artifact, $this->buildings);
+		if ($building) {
+			return self::createBuilding($building);
+		}
+		$ship = $this->getCandidate($artifact, $this->ships);
+		if ($ship) {
+			return self::createShip($ship);
+		}
+		throw new UnknownCommandException();
+	}
+
+	/**
+	 * Create a Building.
+	 *
+	 * @throws UnknownCommandException
+	 */
+	public function building(string $building): Building {
+		$buildingClass = $this->identifySingleton($building, $this->buildings);
+		return self::createBuilding($buildingClass);
+	}
+
+	/**
 	 * Create a Commodity.
 	 *
 	 * @throws UnknownCommandException
@@ -319,6 +399,16 @@ class CommandFactory
 	public function commodity(string $commodity): Commodity {
 		$commodityClass = $this->identifySingleton($commodity, $this->commodities);
 		return self::createCommodity($commodityClass);
+	}
+
+	/**
+	 * Create a Ship.
+	 *
+	 * @throws UnknownCommandException
+	 */
+	public function ship(string $ship): Ship {
+		$shipClass = $this->identifySingleton($ship, $this->ships);
+		return self::createShip($shipClass);
 	}
 
 	/**
@@ -359,6 +449,17 @@ class CommandFactory
 	 * Match a Singleton.
 	 */
 	protected function identifySingleton(string $singleton, array $map): string {
+		$candidate = $this->getCandidate($singleton, $map);
+		if ($candidate) {
+			return $candidate;
+		}
+		throw new UnknownCommandException();
+	}
+
+	/**
+	 * Parse a singleton.
+	 */
+	protected function getCandidate(string $singleton, array $map): ?string {
 		$singleton  = ucfirst(strtolower($singleton));
 		$candidates = [];
 		foreach ($map as $candidate => $singletonClass) {
@@ -369,9 +470,6 @@ class CommandFactory
 				$candidates[] = $singletonClass;
 			}
 		}
-		if (count($candidates) === 1) {
-			return $candidates[0];
-		}
-		throw new UnknownCommandException();
+		return count($candidates) === 1 ? $candidates[0] : null;
 	}
 }

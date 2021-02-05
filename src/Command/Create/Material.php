@@ -16,8 +16,8 @@ use Lemuria\Model\Lemuria\Resources;
  *
  * The command creates new materials from inventory and adds them to the executing unit's inventory.
  *
- * - MACHEN <material>
- * - MACHEN <amount> <material>
+ * - MACHEN <Material>
+ * - MACHEN <amount> <Material>
  */
 final class Material extends AbstractProduct
 {
@@ -54,9 +54,8 @@ final class Material extends AbstractProduct
 	}
 
 	private function getMaterial(): MaterialInterface {
-		$material = $this->context->Factory()->commodity($this->resource);
-		if ($material instanceof MaterialInterface) {
-			return $material;
+		if ($this->resource instanceof MaterialInterface) {
+			return $this->resource;
 		}
 		throw new LemuriaException('Expected a material resource.');
 	}

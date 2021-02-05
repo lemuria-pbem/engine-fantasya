@@ -14,8 +14,8 @@ use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
  *
  * The command determines the create sub command and delegates to it.
  *
- * - MACHEN <resource>
- * - MACHEN <amount> <resource>
+ * - MACHEN <Resource>
+ * - MACHEN <amount> <Resource>
  * - MACHEN Temp
  * - MACHEN Temp <id>
  */
@@ -27,13 +27,13 @@ final class Create extends DelegatedCommand
 		}
 
 		$param = $this->phrase->getParameter();
-		if (isInt($param)) {
-			// MACHEN <number> <Ressource>
-			return new Resource($this->phrase, $this->context);
-		}
+		// MACHEN TEMP
 		if (strtoupper($param) === 'TEMP') {
-			// MACHEN TEMP
 			return new Temp($this->phrase, $this->context);
+		}
+		// MACHEN <number> <Ressource>
+		if (isInt($param)) {
+			return new Resource($this->phrase, $this->context);
 		}
 		// MACHEN <Ressource>
 		return new Resource($this->phrase, $this->context);
