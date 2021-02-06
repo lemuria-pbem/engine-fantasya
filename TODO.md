@@ -13,7 +13,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen
 
-- MACHEN (Gebäude, Schiff)
 - NACH
 - ROUTE
 - BOTSCHAFT

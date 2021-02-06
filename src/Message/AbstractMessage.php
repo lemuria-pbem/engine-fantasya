@@ -73,15 +73,12 @@ abstract class AbstractMessage implements MessageType
 		return (string)$this->$name;
 	}
 
+	protected function building(string $property, string $name): ?string {
+		return $this->getTranslatedName($property, $name, 'building');
+	}
+
 	protected function commodity(string $property, string $name): ?string {
-		if ($property === $name) {
-			$commodity = getClass($this->$name);
-			$commodity = $this->translateKey('resource.' . $commodity, 1);
-			if ($commodity) {
-				return $commodity;
-			}
-		}
-		return null;
+		return $this->getTranslatedName($property, $name, 'resource');
 	}
 
 	protected function item(string $property, string $name): ?string {
@@ -96,18 +93,26 @@ abstract class AbstractMessage implements MessageType
 		return null;
 	}
 
+	protected function ship(string $property, string $name): ?string {
+		return $this->getTranslatedName($property, $name, 'ship');
+	}
+
 	protected function talent(string $property, string $name): ?string {
-		if ($property === $name) {
-			$talent = getClass($this->$name);
-			$talent = $this->translateKey('talent.' . $talent);
-			if ($talent) {
-				return $talent;
-			}
-		}
-		return null;
+		return $this->getTranslatedName($property, $name, 'talent');
 	}
 
 	protected function number(string $property, string $name): ?string {
 		return $property === $name ? number($this->$name) : null;
+	}
+
+	private function getTranslatedName(string $property, string $name, string $prefix): ?string {
+		if ($property === $name) {
+			$class = getClass($this->$name);
+			$class = $this->translateKey($prefix . '.' . $class, 1);
+			if ($class) {
+				return $class;
+			}
+		}
+		return null;
 	}
 }
