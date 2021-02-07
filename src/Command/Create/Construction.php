@@ -62,7 +62,7 @@ final class Construction extends AbstractProduct
 				$construction->setName('Gebäude ' . $id)->setId($id);
 				$construction->Inhabitants()->add($this->unit);
 				$this->unit->Region()->Estate()->add($construction);
-				$construction->setSize($yield);
+				$construction->setBuilding($building)->setSize($yield);
 				if ($this->job->hasCount() && $demand > $production) {
 					$this->message(ConstructionOnlyMessage::class)->e($construction)->p($yield);
 				} else {
@@ -120,7 +120,7 @@ final class Construction extends AbstractProduct
 		$pointsUsed += $delta;
 		$castle      = $castle->Upgrade();
 		$cost        = $castle->getCraft()->Level();
-		if ($talent < $cost || $points < $cost) {
+		if ($level < $cost || $points < $cost) {
 			return $production;
 		}
 
