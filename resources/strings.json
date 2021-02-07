@@ -163,6 +163,8 @@
 		"LearnTeachersMessage": "Die Einheit $id hat $teachers Lehrer.",
 		"LeaveConstructionDebugMessage": "Die Einheit $id hat das Gebäude $construction verlassen.",
 		"LeaveConstructionMessage": "Die Einheit $id verlässt das Gebäude $construction.",
+		"LeaveNewCaptainMessage": "Das Schiff $id hat die Einheit $captain als neuen Kapitän.",
+		"LeaveNewOwnerMessage": "Das Gebäude $id hat die Einheit $owner als neuen Besitzer.",
 		"LeaveNotMessage": "Die Einheit $id ist in keinem Gebäude oder Schiff, das sie verlassen könnte.",
 		"LeaveVesselDebugMessage": "Die Einheit $id ist von Bord des Schiffes $vessel gegangen.",
 		"LeaveVesselMessage": "Die Einheit $id geht von Bord des Schiffes $vessel.",

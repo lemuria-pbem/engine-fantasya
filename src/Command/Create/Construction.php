@@ -66,7 +66,7 @@ final class Construction extends AbstractProduct
 				if ($this->job->hasCount() && $demand > $production) {
 					$this->message(ConstructionOnlyMessage::class)->e($construction)->p($yield);
 				} else {
-					$this->message(ConstructionMessage::class)->s($building);
+					$this->message(ConstructionMessage::class)->s($construction->Building());
 				}
 			}
 		} else {
