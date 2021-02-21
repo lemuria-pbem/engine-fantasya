@@ -6,6 +6,7 @@ use Lemuria\Engine\Lemuria\Activity;
 use Lemuria\Engine\Lemuria\Command\UnitCommand;
 use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Factory\Model\Job;
+use Lemuria\Engine\Lemuria\Message\Unit\AllocationTakeMessage;
 use Lemuria\Engine\Lemuria\Phrase;
 use Lemuria\Model\Lemuria\Quantity;
 use Lemuria\Model\Lemuria\Requirement;
@@ -52,8 +53,10 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 			$needed    = $this->capability * $quantity->Count();
 			$reserve   = $reserves->offsetGet($commodity)->Count();
 			if ($reserve < $needed) {
+				$taking       = new Quantity($commodity, $needed - $reserve);
 				$resourcePool = $this->context->getResourcePool($this->unit);
-				$resourcePool->take($this->unit, new Quantity($commodity, $needed - $reserve));
+				$resourcePool->take($this->unit, $taking);
+				$this->message(AllocationTakeMessage::class)->i($taking);
 			}
 			$reserve    = $reserves->offsetGet($commodity);
 			$amount     = (int)floor($reserve->Count() / $quantity->Count());

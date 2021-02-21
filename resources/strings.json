@@ -75,6 +75,7 @@
 		"Swamp": "Sumpf"
 	},
 	"message": {
+		"AllocationTakeMessage": "Die Einheit $id nimmt sich $item aus dem Materialpool.",
 		"ArtifactCreateMessage": "Die Einheit $id erzeugt $output mit $talent.",
 		"ArtifactExperienceMessage": "Die Einheit $id hat nicht genug Erfahrung in $talent, um $artifact zu erzeugen.",
 		"ArtifactOnlyMessage": "Die Einheit $id kann nur $output mit $talent erzeugen.",

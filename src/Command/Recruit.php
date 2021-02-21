@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Lemuria\Command;
 
 use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Message\Party\RecruitPreventMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\AllocationTakeMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\RecruitGuardedMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\RecruitLessMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\RecruitMessage;
@@ -85,9 +86,10 @@ final class Recruit extends AllocationCommand
 		$ownSilver    = $inventory->offsetGet($silver)->Count();
 		$neededSilver = $payable * $price;
 		if ($neededSilver > $ownSilver) {
-			$quantity     = new Quantity($silver, $neededSilver - $ownSilver);
+			$taking       = new Quantity($silver, $neededSilver - $ownSilver);
 			$resourcePool = $this->context->getResourcePool($this->unit);
-			$resourcePool->take($this->unit, $quantity);
+			$resourcePool->take($this->unit, $taking);
+			$this->message(AllocationTakeMessage::class)->i($taking);
 		}
 		$ownSilver = $inventory->offsetGet($silver)->Count();
 		if ($ownSilver < $neededSilver) {

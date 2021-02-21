@@ -96,12 +96,12 @@ final class Calculus
 		$size      = $this->unit->Size();
 		$payload   = $size * $race->Payload();
 		$inventory = $this->unit->Inventory();
-		$carriage  = $inventory[Carriage::class] ? $inventory[Carriage::class] : null;
-		$horse     = $inventory[Horse::class] ? $inventory[Horse::class] : null;
-		$camel     = $inventory[Camel::class] ? $inventory[Camel::class] : null;
-		$elephant  = $inventory[Elephant::class] ? $inventory[Elephant::class] : null;
-		$griffin   = $inventory[Griffin::class] ? $inventory[Griffin::class] : null;
-		$pegasus   = $inventory[Pegasus::class] ? $inventory[Pegasus::class] : null;
+		$carriage  = $inventory[Carriage::class] ?? null;
+		$horse     = $inventory[Horse::class] ?? null;
+		$camel     = $inventory[Camel::class] ?? null;
+		$elephant  = $inventory[Elephant::class] ?? null;
+		$griffin   = $inventory[Griffin::class] ?? null;
+		$pegasus   = $inventory[Pegasus::class] ?? null;
 		$weight    = $this->weight($this->unit->Weight(), [$carriage, $horse, $camel, $elephant, $griffin, $pegasus]);
 
 		$ride    = $this->transport($carriage) + $this->transport($camel) + $this->transport($elephant);
@@ -132,6 +132,7 @@ final class Calculus
 			$talentWalk = $this->talent($animals, $size);
 			return new Capacity($walk, $rideFly, Capacity::RIDE, $weight, $speed, [$talentRide, $talentWalk]);
 		}
+		$weight -= $size * $race->Weight();
 		return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $race->Speed());
 	}
 
@@ -204,7 +205,9 @@ final class Calculus
 
 	#[Pure] private function weight(int $total, array $goods): int {
 		foreach ($goods as $quantity /* @var Quantity $quantity */) {
-			$total -= $quantity->Weight();
+			if ($quantity) {
+				$total -= $quantity->Weight();
+			}
 		}
 		return $total;
 	}
@@ -212,7 +215,7 @@ final class Calculus
 	#[Pure] private function speed(array $transports): int {
 		$speed = PHP_INT_MAX;
 		foreach ($transports as $item /* @var Item $item */) {
-			$transport = $item->getObject();
+			$transport = $item?->getObject();
 			if ($transport instanceof Transport) {
 				$speed = min($speed, $transport->Speed());
 			}
@@ -227,24 +230,26 @@ final class Calculus
 		                            int $carriage = 0): int {
 		$talent = 0;
 		foreach ($transports as $item /* @var Item $item */) {
-			$transport = $item->getObject();
-			$count     = $item->Count();
-			switch (get_class($transport)) {
-				case Horse::class :
-					$count = max($count, $carriage * 2);
-				case Camel::class :
-				case Pegasus::class :
-					if ($max) {
-						$talent += $count;
-					} elseif ($count > $size) {
-						$talent += $count - $size;
-					}
-					break;
-				case Elephant::class :
-					$talent += $count * 2;
-					break;
-				case Griffin::class :
-					$talent += $count * 6;
+			if ($item) {
+				$transport = $item->getObject();
+				$count     = $item->Count();
+				switch (get_class($transport)) {
+					case Horse::class :
+						$count = max($count, $carriage * 2);
+					case Camel::class :
+					case Pegasus::class :
+						if ($max) {
+							$talent += $count;
+						} elseif ($count > $size) {
+							$talent += $count - $size;
+						}
+						break;
+					case Elephant::class :
+						$talent += $count * 2;
+						break;
+					case Griffin::class :
+						$talent += $count * 6;
+				}
 			}
 		}
 		return $talent;

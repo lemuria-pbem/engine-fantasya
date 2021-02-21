@@ -95,7 +95,7 @@ final class Travel extends UnitCommand implements Activity
 				$region = $this->canMoveTo($direction);
 				if ($region) {
 					$this->moveTo($region);
-					$route[] = [$region];
+					$route[] = $region;
 					$regions--;
 					$this->message(TravelRegionMessage::class)->e($region);
 				}
