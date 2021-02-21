@@ -93,6 +93,10 @@ abstract class AbstractMessage implements MessageType
 		return null;
 	}
 
+	protected function landscape(string $property, string $name): ?string {
+		return $this->getTranslatedName($property, $name, 'landscape');
+	}
+
 	protected function ship(string $property, string $name): ?string {
 		return $this->getTranslatedName($property, $name, 'ship');
 	}

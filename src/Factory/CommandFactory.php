@@ -33,10 +33,12 @@ use Lemuria\Engine\Lemuria\Command\Sentinel;
 use Lemuria\Engine\Lemuria\Command\Sort;
 use Lemuria\Engine\Lemuria\Command\Tax;
 use Lemuria\Engine\Lemuria\Command\Teach;
+use Lemuria\Engine\Lemuria\Command\Travel;
 use Lemuria\Engine\Lemuria\Command\Unit;
 use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
 use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Lemuria;
 use Lemuria\Model\Lemuria\Artifact;
 use Lemuria\Model\Lemuria\Building;
 use Lemuria\Model\Lemuria\Building\Cabin;
@@ -117,6 +119,7 @@ use Lemuria\Model\Lemuria\Talent\Taxcollecting;
 use Lemuria\Model\Lemuria\Talent\Trading;
 use Lemuria\Model\Lemuria\Talent\Weaponry;
 use Lemuria\Model\Lemuria\Talent\Woodchopping;
+use Lemuria\Model\World;
 use Lemuria\Singleton;
 
 /**
@@ -154,11 +157,13 @@ class CommandFactory
 		'LEHREN'       => true,
 		'LERNEN'       => true,
 		'MACHEN'       => true,
+		'NACH'         => 'REISEN',
 		'NAME'         => true,
 		'NÄCHSTER'     => true,
 		'NAECHSTER'    => 'NÄCHSTER',
 		'NUMMER'       => true,
 		'PARTEI'       => true,
+		'REISEN'       => true,
 		'REKRUTIEREN'  => true,
 		'RESERVIEREN'  => true,
 		'SORTIEREN'    => true,
@@ -309,6 +314,35 @@ class CommandFactory
 		'Wagenbau'          => Carriagemaking::class
 	];
 
+	protected array $directions = [
+		World::EAST      => World::EAST,
+		World::NORTH     => World::NORTH,
+		World::NORTHEAST => World::NORTHEAST,
+		World::NORTHWEST => World::NORTHWEST,
+		World::SOUTH     => World::SOUTH,
+		World::SOUTHEAST => World::SOUTHEAST,
+		World::SOUTHWEST => World::SOUTHWEST,
+		World::WEST      => World::WEST,
+		'East'           => World::EAST,
+		'NO'             => World::NORTHEAST,
+		'Norden'         => World::NORTH,
+		'Nordosten'      => World::NORTHEAST,
+		'Nordwesten'     => World::NORTHWEST,
+		'North'          => World::NORTH,
+		'Northeast'      => World::NORTHEAST,
+		'Northwest'      => World::NORTHWEST,
+		'O'              => World::EAST,
+		'Osten'          => World::EAST,
+		'SO'             => World::SOUTHEAST,
+		'South'          => World::SOUTH,
+		'Southeast'      => World::SOUTHEAST,
+		'Southwest'      => World::SOUTHWEST,
+		'Süden'          => World::SOUTH,
+		'Südosten'       => World::SOUTHEAST,
+		'Südwesten'      => World::SOUTHWEST,
+		'Westen'         => World::WEST
+	];
+
 	public function __construct(protected Context $context) {
 	}
 
@@ -341,6 +375,7 @@ class CommandFactory
 				'NÄCHSTER'     => Next::class,
 				'NUMMER'       => Number::class,
 				'PARTEI'       => Party::class,
+				'REISEN'       => Travel::class,
 				'REKRUTIEREN'  => Recruit::class,
 				'RESERVIEREN'  => Reserve::class,
 				'SORTIEREN'    => Sort::class,
@@ -402,6 +437,26 @@ class CommandFactory
 	public function commodity(string $commodity): Commodity {
 		$commodityClass = $this->identifySingleton($commodity, $this->commodities);
 		return self::createCommodity($commodityClass);
+	}
+
+	/**
+	 * Validate a direction.
+	 *
+	 * @param string $direction
+	 * @return string
+	 * @throws UnknownCommandException
+	 */
+	public function direction(string $direction): string {
+		if (strlen($direction) <= 2) {
+			$direction = strtoupper($direction);
+			$candidate = $this->directions[$direction] ?? null;
+		} else {
+			$candidate = $this->getCandidate($direction, $this->directions);
+		}
+		if ($candidate && Lemuria::World()->isDirection($candidate)) {
+			return $candidate;
+		}
+		throw new UnknownCommandException();
 	}
 
 	/**

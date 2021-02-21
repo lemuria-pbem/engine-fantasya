@@ -13,11 +13,13 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen
 
-- NACH
 - ROUTE
+- FOLGE
 - BOTSCHAFT
 - SPIONIEREN
 - VERSENKEN (Schiff vor Entern bewahren)
+- Aufgelöste Einheiten entfernen
+- Straßen (Modell, Bau, Abriss, Reisen)
 - Handel (KAUFEN/VERKAUFEN)
 - Kampf (ATTACKIEREN/BELAGERN)
 - Magie (KAMPFZAUBER/ZAUBERN)

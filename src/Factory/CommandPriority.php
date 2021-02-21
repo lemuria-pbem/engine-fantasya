@@ -45,7 +45,7 @@ final class CommandPriority
 		// BELAGERE => 56,
 		// ZAUBERE => 58,
 		'Smash'         => 60,
-		// NACH => 63,
+		'Travel'        => 63,
 		// ROUTE => 64,
 		'Recruit'       => 66,
 		'Teach'         => 68,

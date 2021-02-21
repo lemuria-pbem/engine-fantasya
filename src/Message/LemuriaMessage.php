@@ -166,6 +166,18 @@ class LemuriaMessage implements Message
 		return new Id($this->entities[$name]);
 	}
 
+	/**
+	 * @return Entity[]
+	 */
+	public function getEntities(): array {
+		$i        = 0;
+		$entities = [];
+		while (isset($this->entities['e' . ++$i])) {
+			$entities[] = $this->get('e' . $i);
+		}
+		return $entities;
+	}
+
 	public function getQuantity(?string $name = null): Quantity {
 		if (!$name) {
 			$name = self::ITEM;
@@ -213,6 +225,20 @@ class LemuriaMessage implements Message
 			$this->entities = [];
 		}
 		$this->entities[$name] = $entity->Id()->Id();
+		return $this;
+	}
+
+	/**
+	 * Set a number of entities.
+	 *
+	 * @param Entity[] $entities
+	 * @return LemuriaMessage
+	 */
+	public function entities(array $entities): LemuriaMessage {
+		$i = 0;
+		foreach ($entities as $entity) {
+			$this->e($entity, 'e' . ++$i);
+		}
 		return $this;
 	}
 

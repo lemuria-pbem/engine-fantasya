@@ -2,9 +2,9 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command\Destroy;
 
-use Lemuria\Engine\Lemuria\Command\GiftTrait;
 use Lemuria\Engine\Lemuria\Command\UnitCommand;
 use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
+use Lemuria\Engine\Lemuria\Factory\GiftTrait;
 use Lemuria\Engine\Lemuria\Factory\Model\Everything;
 use Lemuria\Engine\Lemuria\Message\Unit\LoseEmptyMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\LoseEverythingMessage;
