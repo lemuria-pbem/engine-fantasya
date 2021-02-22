@@ -18,6 +18,7 @@ use Lemuria\Model\Lemuria\Commodity\Food;
 use Lemuria\Model\Lemuria\Quantity;
 use Lemuria\Model\Lemuria\Commodity\Silver;
 use Lemuria\Model\Lemuria\Relation;
+use Lemuria\Model\Lemuria\Resources;
 use Lemuria\Model\Lemuria\Talent\Taxcollecting;
 
 /**
@@ -37,7 +38,9 @@ final class Tax extends AllocationCommand implements Activity
 
 	private int $level = 0;
 
-	protected function run(): void {
+	public function allocate(Resources $resources): void {
+		parent::allocate($resources);
+
 		$quantity = $this->getResource(Silver::class);
 		if ($quantity->Count() <= 0) {
 			if ($this->level <= 0) {

@@ -15,6 +15,7 @@ use Lemuria\Model\Lemuria\Commodity\Silver;
 use Lemuria\Model\Lemuria\Factory\BuilderTrait;
 use Lemuria\Model\Lemuria\Quantity;
 use Lemuria\Model\Lemuria\Relation;
+use Lemuria\Model\Lemuria\Resources;
 
 /**
  * Implementation of command REKRUTIEREN (recruit peasants).
@@ -29,7 +30,9 @@ final class Recruit extends AllocationCommand
 
 	private int $size;
 
-	protected function run(): void {
+	public function allocate(Resources $resources): void {
+		parent::allocate($resources);
+
 		$guardParties = $this->checkBeforeAllocation();
 		if (empty($guardParties)) {
 			$quantity = $this->getResource(Peasant::class);

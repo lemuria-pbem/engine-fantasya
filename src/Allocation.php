@@ -235,11 +235,10 @@ final class Allocation
 
 		/* @var Resources $allocation */
 		$allocation = $this->allocations[$id];
-		if ($consumer->allocate($allocation)) {
-			unset($this->allocations[$id]);
-			foreach ($allocation as $quantity /* @var Quantity $quantity */) {
-				$this->region->Resources()->remove($quantity);
-			}
+		$consumer->allocate($allocation);
+		unset($this->allocations[$id]);
+		foreach ($allocation as $quantity /* @var Quantity $quantity */) {
+			$this->region->Resources()->remove($quantity);
 		}
 	}
 

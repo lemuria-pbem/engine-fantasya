@@ -25,6 +25,7 @@ use Lemuria\Model\Lemuria\Party;
 use Lemuria\Model\Lemuria\Quantity;
 use Lemuria\Model\Lemuria\RawMaterial as RawMaterialInterface;
 use Lemuria\Model\Lemuria\Relation;
+use Lemuria\Model\Lemuria\Resources;
 use Lemuria\Model\Lemuria\Talent;
 
 /**
@@ -49,8 +50,9 @@ final class RawMaterial extends AllocationCommand implements Activity
 		parent::__construct($phrase, $context);
 	}
 
-	protected function run(): void {
-		parent::run();
+	public function allocate(Resources $resources): void {
+		parent::allocate($resources);
+
 		$resource   = $this->job->getObject();
 		$talent     = $this->knowledge->Talent();
 		$production = $this->getResource(getClass($resource))->Count();

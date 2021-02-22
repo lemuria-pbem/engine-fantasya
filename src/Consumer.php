@@ -33,5 +33,5 @@ interface Consumer extends Command
 	/**
 	 * Allocate resources.
 	 */
-	public function allocate(Resources $resources): bool;
+	public function allocate(Resources $resources): void;
 }

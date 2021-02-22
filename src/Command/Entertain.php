@@ -14,6 +14,7 @@ use Lemuria\Model\Lemuria\Commodity\Food;
 use Lemuria\Model\Lemuria\Quantity;
 use Lemuria\Model\Lemuria\Commodity\Silver;
 use Lemuria\Model\Lemuria\Relation;
+use Lemuria\Model\Lemuria\Resources;
 use Lemuria\Model\Lemuria\Talent\Entertaining;
 
 /**
@@ -40,7 +41,9 @@ final class Entertain extends AllocationCommand implements Activity
 		return self::QUOTA;
 	}
 
-	protected function run(): void {
+	public function allocate(Resources $resources): void {
+		parent::allocate($resources);
+
 		$quantity = $this->getResource(Silver::class);
 		if ($quantity->Count() <= 0) {
 			$guardParties = $this->checkBeforeAllocation();

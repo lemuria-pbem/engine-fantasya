@@ -2,19 +2,15 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Ideen
+## Fehler
 
-- Nahrung statt Silber
-- Marktfunktionen
-- Ereignisse
-- Mikromanagement reduzieren
-- Taktik ermöglicht Strategien im Kampf, STRATEGIE
-- Monsterrasse bestimmt maximalen Übermacht-Faktor
 
-## Verbesserungen
+
+## Neue Funktionen
 
 ### 0.1.0
 
+- Rekrutierungskontingent berechnen
 - Aufgelöste Einheiten entfernen
 - Weltentwicklung (Wachstum, Unterhalt)
 
@@ -33,8 +29,13 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Seekampf/Piraterie
 - Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
   Meldungen
+
+## Ideen
+
+- Nahrung statt Silber
+- Marktfunktionen
+- Ereignisse
+- Mikromanagement reduzieren
+- Taktik ermöglicht Strategien im Kampf, STRATEGIE
+- Monsterrasse bestimmt maximalen Übermacht-Faktor
 - Geschlossene Spielwelt
-
-## Fehler
-
-- Allocation muss in distribute() zuerst alle Checks der Consumer durchführen und deregistrieren

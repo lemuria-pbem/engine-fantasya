@@ -69,9 +69,8 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	/**
 	 * Allocate resources.
 	 */
-	public function allocate(Resources $resources) : bool {
+	public function allocate(Resources $resources): void {
 		$this->resources = $resources;
-		return true;
 	}
 
 	/**
