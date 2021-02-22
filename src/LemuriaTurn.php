@@ -17,6 +17,8 @@ use Lemuria\Lemuria;
  */
 class LemuriaTurn implements Turn
 {
+	protected State $state;
+
 	protected CommandPriority $priority;
 
 	/**
@@ -28,6 +30,7 @@ class LemuriaTurn implements Turn
 	 * Initialize turn.
 	 */
 	public function __construct() {
+		$this->state    = new State();
 		$this->priority = CommandPriority::getInstance();
 		foreach (CommandPriority::ORDER as $priority) {
 			$this->queue[$priority] = [];
@@ -39,7 +42,7 @@ class LemuriaTurn implements Turn
 	 */
 	public function add(Move $move): Turn {
 		Lemuria::Log()->debug('Adding party move.', ['move' => $move]);
-		$context = new Context($this);
+		$context = new Context($this->state);
 		$factory = $context->Factory();
 		$parser  = $context->Parser()->parse($move);
 		while ($parser->hasMore()) {

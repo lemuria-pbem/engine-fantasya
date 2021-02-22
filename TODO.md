@@ -37,5 +37,4 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler
 
-- Allocation deckt nur die eigene Partei ab, muss von Context nach LemuriaTurn verschoben werden
 - Allocation muss in distribute() zuerst alle Checks der Consumer durchführen und deregistrieren

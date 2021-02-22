@@ -32,26 +32,16 @@ final class Context
 	private array $calculus = [];
 
 	/**
-	 * @var array(int=>Intelligence)
-	 */
-	private array $intelligence = [];
-
-	/**
 	 * @var array(int=>ActivityProtocol)
 	 */
 	private array $protocol = [];
-
-	/**
-	 * @var array(int=>Allocation)
-	 */
-	private array $allocation = [];
 
 	/**
 	 * @var array(int=>ResourcePool)
 	 */
 	private array $resourcePool = [];
 
-	#[Pure] public function __construct(private LemuriaTurn $turn) {
+	#[Pure] public function __construct(private State $state) {
 		$this->parser  = new Parser($this);
 		$this->factory = new CommandFactory($this);
 		$this->mapper  = new UnitMapper();
@@ -96,10 +86,6 @@ final class Context
 		return $this->mapper;
 	}
 
-	#[Pure] public function Turn(): LemuriaTurn {
-		return $this->turn;
-	}
-
 	/**
 	 * Get a unit's calculus.
 	 */
@@ -126,11 +112,7 @@ final class Context
 	 * Get a region's allocation.
 	 */
 	public function getAllocation(Region $region): Allocation {
-		$id = $region->Id()->Id();
-		if (!isset($this->allocation[$id])) {
-			$this->allocation[$id] = new Allocation($region);
-		}
-		return $this->allocation[$id];
+		return $this->state->getAllocation($region);
 	}
 
 	/**
@@ -148,11 +130,7 @@ final class Context
 	 * Get a region's intelligence.
 	 */
 	public function getIntelligence(Region $region): Intelligence {
-		$id = $region->Id()->Id();
-		if (!isset($this->intelligence[$id])) {
-			$this->intelligence[$id] = new Intelligence($region);
-		}
-		return $this->intelligence[$id];
+		return $this->state->getIntelligence($region);
 	}
 
 	/**
