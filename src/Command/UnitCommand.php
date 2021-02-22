@@ -4,13 +4,16 @@ namespace Lemuria\Engine\Lemuria\Command;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Lemuria\Action;
 use Lemuria\Engine\Lemuria\Calculus;
 use Lemuria\Engine\Lemuria\Context;
 use Lemuria\Engine\Lemuria\Exception\ActivityException;
+use Lemuria\Engine\Lemuria\Exception\CommandException;
 use Lemuria\Engine\Lemuria\Factory\UnitTrait;
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
 use Lemuria\Engine\Lemuria\Phrase;
 use Lemuria\Entity;
+use Lemuria\Lemuria;
 use Lemuria\Model\Lemuria\Unit;
 
 /**
@@ -26,6 +29,20 @@ abstract class UnitCommand extends AbstractCommand
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		$this->unit = $context->Unit();
+	}
+
+	/**
+	 * Execute the command.
+	 *
+	 * @throws CommandException
+	 */
+	public function execute(): Action {
+		parent::execute();
+		$protocol = $this->context->getProtocol($this->unit);
+		if (!$protocol->commit($this)) {
+			throw new ActivityException($this);
+		}
+		return $this;
 	}
 
 	/**
@@ -48,10 +65,6 @@ abstract class UnitCommand extends AbstractCommand
 	 */
 	protected function initialize(): void {
 		$this->context->setUnit($this->unit);
-		$protocol = $this->context->getProtocol($this->unit);
-		if (!$protocol->commit($this)) {
-			throw new ActivityException($this);
-		}
 	}
 
 	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {

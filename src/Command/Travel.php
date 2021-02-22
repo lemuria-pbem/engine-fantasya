@@ -209,7 +209,7 @@ final class Travel extends UnitCommand implements Activity
 	protected function setDefaultTravel(int $i, int $n): void {
 		if ($i < $n) {
 			$travel = $this->phrase->getVerb();
-			for (; $i < $n; $i++) {
+			for (++$i; $i <= $n; $i++) {
 				$travel .= ' ' . $this->phrase->getParameter($i);
 			}
 			/** @var Travel $command */
