@@ -22,6 +22,7 @@ use Lemuria\Engine\Lemuria\Message\Vessel\TravelAnchorMessage;
 use Lemuria\Engine\Lemuria\Message\Vessel\TravelLandMessage;
 use Lemuria\Engine\Lemuria\Message\Vessel\TravelOverLandMessage;
 use Lemuria\Engine\Lemuria\Message\Vessel\TravelShipTooHeavyMessage;
+use Lemuria\Engine\Lemuria\Phrase;
 use Lemuria\Lemuria;
 use Lemuria\Model\Lemuria\Landscape\Forest;
 use Lemuria\Model\Lemuria\Landscape\Ocean;
@@ -42,6 +43,15 @@ final class Travel extends UnitCommand implements Activity
 	private ?Vessel $vessel = null;
 
 	private Capacity $capacity;
+
+	private ?Travel $newDefault = null;
+
+	/**
+	 * Get the new default command.
+	 */
+	public function getNewDefault(): ?UnitCommand {
+		return $this->newDefault;
+	}
 
 	protected function initialize(): void {
 		parent::initialize();
@@ -97,6 +107,7 @@ final class Travel extends UnitCommand implements Activity
 					$this->moveTo($region);
 					$route[] = $region;
 					$regions--;
+					$this->unit->Party()->Chronicle()->add($region);
 					$this->message(TravelRegionMessage::class)->e($region);
 				}
 			}
@@ -104,6 +115,7 @@ final class Travel extends UnitCommand implements Activity
 		}
 
 		$this->message(TravelMessage::class)->p($movement)->entities($route);
+		$this->setDefaultTravel($i, $n);
 		if (isset($directionError)) {
 			throw $directionError;
 		}
@@ -192,5 +204,17 @@ final class Travel extends UnitCommand implements Activity
 			$talent += $unit->Size() * $this->context->getCalculus($unit)->knowledge(Navigation::class);
 		}
 		return $talent;
+	}
+
+	protected function setDefaultTravel(int $i, int $n): void {
+		if ($i < $n) {
+			$travel = $this->phrase->getVerb();
+			for (; $i < $n; $i++) {
+				$travel .= ' ' . $this->phrase->getParameter($i);
+			}
+			/** @var Travel $command */
+			$command          = $this->context->Factory()->create(new Phrase($travel));
+			$this->newDefault = $command;
+		}
 	}
 }

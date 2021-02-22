@@ -13,24 +13,29 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen
 
-- ROUTE
-- FOLGE
+### 0.1.0
+
+- Aufgelöste Einheiten entfernen
+- Weltentwicklung (Wachstum, Unterhalt)
+
+### 0.2.0 und folgende
+
+- Straßen (Modell, Bau, Abriss, Reisen)
 - BOTSCHAFT
 - SPIONIEREN
+- ROUTE
+- FOLGE
 - VERSENKEN (Schiff vor Entern bewahren)
-- Aufgelöste Einheiten entfernen
-- Straßen (Modell, Bau, Abriss, Reisen)
 - Handel (KAUFEN/VERKAUFEN)
 - Kampf (ATTACKIEREN/BELAGERN)
 - Magie (KAMPFZAUBER/ZAUBERN)
 - Alchemie (Kräuter und Tränke, BENUTZEN)
 - Seekampf/Piraterie
-- Weltentwicklung (Wachstum, Unterhalt)
 - Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
   Meldungen
 - Geschlossene Spielwelt
 
 ## Fehler
 
-- Allocation muss in distribute() zuerst alle Checks der Consumer durchführen und deregistrieren
 - Allocation deckt nur die eigene Partei ab, muss von Context nach LemuriaTurn verschoben werden
+- Allocation muss in distribute() zuerst alle Checks der Consumer durchführen und deregistrieren

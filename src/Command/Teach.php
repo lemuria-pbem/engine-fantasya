@@ -5,15 +5,16 @@ namespace Lemuria\Engine\Lemuria\Command;
 use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
+use Lemuria\Engine\Lemuria\Activity;
+use Lemuria\Engine\Lemuria\Exception\CommandException;
+use Lemuria\Engine\Lemuria\Factory\DefaultActivityTrait;
+use Lemuria\Engine\Lemuria\Message\Unit\TeachBonusMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\TeachExceptionMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\TeachPartyMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\TeachRegionMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\TeachSelfMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TeachUnableMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TeachExceptionMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\TeachStudentMessage;
-use Lemuria\Engine\Lemuria\Activity;
-use Lemuria\Engine\Lemuria\Exception\CommandException;
-use Lemuria\Engine\Lemuria\Message\Unit\TeachBonusMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\TeachUnableMessage;
 use Lemuria\Model\Lemuria\Unit;
 
 /**
@@ -26,6 +27,8 @@ use Lemuria\Model\Lemuria\Unit;
  */
 final class Teach extends UnitCommand implements Activity
 {
+	use DefaultActivityTrait;
+
 	private const MAX_STUDENTS = 10;
 
 	/**

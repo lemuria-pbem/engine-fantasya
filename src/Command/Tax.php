@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Lemuria\Command;
 
 use Lemuria\Engine\Lemuria\Activity;
 use Lemuria\Engine\Lemuria\Combat\Army;
+use Lemuria\Engine\Lemuria\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Lemuria\Message\Party\TaxPreventMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\TaxDemandMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\TaxGuardedMessage;
@@ -28,6 +29,8 @@ use Lemuria\Model\Lemuria\Talent\Taxcollecting;
  */
 final class Tax extends AllocationCommand implements Activity
 {
+	use DefaultActivityTrait;
+
 	private const RATE = 2 * Food::PRICE;
 
 	private int $rate = 0;

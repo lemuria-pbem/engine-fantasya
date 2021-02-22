@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Lemuria\Activity;
 use Lemuria\Engine\Lemuria\Context;
+use Lemuria\Engine\Lemuria\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Lemuria\Message\Unit\LearnProgressMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\LearnTeachersMessage;
 use Lemuria\Engine\Lemuria\Phrase;
@@ -22,6 +23,8 @@ use Lemuria\Model\Lemuria\Talent;
  */
 final class Learn extends UnitCommand implements Activity
 {
+	use DefaultActivityTrait;
+
 	private Talent $talent;
 
 	private ?Ability $progress = null;

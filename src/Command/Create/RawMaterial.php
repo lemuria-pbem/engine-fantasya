@@ -6,6 +6,7 @@ use function Lemuria\getClass;
 use Lemuria\Engine\Lemuria\Activity;
 use Lemuria\Engine\Lemuria\Command\AllocationCommand;
 use Lemuria\Engine\Lemuria\Context;
+use Lemuria\Engine\Lemuria\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Lemuria\Factory\Model\Job;
 use Lemuria\Engine\Lemuria\Message\Unit\RawMaterialCanMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\RawMaterialCannotMessage;
@@ -36,6 +37,8 @@ use Lemuria\Model\Lemuria\Talent;
  */
 final class RawMaterial extends AllocationCommand implements Activity
 {
+	use DefaultActivityTrait;
+
 	private Ability $knowledge;
 
 	private ?int $demand = null;

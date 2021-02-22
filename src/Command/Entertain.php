@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
 use Lemuria\Engine\Lemuria\Activity;
+use Lemuria\Engine\Lemuria\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Lemuria\Message\Unit\EntertainGuardedMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\EntertainMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\EntertainNoDemandMessage;
@@ -24,6 +25,8 @@ use Lemuria\Model\Lemuria\Talent\Entertaining;
  */
 final class Entertain extends AllocationCommand implements Activity
 {
+	use DefaultActivityTrait;
+
 	private const FEE = 2 * Food::PRICE;
 
 	private const QUOTA = 0.05;

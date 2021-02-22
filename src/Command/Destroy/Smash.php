@@ -35,6 +35,15 @@ final class Smash extends UnitCommand implements Activity
 {
 	private Id $id;
 
+	private ?Smash $newDefault = null;
+
+	/**
+	 * Get the new default command.
+	 */
+	public function getNewDefault(): ?UnitCommand {
+		return $this->newDefault;
+	}
+
 	protected function run(): void {
 		$this->id = Id::fromId($this->phrase->getParameter(2));
 		switch (strtolower($this->phrase->getParameter())) {
@@ -77,6 +86,7 @@ final class Smash extends UnitCommand implements Activity
 		$remains  = $size - $damage;
 		$construction->setSize($remains);
 		if ($remains > 0) {
+			$this->newDefault = $this;
 			$this->message(SmashDamageConstructionMessage::class)->e($construction)->p($damage);
 		} else {
 			$this->message(SmashDestroyConstructionMessage::class)->e($construction);
@@ -110,6 +120,7 @@ final class Smash extends UnitCommand implements Activity
 		$remains  = $size - $damage;
 		$vessel->setCompletion($remains / $wood);
 		if ($remains > 0) {
+			$this->newDefault = $this;
 			$this->message(SmashDamageVesselMessage::class)->e($vessel)->p($damage);
 		} else {
 			$this->message(SmashDestroyVesselMessage::class)->e($vessel);

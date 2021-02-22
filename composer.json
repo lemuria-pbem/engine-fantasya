@@ -10,7 +10,8 @@
 		"lemuria",
 		"pbem"
 	],
-	"time": "2021-02-21",
+	"version": "0.0.1",
+	"time": "2021-02-22",
 	"license": "GPL-3.0",
 	"authors": [
 		{

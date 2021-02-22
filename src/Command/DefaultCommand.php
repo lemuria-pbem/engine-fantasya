@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Lemuria\Command;
 
 use Lemuria\Engine\Lemuria\Exception\CommandParserException;
 use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
-use Lemuria\Engine\Lemuria\Message\Unit\DefaultAlreadyMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\DefaultInvalidMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\DefaultMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\DefaultUnknownMessage;

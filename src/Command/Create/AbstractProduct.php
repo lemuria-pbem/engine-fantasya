@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Lemuria\Command\Create;
 use Lemuria\Engine\Lemuria\Activity;
 use Lemuria\Engine\Lemuria\Command\UnitCommand;
 use Lemuria\Engine\Lemuria\Context;
+use Lemuria\Engine\Lemuria\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Lemuria\Factory\Model\Job;
 use Lemuria\Engine\Lemuria\Message\Unit\AllocationTakeMessage;
 use Lemuria\Engine\Lemuria\Phrase;
@@ -22,6 +23,8 @@ use Lemuria\Model\Lemuria\Resources;
  */
 abstract class AbstractProduct extends UnitCommand implements Activity
 {
+	use DefaultActivityTrait;
+
 	protected int $capability = 0;
 
 	public function __construct(Phrase $phrase, Context $context, protected Job $job) {

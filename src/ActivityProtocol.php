@@ -41,7 +41,10 @@ final class ActivityProtocol
 			}
 			$this->hasActivity = true;
 			if (!$this->hasDefault) {
-				$this->addDefault($command);
+				$default = $command->getNewDefault();
+				if ($default) {
+					$this->addDefault($default);
+				}
 			}
 		}
 		return true;
