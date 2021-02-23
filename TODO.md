@@ -10,7 +10,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### 0.1.0
 
-- Rekrutierungskontingent berechnen
 - Aufgelöste Einheiten entfernen
 - Weltentwicklung (Wachstum, Unterhalt)
 
@@ -21,12 +20,10 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - SPIONIEREN
 - ROUTE
 - FOLGE
-- VERSENKEN (Schiff vor Entern bewahren)
 - Handel (KAUFEN/VERKAUFEN)
 - Kampf (ATTACKIEREN/BELAGERN)
 - Magie (KAMPFZAUBER/ZAUBERN)
 - Alchemie (Kräuter und Tränke, BENUTZEN)
-- Seekampf/Piraterie
 - Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
   Meldungen
 
@@ -37,5 +34,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Ereignisse
 - Mikromanagement reduzieren
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE
+- Seekampf/Piraterie
+- VERSENKEN (Schiff vor Entern bewahren)
 - Monsterrasse bestimmt maximalen Übermacht-Faktor
 - Geschlossene Spielwelt

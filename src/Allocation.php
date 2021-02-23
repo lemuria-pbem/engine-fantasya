@@ -56,8 +56,8 @@ final class Allocation
 
 	private int $round = 0;
 
-	public function __construct(private Region $region) {
-		Lemuria::Log()->debug('New allocation helper for region ' . $region->Id() . '.', ['allocation' => $this]);
+	public function __construct(private Availability $availability) {
+		Lemuria::Log()->debug('New allocation helper for region ' . $this->Region()->Id() . '.', ['allocation' => $this]);
 		$this->priority = CommandPriority::getInstance();
 	}
 
@@ -71,7 +71,7 @@ final class Allocation
 		$this->consumers[$id]         = $consumer;
 		$this->consumersLeft[$id]     = true;
 		$this->allocations[$id]       = new Resources();
-		Lemuria::Log()->debug('Consumer #' . $id . ' registered for region ' . $this->region->Id() .' (demand: ' . $this->debugDemand($consumer) . ').', ['consumer' => $consumer]);
+		Lemuria::Log()->debug('Consumer #' . $id . ' registered for region ' . $this->Region()->Id() .' (demand: ' . $this->debugDemand($consumer) . ').', ['consumer' => $consumer]);
 		return $this;
 	}
 
@@ -81,7 +81,7 @@ final class Allocation
 	public function distribute(Consumer $consumer): void {
 		$id = $consumer->getId();
 		if (!isset($this->consumers[$id])) {
-			throw new AllocationException($consumer, $this->region);
+			throw new AllocationException($consumer, $this->Region());
 		}
 		if ($consumer->checkBeforeAllocation()) {
 			$this->unregister($consumer);
@@ -104,6 +104,10 @@ final class Allocation
 		}
 	}
 
+	private function Region(): Region {
+		return $this->availability->Region();
+	}
+
 	/**
 	 * Remove a Consumer.
 	 */
@@ -113,7 +117,7 @@ final class Allocation
 		unset($this->rounds[$priority][$id]);
 		unset($this->consumers[$id]);
 		unset($this->allocations[$id]);
-		Lemuria::Log()->debug('Consumer #' . $id . ' unregistered for region ' . $this->region->Id() . '.');
+		Lemuria::Log()->debug('Consumer #' . $id . ' unregistered for region ' . $this->Region()->Id() . '.');
 		return $this;
 	}
 
@@ -183,12 +187,12 @@ final class Allocation
 	private function giveDemand(string $class, int $count): int {
 		$given = 0;
 		foreach ($this->distribution[$class]['demand'] as $id => $demand) {
-			$count                                          = min($count, $demand);
-			$this->distribution[$class]['demand'][$id]     -= $count;
-			$this->distribution[$class]['allocation'][$id] += $count;
-			$given                                         += $count;
-			if ($count === $demand) {
-				unset($this->distribution[$class]['demand']['id']);
+			$gift                                           = min($count, $demand);
+			$this->distribution[$class]['demand'][$id]     -= $gift;
+			$this->distribution[$class]['allocation'][$id] += $gift;
+			$given                                         += $gift;
+			if ($gift === $demand) {
+				unset($this->distribution[$class]['demand'][$id]);
 			}
 		}
 		return $given;
@@ -230,7 +234,7 @@ final class Allocation
 	private function allocate(Consumer $consumer): void {
 		$id = $consumer->getId();
 		if (!isset($this->allocations[$id])) {
-			throw new AllocationException($consumer, $this->region);
+			throw new AllocationException($consumer, $this->Region());
 		}
 
 		/* @var Resources $allocation */
@@ -238,7 +242,7 @@ final class Allocation
 		$consumer->allocate($allocation);
 		unset($this->allocations[$id]);
 		foreach ($allocation as $quantity /* @var Quantity $quantity */) {
-			$this->region->Resources()->remove($quantity);
+			$this->availability->remove($quantity);
 		}
 	}
 
@@ -247,13 +251,11 @@ final class Allocation
 	 */
 	private function getReserve(string $class): Quantity {
 		if (!isset($this->resources[$class])){
-			$commodity = self::createCommodity($class);
-			$reserve   = 0;
-			$resources = $this->region->Resources();
-			if ($resources->offsetExists($commodity)) {
-				$reserve = $resources->offsetGet($commodity)->Count();
-			}
-			$this->resources[$class] = new Quantity($commodity, $reserve);
+			$commodity               = self::createCommodity($class);
+			$reserve                 = $this->availability->getResource($commodity)->Count();
+			$resource                = new Quantity($commodity, $reserve);
+			$this->resources[$class] = $resource;
+			Lemuria::Log()->debug('Allocation reserve calculated.', ['resource' => (string)$resource, 'region' => (string)$this->Region()->Id()]);
 		}
 		return $this->resources[$class];
 	}

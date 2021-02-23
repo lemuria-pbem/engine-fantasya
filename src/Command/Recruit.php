@@ -37,7 +37,7 @@ final class Recruit extends AllocationCommand
 		if (empty($guardParties)) {
 			$quantity = $this->getResource(Peasant::class);
 			$size     = $quantity->Count();
-			$payable  = $this->getMaximumPayable();
+			$payable  = $this->getMaximumPayable($size);
 			if ($payable > 0) {
 				$this->unit->setSize($this->unit->Size() + $payable);
 			}
@@ -81,8 +81,7 @@ final class Recruit extends AllocationCommand
 	/**
 	 * Determine the number of recruits that can be paid.
 	 */
-	private function getMaximumPayable(): int {
-		$payable      = $this->size;
+	private function getMaximumPayable(int $payable): int {
 		$silver       = self::createCommodity(Silver::class);
 		$price        = $this->unit->Party()->Race()->Recruiting();
 		$inventory    = $this->unit->Inventory();
@@ -102,6 +101,6 @@ final class Recruit extends AllocationCommand
 		$payment = new Quantity($silver, $neededSilver);
 		$this->unit->Inventory()->remove($payment);
 		$this->message(RecruitPaymentMessage::class)->i($payment)->p($payable);
-		return $this->size;
+		return $payable;
 	}
 }

@@ -8,6 +8,11 @@ use Lemuria\Model\Lemuria\Region;
 final class State
 {
 	/**
+	 * @var array(int=>Availability)
+	 */
+	private array $availability = [];
+
+	/**
 	 * @var array(int=>Allocation)
 	 */
 	private array $allocation = [];
@@ -18,12 +23,23 @@ final class State
 	private array $intelligence = [];
 
 	/**
+	 * Get a region's available resources.
+	 */
+	public function getAvailability(Region $region): Availability {
+		$id = $region->Id()->Id();
+		if (!isset($this->availability[$id])) {
+			$this->availability[$id] = new Availability($region);
+		}
+		return $this->availability[$id];
+	}
+
+	/**
 	 * Get a region's allocation.
 	 */
 	public function getAllocation(Region $region): Allocation {
 		$id = $region->Id()->Id();
 		if (!isset($this->allocation[$id])) {
-			$this->allocation[$id] = new Allocation($region);
+			$this->allocation[$id] = new Allocation($this->getAvailability($region));
 		}
 		return $this->allocation[$id];
 	}

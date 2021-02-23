@@ -1,0 +1,62 @@
+<?php
+declare(strict_types = 1);
+namespace Lemuria\Engine\Lemuria;
+
+use JetBrains\PhpStorm\Pure;
+
+use Lemuria\Model\Lemuria\Commodity\Peasant;
+use Lemuria\Model\Lemuria\Factory\BuilderTrait;
+use Lemuria\Model\Lemuria\Quantity;
+use Lemuria\Model\Lemuria\Region;
+use Lemuria\Model\Lemuria\Resources;
+
+class Availability
+{
+	use BuilderTrait;
+
+	protected Resources $available;
+
+	#[Pure] public function __construct(protected Region $region) {
+		$this->available = new Resources();
+	}
+
+	#[Pure] public function Region(): Region {
+		return $this->region;
+	}
+
+	public function getResource(mixed $offset): Quantity {
+		if (isset($this->available[$offset])) {
+			$available = $this->available[$offset];
+		} else {
+			$resources = $this->region->Resources();
+			if (isset($resources[$offset])) {
+				$quantity = $resources[$offset];
+			} else {
+				$quantity = new Quantity(self::createCommodity($offset), 0);
+			}
+			$available = $this->calculateAvailability($quantity);
+			$this->available->add($available);
+		}
+		return $available;
+	}
+
+	public function remove(Quantity $resource): void {
+		$this->getResource($resource->Commodity())->remove($resource);
+		$this->region->Resources()->remove($resource);
+	}
+
+	/**
+	 * Calculate availability of each commodity individually.
+	 *
+	 * TODO: Improve calculation.
+	 */
+	protected function calculateAvailability(Quantity $quantity): Quantity {
+		$commodity = $quantity->Commodity();
+		$factor    = match (get_class($commodity)) {
+			Peasant::class => rand(30, 60) / 1000,
+			default        => 1.0
+		};
+		$count = (int)floor($factor * $quantity->Count());
+		return new Quantity($commodity, $count);
+	}
+}
