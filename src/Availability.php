@@ -50,7 +50,7 @@ class Availability
 	 *
 	 * TODO: Improve calculation.
 	 */
-	protected function calculateAvailability(Quantity $quantity): Quantity {
+	#[Pure] protected function calculateAvailability(Quantity $quantity): Quantity {
 		$commodity = $quantity->Commodity();
 		$factor    = match (get_class($commodity)) {
 			Peasant::class => rand(30, 60) / 1000,

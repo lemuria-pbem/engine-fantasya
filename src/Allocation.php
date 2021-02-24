@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Exception\AllocationException;
 use Lemuria\Engine\Lemuria\Factory\CommandPriority;
 use Lemuria\Exception\LemuriaException;
@@ -104,7 +106,7 @@ final class Allocation
 		}
 	}
 
-	private function Region(): Region {
+	#[Pure] private function Region(): Region {
 		return $this->availability->Region();
 	}
 
