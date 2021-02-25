@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Command;
 
 use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
+use Lemuria\Engine\Lemuria\Factory\CollectTrait;
 use Lemuria\Engine\Lemuria\Message\Party\RecruitPreventMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\AllocationTakeMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\RecruitGuardedMessage;
@@ -27,6 +28,7 @@ use Lemuria\Model\Lemuria\Resources;
 final class Recruit extends AllocationCommand
 {
 	use BuilderTrait;
+	use CollectTrait;
 
 	private int $size;
 
@@ -85,14 +87,8 @@ final class Recruit extends AllocationCommand
 		$silver       = self::createCommodity(Silver::class);
 		$price        = $this->unit->Party()->Race()->Recruiting();
 		$inventory    = $this->unit->Inventory();
-		$ownSilver    = $inventory->offsetGet($silver)->Count();
 		$neededSilver = $payable * $price;
-		if ($neededSilver > $ownSilver) {
-			$taking       = new Quantity($silver, $neededSilver - $ownSilver);
-			$resourcePool = $this->context->getResourcePool($this->unit);
-			$resourcePool->take($this->unit, $taking);
-			$this->message(AllocationTakeMessage::class)->i($taking);
-		}
+		$this->collectQuantity($this->unit, $silver, $neededSilver);
 		$ownSilver = $inventory->offsetGet($silver)->Count();
 		if ($ownSilver < $neededSilver) {
 			$payable      = (int)floor($ownSilver / $price);

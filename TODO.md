@@ -2,15 +2,17 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Fehler
+## Fehler/Verbesserungen
 
-
+- Ressourcenpool in allen Produktionen verwenden
+- Context in Event/Effect ersetzen
 
 ## Neue Funktionen
 
 ### 0.1.0
 
 - Weltentwicklung (Wachstum, Unterhalt)
+- Hungernde Einheiten
 
 ### 0.2.0 und folgende
 

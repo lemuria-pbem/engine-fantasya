@@ -27,8 +27,8 @@ final class Liquidation extends AbstractEvent
 {
 	use GiftTrait;
 
-	#[Pure] public function __construct(protected State $state) {
-		parent::__construct($this->state, Action::AFTER);
+	#[Pure] public function __construct(State $state) {
+		parent::__construct($state, Action::AFTER);
 	}
 
 	protected function run(): void {
@@ -68,7 +68,7 @@ final class Liquidation extends AbstractEvent
 	}
 
 	private function giftToOther(Goods $goods, Unit $unit, Party $party): bool {
-		$heirs = $this->state->getIntelligence($unit->Region())->getHeirs($unit);
+		$heirs = $this->context->getIntelligence($unit->Region())->getHeirs($unit);
         foreach ($goods as $quantity /* @var Quantity $quantity */) {
             $heir = $this->giftToRandom($heirs, $quantity);
             if (!$heir) {

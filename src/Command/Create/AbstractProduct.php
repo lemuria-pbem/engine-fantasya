@@ -5,9 +5,9 @@ namespace Lemuria\Engine\Lemuria\Command\Create;
 use Lemuria\Engine\Lemuria\Activity;
 use Lemuria\Engine\Lemuria\Command\UnitCommand;
 use Lemuria\Engine\Lemuria\Context;
+use Lemuria\Engine\Lemuria\Factory\CollectTrait;
 use Lemuria\Engine\Lemuria\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Lemuria\Factory\Model\Job;
-use Lemuria\Engine\Lemuria\Message\Unit\AllocationTakeMessage;
 use Lemuria\Engine\Lemuria\Phrase;
 use Lemuria\Model\Lemuria\Quantity;
 use Lemuria\Model\Lemuria\Requirement;
@@ -23,6 +23,7 @@ use Lemuria\Model\Lemuria\Resources;
  */
 abstract class AbstractProduct extends UnitCommand implements Activity
 {
+	use CollectTrait;
 	use DefaultActivityTrait;
 
 	protected int $capability = 0;
@@ -54,13 +55,7 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 		foreach ($resources as $quantity /* @var Quantity $quantity */) {
 			$commodity = $quantity->Commodity();
 			$needed    = $this->capability * $quantity->Count();
-			$reserve   = $reserves->offsetGet($commodity)->Count();
-			if ($reserve < $needed) {
-				$taking       = new Quantity($commodity, $needed - $reserve);
-				$resourcePool = $this->context->getResourcePool($this->unit);
-				$resourcePool->take($this->unit, $taking);
-				$this->message(AllocationTakeMessage::class)->i($taking);
-			}
+			$this->collectQuantity($this->unit, $commodity, $needed);
 			$reserve    = $reserves->offsetGet($commodity);
 			$amount     = (int)floor($reserve->Count() / $quantity->Count());
 			$production = min($production, $amount);
