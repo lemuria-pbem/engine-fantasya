@@ -6,11 +6,13 @@ use Lemuria\Engine\Lemuria\Exception\ActionException;
 use Lemuria\Engine\Lemuria\Exception\CommandException;
 use Lemuria\Engine\Lemuria\Exception\CommandParserException;
 use Lemuria\Engine\Lemuria\Factory\CommandPriority;
+use Lemuria\Engine\Lemuria\Factory\DefaultProgress;
 use Lemuria\Engine\Move;
 use Lemuria\Engine\Turn;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
 use Lemuria\Lemuria;
+use function Lemuria\getClass;
 
 /**
  * Main engine class.
@@ -26,6 +28,8 @@ class LemuriaTurn implements Turn
 	 */
 	protected array $queue = [];
 
+	private ?Progress $progress = null;
+
 	/**
 	 * Initialize turn.
 	 */
@@ -35,6 +39,33 @@ class LemuriaTurn implements Turn
 		foreach (CommandPriority::ORDER as $priority) {
 			$this->queue[$priority] = [];
 		}
+	}
+
+	/**
+	 * Get the engine State.
+	 */
+	public function State(): State {
+		return $this->state;
+	}
+
+	/**
+	 * Get the Progress instance.
+	 */
+	public function Progress(): Progress {
+		if (!$this->progress) {
+			$this->progress = new DefaultProgress();
+			Lemuria::Log()->debug('Using default Progress.', ['progress' => $this->progress]);
+		}
+		return $this->progress;
+	}
+
+	/**
+	 * Override the Progress instance.
+	 */
+	public function setProgress(Progress $progress): Turn {
+		$this->progress = $progress;
+		Lemuria::Log()->debug('Overriding default Progress.', ['progress' => $progress]);
+		return $this;
 	}
 
 	/**
@@ -83,6 +114,7 @@ class LemuriaTurn implements Turn
 	 */
 	public function addEvent(Event $event): Turn {
 		$this->enqueue($event);
+		Lemuria::Log()->debug('Adding event ' . getClass($event) . '.', ['event' => $event]);
 		return $this;
 	}
 
@@ -91,6 +123,7 @@ class LemuriaTurn implements Turn
 	 */
 	public function addEffect(Effect $effect): Turn {
 		$this->enqueue($effect);
+		Lemuria::Log()->debug('Adding effect ' . getClass($effect) . '.', ['effect' => $effect]);
 		return $this;
 	}
 
@@ -98,6 +131,11 @@ class LemuriaTurn implements Turn
 	 * Evaluate the whole turn.
 	 */
 	public function evaluate(): Turn {
+		foreach ($this->Progress() as $event) {
+			$this->enqueue($event);
+			Lemuria::Log()->debug('Adding event ' . getClass($event) . ' from Progress.', ['event' => $event]);
+		}
+
 		Lemuria::Log()->debug('Executing queued actions.', ['queues' => count($this->queue)]);
 		foreach ($this->queue as $priority => $actions) {
 			Lemuria::Log()->debug('Queue ' . $priority . ' has ' . count($actions) . ' actions.');

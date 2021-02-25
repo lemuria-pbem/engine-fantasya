@@ -2,22 +2,79 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Event;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Lemuria\Action;
+use Lemuria\Engine\Lemuria\Factory\GiftTrait;
+use Lemuria\Engine\Lemuria\Message\Party\LiquidationHeirMessage;
+use Lemuria\Engine\Lemuria\Message\Party\LiquidationLostMessage;
+use Lemuria\Engine\Lemuria\Message\Party\LiquidationMessage;
+use Lemuria\Engine\Lemuria\Message\Party\LiquidationGiftMessage;
+use Lemuria\Engine\Lemuria\State;
+use Lemuria\Lemuria;
+use Lemuria\Model\Catalog;
+use Lemuria\Model\Lemuria\Goods;
+use Lemuria\Model\Lemuria\Party;
+use Lemuria\Model\Lemuria\People;
+use Lemuria\Model\Lemuria\Quantity;
+use Lemuria\Model\Lemuria\Unit;
 
 /**
  * Remove empty units at the end of a turn.
  */
 final class Liquidation extends AbstractEvent
 {
-	public function __construct() {
-		$this->setPriority(Action::AFTER);
-	}
+	use GiftTrait;
 
-	protected function initialize(): void {
-		//TODO
+	#[Pure] public function __construct(protected State $state) {
+		parent::__construct($this->state, Action::AFTER);
 	}
 
 	protected function run(): void {
-		//TODO
+		foreach (Lemuria::Catalog()->getAll(Catalog::PARTIES) as $party /* @var Party $party */) {
+			Lemuria::Log()->debug('Running Liquidation for Party ' . $party->Id() . '.', ['party' => $party]);
+			$units = $party->People();
+			foreach ($units as $unit /* @var Unit $unit */) {
+				if ($unit->Size() <= 0) {
+					$units->remove($unit);
+					$inventory = $unit->Inventory();
+					if ($inventory->count() > 0) {
+						if (!$this->passOn($inventory, $units, $unit)) {
+							if (!$this->giftToOther($inventory, $unit, $party)) {
+								$this->message(LiquidationLostMessage::class, $party)->e($unit);
+							}
+						}
+					}
+					Lemuria::Catalog()->remove($unit);
+					$this->message(LiquidationMessage::class, $party)->e($unit);
+				}
+			}
+		}
+	}
+
+	private function passOn(Goods $goods, People $people, Unit $unit): bool {
+		foreach ($people as $heir /* @var Unit $heir */) {
+			if ($heir->Size() > 0) {
+				$inventory = $heir->Inventory();
+				foreach ($goods as $quantity/* @var Quantity $quantity */) {
+					$inventory->add($quantity);
+				}
+				$this->message(LiquidationHeirMessage::class)->e($unit);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private function giftToOther(Goods $goods, Unit $unit, Party $party): bool {
+		$heirs = $this->state->getIntelligence($unit->Region())->getHeirs($unit);
+        foreach ($goods as $quantity /* @var Quantity $quantity */) {
+            $heir = $this->giftToRandom($heirs, $quantity);
+            if (!$heir) {
+                return false;
+            }
+        }
+		$this->message(LiquidationGiftMessage::class, $party)->e($unit);
+		return true;
 	}
 }

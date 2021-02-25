@@ -10,7 +10,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### 0.1.0
 
-- Aufgelöste Einheiten entfernen
 - Weltentwicklung (Wachstum, Unterhalt)
 
 ### 0.2.0 und folgende

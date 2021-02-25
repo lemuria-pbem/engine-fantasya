@@ -5,15 +5,20 @@ namespace Lemuria\Engine\Lemuria\Event;
 use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
-use Lemuria\Engine\Lemuria\Exception\CommandException;
-use Lemuria\Lemuria;
 use Lemuria\Engine\Lemuria\Action;
 use Lemuria\Engine\Lemuria\Event;
+use Lemuria\Engine\Lemuria\Exception\CommandException;
 use Lemuria\Engine\Lemuria\Factory\ActionTrait;
+use Lemuria\Engine\Lemuria\State;
+use Lemuria\Lemuria;
 
 abstract class AbstractEvent implements Event
 {
 	use ActionTrait;
+
+	#[Pure] public function __construct(protected State $state, int $priority = Action::MIDDLE) {
+		$this->setPriority($priority);
+	}
 
 	/**
 	 * Get action as string.
