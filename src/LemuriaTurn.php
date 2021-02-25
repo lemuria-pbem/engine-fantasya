@@ -53,7 +53,7 @@ class LemuriaTurn implements Turn
 	 */
 	public function Progress(): Progress {
 		if (!$this->progress) {
-			$this->progress = new DefaultProgress();
+			$this->progress = new DefaultProgress($this->state);
 			Lemuria::Log()->debug('Using default Progress.', ['progress' => $this->progress]);
 		}
 		return $this->progress;
@@ -114,7 +114,7 @@ class LemuriaTurn implements Turn
 	 */
 	public function addEvent(Event $event): Turn {
 		$this->enqueue($event);
-		Lemuria::Log()->debug('Adding event ' . getClass($event) . '.', ['event' => $event]);
+		Lemuria::Log()->debug('New event: ' . $event . '.', ['event' => $event]);
 		return $this;
 	}
 
@@ -123,7 +123,7 @@ class LemuriaTurn implements Turn
 	 */
 	public function addEffect(Effect $effect): Turn {
 		$this->enqueue($effect);
-		Lemuria::Log()->debug('Adding effect ' . getClass($effect) . '.', ['effect' => $effect]);
+		Lemuria::Log()->debug('New effect: ' . $effect . '.', ['effect' => $effect]);
 		return $this;
 	}
 
@@ -133,7 +133,7 @@ class LemuriaTurn implements Turn
 	public function evaluate(): Turn {
 		foreach ($this->Progress() as $event) {
 			$this->enqueue($event);
-			Lemuria::Log()->debug('Adding event ' . getClass($event) . ' from Progress.', ['event' => $event]);
+			Lemuria::Log()->debug('Adding ' . $event . ' from Progress.', ['event' => $event]);
 		}
 
 		Lemuria::Log()->debug('Executing queued actions.', ['queues' => count($this->queue)]);

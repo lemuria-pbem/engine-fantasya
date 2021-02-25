@@ -24,7 +24,7 @@ abstract class AbstractEvent implements Event
 	 * Get action as string.
 	 */
 	#[Pure] public function __toString(): string {
-		return 'Event ' . $this->getPriority() . ': ' . getClass($this);
+		return 'Event[' . $this->getPriority() . '] ' . getClass($this);
 	}
 
 	/**
@@ -33,7 +33,7 @@ abstract class AbstractEvent implements Event
 	 * @throws CommandException
 	 */
 	public function prepare(): Action {
-		Lemuria::Log()->debug('Preparing event ' . $this . '.');
+		Lemuria::Log()->debug('Preparing ' . $this . '.');
 		$this->prepareAction();
 		return $this;
 	}
@@ -44,7 +44,7 @@ abstract class AbstractEvent implements Event
 	 * @throws CommandException
 	 */
 	public function execute(): Action {
-		Lemuria::Log()->debug('Executing command ' . $this . '.');
+		Lemuria::Log()->debug('Executing ' . $this . '.');
 		$this->executeAction();
 		return $this;
 	}

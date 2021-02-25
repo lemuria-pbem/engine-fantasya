@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Party;
+namespace Lemuria\Engine\Lemuria\Message\Unit;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\AbstractUnitMessage;
 use Lemuria\Engine\Message;
 use Lemuria\Id;
 

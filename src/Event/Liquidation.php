@@ -6,10 +6,11 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Lemuria\Action;
 use Lemuria\Engine\Lemuria\Factory\GiftTrait;
-use Lemuria\Engine\Lemuria\Message\Party\LiquidationHeirMessage;
 use Lemuria\Engine\Lemuria\Message\Party\LiquidationLostMessage;
 use Lemuria\Engine\Lemuria\Message\Party\LiquidationMessage;
 use Lemuria\Engine\Lemuria\Message\Party\LiquidationGiftMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\LiquidationHeirMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\LoseToUnitMessage;
 use Lemuria\Engine\Lemuria\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
@@ -59,7 +60,7 @@ final class Liquidation extends AbstractEvent
 				foreach ($goods as $quantity/* @var Quantity $quantity */) {
 					$inventory->add($quantity);
 				}
-				$this->message(LiquidationHeirMessage::class)->e($unit);
+				$this->message(LiquidationHeirMessage::class, $heir)->e($unit);
 				return true;
 			}
 		}
@@ -73,6 +74,7 @@ final class Liquidation extends AbstractEvent
             if (!$heir) {
                 return false;
             }
+            $this->message(LoseToUnitMessage::class, $heir)->e($unit)->i($quantity);
         }
 		$this->message(LiquidationGiftMessage::class, $party)->e($unit);
 		return true;
