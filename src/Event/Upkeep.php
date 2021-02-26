@@ -4,92 +4,99 @@ namespace Lemuria\Engine\Lemuria\Event;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Action;
-use Lemuria\Engine\Lemuria\Effect\Hunger;
 use Lemuria\Engine\Lemuria\Factory\CollectTrait;
+use Lemuria\Engine\Lemuria\Message\Unit\UpkeepCharityMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\UpkeepDonateMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\UpkeepNothingMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\UpkeepPayMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\UpkeepPayOnlyMessage;
 use Lemuria\Engine\Lemuria\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Lemuria\Commodity;
 use Lemuria\Model\Lemuria\Commodity\Silver;
+use Lemuria\Model\Lemuria\Construction;
+use Lemuria\Model\Lemuria\Estate;
 use Lemuria\Model\Lemuria\Factory\BuilderTrait;
 use Lemuria\Model\Lemuria\Gathering;
 use Lemuria\Model\Lemuria\Intelligence;
 use Lemuria\Model\Lemuria\Party;
-use Lemuria\Model\Lemuria\People;
 use Lemuria\Model\Lemuria\Quantity;
 use Lemuria\Model\Lemuria\Region;
 use Lemuria\Model\Lemuria\Relation;
 use Lemuria\Model\Lemuria\Unit;
 
 /**
- * Pay every unit's upkeep.
+ * Maintain all constructions.
  */
 final class Upkeep extends AbstractEvent
 {
 	use BuilderTrait;
 	use CollectTrait;
 
-	public const SILVER = 10;
-
 	private Commodity $silver;
 
-	private People $hungryUnits;
+	private Estate $unmaintained;
 
 	#[Pure] public function __construct(State $state) {
-		parent::__construct($state, Action::AFTER);
-		$this->silver      = self::createCommodity(Silver::class);
-		$this->hungryUnits = new People();
+		parent::__construct($state);
+		$this->silver       = self::createCommodity(Silver::class);
+		$this->unmaintained = new Estate();
 	}
 
 	protected function run(): void {
 		$this->pay();
-		if ($this->hungryUnits->count()) {
-			Lemuria::Log()->debug($this->hungryUnits->count() . ' parties cannot pay some of their upkeep.');
+		if ($this->unmaintained->count()) {
+			Lemuria::Log()->debug($this->unmaintained->count() . ' parties cannot maintain some of their constructions.');
 		} else {
-			Lemuria::Log()->debug('All parties have payed their upkeep.');
+			Lemuria::Log()->debug('All parties have maintained their estate.');
 		}
-		foreach ($this->hungryUnits as $unit /* @var Unit $unit */) {
-			$hunger = $this->payCharity($unit);
-			if ($hunger > 0.0) {
-				//TODO Hunger effect
-				$effect = new Hunger($this->state);
+		foreach ($this->unmaintained as $construction /* @var Construction $construction */) {
+			$owner   = $construction->Inhabitants()->Owner();
+			$missing = $this->payCharity($construction);
+			if ($missing > 0.0) {
+				if ($missing >= 1.0) {
+					if ($owner) {
+						$this->message(UpkeepNothingMessage::class, $owner)->e($construction);
+					} else {
+						//TODO
+					}
+				}
+				//TODO maintained
 			} else {
-				//TODO payed
-				//TODO clear hunger
+				//TODO Inactive effect
 			}
 		}
 	}
 
 	private function pay(): void {
-		$hungry = new People();
+		$unmaintained = new Estate();
 		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region /* @var Region $region */) {
-			$intelligence = $this->context->getIntelligence($region);
-			foreach ($intelligence->getParties() as $party /* @var Party $party */) {
-				/** @var Unit $unit */
-				$hungry->clear();
-				foreach ($intelligence->getUnits($party) as $unit) {
-					if (!$this->payFromInventory($unit)) {
-						$hungry->add($unit);
-					}
+			$unmaintained->clear();
+			/** @var Construction $construction */
+			foreach ($region->Estate() as $construction) {
+				//TODO: building without owner
+				if (!$this->payFromInventory($construction)) {
+					$unmaintained->add($construction);
 				}
-				foreach ($hungry as $unit) {
-					if ($this->payFromResourcePool($unit)) {
-						$hungry->remove($unit);
-					}
+			}
+			foreach ($unmaintained as $construction) {
+				if ($this->payFromResourcePool($construction)) {
+					$unmaintained->remove($construction);
 				}
-				foreach ($hungry as $unit) {
-					$this->hungryUnits->add($unit);
-				}
+			}
+			foreach ($unmaintained as $construction) {
+				$this->unmaintained->add($construction);
 			}
 		}
 	}
 
-	private function payCharity(Unit $unit): float {
-		$region       = $unit->Region();
+	private function payCharity(Construction $construction): float {
+		$unit         = $construction->Inhabitants()->Owner();
+		$region       = $construction->Region();
 		$intelligence = $this->context->getIntelligence($region);
-		$bailOut      = $this->findBailOut($unit);
-		$upkeep       = $unit->Size() * self::SILVER;
+		$bailOut      = $this->findBailOut($construction);
+		$upkeep       = $construction->Building()->Upkeep();
 		$inventory    = $unit->Inventory();
 		$ownSilver    = $inventory->offsetGet($this->silver)->Count();
 		$neededSilver = $upkeep - $ownSilver;
@@ -102,7 +109,8 @@ final class Upkeep extends AbstractEvent
 					$help->Inventory()->remove($helpSilver);
 					$inventory->add($helpSilver);
 					$neededSilver -= $charity;
-					//TODO charity
+					$this->message(UpkeepDonateMessage::class, $help)->e($construction)->e($unit, UpkeepDonateMessage::UNIT)->i($helpSilver);
+					$this->message(UpkeepCharityMessage::class, $unit)->e($help)->e($help, UpkeepCharityMessage::UNIT)->i($helpSilver);
 				}
 			}
 		}
@@ -111,40 +119,48 @@ final class Upkeep extends AbstractEvent
 		$payed     = min($ownSilver, $upkeep);
 		if ($payed > 0) {
 			$inventory->remove(new Quantity($this->silver, $payed));
+			if ($neededSilver > 0) {
+				$this->message(UpkeepPayOnlyMessage::class, $unit)->e($construction)->i($payed);
+			} else {
+				$this->message(UpkeepPayMessage::class, $unit)->e($construction)->i($payed);
+			}
 		}
 		return ($upkeep - $payed) / $upkeep;
 	}
 
-	private function payFromInventory(Unit $unit): bool {
-		$upkeep = $unit->Size() * self::SILVER;
+	private function payFromInventory(Construction $construction): bool {
+		$upkeep = $construction->Building()->Upkeep();
 		if ($upkeep <= 0) {
 			return true;
 		}
+		$unit      = $construction->Inhabitants()->Owner();
 		$inventory = $unit->Inventory();
 		$ownSilver = $inventory->offsetGet($this->silver)->Count();
 		if ($ownSilver >= $upkeep) {
-			$inventory->remove(new Quantity($this->silver, $upkeep));
-			//TODO payed
+			$quantity = new Quantity($this->silver, $upkeep);
+			$inventory->remove($quantity);
+			$this->message(UpkeepPayMessage::class, $unit)->e($construction)->i($quantity);
 			return true;
 		}
 		return false;
 	}
 
-	private function payFromResourcePool(Unit $unit): bool {
-		$upkeep   = $unit->Size() * self::SILVER;
+	private function payFromResourcePool(Construction $construction): bool {
+		$upkeep   = $construction->Building()->Upkeep();
+		$unit     = $construction->Inhabitants()->Owner();
 		$quantity = $this->collectQuantity($unit, $this->silver, $upkeep);
 		if ($quantity->Count() >= $upkeep) {
 			$unit->Inventory()->remove($quantity);
-			//TODO payed
+			$this->message(UpkeepPayMessage::class, $unit)->e($construction)->i($quantity);
 			return true;
 		}
 		return false;
 	}
 
-	private function findBailOut(Unit $unit): Gathering {
+	private function findBailOut(Construction $construction): Gathering {
 		$bailOut = new Gathering();
-		foreach ($this->context->getIntelligence($unit->Region())->getParties() as $party /* @var Party $party */) {
-			if ($party->Diplomacy()->has(Relation::SILVER, $unit)) {
+		foreach ($this->context->getIntelligence($construction->Region())->getParties() as $party /* @var Party $party */) {
+			if ($party->Diplomacy()->has(Relation::SILVER, $construction->Inhabitants()->Owner())) {
 				$bailOut->add($party);
 			}
 		}

@@ -6,13 +6,14 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Lemuria\Event;
 use Lemuria\Engine\Lemuria\Event\Liquidation;
+use Lemuria\Engine\Lemuria\Event\Support;
 use Lemuria\Engine\Lemuria\Event\Upkeep;
 use Lemuria\Engine\Lemuria\Progress;
 use Lemuria\Engine\Lemuria\State;
 
 class DefaultProgress implements Progress
 {
-	public const EVENTS = [Liquidation::class, Upkeep::class];
+	public const EVENTS = [Upkeep::class, Liquidation::class, Support::class];
 
 	private array $events = [];
 
