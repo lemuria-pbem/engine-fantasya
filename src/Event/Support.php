@@ -9,6 +9,7 @@ use Lemuria\Engine\Lemuria\Effect\Hunger;
 use Lemuria\Engine\Lemuria\Factory\CollectTrait;
 use Lemuria\Engine\Lemuria\Message\Unit\SupportCharityMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\SupportDonateMessage;
+use Lemuria\Engine\Lemuria\Message\Unit\SupportHungerMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\SupportNothingMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\SupportPayMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\SupportPayOnlyMessage;
@@ -60,11 +61,11 @@ final class Support extends AbstractEvent
 				if ($hunger >= 1.0) {
 					$this->message(SupportNothingMessage::class, $unit);
 				}
-				//TODO Hunger effect
-				$effect = new Hunger($this->state);
+				$effect = $this->effect($unit)->setHunger($hunger);
+				Lemuria::Score()->add($effect);
+				$this->message(SupportHungerMessage::class, $unit);
 			} else {
-
-				//TODO clear hunger
+				Lemuria::Score()->remove($this->effect($unit));
 			}
 		}
 	}
@@ -181,5 +182,12 @@ final class Support extends AbstractEvent
 		$help = $units->random();
 		$bailOut->remove($party);
 		return $help;
+	}
+
+	private function effect(Unit $unit): Hunger {
+		$effect = new Hunger($this->state);
+		/** @var Hunger $effect */
+		$effect = Lemuria::Score()->find($effect->setUnit($unit));
+		return $effect;
 	}
 }

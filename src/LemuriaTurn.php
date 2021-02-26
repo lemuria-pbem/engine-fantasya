@@ -12,15 +12,12 @@ use Lemuria\Engine\Turn;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
 use Lemuria\Lemuria;
-use function Lemuria\getClass;
 
 /**
  * Main engine class.
  */
 class LemuriaTurn implements Turn
 {
-	protected State $state;
-
 	protected CommandPriority $priority;
 
 	/**
@@ -28,24 +25,19 @@ class LemuriaTurn implements Turn
 	 */
 	protected array $queue = [];
 
+	private State $state;
+
 	private ?Progress $progress = null;
 
 	/**
 	 * Initialize turn.
 	 */
 	public function __construct() {
-		$this->state    = new State();
+		$this->state    = State::getInstance();
 		$this->priority = CommandPriority::getInstance();
 		foreach (CommandPriority::ORDER as $priority) {
 			$this->queue[$priority] = [];
 		}
-	}
-
-	/**
-	 * Get the engine State.
-	 */
-	public function State(): State {
-		return $this->state;
 	}
 
 	/**

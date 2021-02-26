@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Lemuria\Event;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Lemuria\Factory\CollectTrait;
+use Lemuria\Engine\Lemuria\Message\Construction\UpkeepAbandonedMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\UpkeepCharityMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\UpkeepDonateMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\UpkeepNothingMessage;
@@ -75,7 +76,6 @@ final class Upkeep extends AbstractEvent
 			$unmaintained->clear();
 			/** @var Construction $construction */
 			foreach ($region->Estate() as $construction) {
-				//TODO: building without owner
 				if (!$this->payFromInventory($construction)) {
 					$unmaintained->add($construction);
 				}
@@ -133,7 +133,12 @@ final class Upkeep extends AbstractEvent
 		if ($upkeep <= 0) {
 			return true;
 		}
-		$unit      = $construction->Inhabitants()->Owner();
+		$unit = $construction->Inhabitants()->Owner();
+		if (!$unit) {
+			$this->message(UpkeepAbandonedMessage::class, $construction);
+			return true;
+		}
+
 		$inventory = $unit->Inventory();
 		$ownSilver = $inventory->offsetGet($this->silver)->Count();
 		if ($ownSilver >= $upkeep) {

@@ -7,6 +7,15 @@ use Lemuria\Model\Lemuria\Region;
 
 final class State
 {
+	private static ?self $instance = null;
+
+	public static function getInstance(): State {
+		if (self::$instance) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
 	/**
 	 * @var array(int=>Availability)
 	 */
