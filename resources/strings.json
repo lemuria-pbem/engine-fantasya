@@ -148,6 +148,7 @@
 		"GrantMessage": "Die Einheit übergibt das Kommando an die Einheit $target.",
 		"GrantNothingMessage": "Die Einheit $id kann kein Kommando übergeben, das sie nicht inne hat.",
 		"GrantNotInsideMessage": "Die Einheit $id kann das Kommando nicht an die Einheit $target übergeben, diese ist au0erhalb.",
+		"GrowthMessage": "In der Region $id wachsen $trees.",
 		"GuardAlreadyMessage": "Die Einheit $id bewacht bereits die Region.",
 		"GuardMessage": "Die Einheit $id bewacht nun die Region.",
 		"GuardWithoutWeaponMessage": "Die Einheit $id kann die Region nicht ohne Waffen bewachen.",

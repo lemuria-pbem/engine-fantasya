@@ -10,8 +10,6 @@ class SubsistenceMessage extends AbstractRegionMessage
 {
 	public const SILVER = 'silver';
 
-	protected string $level = Message::DEBUG;
-
 	protected Item $peasants;
 
 	protected Item $silver;

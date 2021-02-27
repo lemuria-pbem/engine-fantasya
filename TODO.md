@@ -13,7 +13,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Weltentwicklung:
   - verlassene Schiffe treiben und verfallen
   - Bauern und Tiere vermehren sich / wandern / sterben.
-  - Bäume wachsen (im Frühling)
 
 ### 0.2.0 und folgende
 
