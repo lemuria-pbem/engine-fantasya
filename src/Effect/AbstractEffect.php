@@ -28,7 +28,7 @@ abstract class AbstractEffect implements Effect
 
 	private Id $id;
 
-	#[Pure] public function __construct(protected State $state, int $priority = Action::MIDDLE) {
+	#[Pure] public function __construct(protected State $state, int $priority) {
 		$this->setPriority($priority);
 		$this->context = new Context($state);
 	}

@@ -5,7 +5,9 @@ namespace Lemuria\Engine\Lemuria\Event;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Lemuria\Action;
+use Lemuria\Engine\Lemuria\Effect\Unmaintained;
 use Lemuria\Engine\Lemuria\Factory\CollectTrait;
+use Lemuria\Engine\Lemuria\Message\Construction\UnmaintainedMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\UpkeepAbandonedMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\UpkeepCharityMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\UpkeepDonateMessage;
@@ -58,15 +60,12 @@ final class Upkeep extends AbstractEvent
 			$missing = $this->payCharity($construction);
 			if ($missing > 0.0) {
 				if ($missing >= 1.0) {
-					if ($owner) {
-						$this->message(UpkeepNothingMessage::class, $owner)->e($construction);
-					} else {
-						//TODO
-					}
+					$this->message(UpkeepNothingMessage::class, $owner)->e($construction);
 				}
-				//TODO maintained
+				Lemuria::Score()->add($this->effect($construction));
+				$this->message(UnmaintainedMessage::class, $construction);
 			} else {
-				//TODO Inactive effect
+				Lemuria::Score()->remove($this->effect($construction));
 			}
 		}
 	}
@@ -181,5 +180,12 @@ final class Upkeep extends AbstractEvent
 		$help = $units->random();
 		$bailOut->remove($party);
 		return $help;
+	}
+
+	private function effect(Construction $construction): Unmaintained {
+		$effect = new Unmaintained($this->state);
+		/** @var Unmaintained $effect */
+		$effect = Lemuria::Score()->find($effect->setConstruction($construction));
+		return $effect;
 	}
 }

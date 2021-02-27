@@ -34,7 +34,8 @@ final class Hunger extends AbstractUnitEffect
 		} else {
 			$hunger = $this->hunger < 0.5 ? 25 : 40;
 		}
-		$health -= max(0.0, round(rand($hunger - 3, $hunger + 3) / 100, 2));
+		$hunger = round(rand($hunger - 3, $hunger + 3) / 100, 2);
+		$health = max(0.0, $health - $hunger);
 		$unit->setHealth($health);
 		$this->message(HungerMessage::class, $unit)->p($health);
 	}
