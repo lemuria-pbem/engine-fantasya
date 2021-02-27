@@ -11,6 +11,7 @@ use Lemuria\Engine\Lemuria\Message\Unit\DismissOnlyPeasantsMessage;
 use Lemuria\Item;
 use Lemuria\Model\Lemuria\Commodity;
 use Lemuria\Model\Lemuria\Commodity\Peasant;
+use Lemuria\Model\Lemuria\Heirs;
 use Lemuria\Model\Lemuria\People;
 use Lemuria\Model\Lemuria\Quantity;
 use Lemuria\Model\Lemuria\Relation;
@@ -107,19 +108,17 @@ trait GiftTrait
 
 	private function giftToRandomUnit(Item $quantity): ?Unit {
 		if ($quantity instanceof Quantity) {
-			$heirs = $this->context->getIntelligence($this->unit->Region())->getHeirs($this->unit);
+			$heirs = $this->context->getIntelligence($this->unit->Region())->getHeirs($this->unit, false);
 			return $this->giftToRandom($heirs, $quantity);
 		}
 		return null;
 	}
 
-	private function giftToRandom(People $heirs, Quantity $quantity): ?Unit {
-		if ($heirs->count() > 0) {
-			/** @var Unit $unit */
-			$unit = $heirs->random();
+	private function giftToRandom(Heirs $heirs, Quantity $quantity): ?Unit {
+		$unit = $heirs->random();
+		if ($unit) {
 			$unit->Inventory()->add($quantity);
-			return $unit;
 		}
-		return null;
+		return $unit;
 	}
 }

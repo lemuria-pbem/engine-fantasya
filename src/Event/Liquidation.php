@@ -40,12 +40,15 @@ final class Liquidation extends AbstractEvent
 					$units->remove($unit);
 					$inventory = $unit->Inventory();
 					if ($inventory->count() > 0) {
-						if (!$this->passOn($inventory, $units, $unit)) {
+						if (!$this->passOn($inventory, $unit)) {
 							if (!$this->giftToOther($inventory, $unit, $party)) {
 								$this->message(LiquidationLostMessage::class, $party)->e($unit);
 							}
 						}
 					}
+					$unit->Construction()?->Inhabitants()?->remove($unit);
+					$unit->Vessel()?->Passengers()?->remove($unit);
+					$unit->Region()->Residents()->remove($unit);
 					Lemuria::Catalog()->remove($unit);
 					$this->message(LiquidationMessage::class, $party)->e($unit);
 				}
@@ -53,22 +56,22 @@ final class Liquidation extends AbstractEvent
 		}
 	}
 
-	private function passOn(Goods $goods, People $people, Unit $unit): bool {
-		foreach ($people as $heir /* @var Unit $heir */) {
-			if ($heir->Size() > 0) {
-				$inventory = $heir->Inventory();
-				foreach ($goods as $quantity/* @var Quantity $quantity */) {
-					$inventory->add($quantity);
-				}
-				$this->message(LiquidationHeirMessage::class, $heir)->e($unit);
-				return true;
+	private function passOn(Goods $goods, Unit $unit): bool {
+		$heirs = $this->context->getIntelligence($unit->Region())->getHeirs($unit);
+		$heir  = $heirs->get();
+		if ($heir) {
+			$inventory = $heir->Inventory();
+			foreach ($goods as $quantity/* @var Quantity $quantity */) {
+				$inventory->add($quantity);
 			}
+			$this->message(LiquidationHeirMessage::class, $heir)->e($unit);
+			return true;
 		}
 		return false;
 	}
 
 	private function giftToOther(Goods $goods, Unit $unit, Party $party): bool {
-		$heirs = $this->context->getIntelligence($unit->Region())->getHeirs($unit);
+		$heirs = $this->context->getIntelligence($unit->Region())->getHeirs($unit, false);
         foreach ($goods as $quantity /* @var Quantity $quantity */) {
             $heir = $this->giftToRandom($heirs, $quantity);
             if (!$heir) {
