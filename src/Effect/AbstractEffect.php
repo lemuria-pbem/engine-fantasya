@@ -72,7 +72,7 @@ abstract class AbstractEffect implements Effect
 	}
 
 	public function serialize(): array {
-		return ['class' => getClass($this), 'id' => $this->id];
+		return ['class' => getClass($this), 'id' => $this->id->Id()];
 	}
 
 	public function unserialize(array $data): Serializable {

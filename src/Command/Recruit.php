@@ -5,7 +5,6 @@ namespace Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
 use Lemuria\Engine\Lemuria\Factory\CollectTrait;
 use Lemuria\Engine\Lemuria\Message\Party\RecruitPreventMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\AllocationTakeMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\RecruitGuardedMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\RecruitLessMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\RecruitMessage;

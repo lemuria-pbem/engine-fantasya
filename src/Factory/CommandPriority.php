@@ -19,8 +19,8 @@ final class CommandPriority
 	 */
 	public const ORDER = [
 		// 0 forbidden
-		// B-Ereignisse => 1,
-		// B-Effekte => 2,
+		'EFFECT_BEFORE' => 1,
+		'EVENT_BEFORE'  => 2,
 		'DefaultCommand'=> 4,
 		'Name'          => 7,
 		'Describe'      => 8,
@@ -40,8 +40,8 @@ final class CommandPriority
 		'Dismiss'       => 41,
 		'Lose'          => 42,
 		// ATTACKIERE => 45,
-		// M-Ereignisse => 50,
-		// M-Effekte   => 51,
+		'EFFECT_MIDDLE' => 50,
+		'EVENT_MIDDLE'  => 51,
 		'Recruit'       => 52,
 		// BELAGERE => 56,
 		// ZAUBERE => 58,
@@ -65,8 +65,8 @@ final class CommandPriority
 		'Number'        => 94,
 		'Comment'       => 95,
 		'Migrate'       => 97,
-		// A-Ereignisse => 98,
-		// A-Effekte => 99,
+		'EFFECT_AFTER'  => 98,
+		'EVENT_AFTER'   => 99,
 		// 100 reserved for default
 	];
 

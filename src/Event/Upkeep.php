@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Lemuria\Event;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Lemuria\Action;
 use Lemuria\Engine\Lemuria\Factory\CollectTrait;
 use Lemuria\Engine\Lemuria\Message\Construction\UpkeepAbandonedMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\UpkeepCharityMessage;
@@ -40,7 +41,7 @@ final class Upkeep extends AbstractEvent
 	private Estate $unmaintained;
 
 	#[Pure] public function __construct(State $state) {
-		parent::__construct($state);
+		parent::__construct($state, Action::MIDDLE);
 		$this->silver       = self::createCommodity(Silver::class);
 		$this->unmaintained = new Estate();
 	}

@@ -10,7 +10,7 @@ final class State
 	private static ?self $instance = null;
 
 	public static function getInstance(): State {
-		if (self::$instance) {
+		if (!self::$instance) {
 			self::$instance = new self();
 		}
 		return self::$instance;

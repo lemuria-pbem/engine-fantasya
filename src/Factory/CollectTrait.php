@@ -9,7 +9,7 @@ use Lemuria\Model\Lemuria\Unit;
 
 trait CollectTrait
 {
-	private Context $context;
+	protected Context $context;
 
 	protected function collectQuantity(Unit $unit, mixed $commodity, int $amount): Quantity {
 		$inventory = $unit->Inventory();
@@ -17,15 +17,10 @@ trait CollectTrait
 		if ($amount > $reserve) {
 			$taking       = new Quantity($commodity, $amount - $reserve);
 			$resourcePool = $this->context->getResourcePool($unit);
-			$resourcePool->take($unit, $taking);
-			$this->message(AllocationTakeMessage::class)->i($taking);
+			$taking       = $resourcePool->take($unit, $taking);
+			$this->message(AllocationTakeMessage::class, $unit)->i($taking);
 		}
-		if ($inventory->offsetExists($commodity)) {
-			/** @var Quantity $quantity */
-			$quantity = $inventory->offsetGet($commodity);
-			return $quantity;
-		} else {
-			return new Quantity($commodity, 0);
-		}
+		$reserve = $inventory->offsetExists($commodity) ? $inventory->offsetGet($commodity)->Count() : 0;
+		return new Quantity($commodity, $reserve);
 	}
 }

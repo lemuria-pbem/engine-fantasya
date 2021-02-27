@@ -3,9 +3,12 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Lemuria\Message\Unit;
 
 use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
+use Lemuria\Engine\Message;
 
-class HungerMessage extends SupportNothingMessage
+class HungerMessage extends AbstractUnitMessage
 {
+	protected string $level = Message::DEBUG;
+
 	protected float $health;
 
 	protected function create(): string {
