@@ -14,7 +14,7 @@ use Lemuria\Model\Lemuria\Resources;
 /**
  * Implementation of command MACHEN <amount> <Material> (create material).
  *
- * The command creates new materials from inventory and adds them to the executing unit's inventory.
+ * The command creates new materials from inventory or resource pool and adds them to the executing unit's inventory.
  *
  * - MACHEN <Material>
  * - MACHEN <amount> <Material>

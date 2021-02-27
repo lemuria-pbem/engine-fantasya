@@ -4,8 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Ressourcenpool in allen Produktionen verwenden
-- Context in Event/Effect ersetzen
+
 
 ## Neue Funktionen
 
