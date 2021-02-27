@@ -11,9 +11,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ### 0.1.0
 
 - Weltentwicklung:
-  - Bauern arbeiten
   - verlassene Schiffe treiben und verfallen
-  - Bauern und Tiere vermehren sich
+  - Bauern und Tiere vermehren sich / wandern / sterben.
   - Bäume wachsen (im Frühling)
 
 ### 0.2.0 und folgende

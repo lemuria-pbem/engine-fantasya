@@ -253,6 +253,7 @@
 		"SortNotInRegionMessage": "Die Einheit $id ist nicht in der selben Region wie Einheit $other und kann nicht verschoben werden.",
 		"SortWithForeignerMessage": "Die Einheit $id kann nicht mit einer fremden Einheit verschoben werden.",
 		"SortWithItselfMessage": "Die Einheit $id kann nicht mit sich selbst sortiert werden.",
+		"SubsistenceMessage": "$peasants verdienen $silver in der Region $id (Lohn $wage).",
 		"SupportCharityMessage": "Die Einheit $id erhält $support Almosen von der Einheit $unit.",
 		"SupportDonateMessage": "Die Einheit $id spendet $support für den Unterhalt der Einheit $unit.",
 		"SupportHungerMessage": "Die Einheit $id hungert.",
