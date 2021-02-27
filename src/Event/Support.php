@@ -83,12 +83,9 @@ final class Support extends AbstractEvent
 					}
 				}
 				foreach ($hungry as $unit) {
-					if ($this->payFromResourcePool($unit)) {
-						$hungry->remove($unit);
+					if (!$this->payFromResourcePool($unit)) {
+						$this->hungryUnits->add($unit);
 					}
-				}
-				foreach ($hungry as $unit) {
-					$this->hungryUnits->add($unit);
 				}
 			}
 		}

@@ -81,12 +81,9 @@ final class Upkeep extends AbstractEvent
 				}
 			}
 			foreach ($unmaintained as $construction) {
-				if ($this->payFromResourcePool($construction)) {
-					$unmaintained->remove($construction);
+				if (!$this->payFromResourcePool($construction)) {
+					$this->unmaintained->add($construction);
 				}
-			}
-			foreach ($unmaintained as $construction) {
-				$this->unmaintained->add($construction);
 			}
 		}
 	}
