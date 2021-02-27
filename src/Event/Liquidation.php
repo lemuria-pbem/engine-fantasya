@@ -32,12 +32,14 @@ final class Liquidation extends AbstractEvent
 	}
 
 	protected function run(): void {
+		$liquidate = new People();
 		foreach (Lemuria::Catalog()->getAll(Catalog::PARTIES) as $party /* @var Party $party */) {
 			Lemuria::Log()->debug('Running Liquidation for Party ' . $party->Id() . '.', ['party' => $party]);
 			$units = $party->People();
+			$liquidate->clear();
 			foreach ($units as $unit /* @var Unit $unit */) {
 				if ($unit->Size() <= 0) {
-					$units->remove($unit);
+					$liquidate->add($unit);
 					$inventory = $unit->Inventory();
 					if ($inventory->count() > 0) {
 						if (!$this->passOn($inventory, $unit)) {
@@ -46,12 +48,15 @@ final class Liquidation extends AbstractEvent
 							}
 						}
 					}
-					$unit->Construction()?->Inhabitants()?->remove($unit);
-					$unit->Vessel()?->Passengers()?->remove($unit);
-					$unit->Region()->Residents()->remove($unit);
-					Lemuria::Catalog()->remove($unit);
-					$this->message(LiquidationMessage::class, $party)->e($unit);
 				}
+			}
+			foreach ($liquidate as $unit /* @var Unit $unit */) {
+				$unit->Construction()?->Inhabitants()?->remove($unit);
+				$unit->Vessel()?->Passengers()?->remove($unit);
+				$unit->Region()->Residents()->remove($unit);
+				$units->remove($unit);
+				Lemuria::Catalog()->remove($unit);
+				$this->message(LiquidationMessage::class, $party)->e($unit);
 			}
 		}
 	}
