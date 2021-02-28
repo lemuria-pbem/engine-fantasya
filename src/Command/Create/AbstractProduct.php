@@ -39,7 +39,7 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 		$production = 0;
 		$talent     = $craft->Talent();
 		$cost       = $craft->Level();
-		$level      = $this->calculus()->knowledge(get_class($talent))->Level();
+		$level      = $this->calculus()->knowledge($talent::class)->Level();
 		if ($level >= $cost) {
 			$production = (int)floor($this->unit->Size() * $level / $cost);
 		}

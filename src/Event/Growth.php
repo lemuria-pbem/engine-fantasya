@@ -53,7 +53,7 @@ final class Growth extends AbstractEvent
 			$landscape = $region->Landscape();
 			$place     = (int)round($landscape->Workplaces() / Workplaces::TREE);
 			if ($place < 0) {
-				return;
+				continue;
 			}
 
 			$resources = $region->Resources();

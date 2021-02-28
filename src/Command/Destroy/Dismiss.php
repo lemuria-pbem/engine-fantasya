@@ -93,11 +93,10 @@ final class Dismiss extends UnitCommand
 	}
 
 	private function dismiss(): void {
-		$commodity = get_class($this->commodity);
 		$quantity  = new Quantity($this->commodity, $this->amount);
 		$inventory = $this->unit->Inventory();
 		$reserve   = $inventory[$this->commodity] ?? null;
-		if (isset(Allocation::POOL_COMMODITIES[$commodity])) {
+		if (isset(Allocation::POOL_COMMODITIES[$this->commodity::class])) {
 			if ($reserve) {
 				if ($this->amount < PHP_INT_MAX) {
 					if ($reserve->Count() > $this->amount) {

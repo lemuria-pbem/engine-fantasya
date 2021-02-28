@@ -101,7 +101,7 @@ final class Construction extends AbstractProduct
 		$craft  = $castle->getCraft();
 		$talent = $craft->Talent();
 		$cost   = $craft->Level();
-		$level  = $this->calculus()->knowledge(get_class($talent))->Level();
+		$level  = $this->calculus()->knowledge($talent::class)->Level();
 		if ($level < $cost) {
 			return 0;
 		}

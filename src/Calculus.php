@@ -185,7 +185,7 @@ final class Calculus
 			$commodity = $item->Commodity();
 			if ($commodity instanceof Weapon) {
 				$weaponSkill = $commodity->getSkill()->Talent();
-				$skill       = $this->knowledge(get_class($weaponSkill));
+				$skill       = $this->knowledge($weaponSkill::class);
 				if ($skill->Experience() > $bestSkill->Experience()) {
 					$bestSkill = $skill;
 					$weapon    = $item;
@@ -233,7 +233,7 @@ final class Calculus
 			if ($item) {
 				$transport = $item->getObject();
 				$count     = $item->Count();
-				switch (get_class($transport)) {
+				switch ($transport::class) {
 					case Horse::class :
 						$count = max($count, $carriage * 2);
 					case Camel::class :

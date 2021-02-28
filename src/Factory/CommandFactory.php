@@ -487,7 +487,7 @@ class CommandFactory
 	protected function identifyVerb(string $verb): string {
 		$candidates = [];
 		foreach ($this->verbs as $candidate => $isValid) {
-			if (strpos($candidate, $verb) === 0) {
+			if (str_starts_with($candidate, $verb)) {
 				if (is_string($isValid)) {
 					$candidate = $isValid;
 					$isValid   = $this->verbs[$isValid] ?? false;
@@ -521,7 +521,7 @@ class CommandFactory
 		$singleton  = ucfirst(strtolower($singleton));
 		$candidates = [];
 		foreach ($map as $candidate => $singletonClass) {
-			if (strpos($candidate, $singleton) === 0) {
+			if (str_starts_with($candidate, $singleton)) {
 				if ($candidate === $singleton) {
 					return $singletonClass;
 				}

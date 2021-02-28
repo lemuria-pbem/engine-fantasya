@@ -52,7 +52,7 @@ class Availability
 	 */
 	#[Pure] protected function calculateAvailability(Quantity $quantity): Quantity {
 		$commodity = $quantity->Commodity();
-		$factor    = match (get_class($commodity)) {
+		$factor    = match ($commodity::class) {
 			Peasant::class => rand(30, 60) / 1000,
 			default        => 1.0
 		};
