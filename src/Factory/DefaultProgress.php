@@ -8,6 +8,7 @@ use Lemuria\Engine\Lemuria\Event;
 use Lemuria\Engine\Lemuria\Event\Decease;
 use Lemuria\Engine\Lemuria\Event\Growth;
 use Lemuria\Engine\Lemuria\Event\Liquidation;
+use Lemuria\Engine\Lemuria\Event\Population;
 use Lemuria\Engine\Lemuria\Event\Subsistence;
 use Lemuria\Engine\Lemuria\Event\Support;
 use Lemuria\Engine\Lemuria\Event\Upkeep;
@@ -21,7 +22,7 @@ class DefaultProgress implements Progress
 		// middle
 		Upkeep::class, Subsistence::class,
 		// after
-		Support::class, Growth::class, Decease::class, Liquidation::class
+		Support::class, Population::class, Growth::class, Decease::class, Liquidation::class
 	];
 
 	private array $events = [];
