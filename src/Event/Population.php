@@ -7,7 +7,9 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Lemuria\Action;
 use Lemuria\Engine\Lemuria\Factory\Workplaces;
 use Lemuria\Engine\Lemuria\Factory\WorkplacesTrait;
+use Lemuria\Engine\Lemuria\Message\Region\PopulationFeedMessage;
 use Lemuria\Engine\Lemuria\Message\Region\PopulationGrowthMessage;
+use Lemuria\Engine\Lemuria\Message\Region\PopulationHungerMessage;
 use Lemuria\Engine\Lemuria\Message\Region\PopulationMigrantsMessage;
 use Lemuria\Engine\Lemuria\Message\Region\PopulationNewMessage;
 use Lemuria\Engine\Lemuria\State;
@@ -86,11 +88,17 @@ final class Population extends AbstractEvent
 			$needed = $peasants * Subsistence::SILVER;
 			$used   = min($needed, $reserve);
 			if ($needed > $reserve) {
-				//TODO hunger
+				$hungry = min($peasants - (int)floor($reserve / Subsistence::SILVER), $peasants - $migrants);
+				if ($hungry > 0) {
+					$quantity = new Quantity($this->peasant, $hungry);
+					$resources->remove($quantity);
+					$this->message(PopulationHungerMessage::class, $region)->i($quantity);
+				}
 			}
-			$quantity = new Quantity($this->silver, $needed);
+			$feedPeasants = new Quantity($this->peasant, $peasants);
+			$quantity     = new Quantity($this->silver, $used);
 			$resources->remove($quantity);
-			//TODO silver
+			$this->message(PopulationFeedMessage::class, $region)->i($feedPeasants)->i($quantity, PopulationFeedMessage::SILVER);
 		}
 	}
 

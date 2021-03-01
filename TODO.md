@@ -12,7 +12,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 - Weltentwicklung:
   - verlassene Schiffe treiben und verfallen
-  - Bauern und Tiere vermehren sich / wandern / sterben.
+  - Tiere vermehren sich / wandern / sterben.
 
 ### 0.2.0 und folgende
 
