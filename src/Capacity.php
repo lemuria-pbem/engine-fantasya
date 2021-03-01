@@ -4,6 +4,9 @@ namespace Lemuria\Engine\Lemuria;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Lemuria\Vessel;
+
 class Capacity
 {
 	public const WALK = 'walk';
@@ -17,6 +20,16 @@ class Capacity
 	public const FLY = 'fly';
 
 	private array $talent;
+
+	#[Pure] public static function forVessel(Vessel $vessel): self {
+		$ship   = $vessel->Ship();
+		$weight = 0;
+		foreach ($vessel->Passengers() as $unit /* @var Unit $unit */) {
+			$weight += $unit->Weight();
+		}
+		$payload = (int)floor($vessel->Completion() * $ship->Payload());
+		return new Capacity(0, $payload, Capacity::SHIP, $weight, $ship->Speed(), $ship->Crew());
+	}
 
 	/**
 	 * Capacity constructor.

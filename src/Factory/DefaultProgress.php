@@ -6,6 +6,8 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Lemuria\Event;
 use Lemuria\Engine\Lemuria\Event\Decease;
+use Lemuria\Engine\Lemuria\Event\Drift;
+use Lemuria\Engine\Lemuria\Event\Founder;
 use Lemuria\Engine\Lemuria\Event\Growth;
 use Lemuria\Engine\Lemuria\Event\Liquidation;
 use Lemuria\Engine\Lemuria\Event\Population;
@@ -20,9 +22,9 @@ class DefaultProgress implements Progress
 	public const EVENTS = [
 		// before
 		// middle
-		Upkeep::class, Subsistence::class,
+		Upkeep::class, Subsistence::class, Drift::class,
 		// after
-		Support::class, Population::class, Growth::class, Decease::class, Liquidation::class
+		Founder::class, Support::class, Population::class, Growth::class, Decease::class, Liquidation::class
 	];
 
 	private array $events = [];

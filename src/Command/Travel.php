@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Lemuria\Command;
 use Lemuria\Engine\Lemuria\Activity;
 use Lemuria\Engine\Lemuria\Capacity;
 use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
+use Lemuria\Engine\Lemuria\Factory\NavigationTrait;
 use Lemuria\Engine\Lemuria\Message\Construction\LeaveNewOwnerMessage;
 use Lemuria\Engine\Lemuria\Message\Construction\LeaveNoOwnerMessage;
 use Lemuria\Engine\Lemuria\Message\Unit\LeaveConstructionDebugMessage;
@@ -30,7 +31,6 @@ use Lemuria\Model\Lemuria\Landscape\Plain;
 use Lemuria\Model\Lemuria\Region;
 use Lemuria\Model\Lemuria\Ship\Boat;
 use Lemuria\Model\Lemuria\Talent\Navigation;
-use Lemuria\Model\Lemuria\Unit;
 use Lemuria\Model\Lemuria\Vessel;
 
 /**
@@ -40,6 +40,8 @@ use Lemuria\Model\Lemuria\Vessel;
  */
 final class Travel extends UnitCommand implements Activity
 {
+	use NavigationTrait;
+
 	private ?Vessel $vessel = null;
 
 	private Capacity $capacity;
@@ -105,16 +107,21 @@ final class Travel extends UnitCommand implements Activity
 				$region = $this->canMoveTo($direction);
 				if ($region) {
 					$this->moveTo($region);
+					$this->message(TravelRegionMessage::class)->e($region);
 					$route[] = $region;
 					$regions--;
-					$this->unit->Party()->Chronicle()->add($region);
-					$this->message(TravelRegionMessage::class)->e($region);
 				}
 			}
 		} catch (UnknownCommandException $directionError) {
 		}
 
-		$this->message(TravelMessage::class)->p($movement)->entities($route);
+		if ($this->vessel) {
+			foreach ($this->vessel->Passengers() as $unit /* @var Unit $unit */) {
+				$this->message(TravelMessage::class, $unit)->p($movement)->entities($route);
+			}
+		} else {
+			$this->message(TravelMessage::class)->p($movement)->entities($route);
+		}
 		$this->setDefaultTravel($i, $n);
 		if (isset($directionError)) {
 			throw $directionError;
@@ -144,11 +151,9 @@ final class Travel extends UnitCommand implements Activity
 				return $neighbour;
 			}
 			if ($region->Landscape() instanceof Ocean) {
-				if (!($this->vessel->Ship() instanceof Boat)) {
-					if (!($landscape instanceof Plain || $landscape instanceof Forest)) {
-						$this->message(TravelLandMessage::class, $this->vessel)->p($direction)->s($landscape)->e($neighbour);
-						return null;
-					}
+				if (!$this->canSailTo($landscape)) {
+					$this->message(TravelLandMessage::class, $this->vessel)->p($direction)->s($landscape)->e($neighbour);
+					return null;
 				}
 				$this->message(TravelNeighbourMessage::class)->p($direction)->s($landscape)->e($neighbour);
 				return $neighbour;
@@ -188,22 +193,13 @@ final class Travel extends UnitCommand implements Activity
 			}
 		}
 
-		$region->Residents()->remove($this->unit);
-		$destination->Residents()->add($this->unit);
-
-		$vessel = $this->unit->Vessel();
-		if ($vessel) {
-			$region->Fleet()->remove($vessel);
-			$destination->Fleet()->add($vessel);
+		if ($this->vessel) {
+			$this->moveVessel($destination);
+		} else {
+			$region->Residents()->remove($this->unit);
+			$destination->Residents()->add($this->unit);
+			$this->unit->Party()->Chronicle()->add($region);
 		}
-	}
-
-	protected function navigationTalent(): int {
-		$talent = 0;
-		foreach ($this->vessel->Passengers() as $unit /* @var Unit $unit */) {
-			$talent += $unit->Size() * $this->context->getCalculus($unit)->knowledge(Navigation::class);
-		}
-		return $talent;
 	}
 
 	protected function setDefaultTravel(int $i, int $n): void {

@@ -41,7 +41,7 @@ final class Population extends AbstractEvent
 
 	private Commodity $silver;
 
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
 		$this->workplaces = new Workplaces();
 		$this->peasant    = self::createCommodity(Peasant::class);

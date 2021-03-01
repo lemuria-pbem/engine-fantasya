@@ -1,8 +1,4 @@
-<?php /** @noinspection SpellCheckingInspection */
-/** @noinspection SpellCheckingInspection */
-/** @noinspection SpellCheckingInspection */
-/** @noinspection SpellCheckingInspection */
-/** @noinspection SpellCheckingInspection */
+<?php
 declare (strict_types = 1);
 namespace Lemuria\Tests\Engine\Lemuria;
 

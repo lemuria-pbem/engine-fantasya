@@ -84,12 +84,7 @@ final class Calculus
 	public function capacity(): Capacity {
 		$vessel = $this->unit->Vessel();
 		if ($vessel) {
-			$ship   = $vessel->Ship();
-			$weight = 0;
-			foreach ($vessel->Passengers() as $unit /* @var Unit $unit */) {
-				$weight += $unit->Weight();
-			}
-			return new Capacity(0, $ship->Payload(), Capacity::SHIP, $weight, $ship->Speed(), $ship->Crew());
+			return Capacity::forVessel($vessel);
 		}
 
 		$race      = $this->unit->Race();

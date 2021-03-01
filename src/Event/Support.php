@@ -183,8 +183,8 @@ final class Support extends AbstractEvent
 
 	private function effect(Unit $unit): Hunger {
 		$effect = new Hunger($this->state);
-		/** @var Hunger $effect */
-		$effect = Lemuria::Score()->find($effect->setUnit($unit));
-		return $effect;
+		/** @var Hunger $hunger */
+		$hunger = Lemuria::Score()->find($effect->setUnit($unit));
+		return $hunger ?? $effect;
 	}
 }

@@ -11,8 +11,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ### 0.1.0
 
 - Weltentwicklung:
-  - verlassene Schiffe treiben und verfallen
-  - Tiere vermehren sich / wandern / sterben.
+  - Tiere vermehren sich / wandern / sterben
 
 ### 0.2.0 und folgende
 

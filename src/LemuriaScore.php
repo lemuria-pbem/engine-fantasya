@@ -40,12 +40,12 @@ class LemuriaScore implements Score
 	/**
 	 * Search for an existing Effect.
 	 */
-	public function find(Identifiable $effect): Effect {
+	public function find(Identifiable $effect): ?Effect {
 		if ($effect instanceof Effect) {
 			$namespace = $effect->Catalog();
 			$id        = $effect->Id()->Id();
 			$class     = getClass($effect);
-			return $this->effects[$namespace][$id][$class] ?? $effect;
+			return $this->effects[$namespace][$id][$class] ?? null;
 		}
 		throw new LemuriaException('Expected instance of Effect.');
 	}
