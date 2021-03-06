@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Construction;
+namespace Lemuria\Engine\Fantasya\Message\Construction;
 
 class LeaveNoOwnerMessage extends AbstractConstructionMessage
 {

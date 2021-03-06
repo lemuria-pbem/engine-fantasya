@@ -1,8 +1,8 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Message\Unit\CommentMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\CommentMessage;
 
 /**
  * The comment command repeats the comment line in the party's report.

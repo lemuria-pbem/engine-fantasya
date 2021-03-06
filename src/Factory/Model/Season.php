@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Factory\Model;
+namespace Lemuria\Engine\Fantasya\Factory\Model;
 
 final class Season
 {

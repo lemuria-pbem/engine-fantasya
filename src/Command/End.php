@@ -1,10 +1,10 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Immediate;
-use Lemuria\Engine\Lemuria\Message\Unit\EndMessage;
-use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Immediate;
+use Lemuria\Engine\Fantasya\Message\Unit\EndMessage;
+use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Entity;
 
 /**

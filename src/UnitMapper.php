@@ -1,13 +1,13 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Command\Create\Temp;
-use Lemuria\Engine\Lemuria\Exception\CommandException;
-use Lemuria\Engine\Lemuria\Command\Exception\TempUnitException;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Engine\Fantasya\Command\Create\Temp;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
+use Lemuria\Engine\Fantasya\Command\Exception\TempUnitException;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Helper class for mapping newly created units with TEMP numbers.

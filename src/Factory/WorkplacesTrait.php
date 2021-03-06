@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Factory;
+namespace Lemuria\Engine\Fantasya\Factory;
 
-use Lemuria\Model\Lemuria\Commodity\Camel;
-use Lemuria\Model\Lemuria\Commodity\Elephant;
-use Lemuria\Model\Lemuria\Commodity\Horse;
-use Lemuria\Model\Lemuria\Commodity\Peasant;
-use Lemuria\Model\Lemuria\Commodity\Tree;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait;
-use Lemuria\Model\Lemuria\Region;
+use Lemuria\Model\Fantasya\Commodity\Camel;
+use Lemuria\Model\Fantasya\Commodity\Elephant;
+use Lemuria\Model\Fantasya\Commodity\Horse;
+use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Commodity\Tree;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Region;
 
 trait WorkplacesTrait
 {

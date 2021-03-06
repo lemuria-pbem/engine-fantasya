@@ -1,22 +1,22 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Event;
+namespace Lemuria\Engine\Fantasya\Event;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Action;
-use Lemuria\Engine\Lemuria\Factory\NavigationTrait;
-use Lemuria\Engine\Lemuria\Message\Vessel\DriftDamageMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\DriftMessage;
-use Lemuria\Engine\Lemuria\State;
+use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Factory\NavigationTrait;
+use Lemuria\Engine\Fantasya\Message\Vessel\DriftDamageMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\DriftMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait;
-use Lemuria\Model\Lemuria\Landscape\Ocean;
-use Lemuria\Model\Lemuria\Region;
-use Lemuria\Model\Lemuria\Talent;
-use Lemuria\Model\Lemuria\Talent\Navigation;
-use Lemuria\Model\Lemuria\Vessel;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Landscape\Ocean;
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Talent;
+use Lemuria\Model\Fantasya\Talent\Navigation;
+use Lemuria\Model\Fantasya\Vessel;
 
 /**
  * Ships on sea that cannot be controlled anymore will drift with the wind.

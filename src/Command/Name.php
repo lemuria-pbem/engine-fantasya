@@ -1,19 +1,19 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Message\Construction\NameConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Construction\NameOwnerMessage;
-use Lemuria\Engine\Lemuria\Message\Region\NameCastleMessage;
-use Lemuria\Engine\Lemuria\Message\Region\NameRegionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\NameUnitMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\NameNotInConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\NameNotInVesselMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\NameCaptainMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\NameVesselMessage;
-use Lemuria\Model\Lemuria\Building\Castle;
-use Lemuria\Model\Lemuria\Construction;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\Construction\NameConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Construction\NameOwnerMessage;
+use Lemuria\Engine\Fantasya\Message\Region\NameCastleMessage;
+use Lemuria\Engine\Fantasya\Message\Region\NameRegionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NameUnitMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NameNotInConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NameNotInVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\NameCaptainMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\NameVesselMessage;
+use Lemuria\Model\Fantasya\Building\Castle;
+use Lemuria\Model\Fantasya\Construction;
 
 /**
  * The Name command is used to set the name of a unit or the construction, region or vessel it controls.

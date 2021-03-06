@@ -1,12 +1,12 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Factory;
+namespace Lemuria\Engine\Fantasya\Factory;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Action;
-use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
-use Lemuria\Engine\Lemuria\Exception\CommandException;
+use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Entity;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;

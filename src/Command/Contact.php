@@ -1,13 +1,13 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Message\Unit\ContactMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\ContactNotFoundMessage;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\ContactMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ContactNotFoundMessage;
 use Lemuria\Id;
 use Lemuria\Model\Exception\NotRegisteredException;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * This command is used to set temporary diplomatic relations that allow a unit to earn silver, produce resources,

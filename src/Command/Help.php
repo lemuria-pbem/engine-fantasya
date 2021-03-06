@@ -1,22 +1,22 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Message\Unit\HelpMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\HelpNotMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\HelpPartyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\HelpPartyNotMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\HelpPartyRegionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\HelpPartyRegionNotMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\HelpRegionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\HelpRegionNotMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\HelpSelfMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\HelpUnknownPartyMessage;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpNotMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyNotMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyRegionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyRegionNotMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpRegionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpRegionNotMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpSelfMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpUnknownPartyMessage;
 use Lemuria\Id;
 use Lemuria\Model\Exception\NotRegisteredException;
-use Lemuria\Model\Lemuria\Party;
-use Lemuria\Model\Lemuria\Relation;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Relation;
 
 /**
  * This command is used to set diplomatic relations.

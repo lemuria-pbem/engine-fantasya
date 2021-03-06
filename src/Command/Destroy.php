@@ -1,10 +1,10 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Command;
-use Lemuria\Engine\Lemuria\Command\Destroy\Dismiss;
-use Lemuria\Engine\Lemuria\Command\Destroy\Smash;
+use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Command\Destroy\Dismiss;
+use Lemuria\Engine\Fantasya\Command\Destroy\Smash;
 
 /**
  * Implementation of command ZERSTÖREN.

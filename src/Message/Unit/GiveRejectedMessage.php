@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Unit;
+namespace Lemuria\Engine\Fantasya\Message\Unit;
 
-use Lemuria\Engine\Lemuria\Factory\Model\Everything;
-use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Factory\Model\Everything;
+use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Item;
 
 class GiveRejectedMessage extends GiveFailedMessage

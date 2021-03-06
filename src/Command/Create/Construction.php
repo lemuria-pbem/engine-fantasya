@@ -1,23 +1,23 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Create;
+namespace Lemuria\Engine\Fantasya\Command\Create;
 
-use Lemuria\Engine\Lemuria\Message\Unit\ConstructionBuildMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\ConstructionCreateMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\ConstructionExperienceMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\ConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\ConstructionOnlyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\ConstructionResourcesMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\ConstructionUnableMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ConstructionBuildMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ConstructionCreateMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ConstructionExperienceMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ConstructionOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ConstructionResourcesMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ConstructionUnableMessage;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Lemuria\Building;
-use Lemuria\Model\Lemuria\Building\AbstractCastle;
-use Lemuria\Model\Lemuria\Building\Castle;
-use Lemuria\Model\Lemuria\Construction as ConstructionModel;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Requirement;
+use Lemuria\Model\Fantasya\Building;
+use Lemuria\Model\Fantasya\Building\AbstractCastle;
+use Lemuria\Model\Fantasya\Building\Castle;
+use Lemuria\Model\Fantasya\Construction as ConstructionModel;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Requirement;
 
 /**
  * Implementation of command MACHEN <Gebäude> (create construction).

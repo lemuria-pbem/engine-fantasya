@@ -1,14 +1,14 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
 use function Lemuria\isInt;
 
-use Lemuria\Engine\Lemuria\Command;
-use Lemuria\Engine\Lemuria\Command\Create\Resource;
-use Lemuria\Engine\Lemuria\Command\Create\Temp;
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Factory\Model\Job;
+use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Command\Create\Resource;
+use Lemuria\Engine\Fantasya\Command\Create\Temp;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\Model\Job;
 
 /**
  * Implementation of command MACHEN.

@@ -1,16 +1,16 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
-use Lemuria\Engine\Lemuria\Message\Party\OriginMessage;
-use Lemuria\Engine\Lemuria\Message\Party\OriginNotVisitedMessage;
-use Lemuria\Engine\Lemuria\Message\Party\OriginUntoldMessage;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\Party\OriginMessage;
+use Lemuria\Engine\Fantasya\Message\Party\OriginNotVisitedMessage;
+use Lemuria\Engine\Fantasya\Message\Party\OriginUntoldMessage;
 use Lemuria\Entity;
 use Lemuria\Id;
-use Lemuria\Model\Lemuria\Region;
-use Lemuria\Model\Lemuria\Party;
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Party;
 
 /**
  * This command is used to set the party's origin in the world, allowing to synchronize coordinates between different

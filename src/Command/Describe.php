@@ -1,19 +1,19 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Message\Construction\DescribeConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Construction\DescribeOwnerMessage;
-use Lemuria\Engine\Lemuria\Message\Region\DescribeCastleMessage;
-use Lemuria\Engine\Lemuria\Message\Region\DescribeRegionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DescribeUnitMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DescribeNotInConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DescribeNotInVesselMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\DescribeCaptainMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\DescribeVesselMessage;
-use Lemuria\Model\Lemuria\Building\Castle;
-use Lemuria\Model\Lemuria\Construction;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\Construction\DescribeConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Construction\DescribeOwnerMessage;
+use Lemuria\Engine\Fantasya\Message\Region\DescribeCastleMessage;
+use Lemuria\Engine\Fantasya\Message\Region\DescribeRegionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DescribeUnitMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DescribeNotInConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DescribeNotInVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\DescribeCaptainMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\DescribeVesselMessage;
+use Lemuria\Model\Fantasya\Building\Castle;
+use Lemuria\Model\Fantasya\Construction;
 
 /**
  * The Describe command is used to set the description of a unit or the construction, region or vessel it controls.

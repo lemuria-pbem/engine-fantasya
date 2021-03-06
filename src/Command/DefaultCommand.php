@@ -1,13 +1,13 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Exception\CommandParserException;
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
-use Lemuria\Engine\Lemuria\Message\Unit\DefaultInvalidMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DefaultMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DefaultUnknownMessage;
-use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Engine\Fantasya\Exception\CommandParserException;
+use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\DefaultInvalidMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DefaultMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DefaultUnknownMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 
 /**
  * This command defines unit commands that are written to the order template.

@@ -1,18 +1,18 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Destroy;
+namespace Lemuria\Engine\Fantasya\Command\Destroy;
 
-use Lemuria\Engine\Lemuria\Command\UnitCommand;
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
-use Lemuria\Engine\Lemuria\Factory\GiftTrait;
-use Lemuria\Engine\Lemuria\Factory\Model\Everything;
-use Lemuria\Engine\Lemuria\Message\Unit\LoseEmptyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LoseEverythingMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LoseToNoneMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LoseMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LoseToUnitMessage;
-use Lemuria\Model\Lemuria\Commodity\Peasant;
-use Lemuria\Model\Lemuria\Quantity;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\GiftTrait;
+use Lemuria\Engine\Fantasya\Factory\Model\Everything;
+use Lemuria\Engine\Fantasya\Message\Unit\LoseEmptyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LoseEverythingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LoseToNoneMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LoseMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LoseToUnitMessage;
+use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Quantity;
 
 /**
  * Implementation of command VERLIEREN.

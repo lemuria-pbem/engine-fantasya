@@ -1,18 +1,18 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Activity;
-use Lemuria\Engine\Lemuria\Context;
-use Lemuria\Engine\Lemuria\Factory\DefaultActivityTrait;
-use Lemuria\Engine\Lemuria\Message\Unit\LearnProgressMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LearnTeachersMessage;
-use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\LearnProgressMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LearnTeachersMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Model\Lemuria\Ability;
-use Lemuria\Model\Lemuria\Talent;
+use Lemuria\Model\Fantasya\Ability;
+use Lemuria\Model\Fantasya\Talent;
 
 /**
  * Implementation of command LERNEN (a Unit learns a skill).

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message;
+namespace Lemuria\Engine\Fantasya\Message;
 
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -8,19 +8,19 @@ use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
 use Lemuria\Singleton;
-use Lemuria\Engine\Lemuria\Factory\BuilderTrait as EngineBuilderTrait;
-use Lemuria\Engine\Lemuria\Message\Exception\EntityNotSetException;
-use Lemuria\Engine\Lemuria\Message\Exception\ItemNotSetException;
-use Lemuria\Engine\Lemuria\Message\Exception\ParameterNotSetException;
-use Lemuria\Engine\Lemuria\Message\Exception\SingletonNotSetException;
+use Lemuria\Engine\Fantasya\Factory\BuilderTrait as EngineBuilderTrait;
+use Lemuria\Engine\Fantasya\Message\Exception\EntityNotSetException;
+use Lemuria\Engine\Fantasya\Message\Exception\ItemNotSetException;
+use Lemuria\Engine\Fantasya\Message\Exception\ParameterNotSetException;
+use Lemuria\Engine\Fantasya\Message\Exception\SingletonNotSetException;
 use Lemuria\Engine\Message;
 use Lemuria\Entity;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Item;
 use Lemuria\Lemuria;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait as ModelBuilderTrait;
-use Lemuria\Model\Lemuria\Quantity;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait as ModelBuilderTrait;
+use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
 

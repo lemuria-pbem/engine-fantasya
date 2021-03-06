@@ -1,23 +1,23 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Create;
+namespace Lemuria\Engine\Fantasya\Command\Create;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Command\Exception\TempUnitException;
-use Lemuria\Engine\Lemuria\Command\UnitCommand;
-use Lemuria\Engine\Lemuria\Context;
-use Lemuria\Engine\Lemuria\Exception\CommandException;
-use Lemuria\Engine\Lemuria\Immediate;
-use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TempMessage;
-use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Engine\Fantasya\Command\Exception\TempUnitException;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
+use Lemuria\Engine\Fantasya\Immediate;
+use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TempMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Entity;
 use Lemuria\Exception\IdException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Implementation of command MACHEN Temp (create new Unit).

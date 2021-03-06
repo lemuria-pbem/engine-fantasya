@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Unit;
+namespace Lemuria\Engine\Fantasya\Message\Unit;
 
-use Lemuria\Model\Lemuria\Talent;
-use Lemuria\Model\Lemuria\Talent\Taxcollecting;
+use Lemuria\Model\Fantasya\Talent;
+use Lemuria\Model\Fantasya\Talent\Taxcollecting;
 
 class TaxNoExperienceMessage extends AbstractNoExperienceMessage
 {

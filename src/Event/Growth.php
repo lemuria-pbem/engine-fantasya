@@ -1,21 +1,21 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Event;
+namespace Lemuria\Engine\Fantasya\Event;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Action;
-use Lemuria\Engine\Lemuria\Factory\Model\Season;
-use Lemuria\Engine\Lemuria\Factory\Workplaces;
-use Lemuria\Engine\Lemuria\Message\Region\GrowthMessage;
-use Lemuria\Engine\Lemuria\State;
+use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Factory\Model\Season;
+use Lemuria\Engine\Fantasya\Factory\Workplaces;
+use Lemuria\Engine\Fantasya\Message\Region\GrowthMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Lemuria\Commodity;
-use Lemuria\Model\Lemuria\Commodity\Tree;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Region;
+use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Commodity\Tree;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Region;
 
 /**
  * Peasants work for their living and increase their silver reserve.

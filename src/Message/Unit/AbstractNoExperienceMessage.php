@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Unit;
+namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Message;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait;
-use Lemuria\Model\Lemuria\Talent;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Singleton;
 
 abstract class AbstractNoExperienceMessage extends AbstractUnitMessage

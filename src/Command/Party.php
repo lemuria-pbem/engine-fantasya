@@ -1,16 +1,16 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Immediate;
-use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
-use Lemuria\Engine\Lemuria\Message\Party\PartyInRegionsMessage;
-use Lemuria\Engine\Lemuria\Message\Party\PartyMessage;
+use Lemuria\Engine\Fantasya\Immediate;
+use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\Party\PartyInRegionsMessage;
+use Lemuria\Engine\Fantasya\Message\Party\PartyMessage;
 use Lemuria\Entity;
 use Lemuria\Id;
-use Lemuria\Model\Lemuria\Party as PartyModel;
-use Lemuria\Model\Lemuria\Party\Census;
-use Lemuria\Model\Lemuria\Region;
+use Lemuria\Model\Fantasya\Party as PartyModel;
+use Lemuria\Model\Fantasya\Party\Census;
+use Lemuria\Model\Fantasya\Region;
 
 /**
  * Implementation of command PARTEI (this should be the first command in a party's turn).

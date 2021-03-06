@@ -1,14 +1,14 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Command;
-use Lemuria\Engine\Lemuria\Command\Destroy\Dismiss;
-use Lemuria\Engine\Lemuria\Command\Destroy\Lose;
-use Lemuria\Engine\Lemuria\Command\Handover\Give;
-use Lemuria\Engine\Lemuria\Command\Handover\Grant;
-use Lemuria\Engine\Lemuria\Command\Handover\Migrate;
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Command\Destroy\Dismiss;
+use Lemuria\Engine\Fantasya\Command\Destroy\Lose;
+use Lemuria\Engine\Fantasya\Command\Handover\Give;
+use Lemuria\Engine\Fantasya\Command\Handover\Grant;
+use Lemuria\Engine\Fantasya\Command\Handover\Migrate;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 
 /**
  * Implementation of command GIB.

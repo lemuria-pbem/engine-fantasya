@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Factory;
+namespace Lemuria\Engine\Fantasya\Factory;
 
-use Lemuria\Engine\Lemuria\Effect;
-use Lemuria\Engine\Lemuria\Effect\AbstractEffect;
-use Lemuria\Engine\Lemuria\State;
+use Lemuria\Engine\Fantasya\Effect;
+use Lemuria\Engine\Fantasya\Effect\AbstractEffect;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\SerializableTrait;
 

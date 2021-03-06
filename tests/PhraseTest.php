@@ -1,8 +1,8 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Tests\Engine\Lemuria;
+namespace Lemuria\Tests\Engine\Fantasya;
 
-use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Tests\Test;
 
 class PhraseTest extends Test

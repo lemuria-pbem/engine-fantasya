@@ -1,6 +1,6 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
 /**
  * Immediates are commands that are executed immediately after creation.

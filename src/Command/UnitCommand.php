@@ -1,20 +1,20 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Action;
-use Lemuria\Engine\Lemuria\Calculus;
-use Lemuria\Engine\Lemuria\Context;
-use Lemuria\Engine\Lemuria\Exception\ActivityException;
-use Lemuria\Engine\Lemuria\Exception\CommandException;
-use Lemuria\Engine\Lemuria\Factory\UnitTrait;
-use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
-use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Exception\ActivityException;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
+use Lemuria\Engine\Fantasya\Factory\UnitTrait;
+use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Entity;
 use Lemuria\Lemuria;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Base class for all unit commands.

@@ -1,21 +1,21 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Action;
-use Lemuria\Engine\Lemuria\Command;
-use Lemuria\Engine\Lemuria\Context;
-use Lemuria\Engine\Lemuria\Factory\ActionTrait;
-use Lemuria\Engine\Lemuria\Factory\ContextTrait;
-use Lemuria\Engine\Lemuria\Phrase;
-use Lemuria\Engine\Lemuria\Exception\CommandException;
+use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\ActionTrait;
+use Lemuria\Engine\Fantasya\Factory\ContextTrait;
+use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait as ModelBuilderTrait;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait as ModelBuilderTrait;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Base class for all commands.

@@ -1,8 +1,8 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Party;
+namespace Lemuria\Engine\Fantasya\Message\Party;
 
-use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 
 class PartyVisitMessage extends AbstractPartyMessage
 {

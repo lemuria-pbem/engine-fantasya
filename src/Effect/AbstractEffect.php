@@ -1,16 +1,16 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Effect;
+namespace Lemuria\Engine\Fantasya\Effect;
 
 use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
-use Lemuria\Engine\Lemuria\Action;
-use Lemuria\Engine\Lemuria\Context;
-use Lemuria\Engine\Lemuria\Effect;
-use Lemuria\Engine\Lemuria\Exception\CommandException;
-use Lemuria\Engine\Lemuria\Factory\ActionTrait;
-use Lemuria\Engine\Lemuria\State;
+use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Effect;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
+use Lemuria\Engine\Fantasya\Factory\ActionTrait;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Exception\UnserializeException;

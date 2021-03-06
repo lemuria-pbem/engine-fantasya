@@ -1,21 +1,21 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Create;
+namespace Lemuria\Engine\Fantasya\Command\Create;
 
-use Lemuria\Engine\Lemuria\Message\Unit\VesselBuildMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\VesselCreateMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\VesselExperienceMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\VesselMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\VesselOnlyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\VesselResourcesMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\VesselUnableMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\VesselBuildMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\VesselCreateMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\VesselExperienceMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\VesselMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\VesselOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\VesselResourcesMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\VesselUnableMessage;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Requirement;
-use Lemuria\Model\Lemuria\Ship;
-use Lemuria\Model\Lemuria\Vessel as VesselModel;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Requirement;
+use Lemuria\Model\Fantasya\Ship;
+use Lemuria\Model\Fantasya\Vessel as VesselModel;
 
 /**
  * Implementation of command MACHEN <Ship> (create ship).

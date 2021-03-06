@@ -1,9 +1,9 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
-use Lemuria\Model\Lemuria\Party;
-use Lemuria\Model\Lemuria\Resources;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Resources;
 
 /**
  * Consumers are commands that apply for resource allocation.

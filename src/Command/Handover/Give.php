@@ -1,17 +1,17 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Handover;
+namespace Lemuria\Engine\Fantasya\Command\Handover;
 
-use Lemuria\Engine\Lemuria\Command\UnitCommand;
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Factory\GiftTrait;
-use Lemuria\Engine\Lemuria\Factory\Model\Everything;
-use Lemuria\Engine\Lemuria\Message\Unit\GiveMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\GiveNoInventoryMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\GiveFailedMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\GiveRejectedMessage;
-use Lemuria\Model\Lemuria\Commodity;
-use Lemuria\Model\Lemuria\Quantity;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\GiftTrait;
+use Lemuria\Engine\Fantasya\Factory\Model\Everything;
+use Lemuria\Engine\Fantasya\Message\Unit\GiveMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GiveNoInventoryMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GiveFailedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GiveRejectedMessage;
+use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Quantity;
 
 /**
  * Implementation of command GIB.

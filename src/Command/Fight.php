@@ -1,11 +1,11 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Message\Unit\FightMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\FightUnguardMessage;
-use Lemuria\Model\Lemuria\Combat;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\FightMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\FightUnguardMessage;
+use Lemuria\Model\Fantasya\Combat;
 
 /**
  * This command is used to set the unit's behaviour in combat.

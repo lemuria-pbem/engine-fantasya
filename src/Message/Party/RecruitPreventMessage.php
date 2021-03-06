@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Party;
+namespace Lemuria\Engine\Fantasya\Message\Party;
 
 class RecruitPreventMessage extends AbstractPreventMessage
 {

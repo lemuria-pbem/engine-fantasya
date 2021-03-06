@@ -1,15 +1,15 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Combat;
+namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Calculus;
-use Lemuria\Model\Lemuria\Commodity\Weapon\Fists;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Talent\Fistfight;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Talent\Fistfight;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Combatants are groups of persons from a unit that fight with the same equipment.

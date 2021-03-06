@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Unit;
+namespace Lemuria\Engine\Fantasya\Message\Unit;
 
-use Lemuria\Engine\Lemuria\Capacity;
-use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Capacity;
+use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 
 class TravelMessage extends AbstractUnitMessage

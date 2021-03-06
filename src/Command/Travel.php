@@ -1,37 +1,37 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Activity;
-use Lemuria\Engine\Lemuria\Capacity;
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
-use Lemuria\Engine\Lemuria\Factory\NavigationTrait;
-use Lemuria\Engine\Lemuria\Message\Construction\LeaveNewOwnerMessage;
-use Lemuria\Engine\Lemuria\Message\Construction\LeaveNoOwnerMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LeaveConstructionDebugMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TravelIntoChaosMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TravelIntoOceanMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TravelMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TravelNeighbourMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TravelNoCrewMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TravelNoNavigationMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TravelNotCaptainMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TravelSpeedMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TravelTooHeayMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TravelRegionMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\TravelAnchorMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\TravelLandMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\TravelOverLandMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\TravelShipTooHeavyMessage;
-use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Capacity;
+use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\NavigationTrait;
+use Lemuria\Engine\Fantasya\Message\Construction\LeaveNewOwnerMessage;
+use Lemuria\Engine\Fantasya\Message\Construction\LeaveNoOwnerMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoChaosMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoOceanMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelNeighbourMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelNoCrewMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelNoNavigationMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelNotCaptainMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelSpeedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelTooHeayMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelRegionMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\TravelAnchorMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\TravelLandMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\TravelOverLandMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\TravelShipTooHeavyMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
-use Lemuria\Model\Lemuria\Landscape\Forest;
-use Lemuria\Model\Lemuria\Landscape\Ocean;
-use Lemuria\Model\Lemuria\Landscape\Plain;
-use Lemuria\Model\Lemuria\Region;
-use Lemuria\Model\Lemuria\Ship\Boat;
-use Lemuria\Model\Lemuria\Talent\Navigation;
-use Lemuria\Model\Lemuria\Vessel;
+use Lemuria\Model\Fantasya\Landscape\Forest;
+use Lemuria\Model\Fantasya\Landscape\Ocean;
+use Lemuria\Model\Fantasya\Landscape\Plain;
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Ship\Boat;
+use Lemuria\Model\Fantasya\Talent\Navigation;
+use Lemuria\Model\Fantasya\Vessel;
 
 /**
  * Implementation of command REISEN (travel).

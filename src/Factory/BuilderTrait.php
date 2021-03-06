@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Factory;
+namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Exception\SingletonException;
 use Lemuria\Lemuria;
-use Lemuria\Engine\Lemuria\Message\MessageType;
+use Lemuria\Engine\Fantasya\Message\MessageType;
 
 trait BuilderTrait
 {

@@ -1,12 +1,12 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Exception;
+namespace Lemuria\Engine\Fantasya\Command\Exception;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Exception\CommandException;
-use Lemuria\Model\Lemuria\Party;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * This exception is thrown when executing a Unit command fails.

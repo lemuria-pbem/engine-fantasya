@@ -1,18 +1,18 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Handover;
+namespace Lemuria\Engine\Fantasya\Command\Handover;
 
-use Lemuria\Engine\Lemuria\Command\GiftTrait;
-use Lemuria\Engine\Lemuria\Command\UnitCommand;
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
-use Lemuria\Engine\Lemuria\Message\Party\MigrateFailedMessage;
-use Lemuria\Engine\Lemuria\Message\Party\MigrateFromMessage;
-use Lemuria\Engine\Lemuria\Message\Party\MigrateIncompatibleMessage;
-use Lemuria\Engine\Lemuria\Message\Party\MigrateRejectedMessage;
-use Lemuria\Engine\Lemuria\Message\Party\MigrateToMessage;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait;
-use Lemuria\Model\Lemuria\Race\Human;
+use Lemuria\Engine\Fantasya\Command\GiftTrait;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Message\Party\MigrateFailedMessage;
+use Lemuria\Engine\Fantasya\Message\Party\MigrateFromMessage;
+use Lemuria\Engine\Fantasya\Message\Party\MigrateIncompatibleMessage;
+use Lemuria\Engine\Fantasya\Message\Party\MigrateRejectedMessage;
+use Lemuria\Engine\Fantasya\Message\Party\MigrateToMessage;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Race\Human;
 
 /**
  * Implementation of command GIB.

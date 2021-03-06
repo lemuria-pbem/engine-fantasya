@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Factory\Model;
+namespace Lemuria\Engine\Fantasya\Factory\Model;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Model\Lemuria\Commodity;
+use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\SingletonTrait;
 
 final class Everything implements Commodity

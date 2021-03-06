@@ -1,26 +1,26 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Destroy;
+namespace Lemuria\Engine\Fantasya\Command\Destroy;
 
-use Lemuria\Engine\Lemuria\Activity;
-use Lemuria\Engine\Lemuria\Command\UnitCommand;
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
-use Lemuria\Engine\Lemuria\Message\Unit\SmashDamageConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SmashDamageVesselMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SmashDestroyConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SmashDestroyVesselMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SmashLeaveConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SmashLeaveVesselMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SmashNotConstructionMessageOwnerMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SmashNotInConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SmashNotInVesselMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SmashNotVesselOwnerMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SmashRegainMessage;
+use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashDamageConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashDamageVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashDestroyConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashDestroyVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashLeaveConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashLeaveVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashNotConstructionMessageOwnerMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashNotInConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashNotInVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashNotVesselOwnerMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashRegainMessage;
 use Lemuria\Id;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Requirement;
-use Lemuria\Model\Lemuria\Resources;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Requirement;
+use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Implementation of command ZERSTÖREN for constructions and vessels.

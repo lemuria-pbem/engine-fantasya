@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Factory;
+namespace Lemuria\Engine\Fantasya\Factory;
 
-use Lemuria\Engine\Lemuria\Context;
-use Lemuria\Engine\Lemuria\Message\Unit\AllocationTakeMessage;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Message\Unit\AllocationTakeMessage;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Unit;
 
 trait CollectTrait
 {

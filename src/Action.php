@@ -1,10 +1,10 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Exception\ActionException;
+use Lemuria\Engine\Fantasya\Exception\ActionException;
 
 /**
  * Actions change the world of Lemuria when a turn is running.

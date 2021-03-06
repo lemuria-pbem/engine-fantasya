@@ -1,14 +1,14 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Combat;
+namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Calculus;
+use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Model\Lemuria\Party;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * An army consists of all combatants from a single party.

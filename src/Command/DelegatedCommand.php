@@ -1,10 +1,10 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Command;
-use Lemuria\Engine\Lemuria\Context;
-use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Phrase;
 
 /**
  * Base class for all complex commands that delegate to simpler commands.

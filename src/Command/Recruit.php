@@ -1,21 +1,21 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Factory\CollectTrait;
-use Lemuria\Engine\Lemuria\Message\Party\RecruitPreventMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\RecruitGuardedMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\RecruitLessMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\RecruitMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\RecruitPaymentMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\RecruitTooExpensiveMessage;
-use Lemuria\Model\Lemuria\Commodity\Peasant;
-use Lemuria\Model\Lemuria\Commodity\Silver;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Relation;
-use Lemuria\Model\Lemuria\Resources;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\CollectTrait;
+use Lemuria\Engine\Fantasya\Message\Party\RecruitPreventMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RecruitGuardedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RecruitLessMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RecruitMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RecruitPaymentMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RecruitTooExpensiveMessage;
+use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Commodity\Silver;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Fantasya\Resources;
 
 /**
  * Implementation of command REKRUTIEREN (recruit peasants).

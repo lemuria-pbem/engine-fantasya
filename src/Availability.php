@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Model\Lemuria\Commodity\Peasant;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Region;
-use Lemuria\Model\Lemuria\Resources;
+use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Resources;
 
 class Availability
 {

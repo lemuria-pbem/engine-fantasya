@@ -1,17 +1,17 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Create;
+namespace Lemuria\Engine\Fantasya\Command\Create;
 
-use Lemuria\Engine\Lemuria\Activity;
-use Lemuria\Engine\Lemuria\Command\UnitCommand;
-use Lemuria\Engine\Lemuria\Context;
-use Lemuria\Engine\Lemuria\Factory\CollectTrait;
-use Lemuria\Engine\Lemuria\Factory\DefaultActivityTrait;
-use Lemuria\Engine\Lemuria\Factory\Model\Job;
-use Lemuria\Engine\Lemuria\Phrase;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Requirement;
-use Lemuria\Model\Lemuria\Resources;
+use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\CollectTrait;
+use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\Model\Job;
+use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Requirement;
+use Lemuria\Model\Fantasya\Resources;
 
 /**
  * Implementation of command MACHEN <amount> <product> (create product).

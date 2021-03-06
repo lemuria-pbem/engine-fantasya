@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Engine\Exception\NotRegisteredException;
-use Lemuria\Engine\Lemuria\Message\Exception\DuplicateMessageException;
-use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\Exception\DuplicateMessageException;
+use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 use Lemuria\Engine\Report;
 use Lemuria\Exception\LemuriaException;

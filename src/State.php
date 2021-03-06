@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
-use Lemuria\Model\Lemuria\Intelligence;
-use Lemuria\Model\Lemuria\Region;
+use Lemuria\Model\Fantasya\Intelligence;
+use Lemuria\Model\Fantasya\Region;
 
 final class State
 {

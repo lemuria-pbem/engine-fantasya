@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Model\Lemuria\Unit;
-use Lemuria\Model\Lemuria\Vessel;
+use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Fantasya\Vessel;
 
 class Capacity
 {

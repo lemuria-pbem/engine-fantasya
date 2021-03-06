@@ -1,22 +1,22 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Factory;
+namespace Lemuria\Engine\Fantasya\Factory;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Event;
-use Lemuria\Engine\Lemuria\Event\Decease;
-use Lemuria\Engine\Lemuria\Event\Drift;
-use Lemuria\Engine\Lemuria\Event\Fauna;
-use Lemuria\Engine\Lemuria\Event\Founder;
-use Lemuria\Engine\Lemuria\Event\Growth;
-use Lemuria\Engine\Lemuria\Event\Liquidation;
-use Lemuria\Engine\Lemuria\Event\Population;
-use Lemuria\Engine\Lemuria\Event\Subsistence;
-use Lemuria\Engine\Lemuria\Event\Support;
-use Lemuria\Engine\Lemuria\Event\Upkeep;
-use Lemuria\Engine\Lemuria\Progress;
-use Lemuria\Engine\Lemuria\State;
+use Lemuria\Engine\Fantasya\Event;
+use Lemuria\Engine\Fantasya\Event\Decease;
+use Lemuria\Engine\Fantasya\Event\Drift;
+use Lemuria\Engine\Fantasya\Event\Fauna;
+use Lemuria\Engine\Fantasya\Event\Founder;
+use Lemuria\Engine\Fantasya\Event\Growth;
+use Lemuria\Engine\Fantasya\Event\Liquidation;
+use Lemuria\Engine\Fantasya\Event\Population;
+use Lemuria\Engine\Fantasya\Event\Subsistence;
+use Lemuria\Engine\Fantasya\Event\Support;
+use Lemuria\Engine\Fantasya\Event\Upkeep;
+use Lemuria\Engine\Fantasya\Progress;
+use Lemuria\Engine\Fantasya\State;
 
 class DefaultProgress implements Progress
 {

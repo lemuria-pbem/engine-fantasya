@@ -1,15 +1,15 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Exception\CommandParserException;
-use Lemuria\Engine\Lemuria\Factory\CommandFactory;
-use Lemuria\Model\Lemuria\Intelligence;
-use Lemuria\Model\Lemuria\Party;
-use Lemuria\Model\Lemuria\Region;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Engine\Fantasya\Exception\CommandParserException;
+use Lemuria\Engine\Fantasya\Factory\CommandFactory;
+use Lemuria\Model\Fantasya\Intelligence;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * A context class available to all commands.

@@ -1,24 +1,24 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Event;
+namespace Lemuria\Engine\Fantasya\Event;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Action;
-use Lemuria\Engine\Lemuria\Factory\GiftTrait;
-use Lemuria\Engine\Lemuria\Message\Party\LiquidationLostMessage;
-use Lemuria\Engine\Lemuria\Message\Party\LiquidationMessage;
-use Lemuria\Engine\Lemuria\Message\Party\LiquidationGiftMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LiquidationHeirMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LoseToUnitMessage;
-use Lemuria\Engine\Lemuria\State;
+use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Factory\GiftTrait;
+use Lemuria\Engine\Fantasya\Message\Party\LiquidationLostMessage;
+use Lemuria\Engine\Fantasya\Message\Party\LiquidationMessage;
+use Lemuria\Engine\Fantasya\Message\Party\LiquidationGiftMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LiquidationHeirMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LoseToUnitMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Lemuria\Goods;
-use Lemuria\Model\Lemuria\Party;
-use Lemuria\Model\Lemuria\People;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Goods;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\People;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Remove empty units at the end of a turn.

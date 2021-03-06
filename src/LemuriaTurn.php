@@ -1,16 +1,16 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
-use Lemuria\Engine\Lemuria\Exception\ActionException;
-use Lemuria\Engine\Lemuria\Exception\CommandException;
-use Lemuria\Engine\Lemuria\Exception\CommandParserException;
-use Lemuria\Engine\Lemuria\Factory\CommandPriority;
-use Lemuria\Engine\Lemuria\Factory\DefaultProgress;
+use Lemuria\Engine\Fantasya\Exception\ActionException;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
+use Lemuria\Engine\Fantasya\Exception\CommandParserException;
+use Lemuria\Engine\Fantasya\Factory\CommandPriority;
+use Lemuria\Engine\Fantasya\Factory\DefaultProgress;
 use Lemuria\Engine\Move;
 use Lemuria\Engine\Turn;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Lemuria;
 
 /**

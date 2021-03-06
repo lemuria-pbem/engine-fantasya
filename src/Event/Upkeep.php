@@ -1,34 +1,34 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Event;
+namespace Lemuria\Engine\Fantasya\Event;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Action;
-use Lemuria\Engine\Lemuria\Effect\Unmaintained;
-use Lemuria\Engine\Lemuria\Factory\CollectTrait;
-use Lemuria\Engine\Lemuria\Message\Construction\UnmaintainedMessage;
-use Lemuria\Engine\Lemuria\Message\Construction\UpkeepAbandonedMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\UpkeepCharityMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\UpkeepDonateMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\UpkeepNothingMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\UpkeepPayMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\UpkeepPayOnlyMessage;
-use Lemuria\Engine\Lemuria\State;
+use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Effect\Unmaintained;
+use Lemuria\Engine\Fantasya\Factory\CollectTrait;
+use Lemuria\Engine\Fantasya\Message\Construction\UnmaintainedMessage;
+use Lemuria\Engine\Fantasya\Message\Construction\UpkeepAbandonedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\UpkeepCharityMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\UpkeepDonateMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\UpkeepNothingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\UpkeepPayMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\UpkeepPayOnlyMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Lemuria\Commodity;
-use Lemuria\Model\Lemuria\Commodity\Silver;
-use Lemuria\Model\Lemuria\Construction;
-use Lemuria\Model\Lemuria\Estate;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait;
-use Lemuria\Model\Lemuria\Gathering;
-use Lemuria\Model\Lemuria\Intelligence;
-use Lemuria\Model\Lemuria\Party;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Region;
-use Lemuria\Model\Lemuria\Relation;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Commodity\Silver;
+use Lemuria\Model\Fantasya\Construction;
+use Lemuria\Model\Fantasya\Estate;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Gathering;
+use Lemuria\Model\Fantasya\Intelligence;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Maintain all constructions.

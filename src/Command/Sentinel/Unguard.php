@@ -1,10 +1,10 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Sentinel;
+namespace Lemuria\Engine\Fantasya\Command\Sentinel;
 
-use Lemuria\Engine\Lemuria\Command\UnitCommand;
-use Lemuria\Engine\Lemuria\Message\Unit\UnguardMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\UnguardNotGuardingMessage;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Message\Unit\UnguardMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\UnguardNotGuardingMessage;
 
 /**
  * Implementation of command BEWACHEN Nicht.

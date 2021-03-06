@@ -1,21 +1,21 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Factory;
+namespace Lemuria\Engine\Fantasya\Factory;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Factory\Model\Everything;
-use Lemuria\Engine\Lemuria\Message\Unit\DismissEverybodyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DismissEmptyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DismissPeasantsMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DismissOnlyPeasantsMessage;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\Model\Everything;
+use Lemuria\Engine\Fantasya\Message\Unit\DismissEverybodyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DismissEmptyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DismissPeasantsMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DismissOnlyPeasantsMessage;
 use Lemuria\Item;
-use Lemuria\Model\Lemuria\Commodity;
-use Lemuria\Model\Lemuria\Commodity\Peasant;
-use Lemuria\Model\Lemuria\Heirs;
-use Lemuria\Model\Lemuria\People;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Relation;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Heirs;
+use Lemuria\Model\Fantasya\People;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Fantasya\Unit;
 
 trait GiftTrait
 {

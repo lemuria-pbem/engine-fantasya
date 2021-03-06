@@ -1,14 +1,14 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Message\Unit\ReserveAllMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\ReserveEverythingMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\ReserveInvalidMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\ReserveMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\ReserveOnlyMessage;
-use Lemuria\Model\Lemuria\Quantity;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\ReserveAllMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ReserveEverythingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ReserveInvalidMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ReserveMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ReserveOnlyMessage;
+use Lemuria\Model\Fantasya\Quantity;
 
 /**
  * Implementation of command RESERVIEREN.

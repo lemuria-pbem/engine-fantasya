@@ -29,12 +29,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
-- Nahrung statt Silber
-- Marktfunktionen
 - Ereignisse
-- Mikromanagement reduzieren
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE
 - Seekampf/Piraterie
 - VERSENKEN (Schiff vor Entern bewahren)
 - Monsterrasse bestimmt maximalen Übermacht-Faktor
-- Geschlossene Spielwelt

@@ -1,15 +1,15 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Create;
+namespace Lemuria\Engine\Fantasya\Command\Create;
 
-use Lemuria\Engine\Lemuria\Message\Unit\CommodityExperienceMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\CommodityResourcesMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\CommodityCreateMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\CommodityOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\CommodityExperienceMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\CommodityResourcesMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\CommodityCreateMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\CommodityOnlyMessage;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Model\Lemuria\Artifact as ArtifactInterface;
-use Lemuria\Model\Lemuria\Commodity as CommodityModel;
-use Lemuria\Model\Lemuria\Quantity;
+use Lemuria\Model\Fantasya\Artifact as ArtifactInterface;
+use Lemuria\Model\Fantasya\Commodity as CommodityModel;
+use Lemuria\Model\Fantasya\Quantity;
 
 /**
  * Implementation of command MACHEN <amount> <Commodity> (create artifact).

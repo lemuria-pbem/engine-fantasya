@@ -1,18 +1,18 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Message\Unit\DisguiseDoesNotKnowMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DisguiseKnownPartyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DisguiseLevelMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DisguiseMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DisguiseNotMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DisguisePartyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DisguiseUnknownPartyMessage;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\DisguiseDoesNotKnowMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DisguiseKnownPartyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DisguiseLevelMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DisguiseMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DisguiseNotMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DisguisePartyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DisguiseUnknownPartyMessage;
 use Lemuria\Id;
 use Lemuria\Model\Exception\NotRegisteredException;
-use Lemuria\Model\Lemuria\Party;
+use Lemuria\Model\Fantasya\Party;
 
 /**
  * This command lets a unit set its camouflage level and allows it to disguise as unit from foreign party or hide its

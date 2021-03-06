@@ -1,20 +1,20 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Event;
+namespace Lemuria\Engine\Fantasya\Event;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Action;
-use Lemuria\Engine\Lemuria\Capacity;
-use Lemuria\Engine\Lemuria\Effect\ExcessCargo;
-use Lemuria\Engine\Lemuria\Message\Vessel\FounderEffectMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\FounderMessage;
-use Lemuria\Engine\Lemuria\State;
+use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Capacity;
+use Lemuria\Engine\Fantasya\Effect\ExcessCargo;
+use Lemuria\Engine\Fantasya\Message\Vessel\FounderEffectMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\FounderMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Lemuria\People;
-use Lemuria\Model\Lemuria\Unit;
-use Lemuria\Model\Lemuria\Vessel;
+use Lemuria\Model\Fantasya\People;
+use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Fantasya\Vessel;
 
 /**
  * This event determines if an overloaded ship that is lost at sea will take damage and finally sink.

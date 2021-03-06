@@ -1,10 +1,10 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Exception;
+namespace Lemuria\Engine\Fantasya\Exception;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
 
 /**
  * This exception is thrown when a unit tries to execute more than one activity.

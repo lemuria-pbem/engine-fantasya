@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Exception;
+namespace Lemuria\Engine\Fantasya\Message\Exception;
 
 use JetBrains\PhpStorm\Pure;
 

@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Storage;
+namespace Lemuria\Engine\Fantasya\Storage;
 
 use JetBrains\PhpStorm\ArrayShape;
 
-use Lemuria\Model\Lemuria\Storage\JsonGame;
-use Lemuria\Model\Lemuria\Storage\JsonProvider;
+use Lemuria\Model\Fantasya\Storage\JsonGame;
+use Lemuria\Model\Fantasya\Storage\JsonProvider;
 
 class LemuriaGame extends JsonGame
 {
@@ -32,7 +32,7 @@ class LemuriaGame extends JsonGame
 	/**
 	 * @return array(string=>string)
 	 */
-	#[ArrayShape([JsonProvider::DEFAULT => '\Lemuria\Model\Lemuria\Storage\JsonProvider'])]
+	#[ArrayShape([JsonProvider::DEFAULT => '\Lemuria\Model\Fantasya\Storage\JsonProvider'])]
 	protected function getSaveStorage(): array {
 		$round = $this->config[LemuriaConfig::ROUND] + 1;
 		$path  = $this->config->getStoragePath() . DIRECTORY_SEPARATOR . self::GAME_DIR . DIRECTORY_SEPARATOR . $round;

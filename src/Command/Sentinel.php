@@ -1,11 +1,11 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Command;
-use Lemuria\Engine\Lemuria\Command\Sentinel\Guard;
-use Lemuria\Engine\Lemuria\Command\Sentinel\Unguard;
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Command\Sentinel\Guard;
+use Lemuria\Engine\Fantasya\Command\Sentinel\Unguard;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 
 /**
  * Implementation of command BEWACHEN.

@@ -1,25 +1,25 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Message\Unit\SortAfterMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SortAfterInConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SortAfterOwnerMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SortBeforeMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SortBeforeInConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SortFirstMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SortFlipMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SortFlipInConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SortLastInConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SortLastMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SortNotInRegionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SortWithForeignerMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SortWithItselfMessage;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\SortAfterMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortAfterInConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortAfterOwnerMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortBeforeMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortBeforeInConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortFirstMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortFlipMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortFlipInConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortLastInConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortLastMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortNotInRegionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortWithForeignerMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortWithItselfMessage;
 use Lemuria\Exception\IdException;
 use Lemuria\Id;
 use Lemuria\Model\Exception\NotRegisteredException;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Reorder;
 
 /**

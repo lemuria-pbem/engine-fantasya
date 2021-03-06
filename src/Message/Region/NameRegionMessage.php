@@ -1,8 +1,8 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Region;
+namespace Lemuria\Engine\Fantasya\Message\Region;
 
-use Lemuria\Engine\Lemuria\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 
 class NameRegionMessage extends AbstractRegionMessage

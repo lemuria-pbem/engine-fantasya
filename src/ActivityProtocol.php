@@ -1,12 +1,12 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Lemuria;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * A protocol of units' activities.

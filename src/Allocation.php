@@ -1,22 +1,22 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Exception\AllocationException;
-use Lemuria\Engine\Lemuria\Factory\CommandPriority;
+use Lemuria\Engine\Fantasya\Exception\AllocationException;
+use Lemuria\Engine\Fantasya\Factory\CommandPriority;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
-use Lemuria\Model\Lemuria\Commodity\Camel;
-use Lemuria\Model\Lemuria\Commodity\Elephant;
-use Lemuria\Model\Lemuria\Commodity\Food;
-use Lemuria\Model\Lemuria\Commodity\Horse;
-use Lemuria\Model\Lemuria\Commodity\Silver;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Region;
-use Lemuria\Model\Lemuria\Resources;
+use Lemuria\Model\Fantasya\Commodity\Camel;
+use Lemuria\Model\Fantasya\Commodity\Elephant;
+use Lemuria\Model\Fantasya\Commodity\Food;
+use Lemuria\Model\Fantasya\Commodity\Horse;
+use Lemuria\Model\Fantasya\Commodity\Silver;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Resources;
 
 /**
  * Helper for resource distribution.

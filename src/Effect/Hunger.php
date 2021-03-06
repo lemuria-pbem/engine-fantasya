@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Effect;
+namespace Lemuria\Engine\Fantasya\Effect;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Action;
-use Lemuria\Engine\Lemuria\Message\Unit\HungerMessage;
-use Lemuria\Engine\Lemuria\State;
+use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Message\Unit\HungerMessage;
+use Lemuria\Engine\Fantasya\State;
 
 final class Hunger extends AbstractUnitEffect
 {

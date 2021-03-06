@@ -1,32 +1,32 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Event;
+namespace Lemuria\Engine\Fantasya\Event;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Action;
-use Lemuria\Engine\Lemuria\Effect\Hunger;
-use Lemuria\Engine\Lemuria\Factory\CollectTrait;
-use Lemuria\Engine\Lemuria\Message\Unit\SupportCharityMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SupportDonateMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SupportHungerMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SupportNothingMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SupportPayMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\SupportPayOnlyMessage;
-use Lemuria\Engine\Lemuria\State;
+use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Effect\Hunger;
+use Lemuria\Engine\Fantasya\Factory\CollectTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\SupportCharityMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SupportDonateMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SupportHungerMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SupportNothingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SupportPayMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SupportPayOnlyMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Lemuria\Commodity;
-use Lemuria\Model\Lemuria\Commodity\Silver;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait;
-use Lemuria\Model\Lemuria\Gathering;
-use Lemuria\Model\Lemuria\Intelligence;
-use Lemuria\Model\Lemuria\Party;
-use Lemuria\Model\Lemuria\People;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Region;
-use Lemuria\Model\Lemuria\Relation;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Commodity\Silver;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Gathering;
+use Lemuria\Model\Fantasya\Intelligence;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\People;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Pay every unit's upkeep.

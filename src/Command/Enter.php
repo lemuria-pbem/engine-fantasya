@@ -1,18 +1,18 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Message\Unit\EnterAlreadyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\EnterDeniedMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\EnterMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\EnterNotFoundMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\EnterTooLargeMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LeaveConstructionDebugMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LeaveVesselDebugMessage;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\EnterAlreadyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EnterDeniedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EnterMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EnterNotFoundMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EnterTooLargeMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
 use Lemuria\Id;
-use Lemuria\Model\Lemuria\Construction;
-use Lemuria\Model\Lemuria\Relation;
+use Lemuria\Model\Fantasya\Construction;
+use Lemuria\Model\Fantasya\Relation;
 
 /**
  * A unit enters a construction using the Enter command.

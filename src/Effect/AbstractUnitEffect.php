@@ -1,13 +1,13 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Effect;
+namespace Lemuria\Engine\Fantasya\Effect;
 
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Score;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Unit;
 
 abstract class AbstractUnitEffect extends AbstractEffect
 {

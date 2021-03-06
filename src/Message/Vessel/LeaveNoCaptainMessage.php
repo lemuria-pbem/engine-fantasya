@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Vessel;
+namespace Lemuria\Engine\Fantasya\Message\Vessel;
 
 class LeaveNoCaptainMessage extends AbstractVesselMessage
 {

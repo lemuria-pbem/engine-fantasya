@@ -1,19 +1,19 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Factory;
+namespace Lemuria\Engine\Fantasya\Factory;
 
 use JetBrains\PhpStorm\Pure;
-use Lemuria\Engine\Lemuria\Context;
+use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Lemuria;
-use Lemuria\Model\Lemuria\Landscape;
-use Lemuria\Model\Lemuria\Landscape\Forest;
-use Lemuria\Model\Lemuria\Landscape\Ocean;
-use Lemuria\Model\Lemuria\Landscape\Plain;
-use Lemuria\Model\Lemuria\Region;
-use Lemuria\Model\Lemuria\Ship\Boat;
-use Lemuria\Model\Lemuria\Vessel;
-use Lemuria\Model\Lemuria\Talent\Navigation;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Landscape;
+use Lemuria\Model\Fantasya\Landscape\Forest;
+use Lemuria\Model\Fantasya\Landscape\Ocean;
+use Lemuria\Model\Fantasya\Landscape\Plain;
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Ship\Boat;
+use Lemuria\Model\Fantasya\Vessel;
+use Lemuria\Model\Fantasya\Talent\Navigation;
+use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Neighbours;
 
 trait NavigationTrait

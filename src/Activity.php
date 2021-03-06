@@ -1,8 +1,8 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
-use Lemuria\Engine\Lemuria\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
 
 /**
  * Activities are commands that keep a unit busy the whole round, so it cannot do more than one activity per round.

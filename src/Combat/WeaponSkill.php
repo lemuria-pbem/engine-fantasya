@@ -1,19 +1,19 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Combat;
+namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Model\Lemuria\Ability;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Talent;
-use Lemuria\Model\Lemuria\Talent\Archery;
-use Lemuria\Model\Lemuria\Talent\Bladefighting;
-use Lemuria\Model\Lemuria\Talent\Catapulting;
-use Lemuria\Model\Lemuria\Talent\Crossbowing;
-use Lemuria\Model\Lemuria\Talent\Fistfight;
-use Lemuria\Model\Lemuria\Talent\Spearfighting;
+use Lemuria\Model\Fantasya\Ability;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Talent;
+use Lemuria\Model\Fantasya\Talent\Archery;
+use Lemuria\Model\Fantasya\Talent\Bladefighting;
+use Lemuria\Model\Fantasya\Talent\Catapulting;
+use Lemuria\Model\Fantasya\Talent\Crossbowing;
+use Lemuria\Model\Fantasya\Talent\Fistfight;
+use Lemuria\Model\Fantasya\Talent\Spearfighting;
 
 /**
  * Helper class for battle configuration of a unit.

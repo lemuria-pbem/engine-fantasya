@@ -1,24 +1,24 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Destroy;
+namespace Lemuria\Engine\Fantasya\Command\Destroy;
 
-use Lemuria\Engine\Lemuria\Allocation;
-use Lemuria\Engine\Lemuria\Command\UnitCommand;
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
-use Lemuria\Engine\Lemuria\Factory\GiftTrait;
-use Lemuria\Engine\Lemuria\Factory\Model\Everything;
-use Lemuria\Engine\Lemuria\Message\Unit\DismissAllMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DismissEverythingMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DIsmissMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DismissNoneMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DismissNothingMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\DismissOnlyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LoseAllMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LoseMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LoseNothingMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LoseOnlyMessage;
-use Lemuria\Model\Lemuria\Commodity\Peasant;
-use Lemuria\Model\Lemuria\Quantity;
+use Lemuria\Engine\Fantasya\Allocation;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\GiftTrait;
+use Lemuria\Engine\Fantasya\Factory\Model\Everything;
+use Lemuria\Engine\Fantasya\Message\Unit\DismissAllMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DismissEverythingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DIsmissMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DismissNoneMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DismissNothingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DismissOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LoseAllMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LoseMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LoseNothingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LoseOnlyMessage;
+use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Quantity;
 
 /**
  * Implementation of command ENTLASSEN.

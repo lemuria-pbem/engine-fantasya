@@ -1,16 +1,16 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Create;
+namespace Lemuria\Engine\Fantasya\Command\Create;
 
-use Lemuria\Engine\Lemuria\Command;
-use Lemuria\Engine\Lemuria\Command\DelegatedCommand;
-use Lemuria\Engine\Lemuria\Context;
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Factory\Model\Job;
-use Lemuria\Engine\Lemuria\Phrase;
-use Lemuria\Model\Lemuria\Artifact as ArtifactInterface;
-use Lemuria\Model\Lemuria\Material as MaterialInterface;
-use Lemuria\Model\Lemuria\RawMaterial as RawMaterialInterface;
+use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Command\DelegatedCommand;
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\Model\Job;
+use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Fantasya\Artifact as ArtifactInterface;
+use Lemuria\Model\Fantasya\Material as MaterialInterface;
+use Lemuria\Model\Fantasya\RawMaterial as RawMaterialInterface;
 
 /**
  * Implementation of command MACHEN <amount> <Resource> (create resource).

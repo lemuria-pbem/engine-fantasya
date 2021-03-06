@@ -1,32 +1,32 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Create;
+namespace Lemuria\Engine\Fantasya\Command\Create;
 
 use function Lemuria\getClass;
-use Lemuria\Engine\Lemuria\Activity;
-use Lemuria\Engine\Lemuria\Command\AllocationCommand;
-use Lemuria\Engine\Lemuria\Context;
-use Lemuria\Engine\Lemuria\Factory\DefaultActivityTrait;
-use Lemuria\Engine\Lemuria\Factory\Model\Job;
-use Lemuria\Engine\Lemuria\Message\Unit\RawMaterialCanMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\RawMaterialCannotMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\RawMaterialExperienceMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\RawMaterialGuardedMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\RawMaterialNoDemandMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\RawMaterialOnlyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\RawMaterialOutputMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\RawMaterialResourcesMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\RawMaterialWantsMessage;
-use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Command\AllocationCommand;
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\Model\Job;
+use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialCanMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialCannotMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialExperienceMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialGuardedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialNoDemandMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialOutputMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialResourcesMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialWantsMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Model\Lemuria\Ability;
-use Lemuria\Model\Lemuria\Commodity;
-use Lemuria\Model\Lemuria\Party;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\RawMaterial as RawMaterialInterface;
-use Lemuria\Model\Lemuria\Relation;
-use Lemuria\Model\Lemuria\Resources;
-use Lemuria\Model\Lemuria\Talent;
+use Lemuria\Model\Fantasya\Ability;
+use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\RawMaterial as RawMaterialInterface;
+use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Fantasya\Talent;
 
 /**
  * Implementation of command MACHEN <amount> <RawMaterial> (create raw material).

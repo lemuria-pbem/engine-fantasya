@@ -1,16 +1,16 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Create;
+namespace Lemuria\Engine\Fantasya\Command\Create;
 
-use Lemuria\Engine\Lemuria\Command;
-use Lemuria\Engine\Lemuria\Command\DelegatedCommand;
-use Lemuria\Engine\Lemuria\Context;
-use Lemuria\Engine\Lemuria\Exception\UnknownCommandException;
-use Lemuria\Engine\Lemuria\Factory\Model\Job;
-use Lemuria\Engine\Lemuria\Phrase;
-use Lemuria\Model\Lemuria\Commodity as CommodityInterface;
-use Lemuria\Model\Lemuria\Building;
-use Lemuria\Model\Lemuria\Ship;
+use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Command\DelegatedCommand;
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\Model\Job;
+use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Fantasya\Commodity as CommodityInterface;
+use Lemuria\Model\Fantasya\Building;
+use Lemuria\Model\Fantasya\Ship;
 
 /**
  * Implementation of command MACHEN <amount> <artifact> (create artifact).

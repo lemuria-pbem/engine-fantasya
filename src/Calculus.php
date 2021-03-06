@@ -1,30 +1,30 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Combat\WeaponSkill;
-use Lemuria\Engine\Lemuria\Command\Learn;
-use Lemuria\Engine\Lemuria\Command\Teach;
+use Lemuria\Engine\Fantasya\Combat\WeaponSkill;
+use Lemuria\Engine\Fantasya\Command\Learn;
+use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Item;
-use Lemuria\Model\Lemuria\Ability;
-use Lemuria\Model\Lemuria\Commodity\Camel;
-use Lemuria\Model\Lemuria\Commodity\Carriage;
-use Lemuria\Model\Lemuria\Commodity\Elephant;
-use Lemuria\Model\Lemuria\Commodity\Griffin;
-use Lemuria\Model\Lemuria\Commodity\Horse;
-use Lemuria\Model\Lemuria\Commodity\Pegasus;
-use Lemuria\Model\Lemuria\Commodity\Weapon\Fists;
-use Lemuria\Model\Lemuria\Factory\BuilderTrait;
-use Lemuria\Model\Lemuria\Modification;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Talent;
-use Lemuria\Model\Lemuria\Talent\Fistfight;
-use Lemuria\Model\Lemuria\Transport;
-use Lemuria\Model\Lemuria\Unit;
-use Lemuria\Model\Lemuria\Weapon;
+use Lemuria\Model\Fantasya\Ability;
+use Lemuria\Model\Fantasya\Commodity\Camel;
+use Lemuria\Model\Fantasya\Commodity\Carriage;
+use Lemuria\Model\Fantasya\Commodity\Elephant;
+use Lemuria\Model\Fantasya\Commodity\Griffin;
+use Lemuria\Model\Fantasya\Commodity\Horse;
+use Lemuria\Model\Fantasya\Commodity\Pegasus;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Modification;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Talent;
+use Lemuria\Model\Fantasya\Talent\Fistfight;
+use Lemuria\Model\Fantasya\Transport;
+use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Fantasya\Weapon;
 
 /**
  * Helper for unit calculations.

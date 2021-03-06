@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Party;
+namespace Lemuria\Engine\Fantasya\Message\Party;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Message\AbstractMessage;
+use Lemuria\Engine\Fantasya\Message\AbstractMessage;
 use Lemuria\Engine\Report;
 
 abstract class AbstractPartyMessage extends AbstractMessage

@@ -1,12 +1,12 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Factory;
+namespace Lemuria\Engine\Fantasya\Factory;
 
 use function Lemuria\getClass;
-use Lemuria\Engine\Lemuria\Action;
-use Lemuria\Engine\Lemuria\Command;
-use Lemuria\Engine\Lemuria\Effect;
-use Lemuria\Engine\Lemuria\Event;
+use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Effect;
+use Lemuria\Engine\Fantasya\Event;
 use Lemuria\Exception\LemuriaException;
 
 /**

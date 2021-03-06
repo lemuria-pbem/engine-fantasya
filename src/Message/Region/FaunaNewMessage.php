@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Message\Region;
+namespace Lemuria\Engine\Fantasya\Message\Region;
 
 class FaunaNewMessage extends FaunaGrowthMessage
 {

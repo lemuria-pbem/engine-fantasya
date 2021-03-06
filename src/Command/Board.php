@@ -1,18 +1,18 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Message\Unit\BoardAlreadyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\BoardDeniedMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LeaveConstructionDebugMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\LeaveVesselDebugMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\BoardMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\BoardNotFoundMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\BoardTooHeavyMessage;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\BoardAlreadyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\BoardDeniedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\BoardMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\BoardNotFoundMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\BoardTooHeavyMessage;
 use Lemuria\Id;
-use Lemuria\Model\Lemuria\Relation;
-use Lemuria\Model\Lemuria\Vessel;
+use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Fantasya\Vessel;
 
 /**
  * A unit enters a vessel using the Board command.

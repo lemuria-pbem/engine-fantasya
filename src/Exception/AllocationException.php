@@ -1,11 +1,11 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Exception;
+namespace Lemuria\Engine\Fantasya\Exception;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Consumer;
-use Lemuria\Model\Lemuria\Region;
+use Lemuria\Engine\Fantasya\Consumer;
+use Lemuria\Model\Fantasya\Region;
 
 /**
  * This exception is thrown by the Allocation class.

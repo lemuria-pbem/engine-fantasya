@@ -1,13 +1,13 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Storage;
+namespace Lemuria\Engine\Fantasya\Storage;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\LemuriaOrders;
-use Lemuria\Engine\Lemuria\LemuriaReport;
-use Lemuria\Engine\Lemuria\LemuriaScore;
-use Lemuria\Engine\Lemuria\SingletonCatalog as EngineSingletonCatalog;
+use Lemuria\Engine\Fantasya\LemuriaOrders;
+use Lemuria\Engine\Fantasya\LemuriaReport;
+use Lemuria\Engine\Fantasya\LemuriaScore;
+use Lemuria\Engine\Fantasya\SingletonCatalog as EngineSingletonCatalog;
 use Lemuria\Engine\Orders;
 use Lemuria\Engine\Report;
 use Lemuria\Engine\Score;
@@ -19,11 +19,11 @@ use Lemuria\Model\Catalog;
 use Lemuria\Model\Config;
 use Lemuria\Model\Calendar\BaseCalendar;
 use Lemuria\Model\Game;
-use Lemuria\Model\Lemuria\Exception\JsonException;
-use Lemuria\Model\Lemuria\Factory\LemuriaCatalog;
-use Lemuria\Model\Lemuria\Factory\LemuriaRegistry;
-use Lemuria\Model\Lemuria\SingletonCatalog as ModelSingletonCatalog;
-use Lemuria\Model\Lemuria\Storage\JsonProvider;
+use Lemuria\Model\Fantasya\Exception\JsonException;
+use Lemuria\Model\Fantasya\Factory\LemuriaCatalog;
+use Lemuria\Model\Fantasya\Factory\LemuriaRegistry;
+use Lemuria\Model\Fantasya\SingletonCatalog as ModelSingletonCatalog;
+use Lemuria\Model\Fantasya\Storage\JsonProvider;
 use Lemuria\Model\World;
 use Lemuria\Model\World\HexagonalMap;
 use Lemuria\Registry;

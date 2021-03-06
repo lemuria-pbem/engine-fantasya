@@ -1,21 +1,21 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Activity;
-use Lemuria\Engine\Lemuria\Factory\DefaultActivityTrait;
-use Lemuria\Engine\Lemuria\Message\Unit\EntertainGuardedMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\EntertainMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\EntertainNoDemandMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\EntertainNoExperienceMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\EntertainOnlyMessage;
-use Lemuria\Engine\Lemuria\Message\Party\EntertainPreventMessage;
-use Lemuria\Model\Lemuria\Commodity\Food;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Commodity\Silver;
-use Lemuria\Model\Lemuria\Relation;
-use Lemuria\Model\Lemuria\Resources;
-use Lemuria\Model\Lemuria\Talent\Entertaining;
+use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\EntertainGuardedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EntertainMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EntertainNoDemandMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EntertainNoExperienceMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EntertainOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Party\EntertainPreventMessage;
+use Lemuria\Model\Fantasya\Commodity\Food;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Commodity\Silver;
+use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Fantasya\Talent\Entertaining;
 
 /**
  * Implementation of command UNTERHALTEN (a Unit uses its Entertaining skill to earn Silver).

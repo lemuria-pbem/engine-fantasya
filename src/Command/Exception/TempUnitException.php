@@ -1,10 +1,10 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Exception;
+namespace Lemuria\Engine\Fantasya\Command\Exception;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Exception\CommandException;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
 
 /**
  * This exception is thrown when an invalid reference to a TEMP Unit is found.

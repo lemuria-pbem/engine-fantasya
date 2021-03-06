@@ -1,33 +1,33 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Event;
+namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Lemuria\Action;
-use Lemuria\Engine\Lemuria\Factory\Workplaces;
-use Lemuria\Engine\Lemuria\Factory\WorkplacesTrait;
-use Lemuria\Engine\Lemuria\Message\Region\FaunaGriffineggMessage;
-use Lemuria\Engine\Lemuria\Message\Region\FaunaGrowthMessage;
-use Lemuria\Engine\Lemuria\Message\Region\FaunaHungerMessage;
-use Lemuria\Engine\Lemuria\Message\Region\FaunaMigrantsMessage;
-use Lemuria\Engine\Lemuria\Message\Region\FaunaNewMessage;
-use Lemuria\Engine\Lemuria\State;
+use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Factory\Workplaces;
+use Lemuria\Engine\Fantasya\Factory\WorkplacesTrait;
+use Lemuria\Engine\Fantasya\Message\Region\FaunaGriffineggMessage;
+use Lemuria\Engine\Fantasya\Message\Region\FaunaGrowthMessage;
+use Lemuria\Engine\Fantasya\Message\Region\FaunaHungerMessage;
+use Lemuria\Engine\Fantasya\Message\Region\FaunaMigrantsMessage;
+use Lemuria\Engine\Fantasya\Message\Region\FaunaNewMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Lemuria\Commodity;
-use Lemuria\Model\Lemuria\Commodity\Camel;
-use Lemuria\Model\Lemuria\Commodity\Elephant;
-use Lemuria\Model\Lemuria\Commodity\Griffin;
-use Lemuria\Model\Lemuria\Commodity\Griffinegg;
-use Lemuria\Model\Lemuria\Commodity\Horse;
-use Lemuria\Model\Lemuria\Landscape\Desert;
-use Lemuria\Model\Lemuria\Landscape\Forest;
-use Lemuria\Model\Lemuria\Landscape\Glacier;
-use Lemuria\Model\Lemuria\Landscape\Highland;
-use Lemuria\Model\Lemuria\Landscape\Mountain;
-use Lemuria\Model\Lemuria\Landscape\Plain;
-use Lemuria\Model\Lemuria\Landscape\Swamp;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Region;
+use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Commodity\Camel;
+use Lemuria\Model\Fantasya\Commodity\Elephant;
+use Lemuria\Model\Fantasya\Commodity\Griffin;
+use Lemuria\Model\Fantasya\Commodity\Griffinegg;
+use Lemuria\Model\Fantasya\Commodity\Horse;
+use Lemuria\Model\Fantasya\Landscape\Desert;
+use Lemuria\Model\Fantasya\Landscape\Forest;
+use Lemuria\Model\Fantasya\Landscape\Glacier;
+use Lemuria\Model\Fantasya\Landscape\Highland;
+use Lemuria\Model\Fantasya\Landscape\Mountain;
+use Lemuria\Model\Fantasya\Landscape\Plain;
+use Lemuria\Model\Fantasya\Landscape\Swamp;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Neighbours;
 
 /**

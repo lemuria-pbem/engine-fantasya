@@ -1,20 +1,20 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Message\Construction\NumberConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Construction\NumberOwnerMessage;
-use Lemuria\Engine\Lemuria\Message\Construction\NumberConstructionUsedMessage;
-use Lemuria\Engine\Lemuria\Message\Party\NumberPartyMessage;
-use Lemuria\Engine\Lemuria\Message\Party\NumberPartyUsedMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\NumberUnitMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\NumberNotInConstructionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\NumberNotInVesselMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\NumberUnitUsedMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\NumberCaptainMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\NumberVesselMessage;
-use Lemuria\Engine\Lemuria\Message\Vessel\NumberVesselUsedMessage;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\Construction\NumberConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Construction\NumberOwnerMessage;
+use Lemuria\Engine\Fantasya\Message\Construction\NumberConstructionUsedMessage;
+use Lemuria\Engine\Fantasya\Message\Party\NumberPartyMessage;
+use Lemuria\Engine\Fantasya\Message\Party\NumberPartyUsedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NumberUnitMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NumberNotInConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NumberNotInVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NumberUnitUsedMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\NumberCaptainMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\NumberVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\NumberVesselUsedMessage;
 use Lemuria\Model\Catalog;
 use Lemuria\Exception\IdException;
 use Lemuria\Id;

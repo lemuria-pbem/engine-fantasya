@@ -1,17 +1,17 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Handover;
+namespace Lemuria\Engine\Fantasya\Command\Handover;
 
-use Lemuria\Engine\Lemuria\Exception\InvalidCommandException;
-use Lemuria\Engine\Lemuria\Command\UnitCommand;
-use Lemuria\Engine\Lemuria\Message\Unit\GrantFromOutsideMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\GrantMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\GrantNothingMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\GrantNotInsideMessage;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Message\Unit\GrantFromOutsideMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GrantMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GrantNothingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GrantNotInsideMessage;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * A unit who is owner of a construction or vessel grants another unit inside the command over it.

@@ -1,8 +1,8 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
-use Lemuria\Engine\Lemuria\Factory\EffectFactory;
+use Lemuria\Engine\Fantasya\Factory\EffectFactory;
 use Lemuria\Engine\Score;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Identifiable;

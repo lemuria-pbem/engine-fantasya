@@ -1,25 +1,25 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Lemuria\Activity;
-use Lemuria\Engine\Lemuria\Combat\Army;
-use Lemuria\Engine\Lemuria\Factory\DefaultActivityTrait;
-use Lemuria\Engine\Lemuria\Message\Party\TaxPreventMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TaxDemandMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TaxGuardedMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TaxMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TaxNoCollectorsMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TaxNoDemandMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TaxNoExperienceMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TaxOnlyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TaxWithoutWeaponMessage;
-use Lemuria\Model\Lemuria\Commodity\Food;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Commodity\Silver;
-use Lemuria\Model\Lemuria\Relation;
-use Lemuria\Model\Lemuria\Resources;
-use Lemuria\Model\Lemuria\Talent\Taxcollecting;
+use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Combat\Army;
+use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
+use Lemuria\Engine\Fantasya\Message\Party\TaxPreventMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TaxDemandMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TaxGuardedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TaxMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TaxNoCollectorsMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TaxNoDemandMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TaxNoExperienceMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TaxOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TaxWithoutWeaponMessage;
+use Lemuria\Model\Fantasya\Commodity\Food;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Commodity\Silver;
+use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Fantasya\Talent\Taxcollecting;
 
 /**
  * Implementation of command TREIBEN (a Unit uses its Taxcollecting skill to earn Silver).

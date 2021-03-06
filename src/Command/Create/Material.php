@@ -1,15 +1,15 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Create;
+namespace Lemuria\Engine\Fantasya\Command\Create;
 
-use Lemuria\Engine\Lemuria\Message\Unit\MaterialExperienceMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\MaterialResourcesMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\MaterialOnlyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\MaterialOutputMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\MaterialExperienceMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\MaterialResourcesMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\MaterialOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\MaterialOutputMessage;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Model\Lemuria\Material as MaterialInterface;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Resources;
+use Lemuria\Model\Fantasya\Material as MaterialInterface;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Resources;
 
 /**
  * Implementation of command MACHEN <amount> <Material> (create material).

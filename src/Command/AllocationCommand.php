@@ -1,19 +1,19 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Lemuria\Consumer;
-use Lemuria\Engine\Lemuria\Context;
-use Lemuria\Engine\Lemuria\Phrase;
+use Lemuria\Engine\Fantasya\Consumer;
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
-use Lemuria\Model\Lemuria\Party;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Resources;
-use Lemuria\Model\Lemuria\Talent\Camouflage;
-use Lemuria\Model\Lemuria\Talent\Perception;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Fantasya\Talent\Camouflage;
+use Lemuria\Model\Fantasya\Talent\Perception;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Base class for all commands that request resources from a Region.

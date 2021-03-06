@@ -1,16 +1,16 @@
 <?php
 /** @noinspection DuplicatedCode */
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria;
+namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
-use Lemuria\Model\Lemuria\Goods;
-use Lemuria\Model\Lemuria\Party;
-use Lemuria\Model\Lemuria\People;
-use Lemuria\Model\Lemuria\Quantity;
-use Lemuria\Model\Lemuria\Region;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Model\Fantasya\Goods;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\People;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * A resource pool consists of all resources that the units of the same party in a single region carry.

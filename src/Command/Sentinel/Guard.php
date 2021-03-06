@@ -1,11 +1,11 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command\Sentinel;
+namespace Lemuria\Engine\Fantasya\Command\Sentinel;
 
-use Lemuria\Engine\Lemuria\Command\UnitCommand;
-use Lemuria\Engine\Lemuria\Message\Unit\GuardAlreadyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\GuardMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\GuardWithoutWeaponMessage;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Message\Unit\GuardAlreadyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GuardMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GuardWithoutWeaponMessage;
 
 /**
  * Implementation of command BEWACHEN.

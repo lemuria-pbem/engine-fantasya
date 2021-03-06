@@ -1,21 +1,21 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Lemuria\Command;
+namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
-use Lemuria\Engine\Lemuria\Activity;
-use Lemuria\Engine\Lemuria\Exception\CommandException;
-use Lemuria\Engine\Lemuria\Factory\DefaultActivityTrait;
-use Lemuria\Engine\Lemuria\Message\Unit\TeachBonusMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TeachExceptionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TeachPartyMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TeachRegionMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TeachSelfMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TeachStudentMessage;
-use Lemuria\Engine\Lemuria\Message\Unit\TeachUnableMessage;
-use Lemuria\Model\Lemuria\Unit;
+use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
+use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\TeachBonusMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TeachExceptionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TeachPartyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TeachRegionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TeachSelfMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TeachStudentMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TeachUnableMessage;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Implementation of command LEHREN (teach other units).
