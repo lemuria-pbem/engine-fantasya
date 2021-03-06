@@ -94,7 +94,7 @@ final class Fauna extends AbstractEvent
 						}
 					}
 				} else {
-					$migrants = (int)ceil(self::MIGRATION * self::MAX_RATE * self::MAX_RATE / $rate * $count);
+					$migrants = $rate > 0.0 ? (int)ceil(self::MIGRATION * self::MAX_RATE * self::MAX_RATE / $rate * $count) : 0;
 					if ($migrants > 0) {
 						$neighbours   = Lemuria::World()->getNeighbours($region);
 						$distribution = $this->getMigrantDistribution($neighbours, $rates);
