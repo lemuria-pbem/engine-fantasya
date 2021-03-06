@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Landscape;

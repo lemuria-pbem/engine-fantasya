@@ -14,7 +14,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\TaxNoDemandMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxNoExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxWithoutWeaponMessage;
-use Lemuria\Model\Fantasya\Commodity\Food;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Relation;
@@ -32,7 +31,7 @@ final class Tax extends AllocationCommand implements Activity
 {
 	use DefaultActivityTrait;
 
-	private const RATE = 2 * Food::PRICE;
+	private const RATE = 20;
 
 	private int $rate = 0;
 

@@ -10,7 +10,6 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
-use Lemuria\Model\Fantasya\Commodity\Food;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -23,10 +22,7 @@ use Lemuria\Model\Fantasya\Resources;
  */
 final class Allocation
 {
-	public const POOL_COMMODITIES = [
-		Food::class => true, Silver::class => true,
-		Camel::class, Elephant::class, Horse::class
-	];
+	public const POOL_COMMODITIES = [Silver::class => true, Camel::class, Elephant::class, Horse::class];
 
 	use BuilderTrait;
 

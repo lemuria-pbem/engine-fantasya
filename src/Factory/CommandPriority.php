@@ -56,7 +56,6 @@ final class CommandPriority
 		'Construction'  => 77,
 		'Vessel'        => 78,
 		'Commodity'     => 80,
-		'Material'      => 82,
 		'RawMaterial'   => 83,
 		'CollectTaxes'  => 86,
         'Entertain'     => 88,

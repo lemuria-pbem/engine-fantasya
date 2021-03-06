@@ -6,7 +6,7 @@ use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
-use Lemuria\Model\Fantasya\Commodity\Tree;
+use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Region;
 
@@ -22,7 +22,7 @@ trait WorkplacesTrait
 
 	private function getUsedWorkplaces(Region $region): int {
 		$resources = $region->Resources();
-		$trees     = $resources[self::createCommodity(Tree::class)]->Count();
+		$trees     = $resources[self::createCommodity(Wood::class)]->Count();
 		$horses    = $resources[self::createCommodity(Horse::class)]->Count();
 		$camels    = $resources[self::createCommodity(Camel::class)]->Count();
 		$elephants = $resources[self::createCommodity(Elephant::class)]->Count();

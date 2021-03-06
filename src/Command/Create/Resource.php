@@ -9,7 +9,6 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Fantasya\Artifact as ArtifactInterface;
-use Lemuria\Model\Fantasya\Material as MaterialInterface;
 use Lemuria\Model\Fantasya\RawMaterial as RawMaterialInterface;
 
 /**
@@ -22,8 +21,6 @@ use Lemuria\Model\Fantasya\RawMaterial as RawMaterialInterface;
  * - MACHEN <Artifact>
  * - MACHEN <Artifact> <size>
  * - MACHEN <amount> <Artifact>
- * - MACHEN <Material>
- * - MACHEN <amount> <Material>
  * - MACHEN <RawMaterial>
  * - MACHEN <amount> <RawMaterial>
  */
@@ -37,9 +34,6 @@ final class Resource extends DelegatedCommand
 		$resource = $this->job->getObject();
 		if ($resource instanceof ArtifactInterface) {
 			return new Artifact($this->phrase, $this->context, $this->job);
-		}
-		if ($resource instanceof MaterialInterface) {
-			return new Material($this->phrase, $this->context, $this->job);
 		}
 		if ($resource instanceof RawMaterialInterface) {
 			return new RawMaterial($this->phrase, $this->context, $this->job);

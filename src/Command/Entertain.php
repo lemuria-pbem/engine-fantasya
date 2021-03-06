@@ -10,7 +10,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\EntertainNoDemandMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EntertainNoExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EntertainOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Party\EntertainPreventMessage;
-use Lemuria\Model\Fantasya\Commodity\Food;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Relation;
@@ -28,7 +27,7 @@ final class Entertain extends AllocationCommand implements Activity
 {
 	use DefaultActivityTrait;
 
-	private const FEE = 2 * Food::PRICE;
+	private const FEE = 20;
 
 	private const QUOTA = 0.05;
 

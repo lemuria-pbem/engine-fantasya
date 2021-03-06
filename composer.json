@@ -43,8 +43,8 @@
 
 	"autoload": {
 		"psr-4": {
-			"Lemuria\\Engine\\Lemuria\\": "src/",
-			"Lemuria\\Tests\\Engine\\Lemuria\\": "tests/"
+			"Lemuria\\Engine\\Fantasya\\": "src/",
+			"Lemuria\\Tests\\Engine\\Fantasya\\": "tests/"
 		}
 	}
 }

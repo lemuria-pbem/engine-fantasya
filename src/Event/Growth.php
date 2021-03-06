@@ -12,7 +12,7 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Commodity;
-use Lemuria\Model\Fantasya\Commodity\Tree;
+use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
@@ -36,7 +36,7 @@ final class Growth extends AbstractEvent
 
 	#[Pure] public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
-		$this->tree = self::createCommodity(Tree::class);
+		$this->tree = self::createCommodity(Wood::class);
 	}
 
 	protected function initialize(): void {

@@ -54,7 +54,6 @@ use Lemuria\Model\Fantasya\Commodity\Armor;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
-use Lemuria\Model\Fantasya\Commodity\Granite;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg;
 use Lemuria\Model\Fantasya\Commodity\Horse;
@@ -69,10 +68,8 @@ use Lemuria\Model\Fantasya\Commodity\Luxury\Olibanum;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Silk;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Spice;
 use Lemuria\Model\Fantasya\Commodity\Mail;
-use Lemuria\Model\Fantasya\Commodity\Ore;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Commodity\Stone;
-use Lemuria\Model\Fantasya\Commodity\Tree;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
@@ -205,20 +202,15 @@ class CommandFactory
 		'Armbrust'      => Crossbow::class,
 		'Armbrueste'    => Crossbow::class,
 		'Armbrüste'     => Crossbow::class,
-		'Baeume'        => Tree::class,
 		'Balsame'       => Balsam::class,
-		'Baum'          => Tree::class,
-		'Bäume'         => Tree::class,
 		'Bogen'         => Bow::class,
 		'Boegen'        => Bow::class,
 		'Bögen'         => Bow::class,
 		'Eisen'         => Iron::class,
 		'Eisenschilde'  => Ironshield::class,
 		'Elefanten'     => Elephant::class,
-		'Erze'          => Ore::class,
 		'Gewuerze'      => Spice::class,
 		'Gewürze'       => Spice::class,
-		'Granite'       => Granite::class,
 		'Greife'        => Griffin::class,
 		'Greifeneier'   => Griffinegg::class,
 		'Hoelzer'       => Wood::class,
