@@ -8,7 +8,10 @@ use Lemuria\Engine\Lemuria\Exception\AllocationException;
 use Lemuria\Engine\Lemuria\Factory\CommandPriority;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
+use Lemuria\Model\Lemuria\Commodity\Camel;
+use Lemuria\Model\Lemuria\Commodity\Elephant;
 use Lemuria\Model\Lemuria\Commodity\Food;
+use Lemuria\Model\Lemuria\Commodity\Horse;
 use Lemuria\Model\Lemuria\Commodity\Silver;
 use Lemuria\Model\Lemuria\Factory\BuilderTrait;
 use Lemuria\Model\Lemuria\Quantity;
@@ -20,7 +23,10 @@ use Lemuria\Model\Lemuria\Resources;
  */
 final class Allocation
 {
-	public const POOL_COMMODITIES = [Food::class => true, Silver::class => true];
+	public const POOL_COMMODITIES = [
+		Food::class => true, Silver::class => true,
+		Camel::class, Elephant::class, Horse::class
+	];
 
 	use BuilderTrait;
 

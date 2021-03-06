@@ -8,22 +8,22 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
-### 0.1.0
+### 0.2.0
 
-- Weltentwicklung:
-  - Tiere vermehren sich / wandern / sterben
+- Handel (KAUFEN/VERKAUFEN)
 
-### 0.2.0 und folgende
+### 0.3.0 und folgende
 
 - Straßen (Modell, Bau, Abriss, Reisen)
 - BOTSCHAFT
 - SPIONIEREN
 - ROUTE
 - FOLGE
-- Handel (KAUFEN/VERKAUFEN)
+- STEHLEN
 - Kampf (ATTACKIEREN/BELAGERN)
 - Magie (KAMPFZAUBER/ZAUBERN)
 - Alchemie (Kräuter und Tränke, BENUTZEN)
+- Monster
 - Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
   Meldungen
 

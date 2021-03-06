@@ -29,11 +29,11 @@ final class Population extends AbstractEvent
 {
 	use WorkplacesTrait;
 
-	public const RATE = 0.01;
+	private const RATE = 0.01;
 
-	public const MIGRATION = 0.1;
+	private const MIGRATION = 0.1;
 
-	public const WEALTH = 24;
+	private const WEALTH = 24;
 
 	private Workplaces $workplaces;
 

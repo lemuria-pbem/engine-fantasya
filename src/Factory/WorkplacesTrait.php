@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Lemuria\Factory;
 use Lemuria\Model\Lemuria\Commodity\Camel;
 use Lemuria\Model\Lemuria\Commodity\Elephant;
 use Lemuria\Model\Lemuria\Commodity\Horse;
+use Lemuria\Model\Lemuria\Commodity\Peasant;
 use Lemuria\Model\Lemuria\Commodity\Tree;
 use Lemuria\Model\Lemuria\Factory\BuilderTrait;
 use Lemuria\Model\Lemuria\Region;
@@ -26,5 +27,11 @@ trait WorkplacesTrait
 		$camels    = $resources[self::createCommodity(Camel::class)]->Count();
 		$elephants = $resources[self::createCommodity(Elephant::class)]->Count();
 		return $this->workplaces->getUsed($horses, $camels, $elephants, $trees);
+	}
+
+	private function getCultivatedWorkplaces(Region $region): int {
+		$resources = $region->Resources();
+		$peasants  = $resources[self::createCommodity(Peasant::class)]->Count();
+		return $peasants;
 	}
 }
