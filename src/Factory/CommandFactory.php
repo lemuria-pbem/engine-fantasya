@@ -170,7 +170,7 @@ class CommandFactory
 		'SORTIEREN'    => true,
 		'TARNEN'       => true,
 		'TAUSCHEN'     => 'SORTIEREN',
-		'TEXT'         => 'BESCHREIBEN',
+		'TEXT'         => 'BESCHREIBUNG',
 		'TREIBEN'      => true,
 		'UNTERHALTEN'  => true,
 		'URSPRUNG'     => true,
