@@ -26,6 +26,7 @@ use Lemuria\Model\Fantasya\Talent\Taxcollecting;
  * The command increases the current unit's Silver resource.
  *
  * - TREIBEN
+ * - TREIBEN <amount>
  */
 final class Tax extends AllocationCommand implements Activity
 {
@@ -34,6 +35,8 @@ final class Tax extends AllocationCommand implements Activity
 	private const RATE = 20;
 
 	private int $rate = 0;
+
+	private int $demand = 0;
 
 	private int $level = 0;
 
@@ -57,7 +60,7 @@ final class Tax extends AllocationCommand implements Activity
 			}
 		} else {
 			$this->unit->Inventory()->add($quantity);
-			if ($quantity->Count() < $this->rate) {
+			if ($quantity->Count() < $this->rate || $this->demand > $this->rate) {
 				$this->message(TaxOnlyMessage::class)->i($quantity);
 			} else {
 				$this->message(TaxMessage::class)->i($quantity);
@@ -75,12 +78,18 @@ final class Tax extends AllocationCommand implements Activity
 	}
 
 	protected function createDemand(): void {
+		if ($this->phrase->count() > 0) {
+			$this->demand = (int)$this->phrase->getParameter();
+		}
 		$this->level = $this->calculus()->knowledge(Taxcollecting::class)->Level();
 		if ($this->level > 0) {
 			$collectors = $this->getNumberOfTaxCollectors();
 			if ($collectors > 0) {
 				$this->rate = $collectors * $this->level * self::RATE;
-				$silver     = self::createCommodity(Silver::class);
+				if ($this->demand > 0 && $this->demand < $this->rate) {
+					$this->rate = $this->demand;
+				}
+				$silver = self::createCommodity(Silver::class);
 				$this->resources->add(new Quantity($silver, $this->rate));
 				$this->message(TaxDemandMessage::class)->p($collectors, TaxDemandMessage::COLLECTORS)->p($this->rate, TaxDemandMessage::RATE);
 			} else {

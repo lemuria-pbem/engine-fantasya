@@ -4,9 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- LIEFERE / Befehle wiederholen
-- TREIBEN mit Silbermenge
-- UNTERHALTEN mit Silbermenge
+
 
 ## Neue Funktionen
 
@@ -31,6 +29,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
+- Befehle in der Vorlage wiederholen (LIEFERE bzw. @BEFEHL in Fantasya)
 - Ereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE
 - Seekampf/Piraterie

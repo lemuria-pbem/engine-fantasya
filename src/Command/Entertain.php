@@ -22,6 +22,7 @@ use Lemuria\Model\Fantasya\Talent\Entertaining;
  * The command increases the current unit's Silver resource.
  *
  * - UNTERHALTEN
+ * - UNTERHALTEN <amount>
  */
 final class Entertain extends AllocationCommand implements Activity
 {
@@ -32,6 +33,8 @@ final class Entertain extends AllocationCommand implements Activity
 	private const QUOTA = 0.05;
 
 	private int $fee = 0;
+
+	private int $demand = 0;
 
 	/**
 	 * Get the requested resource quota that is available for allocation.
@@ -56,7 +59,7 @@ final class Entertain extends AllocationCommand implements Activity
 			}
 		} else {
 			$this->unit->Inventory()->add($quantity);
-			if ($quantity->Count() < $this->fee) {
+			if ($quantity->Count() < $this->fee || $this->demand > $this->fee) {
 				$this->message(EntertainOnlyMessage::class)->i($quantity);
 			} else {
 				$this->message(EntertainMessage::class)->i($quantity);
@@ -77,10 +80,16 @@ final class Entertain extends AllocationCommand implements Activity
 	 * Determine the demand.
 	 */
 	protected function createDemand(): void {
+		if ($this->phrase->count() > 0) {
+			$this->demand = (int)$this->phrase->getParameter();
+		}
 		$level = $this->calculus()->knowledge(Entertaining::class)->Level();
 		if ($level > 0) {
 			$this->fee = $this->unit->Size() * $level * self::FEE;
-			$silver    = self::createCommodity(Silver::class);
+			if ($this->demand > 0 && $this->demand < $this->fee) {
+				$this->fee = $this->demand;
+			}
+			$silver = self::createCommodity(Silver::class);
 			$this->resources->add(new Quantity($silver, $this->fee));
 		} else {
 			$this->message(EntertainNoDemandMessage::class);
