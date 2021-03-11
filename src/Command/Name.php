@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Construction\NameConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\NameOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Region\NameCastleMessage;
+use Lemuria\Engine\Fantasya\Message\Region\NamePartyMessage;
 use Lemuria\Engine\Fantasya\Message\Region\NameRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameNotInConstructionMessage;
@@ -18,6 +19,7 @@ use Lemuria\Model\Fantasya\Construction;
 /**
  * The Name command is used to set the name of a unit or the construction, region or vessel it controls.
  *
+ * - NAME Partei <Name>
  * - NAME [Einheit] <Name>
  * - NAME Burg|Gebäude <Name>
  * - NAME Region <Name>
@@ -53,22 +55,26 @@ final class Name extends UnitCommand
 			case 'schiff' :
 				$this->renameVessel($name);
 				break;
+			case 'partei' :
+				$this->renameParty($name);
+				break;
 			default :
 				$this->renameUnit($this->trimName($this->phrase->getLine()));
 		}
 	}
 
-	/**
-	 * Set name of unit.
-	 */
+
+	private function renameParty(string $name): void {
+		$party = $this->unit->Party();
+		$party->setName($name);
+		$this->message(NamePartyMessage::class, $party)->p($name);
+	}
+
 	private function renameUnit(string $name): void {
 		$this->unit->setName($name);
 		$this->message(NameUnitMessage::class)->p($name);
 	}
 
-	/**
-	 * Set name of construction the unit controls.
-	 */
 	private function renameConstruction(string $name): void {
 		$construction = $this->unit->Construction();
 		if ($construction) {
@@ -84,9 +90,6 @@ final class Name extends UnitCommand
 		$this->message(NameNotInConstructionMessage::class);
 	}
 
-	/**
-	 * Set name of region the unit controls.
-	 */
 	private function renameRegion(string $name): void {
 		$region = $this->unit->Region();
 		$home   = $this->unit->Construction();
@@ -108,9 +111,6 @@ final class Name extends UnitCommand
 		$this->message(NameCastleMessage::class, $region)->e($this->unit);
 	}
 
-	/**
-	 * Set name of vessel the unit controls.
-	 */
 	private function renameVessel(string $name): void {
 		$vessel = $this->unit->Vessel();
 		if ($vessel) {
@@ -126,9 +126,6 @@ final class Name extends UnitCommand
 		$this->message(NameNotInVesselMessage::class);
 	}
 
-	/**
-	 * Trim special characters from name.
-	 */
 	private function trimName(string $name): string {
 		return trim($name, "\"'`'^°!§$%&/()=?{[]}\\+*~#<>|,.-;:_ ");
 	}

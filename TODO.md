@@ -4,7 +4,9 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-
+- LIEFERE / Befehle wiederholen
+- TREIBEN mit Silbermenge
+- UNTERHALTEN mit Silbermenge
 
 ## Neue Funktionen
 

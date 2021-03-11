@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Construction\DescribeConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\DescribeOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Region\DescribeCastleMessage;
+use Lemuria\Engine\Fantasya\Message\Region\DescribePartyMessage;
 use Lemuria\Engine\Fantasya\Message\Region\DescribeRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DescribeUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DescribeNotInConstructionMessage;
@@ -18,10 +19,11 @@ use Lemuria\Model\Fantasya\Construction;
 /**
  * The Describe command is used to set the description of a unit or the construction, region or vessel it controls.
  *
- * - BESCHREIBE [Einheit] <Name>
- * - BESCHREIBE Burg|Gebäude <Name>
- * - BESCHREIBE Region <Name>
- * - BESCHREIBE Schiff <Name>
+ * - BESCHREIBUNG Partei <Beschreibung>
+ * - BESCHREIBUNG [Einheit] <Beschreibung>
+ * - BESCHREIBUNG Burg|Gebäude <Beschreibung>
+ * - BESCHREIBUNG Region <Beschreibung>
+ * - BESCHREIBUNG Schiff <Beschreibung>
  */
 final class Describe extends UnitCommand
 {
@@ -53,22 +55,25 @@ final class Describe extends UnitCommand
 			case 'schiff' :
 				$this->describeVessel($description);
 				break;
+			case 'partei' :
+				$this->describeParty($description);
+				break;
 			default :
 				$this->describeUnit($this->trimDescription($this->phrase->getLine()));
 		}
 	}
 
-	/**
-	 * Set description of unit.
-	 */
+	private function describeParty(string $description): void {
+		$party = $this->unit->Party();
+		$party->setDescription($description);
+		$this->message(DescribePartyMessage::class, $party);
+	}
+
 	private function describeUnit(string $description): void {
 		$this->unit->setDescription($description);
 		$this->message(DescribeUnitMessage::class);
 	}
 
-	/**
-	 * Set description of construction the unit controls.
-	 */
 	private function describeConstruction(string $description): void {
 		$construction = $this->unit->Construction();
 		if ($construction) {
@@ -84,9 +89,6 @@ final class Describe extends UnitCommand
 		$this->message(DescribeNotInConstructionMessage::class);
 	}
 
-	/**
-	 * Set description of region the unit controls.
-	 */
 	private function describeRegion(string $description): void {
 		$region = $this->unit->Region();
 		$home   = $this->unit->Construction();
@@ -108,9 +110,6 @@ final class Describe extends UnitCommand
 		$this->message(DescribeCastleMessage::class)->setAssignee($region)->e($this->unit);
 	}
 
-	/**
-	 * Set description of vessel the unit controls.
-	 */
 	private function describeVessel(string $description): void {
 		$vessel = $this->unit->Vessel();
 		if ($vessel) {
@@ -126,9 +125,6 @@ final class Describe extends UnitCommand
 		$this->message(DescribeNotInVesselMessage::class);
 	}
 
-	/**
-	 * Trim special characters from description.
-	 */
 	private function trimDescription(string $description): string {
 		return trim($description, "\"'`'^°§$%&/()={[]}\\+*~#<>|,-;:_ ");
 	}
