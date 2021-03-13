@@ -45,6 +45,8 @@ class LemuriaConfig implements \ArrayAccess, Config
 		self::MDD   => 0
 	];
 
+	private bool $hasChanged = false;
+
 	private JsonProvider $file;
 
 	private ?array $config;
@@ -65,7 +67,9 @@ class LemuriaConfig implements \ArrayAccess, Config
 	 * @throws JsonException
 	 */
 	function __destruct() {
-		$this->file->write(self::CONFIG_FILE, $this->config);
+		if ($this->hasChanged) {
+			$this->file->write(self::CONFIG_FILE, $this->config);
+		}
 	}
 
 	/**
@@ -88,6 +92,7 @@ class LemuriaConfig implements \ArrayAccess, Config
 			throw new LemuriaException("Invalid config setting '" . $offset . "'.");
 		}
 		$this->config[$offset] = $value;
+		$this->hasChanged      = true;
 	}
 
 	public function offsetUnset(mixed $offset): void {
@@ -95,6 +100,7 @@ class LemuriaConfig implements \ArrayAccess, Config
 			throw new LemuriaException("No config value for '" . $offset ."'.");
 		}
 		$this->config[$offset] = self::DEFAULTS[$offset];
+		$this->hasChanged      = true;
 	}
 
 	public function Builder(): Builder {
