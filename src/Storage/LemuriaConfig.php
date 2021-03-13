@@ -34,11 +34,11 @@ class LemuriaConfig implements \ArrayAccess, Config
 
 	public const MDD = 'mdd';
 
-	private const CONFIG_FILE = 'config.json';
+	public const CONFIG_FILE = 'config.json';
 
-	private const LOG_DIR = 'log';
+	public const LOG_DIR = 'log';
 
-	private const LOG_FILE = 'lemuria.log';
+	public const LOG_FILE = 'lemuria.log';
 
 	private const DEFAULTS = [
 		self::ROUND => 0,
