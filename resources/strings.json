@@ -321,7 +321,8 @@
 		"VesselMessage": "Die Einheit $id erbaut $ship.",
 		"VesselOnlyMessage": "Die Einheit $id kann nur $size Größenpunkte am Schiff $vessel bauen.",
 		"VesselResourcesMessage": "Die Einheit $id hat kein Baumaterial, um am Schiff $vessel zu bauen.",
-		"VesselUnableMessage": "Die Einheit $id hat nicht genug Erfahrung in $talent, um $ship zu bauen."
+		"VesselUnableMessage": "Die Einheit $id hat nicht genug Erfahrung in $talent, um $ship zu bauen.",
+		"WelcomeMessage": "Herzlich Willkommen auf Lemuria! Du startest heute mit der Partei $party."
 	},
 	"race": {
 		"Aquan": ["Aquaner", "Aquaner"],
