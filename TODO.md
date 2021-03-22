@@ -4,7 +4,11 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-
+- neue Einheiten außerhalb Gebäude/Schiff
+- Schaden für überladene Schiffe
+- Tarnung in Befehlen
+- Tarnung in Reporten beachten
+- TEMP-Einheiten in Befehlen nutzbar
 
 ## Neue Funktionen
 
