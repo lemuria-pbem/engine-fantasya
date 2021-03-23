@@ -25,7 +25,8 @@ final class Grant extends UnitCommand
 		if ($this->phrase->count() < 1) {
 			throw new InvalidCommandException($this, 'Missing unit parameter.');
 		}
-		$id = Id::fromId($this->phrase->getParameter());
+		$i  = 1;
+		$id = $this->nextId($i);
 
 		$construction = $this->unit->Construction();
 		if ($construction) {

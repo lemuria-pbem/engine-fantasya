@@ -43,16 +43,8 @@ final class Sort extends UnitCommand
 			$type = $this->phrase->getParameter();
 		} else {
 			$type = $this->phrase->getParameter(1);
-			$id   = $this->phrase->getParameter(2);
-			try {
-				$withId = Id::fromId($id);
-			} catch (IdException $e) {
-				throw new InvalidCommandException($this, 'Invalid ID given.', $e);
-			}
-			try {
-				$with = Unit::get($withId);
-			} catch (NotRegisteredException) {
-			}
+			$i    = 2;
+			$with = $this->nextId($i);
 			if (!$with || $with->Party() !== $this->unit->Party() ) {
 				$this->message(SortWithForeignerMessage::class)->e($with);
 				return;

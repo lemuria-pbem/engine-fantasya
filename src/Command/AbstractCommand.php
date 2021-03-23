@@ -85,7 +85,7 @@ abstract class AbstractCommand implements Command
 	 *
 	 * @throws CommandException
 	 */
-	protected function nextId(int &$i): ?Unit {
+	protected function nextId(int &$i, ?string &$id = null): ?Unit {
 		$id = $this->phrase->getParameter($i++);
 		if (!$id) {
 			return null;
@@ -94,6 +94,7 @@ abstract class AbstractCommand implements Command
 		if (strtoupper($id) === 'TEMP') {
 			$id   = $this->phrase->getParameter($i++);
 			$temp = $this->context->UnitMapper()->get($id);
+			$id   = 'TEMP ' . $id;
 			return $temp->getUnit();
 		}
 

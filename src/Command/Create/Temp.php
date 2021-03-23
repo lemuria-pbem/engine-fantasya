@@ -60,9 +60,6 @@ final class Temp extends UnitCommand implements Immediate
 
 		$party->People()->add($this->createdUnit);
 		$this->creator->Region()->Residents()->add($this->createdUnit);
-		if ($this->creator->Construction()) {
-			$this->creator->Construction()->Inhabitants()->add($this->createdUnit);
-		}
 
 		$this->context->UnitMapper()->map($this);
 		$this->context->setUnit($this->createdUnit);

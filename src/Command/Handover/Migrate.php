@@ -2,10 +2,10 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Handover;
 
-use Lemuria\Engine\Fantasya\Command\GiftTrait;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateFailedMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateFromMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateIncompatibleMessage;

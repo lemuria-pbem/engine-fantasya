@@ -25,18 +25,15 @@ final class Contact extends UnitCommand
 
 		$region    = $this->unit->Region();
 		$diplomacy = $this->unit->Party()->Diplomacy();
-		for ($i = 1; $i <= $n; $i++) {
-			$id = Id::fromId($this->phrase->getParameter($i));
-			$unit = null;
-			try {
-				$unit = Unit::get($id);
-			} catch (NotRegisteredException) {
-			}
+		$i         = 1;
+		while ($i <= $n) {
+			$id   = null;
+			$unit = $this->nextId($i, $id);
 			if ($unit && $unit->Region() === $region) {
 				$diplomacy->contact($unit);
 				$this->message(ContactMessage::class)->e($unit);
 			} else {
-				$this->message(ContactNotFoundMessage::class)->p($id->Id());
+				$this->message(ContactNotFoundMessage::class)->p($id);
 			}
 		}
 	}
