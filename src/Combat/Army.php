@@ -51,7 +51,7 @@ class Army
 		while (true) {
 			// Calculate best weapon skill.
 			$calculus           = new Calculus($unit);
-			$weaponSkill        = $calculus->weaponSkill();
+			$weaponSkill        = $calculus->bestWeaponSkill();
 			$combatant          = new Combatant($partyUnit);
 			$this->combatants[] = $combatant->setWeapon($weaponSkill);
 			$combatantSize      = $combatant->Size();

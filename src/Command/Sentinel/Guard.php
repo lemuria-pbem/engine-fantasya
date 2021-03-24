@@ -19,13 +19,15 @@ final class Guard extends UnitCommand
 	protected function run(): void {
 		if ($this->unit->IsGuarding()) {
 			$this->message(GuardAlreadyMessage::class);
-		} else {
-			if ($this->calculus()->weaponSkill()->isGuard()) {
-				$this->message(GuardWithoutWeaponMessage::class);
-			} else {
+			return;
+		}
+		foreach ($this->calculus()->weaponSkill() as $skill) {
+			if ($skill->isGuard()) {
 				$this->unit->setIsGuarding(true);
 				$this->message(GuardMessage::class);
+				return;
 			}
 		}
+		$this->message(GuardWithoutWeaponMessage::class);
 	}
 }

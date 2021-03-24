@@ -171,23 +171,45 @@ final class Calculus
 	}
 
 	/**
-	 * Calculate best fighting ability for the unit's talents and inventory.
+	 * Calculate available fighting abilities for the unit's talents and inventory.
+	 *
+	 * If a unit has no weapons or fighting talents, the Fistfight skill is returned.
+	 *
+	 * @return WeaponSkill[]
 	 */
-	public function weaponSkill(): WeaponSkill {
-		$bestSkill = $this->knowledge(Fistfight::class);
-		$weapon    = new Quantity(self::createCommodity(Fists::class), $this->unit->Size());
+	public function weaponSkill(): array {
+		$fistfight = $this->knowledge(Fistfight::class);
+		$fists     = new Quantity(self::createCommodity(Fists::class), $this->unit->Size());
+		$skills    = [new WeaponSkill($fistfight, $fists)];
+		$order     = [0];
+
 		foreach ($this->unit->Inventory() as $item /* @var Quantity $item */) {
 			$commodity = $item->Commodity();
 			if ($commodity instanceof Weapon) {
 				$weaponSkill = $commodity->getSkill()->Talent();
 				$skill       = $this->knowledge($weaponSkill::class);
-				if ($skill->Experience() > $bestSkill->Experience()) {
-					$bestSkill = $skill;
-					$weapon    = $item;
+				$experience  = $skill->Experience();
+				if ($experience > 0) {
+					$skills[] = new WeaponSkill($skill, $item);
+					$order[]  = $experience;
 				}
 			}
 		}
-		return new WeaponSkill($bestSkill, $weapon);
+
+		arsort($order);
+		$weaponSkills = [];
+		foreach (array_keys($order) as $i) {
+			$weaponSkills[] = $skills[$i];
+		}
+		return $weaponSkills;
+	}
+
+	/**
+	 * Calculate best fighting ability for the unit's talents and inventory.
+	 */
+	public function bestWeaponSkill(): WeaponSkill {
+		$weaponSkill = $this->weaponSkill();
+		return $weaponSkill[0];
 	}
 
 	#[Pure] private function transport(?Item $quantity, int $reduceBy = 0): int {
