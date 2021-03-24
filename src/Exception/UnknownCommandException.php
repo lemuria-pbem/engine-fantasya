@@ -5,13 +5,14 @@ namespace Lemuria\Engine\Fantasya\Exception;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Phrase;
 
 /**
  * This exception is thrown when an unknown Command is parsed.
  */
 class UnknownCommandException extends CommandException
 {
-	#[Pure] public function __construct(Command|string|null $command = null, ?CommandException $exception = null) {
+	#[Pure] public function __construct(Command|Phrase|string|null $command = null, ?CommandException $exception = null) {
 		$message = 'Unknown command' . ($command ? ': "' . $command . '"' : '.');
 		parent::__construct($message, 0, $exception);
 	}

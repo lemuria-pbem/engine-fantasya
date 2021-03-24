@@ -9,7 +9,7 @@ use JetBrains\PhpStorm\Pure;
  * Helper class for a single command.
  */
 #[Immutable]
-class Phrase implements \Countable
+class Phrase implements \Countable, \Stringable
 {
 	/**
 	 * @var array(string)

@@ -352,7 +352,7 @@ class CommandFactory
 		$verb = $this->identifyVerb($phrase->getVerb());
 		try {
 			$command = match ($verb) {
-				'BESCHREIBEN'  => Describe::class,
+				'BESCHREIBUNG' => Describe::class,
 				'BESTEIGEN'    => Board::class,
 				'BETRETEN'     => Enter::class,
 				'BEWACHEN'     => Sentinel::class,

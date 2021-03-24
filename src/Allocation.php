@@ -207,7 +207,8 @@ final class Allocation
 	 */
 	private function giveRandom(string $class, int $count): void {
 		$consumers = array_keys($this->distribution[$class]['demand']);
-		$selected  = $count > 1 ? array_rand($consumers) : [array_rand($consumers)];
+		$count     = min($count, count($consumers));
+		$selected  = $count > 1 ? array_rand($consumers, $count) : [array_rand($consumers)];
 		foreach ($selected as $index) {
 			$consumer = $consumers[$index];
 			$this->distribution[$class]['allocation'][$consumer]++;

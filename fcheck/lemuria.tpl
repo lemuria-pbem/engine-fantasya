@@ -2,7 +2,7 @@
 ; - fcheck-Template für Lemuria Alpha -
 ; -------------------------------------
 
-^(\/\/ *)|(komme|kommen|komment|kommenta|kommentar) +.*$
+^(\/\/ +)|(komme|kommen|komment|kommenta|kommentar) +.*$
 ^;.*$
 
 ^(locale) +[a-zA-Z0-9]+$

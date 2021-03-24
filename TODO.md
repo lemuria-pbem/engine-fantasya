@@ -4,14 +4,16 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Schaden für überladene Schiffe
-- Tarnung in Befehlen
 - Tarnung in Reporten beachten
+- Tarnung in Befehlen beachten
+- Debugmeldungen in Reporten ausblenden
+- Schaden für überladene Schiffe
 
 ## Neue Funktionen
 
 ### 0.2.0
 
+- Automatische Willkommensmeldung für neue Parteien
 - Handel (KAUFEN/VERKAUFEN)
 
 ### 0.3.0 und folgende
