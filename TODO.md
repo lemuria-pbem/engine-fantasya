@@ -4,6 +4,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
+- BETRETEN Burg|Gebäude|Gebaeude <id> erkennen
+- Magellan-Pseudobefehle ignorieren
 - Tarnung in Reporten beachten
 - Tarnung in Befehlen beachten
 - Debugmeldungen in Reporten ausblenden
@@ -18,6 +20,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### 0.3.0 und folgende
 
+- Insel/Kontinent benennen
 - Straßen (Modell, Bau, Abriss, Reisen)
 - BOTSCHAFT
 - SPIONIEREN
