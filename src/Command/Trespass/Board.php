@@ -1,7 +1,8 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Fantasya\Command;
+namespace Lemuria\Engine\Fantasya\Command\Trespass;
 
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardDeniedMessage;
