@@ -3,7 +3,6 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
-use Lemuria\Engine\Fantasya\Command\Board;
 use Lemuria\Engine\Fantasya\Command\Comment;
 use Lemuria\Engine\Fantasya\Command\Contact;
 use Lemuria\Engine\Fantasya\Command\Create;
@@ -14,7 +13,6 @@ use Lemuria\Engine\Fantasya\Command\Destroy\Dismiss;
 use Lemuria\Engine\Fantasya\Command\Destroy\Lose;
 use Lemuria\Engine\Fantasya\Command\Disguise;
 use Lemuria\Engine\Fantasya\Command\End;
-use Lemuria\Engine\Fantasya\Command\Enter;
 use Lemuria\Engine\Fantasya\Command\Entertain;
 use Lemuria\Engine\Fantasya\Command\Fight;
 use Lemuria\Engine\Fantasya\Command\Handover;
@@ -34,6 +32,8 @@ use Lemuria\Engine\Fantasya\Command\Sort;
 use Lemuria\Engine\Fantasya\Command\Tax;
 use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Command\Travel;
+use Lemuria\Engine\Fantasya\Command\Trespass;
+use Lemuria\Engine\Fantasya\Command\Trespass\Board;
 use Lemuria\Engine\Fantasya\Command\Unit;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
@@ -354,7 +354,7 @@ class CommandFactory
 			$command = match ($verb) {
 				'BESCHREIBUNG' => Describe::class,
 				'BESTEIGEN'    => Board::class,
-				'BETRETEN'     => Enter::class,
+				'BETRETEN'     => Trespass::class,
 				'BEWACHEN'     => Sentinel::class,
 				'EINHEIT'      => Unit::class,
 				'ENDE'         => End::class,
