@@ -26,7 +26,7 @@ final class Enter extends UnitCommand
 		if ($this->phrase->count() < 1) {
 			throw new InvalidCommandException($this);
 		}
-		$id = Id::fromId($this->phrase->getParameter());
+		$id = Id::fromId($this->phrase->getParameter(0));
 
 		$construction = $this->unit->Construction();
 		if ($construction && $construction->Id()->Id() === $id->Id()) {

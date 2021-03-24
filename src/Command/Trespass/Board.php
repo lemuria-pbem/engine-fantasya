@@ -26,7 +26,7 @@ final class Board extends UnitCommand
 		if ($this->phrase->count() < 1) {
 			throw new InvalidCommandException($this);
 		}
-		$id = Id::fromId($this->phrase->getParameter());
+		$id = Id::fromId($this->phrase->getParameter(0));
 
 		$vessel = $this->unit->Vessel();
 		if ($vessel && $vessel->Id()->Id() === $id->Id()) {
