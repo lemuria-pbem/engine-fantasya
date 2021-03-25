@@ -45,6 +45,8 @@ class LemuriaConfig implements \ArrayAccess, Config
 		self::MDD   => 0
 	];
 
+	protected array $defaults;
+
 	private bool $hasChanged = false;
 
 	private JsonProvider $file;
@@ -55,11 +57,10 @@ class LemuriaConfig implements \ArrayAccess, Config
 	 * @throws JsonException
 	 */
 	public function __construct(private string $storagePath) {
+		$this->initDefaults();
 		$this->file = new JsonProvider($storagePath);
 		if ($this->file->exists(self::CONFIG_FILE)) {
-			$this->config = $this->file->read(self::CONFIG_FILE);
-		} else {
-			$this->config = self::DEFAULTS;
+			$this->config = $this->file->read(self::CONFIG_FILE) + $this->defaults;
 		}
 	}
 
@@ -99,7 +100,7 @@ class LemuriaConfig implements \ArrayAccess, Config
 		if (!$this->offsetExists($offset)) {
 			throw new LemuriaException("No config value for '" . $offset ."'.");
 		}
-		$this->config[$offset] = self::DEFAULTS[$offset];
+		$this->config[$offset] = $this->defaults[$offset];
 		$this->hasChanged      = true;
 	}
 
@@ -146,5 +147,9 @@ class LemuriaConfig implements \ArrayAccess, Config
 
 	#[Pure] public function getPathToLog(): string {
 		return $this->storagePath . DIRECTORY_SEPARATOR . self::LOG_DIR . DIRECTORY_SEPARATOR . self::LOG_FILE;
+	}
+
+	protected function initDefaults(): void {
+		$this->defaults = self::DEFAULTS;
 	}
 }

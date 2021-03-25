@@ -7,7 +7,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Magellan-Pseudobefehle ignorieren
 - Tarnung in Reporten beachten
 - Tarnung in Befehlen beachten
-- Debugmeldungen in Reporten ausblenden
 - Schaden für überladene Schiffe
 
 ## Neue Funktionen
