@@ -123,6 +123,7 @@ class LemuriaTurn implements Turn
 	 * Evaluate the whole turn.
 	 */
 	public function evaluate(): Turn {
+		Lemuria::Orders()->clear();
 		foreach ($this->Progress() as $event) {
 			$this->enqueue($event);
 			Lemuria::Log()->debug('Adding ' . $event . ' from Progress.', ['event' => $event]);

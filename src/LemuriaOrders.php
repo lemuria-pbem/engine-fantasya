@@ -94,6 +94,12 @@ class LemuriaOrders implements Orders, Reassignment
 		return $this;
 	}
 
+	public function clear(): Orders {
+		$this->current = [];
+		$this->default = [];
+		return $this;
+	}
+
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
 		if ($identifiable->Catalog() === Catalog::UNITS) {
 			$this->replace($oldId->Id(), $identifiable->Id()->Id(), $this->current);
