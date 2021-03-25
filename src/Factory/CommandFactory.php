@@ -80,6 +80,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Commodity\Woodshield;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\RawMaterial;
 use Lemuria\Model\Fantasya\Ship;
 use Lemuria\Model\Fantasya\Ship\Boat;
 use Lemuria\Model\Fantasya\Ship\Caravel;
@@ -399,9 +400,9 @@ class CommandFactory
 	public function resource(string $artifact): Singleton {
 		$commodity = $this->getCandidate($artifact, $this->commodities);
 		if ($commodity) {
-			$artifact = self::createCommodity($commodity);
-			if ($artifact instanceof Artifact) {
-				return $artifact;
+			$commodity = self::createCommodity($commodity);
+			if ($commodity instanceof Artifact || $commodity instanceof RawMaterial) {
+				return $commodity;
 			}
 			throw new UnknownCommandException();
 		}
