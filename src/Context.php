@@ -103,7 +103,7 @@ final class Context
 	public function getProtocol(Unit $unit): ActivityProtocol {
 		$id = $unit->Id()->Id();
 		if (!isset($this->protocol[$id])) {
-			$this->protocol[$id] = new ActivityProtocol($unit);
+			$this->protocol[$id] = new ActivityProtocol($unit, $this);
 		}
 		return $this->protocol[$id];
 	}

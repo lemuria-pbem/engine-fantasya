@@ -9,9 +9,18 @@ use Lemuria\Engine\Fantasya\Factory\CommandPriority;
 use Lemuria\Engine\Fantasya\Factory\DefaultProgress;
 use Lemuria\Engine\Move;
 use Lemuria\Engine\Turn;
+use Lemuria\EntitySet;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Id;
+use Lemuria\Identifiable;
 use Lemuria\Lemuria;
+use Lemuria\Model\Catalog;
+use Lemuria\Model\Exception\NotRegisteredException;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\People;
+use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Newcomer;
 
 /**
  * Main engine class.
@@ -63,11 +72,13 @@ class LemuriaTurn implements Turn
 	/**
 	 * Add commands.
 	 */
-	public function add(Move $move): Turn {
+	public function add(Move $move): EntitySet {
 		Lemuria::Log()->debug('Adding party move.', ['move' => $move]);
 		$context = new Context($this->state);
 		$factory = $context->Factory();
 		$parser  = $context->Parser()->parse($move);
+		$units   = new People();
+
 		while ($parser->hasMore()) {
 			$phrase = $parser->next();
 			try {
@@ -96,26 +107,38 @@ class LemuriaTurn implements Turn
 				}
 			} else {
 				$this->enqueue($command);
+				if ($command instanceof Activity) {
+					$units->add($context->Unit());
+				}
 			}
 		}
+
+		return $units;
+	}
+
+	/**
+	 * Bring a new party into the game.
+	 */
+	public function initiate(Newcomer $newcomer): Turn {
+		// TODO: Implement initiate() method.
+
 		return $this;
 	}
 
 	/**
-	 * @throws LemuriaException
+	 * Add default commands of given entity.
 	 */
-	public function addEvent(Event $event): Turn {
-		$this->enqueue($event);
-		Lemuria::Log()->debug('New event: ' . $event . '.', ['event' => $event]);
-		return $this;
-	}
-
-	/**
-	 * @throws LemuriaException
-	 */
-	public function addEffect(Effect $effect): Turn {
-		$this->enqueue($effect);
-		Lemuria::Log()->debug('New effect: ' . $effect . '.', ['effect' => $effect]);
+	public function substitute(Identifiable $entity): Turn {
+		switch ($entity->Catalog()) {
+			case Catalog::PARTIES :
+				$this->substituteParty($entity->Id());
+				break;
+			case Catalog::UNITS :
+				$this->substituteUnit($entity->Id());
+				break;
+			default :
+				throw new LemuriaException('Cannot substitute entity of catalog ' . $entity->Catalog() . '.');
+		}
 		return $this;
 	}
 
@@ -156,12 +179,63 @@ class LemuriaTurn implements Turn
 	}
 
 	/**
-	 * Add action to the right queue.
-	 *
 	 * @throws LemuriaException
 	 */
+	public function addEvent(Event $event): Turn {
+		$this->enqueue($event);
+		Lemuria::Log()->debug('New event: ' . $event . '.', ['event' => $event]);
+		return $this;
+	}
+
+	/**
+	 * @throws LemuriaException
+	 */
+	public function addEffect(Effect $effect): Turn {
+		$this->enqueue($effect);
+		Lemuria::Log()->debug('New effect: ' . $effect . '.', ['effect' => $effect]);
+		return $this;
+	}
+
 	protected function enqueue(Action $action): void {
 		$priority                 = $this->priority->getPriority($action);
 		$this->queue[$priority][] = $action;
+	}
+
+	private function substituteParty(Id $id): void {
+		Lemuria::Log()->debug('Substitute Party ' . $id . '.');
+		try {
+			$party = Party::get($id);
+		} catch (NotRegisteredException $e) {
+			Lemuria::Log()->error($e->getMessage(), ['exception' => $e]);
+			return;
+		}
+
+		$context = new Context($this->state);
+		foreach ($party->People() as $unit /* @var Unit $unit */) {
+			$command = $context->getProtocol($unit)->getDefaultCommand();
+			if ($command) {
+				$this->enqueue($command);
+				Lemuria::Log()->debug('Enqueue default command.', ['unit' => $unit->Id(), 'command' => $command]);
+			} else {
+				Lemuria::Log()->debug('No default command for unit ' . $unit->Id() . '.');
+			}
+		}
+	}
+
+	private function substituteUnit(Id $id): void {
+		Lemuria::Log()->debug('Substitute Unit ' . $id . '.');
+		try {
+			$unit    = Unit::get($id);
+			$context = new Context($this->state);
+			$command = $context->getProtocol($unit)->getDefaultCommand();
+			if ($command) {
+				$this->enqueue($command);
+				Lemuria::Log()->debug('Enqueue default command.', ['command' => $command]);
+			} else {
+				Lemuria::Log()->debug('No default command set.');
+			}
+		} catch (NotRegisteredException $e) {
+			Lemuria::Log()->error($e->getMessage(), ['exception' => $e]);
+		}
 	}
 }
