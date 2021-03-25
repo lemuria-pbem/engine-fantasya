@@ -7,7 +7,6 @@ use JetBrains\PhpStorm\Pure;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
-use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachBonusMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachExceptionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachPartyMessage;
@@ -15,6 +14,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TeachRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachSelfMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachStudentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachUnableMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -27,8 +27,6 @@ use Lemuria\Model\Fantasya\Unit;
  */
 final class Teach extends UnitCommand implements Activity
 {
-	use DefaultActivityTrait;
-
 	private const MAX_STUDENTS = 10;
 
 	/**
@@ -40,6 +38,8 @@ final class Teach extends UnitCommand implements Activity
 
 	private float $bonus = 0.0;
 
+	private ?Teach $newDefault = null;
+
 	/**
 	 * Get learning bonus.
 	 */
@@ -47,9 +47,14 @@ final class Teach extends UnitCommand implements Activity
 		return $this->bonus;
 	}
 
+	public function getNewDefault(): ?UnitCommand {
+		return $this->newDefault;
+	}
+
 	protected function initialize(): void {
 		parent::initialize();
-		$i = 1;
+		$ids = [];
+		$i   = 1;
 		if (count($this->phrase) >= $i) {
 			// Add specific students.
 			while (true) {
@@ -57,6 +62,7 @@ final class Teach extends UnitCommand implements Activity
 					$unit = $this->nextId($i);
 					if ($unit) {
 						$this->size += $this->teach($unit, true);
+						$ids[]       = $unit->Id();
 					} else {
 						break;
 					}
@@ -68,8 +74,10 @@ final class Teach extends UnitCommand implements Activity
 			// Add all units in region as possible students.
 			foreach ($this->unit->Region()->Residents() as $unit /* @var Unit $unit */) {
 				$this->size += $this->teach($unit);
+				$ids[]       = $unit->Id();
 			}
 		}
+		$this->createNewDefault($ids);
 	}
 
 	protected function run(): void {
@@ -137,5 +145,14 @@ final class Teach extends UnitCommand implements Activity
 			$people += $learn->Unit()->Size();
 		}
 		$this->bonus = $people > 0 ? min(self::MAX_STUDENTS / $people, 1.0) ** 2 : 1.0;
+	}
+
+	private function createNewDefault(array $ids): void {
+		if (!empty($ids)) {
+			$teach = $this->phrase->getVerb() . ' ' . implode(' ', $ids);
+			/** @var Teach $command */
+			$command          = $this->context->Factory()->create(new Phrase($teach));
+			$this->newDefault = $command;
+		}
 	}
 }
