@@ -30,7 +30,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Kampf (ATTACKIEREN/BELAGERN)
 - Magie (KAMPFZAUBER/ZAUBERN)
 - Alchemie (Kräuter und Tränke, BENUTZEN)
-- Monster
+- Monster, besondere Gegenstände wie Greifeneier
 - Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
   Meldungen
 
