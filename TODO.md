@@ -4,10 +4,13 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Magellan-Pseudobefehle ignorieren
+- Abstände in Text-Report korrigieren
+- Befehlsvorlage enthält mehrere lange Befehle
 - Tarnung in Reporten beachten
 - Tarnung in Befehlen beachten
+- Verarbeitungsfehler im Report auflisten
 - Schaden für überladene Schiffe
+- Magellan-Pseudobefehle ignorieren
 
 ## Neue Funktionen
 
