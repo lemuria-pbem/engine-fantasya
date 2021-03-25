@@ -4,10 +4,9 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Befehlsvorlagen müssen TEMP-Einheiten konvertieren
+- statt Faulenzen lange Defaultbefehle ausführen
 - Tarnung in Reporten beachten
 - Tarnung in Befehlen beachten
-- statt Faulenzen lange Defaultbefehle ausführen
 - Verarbeitungsfehler im Report auflisten
 - Schaden für überladene Schiffe
 - Magellan-Pseudobefehle ignorieren

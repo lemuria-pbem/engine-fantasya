@@ -25,11 +25,8 @@ use Lemuria\Engine\Fantasya\Message\Vessel\TravelOverLandMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelShipTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Landscape\Forest;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
-use Lemuria\Model\Fantasya\Landscape\Plain;
 use Lemuria\Model\Fantasya\Region;
-use Lemuria\Model\Fantasya\Ship\Boat;
 use Lemuria\Model\Fantasya\Talent\Navigation;
 use Lemuria\Model\Fantasya\Vessel;
 
