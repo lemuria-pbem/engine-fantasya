@@ -4,10 +4,10 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Abstände in Text-Report korrigieren
-- Befehlsvorlage enthält mehrere lange Befehle
+- Befehlsvorlagen müssen TEMP-Einheiten konvertieren
 - Tarnung in Reporten beachten
 - Tarnung in Befehlen beachten
+- statt Faulenzen lange Defaultbefehle ausführen
 - Verarbeitungsfehler im Report auflisten
 - Schaden für überladene Schiffe
 - Magellan-Pseudobefehle ignorieren
