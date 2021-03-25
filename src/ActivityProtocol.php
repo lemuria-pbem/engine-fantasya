@@ -17,10 +17,19 @@ final class ActivityProtocol
 
 	private bool $hasDefault = false;
 
+	private ?Command $defaultCommand = null;
+
 	/**
 	 * Create new activity protocol for a unit.
 	 */
-	#[Pure] public function __construct(private Unit $unit) {
+	#[Pure] public function __construct(private Unit $unit, Context $context) {
+		foreach (Lemuria::Orders()->getDefault($unit->Id()) as $order) {
+			$command = $context->Factory()->create(new Phrase($order));
+			if ($command instanceof Activity) {
+				$this->defaultCommand = $command;
+				break;
+			}
+		}
 	}
 
 	/**
@@ -28,6 +37,13 @@ final class ActivityProtocol
 	 */
 	#[Pure] public function hasActivity(): bool {
 		return $this->hasActivity;
+	}
+
+	/**
+	 * Get the default command from the previous turn.
+	 */
+	#[Pure] public function getDefaultCommand(): ?Command {
+		return $this->defaultCommand;
 	}
 
 	/**

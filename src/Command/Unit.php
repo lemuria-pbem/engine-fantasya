@@ -47,6 +47,7 @@ final class Unit extends AbstractCommand implements Immediate
 			throw new UnitException($unit, $this->context->Party());
 		}
 		$this->context->setUnit($unit);
+		$this->context->getProtocol($unit);
 		$this->message(UnitMessage::class);
 	}
 
