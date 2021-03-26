@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Tarnung in Reporten beachten
 - Tarnung in Befehlen beachten
 - Verarbeitungsfehler im Report auflisten
 - Schaden für überladene Schiffe
