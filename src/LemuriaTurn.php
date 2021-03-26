@@ -211,8 +211,9 @@ class LemuriaTurn implements Turn
 		}
 
 		$context = new Context($this->state);
+		$context->setParty($party);
 		foreach ($party->People() as $unit /* @var Unit $unit */) {
-			$command = $context->getProtocol($unit)->getDefaultCommand();
+			$command = $context->setUnit($unit)->getProtocol($unit)->getDefaultCommand();
 			if ($command) {
 				$this->enqueue($command);
 				Lemuria::Log()->debug('Enqueue default command.', ['unit' => $unit->Id(), 'command' => $command]);
@@ -227,7 +228,7 @@ class LemuriaTurn implements Turn
 		try {
 			$unit    = Unit::get($id);
 			$context = new Context($this->state);
-			$command = $context->getProtocol($unit)->getDefaultCommand();
+			$command = $context->setParty($unit->Party())->setUnit($unit)->getProtocol($unit)->getDefaultCommand();
 			if ($command) {
 				$this->enqueue($command);
 				Lemuria::Log()->debug('Enqueue default command.', ['command' => $command]);
