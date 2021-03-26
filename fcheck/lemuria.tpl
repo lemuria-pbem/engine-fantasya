@@ -63,9 +63,9 @@
 ^(res|rese|reser|reserv|reservi|reservie|reservier|reserviere|reservieren) +alles( +[a-zäöüß]+)?$
 
 ^(s|so|sor|sort|sorti|sortie|sortier|sortiere|sortieren) +(anfang|erste|erster|zuerst|ende|letzte|letzter|zuletzt)$
-^(s|so|sor|sort|sorti|sortie|sortier|sortiere|sortieren) +(vor|hinter|nach|austausch|austauschen|auswechseln|mit|tausch|tausche|tauschen|wechsel|wechseln) +[a-z0-9]{1,6}$
+^(s|so|sor|sort|sorti|sortie|sortier|sortiere|sortieren) +(vor|hinter|nach|austausch|austauschen|auswechseln|mit|tausch|tausche|tauschen|wechsel|wechseln)( +temp)? +[a-z0-9]{1,6}$
 ^(tau|taus|tausc|tausch|tausche|tauschen) +(anfang|erste|erster|zuerst|ende|letzte|letzter|zuletzt)$
-^(tau|taus|tausc|tausch|tausche|tauschen) +(vor|hinter|nach|austausch|austauschen|auswechseln|mit|tausch|tausche|tauschen|wechsel|wechseln) +[a-z0-9]{1,6}$
+^(tau|taus|tausc|tausch|tausche|tauschen) +(vor|hinter|nach|austausch|austauschen|auswechseln|mit|tausch|tausche|tauschen|wechsel|wechseln)( +temp)? +[a-z0-9]{1,6}$
 
 ^(tar|tarn|tarne|tarnen)( +([0-9]+|nein|nicht|partei( +[a-z0-9]{1,6})?))?$
 

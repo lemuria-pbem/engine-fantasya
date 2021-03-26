@@ -16,9 +16,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\SortLastMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortNotInRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortWithForeignerMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortWithItselfMessage;
-use Lemuria\Exception\IdException;
-use Lemuria\Id;
-use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Reorder;
 
