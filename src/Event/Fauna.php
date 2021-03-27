@@ -110,7 +110,7 @@ final class Fauna extends AbstractEvent
 						}
 					}
 
-					if ($workplaces + $migrants < 0) {
+					if ($count - $migrants > 0 && $workplaces + $migrants < 0) {
 						$hunger = (int)ceil(self::HUNGER * $count);
 						if ($hunger > 0) {
 							$quantity = new Quantity($commodity, $hunger);
