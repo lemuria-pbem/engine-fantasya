@@ -4,6 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
+- Talent beim Rekrutieren verringern
 - Magellan-Report sortieren
 - Regions-IDs in Reporten ausgeben
 - Rekrutenzahl in den Reporten ausgeben
