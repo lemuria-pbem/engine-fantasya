@@ -15,7 +15,7 @@ class LemuriaLog implements Log
 {
 	protected ?int $consoleLevel = null;
 
-	protected ?int $fileLevel = Logger::DEBUG;
+	protected ?int $fileLevel = null;
 
 	public function __construct(protected string $logPath) {
 	}
