@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Storage;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\LemuriaLog;
 use Lemuria\Engine\Fantasya\LemuriaOrders;
 use Lemuria\Engine\Fantasya\LemuriaReport;
 use Lemuria\Engine\Fantasya\LemuriaScore;
@@ -13,6 +14,7 @@ use Lemuria\Engine\Report;
 use Lemuria\Engine\Score;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Factory\DefaultBuilder;
+use Lemuria\Log;
 use Lemuria\Model\Builder;
 use Lemuria\Model\Calendar;
 use Lemuria\Model\Catalog;
@@ -141,12 +143,15 @@ class LemuriaConfig implements \ArrayAccess, Config
 		return new LemuriaRegistry();
 	}
 
-	public function getStoragePath(): string {
-		return $this->storagePath;
+	/**
+	 * @throws \Exception
+	 */
+	public function Log(): Log {
+		return new LemuriaLog($this->storagePath . DIRECTORY_SEPARATOR . self::LOG_DIR . DIRECTORY_SEPARATOR . self::LOG_FILE);
 	}
 
-	#[Pure] public function getPathToLog(): string {
-		return $this->storagePath . DIRECTORY_SEPARATOR . self::LOG_DIR . DIRECTORY_SEPARATOR . self::LOG_FILE;
+	public function getStoragePath(): string {
+		return $this->storagePath;
 	}
 
 	protected function initDefaults(): void {

@@ -4,10 +4,16 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
+- Magellan-Report sortieren
+- Regions-IDs in Reporten ausgeben
+- Rekrutenzahl in den Reporten ausgeben
+- Nachbarregionen in Reporten ausgeben
 - Tarnung in Befehlen beachten
 - Verarbeitungsfehler im Report auflisten
 - Schaden für überladene Schiffe
 - Magellan-Pseudobefehle ignorieren
+- Magellan-Regeln an Lemuria anpassen
+- Befehlsvorlage sortieren
 
 ## Neue Funktionen
 
