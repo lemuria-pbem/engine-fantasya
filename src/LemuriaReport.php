@@ -22,19 +22,19 @@ class LemuriaReport implements Reassignment, Report
 	/**
 	 * @var array(int=>array)
 	 */
-	private array $report = [];
+	private array $report;
 
 	/**
 	 * @var LemuriaMessage[]
 	 */
-	private array $message = [];
+	private array $message;
 
 	/**
 	 * @var int[]
 	 */
-	private array $removed = [];
+	private array $removed;
 
-	private int $nextId = 1;
+	private int $nextId;
 
 	private bool $isLoaded = false;
 
@@ -42,14 +42,8 @@ class LemuriaReport implements Reassignment, Report
 	 * Init the report.
 	 */
 	public function __construct() {
+		$this->clear();
 		Lemuria::Catalog()->addReassignment($this);
-		$reflection = new \ReflectionClass(Report::class);
-		foreach ($reflection->getConstants() as $namespace) {
-			if (!is_int($namespace)) {
-				throw new LemuriaException('Expected integer report namespace.');
-			}
-			$this->report[$namespace] = [];
-		}
 	}
 
 	/**
@@ -118,6 +112,23 @@ class LemuriaReport implements Reassignment, Report
 		$removed = array_keys($this->removed);
 		sort($removed);
 		Lemuria::Game()->setMessages(['messages' => $messages, 'removed' => $removed]);
+		return $this;
+	}
+
+	public function clear(): Report {
+		$this->report  = [];
+		$this->message = [];
+		$this->removed = [];
+		$this->nextId  = 1;
+
+		$reflection = new \ReflectionClass(Report::class);
+		foreach ($reflection->getConstants() as $namespace) {
+			if (!is_int($namespace)) {
+				throw new LemuriaException('Expected integer report namespace.');
+			}
+			$this->report[$namespace] = [];
+		}
+
 		return $this;
 	}
 
