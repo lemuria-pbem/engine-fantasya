@@ -244,6 +244,7 @@
 		"RawMaterialResourcesMessage": "Die Einheit $id kann kein $material finden.",
 		"RawMaterialWantsMessage": "Die Einheit $id möchte $production $commodity produzieren.",
 		"RecruitGuardedMessage": "Die Einheit $id kann nicht rekrutieren, die Region wird bewacht.",
+		"RecruitKnowledgeMessage": "Die Erfahrung der Einheit $id hat sich auf $percent% verringert.",
 		"RecruitLessMessage": "Die Einheit $id kann nur $size Personen rekrutieren.",
 		"RecruitMessage": "Die Einheit $id rekrutiert $size Personen.",
 		"RecruitPaymentMessage": "Die Einheit $id bezahlt $cost an $size Rekruten.",
