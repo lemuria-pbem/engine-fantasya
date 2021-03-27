@@ -17,7 +17,7 @@ class LemuriaLog implements Log
 
 	protected ?int $fileLevel = null;
 
-	public function __construct(protected string $logPath) {
+	public function __construct(protected string $logPath, protected bool $addErrorHandler = true) {
 	}
 
 	public function getLogger(): LoggerInterface {
@@ -25,7 +25,9 @@ class LemuriaLog implements Log
 		foreach ($this->getHandlers() as $handler) {
 			$log->pushHandler($handler);
 		}
-		ErrorHandler::register($log);
+		if ($this->addErrorHandler) {
+			ErrorHandler::register($log);
+		}
 		return $log;
 	}
 

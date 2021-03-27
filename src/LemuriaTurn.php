@@ -41,7 +41,7 @@ class LemuriaTurn implements Turn
 	/**
 	 * Initialize turn.
 	 */
-	public function __construct() {
+	public function __construct(private bool $throwExceptions = false) {
 		$this->state    = State::getInstance();
 		$this->priority = CommandPriority::getInstance();
 		foreach (CommandPriority::ORDER as $priority) {
@@ -87,6 +87,9 @@ class LemuriaTurn implements Turn
 				Lemuria::Log()->debug('New command: ' . $command, ['command' => $command]);
 			} catch (UnknownCommandException $e) {
 				Lemuria::Log()->error($e->getMessage(), ['exception' => $e]);
+				if ($this->throwExceptions) {
+					throw $e;
+				}
 				continue;
 			} catch (CommandParserException $e) {
 				if ($parser->isSkip()) {
@@ -105,6 +108,9 @@ class LemuriaTurn implements Turn
 					$command->execute();
 				} catch (CommandException $e) {
 					Lemuria::Log()->error($e->getMessage(), ['exception' => $e, 'command' => $command]);
+					if ($this->throwExceptions) {
+						throw $e;
+					}
 				}
 			} else {
 				$this->enqueue($command);
@@ -161,6 +167,9 @@ class LemuriaTurn implements Turn
 					$action->prepare();
 				} catch (ActionException $e) {
 					Lemuria::Log()->error($e->getMessage(), ['stage' => 'prepare', 'action' => $action]);
+					if ($this->throwExceptions) {
+						throw $e;
+					}
 				}
 			}
 			foreach ($actions as $action /* @var Action $action */) {
@@ -172,6 +181,9 @@ class LemuriaTurn implements Turn
 					}
 				} catch (ActionException $e) {
 					Lemuria::Log()->error($e->getMessage(), ['stage' => 'execute', 'action' => $action]);
+					if ($this->throwExceptions) {
+						throw $e;
+					}
 				}
 			}
 		}
@@ -208,6 +220,9 @@ class LemuriaTurn implements Turn
 			$party = Party::get($id);
 		} catch (NotRegisteredException $e) {
 			Lemuria::Log()->error($e->getMessage(), ['exception' => $e]);
+			if ($this->throwExceptions) {
+				throw $e;
+			}
 			return;
 		}
 
@@ -238,6 +253,9 @@ class LemuriaTurn implements Turn
 			}
 		} catch (NotRegisteredException $e) {
 			Lemuria::Log()->error($e->getMessage(), ['exception' => $e]);
+			if ($this->throwExceptions) {
+				throw $e;
+			}
 		}
 	}
 }
