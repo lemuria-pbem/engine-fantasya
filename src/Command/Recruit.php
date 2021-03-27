@@ -6,10 +6,12 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Message\Party\RecruitPreventMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitGuardedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RecruitKnowledgeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitLessMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitPaymentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitTooExpensiveMessage;
+use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -40,7 +42,10 @@ final class Recruit extends AllocationCommand
 			$size     = $quantity->Count();
 			$payable  = $this->getMaximumPayable($size);
 			if ($payable > 0) {
-				$this->unit->setSize($this->unit->Size() + $payable);
+				$oldSize = $this->unit->Size();
+				$newSize = $oldSize + $payable;
+				$this->reduceKnowledge($oldSize, $newSize);
+				$this->unit->setSize($newSize);
 			}
 			if ($size === $this->size) {
 				$this->message(RecruitMessage::class)->p($size);
@@ -97,5 +102,17 @@ final class Recruit extends AllocationCommand
 		$this->unit->Inventory()->remove($payment);
 		$this->message(RecruitPaymentMessage::class)->i($payment)->p($payable);
 		return $payable;
+	}
+
+	private function reduceKnowledge(int $oldSize, int $newSize): void {
+		if ($oldSize > 0) {
+			$percent = $oldSize / $newSize;
+			foreach ($this->unit->Knowledge() as $ability/* @var Ability $ability */) {
+				$experience    = $ability->Experience();
+				$newExperience = (int)round($percent * $experience);
+				$ability->removeItem(new Ability($ability->Talent(), $experience - $newExperience));
+			}
+			$this->message(RecruitKnowledgeMessage::class)->p((int)round(100.0 * $percent));
+		}
 	}
 }
