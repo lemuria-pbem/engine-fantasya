@@ -12,9 +12,9 @@
 
 ^(bestei|besteig|besteige|besteigen) +[a-z0-9]{1,6}$
 
-^(bet|betr|betre|betret|betrete|betreten) +[a-z0-9]{1,6}$
+^(bet|betr|betre|betret|betrete|betreten)( +(burg|gebäude|gebaeude|schiff))? +[a-z0-9]{1,6}$
 
-^(bew|bewa|bewac|bewach|bewache|bewachen)( +nicht)?$
+^(bew|bewa|bewac|bewach|bewache|bewachen|bewachu|bewachun|bewachung)( +nicht)?$
 
 ^(einh|einhe|einheit) +[a-z0-9]{1,6}$
 
@@ -25,15 +25,15 @@
 ^(gi|gib|ge|geb|gebe|geben) +[a-z0-9]{1,6} +.*$
 ^(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6} +.*$
 
-^(h|he|hel|helf|helfe|helfen) +[a-z0-9]{1,6} +[a-z]+( +(region|nicht|region +nicht|nicht +region))?$
+^(h|he|hel|helf|helfe|helfen|hi|hil|hilf|hilfe) +[a-z0-9]{1,6} +[a-z]+( +(region|nicht|region +nicht|nicht +region))?$
 
-^(kä|käm|kämp|kämpf|kämpfe|kämpfen|kae|kaem|kaemp|kaempf|kaempfe|kaempfen) +(agressiv|defensiv|fliehe|fliehen|flucht|hinten|nicht|vorn|vorne)?$
+^(kä|käm|kämp|kämpf|kämpfe|kämpfen|kae|kaem|kaemp|kaempf|kaempfe|kaempfen|ka|kam|kamp|kampf) +(agressiv|defensiv|fliehe|fliehen|flucht|hinten|nicht|vorn|vorne)?$
 
 ^(komma|komman|kommand|kommando) +[a-z0-9]{1,6}$
 
 ^(kon|kont|konta|kontak|kontakt|kontakti|kontaktie|kontaktier|kontaktiere|kontaktieren) +[a-z0-9]{1,6}$
 
-^(leh|lehr|lehre|lehren)( +[a-z0-9]{1,6})+$
+^(leh|lehr|lehre|lehren|lehrer)( +[a-z0-9]{1,6})+$
 
 ^(ler|lern|lerne|lernen) +(alchemie|armbrustschießen|armbrustschiessen|ausdauer|bergbau|bogenbau|bogenschießen|bogenschiessen|burgenbau|handeln|hiebwaffen|holzfaellen|holzfällen|katapultbedienung|katapultschießen|katapultschiessen|kräuterkunde|kraeuterkunde|magie|pferdedressur|reiten|ruestungsbau|rüstungsbau|schiffbau|segeln|speerkampf|spionage|steinbau|steuereintreiben|strassenbau|straßenbau|taktik|tarnung|unterhaltung|waffenbau|wagenbau|wahrnehmung)$
 
@@ -56,24 +56,24 @@
 
 ^(rei|reis|reise|reisen|nac|nach)( +(e|ne|no|nw|o|so|sw|w|east|nordosten|nordwesten|northeast|northwest|osten|suedosten|suedwesten|southeast|southwest|westen|west))+$
 
-^(rek|rekr|rekru|rekrut|rekruti|rekrutie|rekrutier|rekrutiere|rekrutieren) +[0-9]+$
+^(rek|rekr|rekru|rekrut|rekruti|rekrutie|rekrutier|rekrutiere|rekrutieren|rekrute|rekruten) +[0-9]+$
 
-^(res|rese|reser|reserv|reservi|reservie|reservier|reserviere|reservieren) +[0-9]+ +[a-zäöüß]+$
-^(res|rese|reser|reserv|reservi|reservie|reservier|reserviere|reservieren) +[a-zäöüß]+$
-^(res|rese|reser|reserv|reservi|reservie|reservier|reserviere|reservieren) +alles( +[a-zäöüß]+)?$
+^(res|rese|reser|reserv|reservi|reserve|reservie|reservier|reserviere|reservieren|reservieru|reservierun|reservierung) +[0-9]+ +[a-zäöüß]+$
+^(res|rese|reser|reserv|reservi|reserve|reservie|reservier|reserviere|reservieren|reservieru|reservierun|reservierung) +[a-zäöüß]+$
+^(res|rese|reser|reserv|reservi|reserve|reservie|reservier|reserviere|reservieren|reservieru|reservierun|reservierung) +alles( +[a-zäöüß]+)?$
 
-^(s|so|sor|sort|sorti|sortie|sortier|sortiere|sortieren) +(anfang|erste|erster|zuerst|ende|letzte|letzter|zuletzt)$
-^(s|so|sor|sort|sorti|sortie|sortier|sortiere|sortieren) +(vor|hinter|nach|austausch|austauschen|auswechseln|mit|tausch|tausche|tauschen|wechsel|wechseln)( +temp)? +[a-z0-9]{1,6}$
+^(s|so|sor|sort|sorti|sortie|sortier|sortiere|sortieren|sortieru|sortierun|sortierung) +(anfang|erste|erster|zuerst|ende|letzte|letzter|zuletzt)$
+^(s|so|sor|sort|sorti|sortie|sortier|sortiere|sortieren|sortieru|sortierun|sortierung) +(vor|hinter|nach|austausch|austauschen|auswechseln|mit|tausch|tausche|tauschen|wechsel|wechseln)( +temp)? +[a-z0-9]{1,6}$
 ^(tau|taus|tausc|tausch|tausche|tauschen) +(anfang|erste|erster|zuerst|ende|letzte|letzter|zuletzt)$
 ^(tau|taus|tausc|tausch|tausche|tauschen) +(vor|hinter|nach|austausch|austauschen|auswechseln|mit|tausch|tausche|tauschen|wechsel|wechseln)( +temp)? +[a-z0-9]{1,6}$
 
-^(tar|tarn|tarne|tarnen)( +([0-9]+|nein|nicht|partei( +[a-z0-9]{1,6})?))?$
+^(tar|tarn|tarne|tarnen|tarnu|tarnun|tarnung)( +([0-9]+|nein|nicht|partei( +[a-z0-9]{1,6})?))?$
 
 ^(tr|tre|trei|treib|treibe|treiben)( +[0-9]+)?$
-^(besteu|besteue|besteuer|besteuern)( +[0-9]+)?$
+^(besteu|besteue|besteuer|besteuern|besteueru|besteuerun|besteuerung)( +[0-9]+)?$
 ^(eint|eintr|eintre|eintrei|eintreib|eintreibe|eintreiben)( +[0-9]+)?$
 
-^(un|unt|unte|unter|unterh|unterha|unterhal|unterhalt|unterhalte|unterhalten)( +[0-9]+)?$
+^(un|unt|unte|unter|unterh|unterha|unterhal|unterhalt|unterhalte|unterhalten|unterhaltu|unterhaltun|unterhaltung)( +[0-9]+)?$
 
 ^(ur|urs|ursp|urspr|urspru|ursprun|ursprung)( +(partei|region) +[a-z0-9]{1,6})?$
 

@@ -137,8 +137,10 @@ class CommandFactory
 		'BESCHREIBUNG' => true,
 		'BESTEIGEN'    => true,
 		'BESTEUERN'    => 'TREIBEN',
+		'BESTEUERUNG'  => 'TREIBEN',
 		'BETRETEN'     => true,
 		'BEWACHEN'     => true,
+		'BEWACHUNG'    => 'BEWACHEN',
 		'DEFAULT'      => 'VORLAGE',
 		'EINHEIT'      => true,
 		'EINTREIBEN'   => 'TREIBEN',
@@ -149,13 +151,16 @@ class CommandFactory
 		'GIB'          => true,
 		'GEBEN'        => 'GIB',
 		'HELFEN'       => true,
+		'HILFE'        => 'HELFEN',
 		'ID'           => 'NUMMER',
+		'KAMPF'        => 'KÄMPFEN',
 		'KAEMPFEN'     => 'KÄMPFEN',
 		'KÄMPFEN'      => true,
 		'KOMMANDO'     => true,
 		'KOMMENTAR'    => true,
 		'KONTAKTIEREN' => true,
 		'LEHREN'       => true,
+		'LEHRER'       => 'LEHREN',
 		'LEMURIA'      => 'PARTEI',
 		'LERNEN'       => true,
 		'MACHEN'       => true,
@@ -166,14 +171,20 @@ class CommandFactory
 		'NUMMER'       => true,
 		'PARTEI'       => true,
 		'REISEN'       => true,
+		'REKRUTEN'     => 'REKRUTIEREN',
 		'REKRUTIEREN'  => true,
+		'RESERVE'      => 'RESERVIEREN',
 		'RESERVIEREN'  => true,
+		'RESERVIERUNG' => 'RESERVIEREN',
 		'SORTIEREN'    => true,
+		'SORTIERUNG'   => 'SORTIEREN',
 		'TARNEN'       => true,
+		'TARNUNG'      => 'TARNEN',
 		'TAUSCHEN'     => 'SORTIEREN',
 		'TEXT'         => 'BESCHREIBUNG',
 		'TREIBEN'      => true,
 		'UNTERHALTEN'  => true,
+		'UNTERHALTUNG' => 'UNTERHALTEN',
 		'URSPRUNG'     => true,
 		'ÜBERGEBEN'    => 'GIB',
 		'UEBERGEBEN'   => 'GIB',
@@ -491,12 +502,13 @@ class CommandFactory
 					$isValid   = $this->verbs[$isValid] ?? false;
 				}
 				if ($isValid === true) {
-					$candidates[] = $candidate;
+					$candidates[$candidate] = true;
 				}
 			}
 		}
 		if (count($candidates) === 1) {
-			return $candidates[0];
+			reset($candidates);
+			return key($candidates);
 		}
 		throw new UnknownCommandException($verb);
 	}
