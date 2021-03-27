@@ -47,6 +47,7 @@ class LemuriaTurn implements Turn
 		foreach (CommandPriority::ORDER as $priority) {
 			$this->queue[$priority] = [];
 		}
+		Lemuria::Report()->clear();
 	}
 
 	/**
