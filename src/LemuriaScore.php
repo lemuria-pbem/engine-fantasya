@@ -57,7 +57,13 @@ class LemuriaScore implements Score
 
 	public function rewind(): void {
 		$this->iterator = [];
-
+		foreach ($this->effects as $entities) {
+			foreach ($entities as $effects) {
+				foreach ($effects as $effect) {
+					$this->iterator[] = $effect;
+				}
+			}
+		}
 		$this->index = 0;
 		$this->count = count($this->iterator);
 	}
