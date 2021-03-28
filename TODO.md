@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Rekrutenzahl in den Reporten ausgeben
 - Regions-IDs in Reporten ausgeben
 - Nachbarregionen in Reporten ausgeben
 - Kalender in Magellan korrigieren
