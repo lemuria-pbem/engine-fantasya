@@ -52,7 +52,7 @@ final class Growth extends AbstractEvent
 		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region /* @var Region $region */) {
 			$landscape = $region->Landscape();
 			$place     = (int)round($landscape->Workplaces() / Workplaces::TREE);
-			if ($place < 0) {
+			if ($place <= 0) {
 				continue;
 			}
 
