@@ -51,7 +51,7 @@ class Availability
 	/**
 	 * Calculate availability of each commodity individually.
 	 */
-	#[Pure] protected function calculateAvailability(Quantity $quantity): Quantity {
+	protected function calculateAvailability(Quantity $quantity): Quantity {
 		$commodity = $quantity->Commodity();
 		$count     = match ($commodity::class) {
 			Peasant::class => $this->getUnemployedPeasants($quantity->Count()),

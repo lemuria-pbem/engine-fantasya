@@ -11,7 +11,6 @@ use Lemuria\Engine\Fantasya\Message\Region\SubsistenceMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Silver;
@@ -47,11 +46,7 @@ final class Subsistence extends AbstractEvent
 			$resources = $region->Resources();
 			$peasants  = $resources[$this->peasant]->Count();
 			if ($peasants > 0) {
-				$government = $this->context->getIntelligence($region)->getGovernment();
-				/** @var Castle $castle */
-				$castle = $government?->Building();
-				$wage   = $castle?->Wage() ?? self::WAGE;
-
+				$wage      = $this->context->getIntelligence($region)->getWage(self::WAGE);
 				$available = $this->getAvailableWorkplaces($region);
 				$workers   = min($peasants, $available);
 				$earnings  = $workers * $wage;
