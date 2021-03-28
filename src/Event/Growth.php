@@ -18,7 +18,7 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 
 /**
- * Peasants work for their living and increase their silver reserve.
+ * Forests grow in the spring.
  */
 final class Growth extends AbstractEvent
 {

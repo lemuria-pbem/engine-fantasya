@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Event;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Effect\Unemployment;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Factory\WorkplacesTrait;
 use Lemuria\Engine\Fantasya\Message\Region\PopulationFeedMessage;
@@ -23,7 +24,9 @@ use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Neighbours;
 
 /**
- * Peasants work for their living and increase their silver reserve.
+ * The peasant population grows or shrinks at the end of each turn.
+ *
+ * The number of available recruits is calculated and persisted as an effect.
  */
 final class Population extends AbstractEvent
 {
@@ -34,6 +37,8 @@ final class Population extends AbstractEvent
 	private const MIGRATION = 0.1;
 
 	private const WEALTH = 24;
+
+	private const UNEMPLOYMENT = 5.0;
 
 	private Workplaces $workplaces;
 
@@ -53,6 +58,7 @@ final class Population extends AbstractEvent
 			$resources = $region->Resources();
 			$peasants  = $resources[$this->peasant]->Count();
 			if ($peasants <= 0) {
+				$this->calculateUnemployment($region);
 				continue;
 			}
 
@@ -87,6 +93,7 @@ final class Population extends AbstractEvent
 
 			$needed = $peasants * Subsistence::SILVER;
 			$used   = min($needed, $reserve);
+			$hungry = 0;
 			if ($needed > $reserve) {
 				$hungry = min($peasants - (int)floor($reserve / Subsistence::SILVER), $peasants - $migrants);
 				if ($hungry > 0) {
@@ -99,6 +106,8 @@ final class Population extends AbstractEvent
 			$quantity     = new Quantity($this->silver, $used);
 			$resources->remove($quantity);
 			$this->message(PopulationFeedMessage::class, $region)->i($feedPeasants)->i($quantity, PopulationFeedMessage::SILVER);
+
+			$this->calculateUnemployment($region, $years, $peasants, $growth, $migrants, $hungry);
 		}
 	}
 
@@ -192,5 +201,29 @@ final class Population extends AbstractEvent
 				break;
 			}
 		}
+	}
+
+	private function calculateUnemployment(Region $region, float $years = 0.0, int $peasants = 0, int $growth = 0, int $migrants = 0, int $hungry = 0): void {
+		$effect       = new Unemployment($this->state);
+		$unemployment = Lemuria::Score()->find($effect->setRegion($region));
+		if (!$unemployment) {
+			$unemployment = $effect;
+			Lemuria::Score()->add($unemployment);
+		}
+
+		$percent  = self::UNEMPLOYMENT;
+		$percent -= min((2.0 * (self::UNEMPLOYMENT - 0.5)), $years) * 0.5;
+		if ($growth > 0) {
+			$percent /= 2.0;
+		}
+		if ($migrants > 0) {
+			$percent *= 2.0;
+		}
+		if ($migrants > 0) {
+			$percent *= 2.0;
+		}
+		$unemployed = (int)ceil(($percent / 100.0) * ($peasants + $growth - $migrants - $hungry));
+		$unemployment->setPeasants($unemployed);
+		Lemuria::Log()->debug('Unemployment in region ' . $region->Id() . ' is ' . round($percent, 1) . '%.');
 	}
 }
