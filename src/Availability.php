@@ -4,6 +4,9 @@ namespace Lemuria\Engine\Fantasya;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Effect\Unemployment;
+use Lemuria\Engine\Fantasya\Event\Population;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
@@ -47,16 +50,20 @@ class Availability
 
 	/**
 	 * Calculate availability of each commodity individually.
-	 *
-	 * TODO: Improve calculation.
 	 */
 	#[Pure] protected function calculateAvailability(Quantity $quantity): Quantity {
 		$commodity = $quantity->Commodity();
-		$factor    = match ($commodity::class) {
-			Peasant::class => rand(30, 60) / 1000,
-			default        => 1.0
+		$count     = match ($commodity::class) {
+			Peasant::class => $this->getUnemployedPeasants($quantity->Count()),
+			default        => $quantity->Count()
 		};
-		$count = (int)floor($factor * $quantity->Count());
 		return new Quantity($commodity, $count);
+	}
+
+	private function getUnemployedPeasants(int $totalPeasants): int {
+		$effect       = new Unemployment(State::getInstance());
+		/** @var Unemployment $unemployment */
+		$unemployment = Lemuria::Score()->find($effect->setRegion($this->region));
+		return $unemployment?->Peasants() ?? (int)ceil(Population::UNEMPLOYMENT / 100.0 * $totalPeasants);
 	}
 }
