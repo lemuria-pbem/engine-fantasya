@@ -72,17 +72,17 @@ final class CommandPriority
 	/**
 	 * Priority of B-Events.
 	 */
-	private const B_ACTION = 1;
+	private const B_ACTION = 2;
 
 	/**
 	 * Priority of M-Events.
 	 */
-	private const M_ACTION = 50;
+	private const M_ACTION = 51;
 
 	/**
 	 * Priority of A-Events.
 	 */
-	private const A_ACTION = 98;
+	private const A_ACTION = 99;
 
 	/**
 	 * The lowest possible execution priority.
@@ -123,12 +123,12 @@ final class CommandPriority
 
 		if ($action instanceof Effect) {
 			if ($priority <= Action::BEFORE) {
-				return self::B_ACTION + 1;
+				return self::B_ACTION - 1;
 			}
 			if ($priority >= Action::AFTER) {
-				return self::A_ACTION + 1;
+				return self::A_ACTION - 1;
 			}
-			return self::M_ACTION + 1;
+			return self::M_ACTION - 1;
 		}
 
 		throw new LemuriaException('Unsupported action: ' . getClass($action));
