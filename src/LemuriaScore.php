@@ -2,13 +2,13 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Factory\EffectFactory;
 use Lemuria\Engine\Score;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\SerializableTrait;
-use function Lemuria\getClass;
 
 class LemuriaScore implements Score
 {
@@ -23,6 +23,12 @@ class LemuriaScore implements Score
 
 	private bool $isLoaded = false;
 
+	private ?array $iterator = null;
+
+	private int $index = 0;
+
+	private int $count = 0;
+
 	/**
 	 * Init the score.
 	 */
@@ -35,6 +41,33 @@ class LemuriaScore implements Score
 			$this->effects[$namespace] = [];
 		}
 		$this->factory = new EffectFactory(State::getInstance());
+	}
+
+	public function current(): ?Effect {
+		return $this->iterator[$this->index] ?? null;
+	}
+
+	public function key(): string {
+		return (string)$this->current();
+	}
+
+	public function next(): void {
+		$this->index++;
+	}
+
+	public function rewind(): void {
+		$this->iterator = [];
+
+		$this->index = 0;
+		$this->count = count($this->iterator);
+	}
+
+	public function valid(): bool {
+		if ($this->index < $this->count) {
+			return true;
+		}
+		$this->iterator = null;
+		return false;
 	}
 
 	/**
