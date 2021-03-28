@@ -41,6 +41,7 @@ final class TravelAtlas extends Atlas
 			foreach ($outlook->Panorama($region) as $neighbour /* @var Region $neighbour */) {
 				$id = $neighbour->Id()->Id();
 				if (!isset($this->visibility[$id])) {
+					$this->add($neighbour);
 					$this->visibility[$id] = self::NEIGHBOUR;
 				}
 			}
@@ -48,9 +49,13 @@ final class TravelAtlas extends Atlas
 
 		$chronicle = $this->party->Chronicle();
 		foreach ($chronicle as $id => $region /* @var Region $region */) {
-			if (!array_key_exists($id, $this->visibility) || $this->visibility[$id] === self::NEIGHBOUR) {
-				$visibility            = $chronicle->getVisit($region)->Round() === $round ? self::TRAVELLED : self::HISTORIC;
-				$this->visibility[$id] = $visibility;
+			if ($chronicle->getVisit($region)->Round() === $round) {
+				if (!isset($this->visibility[$id])) {
+					$this->add($region);
+					$this->visibility[$id] = self::TRAVELLED;
+				} elseif ($this->visibility[$id] === self::NEIGHBOUR) {
+					$this->visibility[$id] = self::TRAVELLED;
+				}
 			}
 		}
 
