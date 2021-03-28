@@ -306,6 +306,7 @@
 		"TravelShipTooHeavyMessage": "Das Schiff $id ist zu schwer, um sich zu bewegen.",
 		"TravelSpeedMessage": "Die Einheit $id kann sich $speed Regionen bewegen (Gewicht: $weight).",
 		"TravelTooHeayMessage": "Die Einheit $id ist zu schwer, um sich zu bewegen.",
+		"UnemploymentMessage": "$recruits Rekruten sind in der Region $id verfügbar.",
 		"UnguardMessage": "Die Einheit $id bewacht nicht länger die Region.",
 		"UnguardNotGuardingMessage": "Die Einheit $id bewacht die Region nicht.",
 		"UnitMessage": "Wechsel zur Einheit $id.",
