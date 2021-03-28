@@ -4,11 +4,14 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Magellan-Report sortieren
-- Regions-IDs in Reporten ausgeben
 - Rekrutenzahl in den Reporten ausgeben
+- Regions-IDs in Reporten ausgeben
 - Nachbarregionen in Reporten ausgeben
+- Kalender in Magellan korrigieren
+- Personenzahl in Gebäuden / auf Schiffen ausgeben
+- Materialpool in Reporten ausgeben
 - Tarnung in Befehlen beachten
+- Faulenzen-Nachricht ergänzen
 - Verarbeitungsfehler im Report auflisten
 - Schaden für überladene Schiffe
 - Magellan-Pseudobefehle ignorieren

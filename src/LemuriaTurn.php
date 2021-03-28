@@ -6,8 +6,8 @@ use Lemuria\Engine\Fantasya\Exception\ActionException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
-use Lemuria\Engine\Fantasya\Factory\DefaultProgress;
 use Lemuria\Engine\Move;
+use Lemuria\Engine\Score;
 use Lemuria\Engine\Turn;
 use Lemuria\EntitySet;
 use Lemuria\Exception\LemuriaException;
@@ -36,8 +36,6 @@ class LemuriaTurn implements Turn
 
 	private State $state;
 
-	private ?Progress $progress = null;
-
 	/**
 	 * Initialize turn.
 	 */
@@ -48,26 +46,6 @@ class LemuriaTurn implements Turn
 			$this->queue[$priority] = [];
 		}
 		Lemuria::Report()->clear();
-	}
-
-	/**
-	 * Get the Progress instance.
-	 */
-	public function Progress(): Progress {
-		if (!$this->progress) {
-			$this->progress = new DefaultProgress($this->state);
-			Lemuria::Log()->debug('Using default Progress.', ['progress' => $this->progress]);
-		}
-		return $this->progress;
-	}
-
-	/**
-	 * Override the Progress instance.
-	 */
-	public function setProgress(Progress $progress): Turn {
-		$this->progress = $progress;
-		Lemuria::Log()->debug('Overriding default Progress.', ['progress' => $progress]);
-		return $this;
 	}
 
 	/**
@@ -154,11 +132,6 @@ class LemuriaTurn implements Turn
 	 */
 	public function evaluate(): Turn {
 		Lemuria::Orders()->clear();
-		foreach ($this->Progress() as $event) {
-			$this->enqueue($event);
-			Lemuria::Log()->debug('Adding ' . $event . ' from Progress.', ['event' => $event]);
-		}
-
 		Lemuria::Log()->debug('Executing queued actions.', ['queues' => count($this->queue)]);
 		foreach ($this->queue as $priority => $actions) {
 			Lemuria::Log()->debug('Queue ' . $priority . ' has ' . count($actions) . ' actions.');
@@ -192,26 +165,41 @@ class LemuriaTurn implements Turn
 	}
 
 	/**
-	 * @throws LemuriaException
+	 * Add events from default progress,
 	 */
-	public function addEvent(Event $event): Turn {
-		$this->enqueue($event);
-		Lemuria::Log()->debug('New event: ' . $event . '.', ['event' => $event]);
+	public function addProgress(Progress $progress): LemuriaTurn {
+		Lemuria::Log()->debug('Adding events from progress.', ['progress' => $progress]);
+		foreach ($progress as $event) {
+			$this->addEvent($event);
+		}
 		return $this;
 	}
 
 	/**
-	 * @throws LemuriaException
+	 * Add effects from Score.
 	 */
-	public function addEffect(Effect $effect): Turn {
-		$this->enqueue($effect);
-		Lemuria::Log()->debug('New effect: ' . $effect . '.', ['effect' => $effect]);
+	public function addScore(Score $score): LemuriaTurn {
+		foreach ($score as $effect /* @var Effect $effect */) {
+			$this->addEffect($effect);
+		}
 		return $this;
 	}
 
 	protected function enqueue(Action $action): void {
 		$priority                 = $this->priority->getPriority($action);
 		$this->queue[$priority][] = $action;
+	}
+
+	protected function addEvent(Event $event): Turn {
+		$this->enqueue($event);
+		Lemuria::Log()->debug('New event: ' . $event . '.', ['event' => $event]);
+		return $this;
+	}
+
+	protected function addEffect(Effect $effect): Turn {
+		$this->enqueue($effect);
+		Lemuria::Log()->debug('New effect: ' . $effect . '.', ['effect' => $effect]);
+		return $this;
 	}
 
 	private function substituteParty(Id $id): void {
