@@ -6,15 +6,18 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Factory\CommandFactory;
+use Lemuria\Id;
+use Lemuria\Identifiable;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Reassignment;
 
 /**
  * A context class available to all commands.
  */
-final class Context
+final class Context implements Reassignment
 {
 	private Parser $parser;
 
@@ -86,6 +89,33 @@ final class Context
 		return $this->mapper;
 	}
 
+	public function reassign(Id $oldId, Identifiable $identifiable): void {
+		if ($identifiable instanceof Unit) {
+			$old = $oldId->Id();
+			$new = $identifiable->Id()->Id();
+			if (isset($this->calculus[$old])) {
+				$this->calculus[$new] = $this->calculus[$old];
+				unset($this->calculus[$old]);
+			}
+			if (isset($this->protocol[$old])) {
+				$this->protocol[$new] = $this->protocol[$old];
+				unset($this->protocol[$old]);
+				$this->state->unsetProtocol($oldId);
+				$this->state->setProtocol($this->protocol[$new]);
+			}
+		}
+	}
+
+	public function remove(Identifiable $identifiable): void {
+		if ($identifiable instanceof Unit) {
+			$id = $identifiable->Id()->Id();
+			unset($this->calculus[$id]);
+			$this->state->unsetProtocol($identifiable->Id());
+			unset($this->protocol[$id]);
+			unset($this->resourcePool[self::resourcePoolId($identifiable)]);
+		}
+	}
+
 	/**
 	 * Get a unit's calculus.
 	 */
@@ -103,7 +133,9 @@ final class Context
 	public function getProtocol(Unit $unit): ActivityProtocol {
 		$id = $unit->Id()->Id();
 		if (!isset($this->protocol[$id])) {
-			$this->protocol[$id] = new ActivityProtocol($unit, $this);
+			$protocol            = new ActivityProtocol($unit, $this);
+			$this->protocol[$id] = $protocol;
+			$this->state->setProtocol($protocol);
 		}
 		return $this->protocol[$id];
 	}
@@ -119,7 +151,7 @@ final class Context
 	 * Get a resource pool.
 	 */
 	public function getResourcePool(Unit $unit): ResourcePool {
-		$id = $unit->Party()->Id()->Id() . '-' . $unit->Region()->Id()->Id();
+		$id = self::resourcePoolId($unit);
 		if (!isset($this->resourcePool[$id])) {
 			$this->resourcePool[$id] = new ResourcePool($unit);
 		}
@@ -152,5 +184,9 @@ final class Context
 	public function setUnit(Unit $unit): Context {
 		$this->unit = $unit;
 		return $this;
+	}
+
+	private static function resourcePoolId(Unit $unit): string {
+		return $unit->Party()->Id()->Id() . '-' . $unit->Region()->Id()->Id();
 	}
 }

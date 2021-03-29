@@ -10,6 +10,7 @@ use Lemuria\Engine\Fantasya\Event\Drift;
 use Lemuria\Engine\Fantasya\Event\Fauna;
 use Lemuria\Engine\Fantasya\Event\Founder;
 use Lemuria\Engine\Fantasya\Event\Growth;
+use Lemuria\Engine\Fantasya\Event\Layabout;
 use Lemuria\Engine\Fantasya\Event\Liquidation;
 use Lemuria\Engine\Fantasya\Event\Population;
 use Lemuria\Engine\Fantasya\Event\Subsistence;
@@ -25,7 +26,8 @@ class DefaultProgress implements Progress
 		// middle
 		Upkeep::class, Subsistence::class, Drift::class,
 		// after
-		Founder::class, Support::class, Population::class, Fauna::class,  Growth::class, Decease::class, Liquidation::class
+		Founder::class, Support::class, Population::class, Fauna::class, Growth::class, Decease::class,
+		Liquidation::class, Layabout::class
 	];
 
 	private array $events = [];

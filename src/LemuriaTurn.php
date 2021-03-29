@@ -54,6 +54,7 @@ class LemuriaTurn implements Turn
 	public function add(Move $move): EntitySet {
 		Lemuria::Log()->debug('Adding party move.', ['move' => $move]);
 		$context = new Context($this->state);
+		Lemuria::Catalog()->addReassignment($context);
 		$factory = $context->Factory();
 		$parser  = $context->Parser()->parse($move);
 		$units   = new People();
@@ -215,6 +216,7 @@ class LemuriaTurn implements Turn
 		}
 
 		$context = new Context($this->state);
+		Lemuria::Catalog()->addReassignment($context);
 		$context->setParty($party);
 		foreach ($party->People() as $unit /* @var Unit $unit */) {
 			$command = $context->setUnit($unit)->getProtocol($unit)->getDefaultCommand();
@@ -232,6 +234,7 @@ class LemuriaTurn implements Turn
 		try {
 			$unit    = Unit::get($id);
 			$context = new Context($this->state);
+			Lemuria::Catalog()->addReassignment($context);
 			$command = $context->setParty($unit->Party())->setUnit($unit)->getProtocol($unit)->getDefaultCommand();
 			if ($command) {
 				$this->enqueue($command);
