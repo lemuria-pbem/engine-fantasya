@@ -2,8 +2,11 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use Lemuria\Exception\LemuriaException;
+use Lemuria\Id;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Unit;
 
 final class State
 {
@@ -30,6 +33,11 @@ final class State
 	 * @var array(int=>Intelligence)
 	 */
 	private array $intelligence = [];
+
+	/**
+	 * @var array(int=>ActivityProtocol)
+	 */
+	private array $protocol = [];
 
 	/**
 	 * Get a region's available resources.
@@ -62,5 +70,24 @@ final class State
 			$this->intelligence[$id] = new Intelligence($region);
 		}
 		return $this->intelligence[$id];
+	}
+
+	/**
+	 * Get a unit's activity protocol.
+	 */
+	public function getProtocol(Unit $unit): ActivityProtocol {
+		$id = $unit->Id()->Id();
+		if (!isset($this->protocol[$id])) {
+			throw new LemuriaException();
+		}
+		return $this->protocol[$id];
+	}
+
+	public function setProtocol(ActivityProtocol $protocol): void {
+		$this->protocol[$protocol->Unit()->Id()->Id()] = $protocol;
+	}
+
+	public function unsetProtocol(Id $oldId): void {
+		unset($this->protocol[$oldId->Id()]);
 	}
 }

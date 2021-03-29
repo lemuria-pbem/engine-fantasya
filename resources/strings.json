@@ -175,6 +175,7 @@
 		"HelpSelfMessage": "Die Einheit $id kann nicht der eigenen Partei helfen.",
 		"HelpUnknownPartyMessage": "Die Einheiz $id kennt die Partei $party nicht, um ihr zu helfen.",
 		"HungerMessage": "Die Gesundheit der Einheit $id sinkt auf $health.",
+		"LayaboutMessage": "Die Einheit $id faulenzt in dieser Woche.",
 		"LearnProgressMessage": "Die Einheit $id lernt $talent mit $experience Lerntagen.",
 		"LearnTeachersMessage": "Die Einheit $id hat $teachers Lehrer.",
 		"LeaveConstructionDebugMessage": "Die Einheit $id hat das Gebäude $construction verlassen.",

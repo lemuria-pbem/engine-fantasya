@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Faulenzen-Nachricht ergänzen
 - Verarbeitungsfehler im Report auflisten
 - Schaden für überladene Schiffe
 - Magellan-Pseudobefehle ignorieren
