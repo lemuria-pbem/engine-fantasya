@@ -7,6 +7,7 @@ use JetBrains\PhpStorm\Pure;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
+use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachBonusMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachExceptionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachPartyMessage;
@@ -27,6 +28,8 @@ use Lemuria\Model\Fantasya\Unit;
  */
 final class Teach extends UnitCommand implements Activity
 {
+	use CamouflageTrait;
+
 	private const MAX_STUDENTS = 10;
 
 	/**
@@ -61,8 +64,13 @@ final class Teach extends UnitCommand implements Activity
 				try {
 					$unit = $this->nextId($i);
 					if ($unit) {
-						$this->size += $this->teach($unit, true);
-						$ids[]       = $unit->Id();
+						$message = $this->checkUnit($unit);
+						if ($message) {
+							$this->message(TeachExceptionMessage::class)->p($message);
+						} else {
+							$this->size += $this->teach($unit, true);
+							$ids[]       = $unit->Id();
+						}
 					} else {
 						break;
 					}
@@ -83,6 +91,19 @@ final class Teach extends UnitCommand implements Activity
 	protected function run(): void {
 		$this->calculateBonuses();
 		$this->message(TeachBonusMessage::class)->p($this->size, TeachBonusMessage::STUDENTS)->p($this->bonus, TeachBonusMessage::BONUS);
+	}
+
+	private function checkUnit(Unit $unit): ?string {
+		if ($unit->Region() !== $this->unit->Region()) {
+			return 'Not in our region.';
+		}
+		if ($unit->Party() === $this->unit->Party()) {
+			return null;
+		}
+		if (!$this->checkVisibility($this->calculus(), $unit)) {
+			return 'Not in our region.';
+		}
+		return null;
 	}
 
 	/**

@@ -5,12 +5,14 @@ namespace Lemuria\Engine\Fantasya\Command\Handover;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateFailedMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateFromMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateIncompatibleMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateRejectedMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateToMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\MigrateNotFoundMessage;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Race\Human;
 
@@ -24,6 +26,7 @@ use Lemuria\Model\Fantasya\Race\Human;
 final class Migrate extends UnitCommand
 {
 	use BuilderTrait;
+	use CamouflageTrait;
 	use GiftTrait;
 
 	protected function run(): void {
@@ -35,6 +38,14 @@ final class Migrate extends UnitCommand
 		}
 		if (strtolower($this->phrase->getParameter(2)) !== 'einheit') {
 			throw new UnknownCommandException($this);
+		}
+		if ($this->recipient->Region() !== $this->unit->Region()) {
+			$this->message(MigrateNotFoundMessage::class)->e($this->recipient);
+			return;
+		}
+		if (!$this->checkVisibility($this->calculus(), $this->recipient)) {
+			$this->message(MigrateNotFoundMessage::class)->e($this->recipient);
+			return;
 		}
 
 		$from = $this->unit->Party();

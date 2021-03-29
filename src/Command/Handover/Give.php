@@ -4,11 +4,13 @@ namespace Lemuria\Engine\Fantasya\Command\Handover;
 
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Everything;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveNoInventoryMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveFailedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GiveNotFoundMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveRejectedMessage;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Quantity;
@@ -26,6 +28,7 @@ use Lemuria\Model\Fantasya\Quantity;
  */
 final class Give extends UnitCommand
 {
+	use CamouflageTrait;
 	use GiftTrait;
 
 	protected function run(): void {
@@ -36,12 +39,24 @@ final class Give extends UnitCommand
 		if (!$this->recipient) {
 			throw new InvalidCommandException($this, 'No recipient parameter.');
 		}
+		if ($this->recipient->Region() !== $this->unit->Region()) {
+			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
+			return;
+		}
 
 		$this->parseObject($count, $commodity);
 		if (!$this->checkPermission()) {
-			$this->message(GiveFailedMessage::class)->e($this->recipient);
-			$gift = new Quantity($this->commodity, $this->amount);
-			$this->message(GiveRejectedMessage::class, $this->recipient)->e($this->unit)->i($gift);
+			if ($this->checkVisibility($this->calculus(), $this->recipient)) {
+				$this->message(GiveFailedMessage::class)->e($this->recipient);
+				$gift = new Quantity($this->commodity, $this->amount);
+				$this->message(GiveRejectedMessage::class, $this->recipient)->e($this->unit)->i($gift);
+				return;
+			}
+			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
+		}
+
+		if (!$this->checkVisibility($this->calculus(), $this->recipient)) {
+			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
 			return;
 		}
 
