@@ -22,6 +22,7 @@ use Lemuria\Model\Fantasya\Modification;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
+use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Transport;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Weapon;
@@ -41,6 +42,10 @@ final class Calculus
 	private array $teachers = [];
 
 	public function __construct(private Unit $unit) {
+	}
+
+	public function Unit(): Unit {
+		return $this->unit;
 	}
 
 	/**
@@ -210,6 +215,21 @@ final class Calculus
 	public function bestWeaponSkill(): WeaponSkill {
 		$weaponSkill = $this->weaponSkill();
 		return $weaponSkill[0];
+	}
+
+	/**
+	 * Check if this unit can discover given unit.
+	 */
+	public function canDiscover(Unit $unit): bool {
+		if ($unit->Construction() || $unit->Vessel()) {
+			return true;
+		}
+		$camouflage = $unit->Camouflage();
+		if (!$camouflage) {
+			return true;
+		}
+		$perception = $this->knowledge(Perception::class);
+		return $perception->Level() >= $camouflage;
 	}
 
 	#[Pure] private function transport(?Item $quantity, int $reduceBy = 0): int {
