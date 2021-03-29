@@ -14,10 +14,10 @@ use Lemuria\Engine\Fantasya\Message\Unit\LoseToUnitMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Fantasya\Goods;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -61,7 +61,7 @@ final class Liquidation extends AbstractEvent
 		}
 	}
 
-	private function passOn(Goods $goods, Unit $unit): bool {
+	private function passOn(Resources $goods, Unit $unit): bool {
 		$heirs = $this->context->getIntelligence($unit->Region())->getHeirs($unit);
 		$heir  = $heirs->get();
 		if ($heir) {
@@ -75,7 +75,7 @@ final class Liquidation extends AbstractEvent
 		return false;
 	}
 
-	private function giftToOther(Goods $goods, Unit $unit, Party $party): bool {
+	private function giftToOther(Resources $goods, Unit $unit, Party $party): bool {
 		$heirs = $this->context->getIntelligence($unit->Region())->getHeirs($unit, false);
         foreach ($goods as $quantity /* @var Quantity $quantity */) {
             $heir = $this->giftToRandom($heirs, $quantity);
