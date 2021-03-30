@@ -23,7 +23,13 @@ class PartyExceptionMessage extends AbstractPartyMessage
 	protected function getTranslation(string $name): string {
 		if ($name === 'exception') {
 			if (str_starts_with($this->exception, 'Unknown command')) {
-				return str_replace('Unknown command', 'unbekannter Befehl', $this->exception);
+				return str_replace('Unknown command', 'Unbekannter Befehl', $this->exception);
+			}
+			if (preg_match('/Entity ([0-9a-z]+) is not registered in this catalog./', $this->exception, $matches) === 1) {
+				return 'Die Einheit ' . $matches[1] . ' gehört nicht zu uns';
+			}
+			if (str_starts_with($this->exception, 'Skipping command')) {
+				return substr($this->exception, 17, strlen($this->exception) - 18) . ' übersprungen';
 			}
 		}
 		return parent::getTranslation($name);

@@ -81,15 +81,17 @@ class LemuriaTurn implements Turn
 				continue;
 			} catch (CommandParserException $e) {
 				if ($parser->isSkip()) {
-					Lemuria::Log()->notice('Skipping command: ' . $phrase);
+					Lemuria::Log()->error('Skipping command: ' . $phrase);
+					$this->addSkipMessage($phrase, $context);
 					continue;
 				}
 				throw $e;
 			}
 			if ($parser->isSkip()) {
-				Lemuria::Log()->notice('Skipping command: ' . $command);
+				Lemuria::Log()->error('Skipping command: ' . $command);
 				if ($command instanceof Immediate) {
 					$command->skip();
+					$this->addSkipMessage($command, $context);
 				}
 			} elseif ($command instanceof Immediate) {
 				try {
@@ -260,6 +262,20 @@ class LemuriaTurn implements Turn
 				throw $e;
 			}
 		}
+	}
+
+	private function addSkipMessage(Command|Phrase $command, Context $context): void {
+		try {
+			$party = $context->Party();
+		} catch (CommandParserException) {
+			return;
+		}
+
+		$id          = Lemuria::Report()->nextId();
+		$message     = new LemuriaMessage();
+		$messageType = self::createMessageType(PartyExceptionMessage::class);
+		$parameter   = 'Skipping command ' . (string)$command . '.';
+		$message->setAssignee($party->Id())->setType($messageType)->p($parameter)->setId($id);
 	}
 
 	private function addExceptionMessage(EngineException $exception, Context $context): void {
