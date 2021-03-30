@@ -22,6 +22,7 @@ use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Leave;
 use Lemuria\Engine\Fantasya\Command\Name;
 use Lemuria\Engine\Fantasya\Command\Next;
+use Lemuria\Engine\Fantasya\Command\NullCommand;
 use Lemuria\Engine\Fantasya\Command\Number;
 use Lemuria\Engine\Fantasya\Command\Origin;
 use Lemuria\Engine\Fantasya\Command\Party;
@@ -164,6 +165,7 @@ class CommandFactory
 		'LEHRER'       => 'LEHREN',
 		'LEMURIA'      => 'PARTEI',
 		'LERNEN'       => true,
+		'LOCALE'       => true,
 		'MACHEN'       => true,
 		'NACH'         => 'REISEN',
 		'NAME'         => true,
@@ -171,12 +173,14 @@ class CommandFactory
 		'NAECHSTER'    => 'NÄCHSTER',
 		'NUMMER'       => true,
 		'PARTEI'       => true,
+		'REGION'       => true,
 		'REISEN'       => true,
 		'REKRUTEN'     => 'REKRUTIEREN',
 		'REKRUTIEREN'  => true,
 		'RESERVE'      => 'RESERVIEREN',
 		'RESERVIEREN'  => true,
 		'RESERVIERUNG' => 'RESERVIEREN',
+		'RUNDE'        => true,
 		'SORTIEREN'    => true,
 		'SORTIERUNG'   => 'SORTIEREN',
 		'TARNEN'       => true,
@@ -380,14 +384,17 @@ class CommandFactory
 				'KONTAKTIEREN' => Contact::class,
 				'LEHREN'       => Teach::class,
 				'LERNEN'       => Learn::class,
+				'LOCALE'       => NullCommand::class,
 				'MACHEN'       => Create::class,
 				'NAME'         => Name::class,
 				'NÄCHSTER'     => Next::class,
 				'NUMMER'       => Number::class,
 				'PARTEI'       => Party::class,
+				'REGION'       => NullCommand::class,
 				'REISEN'       => Travel::class,
 				'REKRUTIEREN'  => Recruit::class,
 				'RESERVIEREN'  => Reserve::class,
+				'RUNDE'        => NullCommand::class,
 				'SORTIEREN'    => Sort::class,
 				'TARNEN'       => Disguise::class,
 				'TREIBEN'      => Tax::class,

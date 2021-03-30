@@ -5,7 +5,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Fehler/Verbesserungen
 
 - Schaden für überladene Schiffe
-- Magellan-Pseudobefehle ignorieren
 - Magellan-Regeln an Lemuria anpassen
 - Befehlsvorlage sortieren
 
