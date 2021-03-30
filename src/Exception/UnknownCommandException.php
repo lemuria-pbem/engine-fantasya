@@ -13,7 +13,7 @@ use Lemuria\Engine\Fantasya\Phrase;
 class UnknownCommandException extends CommandException
 {
 	#[Pure] public function __construct(Command|Phrase|string|null $command = null, ?CommandException $exception = null) {
-		$message = 'Unknown command' . ($command ? ': "' . $command . '"' : '.');
+		$message = 'Unknown command' . ($command ? ' ' . $command : '.');
 		parent::__construct($message, 0, $exception);
 	}
 }

@@ -2,10 +2,16 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use Lemuria\Engine\Exception\EngineException;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\ActionException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
+use Lemuria\Engine\Fantasya\Factory\BuilderTrait;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
+use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\Party\PartyExceptionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\UnitExceptionMessage;
 use Lemuria\Engine\Move;
 use Lemuria\Engine\Score;
 use Lemuria\Engine\Turn;
@@ -27,6 +33,8 @@ use Lemuria\Model\Newcomer;
  */
 class LemuriaTurn implements Turn
 {
+	use BuilderTrait;
+
 	protected CommandPriority $priority;
 
 	/**
@@ -66,19 +74,20 @@ class LemuriaTurn implements Turn
 				Lemuria::Log()->debug('New command: ' . $command, ['command' => $command]);
 			} catch (UnknownCommandException $e) {
 				Lemuria::Log()->error($e->getMessage(), ['exception' => $e]);
+				$this->addExceptionMessage($e, $context);
 				if ($this->throwExceptions) {
 					throw $e;
 				}
 				continue;
 			} catch (CommandParserException $e) {
 				if ($parser->isSkip()) {
-					Lemuria::Log()->warning('Skipping command: ' . $phrase);
+					Lemuria::Log()->notice('Skipping command: ' . $phrase);
 					continue;
 				}
 				throw $e;
 			}
 			if ($parser->isSkip()) {
-				Lemuria::Log()->warning('Skipping command: ' . $command);
+				Lemuria::Log()->notice('Skipping command: ' . $command);
 				if ($command instanceof Immediate) {
 					$command->skip();
 				}
@@ -87,6 +96,7 @@ class LemuriaTurn implements Turn
 					$command->execute();
 				} catch (CommandException $e) {
 					Lemuria::Log()->error($e->getMessage(), ['exception' => $e, 'command' => $command]);
+					$this->addExceptionMessage($e, $context);
 					if ($this->throwExceptions) {
 						throw $e;
 					}
@@ -141,6 +151,7 @@ class LemuriaTurn implements Turn
 					$action->prepare();
 				} catch (ActionException $e) {
 					Lemuria::Log()->error($e->getMessage(), ['stage' => 'prepare', 'action' => $action]);
+					$this->addActionException($e, $action);
 					if ($this->throwExceptions) {
 						throw $e;
 					}
@@ -155,6 +166,7 @@ class LemuriaTurn implements Turn
 					}
 				} catch (ActionException $e) {
 					Lemuria::Log()->error($e->getMessage(), ['stage' => 'execute', 'action' => $action]);
+					$this->addActionException($e, $action);
 					if ($this->throwExceptions) {
 						throw $e;
 					}
@@ -208,7 +220,7 @@ class LemuriaTurn implements Turn
 		try {
 			$party = Party::get($id);
 		} catch (NotRegisteredException $e) {
-			Lemuria::Log()->error($e->getMessage(), ['exception' => $e]);
+			Lemuria::Log()->critical($e->getMessage(), ['exception' => $e]);
 			if ($this->throwExceptions) {
 				throw $e;
 			}
@@ -243,10 +255,38 @@ class LemuriaTurn implements Turn
 				Lemuria::Log()->debug('No default command set.');
 			}
 		} catch (NotRegisteredException $e) {
-			Lemuria::Log()->error($e->getMessage(), ['exception' => $e]);
+			Lemuria::Log()->critical($e->getMessage(), ['exception' => $e]);
 			if ($this->throwExceptions) {
 				throw $e;
 			}
+		}
+	}
+
+	private function addExceptionMessage(EngineException $exception, Context $context): void {
+		try {
+			$party = $context->Party();
+		} catch (CommandParserException) {
+			return;
+		}
+
+		$id          = Lemuria::Report()->nextId();
+		$message     = new LemuriaMessage();
+		$messageType = self::createMessageType(PartyExceptionMessage::class);
+		$message->setAssignee($party->Id())->setType($messageType)->p($exception->getMessage())->setId($id);
+	}
+
+	private function addActionException(EngineException $exception, Action $action): void {
+		if ($action instanceof UnitCommand) {
+			$id          = Lemuria::Report()->nextId();
+			$message     = new LemuriaMessage();
+			$messageType = self::createMessageType(PartyExceptionMessage::class);
+			$message->setAssignee($action->Unit()->Party()->Id())->setType($messageType)->p((string)$action)->setId($id);
+
+			$id          = Lemuria::Report()->nextId();
+			$message     = new LemuriaMessage();
+			$messageType = self::createMessageType(UnitExceptionMessage::class);
+			$message->setAssignee($action->Unit()->Id())->setType($messageType);
+			$message->p($exception->getMessage())->p((string)$action->Phrase(), UnitExceptionMessage::ACTION)->setId($id);
 		}
 	}
 }

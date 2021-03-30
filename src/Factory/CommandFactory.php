@@ -37,6 +37,7 @@ use Lemuria\Engine\Fantasya\Command\Trespass\Board;
 use Lemuria\Engine\Fantasya\Command\Unit;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Artifact;
@@ -415,7 +416,7 @@ class CommandFactory
 			if ($commodity instanceof Artifact || $commodity instanceof RawMaterial) {
 				return $commodity;
 			}
-			throw new UnknownCommandException();
+			throw new UnknownItemException($commodity);
 		}
 		$building = $this->getCandidate($artifact, $this->buildings);
 		if ($building) {
@@ -425,7 +426,7 @@ class CommandFactory
 		if ($ship) {
 			return self::createShip($ship);
 		}
-		throw new UnknownCommandException();
+		throw new UnknownCommandException($artifact);
 	}
 
 	/**
@@ -465,7 +466,7 @@ class CommandFactory
 		if ($candidate && Lemuria::World()->isDirection($candidate)) {
 			return $candidate;
 		}
-		throw new UnknownCommandException();
+		throw new UnknownItemException($direction);
 	}
 
 	/**
@@ -521,7 +522,7 @@ class CommandFactory
 		if ($candidate) {
 			return $candidate;
 		}
-		throw new UnknownCommandException();
+		throw new UnknownItemException($singleton);
 	}
 
 	/**
