@@ -13,7 +13,6 @@ use Lemuria\Engine\Fantasya\Factory\UnitTrait;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Entity;
-use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
