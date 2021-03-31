@@ -3,15 +3,20 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\SortAfterCaptainMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortAfterInVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortAfterMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortAfterInConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortAfterOwnerMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortBeforeInVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortBeforeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortBeforeInConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortFirstMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortFlipInVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortFlipMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortFlipInConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortLastInConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SortLastInVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortLastMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortNotInRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortWithForeignerMessage;
@@ -106,6 +111,16 @@ final class Sort extends UnitCommand
 				$this->message(SortAfterOwnerMessage::class);
 			}
 		}
+
+		$vessel = $this->unit->Vessel();
+		if ($vessel) {
+			$passengers = $vessel->Passengers();
+			$captain    = $passengers->Owner();
+			if ($this->unit !== $captain) {
+				$passengers->reorder($this->unit, $captain, Reorder::AFTER);
+				$this->message(SortAfterCaptainMessage::class);
+			}
+		}
 	}
 
 	/**
@@ -129,6 +144,16 @@ final class Sort extends UnitCommand
 			}
 		}
 
+		$vessel = $this->unit->Vessel();
+		if ($vessel) {
+			$passengers = $vessel->Passengers();
+			if ($this->unit !== $passengers->Owner()) {
+				$l    = count($passengers) - 1;
+				$last = $passengers[$l];
+				$passengers->reorder($this->unit, $last, Reorder::AFTER);
+				$this->message(SortLastInVesselMessage::class);
+			}
+		}
 	}
 
 	private function sortBefore(Unit $unit): void {
@@ -153,6 +178,20 @@ final class Sort extends UnitCommand
 			}
 		}
 
+		$vessel = $this->unit->Vessel();
+		if ($vessel && $unit->Vessel() === $vessel) {
+			$passengers = $vessel->Passengers();
+			$captain    = $passengers->Owner();
+			if ($this->unit !== $captain) {
+				if ($unit === $captain) {
+					$passengers->reorder($this->unit, $captain, Reorder::AFTER);
+					$this->message(SortAfterCaptainMessage::class);
+				} else {
+					$passengers->reorder($this->unit, $unit, Reorder::BEFORE);
+					$this->message(SortBeforeInVesselMessage::class)->e($unit);
+				}
+			}
+		}
 	}
 
 	private function sortAfter(Unit $unit): void {
@@ -170,6 +209,14 @@ final class Sort extends UnitCommand
 				}
 			}
 
+			$vessel = $this->unit->Vessel();
+			if ($vessel && $unit->Vessel() === $vessel) {
+				$passengers = $vessel->Passengers();
+				if ($this->unit !== $passengers->Owner()) {
+					$passengers->reorder($this->unit, $unit, Reorder::AFTER);
+					$this->message(SortAfterInVesselMessage::class)->e($unit);
+				}
+			}
 		}
 	}
 
@@ -190,6 +237,21 @@ final class Sort extends UnitCommand
 					} else {
 						$inhabitants->reorder($this->unit, $unit, Reorder::FLIP);
 						$this->message(SortFlipInConstructionMessage::class)->e($unit);
+					}
+				}
+			}
+
+			$vessel = $this->unit->Vessel();
+			if ($vessel && $unit->Vessel() === $vessel) {
+				$passengers = $vessel->Passengers();
+				$captain    = $passengers->Owner();
+				if ($this->unit !== $captain) {
+					if ($unit === $captain) {
+						$passengers->reorder($this->unit, $captain, Reorder::AFTER);
+						$this->message(SortAfterCaptainMessage::class);
+					} else {
+						$passengers->reorder($this->unit, $unit, Reorder::FLIP);
+						$this->message(SortFlipInVesselMessage::class)->e($unit);
 					}
 				}
 			}
