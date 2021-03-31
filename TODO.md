@@ -4,9 +4,10 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
+- SORTIEREN auf Schiffen
+- Befehlsvorlage sortieren
 - Schaden für überladene Schiffe
 - Magellan-Regeln an Lemuria anpassen
-- Befehlsvorlage sortieren
 
 ## Neue Funktionen
 
