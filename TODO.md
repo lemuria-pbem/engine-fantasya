@@ -4,9 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Befehlsvorlage sortieren
-- Schaden für überladene Schiffe
-- Magellan-Regeln an Lemuria anpassen
 
 ## Neue Funktionen
 
@@ -30,6 +27,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Monster, besondere Gegenstände wie Greifeneier
 - Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
   Meldungen
+- Regeldatei für Magellan
 
 ## Ideen
 
