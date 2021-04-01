@@ -4,6 +4,8 @@ namespace Lemuria\Engine\Fantasya\Storage;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Debut;
+use Lemuria\Engine\Fantasya\LemuriaDebut;
 use Lemuria\Engine\Fantasya\LemuriaLog;
 use Lemuria\Engine\Fantasya\LemuriaOrders;
 use Lemuria\Engine\Fantasya\LemuriaReport;
@@ -117,6 +119,10 @@ class LemuriaConfig implements \ArrayAccess, Config
 
 	#[Pure] public function Calendar(): Calendar {
 		return new BaseCalendar();
+	}
+
+	public function Debut(): Debut {
+		return new LemuriaDebut();
 	}
 
 	public function Game(): Game {

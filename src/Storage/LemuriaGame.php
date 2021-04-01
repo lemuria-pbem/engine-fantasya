@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Storage;
 
 use JetBrains\PhpStorm\ArrayShape;
 
-use Lemuria\Model\Exception\ModelException;
 use Lemuria\Model\Fantasya\Storage\JsonGame;
 use Lemuria\Model\Fantasya\Storage\JsonProvider;
 
@@ -22,18 +21,6 @@ class LemuriaGame extends JsonGame
 
 	public function __construct(protected LemuriaConfig $config) {
 		parent::__construct();
-	}
-
-	public function getNewcomers(): array {
-		return $this->readProvider->read('newcomers.json');
-	}
-
-	public function setNewcomers(array $newcomers): LemuriaGame {
-		if (!ksort($newcomers)) {
-			throw new ModelException('Sorting constructions failed.');
-		}
-		$this->writeProvider->write('newcomers.json', array_values($newcomers));
-		return $this;
 	}
 
 	/**
