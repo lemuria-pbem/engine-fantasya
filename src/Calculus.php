@@ -170,8 +170,8 @@ final class Calculus
 			$teachBonus += $teach->getBonus();
 		}
 		$teachBonus  = min(1.0, $teachBonus);
-		$probability = rand(750, 1000) / 1000;
-		$progress    = (int)round(100 * ($probability + 0.25 + $teachBonus));
+		$probability = rand(750, 1250) / 1000;
+		$progress    = (int)round(100 * ($probability + $teachBonus));
 		return new Ability($talent, $progress);
 	}
 
