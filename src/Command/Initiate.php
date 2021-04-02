@@ -51,6 +51,7 @@ use Lemuria\Model\Fantasya\Talent\Taxcollecting;
 use Lemuria\Model\Fantasya\Talent\Trading;
 use Lemuria\Model\Fantasya\Talent\Woodchopping;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Fantasya\World\FantasyaAtlas;
 use Lemuria\Model\Fantasya\World\LocationPicker;
 
 /**
@@ -59,13 +60,13 @@ use Lemuria\Model\Fantasya\World\LocationPicker;
 final class Initiate implements Command
 {
 	private const LANDSCAPES = [
-		Aquan::class    => [Plain::class, Desert::class, Swamp::class, Highland::class, Forest::class],
-		Dwarf::class    => [Mountain::class, Highland::class, Plain::class, Desert::class],
+		Aquan::class    => [Plain::class, Forest::class],
+		Dwarf::class    => [Mountain::class, Highland::class],
 		Elf::class      => [Forest::class, Plain::class, Highland::class, Swamp::class],
-		Halfling::class => [Plain::class, Highland::class, Swamp::class, Mountain::class, Forest::class],
-		Human::class    => [Plain::class, Forest::class, Highland::class, Mountain::class, Swamp::class, Desert::class],
+		Halfling::class => [Plain::class, Highland::class, Swamp::class],
+		Human::class    => [Plain::class, Highland::class, Desert::class, Forest::class, Swamp::class],
 		Orc::class      => [Plain::class, Highland::class, Mountain::class, Desert::class],
-		Troll::class    => [Highland::class, Mountain::class, Desert::class, Plain::class, Forest::class]
+		Troll::class    => [Highland::class, Mountain::class, Desert::class, Plain::class]
 	];
 
 	private const KNOWLEDGE = [
@@ -129,7 +130,7 @@ final class Initiate implements Command
 		$unit = new Unit();
 		$id   = Lemuria::Catalog()->nextId(Catalog::UNITS);
 		$unit->setId($id);
-		$unit->setSize(1)->$unit->setName('Einheit ' . $id)->setDescription('')->setRace($race);
+		$unit->setSize(1)->setName('Einheit ' . $id)->setDescription('')->setRace($race);
 		foreach ($this->newcomer->Inventory() as $item /* @var Quantity $item */) {
 			$unit->Inventory()->add($item);
 		}
@@ -144,25 +145,47 @@ final class Initiate implements Command
 		if ($this->newcomer->Race()) {
 			return $this->newcomer->Race();
 		}
-		return self::createRace(array_rand(array_keys(self::LANDSCAPES), 1));
+		$races = array_keys(self::LANDSCAPES);
+		return self::createRace($races[array_rand($races, 1)]);
 	}
 
 	private function pickOrigin(Race $race): Region {
 		if ($this->newcomer->Origin()) {
 			return $this->newcomer->Origin();
 		}
+
 		$locations  = new LocationPicker();
 		$landscapes = self::LANDSCAPES[$race::class];
+		if ($this->newcomer->Landscape()) {
+			array_unshift($landscapes, $this->newcomer->Landscape()::class);
+		}
+
+		// First try: Consider only void regions.
+		foreach ($landscapes as $type) {
+			$locations->landscape(self::createLandscape($type));
+			if ($race instanceof Aquan) {
+				$locations->coastal();
+			}
+			if ($locations->void()->count()) {
+				return $locations[0];
+			}
+			$locations->reset();
+		}
+
+		// Second try: Use the region with least residents.
 		foreach ($landscapes as $type) {
 			$locations->landscape(self::createLandscape($type));
 			if ($race instanceof Aquan) {
 				$locations->coastal();
 			}
 			if ($locations->count()) {
-				return $locations[0];
+				/** @var Region $region */
+				$region = $locations->Atlas()->sort(FantasyaAtlas::BY_RESIDENTS)->current();
+				return $region;
 			}
 			$locations->reset();
 		}
+
 		throw new LemuriaException('Origin region could not be picked.');
 	}
 
