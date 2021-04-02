@@ -3,16 +3,19 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Engine\Exception\EngineException;
+use Lemuria\Engine\Fantasya\Command\Initiate;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\ActionException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
+use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Party\PartyExceptionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnitExceptionMessage;
 use Lemuria\Engine\Move;
+use Lemuria\Engine\Newcomer;
 use Lemuria\Engine\Score;
 use Lemuria\Engine\Turn;
 use Lemuria\EntitySet;
@@ -26,7 +29,6 @@ use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Model\Newcomer;
 
 /**
  * Main engine class.
@@ -118,9 +120,13 @@ class LemuriaTurn implements Turn
 	 * Bring a new party into the game.
 	 */
 	public function initiate(Newcomer $newcomer): Turn {
-		// TODO: Implement initiate() method.
-
-		return $this;
+		if ($newcomer instanceof LemuriaNewcomer) {
+			$command = new Initiate($newcomer);
+			Lemuria::Log()->debug('New command: ' . $command, ['command' => $command]);
+			$this->enqueue($command);
+			return $this;
+		}
+		throw new LemuriaException('LemuriaNewcomer expected.');
 	}
 
 	/**

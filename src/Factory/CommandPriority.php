@@ -66,7 +66,7 @@ final class CommandPriority
 		'Migrate'       => 97,
 		'EFFECT_AFTER'  => 98,
 		'EVENT_AFTER'   => 99,
-		// 100 reserved for default
+		'Initiate'      => 100
 	];
 
 	/**

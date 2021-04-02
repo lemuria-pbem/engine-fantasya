@@ -2,8 +2,10 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use Lemuria\Alpha\Model\LemuriaNewcomer;
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Debut;
+use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
 use Lemuria\Engine\Newcomer;
 use Lemuria\Exception\UnknownUuidException;
 use Lemuria\Lemuria;
@@ -17,7 +19,7 @@ class LemuriaDebut implements Debut
 
 	private bool $isLoaded = false;
 
-	public function count() {
+	#[Pure] public function count(): int {
 		return count($this->newcomers);
 	}
 
