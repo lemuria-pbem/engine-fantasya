@@ -30,11 +30,15 @@ abstract class AbstractCommand implements Command
 
 	private int $id;
 
+	public static function id(): int {
+		return self::$nextId++;
+	}
+
 	/**
 	 * Create a new command for given Phrase.
 	 */
 	public function __construct(protected Phrase $phrase, protected Context $context) {
-		$this->id = self::$nextId++;
+		$this->id = self::id();
 	}
 
 	/**

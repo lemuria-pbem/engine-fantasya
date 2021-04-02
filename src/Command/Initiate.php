@@ -1,0 +1,175 @@
+<?php
+declare (strict_types = 1);
+namespace Lemuria\Engine\Fantasya\Command;
+
+use JetBrains\PhpStorm\Pure;
+
+use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Factory\ActionTrait;
+use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
+use Lemuria\Engine\Fantasya\Message\Party\WelcomeMessage;
+use Lemuria\Exception\LemuriaException;
+use Lemuria\Lemuria;
+use Lemuria\Model\Catalog;
+use Lemuria\Model\Fantasya\Ability;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Landscape\Desert;
+use Lemuria\Model\Fantasya\Landscape\Forest;
+use Lemuria\Model\Fantasya\Landscape\Highland;
+use Lemuria\Model\Fantasya\Landscape\Mountain;
+use Lemuria\Model\Fantasya\Landscape\Plain;
+use Lemuria\Model\Fantasya\Landscape\Swamp;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Race;
+use Lemuria\Model\Fantasya\Race\Aquan;
+use Lemuria\Model\Fantasya\Race\Dwarf;
+use Lemuria\Model\Fantasya\Race\Elf;
+use Lemuria\Model\Fantasya\Race\Halfling;
+use Lemuria\Model\Fantasya\Race\Human;
+use Lemuria\Model\Fantasya\Race\Orc;
+use Lemuria\Model\Fantasya\Race\Troll;
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Talent\Archery;
+use Lemuria\Model\Fantasya\Talent\Bladefighting;
+use Lemuria\Model\Fantasya\Talent\Camouflage;
+use Lemuria\Model\Fantasya\Talent\Carriagemaking;
+use Lemuria\Model\Fantasya\Talent\Constructing;
+use Lemuria\Model\Fantasya\Talent\Crossbowing;
+use Lemuria\Model\Fantasya\Talent\Entertaining;
+use Lemuria\Model\Fantasya\Talent\Mining;
+use Lemuria\Model\Fantasya\Talent\Navigation;
+use Lemuria\Model\Fantasya\Talent\Perception;
+use Lemuria\Model\Fantasya\Talent\Quarrying;
+use Lemuria\Model\Fantasya\Talent\Riding;
+use Lemuria\Model\Fantasya\Talent\Shipbuilding;
+use Lemuria\Model\Fantasya\Talent\Spearfighting;
+use Lemuria\Model\Fantasya\Talent\Stamina;
+use Lemuria\Model\Fantasya\Talent\Taxcollecting;
+use Lemuria\Model\Fantasya\Talent\Trading;
+use Lemuria\Model\Fantasya\Talent\Woodchopping;
+use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Fantasya\World\LocationPicker;
+
+/**
+ * Introduce a Newcomer as a new Party.
+ */
+final class Initiate implements Command
+{
+	private const LANDSCAPES = [
+		Aquan::class    => [Plain::class, Desert::class, Swamp::class, Highland::class, Forest::class],
+		Dwarf::class    => [Mountain::class, Highland::class, Plain::class, Desert::class],
+		Elf::class      => [Forest::class, Plain::class, Highland::class, Swamp::class],
+		Halfling::class => [Plain::class, Highland::class, Swamp::class, Mountain::class, Forest::class],
+		Human::class    => [Plain::class, Forest::class, Highland::class, Mountain::class, Swamp::class, Desert::class],
+		Orc::class      => [Plain::class, Highland::class, Mountain::class, Desert::class],
+		Troll::class    => [Highland::class, Mountain::class, Desert::class, Plain::class, Forest::class]
+	];
+
+	private const KNOWLEDGE = [
+		Aquan::class    => [Navigation::class => 12, Shipbuilding::class => 8, Spearfighting::class => 5],
+		Dwarf::class    => [Mining::class => 12, Constructing::class => 8, Bladefighting::class => 5],
+		Elf::class      => [Perception::class => 12, Camouflage::class => 8, Archery::class => 5],
+		Halfling::class => [Entertaining::class => 12, Carriagemaking::class => 8, Spearfighting::class => 5],
+		Human::class    => [Riding::class => 12, Trading::class => 8, Crossbowing::class => 5],
+		Orc::class      => [Woodchopping::class => 12, Taxcollecting::class => 8, Bladefighting::class => 5],
+		Troll::class    => [Quarrying::class => 12, Stamina::class => 8, Bladefighting::class => 5]
+	];
+
+	use ActionTrait;
+	use BuilderTrait;
+
+	private int $id;
+
+	public function __construct(private LemuriaNewcomer $newcomer) {
+		$this->id = AbstractCommand::id();
+	}
+
+	#[Pure] public function __toString(): string {
+		return 'INITIATE ' . $this->newcomer->Uuid();
+	}
+
+	/**
+	 * @throws CommandException
+	 */
+	public function prepare(): Action {
+		Lemuria::Log()->debug('Preparing command ' . $this . '.', ['command' => $this]);
+		$this->prepareAction();
+		return $this;
+	}
+
+	/**
+	 * @throws CommandException
+	 */
+	public function execute(): Action {
+		Lemuria::Log()->debug('Executing command ' . $this . '.', ['command' => $this]);
+		$this->executeAction();
+		return $this;
+	}
+
+	#[Pure] public function getId(): int {
+		return $this->id;
+	}
+
+	#[Pure] public function getDelegate(): Command {
+		return $this;
+	}
+
+	protected function run(): void {
+		$race   = $this->pickRace();
+		$origin = $this->pickOrigin($race);
+
+		$party  = new Party($this->newcomer);
+		$party->setId(Lemuria::Catalog()->nextId(Catalog::PARTIES));
+		$party->setName($this->newcomer->Name())->setDescription($this->newcomer->Description());
+		$party->setRace($race)->setOrigin($origin);
+
+		$unit = new Unit();
+		$id   = Lemuria::Catalog()->nextId(Catalog::UNITS);
+		$unit->setId($id);
+		$unit->setSize(1)->$unit->setName('Einheit ' . $id)->setDescription('')->setRace($race);
+		foreach ($this->newcomer->Inventory() as $item /* @var Quantity $item */) {
+			$unit->Inventory()->add($item);
+		}
+		$this->addKnowledge($unit);
+
+		$party->People()->add($unit);
+		$origin->Residents()->add($unit);
+		$this->message(WelcomeMessage::class, $party)->p($party->Name());
+	}
+
+	private function pickRace(): Race {
+		if ($this->newcomer->Race()) {
+			return $this->newcomer->Race();
+		}
+		return self::createRace(array_rand(array_keys(self::LANDSCAPES), 1));
+	}
+
+	private function pickOrigin(Race $race): Region {
+		if ($this->newcomer->Origin()) {
+			return $this->newcomer->Origin();
+		}
+		$locations  = new LocationPicker();
+		$landscapes = self::LANDSCAPES[$race::class];
+		foreach ($landscapes as $type) {
+			$locations->landscape(self::createLandscape($type));
+			if ($race instanceof Aquan) {
+				$locations->coastal();
+			}
+			if ($locations->count()) {
+				return $locations[0];
+			}
+			$locations->reset();
+		}
+		throw new LemuriaException('Origin region could not be picked.');
+	}
+
+	private function addKnowledge(Unit $unit): void {
+		foreach (self::KNOWLEDGE[$unit->Race()::class] as $talent => $level) {
+			$ability = new Ability(self::createTalent($talent), Ability::getExperience($level));
+			$unit->Knowledge()->add($ability);
+		}
+	}
+}
