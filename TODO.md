@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Rekrutenzahl in Reporten ausgeben
 
 ## Neue Funktionen
 
