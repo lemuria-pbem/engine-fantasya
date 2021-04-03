@@ -243,7 +243,7 @@
 		"RawMaterialCannotMessage": "Die Einheit $id kann nicht mehr als $production $commodity produzieren.",
 		"RawMaterialExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um $material zu produzieren.",
 		"RawMaterialGuardedMessage": "Die Einheit $id kann kein $material produzieren, die Region wird bewacht.",
-		"RawMaterialNoDemandMessage": "Die Einheit $id kann kein $material produzieren, kein Bedarf.",
+		"RawMaterialNoDemandMessage": "Die Einheit $id kann kein $material produzieren.",
 		"RawMaterialOnlyMessage": "Die Einheit $id kann nur $output mit $talent produzieren.",
 		"RawMaterialOutputMessage": "Die Einheit $id produziert $output mit $talent.",
 		"RawMaterialResourcesMessage": "Die Einheit $id kann kein $material finden.",

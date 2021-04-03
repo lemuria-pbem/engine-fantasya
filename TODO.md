@@ -4,19 +4,16 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Text-Report: Leerzeile hinter Fremdeinheiten
 - Tarnungseinstellung in Reporten beachten (Magellan vs. Text)
 - Parteizugehörigkeit in Reporten angeben
 - effektive Talentstufen in Reporten ausgeben
-- Meldung "kein Bedarf" verbessern, Level Fehler?
-- Fcheck um Talentalternativen erweitern
 - "Ozean Ozean" vermeiden
-- "Unknown item" nicht übersetzt
 - Grammatik in Reporten verbessern
 - Befehlsfortsetzung mit \ unterstützen
 - Parteiname in Magellan-Report anzeigen
 - Parteitarnung in Reporten beachten
 - Völker in Reporten auflisten
+- Job umbauen, damit unbekannte Items bei MACHE in der Einheit gemeldet werden
 
 ## Neue Funktionen
 
