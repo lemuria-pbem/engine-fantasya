@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\ActionException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
+use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
 use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
@@ -74,7 +75,7 @@ class LemuriaTurn implements Turn
 			try {
 				$command = $factory->create($phrase)->getDelegate();
 				Lemuria::Log()->debug('New command: ' . $command, ['command' => $command]);
-			} catch (UnknownCommandException $e) {
+			} catch (UnknownCommandException|UnknownItemException $e) {
 				Lemuria::Log()->error($e->getMessage(), ['exception' => $e]);
 				$this->addExceptionMessage($e, $context);
 				if ($this->throwExceptions) {

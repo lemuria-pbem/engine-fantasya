@@ -27,10 +27,10 @@ class UnitExceptionMessage extends AbstractUnitMessage
 
 	protected function getTranslation(string $name): string {
 		if ($name === 'exception') {
-			if (str_starts_with($this->exception, 'Unknown command:')) {
+			if (str_starts_with($this->exception, 'Unknown command')) {
 				return str_replace('Unknown command', 'unbekannter Befehl', $this->exception);
 			}
-			if (str_starts_with($this->exception, 'Unknown item:')) {
+			if (str_starts_with($this->exception, 'Unknown item')) {
 				return str_replace('Unknown item', 'unbekannte Ressource', $this->exception);
 			}
 		}
