@@ -433,7 +433,7 @@ class CommandFactory
 		if ($ship) {
 			return self::createShip($ship);
 		}
-		throw new UnknownCommandException($artifact);
+		throw new UnknownItemException($artifact);
 	}
 
 	/**
