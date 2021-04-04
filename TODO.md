@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Völker in Reporten auflisten
 - effektive Talentstufen in Reporten ausgeben
 - "Ozean Ozean" vermeiden
 - Grammatik in Reporten verbessern
