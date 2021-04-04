@@ -43,7 +43,6 @@
       <path value="$PROJECT_DIR$/vendor/ramsey/uuid" />
       <path value="$PROJECT_DIR$/vendor/ramsey/collection" />
       <path value="$PROJECT_DIR$/vendor/lemuria-pbem/model-fantasya" />
-      <path value="$PROJECT_DIR$/vendor/lemuria-pbem/model-lemuria" />
       <path value="$PROJECT_DIR$/vendor/monolog/monolog" />
     </include_path>
   </component>

@@ -28,6 +28,7 @@ use Lemuria\Model\Fantasya\Relation;
  * - HELFEN 0|<Party> Gib|Geben [Nicht|Region] [Region|Nicht]
  * - HELFEN 0|<Party> Handel|Handeln [Nicht|Region] [Region|Nicht]
  * - HELFEN 0|<Party> Kampf|Kämpfe|Kämpfen [Nicht|Region] [Region|Nicht]
+ * - HELFEN 0|<Party> Kontakt|Kontaktiere|Kontaktieren [Nicht|Region] [Region|Nicht]
  * - HELFEN 0|<Party> Nahrung [Nicht|Region] [Region|Nicht]
  * - HELFEN 0|<Party> Nicht|Nichts [Region]
  * - HELFEN 0|<Party> Parteitarnung [Nicht|Region] [Region|Nicht]
@@ -116,6 +117,10 @@ final class Help extends UnitCommand
 			case 'kämpfe' :
 			case 'kämpfen' :
 				return Relation::COMBAT;
+			case 'kontakt' :
+			case 'kontaktiere' :
+			case 'kontaktieren' :
+				return Relation::TELL;
 			case 'nahrung' :
 				return Relation::FOOD;
 			case 'nicht' :

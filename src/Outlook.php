@@ -21,6 +21,10 @@ final class Outlook
 	public function __construct(private Census $census) {
 	}
 
+	public function Census(): Census {
+		return $this->census;
+	}
+
 	/**
 	 * Find units in a region that are not camouflaged.
 	 */

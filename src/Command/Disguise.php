@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\DisguiseLevelMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguiseMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguiseNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguisePartyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DisguisePartyNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguiseUnknownPartyMessage;
 use Lemuria\Id;
 use Lemuria\Model\Exception\NotRegisteredException;
@@ -21,6 +22,7 @@ use Lemuria\Model\Fantasya\Party;
  * - TARNEN [<Level>]
  * - TARNEN Nein|Nicht
  * - TARNEN Partei [<Party>]
+ * - TARNEN Partei Nein|Nicht
  */
 final class Disguise extends UnitCommand
 {
@@ -40,21 +42,32 @@ final class Disguise extends UnitCommand
 				return;
 			}
 			if ($n === 2) {
-				$partyId = Id::fromId($this->phrase->getParameter(2));
-				try {
-					$party = Party::get($partyId);
-					if (!$this->unit->Party()->Diplomacy()->isKnown($party)) {
-						$party = null;
-						$this->message(DisguiseDoesNotKnowMessage::class)->e($party);
-					}
-				} catch (NotRegisteredException) {
-					$party = null;
-				}
-				if ($party) {
-					$this->unit->setDisguise($party);
-					$this->message(DisguiseKnownPartyMessage::class)->e($party);
+				$parameter = strtolower($this->phrase->getParameter(2));
+				if (in_array($parameter, ['nein', 'nicht'])) {
+					$this->unit->setDisguise(false);
+					$this->message(DisguisePartyNotMessage::class);
 				} else {
-					$this->message(DisguiseUnknownPartyMessage::class)->e($party);
+					$partyId = Id::fromId($parameter);
+					try {
+						$party = Party::get($partyId);
+						if (!$this->unit->Party()->Diplomacy()->isKnown($party)) {
+							$party = null;
+							$this->message(DisguiseDoesNotKnowMessage::class)->e($party);
+						}
+					} catch (NotRegisteredException) {
+						$party = null;
+					}
+					if ($party) {
+						if ($party === $this->unit->Party()) {
+							$this->unit->setDisguise();
+							$this->message(DisguisePartyMessage::class);
+						} else {
+							$this->unit->setDisguise($party);
+							$this->message(DisguiseKnownPartyMessage::class)->e($party);
+						}
+					} else {
+						$this->message(DisguiseUnknownPartyMessage::class)->e($party);
+					}
 				}
 				return;
 			}

@@ -12,6 +12,7 @@ use Lemuria\Engine\Fantasya\Message\Vessel\FounderMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
+use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
@@ -32,22 +33,28 @@ final class Founder extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Catalog::VESSELS) as $vessel /* @var Vessel $vessel */) {
-			$completion  = $vessel->Completion();
 			$excessCargo = Lemuria::Score()->find($this->effect($vessel));
-			if ($completion <= 0.0) {
-				$this->founder($vessel);
-				if ($excessCargo) {
-					Lemuria::Score()->remove($excessCargo);
-				}
-				$this->message(FounderMessage::class, $vessel)->e($vessel->Region());
-			} else {
-				$capacity = Capacity::forVessel($vessel);
-				if ($capacity->Weight() > $vessel->Ship()->Payload()) {
-					if (!$excessCargo) {
-						Lemuria::Score()->add($this->effect($vessel));
-						$this->message(FounderEffectMessage::class, $vessel);
+			if ($vessel->Region()->Landscape() instanceof Ocean) {
+				$completion = $vessel->Completion();
+				if ($completion <= 0.0) {
+					$this->founder($vessel);
+					if ($excessCargo) {
+						Lemuria::Score()->remove($excessCargo);
 					}
-				} elseif ($excessCargo) {
+					$this->message(FounderMessage::class, $vessel)->e($vessel->Region());
+				} else {
+					$capacity = Capacity::forVessel($vessel);
+					if ($capacity->Weight() > $vessel->Ship()->Payload()) {
+						if (!$excessCargo) {
+							Lemuria::Score()->add($this->effect($vessel));
+							$this->message(FounderEffectMessage::class, $vessel);
+						}
+					} elseif ($excessCargo) {
+						Lemuria::Score()->remove($excessCargo);
+					}
+				}
+			} else {
+				if ($excessCargo) {
 					Lemuria::Score()->remove($excessCargo);
 				}
 			}
