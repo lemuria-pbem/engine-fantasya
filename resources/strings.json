@@ -76,6 +76,7 @@
 	},
 	"message": {
 		"AllocationTakeMessage": "Die Einheit $id nimmt sich $item aus dem Materialpool.",
+		"AcquaintanceMessage": "Wir haben zum ersten Mal ein Mitglied der Partei $party getroffen.",
 		"BoardAlreadyMessage": "Die Einheit $id ist bereits an Bord des Schiffes $vessel.",
 		"BoardDeniedMessage": "Die Einheit $id kann das Schiff $vessel nicht ohne die Erlaubnis des Kapitäns betreten.",
 		"BoardMessage": "Die Einheit $id geht an Bord des Schiffes $vessel.",
@@ -115,6 +116,7 @@
 		"DisguiseMessage": "Die Einheit $id tarnt sich so gut wie möglich.",
 		"DisguiseNotMessage": "Die Einheit $id tarnt sich nicht mehr.",
 		"DisguisePartyMessage": "Die Einheit $id wird ihre Parteizugehörigkeit verheimlichen.",
+		"DisguisePartyNotMessage": "Die Einheit $id wird ihre Parteizugehörigkeit nicht verheimlichen.",
 		"DisguiseUnknownPartyMessage": "Die Einheit $id kennt die Partei $party nicht und kann nicht vorgeben, zu dieser zu gehören.",
 		"DismissAllMessage": "Die Einheit $id spendet ihren Vorrat an $commodity an die Bauern.",
 		"DismissEmptyMessage": "Die Einheit $id kann keine Personen mehr entlassen.",

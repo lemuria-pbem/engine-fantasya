@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Factory;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Event;
+use Lemuria\Engine\Fantasya\Event\Acquaintance;
 use Lemuria\Engine\Fantasya\Event\Decease;
 use Lemuria\Engine\Fantasya\Event\Drift;
 use Lemuria\Engine\Fantasya\Event\Fauna;
@@ -27,7 +28,7 @@ class DefaultProgress implements Progress
 		Upkeep::class, Subsistence::class, Drift::class,
 		// after
 		Founder::class, Support::class, Population::class, Fauna::class, Growth::class, Decease::class,
-		Liquidation::class, Layabout::class
+		Liquidation::class, Acquaintance::class, Layabout::class
 	];
 
 	private array $events = [];

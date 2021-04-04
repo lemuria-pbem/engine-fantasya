@@ -4,21 +4,14 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Tarnungseinstellung in Reporten beachten (Magellan vs. Text)
-- Parteizugehörigkeit in Reporten angeben
-- effektive Talentstufen in Reporten ausgeben
-- "Ozean Ozean" vermeiden
-- Grammatik in Reporten verbessern
-- Befehlsfortsetzung mit \ unterstützen
-- Parteiname in Magellan-Report anzeigen
-- Parteitarnung in Reporten beachten
-- Völker in Reporten auflisten
-- Job umbauen, damit unbekannte Items bei MACHE in der Einheit gemeldet werden
 
 ## Neue Funktionen
 
 ### 0.2.0
 
+- Grammatik in Reporten verbessern
+- Befehlsfortsetzung mit \ unterstützen
+- Job umbauen, damit unbekannte Items bei MACHE in der Einheit gemeldet werden
 - Handel (KAUFEN/VERKAUFEN)
 
 ### 0.3.0 und folgende
