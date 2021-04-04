@@ -4,9 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Parteizugehörigkeit in Reporten angeben
-- Parteitarnung in Reporten beachten
-- Schiffe im Dock oder Hafen nehmen keinen Schaden
 - Völker in Reporten auflisten
 - effektive Talentstufen in Reporten ausgeben
 - "Ozean Ozean" vermeiden
