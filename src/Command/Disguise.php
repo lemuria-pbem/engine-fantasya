@@ -37,14 +37,14 @@ final class Disguise extends UnitCommand
 		$p = strtolower($parameter);
 		if ($p === 'partei') {
 			if ($n === 1) {
-				$this->unit->setDisguise($this->unit->Party());
+				$this->unit->setDisguise();
 				$this->message(DisguisePartyMessage::class);
 				return;
 			}
 			if ($n === 2) {
 				$parameter = strtolower($this->phrase->getParameter(2));
 				if (in_array($parameter, ['nein', 'nicht'])) {
-					$this->unit->setDisguise();
+					$this->unit->setDisguise(false);
 					$this->message(DisguisePartyNotMessage::class);
 				} else {
 					$partyId = Id::fromId($parameter);
@@ -58,8 +58,13 @@ final class Disguise extends UnitCommand
 						$party = null;
 					}
 					if ($party) {
-						$this->unit->setDisguise($party);
-						$this->message(DisguiseKnownPartyMessage::class)->e($party);
+						if ($party === $this->unit->Party()) {
+							$this->unit->setDisguise();
+							$this->message(DisguisePartyMessage::class);
+						} else {
+							$this->unit->setDisguise($party);
+							$this->message(DisguiseKnownPartyMessage::class)->e($party);
+						}
 					} else {
 						$this->message(DisguiseUnknownPartyMessage::class)->e($party);
 					}

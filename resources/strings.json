@@ -76,6 +76,7 @@
 	},
 	"message": {
 		"AllocationTakeMessage": "Die Einheit $id nimmt sich $item aus dem Materialpool.",
+		"AcquaintanceMessage": "Wir haben zum ersten Mal ein Mitglied der Partei $party getroffen.",
 		"BoardAlreadyMessage": "Die Einheit $id ist bereits an Bord des Schiffes $vessel.",
 		"BoardDeniedMessage": "Die Einheit $id kann das Schiff $vessel nicht ohne die Erlaubnis des Kapitäns betreten.",
 		"BoardMessage": "Die Einheit $id geht an Bord des Schiffes $vessel.",
