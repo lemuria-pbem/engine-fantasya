@@ -7,6 +7,8 @@ use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
 use function Lemuria\number;
+use Lemuria\Item;
+use Lemuria\Singleton;
 use Lemuria\Engine\Report;
 use Lemuria\Engine\Message;
 use Lemuria\Id;
@@ -41,6 +43,20 @@ abstract class AbstractMessage implements MessageType
 		$translation = $this->translateKey('message.' . getClass($this));
 		if ($translation === null) {
 			return null;
+		}
+		if (preg_match('/({[^:]+:\$[a-zA-Z]+})/', $translation, $matches) === 1) {
+			$n = count($matches);
+			for ($i = 1; $i < $n; $i++) {
+				$match = $matches[$i];
+				$translation = str_replace($match, $this->replacePrefix($match), $translation);
+			}
+		}
+		if (preg_match('/({\$[^:]+:[^}]+})/', $translation, $matches) === 1) {
+			$n = count($matches);
+			for ($i = 1; $i < $n; $i++) {
+				$match = $matches[$i];
+				$translation = str_replace($match, $this->replaceSuffix($match), $translation);
+			}
 		}
 		foreach ($this->getVariables() as $name) {
 			$translation = str_replace('$' . $name, $this->getTranslation($name), $translation);
@@ -118,5 +134,33 @@ abstract class AbstractMessage implements MessageType
 			}
 		}
 		return null;
+	}
+
+	private function replacePrefix(string $match): string {
+		$parts    = explode(':', substr($match, 1, strlen($match) - 2));
+		$key      = $parts[0];
+		$name     = substr($parts[1], 1);
+		$variable = $this->$name;
+		if ($variable instanceof Singleton) {
+			return $this->translateKey('replace.' . $key . '.' . getClass($variable)) . ' ' . $parts[1];
+		}
+		if ($variable instanceof Item) {
+			return $this->translateKey('replace.' . $key, $variable->Count() === 1 ? 0 : 1) . ' ' . $parts[1];
+		}
+		return $match;
+	}
+
+	private function replaceSuffix(string $match): string {
+		$parts    = explode(':', substr($match, 1, strlen($match) - 2));
+		$name     = substr($parts[0], 1);
+		$key      = $parts[1];
+		$variable = $this->$name;
+		if (is_int($variable)) {
+			return $parts[0] . ' ' . $this->translateKey('replace.' . $key, $variable === 1 ? 0 : 1);
+		}
+		if ($variable instanceof Item) {
+			return $parts[0] . ' ' . $this->translateKey('replace.' . $key, $variable->Count() === 1 ? 0 : 1);
+		}
+		return $match;
 	}
 }
