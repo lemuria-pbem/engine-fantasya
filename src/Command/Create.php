@@ -2,11 +2,13 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
 use function Lemuria\isInt;
 
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command\Create\Resource;
 use Lemuria\Engine\Fantasya\Command\Create\Temp;
+use Lemuria\Engine\Fantasya\Command\Create\Unknown;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 
@@ -42,7 +44,11 @@ final class Create extends DelegatedCommand
 			$what   = $param;
 			$number = (int)$this->phrase->getParameter(2);
 		}
-		$resource = $this->context->Factory()->resource($what);
-		return new Resource($this->phrase, $this->context, new Job($resource, $number));
+		try {
+			$resource = $this->context->Factory()->resource($what);
+			return new Resource($this->phrase, $this->context, new Job($resource, $number));
+		} catch (UnknownItemException $e) {
+			return new Unknown($this->phrase, $this->context, $e);
+		}
 	}
 }
