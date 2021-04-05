@@ -10,7 +10,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ### 0.2.0
 
 - Automatische Willkommensmeldung für neue Parteien
-- Befehlsfortsetzung mit \ unterstützen
 - Job umbauen, damit unbekannte Items bei MACHE in der Einheit gemeldet werden
 - Handel (KAUFEN/VERKAUFEN)
 
