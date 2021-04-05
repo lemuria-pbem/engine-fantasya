@@ -101,8 +101,8 @@ final class Allocation
 				}
 				$this->createAllocations();
 				$this->round = $round;
-				foreach ($this->consumers as $consumer) {
-					$this->allocate($consumer);
+				foreach ($this->rounds[$round] as $id) {
+					$this->allocate($this->consumers[$id]);
 				}
 			}
 		}
