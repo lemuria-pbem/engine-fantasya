@@ -9,6 +9,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### 0.2.0
 
+- TELL-Beziehung beim Kontakt überprüfen
 - Handel (KAUFEN/VERKAUFEN)
 
 ### 0.3.0 und folgende

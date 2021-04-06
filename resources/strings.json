@@ -77,6 +77,9 @@
 	"message": {
 		"AllocationTakeMessage": "Die Einheit $id nimmt sich $item aus dem Materialpool.",
 		"AcquaintanceMessage": "Wir haben zum ersten Mal ein Mitglied der Partei $party getroffen.",
+		"AcquaintanceTellMessage": "Wir haben diplomatische Beziehungen zur Partei $party aufgenommen und der Einheit $unit von unserem Volk erzählt.",
+		"AcquaintanceTellDisguiseMessage": "Wir haben diplomatische Beziehungen zur Partei $party aufgenommen und der Einheit $unit Falschinformationen über das Volk der Partei $disguised erzählt.",
+		"AcquaintanceToldMessage": "Die Einheit $unit hat jemanden von der Partei $party getroffen und Informationen über deren Volk erhalten.",
 		"BoardAlreadyMessage": "Die Einheit $id ist bereits an Bord des Schiffes $vessel.",
 		"BoardDeniedMessage": "Die Einheit $id kann das Schiff $vessel nicht ohne die Erlaubnis des Kapitäns betreten.",
 		"BoardMessage": "Die Einheit $id geht an Bord des Schiffes $vessel.",
