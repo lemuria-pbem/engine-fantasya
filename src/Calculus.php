@@ -21,6 +21,7 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Modification;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Talent;
+use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Transport;
@@ -224,12 +225,13 @@ final class Calculus
 		if ($unit->Construction() || $unit->Vessel()) {
 			return true;
 		}
-		$camouflage = $unit->Camouflage();
-		if (!$camouflage) {
+		if (!$unit->IsHiding()) {
 			return true;
 		}
+		$calculus   = new self($unit);
+		$camouflage = $calculus->knowledge(Camouflage::class);
 		$perception = $this->knowledge(Perception::class);
-		return $perception->Level() >= $camouflage;
+		return $perception->Level() >= $camouflage->Level();
 	}
 
 	#[Pure] private function transport(?Item $quantity, int $reduceBy = 0): int {
