@@ -44,19 +44,13 @@ abstract class AbstractMessage implements MessageType
 		if ($translation === null) {
 			return null;
 		}
-		if (preg_match('/({[^:]+:\$[a-zA-Z]+})/', $translation, $matches) === 1) {
-			$n = count($matches);
-			for ($i = 1; $i < $n; $i++) {
-				$match = $matches[$i];
-				$translation = str_replace($match, $this->replacePrefix($match), $translation);
-			}
+		while (preg_match('/({[^:]+:\$[a-zA-Z]+})+/', $translation, $matches) === 1) {
+			$match = $matches[1];
+			$translation = str_replace($match, $this->replacePrefix($match), $translation);
 		}
-		if (preg_match('/({\$[^:]+:[^}]+})/', $translation, $matches) === 1) {
-			$n = count($matches);
-			for ($i = 1; $i < $n; $i++) {
-				$match = $matches[$i];
-				$translation = str_replace($match, $this->replaceSuffix($match), $translation);
-			}
+		while (preg_match('/({\$[^:]+:[^}]+})+/', $translation, $matches) === 1) {
+			$match = $matches[1];
+			$translation = str_replace($match, $this->replaceSuffix($match), $translation);
 		}
 		foreach ($this->getVariables() as $name) {
 			$translation = str_replace('$' . $name, $this->getTranslation($name), $translation);
@@ -147,7 +141,7 @@ abstract class AbstractMessage implements MessageType
 		if ($variable instanceof Item) {
 			return $this->translateKey('replace.' . $key, $variable->Count() === 1 ? 0 : 1) . ' ' . $parts[1];
 		}
-		return $match;
+		return '{' . $parts[0] . '}' . ' ' . $parts[1];
 	}
 
 	private function replaceSuffix(string $match): string {
@@ -161,6 +155,6 @@ abstract class AbstractMessage implements MessageType
 		if ($variable instanceof Item) {
 			return $parts[0] . ' ' . $this->translateKey('replace.' . $key, $variable->Count() === 1 ? 0 : 1);
 		}
-		return $match;
+		return $parts[0] . ' ' . '{' . $parts[1] . '}';
 	}
 }
