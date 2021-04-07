@@ -9,6 +9,6 @@ class DisguiseMessage extends AbstractUnitMessage
 	protected string $level = Message::SUCCESS;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' will camouflage at maximum level.';
+		return 'Unit ' . $this->id . ' will camouflage.';
 	}
 }

@@ -5,7 +5,6 @@ namespace Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguiseDoesNotKnowMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguiseKnownPartyMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\DisguiseLevelMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguiseMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguiseNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguisePartyMessage;
@@ -19,7 +18,7 @@ use Lemuria\Model\Fantasya\Party;
  * This command lets a unit set its camouflage level and allows it to disguise as unit from foreign party or hide its
  * party completely.
  *
- * - TARNEN [<Level>]
+ * - TARNEN
  * - TARNEN Nein|Nicht
  * - TARNEN Partei [<Party>]
  * - TARNEN Partei Nein|Nicht
@@ -29,7 +28,7 @@ final class Disguise extends UnitCommand
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n <= 0) {
-			$this->unit->setCamouflage(null);
+			$this->unit->setIsHiding(true);
 			$this->message(DisguiseMessage::class);
 			return;
 		}
@@ -71,20 +70,9 @@ final class Disguise extends UnitCommand
 				}
 				return;
 			}
-		} else {
-			if ($n === 1) {
-				if (in_array($p, ['nein', 'nicht'])) {
-					$this->unit->setCamouflage(null);
-					$this->message(DisguiseNotMessage::class);
-				} else {
-					$level = (int)$parameter;
-					if ((string)$level === $parameter) {
-						$this->unit->setCamouflage($level);
-						$this->message(DisguiseLevelMessage::class)->p($level);
-						return;
-					}
-				}
-			}
+		} elseif ($n === 1 && in_array($p, ['nein', 'nicht'])) {
+			$this->unit->setIsHiding(false);
+			$this->message(DisguiseNotMessage::class);
 		}
 		throw new InvalidCommandException($this);
 	}

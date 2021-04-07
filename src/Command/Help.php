@@ -9,12 +9,14 @@ use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyRegionNotMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyUnknownMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpRegionNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpSelfMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpUnknownPartyMessage;
 use Lemuria\Id;
 use Lemuria\Model\Exception\NotRegisteredException;
+use Lemuria\Model\Fantasya\Exception\UnknownPartyException;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Relation;
 
@@ -166,7 +168,12 @@ final class Help extends UnitCommand
 		if ($diplomacy->offsetExists($relation)) {
 			$relation = $diplomacy->offsetGet($relation);
 		} else {
-			$diplomacy->add($relation);
+			try {
+				$diplomacy->add($relation);
+			} catch (UnknownPartyException) {
+				$this->message(HelpUnknownPartyMessage::class)->e($party);
+				return;
+			}
 		}
 
 		if ($isNot) {
