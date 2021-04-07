@@ -73,7 +73,8 @@ final class Disguise extends UnitCommand
 		} elseif ($n === 1 && in_array($p, ['nein', 'nicht'])) {
 			$this->unit->setIsHiding(false);
 			$this->message(DisguiseNotMessage::class);
+		} else {
+			throw new InvalidCommandException($this);
 		}
-		throw new InvalidCommandException($this);
 	}
 }
