@@ -5,37 +5,34 @@ namespace Lemuria\Engine\Fantasya\Effect;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Action;
-use Lemuria\Engine\Fantasya\Message\Region\UnemploymentMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
+use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\People;
 use Lemuria\Serializable;
 
-final class Unemployment extends AbstractRegionEffect
+final class ContactEffect extends AbstractPartyEffect
 {
-	private int $peasants = 0;
+	private People $from;
 
 	#[Pure] public function __construct(State $state) {
 		parent::__construct($state, Action::BEFORE);
+		$this->from = new People();
 	}
 
-	public function Peasants(): int {
-		return $this->peasants;
-	}
-
-	public function setPeasants(int $peasants): Unemployment {
-		$this->peasants = $peasants;
-		return $this;
+	public function From(): People {
+		return $this->from;
 	}
 
 	public function serialize(): array {
 		$data = parent::serialize();
-		$data['peasants'] = $this->peasants;
+		$data['from'] = $this->from->serialize();
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->peasants = $data['peasants'];
+		$this->from->unserialize($data['from']);
 		return $this;
 	}
 
@@ -45,10 +42,10 @@ final class Unemployment extends AbstractRegionEffect
 	 */
 	protected function validateSerializedData(array &$data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'peasants', 'int');
+		$this->validate($data, 'from', 'array');
 	}
 
 	protected function run(): void {
-		$this->message(UnemploymentMessage::class, $this->Region())->p($this->peasants);
+		Lemuria::Score()->remove($this);
 	}
 }

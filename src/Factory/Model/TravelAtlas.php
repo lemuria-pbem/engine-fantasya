@@ -4,9 +4,9 @@ namespace Lemuria\Engine\Fantasya\Factory\Model;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Outlook;
 use Lemuria\Model\Fantasya\Party;
-use Lemuria\Model\Fantasya\Party\Census;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\World\Atlas;
 
