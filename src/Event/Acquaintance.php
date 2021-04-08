@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Message\Party\AcquaintanceMessage;
 use Lemuria\Engine\Fantasya\Message\Party\AcquaintanceTellMessage;
 use Lemuria\Engine\Fantasya\Message\Party\AcquaintanceTellDisguiseMessage;
@@ -18,7 +19,6 @@ use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Party;
-use Lemuria\Model\Fantasya\Party\Census;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent;
