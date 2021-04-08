@@ -4,6 +4,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
+- Regionen in Reporten von Nord nach Süd sortieren
+- HILFE-Status in den Reporten auflisten
 
 ## Neue Funktionen
 
