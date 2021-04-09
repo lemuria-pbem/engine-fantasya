@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- HILFE-Status in den Reporten auflisten
 
 ## Neue Funktionen
 
