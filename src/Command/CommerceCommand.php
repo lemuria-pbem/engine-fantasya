@@ -31,6 +31,10 @@ abstract class CommerceCommand extends UnitCommand implements Merchant
 
 	protected int $maximum;
 
+	protected int $amount;
+
+	protected int $count = 0;
+
 	protected ?array $lastCheck = null;
 
 	protected Commodity $silver;
@@ -109,6 +113,7 @@ abstract class CommerceCommand extends UnitCommand implements Merchant
 	 * @return Party[]
 	 */
 	protected function getCheckByAgreement(int $agreement): array {
+		//TODO
 		$guardParties = [];
 		$party        = $this->unit->Party();
 		$context      = $this->context;
@@ -140,9 +145,9 @@ abstract class CommerceCommand extends UnitCommand implements Merchant
 		if ($this->phrase->count() !== 2) {
 			throw new UnknownCommandException($this);
 		}
-		$demand = $this->getDemand();
-		$count  = min($demand, $this->getMaximum());
-		if ($count > 0) {
+		$demand       = $this->getDemand();
+		$this->amount = min($demand->Count(), $this->getMaximum());
+		if ($this->amount > 0) {
 			$this->goods->add($demand);
 		} else {
 			Lemuria::Log()->debug('Merchant ' . $this . ' has no demand.');

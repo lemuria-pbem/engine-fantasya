@@ -155,7 +155,7 @@ final class Commerce
 		$price  = 0;
 		$isOpen = false;
 		$traded = 0;
-		while ($n > 0 && $isOpen || $supply->hasMore()) {
+		while ($n > 0 && ($isOpen || $supply->hasMore())) {
 			if (!$isOpen) {
 				$price  = $supply->one();
 				$isOpen = true;
@@ -185,6 +185,7 @@ final class Commerce
 			Lemuria::Log()->debug('No more peasants want to trade ' . $class . '.');
 		}
 		Lemuria::Log()->debug($traded . ' ' . $class . ' were traded in region ' . $this->region . '.');
+		Lemuria::Log()->debug('The peasants have ' . $this->regionSilver . ' silver now.');
 	}
 
 	private function tradeOne(Merchant $merchant, Luxury $good, int $price): bool {

@@ -13,8 +13,6 @@ use Lemuria\Model\Fantasya\Quantity;
  */
 final class Buy extends CommerceCommand
 {
-	private int $amount = 0;
-
 	/**
 	 * Get the type of trade.
 	 */
@@ -23,15 +21,18 @@ final class Buy extends CommerceCommand
 	}
 
 	public function trade(Luxury $good, int $price): bool {
-		$payment = new Quantity($this->silver, $price);
-		$payment = $this->context->getResourcePool($this->unit)->reserve($this->unit, $payment);
-		if ($payment->Count() === $price) {
-			$inventory = $this->unit->Inventory();
-			$inventory->add(new Quantity($good, 1));
-			$inventory->remove($payment);
-			$this->amount++;
-			return true;
+		if ($this->count < $this->amount) {
+			$payment = new Quantity($this->silver, $price);
+			$payment = $this->context->getResourcePool($this->unit)->reserve($this->unit, $payment);
+			if ($payment->Count() === $price) {
+				$inventory = $this->unit->Inventory();
+				$inventory->add(new Quantity($good, 1));
+				$inventory->remove($payment);
+				$this->count++;
+				return true;
+			}
 		}
+		//TODO
 		return false;
 	}
 }

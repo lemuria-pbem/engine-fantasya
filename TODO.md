@@ -10,6 +10,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ### 0.2.0
 
 - Handel (KAUFEN/VERKAUFEN)
+- Ereignis "Silberschatz gefunden"
 
 ### 0.3.0 und folgende
 

@@ -23,13 +23,14 @@ final class Sell extends CommerceCommand
 	}
 
 	public function trade(Luxury $good, int $price): bool {
-		if ($this->reserve > 0) {
+		if ($this->count < $this->amount && $this->reserve > 0) {
 			$inventory = $this->unit->Inventory();
 			$inventory->remove(new Quantity($good, 1));
 			$inventory->add(new Quantity($this->silver, $price));
 			$this->reserve--;
 			return true;
 		}
+		//TODO
 		return false;
 	}
 
