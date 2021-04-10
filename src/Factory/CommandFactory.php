@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
+use Lemuria\Engine\Fantasya\Command\Buy;
 use Lemuria\Engine\Fantasya\Command\Comment;
 use Lemuria\Engine\Fantasya\Command\Contact;
 use Lemuria\Engine\Fantasya\Command\Create;
@@ -28,6 +29,7 @@ use Lemuria\Engine\Fantasya\Command\Origin;
 use Lemuria\Engine\Fantasya\Command\Party;
 use Lemuria\Engine\Fantasya\Command\Recruit;
 use Lemuria\Engine\Fantasya\Command\Reserve;
+use Lemuria\Engine\Fantasya\Command\Sell;
 use Lemuria\Engine\Fantasya\Command\Sentinel;
 use Lemuria\Engine\Fantasya\Command\Sort;
 use Lemuria\Engine\Fantasya\Command\Tax;
@@ -157,6 +159,7 @@ class CommandFactory
 		'ID'           => 'NUMMER',
 		'KAMPF'        => 'KÄMPFEN',
 		'KAEMPFEN'     => 'KÄMPFEN',
+		'KAUFEN'       => true,
 		'KÄMPFEN'      => true,
 		'KOMMANDO'     => true,
 		'KOMMENTAR'    => true,
@@ -193,6 +196,7 @@ class CommandFactory
 		'URSPRUNG'     => true,
 		'ÜBERGEBEN'    => 'GIB',
 		'UEBERGEBEN'   => 'GIB',
+		'VERKAUFEN'    => true,
 		'VERLASSEN'    => true,
 		'VERLIEREN'    => true,
 		'VORLAGE'      => true,
@@ -378,6 +382,7 @@ class CommandFactory
 				'ENTLASSEN'    => Dismiss::class,
 				'GIB'          => Handover::class,
 				'HELFEN'       => Help::class,
+				'KAUFEN'       => Buy::class,
 				'KÄMPFEN'      => Fight::class,
 				'KOMMANDO'     => Grant::class,
 				'KOMMENTAR'    => Comment::class,
@@ -400,6 +405,7 @@ class CommandFactory
 				'TREIBEN'      => Tax::class,
 				'UNTERHALTEN'  => Entertain::class,
 				'URSPRUNG'     => Origin::class,
+				'VERKAUFEN'    => Sell::class,
 				'VERLASSEN'    => Leave::class,
 				'VERLIEREN'    => Lose::class,
 				'VORLAGE'      => DefaultCommand::class,

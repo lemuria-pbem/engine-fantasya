@@ -148,6 +148,13 @@ final class Context implements Reassignment
 	}
 
 	/**
+	 * Get a region's commerce.
+	 */
+	public function getCommerce(Region $region): Commerce {
+		return $this->state->getCommerce($region);
+	}
+
+	/**
 	 * Get a resource pool.
 	 */
 	public function getResourcePool(Unit $unit): ResourcePool {

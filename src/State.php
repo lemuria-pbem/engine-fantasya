@@ -30,6 +30,11 @@ final class State
 	private array $allocation = [];
 
 	/**
+	 * @var array(int=>Commerce)
+	 */
+	private array $commerce = [];
+
+	/**
 	 * @var array(int=>Intelligence)
 	 */
 	private array $intelligence = [];
@@ -59,6 +64,17 @@ final class State
 			$this->allocation[$id] = new Allocation($this->getAvailability($region));
 		}
 		return $this->allocation[$id];
+	}
+
+	/**
+	 * Get a region's commerce.
+	 */
+	public function getCommerce(Region $region): Commerce {
+		$id = $region->Id()->Id();
+		if (!isset($this->commerce[$id])) {
+			$this->commerce[$id] = new Commerce($region);
+		}
+		return $this->commerce[$id];
 	}
 
 	/**
