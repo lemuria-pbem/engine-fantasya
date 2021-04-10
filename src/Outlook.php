@@ -49,7 +49,7 @@ final class Outlook
 				} else {
 					$effect = new ContactEffect(State::getInstance());
 					$effect = Lemuria::Score()->find($effect->setParty($party));
-					if ($effect && $effect->From()->has($unit->Id())) {
+					if ($effect instanceof ContactEffect && $effect->From()->has($unit->Id())) {
 						$units->add($unit);
 					} else {
 						$calculus = new Calculus($unit);

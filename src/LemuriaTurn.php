@@ -281,7 +281,7 @@ class LemuriaTurn implements Turn
 		$id          = Lemuria::Report()->nextId();
 		$message     = new LemuriaMessage();
 		$messageType = self::createMessageType(PartyExceptionMessage::class);
-		$parameter   = 'Skipping command ' . (string)$command . '.';
+		$parameter   = 'Skipping command ' . $command . '.';
 		$message->setAssignee($party->Id())->setType($messageType)->p($parameter)->setId($id);
 	}
 

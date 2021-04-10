@@ -22,7 +22,7 @@ final class ActivityProtocol
 	/**
 	 * Create new activity protocol for a unit.
 	 */
-	public function __construct(private Unit $unit, private Context $context) {
+	public function __construct(private Unit $unit, Context $context) {
 		foreach (Lemuria::Orders()->getDefault($unit->Id()) as $order) {
 			$command = $context->Factory()->create(new Phrase($order));
 			if ($command instanceof Activity) {
