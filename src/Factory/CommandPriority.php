@@ -58,7 +58,7 @@ final class CommandPriority
 		'Commodity'     => 80,
 		'RawMaterial'   => 82,
 		'Unknown'       => 84,
-		'CollectTaxes'  => 86,
+		'Tax'           => 86,
         'Entertain'     => 88,
 		'Guard'         => 90,
 		'Sort'          => 93,
@@ -107,7 +107,9 @@ final class CommandPriority
 	public function getPriority(Action $action): int {
 		if ($action instanceof Command) {
 			$class = getClass($action);
-			return self::ORDER[$class] ?? self::LOWEST;
+			if (isset(self::ORDER[$class])) {
+				return self::ORDER[$class];
+			}
 		}
 
 		$priority = $action->Priority();
