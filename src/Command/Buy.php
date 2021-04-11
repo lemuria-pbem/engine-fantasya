@@ -4,6 +4,8 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\BuyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\BuyNoneMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\BuyOnlyMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Quantity;
@@ -51,17 +53,13 @@ final class Buy extends CommerceCommand
 	protected function run(): void {
 		parent::run();
 		if ($this->demand > 0) {
-			if ($this->remaining < $this->demand) {
-				//TODO only left
+			if ($this->count < $this->demand) {
+				$this->message(BuyOnlyMessage::class)->i($this->goods())->i($this->cost(), BuyOnlyMessage::PAYMENT);
 			} else {
-				if ($this->count < $this->demand) {
-					//TODO only
-				} else {
-					$this->message(BuyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
-				}
+				$this->message(BuyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
 			}
 		} else {
-			//TODO no demand
+			$this->message(BuyNoneMessage::class)->s($this->goods()->Commodity());
 		}
 	}
 

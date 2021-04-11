@@ -17,7 +17,7 @@ class BuyMessage extends AbstractUnitMessage
 	protected Item $payment;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' bought ' . $this->goods . ' from the peasants for ' . $this->payment . '.';
+		return 'Unit ' . $this->id . ' buys ' . $this->goods . ' from the peasants for ' . $this->payment . '.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {

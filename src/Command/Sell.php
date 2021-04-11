@@ -4,6 +4,8 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\SellMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SellNoneMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SellOnlyMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Quantity;
@@ -15,8 +17,6 @@ use Lemuria\Model\Fantasya\Quantity;
  */
 final class Sell extends CommerceCommand
 {
-	private int $reserve;
-
 	/**
 	 * Get the type of trade.
 	 */
@@ -49,25 +49,20 @@ final class Sell extends CommerceCommand
 	protected function run(): void {
 		parent::run();
 		if ($this->demand > 0) {
-			if ($this->remaining < $this->demand) {
-				//TODO only left
+			if ($this->count < $this->demand) {
+				$this->message(SellOnlyMessage::class)->i($this->goods())->i($this->cost(), SellOnlyMessage::PAYMENT);
 			} else {
-				if ($this->count < $this->demand) {
-					//TODO only
-				} else {
-					$this->message(SellMessage::class)->i($this->goods())->i($this->cost(), SellMessage::PAYMENT);
-				}
+				$this->message(SellMessage::class)->i($this->goods())->i($this->cost(), SellMessage::PAYMENT);
 			}
 		} else {
-			//TODO no demand
+			$this->message(SellNoneMessage::class)->s($this->goods()->Commodity());
 		}
 	}
 
 	protected function getDemand(): Quantity {
 		$demand = parent::getDemand();
 		if ($demand->Count() > 0) {
-			$demand        = $this->context->getResourcePool($this->unit)->reserve($this->unit, $demand);
-			$this->reserve = $demand->Count();
+			$demand = $this->context->getResourcePool($this->unit)->reserve($this->unit, $demand);
 		}
 		return $demand;
 	}

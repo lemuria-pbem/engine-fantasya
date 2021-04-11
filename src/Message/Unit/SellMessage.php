@@ -5,6 +5,6 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 class SellMessage extends BuyMessage
 {
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' sold ' . $this->goods . ' to the peasants for ' . $this->payment . '.';
+		return 'Unit ' . $this->id . ' sells ' . $this->goods . ' to the peasants for ' . $this->payment . '.';
 	}
 }
