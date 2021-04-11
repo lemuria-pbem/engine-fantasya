@@ -9,7 +9,7 @@ use Lemuria\Model\Fantasya\Quantity;
 /**
  * Buy goods on the market.
  *
- * KAUFEN <amount> <commodity>
+ * KAUFEN [<amount>] <commodity>
  */
 final class Buy extends CommerceCommand
 {

@@ -9,7 +9,7 @@ use Lemuria\Model\Fantasya\Quantity;
 /**
  * Sell goods on the market.
  *
- * VERKAUFEN <amount> <commodity>
+ * VERKAUFEN [<amount>] <commodity>
  */
 final class Sell extends CommerceCommand
 {
@@ -23,11 +23,11 @@ final class Sell extends CommerceCommand
 	}
 
 	public function trade(Luxury $good, int $price): bool {
-		if ($this->count < $this->amount && $this->reserve > 0) {
+		if ($this->count < $this->amount) {
 			$inventory = $this->unit->Inventory();
 			$inventory->remove(new Quantity($good, 1));
 			$inventory->add(new Quantity($this->silver, $price));
-			$this->reserve--;
+			$this->count++;
 			return true;
 		}
 		//TODO

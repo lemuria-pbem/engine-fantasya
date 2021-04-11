@@ -15,10 +15,7 @@ use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Resources;
-use Lemuria\Model\Fantasya\Talent\Camouflage;
-use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Talent\Trading;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Base class for all commands that trade in a Region.
@@ -105,46 +102,9 @@ abstract class CommerceCommand extends UnitCommand implements Merchant
 	}
 
 	/**
-	 * Check region guards before allocation.
-	 *
-	 * If region is guarded by other parties and there are no specific agreements, this unit may only produce if it is
-	 * not in a building and has better camouflage than all the blocking guards' perception.
-	 *
-	 * @return Party[]
-	 */
-	protected function getCheckByAgreement(int $agreement): array {
-		//TODO
-		$guardParties = [];
-		$party        = $this->unit->Party();
-		$context      = $this->context;
-		$intelligence = $context->getIntelligence($this->unit->Region());
-		$camouflage   = PHP_INT_MIN;
-		if (!$this->unit->Construction()) {
-			$camouflage = $this->calculus()->knowledge(Camouflage::class)->Level();
-		}
-
-		foreach ($intelligence->getGuards() as $guard /* @var Unit $guard */) {
-			$guardParty = $guard->Party();
-			if ($guardParty !== $party) {
-				if (!$guardParty->Diplomacy()->has($agreement, $this->unit)) {
-					$perception = $context->getCalculus($guard)->knowledge(Perception::class)->Level();
-					if ($perception >= $camouflage) {
-						$guardParties[$guardParty->Id()->Id()] = $guardParty;
-					}
-				}
-			}
-		}
-
-		return $guardParties;
-	}
-
-	/**
 	 * Determine the goods.
 	 */
 	protected function createGoods(): void {
-		if ($this->phrase->count() !== 2) {
-			throw new UnknownCommandException($this);
-		}
 		$demand       = $this->getDemand();
 		$this->amount = min($demand->Count(), $this->getMaximum());
 		if ($this->amount > 0) {
@@ -155,8 +115,17 @@ abstract class CommerceCommand extends UnitCommand implements Merchant
 	}
 
 	protected function getDemand(): Quantity {
-		$this->demand = (int)$this->phrase->getParameter();
-		$commodity    = $this->context->Factory()->commodity($this->phrase->getParameter(2));
+		$n = $this->phrase->count();
+		if ($n === 1) {
+			$this->demand = PHP_INT_MAX;
+			$luxury       = $this->phrase->getParameter();
+		} elseif ($n === 2) {
+			$this->demand = (int)$this->phrase->getParameter();
+			$luxury       = $this->phrase->getParameter(2);
+		} else {
+			throw new UnknownCommandException($this);
+		}
+		$commodity = $this->context->Factory()->commodity($luxury);
 		return new Quantity($commodity, $this->demand);
 	}
 
