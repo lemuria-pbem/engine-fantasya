@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Merchant;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Quantity;
 
@@ -32,6 +33,15 @@ final class Sell extends CommerceCommand
 		}
 		//TODO
 		return false;
+	}
+
+	/**
+	 * Give a cost estimation to the merchant to allow silver reservation from pool.
+	 */
+	public function costEstimation(int $cost): Merchant {
+		$income = new Quantity($this->silver, $cost);
+		Lemuria::Log()->debug('Merchant ' . $this . ' expects income of ' . $income . '.');
+		return $this;
 	}
 
 	protected function getDemand(): Quantity {

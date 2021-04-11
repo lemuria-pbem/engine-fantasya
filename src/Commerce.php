@@ -7,6 +7,7 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Exception\CommerceException;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
 use Lemuria\Engine\Fantasya\Factory\Supply;
+use Lemuria\Engine\Fantasya\Factory\Trades;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
@@ -14,6 +15,7 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Helper for trading distribution.
@@ -35,6 +37,11 @@ final class Commerce
 	private array $merchantsLeft = [];
 
 	/**
+	 * @var array(int=>Trades)
+	 */
+	private array $units = [];
+
+	/**
 	 * @var array(string=>array)
 	 */
 	private array $goods;
@@ -54,6 +61,14 @@ final class Commerce
 		Lemuria::Log()->debug('New commerce helper for region ' . $region->Id() . '.', ['commerce' => $this]);
 		$this->priority = CommandPriority::getInstance();
 		$this->silver   = self::createCommodity(Silver::class);
+	}
+
+	public function getTrades(Unit $unit): Trades {
+		$id = $unit->Id()->Id();
+		if (!isset($this->units[$id])) {
+			$this->units[$id] = new Trades();
+		}
+		return $this->units[$id];
 	}
 
 	/**
@@ -143,12 +158,18 @@ final class Commerce
 		/** @var Supply $supply */
 		$supply = $this->goods[$class]['supply'];
 		/** @var Luxury $good */
-		$good      = $this->goods[$class]['good'];
-		$demand    = $this->goods[$class]['demand'];
-		$merchants = $this->randomize(array_keys($demand));
-		$total     = array_sum($demand);
-		Lemuria::Log()->debug(count($demand) . ' merchants want to trade ' . $total . ' ' . $class . '.');
+		$good       = $this->goods[$class]['good'];
+		$demand     = $this->goods[$class]['demand'];
+		$merchants  = $this->randomize(array_keys($demand));
+		$total      = array_sum($demand);
+		$estimation = $supply->estimate($total);
+		Lemuria::Log()->debug(count($demand) . ' merchants want to trade ' . $total . ' ' . $class . ' (est. cost: ' . $estimation . ').');
 		Lemuria::Log()->debug('The peasants will trade up to ' . $supply->count() . ' ' . $class . '.');
+		foreach ($demand as $id => $count) {
+			/** @var Merchant $merchant */
+			$merchant = $this->merchants[$id];
+			$merchant->costEstimation((int)ceil($count / $total * $estimation));
+		}
 
 		$i      = 0;
 		$n      = count($merchants);
@@ -160,17 +181,24 @@ final class Commerce
 				$price  = $supply->one();
 				$isOpen = true;
 			}
-			$id       = $merchants[$i];
+			$id = $merchants[$i];
+			/** @var Merchant $merchant */
 			$merchant = $this->merchants[$id];
 			if (!$merchant->Type() === Merchant::SELL && $this->regionSilver < $price) {
 				Lemuria::Log()->debug('The peasants have no more silver to buy luxuries.');
 				break;
 			}
-			if ($this->tradeOne($merchant, $good, $price)) {
+			/** @var Trades $trades */
+			$trades = $this->units[$merchant->Unit()->Id()->Id()];
+			if ($trades->CanTrade() && $this->tradeOne($merchant, $good, $price)) {
+				$trades->add();
 				$isOpen = false;
 				$i++;
 				$traded++;
 			} else {
+				if ($trades->CanTrade()) {
+					Lemuria::Log()->debug('Merchant ' . $merchant . ' has no more trades.');
+				}
 				unset($merchants[$i]);
 				$merchants = array_values($merchants);
 				$n--;

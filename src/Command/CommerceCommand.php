@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\Trades;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
@@ -16,6 +17,7 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Trading;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Base class for all commands that trade in a Region.
@@ -26,7 +28,9 @@ abstract class CommerceCommand extends UnitCommand implements Merchant
 
 	protected int $demand;
 
-	protected int $maximum;
+	protected ?int $maximum = null;
+
+	protected int $remaining;
 
 	protected int $amount;
 
@@ -35,6 +39,8 @@ abstract class CommerceCommand extends UnitCommand implements Merchant
 	protected ?array $lastCheck = null;
 
 	protected Commodity $silver;
+
+	protected Trades $trades;
 
 	/**
 	 * Create a new command for given Phrase.
@@ -75,9 +81,11 @@ abstract class CommerceCommand extends UnitCommand implements Merchant
 	 */
 	protected function initialize(): void {
 		parent::initialize();
+		$commerce     = $this->context->getCommerce($this->unit->Region());
+		$this->trades = $commerce->getTrades($this->unit);
 		$this->createGoods();
 		if (count($this->goods)) {
-			$this->context->getCommerce($this->unit->Region())->register($this);
+			$commerce->register($this);
 		} else {
 			Lemuria::Log()->debug('Commerce registration skipped due to empty demand.', ['command' => $this]);
 		}
@@ -117,20 +125,26 @@ abstract class CommerceCommand extends UnitCommand implements Merchant
 	protected function getDemand(): Quantity {
 		$n = $this->phrase->count();
 		if ($n === 1) {
+			$demand       = $this->getMaximum();
 			$this->demand = PHP_INT_MAX;
 			$luxury       = $this->phrase->getParameter();
 		} elseif ($n === 2) {
-			$this->demand = (int)$this->phrase->getParameter();
+			$demand       = (int)$this->phrase->getParameter();
+			$this->demand = $demand;
 			$luxury       = $this->phrase->getParameter(2);
 		} else {
 			throw new UnknownCommandException($this);
 		}
 		$commodity = $this->context->Factory()->commodity($luxury);
-		return new Quantity($commodity, $this->demand);
+		return new Quantity($commodity, $demand);
 	}
 
 	protected function getMaximum(): int {
-		$this->maximum = $this->calculus()->knowledge(Trading::class)->Level() * 10;
-		return $this->maximum;
+		if ($this->maximum === null) {
+			$this->maximum = $this->calculus()->knowledge(Trading::class)->Level() * 10;
+			$this->trades->setMaximum($this->maximum);
+			$this->remaining = max(0, $this->maximum - $this->trades->count());
+		}
+		return $this->remaining;
 	}
 }

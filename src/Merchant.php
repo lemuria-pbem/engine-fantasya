@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Merchants are trade commands that attend in luxury distribution.
@@ -19,6 +20,11 @@ interface Merchant extends Command
 	 * Get the type of trade.
 	 */
 	public function Type(): bool;
+
+	/**
+	 * Get the trading unit.
+	 */
+	public function Unit(): Unit;
 
 	/**
 	 * Get the resources this merchant wants to trade.
@@ -39,4 +45,9 @@ interface Merchant extends Command
 	 * @return Party[]
 	 */
 	public function checkBeforeCommerce(): array;
+
+	/**
+	 * Give a cost estimation to the merchant to allow silver reservation from pool.
+	 */
+	public function costEstimation(int $cost): Merchant;
 }
