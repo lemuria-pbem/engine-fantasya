@@ -13,7 +13,10 @@ use Lemuria\Model\Fantasya\Unit;
  */
 final class ActivityProtocol
 {
-	private bool $hasActivity = false;
+	/**
+	 * @var array(string=>true)
+	 */
+	private array $activity = [];
 
 	private bool $hasDefault = false;
 
@@ -40,7 +43,20 @@ final class ActivityProtocol
 	 * Check if unit has an activity already.
 	 */
 	#[Pure] public function hasActivity(): bool {
-		return $this->hasActivity;
+		return !empty($this->activity);
+	}
+
+	/**
+	 * Check if an activity is allowed.
+	 *
+	 * Multiple activities of the same kind (e.g. multiple buy or sell commands) are allowed, but execution of a second
+	 * activity of a differenz kind than the first activity is forbidden.
+	 */
+	public function isAllowed(Activity $activity): bool {
+		if (empty($this->activity) || isset($this->activity[$activity->Activity()])) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -56,10 +72,10 @@ final class ActivityProtocol
 	public function commit(UnitCommand $command): bool {
 		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
 		if ($command instanceof Activity) {
-			if ($this->hasActivity) {
+			if (!$this->isAllowed($command)) {
 				return false;
 			}
-			$this->hasActivity = true;
+			$this->registerActivity($command);
 			if (!$this->hasDefault) {
 				$default = $command->getNewDefault();
 				if ($default) {
@@ -78,5 +94,9 @@ final class ActivityProtocol
 			$this->hasDefault = true;
 		}
 		Lemuria::Orders()->getDefault($this->unit->Id())[] = $command->Phrase();
+	}
+
+	protected function registerActivity(Activity $activity): void {
+		$this->activity[$activity->Activity()] = true;
 	}
 }

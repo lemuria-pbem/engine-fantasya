@@ -4,8 +4,10 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\Trades;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Phrase;
@@ -17,12 +19,17 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Trading;
+use function Lemuria\getClass;
 
 /**
  * Base class for all commands that trade in a Region.
  */
-abstract class CommerceCommand extends UnitCommand implements Merchant
+abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 {
+	private const ACTIVITY = 'Trade';
+
+	use DefaultActivityTrait;
+
 	protected Resources $goods;
 
 	protected int $demand;
@@ -55,6 +62,13 @@ abstract class CommerceCommand extends UnitCommand implements Merchant
 		$this->goods  = new Resources();
 		$this->traded = new Resources();
 		$this->silver = self::createCommodity(Silver::class);
+	}
+
+	/**
+	 * Get the activity class.
+	 */
+	#[Pure] public function Activity(): string {
+		return self::ACTIVITY;
 	}
 
 	/**

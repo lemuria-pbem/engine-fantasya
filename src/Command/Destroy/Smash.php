@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Destroy;
 
+use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
@@ -33,16 +34,9 @@ use Lemuria\Model\Fantasya\Unit;
  */
 final class Smash extends UnitCommand implements Activity
 {
+	use ModifiedActivityTrait;
+
 	private Id $id;
-
-	private ?Smash $newDefault = null;
-
-	/**
-	 * Get the new default command.
-	 */
-	public function getNewDefault(): ?UnitCommand {
-		return $this->newDefault;
-	}
 
 	protected function run(): void {
 		$this->id = Id::fromId($this->phrase->getParameter(2));

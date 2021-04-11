@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\BuyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BuyNoneMessage;
@@ -22,6 +23,20 @@ final class Buy extends CommerceCommand
 	 */
 	public function Type(): bool {
 		return Merchant::BUY;
+	}
+
+	public function execute(): Action {
+		parent::execute();
+		if ($this->demand > 0) {
+			if ($this->count < $this->demand) {
+				$this->message(BuyOnlyMessage::class)->i($this->goods())->i($this->cost(), BuyOnlyMessage::PAYMENT);
+			} else {
+				$this->message(BuyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
+			}
+		} else {
+			$this->message(BuyNoneMessage::class)->s($this->goods()->Commodity());
+		}
+		return $this;
 	}
 
 	public function trade(Luxury $good, int $price): bool {
@@ -48,19 +63,6 @@ final class Buy extends CommerceCommand
 		Lemuria::Log()->debug('Merchant ' . $this . ' expects buy cost of ' . $payment . '.');
 		$this->context->getResourcePool($this->unit)->reserve($this->unit, $payment);
 		return $this;
-	}
-
-	protected function run(): void {
-		parent::run();
-		if ($this->demand > 0) {
-			if ($this->count < $this->demand) {
-				$this->message(BuyOnlyMessage::class)->i($this->goods())->i($this->cost(), BuyOnlyMessage::PAYMENT);
-			} else {
-				$this->message(BuyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
-			}
-		} else {
-			$this->message(BuyNoneMessage::class)->s($this->goods()->Commodity());
-		}
 	}
 
 	private function getPayment(int $price): Quantity {

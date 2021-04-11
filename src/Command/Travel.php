@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
@@ -37,20 +38,12 @@ use Lemuria\Model\Fantasya\Vessel;
  */
 final class Travel extends UnitCommand implements Activity
 {
+	use ModifiedActivityTrait;
 	use NavigationTrait;
 
 	private ?Vessel $vessel = null;
 
 	private Capacity $capacity;
-
-	private ?Travel $newDefault = null;
-
-	/**
-	 * Get the new default command.
-	 */
-	public function getNewDefault(): ?UnitCommand {
-		return $this->newDefault;
-	}
 
 	protected function initialize(): void {
 		parent::initialize();

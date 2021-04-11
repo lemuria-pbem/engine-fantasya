@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\SellMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellNoneMessage;
@@ -24,6 +25,20 @@ final class Sell extends CommerceCommand
 		return Merchant::SELL;
 	}
 
+	public function execute(): Action {
+		parent::execute();
+		if ($this->demand > 0) {
+			if ($this->count < $this->demand) {
+				$this->message(SellOnlyMessage::class)->i($this->goods())->i($this->cost(), SellOnlyMessage::PAYMENT);
+			} else {
+				$this->message(SellMessage::class)->i($this->goods())->i($this->cost(), SellMessage::PAYMENT);
+			}
+		} else {
+			$this->message(SellNoneMessage::class)->s($this->goods()->Commodity());
+		}
+		return $this;
+	}
+
 	public function trade(Luxury $good, int $price): bool {
 		if ($this->count < $this->amount) {
 			$inventory = $this->unit->Inventory();
@@ -44,19 +59,6 @@ final class Sell extends CommerceCommand
 		$income = new Quantity($this->silver, $cost);
 		Lemuria::Log()->debug('Merchant ' . $this . ' expects income of ' . $income . '.');
 		return $this;
-	}
-
-	protected function run(): void {
-		parent::run();
-		if ($this->demand > 0) {
-			if ($this->count < $this->demand) {
-				$this->message(SellOnlyMessage::class)->i($this->goods())->i($this->cost(), SellOnlyMessage::PAYMENT);
-			} else {
-				$this->message(SellMessage::class)->i($this->goods())->i($this->cost(), SellMessage::PAYMENT);
-			}
-		} else {
-			$this->message(SellNoneMessage::class)->s($this->goods()->Commodity());
-		}
 	}
 
 	protected function getDemand(): Quantity {

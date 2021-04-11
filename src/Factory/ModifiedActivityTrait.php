@@ -7,8 +7,10 @@ use JetBrains\PhpStorm\Pure;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 
-trait DefaultActivityTrait
+trait ModifiedActivityTrait
 {
+	private ?UnitCommand $newDefault = null;
+
 	/**
 	 * Get the activity class.
 	 */
@@ -20,9 +22,6 @@ trait DefaultActivityTrait
 	 * Get the new default command.
 	 */
 	public function getNewDefault(): ?UnitCommand {
-		if ($this instanceof UnitCommand) {
-			return $this;
-		}
-		return null;
+		return $this->newDefault;
 	}
 }

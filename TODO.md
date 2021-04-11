@@ -4,14 +4,13 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- MACHEN prüfen, ob langer Befehl
+- mehrfache gleichartige Aktivitäten erlauben  
 - Reisen durch bewachte Regionen einschränken
 
 ## Neue Funktionen
 
 ### 0.2.0
 
-- Handel (KAUFEN/VERKAUFEN)
 - Ereignis "Silberschatz gefunden"
 - BANNER
 
