@@ -17,7 +17,6 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Trading;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Base class for all commands that trade in a Region.
@@ -36,11 +35,17 @@ abstract class CommerceCommand extends UnitCommand implements Merchant
 
 	protected int $count = 0;
 
+	protected int $cost = 0;
+
 	protected ?array $lastCheck = null;
 
 	protected Commodity $silver;
 
 	protected Trades $trades;
+
+	protected Resources $traded;
+
+	private Commodity $commodity;
 
 	/**
 	 * Create a new command for given Phrase.
@@ -48,6 +53,7 @@ abstract class CommerceCommand extends UnitCommand implements Merchant
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		$this->goods  = new Resources();
+		$this->traded = new Resources();
 		$this->silver = self::createCommodity(Silver::class);
 	}
 
@@ -135,8 +141,8 @@ abstract class CommerceCommand extends UnitCommand implements Merchant
 		} else {
 			throw new UnknownCommandException($this);
 		}
-		$commodity = $this->context->Factory()->commodity($luxury);
-		return new Quantity($commodity, $demand);
+		$this->commodity = $this->context->Factory()->commodity($luxury);
+		return new Quantity($this->commodity, $demand);
 	}
 
 	protected function getMaximum(): int {
@@ -146,5 +152,20 @@ abstract class CommerceCommand extends UnitCommand implements Merchant
 			$this->remaining = max(0, $this->maximum - $this->trades->count());
 		}
 		return $this->remaining;
+	}
+
+	protected function goods(): Quantity {
+		$this->traded->rewind();
+		if ($this->traded->valid()) {
+			/** @var Quantity $quantity */
+			$quantity = $this->traded->current();
+		} else {
+			$quantity = new Quantity($this->commodity, 0);
+		}
+		return $quantity;
+	}
+
+	protected function cost(): Quantity {
+		return new Quantity($this->silver, $this->cost);
 	}
 }

@@ -196,7 +196,7 @@ final class Commerce
 				$i++;
 				$traded++;
 			} else {
-				if ($trades->CanTrade()) {
+				if (!$trades->CanTrade()) {
 					Lemuria::Log()->debug('Merchant ' . $merchant . ' has no more trades.');
 				}
 				unset($merchants[$i]);

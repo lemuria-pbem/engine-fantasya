@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Merchant;
+use Lemuria\Engine\Fantasya\Message\Unit\SellMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Quantity;
@@ -26,12 +27,13 @@ final class Sell extends CommerceCommand
 	public function trade(Luxury $good, int $price): bool {
 		if ($this->count < $this->amount) {
 			$inventory = $this->unit->Inventory();
+			$this->traded->add(new Quantity($good, 1));
 			$inventory->remove(new Quantity($good, 1));
 			$inventory->add(new Quantity($this->silver, $price));
 			$this->count++;
+			$this->cost += $price;
 			return true;
 		}
-		//TODO
 		return false;
 	}
 
@@ -42,6 +44,23 @@ final class Sell extends CommerceCommand
 		$income = new Quantity($this->silver, $cost);
 		Lemuria::Log()->debug('Merchant ' . $this . ' expects income of ' . $income . '.');
 		return $this;
+	}
+
+	protected function run(): void {
+		parent::run();
+		if ($this->demand > 0) {
+			if ($this->remaining < $this->demand) {
+				//TODO only left
+			} else {
+				if ($this->count < $this->demand) {
+					//TODO only
+				} else {
+					$this->message(SellMessage::class)->i($this->goods())->i($this->cost(), SellMessage::PAYMENT);
+				}
+			}
+		} else {
+			//TODO no demand
+		}
 	}
 
 	protected function getDemand(): Quantity {
