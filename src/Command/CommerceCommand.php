@@ -8,7 +8,7 @@ use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
-use Lemuria\Engine\Fantasya\Factory\Trades;
+use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
@@ -19,7 +19,6 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Trading;
-use function Lemuria\getClass;
 
 /**
  * Base class for all commands that trade in a Region.
@@ -48,7 +47,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 
 	protected Commodity $silver;
 
-	protected Trades $trades;
+	protected Workload $trades;
 
 	protected Resources $traded;
 
@@ -102,7 +101,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	protected function initialize(): void {
 		parent::initialize();
 		$commerce     = $this->context->getCommerce($this->unit->Region());
-		$this->trades = $commerce->getTrades($this->unit);
+		$this->trades = $commerce->getWorkload($this->unit);
 		$this->createGoods();
 		if (count($this->goods)) {
 			$commerce->register($this);

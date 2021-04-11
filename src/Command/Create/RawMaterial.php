@@ -98,10 +98,11 @@ final class RawMaterial extends AllocationCommand implements Activity
 	protected function createDemand(): void {
 		$resource         = $this->getCommodity();
 		$this->knowledge  = $this->calculus()->knowledge($this->getRequiredTalent());
-		$this->production = $this->unit->Size() * $this->knowledge->Level();
+		$production       = $this->unit->Size() * $this->knowledge->Level();
+		$this->production = $this->reduceByWorkload($production);
 		if ($this->production > 0) {
 			if (count($this->phrase) === 2) {
-				$this->demand = (int)$this->phrase->getParameter(1);
+				$this->demand = (int)$this->phrase->getParameter();
 				if ($this->demand <= $this->production) {
 					$this->production = (int)$this->demand;
 					$quantity = new Quantity($this->getCommodity(), $this->production);
@@ -114,6 +115,7 @@ final class RawMaterial extends AllocationCommand implements Activity
 				$quantity = new Quantity($this->getCommodity(), $this->production);
 				$this->message(RawMaterialCanMessage::class)->i($quantity);
 			}
+			$this->addToWorkload($this->production);
 			$this->resources->add($quantity);
 		} else {
 			$this->message(RawMaterialNoDemandMessage::class)->s($resource);

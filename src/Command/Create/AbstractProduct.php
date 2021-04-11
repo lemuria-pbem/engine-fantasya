@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
+use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Requirement;
@@ -25,11 +26,15 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 {
 	use CollectTrait;
 	use DefaultActivityTrait;
+	use WorkloadTrait;
+
+	protected int $maximum = 0;
 
 	protected int $capability = 0;
 
 	public function __construct(Phrase $phrase, Context $context, protected Job $job) {
 		parent::__construct($phrase, $context);
+		$this->initWorkload();
 	}
 
 	/**
@@ -42,6 +47,7 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 		$level      = $this->calculus()->knowledge($talent::class)->Level();
 		if ($level >= $cost) {
 			$production = (int)floor($this->unit->Size() * $level / $cost);
+			return $this->reduceByWorkload($production);
 		}
 		return $production;
 	}

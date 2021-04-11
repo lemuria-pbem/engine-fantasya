@@ -85,10 +85,12 @@ final class Tax extends AllocationCommand implements Activity
 			$collectors = $this->getNumberOfTaxCollectors();
 			if ($collectors > 0) {
 				$this->rate = $collectors * $this->level * self::RATE;
+				$this->rate = $this->reduceByWorkload($this->rate);
 				if ($this->demand > 0 && $this->demand < $this->rate) {
 					$this->rate = $this->demand;
 				}
 				$silver = self::createCommodity(Silver::class);
+				$this->addToWorkload($this->rate);
 				$this->resources->add(new Quantity($silver, $this->rate));
 				$this->message(TaxDemandMessage::class)->p($collectors, TaxDemandMessage::COLLECTORS)->p($this->rate, TaxDemandMessage::RATE);
 			} else {

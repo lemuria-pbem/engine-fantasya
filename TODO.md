@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- mehrfache gleichartige Aktivitäten erlauben  
 - Reisen durch bewachte Regionen einschränken
 
 ## Neue Funktionen

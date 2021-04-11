@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Factory\CommandFactory;
+use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Model\Fantasya\Intelligence;
@@ -170,6 +171,13 @@ final class Context implements Reassignment
 	 */
 	public function getIntelligence(Region $region): Intelligence {
 		return $this->state->getIntelligence($region);
+	}
+
+	/**
+	 * Get a unit's workload.
+	 */
+	public function getWorkload(Unit $unit): Workload {
+		return $this->state->getWorkload($unit);
 	}
 
 	/**

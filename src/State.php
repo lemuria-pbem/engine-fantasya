@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Intelligence;
@@ -43,6 +44,11 @@ final class State
 	 * @var array(int=>ActivityProtocol)
 	 */
 	private array $protocol = [];
+
+	/**
+	 * @var array(int=>Workload)
+	 */
+	private array $workload = [];
 
 	/**
 	 * Get a region's available resources.
@@ -97,6 +103,17 @@ final class State
 			throw new LemuriaException();
 		}
 		return $this->protocol[$id];
+	}
+
+	/**
+	 * Get a unit's workload.
+	 */
+	public function getWorkload(Unit $unit): Workload {
+		$id = $unit->Id()->Id();
+		if (!isset($this->workload[$id])) {
+			$this->workload[$id] = new Workload();
+		}
+		return $this->workload[$id];
 	}
 
 	public function setProtocol(ActivityProtocol $protocol): void {

@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Consumer;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party;
@@ -17,6 +18,8 @@ use Lemuria\Model\Fantasya\Resources;
  */
 abstract class AllocationCommand extends UnitCommand implements Consumer
 {
+	use WorkloadTrait;
+
 	private const QUOTA = 1.0;
 
 	protected Resources $resources;
@@ -75,9 +78,11 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	 */
 	protected function initialize(): void {
 		parent::initialize();
+		$allocation     = $this->context->getAllocation($this->unit->Region());
+		$this->initWorkload();
 		$this->createDemand();
 		if (count($this->resources)) {
-			$this->context->getAllocation($this->unit->Region())->register($this);
+			$allocation->register($this);
 		} else {
 			Lemuria::Log()->debug('Allocation registration skipped due to empty demand.', ['command' => $this]);
 		}

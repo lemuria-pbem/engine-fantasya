@@ -7,7 +7,7 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Exception\CommerceException;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
 use Lemuria\Engine\Fantasya\Factory\Supply;
-use Lemuria\Engine\Fantasya\Factory\Trades;
+use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
@@ -37,11 +37,6 @@ final class Commerce
 	private array $merchantsLeft = [];
 
 	/**
-	 * @var array(int=>Trades)
-	 */
-	private array $units = [];
-
-	/**
 	 * @var array(string=>array)
 	 */
 	private array $goods;
@@ -63,12 +58,8 @@ final class Commerce
 		$this->silver   = self::createCommodity(Silver::class);
 	}
 
-	public function getTrades(Unit $unit): Trades {
-		$id = $unit->Id()->Id();
-		if (!isset($this->units[$id])) {
-			$this->units[$id] = new Trades();
-		}
-		return $this->units[$id];
+	public function getWorkload(Unit $unit): Workload {
+		return State::getInstance()->getWorkload($unit);
 	}
 
 	/**
@@ -188,15 +179,14 @@ final class Commerce
 				Lemuria::Log()->debug('The peasants have no more silver to buy luxuries.');
 				break;
 			}
-			/** @var Trades $trades */
-			$trades = $this->units[$merchant->Unit()->Id()->Id()];
-			if ($trades->CanTrade() && $this->tradeOne($merchant, $good, $price)) {
+			$trades = $this->getWorkload($merchant->Unit());
+			if ($trades->CanWork() && $this->tradeOne($merchant, $good, $price)) {
 				$trades->add();
 				$isOpen = false;
 				$i++;
 				$traded++;
 			} else {
-				if (!$trades->CanTrade()) {
+				if (!$trades->CanWork()) {
 					Lemuria::Log()->debug('Merchant ' . $merchant . ' has no more trades.');
 				}
 				unset($merchants[$i]);
