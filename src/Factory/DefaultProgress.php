@@ -16,6 +16,7 @@ use Lemuria\Engine\Fantasya\Event\Liquidation;
 use Lemuria\Engine\Fantasya\Event\Population;
 use Lemuria\Engine\Fantasya\Event\Subsistence;
 use Lemuria\Engine\Fantasya\Event\Support;
+use Lemuria\Engine\Fantasya\Event\Timer;
 use Lemuria\Engine\Fantasya\Event\Upkeep;
 use Lemuria\Engine\Fantasya\Progress;
 use Lemuria\Engine\Fantasya\State;
@@ -24,6 +25,7 @@ class DefaultProgress implements Progress
 {
 	public const EVENTS = [
 		// before
+		Timer::class,
 		// middle
 		Upkeep::class, Subsistence::class, Drift::class,
 		// after

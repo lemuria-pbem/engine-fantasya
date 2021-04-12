@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya;
 use Lemuria\Engine\Exception\EngineException;
 use Lemuria\Engine\Fantasya\Command\Initiate;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Event\DelegatedEvent;
 use Lemuria\Engine\Fantasya\Exception\ActionException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
@@ -213,8 +214,16 @@ class LemuriaTurn implements Turn
 	}
 
 	protected function addEvent(Event $event): Turn {
-		$this->enqueue($event);
-		Lemuria::Log()->debug('New event: ' . $event . '.', ['event' => $event]);
+		if ($event instanceof DelegatedEvent) {
+			Lemuria::Log()->debug('New delegated event: ' . $event . '.', ['event' => $event]);
+			foreach ($event->getDelegates() as $delegate) {
+				$this->enqueue($delegate);
+				Lemuria::Log()->debug('New event from delegate: ' . $delegate . '.', ['event' => $delegate]);
+			}
+		} else {
+			$this->enqueue($event);
+			Lemuria::Log()->debug('New event: ' . $event . '.', ['event' => $event]);
+		}
 		return $this;
 	}
 

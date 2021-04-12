@@ -156,6 +156,7 @@
 		"FaunaNewMessage": "{$animals:wandert} in die Region $id ein.",
 		"FightMessage": "Die Einheit $id wird $position.",
 		"FightUnguardMessage": "Die Einheit $id bewacht nicht länger die Region.",
+		"FindWalletMessage": "Die Einheit $unit hat einen verlorenen Silberbeutel mit $silver gefunden.",
 		"FounderEffectMessage": "Das Schiff $id ist zu schwer und wird Schaden nehmen, wenn die überschüssige Ladung nicht über Bord geworfen wird.",
 		"FounderMessage": "Das Schiff $id sinkt mit Mann und Maus in der Region $region.",
 		"GiveFailedMessage": "Die Einheit $id kann nichts an die Einheit $recipient übergeben, die Annahme wird verweigert.",

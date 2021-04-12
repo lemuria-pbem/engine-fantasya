@@ -9,7 +9,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### 0.2.0
 
-- Ereignis "Silberschatz gefunden"
 - BANNER
 
 ### 0.3.0 und folgende
