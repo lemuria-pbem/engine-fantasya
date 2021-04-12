@@ -7,11 +7,10 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
-### 0.2.0
+### 0.3.0
 
-- BANNER
 
-### 0.3.0 und folgende
+### 0.4.0 und folgende
 
 - Insel/Kontinent benennen
 - Straßen (Modell, Bau, Abriss, Reisen)

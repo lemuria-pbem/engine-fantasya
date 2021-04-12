@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
+use Lemuria\Engine\Fantasya\Command\Banner;
 use Lemuria\Engine\Fantasya\Command\Buy;
 use Lemuria\Engine\Fantasya\Command\Comment;
 use Lemuria\Engine\Fantasya\Command\Contact;
@@ -136,6 +137,7 @@ class CommandFactory
 	 */
 	protected array $verbs = [
 		'//'           => 'KOMMENTAR',
+		'BANNER'       => true,
 		'BENENNEN'     => 'NAME',
 		'BESCHREIBEN'  => 'BESCHREIBUNG',
 		'BESCHREIBUNG' => true,
@@ -373,6 +375,7 @@ class CommandFactory
 		$verb = $this->identifyVerb($phrase->getVerb());
 		try {
 			$command = match ($verb) {
+				'BANNER'       => Banner::class,
 				'BESCHREIBUNG' => Describe::class,
 				'BESTEIGEN'    => Board::class,
 				'BETRETEN'     => Trespass::class,
