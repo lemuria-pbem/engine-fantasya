@@ -326,6 +326,8 @@
 		"TeachUnableMessage": "Die Einheit $id kann die Einheit $student nicht mehr lehren.",
 		"TempMessage": "Neue Einheit $id erzeugt.",
 		"TravelAnchorMessage": "Das Schiff $id ankert im $anchor und kann nicht nach $direction auslaufen.",
+		"TravelGuardedMessage": "Die Einheit $id wurde in der Region $region von den Wachen gestoppt.",
+		"TravelGuardMessage": "Unsere Wachen haben die Einheit $unit in der Region $region aufgehalten.",
 		"TravelIntoChaosMessage": "Die Einheit $id kann sich nicht nach $direction ins Chaos bewegen.",
 		"TravelIntoOceanMessage": "Die Einheit $id kann sich nicht nach $direction in den Ozean bewegen.",
 		"TravelLandMessage": "Das Schiff $id kann sich nicht nach $direction bewegen und in {der:$landscape} $region anlanden.",
