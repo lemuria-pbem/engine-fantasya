@@ -9,12 +9,13 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### 0.2.0
 
+- Angebot und Nachfrage ändern den Preis
 - BOTSCHAFT
-- ROUTE
 
 ### 0.3.0
 
 - Straßen (Modell, Bau, Abriss, Reisen)
+- ROUTE
 
 ### 0.4.0 und folgende
 
