@@ -7,16 +7,19 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
+### 0.2.0
+
+- BOTSCHAFT
+- ROUTE
+
 ### 0.3.0
 
+- Straßen (Modell, Bau, Abriss, Reisen)
 
 ### 0.4.0 und folgende
 
 - Insel/Kontinent benennen
-- Straßen (Modell, Bau, Abriss, Reisen)
-- BOTSCHAFT
 - SPIONIEREN
-- ROUTE
 - FOLGE
 - STEHLEN
 - Kampf (ATTACKIEREN/BELAGERN)
