@@ -7,9 +7,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
-### Version 0.2
-
-
 ### Version 0.3
 
 - Straßen (Modell, Bau, Abriss, Reisen)
