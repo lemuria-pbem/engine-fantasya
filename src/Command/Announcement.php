@@ -29,18 +29,14 @@ final class Announcement extends UnitCommand
 {
 	protected function run(): void {
 		$n = $this->phrase->count();
-		if ($n === 2) {
-			if (strtolower($this->phrase->getParameter()) === 'region') {
-				$this->sendToRegion();
-			} else {
-				$i = 1;
-				$this->sendToUnit($this->nextId($i));
-			}
-		} elseif ($n === 3) {
+		if ($n >= 2) {
 			$i = 2;
 			switch (strtolower($this->phrase->getParameter())) {
 				case 'einheit' :
-					$this->sendToUnit($this->nextId($i));
+					$this->sendToUnit($this->nextId($i), $this->getMessage());
+					break;
+				case 'region' :
+					$this->sendToRegion();
 					break;
 				case 'partei' :
 					$id = Id::fromId(strtolower($this->phrase->getParameter($i)));
@@ -57,16 +53,16 @@ final class Announcement extends UnitCommand
 					$this->sendToVessel(Vessel::get($id));
 					break;
 				default :
-					throw new UnknownCommandException($this);
+					$i = 1;
+					$this->sendToUnit($this->nextId($i), $this->getMessage(2));
 			}
 		} else {
 			throw new UnknownCommandException($this);
 		}
 	}
 
-	private function sendToUnit(Unit $unit): void {
+	private function sendToUnit(Unit $unit, string $message): void {
 		$calculus = $this->context->getCalculus($unit);
-		$message  = $this->getMessage();
 		if ($calculus->canDiscover($this->unit)) {
 			$sender = $this->unit->Name();
 			$this->message(AnnouncementUnitMessage::class, $unit)->p($message)->p($sender, AnnouncementUnitMessage::SENDER);
@@ -95,13 +91,13 @@ final class Announcement extends UnitCommand
 
 	private function sendToRegion(): void {
 		$region  = $this->unit->Region();
-		$message = $this->getMessage();
+		$message = $this->getMessage(2);
 		$sender  = $this->unit->Party()->Name();
 		$this->message(AnnouncementRegionMessage::class, $region)->p($message)->p($sender, AnnouncementRegionMessage::SENDER);
 	}
 
-	private function getMessage(): string {
-		$message = $this->phrase->getParameter(0);
+	private function getMessage(int $i = 3): string {
+		$message = $this->phrase->getLine($i);
 		return trim($message, "\"'\t ");
 	}
 }
