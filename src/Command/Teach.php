@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
@@ -29,6 +30,7 @@ use Lemuria\Model\Fantasya\Unit;
 final class Teach extends UnitCommand implements Activity
 {
 	use CamouflageTrait;
+	use ModifiedActivityTrait;
 
 	private const MAX_STUDENTS = 10;
 
@@ -41,17 +43,11 @@ final class Teach extends UnitCommand implements Activity
 
 	private float $bonus = 0.0;
 
-	private ?Teach $newDefault = null;
-
 	/**
 	 * Get learning bonus.
 	 */
 	#[Pure] public function getBonus(): float {
 		return $this->bonus;
-	}
-
-	public function getNewDefault(): ?UnitCommand {
-		return $this->newDefault;
 	}
 
 	protected function initialize(): void {
@@ -162,7 +158,7 @@ final class Teach extends UnitCommand implements Activity
 	 */
 	private function calculateBonuses(): void {
 		$people = 0;
-		foreach ($this->students as $id => $learn /* @var Learn $learn */) {
+		foreach ($this->students as $learn /* @var Learn $learn */) {
 			$people += $learn->Unit()->Size();
 		}
 		$this->bonus = $people > 0 ? min(self::MAX_STUDENTS / $people, 1.0) ** 2 : 1.0;

@@ -3,33 +3,22 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Singleton;
+use Lemuria\Item;
 
 class RawMaterialWantsMessage extends AbstractUnitMessage
 {
-	protected Singleton $commodity;
-
-	protected int $production;
+	protected Item $quantity;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' wants to produce ' . $this->production . ' ' . $this->commodity . '.';
+		return 'Unit ' . $this->id . ' wants to produce ' . $this->quantity . '.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->commodity = $message->getSingleton();
-		$this->production = $message->getParameter();
+		$this->quantity = $message->getQuantity();
 	}
 
 	protected function getTranslation(string $name): string {
-		$commodity = $this->commodity($name, 'commodity');
-		if ($commodity) {
-			return $commodity;
-		}
-		$production = $this->number($name, 'production');
-		if ($production) {
-			return $production;
-		}
-		return parent::getTranslation($name);
+		return $this->item($name, 'quantity') ?? parent::getTranslation($name);
 	}
 }

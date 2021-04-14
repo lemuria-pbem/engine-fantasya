@@ -35,7 +35,7 @@ class Census extends ModelCensus
 		$effect = new ContactEffect(State::getInstance());
 		$effect = Lemuria::Score()->find($effect->setParty($party));
 		// Contact order given.
-		if ($effect && $effect->From()->has($unit->Id())) {
+		if ($effect instanceof ContactEffect && $effect->From()->has($unit->Id())) {
 			return $foreign;
 		}
 		// Disguised unit.

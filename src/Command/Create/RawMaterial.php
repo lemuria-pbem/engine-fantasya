@@ -96,22 +96,27 @@ final class RawMaterial extends AllocationCommand implements Activity
 	 * Determine the demand.
 	 */
 	protected function createDemand(): void {
-		$resource         = $this->job->getObject();
+		$resource         = $this->getCommodity();
 		$this->knowledge  = $this->calculus()->knowledge($this->getRequiredTalent());
-		$this->production = $this->unit->Size() * $this->knowledge->Level();
+		$production       = $this->unit->Size() * $this->knowledge->Level();
+		$this->production = $this->reduceByWorkload($production);
 		if ($this->production > 0) {
 			if (count($this->phrase) === 2) {
-				$this->demand = (int)$this->phrase->getParameter(1);
+				$this->demand = (int)$this->phrase->getParameter();
 				if ($this->demand <= $this->production) {
 					$this->production = (int)$this->demand;
-					$this->message(RawMaterialWantsMessage::class)->p($this->production)->s($resource);
+					$quantity = new Quantity($this->getCommodity(), $this->production);
+					$this->message(RawMaterialWantsMessage::class)->i($quantity);
 				} else {
-					$this->message(RawMaterialCannotMessage::class)->p($this->production)->s($resource);
+					$quantity = new Quantity($this->getCommodity(), $this->production);
+					$this->message(RawMaterialCannotMessage::class)->i($quantity);
 				}
 			} else {
-				$this->message(RawMaterialCanMessage::class)->p($this->production)->s($resource);
+				$quantity = new Quantity($this->getCommodity(), $this->production);
+				$this->message(RawMaterialCanMessage::class)->i($quantity);
 			}
-			$this->resources->add(new Quantity($this->getCommodity(), $this->production));
+			$this->addToWorkload($this->production);
+			$this->resources->add($quantity);
 		} else {
 			$this->message(RawMaterialNoDemandMessage::class)->s($resource);
 		}

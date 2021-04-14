@@ -39,6 +39,7 @@ final class Commodity extends AbstractProduct
 			if (!$commodity instanceof CommodityModel) {
 				throw new LemuriaException('Artifact ' . $artifact . ' is not a Commodity.');
 			}
+			$this->addToWorkload($yield);
 			$output = new Quantity($commodity, $yield);
 			$this->unit->Inventory()->add($output);
 			if ($this->job->hasCount() && $count > $production) {

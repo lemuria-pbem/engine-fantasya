@@ -165,7 +165,7 @@ final class Calculus
 	/**
 	 * Get learning progress.
 	 */
-	#[Pure] public function progress(Talent $talent): Ability {
+	public function progress(Talent $talent): Ability {
 		$teachBonus = 0.0;
 		foreach ($this->teachers as $teach /* @var Teach $teach */) {
 			$teachBonus += $teach->getBonus();

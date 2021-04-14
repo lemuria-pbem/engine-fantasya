@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\EntertainGuardedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EntertainMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EntertainNoDemandMessage;
@@ -86,10 +87,12 @@ final class Entertain extends AllocationCommand implements Activity
 		$level = $this->calculus()->knowledge(Entertaining::class)->Level();
 		if ($level > 0) {
 			$this->fee = $this->unit->Size() * $level * self::FEE;
+			$this->fee = $this->reduceByWorkload($this->fee);
 			if ($this->demand > 0 && $this->demand < $this->fee) {
 				$this->fee = $this->demand;
 			}
 			$silver = self::createCommodity(Silver::class);
+			$this->addToWorkload($this->fee);
 			$this->resources->add(new Quantity($silver, $this->fee));
 		} else {
 			$this->message(EntertainNoDemandMessage::class);

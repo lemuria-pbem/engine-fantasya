@@ -19,55 +19,56 @@ final class CommandPriority
 	 */
 	public const ORDER = [
 		// 0 forbidden
-		'EFFECT_BEFORE' => 1,
-		'EVENT_BEFORE'  => 2,
-		'DefaultCommand'=> 4,
-		'Name'          => 7,
-		'Describe'      => 8,
-		'Disguise'      => 10,
-		'Unguard'       => 12,
-		'Origin'        => 14,
-		'Fight'         => 16,
-		'Help'          => 20,
-		'Contact'       => 22,
-		// BOTSCHAFT => 25,
-		'Enter'         => 28,
-		'Board'         => 29,
-		'Grant'         => 32,
-		'Leave'         => 34,
-		'Reserve'       => 38,
-		'Give'          => 40,
-		'Dismiss'       => 41,
-		'Lose'          => 42,
+		'EFFECT_BEFORE'  => 1,
+		'EVENT_BEFORE'   => 2,
+		'DefaultCommand' => 4,
+		'Banner'         => 6,
+		'Name'           => 7,
+		'Describe'       => 8,
+		'Disguise'       => 10,
+		'Unguard'        => 12,
+		'Origin'         => 14,
+		'Fight'          => 16,
+		'Help'           => 19,
+		'Contact'        => 22,
+		'Announcement'   => 25,
+		'Enter'          => 28,
+		'Board'          => 29,
+		'Grant'          => 31,
+		'Leave'          => 33,
+		'Reserve'        => 36,
+		'Give'           => 40,
+		'Dismiss'        => 41,
+		'Lose'           => 42,
 		// ATTACKIERE => 45,
-		'Recruit'       => 48,
-		'EFFECT_MIDDLE' => 50,
-		'EVENT_MIDDLE'  => 51,
+		'Recruit'        => 48,
+		'EFFECT_MIDDLE'  => 50,
+		'EVENT_MIDDLE'   => 51,
 		// BELAGERE => 55,
 		// ZAUBERE => 58,
-		'Smash'         => 60,
-		'Travel'        => 63,
+		'Smash'          => 60,
+		'Travel'         => 63,
 		// ROUTE => 64,
-		'Teach'         => 67,
-		'Learn'         => 69,
+		'Teach'          => 67,
+		'Learn'          => 69,
 		// SPIONIERE => 72,
-		// VERKAUFE => 74,
-		// KAUFE => 75,
-		'Construction'  => 77,
-		'Vessel'        => 78,
-		'Commodity'     => 80,
-		'RawMaterial'   => 82,
-		'Unknown'       => 84,
-		'CollectTaxes'  => 86,
-        'Entertain'     => 88,
-		'Guard'         => 90,
-		'Sort'          => 93,
-		'Number'        => 94,
-		'Comment'       => 95,
-		'Migrate'       => 97,
-		'EFFECT_AFTER'  => 98,
-		'EVENT_AFTER'   => 99,
-		'Initiate'      => 100
+		'Sell'           => 74,
+		'Buy'            => 75,
+		'Construction'   => 77,
+		'Vessel'         => 78,
+		'Commodity'      => 80,
+		'RawMaterial'    => 82,
+		'Unknown'        => 84,
+		'Tax'            => 86,
+        'Entertain'      => 88,
+		'Guard'          => 90,
+		'Sort'           => 93,
+		'Number'         => 94,
+		'Comment'        => 95,
+		'Migrate'        => 97,
+		'EFFECT_AFTER'   => 98,
+		'EVENT_AFTER'    => 99,
+		'Initiate'       => 100
 	];
 
 	/**
@@ -84,11 +85,6 @@ final class CommandPriority
 	 * Priority of A-Events.
 	 */
 	private const A_ACTION = 99;
-
-	/**
-	 * The lowest possible execution priority.
-	 */
-	private const LOWEST = 100;
 
 	private static ?CommandPriority $instance = null;
 
@@ -107,7 +103,9 @@ final class CommandPriority
 	public function getPriority(Action $action): int {
 		if ($action instanceof Command) {
 			$class = getClass($action);
-			return self::ORDER[$class] ?? self::LOWEST;
+			if (isset(self::ORDER[$class])) {
+				return self::ORDER[$class];
+			}
 		}
 
 		$priority = $action->Priority();

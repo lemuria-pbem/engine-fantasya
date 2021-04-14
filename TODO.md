@@ -7,17 +7,15 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
-### 0.2.0
+### Version 0.3
 
-- Handel (KAUFEN/VERKAUFEN)
+- Straßen (Modell, Bau, Abriss, Reisen)
+- ROUTE
 
-### 0.3.0 und folgende
+### Version 0.4 und folgende
 
 - Insel/Kontinent benennen
-- Straßen (Modell, Bau, Abriss, Reisen)
-- BOTSCHAFT
 - SPIONIEREN
-- ROUTE
 - FOLGE
 - STEHLEN
 - Kampf (ATTACKIEREN/BELAGERN)

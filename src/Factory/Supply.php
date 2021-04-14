@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Luxury;
@@ -30,6 +32,34 @@ class Supply implements \Countable
 		$this->step     = $this->peasants / 100.0;
 	}
 
+	/**
+	 * Get the current Luxury.
+	 *
+	 * @throws LemuriaException
+	 */
+	public function Luxury(): Luxury {
+		if (!$this->luxury) {
+			throw new LemuriaException('The Luxury has not been set.');
+		}
+		return $this->luxury;
+	}
+
+	/**
+	 * Get the current price of the Luxury.
+	 *
+	 * @throws LemuriaException
+	 */
+	public function Price(): int {
+		if (!$this->luxury) {
+			throw new LemuriaException('The Luxury has not been set.');
+		}
+		$factor = (int)floor($this->count / $this->step);
+		if ($this->isOffer) {
+			return ($factor + 1) * $this->luxury->Value();
+		}
+		return $this->offer->Price() - $factor * $this->luxury->Value();
+	}
+
 	public function count(): int {
 		return $this->max;
 	}
@@ -39,6 +69,35 @@ class Supply implements \Countable
 	 */
 	public function hasMore(): bool {
 		return $this->count < $this->max;
+	}
+
+	/**
+	 * Estimate total cost of given number of items.
+	 */
+	#[Pure] public function estimate(int $count): int {
+		$count = min($count, $this->count());
+		$steps = (int)floor($count / $this->step);
+		$rest  = $count % (int)floor($this->step);
+		$value = $this->luxury->Value();
+		$total = 0.0;
+		$i     = 0;
+
+		if ($this->isOffer) {
+			$price = $value;
+			while ($i++ < $steps) {
+				$total += $this->step * $price;
+				$price += $value;
+			}
+		} else {
+			$price = $this->offer->Price();
+			while ($i++ < $steps) {
+				$total += $this->step * $price;
+				$price -= $value;
+			}
+		}
+
+		$total += $rest * $price;
+		return (int)ceil($total);
 	}
 
 	/**

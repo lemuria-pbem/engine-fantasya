@@ -2,13 +2,18 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\NavigationTrait;
+use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNewOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNoOwnerMessage;
+use Lemuria\Engine\Fantasya\Message\Party\TravelGuardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoChaosMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoOceanMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelMessage;
@@ -26,8 +31,13 @@ use Lemuria\Engine\Fantasya\Message\Vessel\TravelShipTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
+use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Navigation;
+use Lemuria\Model\Fantasya\Talent\Perception;
+use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
 
 /**
@@ -37,26 +47,25 @@ use Lemuria\Model\Fantasya\Vessel;
  */
 final class Travel extends UnitCommand implements Activity
 {
+	use ModifiedActivityTrait;
 	use NavigationTrait;
 
 	private ?Vessel $vessel = null;
 
 	private Capacity $capacity;
 
-	private ?Travel $newDefault = null;
+	private Workload $workload;
 
-	/**
-	 * Get the new default command.
-	 */
-	public function getNewDefault(): ?UnitCommand {
-		return $this->newDefault;
+	public function __construct(Phrase $phrase, Context $context) {
+		parent::__construct($phrase, $context);
+		$this->workload = $context->getWorkload($this->unit);
 	}
 
 	protected function initialize(): void {
 		parent::initialize();
 		$this->vessel   = $this->unit->Vessel();
 		$this->capacity = $this->calculus()->capacity();
-
+		$this->workload->setMaximum(min($this->workload->Maximum(), $this->capacity->Speed()));
 	}
 
 	protected function run(): void {
@@ -96,7 +105,7 @@ final class Travel extends UnitCommand implements Activity
 
 		$route   = [$this->unit->Region()];
 		$i       = 0;
-		$regions = $this->capacity->Speed();
+		$regions = $this->capacity->Speed() - $this->workload->count();
 		$this->message(TravelSpeedMessage::class)->p($regions)->p($weight, TravelSpeedMessage::WEIGHT);
 		try {
 			while ($regions > 0 && $i < $n) {
@@ -107,6 +116,16 @@ final class Travel extends UnitCommand implements Activity
 					$this->message(TravelRegionMessage::class)->e($region);
 					$route[] = $region;
 					$regions--;
+					$this->workload->add();
+					$guards = $this->unitIsStoppedByGuards($region);
+					if ($guards) {
+						$this->workload->add($regions);
+						$regions = 0;
+						$this->message(TravelGuardedMessage::class)->e($region);
+						foreach ($guards as $party) {
+							$this->message(TravelGuardMessage::class, $party)->e($region)->e($this->unit, TravelGuardMessage::UNIT);
+						}
+					}
 				}
 			}
 		} catch (UnknownCommandException $directionError) {
@@ -209,5 +228,29 @@ final class Travel extends UnitCommand implements Activity
 			$command          = $this->context->Factory()->create(new Phrase($travel));
 			$this->newDefault = $command;
 		}
+	}
+
+	/**
+	 * @return Party[]
+	 */
+	protected function unitIsStoppedByGuards(Region $region): array {
+		$guards       = [];
+		$intelligence = $this->context->getIntelligence($region);
+		$camouflage   = $this->calculus()->knowledge(Camouflage::class)->Level();
+		foreach ($intelligence->getGuards() as $guard /* @var Unit $guard */) {
+			$guardParty = $guard->Party();
+			if ($guardParty !== $this->unit->Party()) {
+				if (!$guardParty->Diplomacy()->has(Relation::GUARD, $this->unit)) {
+					if ($region instanceof Ocean) {
+						$guards[$guardParty->Id()->Id()] = $guardParty;
+					}
+					$perception = $this->context->getCalculus($guard)->knowledge(Perception::class)->Level();
+					if ($perception >= $camouflage) {
+						$guards[$guardParty->Id()->Id()] = $guardParty;
+					}
+				}
+			}
+		}
+		return $guards;
 	}
 }

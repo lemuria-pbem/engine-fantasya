@@ -2,9 +2,12 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Destroy;
 
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashDamageConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashDamageVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashDestroyConstructionMessage;
@@ -16,6 +19,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\SmashNotInConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashNotInVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashNotVesselOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashRegainMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Requirement;
@@ -33,15 +37,14 @@ use Lemuria\Model\Fantasya\Unit;
  */
 final class Smash extends UnitCommand implements Activity
 {
+	use ModifiedActivityTrait;
+	use WorkloadTrait;
+
 	private Id $id;
 
-	private ?Smash $newDefault = null;
-
-	/**
-	 * Get the new default command.
-	 */
-	public function getNewDefault(): ?UnitCommand {
-		return $this->newDefault;
+	public function __construct(Phrase $phrase, Context $context) {
+		parent::__construct($phrase, $context);
+		$this->initWorkload();
 	}
 
 	protected function run(): void {
@@ -83,6 +86,7 @@ final class Smash extends UnitCommand implements Activity
 		$material = $building->getMaterial();
 		$size     = $construction->Size();
 		$damage   = $this->destroy($craft, $material, $size);
+		$this->addToWorkload($damage);
 		$remains  = $size - $damage;
 		$construction->setSize($remains);
 		if ($remains > 0) {
@@ -117,6 +121,7 @@ final class Smash extends UnitCommand implements Activity
 		$wood     = $ship->Wood();
 		$size     = (int)round($vessel->Completion() * $wood);
 		$damage   = $this->destroy($craft, $material, $size);
+		$this->addToWorkload($damage);
 		$remains  = $size - $damage;
 		$vessel->setCompletion($remains / $wood);
 		if ($remains > 0) {
@@ -130,6 +135,7 @@ final class Smash extends UnitCommand implements Activity
 	private function destroy(Requirement $craft, Resources $material, int $size): int {
 		$level      = $this->calculus()->knowledge($craft->Talent())->Level();
 		$capability = $level > 1 ? $this->unit->Size() * $level : $this->unit->Size();
+		$capability = $this->reduceByWorkload($capability);
 		$damage     = $capability < $size ? $capability : $size;
 		foreach ($material as $quantity /* @var Quantity $quantity */) {
 			$regain = new Quantity($quantity->Commodity(), $damage * $quantity->Count());

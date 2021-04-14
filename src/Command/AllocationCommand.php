@@ -6,20 +6,20 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Consumer;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
-use Lemuria\Model\Fantasya\Talent\Camouflage;
-use Lemuria\Model\Fantasya\Talent\Perception;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Base class for all commands that request resources from a Region.
  */
 abstract class AllocationCommand extends UnitCommand implements Consumer
 {
+	use WorkloadTrait;
+
 	private const QUOTA = 1.0;
 
 	protected Resources $resources;
@@ -78,9 +78,11 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	 */
 	protected function initialize(): void {
 		parent::initialize();
+		$allocation     = $this->context->getAllocation($this->unit->Region());
+		$this->initWorkload();
 		$this->createDemand();
 		if (count($this->resources)) {
-			$this->context->getAllocation($this->unit->Region())->register($this);
+			$allocation->register($this);
 		} else {
 			Lemuria::Log()->debug('Allocation registration skipped due to empty demand.', ['command' => $this]);
 		}
@@ -104,7 +106,7 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 			return new Quantity($commodity, 0);
 		}
 
-		/* @var Quantity $quantity */
+		/** @var Quantity $quantity */
 		$quantity = $this->resources[$class];
 		return $quantity;
 	}
@@ -116,39 +118,6 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	 */
 	protected function getCheckBeforeAllocation(): array {
 		return [];
-	}
-
-	/**
-	 * Check region guards before allocation.
-	 *
-	 * If region is guarded by other parties and there are no specific agreements, this unit may only produce if it is
-	 * not in a building and has better camouflage than all the blocking guards' perception.
-	 *
-	 * @return Party[]
-	 */
-	protected function getCheckByAgreement(int $agreement): array {
-		$guardParties = [];
-		$party        = $this->unit->Party();
-		$context      = $this->context;
-		$intelligence = $context->getIntelligence($this->unit->Region());
-		$camouflage   = PHP_INT_MIN;
-		if (!$this->unit->Construction()) {
-			$camouflage = $this->calculus()->knowledge(Camouflage::class)->Level();
-		}
-
-		foreach ($intelligence->getGuards() as $guard /* @var Unit $guard */) {
-			$guardParty = $guard->Party();
-			if ($guardParty !== $party) {
-				if (!$guardParty->Diplomacy()->has($agreement, $this->unit)) {
-					$perception = $context->getCalculus($guard)->knowledge(Perception::class)->Level();
-					if ($perception >= $camouflage) {
-						$guardParties[$guardParty->Id()->Id()] = $guardParty;
-					}
-				}
-			}
-		}
-
-		return $guardParties;
 	}
 
 	/**

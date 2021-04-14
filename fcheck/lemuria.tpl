@@ -8,6 +8,8 @@
 ^(locale) +[a-zA-Z0-9]+$
 ^(region) +.+$
 
+^(ba|ban|bann|banne|banner) +.*$
+
 ^(beschreibu|beschreibun|beschreibung|beschreibe|beschreiben|te|tex|text)( +(einheit|region|gebaeude|gebäude|burg|schiff|partei))? .+$
 
 ^(bestei|besteig|besteige|besteigen) +[a-z0-9]{1,6}$
@@ -15,6 +17,10 @@
 ^(bet|betr|betre|betret|betrete|betreten)( +(burg|gebäude|gebaeude|schiff))? +[a-z0-9]{1,6}$
 
 ^(bew|bewa|bewac|bewach|bewache|bewachen|bewachu|bewachun|bewachung)( +nicht)?$
+
+^(bo|bot|bots|botsc|botsch|botscha|botschaf|botschaft) +(einheit +)?[a-z0-9]{1,6} +.+$
+^(bo|bot|bots|botsc|botsch|botscha|botschaf|botschaft) +region +.+$
+^(bo|bot|bots|botsc|botsch|botscha|botschaf|botschaft) +(burg|gebäude|gebaeude|partei|schiff) +[a-z0-9]{1,6} +.+$
 
 ^(einh|einhe|einheit) +[a-z0-9]{1,6}$
 
@@ -26,6 +32,8 @@
 ^(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6} +.*$
 
 ^(h|he|hel|helf|helfe|helfen|hi|hil|hilf|hilfe) +[a-z0-9]{1,6} +[a-z]+( +(region|nicht|region +nicht|nicht +region))?$
+
+^(kau|kauf|kaufe|kaufen)( +[0-9]+)? +(balsam|balsame|gewürz|gewürze|gewuerz|gewuerze|juwel|juwelen|myrrhe|myrrhen|öl|öle|oel|oele|pelz|pelze|seide|seiden|weihrauch)$
 
 ^(kä|käm|kämp|kämpf|kämpfe|kämpfen|kae|kaem|kaemp|kaempf|kaempfe|kaempfen|ka|kam|kamp|kampf) +(agressiv|defensiv|fliehe|fliehen|flucht|hinten|nicht|vorn|vorne)?$
 
@@ -76,6 +84,8 @@
 ^(un|unt|unte|unter|unterh|unterha|unterhal|unterhalt|unterhalte|unterhalten|unterhaltu|unterhaltun|unterhaltung)( +[0-9]+)?$
 
 ^(ur|urs|ursp|urspr|urspru|ursprun|ursprung)( +(partei|region) +[a-z0-9]{1,6})?$
+
+^(verk|verkauf|verkaufe|verkaufen)( +[0-9]+)? +(balsam|balsame|gewürz|gewürze|gewuerz|gewuerze|juwel|juwelen|myrrhe|myrrhen|öl|öle|oel|oele|pelz|pelze|seide|seiden|weihrauch)$
 
 ^(verla|verlas|verlass|verlasse|verlassen)$
 

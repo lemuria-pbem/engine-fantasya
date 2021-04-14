@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Intelligence;
@@ -30,6 +31,11 @@ final class State
 	private array $allocation = [];
 
 	/**
+	 * @var array(int=>Commerce)
+	 */
+	private array $commerce = [];
+
+	/**
 	 * @var array(int=>Intelligence)
 	 */
 	private array $intelligence = [];
@@ -38,6 +44,11 @@ final class State
 	 * @var array(int=>ActivityProtocol)
 	 */
 	private array $protocol = [];
+
+	/**
+	 * @var array(int=>Workload)
+	 */
+	private array $workload = [];
 
 	/**
 	 * Get a region's available resources.
@@ -62,6 +73,17 @@ final class State
 	}
 
 	/**
+	 * Get a region's commerce.
+	 */
+	public function getCommerce(Region $region): Commerce {
+		$id = $region->Id()->Id();
+		if (!isset($this->commerce[$id])) {
+			$this->commerce[$id] = new Commerce($region);
+		}
+		return $this->commerce[$id];
+	}
+
+	/**
 	 * Get a region's intelligence.
 	 */
 	public function getIntelligence(Region $region): Intelligence {
@@ -81,6 +103,24 @@ final class State
 			throw new LemuriaException();
 		}
 		return $this->protocol[$id];
+	}
+
+	/**
+	 * Get a unit's workload.
+	 */
+	public function getWorkload(Unit $unit): Workload {
+		$id = $unit->Id()->Id();
+		if (!isset($this->workload[$id])) {
+			$this->workload[$id] = new Workload();
+		}
+		return $this->workload[$id];
+	}
+
+	/**
+	 * @return Commerce[]
+	 */
+	public function getAllCommerces(): array {
+		return array_values($this->commerce);
 	}
 
 	public function setProtocol(ActivityProtocol $protocol): void {

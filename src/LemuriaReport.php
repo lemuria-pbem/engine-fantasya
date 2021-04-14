@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Exception\NotRegisteredException;
 use Lemuria\Engine\Fantasya\Message\Exception\DuplicateMessageException;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
@@ -64,7 +66,7 @@ class LemuriaReport implements Reassignment, Report
 	 *
 	 * @return Message[]
 	 */
-	public function getAll(Identifiable $entity): array {
+	#[Pure] public function getAll(Identifiable $entity): array {
 		$namespace = $entity->Catalog();
 		$id        = $entity->Id()->Id();
 		if (!isset($this->report[$namespace][$id])) {

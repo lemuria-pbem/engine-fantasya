@@ -10,6 +10,11 @@ use Lemuria\Engine\Fantasya\Command\UnitCommand;
 interface Activity
 {
 	/**
+	 * Get the activity class.
+	 */
+	public function Activity(): string;
+
+	/**
 	 * Get the new default command.
 	 */
 	public function getNewDefault(): ?UnitCommand;

@@ -116,12 +116,14 @@ class ResourcePool
 			return $quantity;
 		}
 		if ($available > 0) {
-			$addition = new Quantity($commodity, $available);
-			$demand   -= $available;
-			Lemuria::Log()->debug('Unit ' . $id . ' can only cover ' . $addition . ' of demand.');
+			$reservation = new Quantity($commodity, $available);
+			$reservations->add($reservation);
+			$demand -= $available;
+			Lemuria::Log()->debug('Unit ' . $id . ' can only cover ' . $reservation . ' of demand.');
 		} else {
-			$addition = new Quantity($commodity, 0);
+			$reservation = new Quantity($commodity, 0);
 		}
+		$addition = new Quantity($commodity, 0);
 
 		foreach ($this->units as $next/* @var Unit $next */) {
 			if ($next === $unit) {
@@ -151,11 +153,12 @@ class ResourcePool
 		if ($addition->Count() <= 0) {
 			Lemuria::Log()->debug('Unit ' . $id . ' cannot reserve any ' . $commodity . ' from other units.');
 		} else {
+			$reservation->add($addition);
 			$inventory->add($addition);
 			$reservations->add($addition);
 			Lemuria::Log()->debug('Unit ' . $id . ' has reserved ' . $reservations->offsetGet($commodity) . ' now.');
 		}
-		return $addition;
+		return $reservation;
 	}
 
 	/**

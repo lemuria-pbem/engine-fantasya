@@ -27,4 +27,16 @@ class CommodityExperienceMessage extends AbstractUnitMessage
 		$this->talent = $message->getSingleton(self::TALENT);
 		$this->artifact = $message->getSingleton(self::ARTIFACT);
 	}
+
+	protected function getTranslation(string $name): string {
+		$talent = $this->talent($name, 'talent');
+		if ($talent) {
+			return $talent;
+		}
+		$artifact = $this->commodity($name, 'artifact');
+		if ($artifact) {
+			return $artifact;
+		}
+		return parent::getTranslation($name);
+	}
 }

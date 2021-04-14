@@ -16,9 +16,6 @@ class Phrase implements \Countable, \Stringable
 	 */
 	protected array $parts = [];
 
-	/**
-	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
-	 */
 	#[Pure] public function __construct(string $command) {
 		foreach (explode(' ', $command) as $part) {
 			$part = trim($part);

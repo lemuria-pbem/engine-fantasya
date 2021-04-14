@@ -3,6 +3,9 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
+use Lemuria\Engine\Fantasya\Command\Announcement;
+use Lemuria\Engine\Fantasya\Command\Banner;
+use Lemuria\Engine\Fantasya\Command\Buy;
 use Lemuria\Engine\Fantasya\Command\Comment;
 use Lemuria\Engine\Fantasya\Command\Contact;
 use Lemuria\Engine\Fantasya\Command\Create;
@@ -28,6 +31,7 @@ use Lemuria\Engine\Fantasya\Command\Origin;
 use Lemuria\Engine\Fantasya\Command\Party;
 use Lemuria\Engine\Fantasya\Command\Recruit;
 use Lemuria\Engine\Fantasya\Command\Reserve;
+use Lemuria\Engine\Fantasya\Command\Sell;
 use Lemuria\Engine\Fantasya\Command\Sentinel;
 use Lemuria\Engine\Fantasya\Command\Sort;
 use Lemuria\Engine\Fantasya\Command\Tax;
@@ -134,6 +138,7 @@ class CommandFactory
 	 */
 	protected array $verbs = [
 		'//'           => 'KOMMENTAR',
+		'BANNER'       => true,
 		'BENENNEN'     => 'NAME',
 		'BESCHREIBEN'  => 'BESCHREIBUNG',
 		'BESCHREIBUNG' => true,
@@ -143,6 +148,7 @@ class CommandFactory
 		'BETRETEN'     => true,
 		'BEWACHEN'     => true,
 		'BEWACHUNG'    => 'BEWACHEN',
+		'BOTSCHAFT'    => true,
 		'DEFAULT'      => 'VORLAGE',
 		'EINHEIT'      => true,
 		'EINTREIBEN'   => 'TREIBEN',
@@ -157,6 +163,7 @@ class CommandFactory
 		'ID'           => 'NUMMER',
 		'KAMPF'        => 'KÄMPFEN',
 		'KAEMPFEN'     => 'KÄMPFEN',
+		'KAUFEN'       => true,
 		'KÄMPFEN'      => true,
 		'KOMMANDO'     => true,
 		'KOMMENTAR'    => true,
@@ -193,6 +200,7 @@ class CommandFactory
 		'URSPRUNG'     => true,
 		'ÜBERGEBEN'    => 'GIB',
 		'UEBERGEBEN'   => 'GIB',
+		'VERKAUFEN'    => true,
 		'VERLASSEN'    => true,
 		'VERLIEREN'    => true,
 		'VORLAGE'      => true,
@@ -246,14 +254,14 @@ class CommandFactory
 		'Kriegshammer'  => Warhammer::class,
 		'Kriegshaemmer' => Warhammer::class,
 		'Kriegshämmer'  => Warhammer::class,
-		'Myrrhe'        => Myrrh::class,
+		'Myrrhen'       => Myrrh::class,
 		'Oele'          => Oil::class,
 		'Öle'           => Oil::class,
 		'Pelze'         => Fur::class,
 		'Pferde'        => Horse::class,
 		'Plattenpanzer' => Armor::class,
 		'Schwerter'     => Sword::class,
-		'Seide'         => Silk::class,
+		'Seiden'        => Silk::class,
 		'Silber'        => Silver::class,
 		'Speere'        => Spear::class,
 		'Steine'        => Stone::class,
@@ -369,15 +377,18 @@ class CommandFactory
 		$verb = $this->identifyVerb($phrase->getVerb());
 		try {
 			$command = match ($verb) {
+				'BANNER'       => Banner::class,
 				'BESCHREIBUNG' => Describe::class,
 				'BESTEIGEN'    => Board::class,
 				'BETRETEN'     => Trespass::class,
 				'BEWACHEN'     => Sentinel::class,
+				'BOTSCHAFT'    => Announcement::class,
 				'EINHEIT'      => Unit::class,
 				'ENDE'         => End::class,
 				'ENTLASSEN'    => Dismiss::class,
 				'GIB'          => Handover::class,
 				'HELFEN'       => Help::class,
+				'KAUFEN'       => Buy::class,
 				'KÄMPFEN'      => Fight::class,
 				'KOMMANDO'     => Grant::class,
 				'KOMMENTAR'    => Comment::class,
@@ -400,6 +411,7 @@ class CommandFactory
 				'TREIBEN'      => Tax::class,
 				'UNTERHALTEN'  => Entertain::class,
 				'URSPRUNG'     => Origin::class,
+				'VERKAUFEN'    => Sell::class,
 				'VERLASSEN'    => Leave::class,
 				'VERLIEREN'    => Lose::class,
 				'VORLAGE'      => DefaultCommand::class,
