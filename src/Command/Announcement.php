@@ -2,14 +2,20 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use JetBrains\PhpStorm\Pure;
+
+use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Message\Construction\AbstractConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\AnnouncementConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Party\AnnouncementNoPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Party\AnnouncementPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Region\AnnouncementRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementAnonymousMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementNoUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\AnnouncementVesselMessage;
+use Lemuria\Engine\Fantasya\Outlook;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Party;
@@ -62,31 +68,50 @@ final class Announcement extends UnitCommand
 	}
 
 	private function sendToUnit(Unit $unit, string $message): void {
-		$calculus = $this->context->getCalculus($unit);
-		if ($calculus->canDiscover($this->unit)) {
-			$sender = $this->unit->Name();
-			$this->message(AnnouncementUnitMessage::class, $unit)->p($message)->p($sender, AnnouncementUnitMessage::SENDER);
+		if ($unit->Region() === $this->unit->Region() && $this->calculus()->canDiscover($unit)) {
+			$calculus = $this->context->getCalculus($unit);
+			if ($calculus->canDiscover($this->unit)) {
+				$sender = $this->unit->Name();
+				$this->message(AnnouncementUnitMessage::class, $unit)->p($message)->p($sender, AnnouncementUnitMessage::SENDER);
+			} else {
+				$this->message(AnnouncementAnonymousMessage::class, $unit)->p($message);
+			}
 		} else {
-			$this->message(AnnouncementAnonymousMessage::class, $unit)->p($message);
+			$this->message(AnnouncementNoUnitMessage::class)->e($unit);
 		}
 	}
 
 	private function sendToParty(Party $party): void {
-		$message = $this->getMessage();
-		$sender  = $this->unit->Party()->Name();
-		$this->message(AnnouncementPartyMessage::class, $party)->p($message)->p($sender, AnnouncementConstructionMessage::SENDER);
+		$outlook = new Outlook(new Census($this->unit->Party()));
+		foreach ($outlook->Apparitions($this->unit->Region()) as $unit /* @var Unit $unit */) {
+			if ($unit->Party() === $party) {
+				$message = $this->getMessage();
+				$sender  = $this->unit->Party()->Name();
+				$this->message(AnnouncementPartyMessage::class, $party)->p($message)->p($sender, AnnouncementConstructionMessage::SENDER);
+				return;
+			}
+		}
+		$this->message(AnnouncementNoPartyMessage::class)->e($party);
 	}
 
 	private function sendToConstruction(Construction $construction): void {
-		$message = $this->getMessage();
-		$sender  = $this->unit->Party()->Name();
-		$this->message(AbstractConstructionMessage::class, $construction)->p($message)->p($sender, AnnouncementConstructionMessage::SENDER);
+		if ($construction->Region() === $this->unit->Region()) {
+			$message = $this->getMessage();
+			$sender  = $this->unit->Party()->Name();
+			$this->message(AbstractConstructionMessage::class, $construction)->p($message)->p($sender, AnnouncementConstructionMessage::SENDER);
+		} else {
+			$this->message(AnnouncementConstructionMessage::class)->e($construction);
+		}
 	}
 
 	private function sendToVessel(Vessel $vessel): void {
-		$message = $this->getMessage();
-		$sender  = $this->unit->Party()->Name();
-		$this->message(AnnouncementVesselMessage::class, $vessel)->p($message)->p($sender, AnnouncementVesselMessage::SENDER);
+		if ($vessel->Region() === $this->unit->Region()) {
+			$message = $this->getMessage();
+			$sender  = $this->unit->Party()->Name();
+			$this->message(AnnouncementVesselMessage::class, $vessel)->p($message)->p($sender, AnnouncementVesselMessage::SENDER);
+		} else {
+			$this->message(AnnouncementVesselMessage::class)->e($vessel);
+		}
 	}
 
 	private function sendToRegion(): void {
@@ -96,7 +121,7 @@ final class Announcement extends UnitCommand
 		$this->message(AnnouncementRegionMessage::class, $region)->p($message)->p($sender, AnnouncementRegionMessage::SENDER);
 	}
 
-	private function getMessage(int $i = 3): string {
+	#[Pure] private function getMessage(int $i = 3): string {
 		$message = $this->phrase->getLine($i);
 		return trim($message, "\"'\t ");
 	}
