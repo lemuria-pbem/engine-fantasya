@@ -32,6 +32,34 @@ class Supply implements \Countable
 		$this->step     = $this->peasants / 100.0;
 	}
 
+	/**
+	 * Get the current Luxury.
+	 *
+	 * @throws LemuriaException
+	 */
+	public function Luxury(): Luxury {
+		if (!$this->luxury) {
+			throw new LemuriaException('The Luxury has not been set.');
+		}
+		return $this->luxury;
+	}
+
+	/**
+	 * Get the current price of the Luxury.
+	 *
+	 * @throws LemuriaException
+	 */
+	public function Price(): int {
+		if (!$this->luxury) {
+			throw new LemuriaException('The Luxury has not been set.');
+		}
+		$factor = (int)floor($this->count / $this->step);
+		if ($this->isOffer) {
+			return ($factor + 1) * $this->luxury->Value();
+		}
+		return $this->offer->Price() - $factor * $this->luxury->Value();
+	}
+
 	public function count(): int {
 		return $this->max;
 	}

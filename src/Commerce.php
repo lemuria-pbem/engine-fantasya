@@ -58,6 +58,10 @@ final class Commerce
 		$this->silver   = self::createCommodity(Silver::class);
 	}
 
+	#[Pure] public function Region(): Region {
+		return $this->region;
+	}
+
 	public function getWorkload(Unit $unit): Workload {
 		return State::getInstance()->getWorkload($unit);
 	}
@@ -100,8 +104,15 @@ final class Commerce
 		}
 	}
 
-	#[Pure] private function Region(): Region {
-		return $this->region;
+	/**
+	 * @return Supply[]
+	 */
+	public function getSupplies(): array {
+		$supplies = [];
+		foreach ($this->goods as $data) {
+			$supplies[] = $data['supply'];
+		}
+		return $supplies;
 	}
 
 	/**

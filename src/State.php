@@ -116,6 +116,13 @@ final class State
 		return $this->workload[$id];
 	}
 
+	/**
+	 * @return Commerce[]
+	 */
+	public function getAllCommerces(): array {
+		return array_values($this->commerce);
+	}
+
 	public function setProtocol(ActivityProtocol $protocol): void {
 		$this->protocol[$protocol->Unit()->Id()->Id()] = $protocol;
 	}

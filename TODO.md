@@ -4,20 +4,20 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
+- Preise der Luxusgüter in Reporten anzeigen
 
 ## Neue Funktionen
 
-### 0.2.0
+### Version 0.2
 
-- Angebot und Nachfrage ändern den Preis
 - BOTSCHAFT
 
-### 0.3.0
+### Version 0.3
 
 - Straßen (Modell, Bau, Abriss, Reisen)
 - ROUTE
 
-### 0.4.0 und folgende
+### Version 0.4 und folgende
 
 - Insel/Kontinent benennen
 - SPIONIEREN
