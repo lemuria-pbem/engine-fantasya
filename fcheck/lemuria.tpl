@@ -18,6 +18,10 @@
 
 ^(bew|bewa|bewac|bewach|bewache|bewachen|bewachu|bewachun|bewachung)( +nicht)?$
 
+^(bo|bot|bots|botsc|botsch|botscha|botschaf|botschaft) +(einheit +)?[a-z0-9]{1,6} +.+$
+^(bo|bot|bots|botsc|botsch|botscha|botschaf|botschaft) +region +.+$
+^(bo|bot|bots|botsc|botsch|botscha|botschaf|botschaft) +(burg|gebäude|gebaeude|partei|schiff) +[a-z0-9]{1,6} +.+$
+
 ^(einh|einhe|einheit) +[a-z0-9]{1,6}$
 
 ^(end|ende)$
