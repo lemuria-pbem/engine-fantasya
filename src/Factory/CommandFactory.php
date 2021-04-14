@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
+use Lemuria\Engine\Fantasya\Command\Announcement;
 use Lemuria\Engine\Fantasya\Command\Banner;
 use Lemuria\Engine\Fantasya\Command\Buy;
 use Lemuria\Engine\Fantasya\Command\Comment;
@@ -147,6 +148,7 @@ class CommandFactory
 		'BETRETEN'     => true,
 		'BEWACHEN'     => true,
 		'BEWACHUNG'    => 'BEWACHEN',
+		'BOTSCHAFT'    => true,
 		'DEFAULT'      => 'VORLAGE',
 		'EINHEIT'      => true,
 		'EINTREIBEN'   => 'TREIBEN',
@@ -380,6 +382,7 @@ class CommandFactory
 				'BESTEIGEN'    => Board::class,
 				'BETRETEN'     => Trespass::class,
 				'BEWACHEN'     => Sentinel::class,
+				'BOTSCHAFT'    => Announcement::class,
 				'EINHEIT'      => Unit::class,
 				'ENDE'         => End::class,
 				'ENTLASSEN'    => Dismiss::class,

@@ -4,13 +4,11 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- Preise der Luxusgüter in Reporten anzeigen
 
 ## Neue Funktionen
 
 ### Version 0.2
 
-- BOTSCHAFT
 
 ### Version 0.3
 

@@ -31,7 +31,7 @@ final class CommandPriority
 		'Fight'          => 16,
 		'Help'           => 19,
 		'Contact'        => 22,
-		// BOTSCHAFT => 25,
+		'Announcement'   => 25,
 		'Enter'          => 28,
 		'Board'          => 29,
 		'Grant'          => 31,
