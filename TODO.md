@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- NewcomerConfig für Webseite
 
 ## Neue Funktionen
 
