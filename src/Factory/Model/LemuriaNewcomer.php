@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
 use JetBrains\PhpStorm\ArrayShape;
+use Ramsey\Uuid\Uuid;
 
 use function Lemuria\getClass;
 use Lemuria\Engine\Newcomer;
@@ -37,6 +38,7 @@ class LemuriaNewcomer implements Newcomer, Serializable
 	private Resources $inventory;
 
 	public function __construct() {
+		$this->uuid      = Uuid::uuid4()->toString();
 		$this->creation  = time();
 		$this->inventory = new Resources();
 	}
