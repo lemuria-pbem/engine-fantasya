@@ -22,6 +22,7 @@ use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Commodity\Stone;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
 use Lemuria\Model\Fantasya\Commodity\Wood;
@@ -98,7 +99,7 @@ final class Initiate implements Command
 		Dwarf::class    => [Battleaxe::class => 1, Armor::class => 1, Ironshield::class => 1],
 		Elf::class      => [Bow::class => 1, Mail::class => 1],
 		Halfling::class => [Spear::class => 1, Mail::class => 1],
-		Human::class    => [Crossbowing::class => 1, Mail::class => 1],
+		Human::class    => [Crossbow::class => 1, Mail::class => 1],
 		Orc::class      => [Sword::class => 1, Armor::class => 1, Woodshield::class => 1],
 		Troll::class    => [Sword::class => 1, Armor::class => 1, Ironshield::class => 1]
 	];
