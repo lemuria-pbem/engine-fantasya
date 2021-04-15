@@ -9,7 +9,7 @@ use Lemuria\Model\Fantasya\Storage\JsonProvider;
 
 class LemuriaGame extends JsonGame
 {
-	private const GAME_DIR = 'game';
+	protected const GAME_DIR = 'game';
 
 	private const STRINGS_DIR = __DIR__ . '/../../resources';
 
