@@ -10,6 +10,6 @@ use Lemuria\Model\Game;
 class NewcomerConfig extends LemuriaConfig
 {
 	public function Game(): Game {
-		return new LemuriaGame($this);
+		return new NewcomerGame($this);
 	}
 }

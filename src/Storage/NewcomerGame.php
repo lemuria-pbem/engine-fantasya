@@ -22,7 +22,7 @@ class NewcomerGame extends LemuriaGame
 	 */
 	#[ArrayShape([JsonProvider::DEFAULT => '\Lemuria\Storage\NullProvider', self::NEWCOMERS_FILE => '\Lemuria\Model\Fantasya\Storage\JsonProvider'])]
 	protected function getSaveStorage(): array {
-		$round               = $this->config[LemuriaConfig::ROUND];
+		$round               = $this->config[NewcomerConfig::ROUND];
 		$path                = $this->config->getStoragePath() . DIRECTORY_SEPARATOR . self::GAME_DIR . DIRECTORY_SEPARATOR . $round;
 		$this->writeProvider = new JsonProvider($path);
 		return [JsonProvider::DEFAULT => new NullProvider(''), self::NEWCOMERS_FILE => $this->writeProvider];
