@@ -14,6 +14,19 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Ability;
+use Lemuria\Model\Fantasya\Commodity\Armor;
+use Lemuria\Model\Fantasya\Commodity\Iron;
+use Lemuria\Model\Fantasya\Commodity\Ironshield;
+use Lemuria\Model\Fantasya\Commodity\Mail;
+use Lemuria\Model\Fantasya\Commodity\Silver;
+use Lemuria\Model\Fantasya\Commodity\Stone;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
+use Lemuria\Model\Fantasya\Commodity\Wood;
+use Lemuria\Model\Fantasya\Commodity\Woodshield;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Landscape\Desert;
 use Lemuria\Model\Fantasya\Landscape\Forest;
@@ -79,6 +92,18 @@ final class Initiate implements Command
 		Troll::class    => [Quarrying::class => 12, Stamina::class => 8, Bladefighting::class => 5]
 	];
 
+	private const EVERYONE = [Silver::class => 10000, Wood::class => 500, Stone::class => 500, Iron::class => 500];
+
+	private const INVENTORY = [
+		Aquan::class    => [Spear::class => 1, Mail::class => 1, Woodshield::class => 1],
+		Dwarf::class    => [Battleaxe::class => 1, Armor::class => 1, Ironshield::class => 1],
+		Elf::class      => [Bow::class => 1, Mail::class => 1],
+		Halfling::class => [Spear::class => 1, Mail::class => 1],
+		Human::class    => [Crossbow::class => 1, Mail::class => 1],
+		Orc::class      => [Sword::class => 1, Armor::class => 1, Woodshield::class => 1],
+		Troll::class    => [Sword::class => 1, Armor::class => 1, Ironshield::class => 1]
+	];
+
 	use ActionTrait;
 	use BuilderTrait;
 
@@ -131,8 +156,17 @@ final class Initiate implements Command
 		$id   = Lemuria::Catalog()->nextId(Catalog::UNITS);
 		$unit->setId($id);
 		$unit->setSize(1)->setName('Einheit ' . $id)->setDescription('')->setRace($race);
-		foreach ($this->newcomer->Inventory() as $item /* @var Quantity $item */) {
-			$unit->Inventory()->add($item);
+		if ($this->newcomer->Inventory()->count()) {
+			foreach ($this->newcomer->Inventory() as $item/* @var Quantity $item */) {
+				$unit->Inventory()->add($item);
+			}
+		} else {
+			foreach (self::EVERYONE as $class => $count) {
+				$unit->Inventory()->add(new Quantity(self::createCommodity($class), $count));
+			}
+			foreach (self::INVENTORY[$race::class] as $class => $count) {
+				$unit->Inventory()->add(new Quantity(self::createCommodity($class), $count));
+			}
 		}
 		$this->addKnowledge($unit);
 
