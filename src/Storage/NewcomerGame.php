@@ -13,7 +13,7 @@ class NewcomerGame extends LemuriaGame
 
 	private JsonProvider $writeProvider;
 
-	public function __construct(protected NewcomerConfig $config) {
+	public function __construct(NewcomerConfig $config) {
 		parent::__construct($config);
 	}
 
