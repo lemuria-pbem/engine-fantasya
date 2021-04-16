@@ -11,6 +11,7 @@ use Lemuria\Engine\Fantasya\Message\Region\MarketUpdateOfferMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
+use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Offer;
 use Lemuria\Model\Fantasya\Region;
@@ -59,14 +60,21 @@ final class MarketUpdate extends AbstractEvent
 	protected function run(): void {
 		Lemuria::Log()->debug('Moving prices in all regions with a market.');
 		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region /* @var Region $region */) {
-			$luxuries = $region->Luxuries();
-			if ($luxuries) {
-				$this->modifyOffer($region, $luxuries->Offer());
-				foreach ($luxuries as $demand) {
-					$this->modifyDemand($region, $demand);
+			if ($this->hasMarket($region)) {
+				$luxuries = $region->Luxuries();
+				if ($luxuries) {
+					$this->modifyOffer($region, $luxuries->Offer());
+					foreach ($luxuries as $demand) {
+						$this->modifyDemand($region, $demand);
+					}
 				}
 			}
 		}
+	}
+
+	private function hasMarket(Region $region): bool {
+		$castle = $this->context->getIntelligence($region)->getGovernment();
+		return $castle?->Size() > Site::MAX_SIZE;
 	}
 
 	private function modifyOffer(Region $region, Offer $offer): void {
