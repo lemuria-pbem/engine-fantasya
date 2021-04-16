@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\BuyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BuyNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BuyOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\CommerceNotPossibleMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Quantity;
@@ -27,6 +28,11 @@ final class Buy extends CommerceCommand
 
 	public function execute(): Action {
 		parent::execute();
+		if (!$this->isTradePossible()) {
+			$this->message(CommerceNotPossibleMessage::class)->e($this->unit->Region());
+			return $this;
+		}
+
 		if ($this->demand > 0) {
 			if ($this->count < $this->demand) {
 				$this->message(BuyOnlyMessage::class)->i($this->goods())->i($this->cost(), BuyOnlyMessage::PAYMENT);

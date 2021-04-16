@@ -101,6 +101,7 @@
 		"BuyNoneMessage": "Die Einheit $id kann nur $goods für $payment von den Bauern erwerben.",
 		"BuyOnlyMessage": "Die Einheit $id kann keine $goods von den Bauern erwerben.",
 		"CommentMessage": "Kommentar für Einheit $id: $comment",
+		"CommerceNotPossibleMessage": "Die Einheit $id kann in der Region $region keinen Handel treiben - es gibt hier keine Burg mit einem Markt.",
 		"CommodityCreateMessage": "Die Einheit $id produziert $output mit $talent.",
 		"CommodityExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um {ein:$artifact} zu produzieren.",
 		"CommodityOnlyMessage": "Die Einheit $id kann nur $output mit $talent produzieren.",

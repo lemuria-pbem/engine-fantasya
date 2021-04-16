@@ -12,6 +12,7 @@ use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Party;
@@ -50,6 +51,8 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	protected Workload $trades;
 
 	protected Resources $traded;
+
+	private ?bool $isTradePossible = null;
 
 	private Commodity $commodity;
 
@@ -100,13 +103,17 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	 */
 	protected function initialize(): void {
 		parent::initialize();
-		$commerce     = $this->context->getCommerce($this->unit->Region());
-		$this->trades = $commerce->getWorkload($this->unit);
-		$this->createGoods();
-		if (count($this->goods)) {
-			$commerce->register($this);
+		if ($this->isTradePossible()) {
+			$commerce     = $this->context->getCommerce($this->unit->Region());
+			$this->trades = $commerce->getWorkload($this->unit);
+			$this->createGoods();
+			if (count($this->goods)) {
+				$commerce->register($this);
+			} else {
+				Lemuria::Log()->debug('Commerce registration skipped due to empty demand.', ['command' => $this]);
+			}
 		} else {
-			Lemuria::Log()->debug('Commerce registration skipped due to empty demand.', ['command' => $this]);
+			Lemuria::Log()->debug('Commerce disabled in this region - no castle here.');
 		}
 	}
 
@@ -165,6 +172,14 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 			$this->remaining = max(0, $this->maximum - $this->trades->count());
 		}
 		return $this->remaining;
+	}
+
+	protected function isTradePossible(): bool {
+		if ($this->isTradePossible === null) {
+			$castle                = $this->context->getIntelligence($this->unit->Region())->getGovernment();
+			$this->isTradePossible = $castle?->Size() > Site::MAX_SIZE;
+		}
+		return $this->isTradePossible;
 	}
 
 	protected function goods(): Quantity {
