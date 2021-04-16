@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
+use Lemuria\Engine\Fantasya\Factory\MarketBuilder;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionBuildMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionCreateMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionExperienceMessage;
@@ -15,7 +16,9 @@ use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\AbstractCastle;
 use Lemuria\Model\Fantasya\Building\Castle;
+use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Construction as ConstructionModel;
+use Lemuria\Model\Fantasya\Luxuries;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Requirement;
 
@@ -32,6 +35,16 @@ use Lemuria\Model\Fantasya\Requirement;
 final class Construction extends AbstractProduct
 {
 	private int $size;
+
+	private bool $hasMarket = false;
+
+	protected function initialize(): void {
+		parent::initialize();
+		$castle = $this->context->getIntelligence($this->unit->Region())->getGovernment();
+		if ($castle->Size() > Site::MAX_SIZE) {
+			$this->hasMarket = true;
+		}
+	}
 
 	protected function run(): void {
 		$construction     = $this->unit->Construction();
@@ -69,6 +82,7 @@ final class Construction extends AbstractProduct
 					$this->message(ConstructionMessage::class)->s($construction->Building());
 				}
 			}
+			$this->initializeMarket($construction);
 		} else {
 			if ($this->capability > 0) {
 				if ($construction) {
@@ -136,5 +150,17 @@ final class Construction extends AbstractProduct
 			return $resource;
 		}
 		throw new LemuriaException('Expected a building resource.');
+	}
+
+	private function initializeMarket(ConstructionModel $construction): void {
+		if ($this->hasMarket) {
+			return;
+		}
+		if ($construction->Building() instanceof Castle && $construction->Size() > Site::MAX_SIZE) {
+			$region        = $construction->Region();
+			$marketBuilder = new MarketBuilder($this->context->getIntelligence($region));
+			$marketBuilder->initPrices();
+			Lemuria::Log()->debug('Market opens the first time in region ' . $region . ' - prices have been initialized.');
+		}
 	}
 }
