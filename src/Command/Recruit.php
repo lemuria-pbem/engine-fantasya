@@ -11,6 +11,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\RecruitLessMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitPaymentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitTooExpensiveMessage;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Silver;
@@ -79,6 +80,18 @@ final class Recruit extends AllocationCommand
 		if (!$size) {
 			throw new InvalidCommandException('Invalid size "' . $size . '".');
 		}
+
+		$construction = $this->unit->Construction();
+		if ($construction) {
+			$space = $construction->Size();
+			$used  = $construction->Inhabitants()->count();
+			$free  = max(0, $space - $used);
+			if ($free < $size) {
+				$size = $free;
+				Lemuria::Log()->debug('Number of recruits reduced to ' . $free . '.');
+			}
+		}
+
 		$this->size = $size;
 		$peasant    = self::createCommodity(Peasant::class);
 		$this->resources->add(new Quantity($peasant, $size));
