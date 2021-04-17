@@ -358,6 +358,7 @@
 		"TravelNotCaptainMessage": "Die Einheit $id muss der Kapitän des Schiffes $vessel sein, um es zu steuern.",
 		"TravelOverLandMessage": "Das Schiff $id kann sich nicht über Land nach $direction bewegen.",
 		"TravelRegionMessage": "Die Einheit $id bewegt sich in die Region $region.",
+		"TravelRoadMessage": "Die Einheit $id ist über eine Straße gereist und kann sich eine Region weiter bewegen.",
 		"TravelShipTooHeavyMessage": "Das Schiff $id ist zu schwer, um sich zu bewegen.",
 		"TravelSpeedMessage": "Die Einheit $id kann sich {$speed:Region} bewegen (Gewicht: $weight).",
 		"TravelTooHeayMessage": "Die Einheit $id ist zu schwer, um sich zu bewegen.",

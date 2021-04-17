@@ -8,37 +8,21 @@ use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\NavigationTrait;
-use Lemuria\Engine\Fantasya\Factory\Workload;
-use Lemuria\Engine\Fantasya\Message\Construction\LeaveNewOwnerMessage;
-use Lemuria\Engine\Fantasya\Message\Construction\LeaveNoOwnerMessage;
+use Lemuria\Engine\Fantasya\Factory\TravelTrait;
 use Lemuria\Engine\Fantasya\Message\Party\TravelGuardMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardedMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoChaosMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoOceanMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\TravelNeighbourMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNoCrewMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNoNavigationMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNotCaptainMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelRoadMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelSpeedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelTooHeayMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelRegionMessage;
-use Lemuria\Engine\Fantasya\Message\Vessel\TravelAnchorMessage;
-use Lemuria\Engine\Fantasya\Message\Vessel\TravelLandMessage;
-use Lemuria\Engine\Fantasya\Message\Vessel\TravelOverLandMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelShipTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Phrase;
-use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Landscape\Ocean;
-use Lemuria\Model\Fantasya\Party;
-use Lemuria\Model\Fantasya\Region;
-use Lemuria\Model\Fantasya\Relation;
-use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Navigation;
-use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Model\Fantasya\Vessel;
 
 /**
  * Implementation of command REISEN (travel).
@@ -49,12 +33,7 @@ final class Travel extends UnitCommand implements Activity
 {
 	use ModifiedActivityTrait;
 	use NavigationTrait;
-
-	private ?Vessel $vessel = null;
-
-	private Capacity $capacity;
-
-	private Workload $workload;
+	use TravelTrait;
 
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
@@ -102,6 +81,7 @@ final class Travel extends UnitCommand implements Activity
 				$movement = Capacity::WALK;
 			}
 		}
+		$this->setRoadsLeft($movement);
 
 		$route   = [$this->unit->Region()];
 		$i       = 0;
@@ -112,10 +92,17 @@ final class Travel extends UnitCommand implements Activity
 				$direction = $this->context->Factory()->direction($this->phrase->getParameter(++$i));
 				$region = $this->canMoveTo($direction);
 				if ($region) {
+					$overRoad = $this->overRoad($this->unit->Region(), $direction, $region);
 					$this->moveTo($region);
 					$this->message(TravelRegionMessage::class)->e($region);
 					$route[] = $region;
-					$regions--;
+
+					if ($overRoad && $this->roadsLeft > 0) {
+						$this->message(TravelRoadMessage::class);
+					} else {
+						$regions--;
+					}
+
 					$this->workload->add();
 					$guards = $this->unitIsStoppedByGuards($region);
 					if ($guards) {
@@ -144,80 +131,6 @@ final class Travel extends UnitCommand implements Activity
 		}
 	}
 
-	protected function canMoveTo(string $direction): ?Region {
-		$region = $this->unit->Region();
-		/** @var Region $neighbour */
-		$neighbour = Lemuria::World()->getNeighbours($region)[$direction] ?? null;
-		if (!$neighbour) {
-			$this->message(TravelIntoChaosMessage::class)->p($direction);
-			return null;
-		}
-		$landscape = $neighbour->Landscape();
-
-		if ($this->capacity->Movement() === Capacity::SHIP) {
-			$anchor = $this->vessel->Anchor();
-			if ($anchor !== Vessel::IN_DOCK) {
-				if ($direction !== $anchor) {
-					$this->message(TravelAnchorMessage::class)->p($direction)->p($anchor, TravelAnchorMessage::ANCHOR);
-					return null;
-				}
-			}
-			if ($landscape instanceof Ocean) {
-				$this->message(TravelNeighbourMessage::class)->p($direction)->s($landscape)->e($neighbour);
-				return $neighbour;
-			}
-			if ($region->Landscape() instanceof Ocean) {
-				if (!$this->canSailTo($landscape)) {
-					$this->message(TravelLandMessage::class, $this->vessel)->p($direction)->s($landscape)->e($neighbour);
-					return null;
-				}
-				$this->message(TravelNeighbourMessage::class)->p($direction)->s($landscape)->e($neighbour);
-				return $neighbour;
-			}
-			$this->message(TravelOverLandMessage::class, $this->vessel)->p($direction);
-			return null;
-		}
-
-		if ($this->capacity->Movement() === Capacity::FLY) {
-			$this->message(TravelNeighbourMessage::class)->p($direction)->s($landscape)->e($neighbour);
-			return $neighbour;
-		}
-
-		if ($landscape instanceof Ocean) {
-			$this->message(TravelIntoOceanMessage::class)->p($direction);
-			return null;
-		}
-		$this->message(TravelNeighbourMessage::class)->p($direction)->s($landscape)->e($neighbour);
-		return $neighbour;
-	}
-
-	protected function moveTo(Region $destination): void {
-		$region = $this->unit->Region();
-
-		$construction = $this->unit->Construction();
-		if ($construction) {
-			$isOwner = $construction->Inhabitants()->Owner() === $this->unit;
-			$construction->Inhabitants()->remove($this->unit);
-			$this->message(LeaveConstructionDebugMessage::class)->e($construction);
-			if ($isOwner) {
-				$owner = $construction->Inhabitants()->Owner();
-				if ($owner) {
-					$this->message(LeaveNewOwnerMessage::class, $construction)->e($owner);
-				} else {
-					$this->message(LeaveNoOwnerMessage::class, $construction);
-				}
-			}
-		}
-
-		if ($this->vessel) {
-			$this->moveVessel($destination);
-		} else {
-			$region->Residents()->remove($this->unit);
-			$destination->Residents()->add($this->unit);
-			$this->unit->Party()->Chronicle()->add($region);
-		}
-	}
-
 	protected function setDefaultTravel(int $i, int $n): void {
 		if ($i < $n) {
 			$travel = $this->phrase->getVerb();
@@ -228,29 +141,5 @@ final class Travel extends UnitCommand implements Activity
 			$command          = $this->context->Factory()->create(new Phrase($travel));
 			$this->newDefault = $command;
 		}
-	}
-
-	/**
-	 * @return Party[]
-	 */
-	protected function unitIsStoppedByGuards(Region $region): array {
-		$guards       = [];
-		$intelligence = $this->context->getIntelligence($region);
-		$camouflage   = $this->calculus()->knowledge(Camouflage::class)->Level();
-		foreach ($intelligence->getGuards() as $guard /* @var Unit $guard */) {
-			$guardParty = $guard->Party();
-			if ($guardParty !== $this->unit->Party()) {
-				if (!$guardParty->Diplomacy()->has(Relation::GUARD, $this->unit)) {
-					if ($region instanceof Ocean) {
-						$guards[$guardParty->Id()->Id()] = $guardParty;
-					}
-					$perception = $this->context->getCalculus($guard)->knowledge(Perception::class)->Level();
-					if ($perception >= $camouflage) {
-						$guards[$guardParty->Id()->Id()] = $guardParty;
-					}
-				}
-			}
-		}
-		return $guards;
 	}
 }
