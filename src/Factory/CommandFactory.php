@@ -74,6 +74,7 @@ use Lemuria\Model\Fantasya\Commodity\Luxury\Olibanum;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Silk;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Spice;
 use Lemuria\Model\Fantasya\Commodity\Mail;
+use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Commodity\Stone;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
@@ -365,6 +366,10 @@ class CommandFactory
 		'Westen'         => World::WEST
 	];
 
+	protected array $person = [
+		'Personen' => Peasant::class
+	];
+
 	public function __construct(protected Context $context) {
 	}
 
@@ -421,6 +426,10 @@ class CommandFactory
 		} catch (\UnhandledMatchError) {
 			throw new UnknownCommandException($phrase);
 		}
+	}
+
+	public function isPerson(string $person): bool {
+		return (bool)$this->getCandidate($person, $this->person);
 	}
 
 	/**

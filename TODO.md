@@ -10,6 +10,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ### Version 0.3
 
 - Straßen (Modell, Bau, Abriss, Reisen)
+- Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
+  Meldungen
 - ROUTE
 
 ### Version 0.4 und folgende
@@ -22,8 +24,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Magie (KAMPFZAUBER/ZAUBERN)
 - Alchemie (Kräuter und Tränke, BENUTZEN)
 - Monster, besondere Gegenstände wie Greifeneier
-- Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
-  Meldungen
 - Regeldatei für Magellan
 
 ## Ideen

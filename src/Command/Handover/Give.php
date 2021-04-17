@@ -10,8 +10,15 @@ use Lemuria\Engine\Fantasya\Factory\Model\Everything;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveNoInventoryMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveFailedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GiveNoPersonsMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveNotFoundMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GivePersonsMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GivePersonsNoSpaceMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GivePersonsOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GivePersonsReceivedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GivePersonsToOwnMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveRejectedMessage;
+use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Quantity;
 
@@ -41,6 +48,11 @@ final class Give extends UnitCommand
 		}
 		if ($this->recipient->Region() !== $this->unit->Region()) {
 			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
+			return;
+		}
+
+		if ($this->context->Factory()->isPerson($commodity)) {
+			$this->givePersons((int)$count);
 			return;
 		}
 
@@ -113,5 +125,64 @@ final class Give extends UnitCommand
 	private function giveOnly(Quantity $gift): void {
 		$this->recipient->Inventory()->add($gift);
 		$this->message(GiveMessage::class)->e($this->recipient)->i($gift);
+	}
+
+	/**
+	 * Transfer persons to own unit.
+	 */
+	private function givePersons(int $count): void {
+		if ($this->recipient->Party() !== $this->unit->Party()) {
+			$this->message(GivePersonsToOwnMessage::class);
+			return;
+		}
+		$fromSize = $this->unit->Size();
+		if ($count <= 0 || $fromSize <= 0) {
+			$this->message(GiveNoPersonsMessage::class);
+			return;
+		}
+		$amount = min($count, $fromSize);
+		if ($this->recipient->Construction() && !$this->unit->Construction()) {
+			$construction = $this->recipient->Construction();
+			$used         = $construction->Inhabitants()->count();
+			$free         = $construction->Size() - $used;
+			if ($free <= 0) {
+				$this->message(GivePersonsNoSpaceMessage::class)->e($this->recipient);
+				return;
+			}
+			$amount = min($amount, $free);
+		}
+
+		$toSize = $this->recipient->Size();
+		$this->unit->setSize($fromSize - $amount);
+		$this->recipient->setSize($toSize + $amount);
+		$this->mergeKnowledge($toSize, $amount);
+		if ($amount < $count) {
+			$this->message(GivePersonsOnlyMessage::class)->e($this->recipient)->p($amount);
+		} else {
+			$this->message(GivePersonsMessage::class)->e($this->recipient)->p($amount);
+		}
+		$this->message(GivePersonsReceivedMessage::class, $this->recipient)->e($this->unit)->p($amount);
+	}
+
+	private function mergeKnowledge(int $old, int $new): void {
+		$talents = [];
+		foreach ($this->recipient->Knowledge() as $class => $ability /* @var Ability $ability */) {
+			$talents[$class] = $old * $ability->Experience();
+		}
+		foreach ($this->unit->Knowledge() as $class => $ability /* @var Ability $ability */) {
+			if (isset($talents[$class])) {
+				$talents[$class] += $new * $ability->Experience();
+			} else {
+				$talents[$class] = $new * $ability->Experience();
+			}
+		}
+
+		$size      = $this->recipient->Size();
+		$knowledge = $this->recipient->Knowledge();
+		$knowledge->clear();
+		foreach ($talents as $class => $points) {
+			$average = (int)floor($points / $size);
+			$knowledge->add(new Ability(self::createTalent($class), $average));
+		}
 	}
 }
