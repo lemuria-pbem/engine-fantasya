@@ -11,19 +11,26 @@ use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashDamageConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashDamageVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashDestroyConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashDestroyRoadMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashDestroyVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashLeaveConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashLeaveVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashNoRoadMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashNoRoadToMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashNotConstructionMessageOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashNotInConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashNotInVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashNotVesselOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashRegainMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SmashRoadGuardedMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Id;
+use Lemuria\Model\Fantasya\Commodity\Stone;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Requirement;
 use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Fantasya\Talent\Roadmaking;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -34,13 +41,12 @@ use Lemuria\Model\Fantasya\Unit;
  *
  * - ZERSTÖREN Burg|Gebäude|Gebaeude <construction>
  * - ZERSTÖREN Schiff <vessel>
+ * - ZERSTÖREN Straße|Strasse <direction>
  */
 final class Smash extends UnitCommand implements Activity
 {
 	use ModifiedActivityTrait;
 	use WorkloadTrait;
-
-	private Id $id;
 
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
@@ -48,24 +54,32 @@ final class Smash extends UnitCommand implements Activity
 	}
 
 	protected function run(): void {
-		$this->id = Id::fromId($this->phrase->getParameter(2));
+		if ($this->phrase->count() !== 2) {
+			throw new UnknownCommandException($this);
+		}
+
+		$param = $this->phrase->getParameter(2);
 		switch (strtolower($this->phrase->getParameter())) {
 			case 'burg' :
 			case 'gebäude' :
 			case 'gebaeude' :
-				$this->destroyConstruction();
+				$this->destroyConstruction(Id::fromId($param));
 				break;
 			case 'schiff' :
-				$this->destroyVessel();
+				$this->destroyVessel(Id::fromId($param));
+				break;
+			case 'straße' :
+			case 'strasse' :
+				$this->destroyRoad($this->phrase->getParameter(2));
 				break;
 			default :
 				throw new UnknownCommandException($this);
 		}
 	}
 
-	private function destroyConstruction(): void {
+	private function destroyConstruction(Id $id): void {
 		$construction = $this->unit->Construction();
-		if (!$construction || $construction->Id()->Id() !== $this->id->Id()) {
+		if (!$construction || $construction->Id()->Id() !== $id->Id()) {
 			$this->message(SmashNotInConstructionMessage::class);
 			return;
 		}
@@ -97,9 +111,9 @@ final class Smash extends UnitCommand implements Activity
 		}
 	}
 
-	private function destroyVessel(): void {
+	private function destroyVessel(Id $id): void {
 		$vessel = $this->unit->Vessel();
-		if (!$vessel || $vessel->Id()->Id() !== $this->id->Id()) {
+		if (!$vessel || $vessel->Id()->Id() !== $id->Id()) {
 			$this->message(SmashNotInVesselMessage::class);
 			return;
 		}
@@ -129,6 +143,45 @@ final class Smash extends UnitCommand implements Activity
 			$this->message(SmashDamageVesselMessage::class)->e($vessel)->p($damage);
 		} else {
 			$this->message(SmashDestroyVesselMessage::class)->e($vessel);
+		}
+	}
+
+	private function destroyRoad(string $direction): void {
+		$direction  = $this->context->Factory()->direction($direction);
+		$region     = $this->unit->Region();
+		$landscape  = $region->Landscape();
+		$roadStones = $landscape->RoadStones();
+		if ($roadStones <= 0) {
+			$this->message(SmashNoRoadMessage::class)->e($region);
+			return;
+		}
+		$roads = $region->Roads();
+		if (!isset($roads[$direction])) {
+			$this->message(SmashNoRoadToMessage::class)->e($region)->p($direction);
+			return;
+		}
+		if ($this->getCheckByAgreement(Relation::GUARD)) {
+			$this->message(SmashRoadGuardedMessage::class)->e($region);
+			return;
+		}
+
+		$craft      = new Requirement(self::createTalent(Roadmaking::class));
+		$stone      = self::createCommodity(Stone::class);
+		$completion = $roads[$direction];
+		$size       = (int)round($completion * $roadStones);
+		$material   = new Resources();
+		$material->add(new Quantity($stone, 1));
+		$damage = $this->destroy($craft, $material, $size);
+		$this->addToWorkload($damage);
+		$remains = $size - $damage;
+		if ($remains > 0) {
+			$roads[$direction] = $remains / $roadStones;
+			$this->newDefault  = $this;
+			$regain            = new Quantity($stone, $damage);
+			$this->message(SmashDestroyRoadMessage::class)->e($region)->p($direction)->i($regain);
+		} else {
+			unset($roads[$direction]);
+			$this->message(SmashDestroyRoadMessage::class)->e($region)->p($direction);
 		}
 	}
 

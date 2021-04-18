@@ -2,14 +2,14 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
 use function Lemuria\isInt;
-
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command\Create\Resource;
+use Lemuria\Engine\Fantasya\Command\Create\Road;
 use Lemuria\Engine\Fantasya\Command\Create\Temp;
 use Lemuria\Engine\Fantasya\Command\Create\Unknown;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 
 /**
@@ -22,18 +22,23 @@ use Lemuria\Engine\Fantasya\Factory\Model\Job;
  * - MACHEN <amount> <Resource>
  * - MACHEN Temp
  * - MACHEN Temp <id>
+ * - MACHEN Straße|Strasse <direction> [<amount>]
  */
 final class Create extends DelegatedCommand
 {
 	protected function createDelegate(): Command {
-		if (count($this->phrase) > 2) {
+		if (count($this->phrase) > 3) {
 			throw new InvalidCommandException($this);
 		}
 
 		$param = $this->phrase->getParameter();
+		$upper = strtolower($param);
 		// MACHEN TEMP
-		if (strtoupper($param) === 'TEMP') {
+		if ($upper === 'temp') {
 			return new Temp($this->phrase, $this->context);
+		}
+		if ($upper === 'straße' || $upper === 'strasse') {
+			return new Road($this->phrase, $this->context);
 		}
 
 		// MACHEN <amount> <Ressource>
