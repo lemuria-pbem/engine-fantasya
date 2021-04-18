@@ -4,21 +4,21 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
+- BoardTooHeadyMessage entfernen
 
 ## Neue Funktionen
 
 ### Version 0.3
 
-- Straßen (Modell, Bau, Abriss, Reisen)
 - Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
   Meldungen
 - ROUTE
+- FOLGE
 
 ### Version 0.4 und folgende
 
 - Insel/Kontinent benennen
 - SPIONIEREN
-- FOLGE
 - STEHLEN
 - Kampf (ATTACKIEREN/BELAGERN)
 - Magie (KAMPFZAUBER/ZAUBERN)
