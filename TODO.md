@@ -4,12 +4,16 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
+- Report-Rendering vereinfachen
+- Regionsereignis für durchgereiste Einheiten
+- Regionsdetails für durchreiste Regionen anzeigen
 - BoardTooHeadyMessage entfernen
 
 ## Neue Funktionen
 
 ### Version 0.3
 
+- Straßen in Reporten anzeigen
 - Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
   Meldungen
 - ROUTE
