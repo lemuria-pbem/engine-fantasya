@@ -4,26 +4,32 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
+- BoardTooHeavyMessage entfernen
 
 ## Neue Funktionen
 
 ### Version 0.3
 
-- Straßen (Modell, Bau, Abriss, Reisen)
-- ROUTE
+- Straßen in Reporten anzeigen
+- Regionsereignis für durchgereiste Einheiten
+- Regionsdetails für durchreiste Regionen anzeigen
+  
+### Version 0.4
 
-### Version 0.4 und folgende
+- Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
+  Meldungen
+- ROUTE
+- FOLGE
+
+### Version 0.5 und folgende
 
 - Insel/Kontinent benennen
 - SPIONIEREN
-- FOLGE
 - STEHLEN
 - Kampf (ATTACKIEREN/BELAGERN)
 - Magie (KAMPFZAUBER/ZAUBERN)
 - Alchemie (Kräuter und Tränke, BENUTZEN)
 - Monster, besondere Gegenstände wie Greifeneier
-- Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
-  Meldungen
 - Regeldatei für Magellan
 
 ## Ideen

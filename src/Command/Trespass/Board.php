@@ -10,7 +10,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardNotFoundMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\BoardTooHeavyMessage;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Vessel;
@@ -39,10 +38,6 @@ final class Board extends UnitCommand
 		}
 
 		$newVessel = Vessel::get($id);
-		if ($newVessel->Space() < $this->unit->Weight()) {
-			$this->message(BoardTooHeavyMessage::class)->e($newVessel);
-			return;
-		}
 		if (!$this->checkPermission($newVessel)) {
 			$this->message(BoardDeniedMessage::class)->e($newVessel);
 			return;
