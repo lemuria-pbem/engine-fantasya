@@ -15,8 +15,8 @@ use Lemuria\Lemuria;
 final class Timer extends DelegatedEvent
 {
 	private const SCHEDULE = [
-		4 => [
-			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 20, FindWallet::SILVER => 4000]]
+		5 => [
+			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 34, FindWallet::SILVER => 4000]]
 		]
 	];
 
