@@ -11,20 +11,19 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ### Version 0.3
 
 - Regionsereignis für durchgereiste Einheiten
-- Regionsdetails für durchreiste Regionen anzeigen
+- Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
+  Meldungen
   
 ### Version 0.4
 
-- Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
-  Meldungen
 - ROUTE
 - FOLGE
+- SPIONIEREN
+- STEHLEN
 
 ### Version 0.5 und folgende
 
 - Insel/Kontinent benennen
-- SPIONIEREN
-- STEHLEN
 - Kampf (ATTACKIEREN/BELAGERN)
 - Magie (KAMPFZAUBER/ZAUBERN)
 - Alchemie (Kräuter und Tränke, BENUTZEN)
