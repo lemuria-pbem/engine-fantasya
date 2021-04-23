@@ -25,6 +25,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\SmashRegainMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashRoadGuardedMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Id;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Stone;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Relation;
@@ -107,6 +108,10 @@ final class Smash extends UnitCommand implements Activity
 			$this->newDefault = $this;
 			$this->message(SmashDamageConstructionMessage::class)->e($construction)->p($damage);
 		} else {
+			Lemuria::Catalog()->reassign($construction);
+			$construction->Inhabitants()->remove($this->unit);
+			$construction->Region()->Estate()->remove($construction);
+			Lemuria::Catalog()->remove($construction);
 			$this->message(SmashDestroyConstructionMessage::class)->e($construction);
 		}
 	}
@@ -142,6 +147,10 @@ final class Smash extends UnitCommand implements Activity
 			$this->newDefault = $this;
 			$this->message(SmashDamageVesselMessage::class)->e($vessel)->p($damage);
 		} else {
+			Lemuria::Catalog()->reassign($vessel);
+			$vessel->Passengers()->remove($this->unit);
+			$vessel->Region()->Fleet()->remove($vessel);
+			Lemuria::Catalog()->remove($vessel);
 			$this->message(SmashDestroyVesselMessage::class)->e($vessel);
 		}
 	}
