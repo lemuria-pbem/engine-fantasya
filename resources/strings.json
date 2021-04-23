@@ -397,7 +397,14 @@
 		"VesselUnableMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um {ein:$ship} zu bauen.",
 		"WelcomeMessage": "Herzlich willkommen auf Lemuria! Du startest heute mit der Partei $party."
 	},
-	"race": {
+	"preposition": {
+		"zu": {
+			"der": "zum",
+			"die": "zur",
+			"das": "zum"
+		}
+	},
+		"race": {
 		"Aquan": ["Aquaner", "Aquaner"],
 		"Dwarf": ["Zwerg", "Zwerge"],
 		"Elf": ["Elf", "Elfen"],

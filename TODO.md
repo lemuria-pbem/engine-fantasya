@@ -10,7 +10,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.3
 
-- Straßen in Reporten anzeigen
 - Regionsereignis für durchgereiste Einheiten
 - Regionsdetails für durchreiste Regionen anzeigen
   
