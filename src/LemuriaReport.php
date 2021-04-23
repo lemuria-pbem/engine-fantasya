@@ -176,10 +176,10 @@ class LemuriaReport implements Reassignment, Report
 
 	public function remove(Identifiable $identifiable): void {
 		$namespace = $identifiable->Catalog();
-		$id        = $identifiable->Id();
+		$id        = $identifiable->Id()->Id();
 		if (isset($this->report[$namespace][$id])) {
-			foreach ($this->report[$namespace][$id] as $message /* @var LemuriaMessage $message */) {
-				$this->removed[$message->Id()->Id()] = true;
+			foreach ($this->report[$namespace][$id] as $message) {
+				$this->removed[$message] = true;
 			}
 		}
 	}

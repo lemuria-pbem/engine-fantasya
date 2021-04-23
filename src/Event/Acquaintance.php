@@ -47,7 +47,7 @@ final class Acquaintance extends AbstractEvent
 		$this->perception = self::createTalent(Perception::class);
 	}
 
-	protected function initialize(): void {
+	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Catalog::PARTIES) as $party /* @var Party $party */) {
 			$census  = new Census($party);
 			$outlook = new Outlook($census);
@@ -83,9 +83,7 @@ final class Acquaintance extends AbstractEvent
 				}
 			}
 		}
-	}
 
-	protected function run(): void {
 		foreach ($this->network as $id => $network) {
 			$party = Party::get(new Id($id));
 			foreach ($network as $fid => $pairs) {

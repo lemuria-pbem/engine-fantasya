@@ -51,6 +51,7 @@ final class Liquidation extends AbstractEvent
 				}
 			}
 			foreach ($liquidate as $unit /* @var Unit $unit */) {
+				Lemuria::Catalog()->reassign($unit);
 				$unit->Construction()?->Inhabitants()?->remove($unit);
 				$unit->Vessel()?->Passengers()?->remove($unit);
 				$unit->Region()->Residents()->remove($unit);

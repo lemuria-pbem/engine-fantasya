@@ -45,7 +45,7 @@ trait GiftTrait
 		}
 		$this->commodity = match (strtolower($commodity)) {
 			'' => new Everything(),
-			'person', 'personen' => $this->context->Factory()->commodity(Peasant::class),
+			'person', 'personen' => $this->context->Factory()->person(),
 			default => $this->context->Factory()->commodity($commodity)
 		};
 	}
