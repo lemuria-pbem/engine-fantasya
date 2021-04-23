@@ -111,7 +111,7 @@ trait TravelTrait
 		} else {
 			$region->Residents()->remove($this->unit);
 			$destination->Residents()->add($this->unit);
-			$this->unit->Party()->Chronicle()->add($region);
+			$this->unit->Party()->Chronicle()->add($destination);
 		}
 	}
 
