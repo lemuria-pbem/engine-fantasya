@@ -4,15 +4,14 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
-- BoardTooHeavyMessage entfernen
 
 ## Neue Funktionen
 
 ### Version 0.3
 
-- Regionsereignis für durchgereiste Einheiten
 - Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
   Meldungen
+- BoardTooHeavyMessage entfernen
   
 ### Version 0.4
 

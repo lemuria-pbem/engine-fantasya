@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Factory;
 use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNewOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNoOwnerMessage;
+use Lemuria\Engine\Fantasya\Message\Region\TravelUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoChaosMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoOceanMessage;
@@ -112,6 +113,9 @@ trait TravelTrait
 			$region->Residents()->remove($this->unit);
 			$destination->Residents()->add($this->unit);
 			$this->unit->Party()->Chronicle()->add($destination);
+			if (!$this->unit->IsHiding()) {
+				$this->message(TravelUnitMessage::class, $region)->p((string)$this->unit);
+			}
 		}
 	}
 
