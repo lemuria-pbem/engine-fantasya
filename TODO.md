@@ -4,6 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen
 
+- Rundendiskrepanz beheben
 
 ## Neue Funktionen
 
@@ -11,6 +12,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 - Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
   Meldungen
+- Parteinachricht bei fehlendem Zug
 - BoardTooHeavyMessage entfernen
   
 ### Version 0.4
@@ -31,6 +33,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
+- Zugsimulator für abgegebene Befehle
 - Befehle in der Vorlage wiederholen (LIEFERE bzw. @BEFEHL in Fantasya)
 - Ereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE

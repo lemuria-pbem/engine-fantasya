@@ -178,12 +178,12 @@ final class Population extends AbstractEvent
 		} else {
 			$max = max($distribution) + 1;
 			reset($distribution);
-			while ($direction = key($distribution)) {
+			while (key($distribution)) {
 				$destination[] = $neighbours[key($distribution)];
 				$amount[]      = $max - current($distribution);
 				next($distribution);
 			}
-			$n = 5;
+			$n = count($destination);
 		}
 		$sum = array_sum($amount);
 
