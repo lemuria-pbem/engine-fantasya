@@ -7,10 +7,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
-### Version 0.3
-
-- Insel/Kontinent benennen
-
 ### Version 0.4
 
 - ROUTE
