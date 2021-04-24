@@ -5,18 +5,18 @@ namespace Lemuria\Engine\Fantasya\Message\Party;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 
-class NamePartyMessage extends AbstractPartyMessage
+class DescribeContinentMessage extends AbstractPartyMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	protected string $name;
+	protected string $continent;
 
 	protected function create(): string {
-		return 'Party ' . $this->id . ' is now known as ' . $this->name . '.';
+		return 'Party ' . $this->id . ' has set a description for the continent ' . $this->continent .'.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->name = $message->getParameter();
+		$this->continent = $message->getParameter();
 	}
 }

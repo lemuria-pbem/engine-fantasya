@@ -5,9 +5,12 @@ namespace Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Construction\DescribeConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\DescribeOwnerMessage;
+use Lemuria\Engine\Fantasya\Message\Party\DescribeContinentMessage;
+use Lemuria\Engine\Fantasya\Message\Party\DescribeContinentUndoMessage;
 use Lemuria\Engine\Fantasya\Message\Party\DescribePartyMessage;
 use Lemuria\Engine\Fantasya\Message\Region\DescribeCastleMessage;
 use Lemuria\Engine\Fantasya\Message\Region\DescribeRegionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DescribeNoContinentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DescribeUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DescribeNotInConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DescribeNotInVesselMessage;
@@ -24,6 +27,7 @@ use Lemuria\Model\Fantasya\Construction;
  * - BESCHREIBUNG Burg|Gebäude <Beschreibung>
  * - BESCHREIBUNG Region <Beschreibung>
  * - BESCHREIBUNG Schiff <Beschreibung>
+ * - BESCHREIBUNG Kontinent|Insel <Name>
  */
 final class Describe extends UnitCommand
 {
@@ -36,7 +40,7 @@ final class Describe extends UnitCommand
 			$type        = 'Einheit';
 			$description = $this->phrase->getParameter();
 		} else {
-			$type        = $this->phrase->getParameter(1);
+			$type        = $this->phrase->getParameter();
 			$description = $this->trimDescription($this->phrase->getLine(2));
 		}
 
@@ -57,6 +61,10 @@ final class Describe extends UnitCommand
 				break;
 			case 'partei' :
 				$this->describeParty($description);
+				break;
+			case 'kontinent' :
+			case 'insel' :
+				$this->setContinentDescription($description);
 				break;
 			default :
 				$this->describeUnit($this->trimDescription($this->phrase->getLine()));
@@ -123,6 +131,22 @@ final class Describe extends UnitCommand
 			return;
 		}
 		$this->message(DescribeNotInVesselMessage::class);
+	}
+
+	private function setContinentDescription(string $description): void {
+		$continent = $this->unit->Region()->Continent();
+		if ($continent) {
+			$party = $this->unit->Party();
+			if (empty($description)) {
+				$continent->setDescriptionFor($party);
+				$this->message(DescribeContinentUndoMessage::class, $party)->p($continent->Name());
+			} else {
+				$continent->setDescriptionFor($party, $description);
+				$this->message(DescribeContinentMessage::class, $party)->p($continent->Name());
+			}
+		} else {
+			$this->message(DescribeNoContinentMessage::class);
+		}
 	}
 
 	private function trimDescription(string $description): string {

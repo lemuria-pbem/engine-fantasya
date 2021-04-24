@@ -5,9 +5,12 @@ namespace Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Construction\NameConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\NameOwnerMessage;
+use Lemuria\Engine\Fantasya\Message\Party\NameContinentMessage;
+use Lemuria\Engine\Fantasya\Message\Party\NameContinentUndoMessage;
+use Lemuria\Engine\Fantasya\Message\Party\NamePartyMessage;
 use Lemuria\Engine\Fantasya\Message\Region\NameCastleMessage;
-use Lemuria\Engine\Fantasya\Message\Region\NamePartyMessage;
 use Lemuria\Engine\Fantasya\Message\Region\NameRegionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NameNoContinentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameNotInConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameNotInVesselMessage;
@@ -24,6 +27,7 @@ use Lemuria\Model\Fantasya\Construction;
  * - NAME Burg|Gebäude <Name>
  * - NAME Region <Name>
  * - NAME Schiff <Name>
+ * - NAME Kontinent|Insel <Name>
  */
 final class Name extends UnitCommand
 {
@@ -34,9 +38,9 @@ final class Name extends UnitCommand
 		}
 		if ($n === 1) {
 			$type = 'Einheit';
-			$name = $this->trimName($this->phrase->getLine(1));
+			$name = $this->trimName($this->phrase->getLine());
 		} else {
-			$type = $this->phrase->getParameter(1);
+			$type = $this->phrase->getParameter();
 			$name = $this->trimName($this->phrase->getLine(2));
 		}
 
@@ -57,6 +61,10 @@ final class Name extends UnitCommand
 				break;
 			case 'partei' :
 				$this->renameParty($name);
+				break;
+			case 'kontinent' :
+			case 'insel' :
+				$this->setContinentName($name);
 				break;
 			default :
 				$this->renameUnit($this->trimName($this->phrase->getLine()));
@@ -124,6 +132,22 @@ final class Name extends UnitCommand
 			return;
 		}
 		$this->message(NameNotInVesselMessage::class);
+	}
+
+	private function setContinentName(string $name): void {
+		$continent = $this->unit->Region()->Continent();
+		if ($continent) {
+			$party = $this->unit->Party();
+			if (empty($name)) {
+				$continent->setNameFor($party);
+				$this->message(NameContinentUndoMessage::class, $party)->p($continent->Name());
+			} else {
+				$continent->setNameFor($party, $name);
+				$this->message(NameContinentMessage::class, $party)->p($continent->Name())->p($name, NameContinentMessage::NAME);
+			}
+		} else {
+			$this->message(NameNoContinentMessage::class);
+		}
 	}
 
 	private function trimName(string $name): string {
