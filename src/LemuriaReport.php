@@ -13,7 +13,9 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
+use Lemuria\Model\Catalog;
 use Lemuria\Model\Exception\DuplicateIdException;
+use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
 use Lemuria\SerializableTrait;
 
@@ -32,7 +34,7 @@ class LemuriaReport implements Reassignment, Report
 	private array $message;
 
 	/**
-	 * @var int[]
+	 * @var array(int=>array)
 	 */
 	private array $removed;
 
@@ -67,16 +69,23 @@ class LemuriaReport implements Reassignment, Report
 	 * @return Message[]
 	 */
 	#[Pure] public function getAll(Identifiable $entity): array {
+		$messages = [];
+
 		$namespace = $entity->Catalog();
 		$id        = $entity->Id()->Id();
-		if (!isset($this->report[$namespace][$id])) {
-			return [];
+		if (isset($this->report[$namespace][$id])) {
+			foreach ($this->report[$namespace][$id] as $i) {
+				$messages[$i] = $this->message[$i];
+			}
 		}
-		$messages = [];
-		foreach ($this->report[$namespace][$id] as $i) {
-			$messages[] = $this->message[$i];
+		if ($namespace === Catalog::PARTIES && isset($this->removed[$id])) {
+			foreach ($this->removed[$id] as $i) {
+				$messages[$i] = $this->message[$i];
+			}
 		}
-		return $messages;
+
+		ksort($messages);
+		return array_values($messages);
 	}
 
 	/**
@@ -91,13 +100,7 @@ class LemuriaReport implements Reassignment, Report
 				$message->unserialize($data);
 			}
 
-			$removed = $report['removed'];
-			foreach ($removed as $id) {
-				if (!isset($this->message[$id])) {
-					throw new NotRegisteredException($id);
-				}
-			}
-			$this->removed  = array_fill_keys($removed, true);
+			$this->removed  = $report['removed'];
 			$this->isLoaded = true;
 		}
 		return $this;
@@ -111,9 +114,7 @@ class LemuriaReport implements Reassignment, Report
 		foreach ($this->message as $message /* @var LemuriaMessage $message */) {
 			$messages[] = $message->serialize();
 		}
-		$removed = array_keys($this->removed);
-		sort($removed);
-		Lemuria::Game()->setMessages(['messages' => $messages, 'removed' => $removed]);
+		Lemuria::Game()->setMessages(['messages' => $messages, 'removed' => $this->removed]);
 		return $this;
 	}
 
@@ -175,11 +176,17 @@ class LemuriaReport implements Reassignment, Report
 	}
 
 	public function remove(Identifiable $identifiable): void {
-		$namespace = $identifiable->Catalog();
-		$id        = $identifiable->Id()->Id();
-		if (isset($this->report[$namespace][$id])) {
-			foreach ($this->report[$namespace][$id] as $message) {
-				$this->removed[$message] = true;
+		if ($identifiable instanceof Unit) {
+			$namespace = $identifiable->Catalog();
+			$id        = $identifiable->Id()->Id();
+			if (isset($this->report[$namespace][$id])) {
+				$party = $identifiable->Party()->Id()->Id();
+				if (!isset($this->removed[$party])) {
+					$this->removed[$party] = [];
+				}
+				foreach ($this->report[$namespace][$id] as $message) {
+					$this->removed[$party][] = $message;
+				}
 			}
 		}
 	}
