@@ -11,8 +11,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 - Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
   Meldungen
-- Parteinachricht bei fehlendem Zug
-- BoardTooHeavyMessage entfernen
   
 ### Version 0.4
 

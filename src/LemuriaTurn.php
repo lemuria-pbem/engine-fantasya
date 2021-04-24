@@ -14,6 +14,7 @@ use Lemuria\Engine\Fantasya\Factory\BuilderTrait;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
 use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\Party\NoMoveMessage;
 use Lemuria\Engine\Fantasya\Message\Party\PartyExceptionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnitExceptionMessage;
 use Lemuria\Engine\Move;
@@ -244,6 +245,11 @@ class LemuriaTurn implements Turn
 			}
 			return;
 		}
+
+		$id          = Lemuria::Report()->nextId();
+		$message     = new LemuriaMessage();
+		$messageType = self::createMessageType(NoMoveMessage::class);
+		$message->setAssignee($party->Id())->setType($messageType)->setId($id);
 
 		$context = new Context($this->state);
 		Lemuria::Catalog()->addReassignment($context);

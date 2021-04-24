@@ -244,6 +244,7 @@
 		"NameUnitMessage": "Die Einheit $id ist nun bekannt unter dem Namen $name.",
 		"NameVesselMessage": "Das Schiff $id trägt nun den Namen $name.",
 		"NextMessage": "Runde für Partei $id beendet.",
+		"NoMoveMessage": "Der Server hat für diese Runde keine Befehle für die Partei $id von Dir erhalten.",
 		"NumberCaptainMessage": "Die Einheit $captain ist nicht der Kapitän des Schiffes $id und kann daher dessen Nummer nicht ändern.",
 		"NumberConstructionMessage": "Die neue Nummer des Gebäudes $oldId ist $id.",
 		"NumberConstructionUsedMessage": "Die Nummer des Gebäudes $id wurde nicht geändert. Die Nummer $newId ist schon vergeben.",
