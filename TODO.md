@@ -2,30 +2,20 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Fehler/Verbesserungen
+## Fehler in 0.3
 
-- BoardTooHeavyMessage entfernen
 
 ## Neue Funktionen
 
-### Version 0.3
-
-- Straßen in Reporten anzeigen
-- Regionsereignis für durchgereiste Einheiten
-- Regionsdetails für durchreiste Regionen anzeigen
-  
 ### Version 0.4
 
-- Parteimeldungen für gelöschte Entities als Ereignis mit IDs der zugehörigen
-  Meldungen
 - ROUTE
 - FOLGE
+- SPIONIEREN
+- STEHLEN
 
 ### Version 0.5 und folgende
 
-- Insel/Kontinent benennen
-- SPIONIEREN
-- STEHLEN
 - Kampf (ATTACKIEREN/BELAGERN)
 - Magie (KAMPFZAUBER/ZAUBERN)
 - Alchemie (Kräuter und Tränke, BENUTZEN)
@@ -34,6 +24,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
+- Zugsimulator für abgegebene Befehle
 - Befehle in der Vorlage wiederholen (LIEFERE bzw. @BEFEHL in Fantasya)
 - Ereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE

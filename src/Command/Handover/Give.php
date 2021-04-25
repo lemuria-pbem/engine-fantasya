@@ -20,6 +20,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\GivePersonsToOwnMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveRejectedMessage;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Quantity;
 
 /**
@@ -51,12 +52,12 @@ final class Give extends UnitCommand
 			return;
 		}
 
-		if ($this->context->Factory()->isPerson($commodity)) {
-			$this->givePersons((int)$count);
+		$this->parseObject($count, $commodity);
+		if ($this->commodity instanceof Peasant) {
+			$this->givePersons($this->amount === PHP_INT_MAX ? $this->unit->Size() : $this->amount);
 			return;
 		}
 
-		$this->parseObject($count, $commodity);
 		if (!$this->checkPermission()) {
 			if ($this->checkVisibility($this->calculus(), $this->recipient)) {
 				$this->message(GiveFailedMessage::class)->e($this->recipient);

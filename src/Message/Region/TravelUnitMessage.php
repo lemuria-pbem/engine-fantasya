@@ -1,22 +1,22 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Fantasya\Message\Party;
+namespace Lemuria\Engine\Fantasya\Message\Region;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 
-class NamePartyMessage extends AbstractPartyMessage
+class TravelUnitMessage extends AbstractRegionMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	protected string $name;
+	protected string $unit;
 
 	protected function create(): string {
-		return 'Party ' . $this->id . ' is now known as ' . $this->name . '.';
+		return 'Unit ' . $this->unit . ' has travelled through region ' . $this->id . '.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->name = $message->getParameter();
+		$this->unit = $message->getParameter();
 	}
 }

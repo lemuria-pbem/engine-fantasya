@@ -172,6 +172,7 @@ final class Initiate implements Command
 
 		$party->People()->add($unit);
 		$origin->Residents()->add($unit);
+		$party->Chronicle()->add($origin);
 		$this->message(WelcomeMessage::class, $party)->p($party->Name());
 	}
 

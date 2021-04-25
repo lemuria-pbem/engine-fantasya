@@ -121,6 +121,9 @@
 		"DescribeCaptainMessage": "Die Einheit $captain ist nicht der Kapitän des Schiffes $id und kann daher dessen Beschreibung nicht ändern.",
 		"DescribeCastleMessage": "Die Einheit $owner ist nicht Besitzer der größten Burg in der Region $id und kann daher ihre Beschreibung nicht ändern.",
 		"DescribeConstructionMessage" : "Das Gebäude $id hat nun eine neue Beschreibung.",
+		"DescribeContinentMessage": "Die Partei $id hat dem Kontinent $continent eine neue Beschreibung gegeben.",
+		"DescribeContinentUndoMessage": "Die Partei $id hat ihre Beschreibung für den Kontinent $continent gestrichen.",
+		"DescribeNoContinentMessage": "Die Einheit $id muss sich für die Beschreibung auf einem Kontinent befinden.",
 		"DescribeNotInConstructionMessage": "Die Einheit $id ist in keinem Gebäude, das sie beschreiben könnte.",
 		"DescribeNotInVesselMessage": "Die Einheit $id ist in keinem Schiff, das sie beschreiben könnte.",
 		"DescribeOwnerMessage": "Die Einheit $owner ist nicht der Besitzer des Gebäudes $id und kann daher dessen Beschreibung nicht ändern.",
@@ -238,12 +241,16 @@
 		"NameCaptainMessage": "Die Einheit $captain ist nicht der Kapitän des Schiffes $id und kann daher dessen Namen nicht ändern.",
 		"NameCastleMessage": "Die Einheit $owner ist nicht Besitzer der größten Burg in der Region $id und kann daher ihren Namen nicht ändern.",
 		"NameConstructionMessage": "Das Gebäude $id trägt nun den Namen $name.",
+		"NameContinentMessage": "Die Partei $id hat dem Kontinent $continent den Namen $name gegeben.",
+		"NameContinentUndoMessage": "Die Partei $id hat ihren Namen für den Kontinent $continent gestrichen.",
+		"NameNoContinentMessage": "Die Einheit $id muss sich für die Namensgebung auf einem Kontinent befinden.",
 		"NameOwnerMessage": "Die Einheit $owner ist nicht der Besitzer des Gebäudes $id und kann daher dessen Namen nicht ändern.",
 		"NamePartyMessage": "Die Partei $id trägt nun den Namen $name.",
 		"NameRegionMessage": "Die Region $id trägt nun den Namen $name.",
 		"NameUnitMessage": "Die Einheit $id ist nun bekannt unter dem Namen $name.",
 		"NameVesselMessage": "Das Schiff $id trägt nun den Namen $name.",
 		"NextMessage": "Runde für Partei $id beendet.",
+		"NoMoveMessage": "Der Server hat für diese Runde keine Befehle für die Partei $id von Dir erhalten.",
 		"NumberCaptainMessage": "Die Einheit $captain ist nicht der Kapitän des Schiffes $id und kann daher dessen Nummer nicht ändern.",
 		"NumberConstructionMessage": "Die neue Nummer des Gebäudes $oldId ist $id.",
 		"NumberConstructionUsedMessage": "Die Nummer des Gebäudes $id wurde nicht geändert. Die Nummer $newId ist schon vergeben.",
@@ -374,6 +381,7 @@
 		"TravelShipTooHeavyMessage": "Das Schiff $id ist zu schwer, um sich zu bewegen.",
 		"TravelSpeedMessage": "Die Einheit $id kann sich {$speed:Region} bewegen (Gewicht: $weight).",
 		"TravelTooHeayMessage": "Die Einheit $id ist zu schwer, um sich zu bewegen.",
+		"TravelUnitMessage": "Die Einheit $unit ist durch die Region $id gereist.",
 		"UnemploymentMessage": "{$recruits:Rekrut ist} in der Region $id verfügbar.",
 		"UnguardMessage": "Die Einheit $id bewacht nicht länger die Region.",
 		"UnguardNotGuardingMessage": "Die Einheit $id bewacht die Region nicht.",
@@ -397,7 +405,14 @@
 		"VesselUnableMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um {ein:$ship} zu bauen.",
 		"WelcomeMessage": "Herzlich willkommen auf Lemuria! Du startest heute mit der Partei $party."
 	},
-	"race": {
+	"preposition": {
+		"zu": {
+			"der": "zum",
+			"die": "zur",
+			"das": "zum"
+		}
+	},
+		"race": {
 		"Aquan": ["Aquaner", "Aquaner"],
 		"Dwarf": ["Zwerg", "Zwerge"],
 		"Elf": ["Elf", "Elfen"],

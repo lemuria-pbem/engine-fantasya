@@ -366,10 +366,6 @@ class CommandFactory
 		'Westen'         => World::WEST
 	];
 
-	protected array $person = [
-		'Personen' => Peasant::class
-	];
-
 	public function __construct(protected Context $context) {
 	}
 
@@ -428,8 +424,8 @@ class CommandFactory
 		}
 	}
 
-	public function isPerson(string $person): bool {
-		return (bool)$this->getCandidate($person, $this->person);
+	public function person(): Commodity {
+		return self::createCommodity(Peasant::class);
 	}
 
 	/**
