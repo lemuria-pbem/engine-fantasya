@@ -31,6 +31,7 @@ use Lemuria\Engine\Fantasya\Command\Origin;
 use Lemuria\Engine\Fantasya\Command\Party;
 use Lemuria\Engine\Fantasya\Command\Recruit;
 use Lemuria\Engine\Fantasya\Command\Reserve;
+use Lemuria\Engine\Fantasya\Command\Route;
 use Lemuria\Engine\Fantasya\Command\Sell;
 use Lemuria\Engine\Fantasya\Command\Sentinel;
 use Lemuria\Engine\Fantasya\Command\Sort;
@@ -188,6 +189,7 @@ class CommandFactory
 		'RESERVE'      => 'RESERVIEREN',
 		'RESERVIEREN'  => true,
 		'RESERVIERUNG' => 'RESERVIEREN',
+		'ROUTE'        => true,
 		'RUNDE'        => true,
 		'SORTIEREN'    => true,
 		'SORTIERUNG'   => 'SORTIEREN',
@@ -406,6 +408,7 @@ class CommandFactory
 				'REISEN'       => Travel::class,
 				'REKRUTIEREN'  => Recruit::class,
 				'RESERVIEREN'  => Reserve::class,
+				'ROUTE'        => Route::class,
 				'RUNDE'        => NullCommand::class,
 				'SORTIEREN'    => Sort::class,
 				'TARNEN'       => Disguise::class,
@@ -471,6 +474,13 @@ class CommandFactory
 	public function commodity(string $commodity): Commodity {
 		$commodityClass = $this->identifySingleton($commodity, $this->commodities);
 		return self::createCommodity($commodityClass);
+	}
+
+	/**
+	 * Check if a direction is route stop.
+	 */
+	public function isRouteStop(string $direction): bool {
+		return str_starts_with('pause', strtolower($direction));
 	}
 
 	/**

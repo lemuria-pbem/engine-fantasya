@@ -2,8 +2,10 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Context;
-use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
@@ -25,19 +27,38 @@ use Lemuria\Model\Fantasya\Talent\Navigation;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
- * Implementation of command REISEN (travel).
+ * Implementation of command REISEN and ROUTE (travel).
  *
  * - REISEN <direction> [<direction>...]
+ * - ROUTE <direction>|Pause [<direction>|Pause...]
  */
-final class Travel extends UnitCommand implements Activity
+class Travel extends UnitCommand implements Activity
 {
-	use ModifiedActivityTrait;
+	protected const ACTIVITY = 'Travel';
+
 	use NavigationTrait;
 	use TravelTrait;
 
+	protected DirectionList $directions;
+
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
-		$this->workload = $context->getWorkload($this->unit);
+		$this->workload   = $context->getWorkload($this->unit);
+		$this->directions = new DirectionList($context);
+	}
+
+	#[Pure] public function Activity(): string {
+		return self::ACTIVITY;
+	}
+
+	public function getNewDefault(): ?UnitCommand {
+		if ($this->directions->hasMore()) {
+			$travel = $this->phrase->getVerb() . ' ' . implode(' ', $this->directions->route());
+			/** @var Travel $command */
+			$command = $this->context->Factory()->create(new Phrase($travel));
+			return $command;
+		}
+		return null;
 	}
 
 	protected function initialize(): void {
@@ -45,11 +66,11 @@ final class Travel extends UnitCommand implements Activity
 		$this->vessel   = $this->unit->Vessel();
 		$this->capacity = $this->calculus()->capacity();
 		$this->workload->setMaximum(min($this->workload->Maximum(), $this->capacity->Speed()));
+		$this->directions->add($this->phrase);
 	}
 
 	protected function run(): void {
-		$n = $this->phrase->count();
-		if ($n <= 0) {
+		if ($this->directions->count() <= 0) {
 			throw new UnknownCommandException();
 		}
 
@@ -84,12 +105,15 @@ final class Travel extends UnitCommand implements Activity
 		$this->setRoadsLeft($movement);
 
 		$route   = [$this->unit->Region()];
-		$i       = 0;
 		$regions = $this->capacity->Speed() - $this->workload->count();
 		$this->message(TravelSpeedMessage::class)->p($regions)->p($weight, TravelSpeedMessage::WEIGHT);
 		try {
-			while ($regions > 0 && $i < $n) {
-				$direction = $this->context->Factory()->direction($this->phrase->getParameter(++$i));
+			while ($regions > 0 && $this->directions->hasMore()) {
+				$direction = $this->directions->next();
+				if ($direction === DirectionList::ROUTE_STOP) {
+					break;
+				}
+
 				$region = $this->canMoveTo($direction);
 				if ($region) {
 					$overRoad = $this->overRoad($this->unit->Region(), $direction, $region);
@@ -125,21 +149,8 @@ final class Travel extends UnitCommand implements Activity
 		} else {
 			$this->message(TravelMessage::class)->p($movement)->entities($route);
 		}
-		$this->setDefaultTravel($i, $n);
 		if (isset($directionError)) {
 			throw $directionError;
-		}
-	}
-
-	protected function setDefaultTravel(int $i, int $n): void {
-		if ($i < $n) {
-			$travel = $this->phrase->getVerb();
-			for (++$i; $i <= $n; $i++) {
-				$travel .= ' ' . $this->phrase->getParameter($i);
-			}
-			/** @var Travel $command */
-			$command          = $this->context->Factory()->create(new Phrase($travel));
-			$this->newDefault = $command;
 		}
 	}
 }

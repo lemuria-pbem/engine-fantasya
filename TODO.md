@@ -9,7 +9,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.4
 
-- ROUTE
 - FOLGE
 - SPIONIEREN
 - STEHLEN
@@ -24,7 +23,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
-- Zugsimulator für abgegebene Befehle
 - Befehle in der Vorlage wiederholen (LIEFERE bzw. @BEFEHL in Fantasya)
 - Ereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE
