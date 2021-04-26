@@ -303,6 +303,7 @@
 		"RoadMessage": "Die Einheit $id verbaut in der Region $region $stones in der Straße nach $direction.",
 		"RoadNoRessourcesMessage": "Die Einheit $id hat keine Steine für den Bau der Straße nach $direction in der Region $region.",
 		"RoadOnlyMessage": "Die Einheit $id kann in der Region $region nur $stones in der Straße nach $direction verbauen.",
+		"RoutePauseMessage": "Die Einheit $id pausiert in dieser Woche auf der Route.",
 		"SellMessage": "Die Einheit $id verkauft den Bauern $goods für $payment.",
 		"SellNoneMessage": "Die Einheit $id kann den Bauern keine $goods verkaufen.",
 		"SellOnlyMessage": "Die Einheit $id kann den Bauern nur $goods für $payment verkaufen.",

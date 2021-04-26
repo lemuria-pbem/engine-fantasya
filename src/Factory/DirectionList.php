@@ -7,6 +7,7 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
+use Lemuria\Model\World;
 
 class DirectionList implements \Countable
 {
@@ -64,12 +65,16 @@ class DirectionList implements \Countable
 		$index = $this->index;
 		$n     = $this->count;
 		for ($i = $index; $i < $n; $i++) {
-			$route[] = $this->directions[$i];
+			$route[] = $this->routeDirection($i);
 		}
 		if ($this->isRotating && $index > 0) {
 			for ($i = 0; $i < $index; $i++) {
-				$route[] = $this->directions[$i];
+				$route[] = $this->routeDirection($i);
 			}
+		}
+		if ($route[0] === self::ROUTE_STOP) {
+			array_shift($route);
+			$route[] = self::ROUTE_STOP;
 		}
 		return $route;
 	}
@@ -80,5 +85,15 @@ class DirectionList implements \Countable
 		} else {
 			$this->directions[] = $this->factory->direction($direction);
 		}
+	}
+
+	private function routeDirection(int $i): string {
+		$direction = $this->directions[$i];
+		return match ($direction) {
+			World::NORTHEAST => 'NO',
+			World::EAST      => 'O',
+			World::SOUTHEAST => 'SO',
+			default          => $direction
+		};
 	}
 }

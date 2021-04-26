@@ -12,6 +12,7 @@ use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\NavigationTrait;
 use Lemuria\Engine\Fantasya\Factory\TravelTrait;
 use Lemuria\Engine\Fantasya\Message\Party\TravelGuardMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RoutePauseMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNoCrewMessage;
@@ -142,12 +143,22 @@ class Travel extends UnitCommand implements Activity
 		} catch (UnknownCommandException $directionError) {
 		}
 
-		if ($this->vessel) {
-			foreach ($this->vessel->Passengers() as $unit /* @var Unit $unit */) {
-				$this->message(TravelMessage::class, $unit)->p($movement)->entities($route);
+		if (count($route) > 1) {
+			if ($this->vessel) {
+				foreach ($this->vessel->Passengers() as $unit/* @var Unit $unit */) {
+					$this->message(TravelMessage::class, $unit)->p($movement)->entities($route);
+				}
+			} else {
+				$this->message(TravelMessage::class)->p($movement)->entities($route);
 			}
 		} else {
-			$this->message(TravelMessage::class)->p($movement)->entities($route);
+			if ($this->vessel) {
+				foreach ($this->vessel->Passengers() as $unit/* @var Unit $unit */) {
+					$this->message(RoutePauseMessage::class, $unit);
+				}
+			} else {
+				$this->message(RoutePauseMessage::class);
+			}
 		}
 		if (isset($directionError)) {
 			throw $directionError;
