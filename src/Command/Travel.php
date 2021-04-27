@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\Command\Dummy;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Capacity;
@@ -28,10 +29,9 @@ use Lemuria\Model\Fantasya\Talent\Navigation;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
- * Implementation of command REISEN and ROUTE (travel).
+ * Implementation of command REISEN.
  *
  * - REISEN <direction> [<direction>...]
- * - ROUTE <direction>|Pause [<direction>|Pause...]
  */
 class Travel extends UnitCommand implements Activity
 {
@@ -67,7 +67,7 @@ class Travel extends UnitCommand implements Activity
 		$this->vessel   = $this->unit->Vessel();
 		$this->capacity = $this->calculus()->capacity();
 		$this->workload->setMaximum(min($this->workload->Maximum(), $this->capacity->Speed()));
-		$this->directions->add($this->phrase);
+		$this->initDirections();
 	}
 
 	protected function run(): void {
@@ -119,6 +119,7 @@ class Travel extends UnitCommand implements Activity
 				if ($region) {
 					$overRoad = $this->overRoad($this->unit->Region(), $direction, $region);
 					$this->moveTo($region);
+					$this->addToTravelRoute($direction);
 					$this->message(TravelRegionMessage::class)->e($region);
 					$route[] = $region;
 
@@ -163,5 +164,20 @@ class Travel extends UnitCommand implements Activity
 		if (isset($directionError)) {
 			throw $directionError;
 		}
+	}
+
+	protected function commitCommand(UnitCommand $command): void {
+		if (!$this->hasTravelled) {
+			$command = new Dummy($command->Phrase(), $this->context);
+		}
+		parent::commitCommand($command);
+	}
+
+	protected function initDirections(): void {
+		$this->directions->set($this->phrase);
+	}
+
+	protected function addToTravelRoute(string $direction): void {
+		$this->context->getTravelRoute($this->unit)->add($direction);
 	}
 }

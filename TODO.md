@@ -4,12 +4,13 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler in 0.3
 
+- Fehlermeldung beim Lehren nicht anwesender Einheiten übersetzen
+- mehrere Aktivitäten als Default-Befehle ermöglichen
 
 ## Neue Funktionen
 
 ### Version 0.4
 
-- FOLGE
 - SPIONIEREN
 - STEHLEN
 

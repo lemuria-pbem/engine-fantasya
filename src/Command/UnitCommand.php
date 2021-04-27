@@ -7,7 +7,6 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Context;
-use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\UnitTrait;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
@@ -37,10 +36,7 @@ abstract class UnitCommand extends AbstractCommand
 	 */
 	public function execute(): Action {
 		parent::execute();
-		$protocol = $this->context->getProtocol($this->unit);
-		if (!$protocol->commit($this)) {
-			throw new ActivityException($this);
-		}
+		$this->commitCommand($this);
 		return $this;
 	}
 

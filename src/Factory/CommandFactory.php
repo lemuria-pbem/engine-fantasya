@@ -18,6 +18,7 @@ use Lemuria\Engine\Fantasya\Command\Disguise;
 use Lemuria\Engine\Fantasya\Command\End;
 use Lemuria\Engine\Fantasya\Command\Entertain;
 use Lemuria\Engine\Fantasya\Command\Fight;
+use Lemuria\Engine\Fantasya\Command\Follow;
 use Lemuria\Engine\Fantasya\Command\Handover;
 use Lemuria\Engine\Fantasya\Command\Handover\Grant;
 use Lemuria\Engine\Fantasya\Command\Help;
@@ -158,6 +159,7 @@ class CommandFactory
 		'ENTLASSEN'    => true,
 		'ERESSEA'      => 'PARTEI',
 		'FANTASYA'     => 'PARTEI',
+		'FOLGEN'       => true,
 		'GIB'          => true,
 		'GEBEN'        => 'GIB',
 		'HELFEN'       => true,
@@ -389,6 +391,7 @@ class CommandFactory
 				'EINHEIT'      => Unit::class,
 				'ENDE'         => End::class,
 				'ENTLASSEN'    => Dismiss::class,
+				'FOLGEN'       => Follow::class,
 				'GIB'          => Handover::class,
 				'HELFEN'       => Help::class,
 				'KAUFEN'       => Buy::class,

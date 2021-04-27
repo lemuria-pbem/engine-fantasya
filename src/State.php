@@ -2,6 +2,9 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use JetBrains\PhpStorm\Pure;
+
+use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
@@ -49,6 +52,11 @@ final class State
 	 * @var array(int=>Workload)
 	 */
 	private array $workload = [];
+
+	/**
+	 * @var array(int=>DirectionList)
+	 */
+	private array $travelRoute = [];
 
 	/**
 	 * Get a region's available resources.
@@ -116,6 +124,11 @@ final class State
 		return $this->workload[$id];
 	}
 
+	#[Pure] public function getTravelRoute(Unit $unit): ?DirectionList {
+		$id = $unit->Id()->Id();
+		return $this->travelRoute[$id] ?? null;
+	}
+
 	/**
 	 * @return Commerce[]
 	 */
@@ -129,5 +142,10 @@ final class State
 
 	public function unsetProtocol(Id $oldId): void {
 		unset($this->protocol[$oldId->Id()]);
+	}
+
+	public function setTravelRoute(Unit $unit, DirectionList $travelRoute): void {
+		$id = $unit->Id()->Id();
+		$this->travelRoute[$id] = $travelRoute;
 	}
 }

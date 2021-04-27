@@ -171,6 +171,8 @@
 		"FightMessage": "Die Einheit $id wird $position.",
 		"FightUnguardMessage": "Die Einheit $id bewacht nicht länger die Region.",
 		"FindWalletMessage": "Die Einheit $unit hat einen verlorenen Silberbeutel mit $silver gefunden.",
+		"FollowMessage": "Die Einheit $id folgt der Einheit $leader auf ihrem Weg.",
+		"FollowNoMoveMessage": "Die Einheit $id folgt der Einheit $leader, welche sich jedoch nicht vom Fleck bewegt hat.",
 		"FounderEffectMessage": "Das Schiff $id ist zu schwer und wird Schaden nehmen, wenn die überschüssige Ladung nicht über Bord geworfen wird.",
 		"FounderMessage": "Das Schiff $id sinkt mit Mann und Maus in der Region $region.",
 		"GiveFailedMessage": "Die Einheit $id kann nichts an die Einheit $recipient übergeben, die Annahme wird verweigert.",
