@@ -30,17 +30,6 @@ abstract class UnitCommand extends AbstractCommand
 	}
 
 	/**
-	 * Execute the command.
-	 *
-	 * @throws CommandException
-	 */
-	public function execute(): Action {
-		parent::execute();
-		$this->commitCommand($this);
-		return $this;
-	}
-
-	/**
 	 * Get command as string.
 	 */
 	#[Pure] public function __toString(): string {
@@ -60,6 +49,7 @@ abstract class UnitCommand extends AbstractCommand
 	 */
 	protected function initialize(): void {
 		$this->context->setUnit($this->unit);
+		$this->commitCommand($this);
 	}
 
 	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {

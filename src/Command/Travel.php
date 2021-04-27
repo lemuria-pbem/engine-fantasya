@@ -4,7 +4,9 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Factory\Command\Dummy;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Activity;
@@ -46,6 +48,20 @@ class Travel extends UnitCommand implements Activity
 		parent::__construct($phrase, $context);
 		$this->workload   = $context->getWorkload($this->unit);
 		$this->directions = new DirectionList($context);
+	}
+
+	public function execute(): Action {
+		parent::execute();
+		if ($this->hasTravelled) {
+			parent::commitCommand($this);
+		} else {
+			parent::commitCommand(new Dummy($this->phrase, $this->context));
+			$command = $this->getNewDefault();
+			if ($command) {
+				$this->context->getProtocol($this->unit)->addDefault($command);
+			}
+		}
+		return $this;
 	}
 
 	#[Pure] public function Activity(): string {
@@ -167,10 +183,10 @@ class Travel extends UnitCommand implements Activity
 	}
 
 	protected function commitCommand(UnitCommand $command): void {
-		if (!$this->hasTravelled) {
-			$command = new Dummy($command->Phrase(), $this->context);
+		$protocol = $this->context->getProtocol($this->unit);
+		if ($protocol->hasActivity()) {
+			throw new ActivityException($command);
 		}
-		parent::commitCommand($command);
 	}
 
 	protected function initDirections(): void {

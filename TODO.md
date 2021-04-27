@@ -4,7 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler in 0.3
 
-- Aktivitätsprotokoll vor Befehlsausführung prüfen
+- mehrfaches Lernen verhindern
 
 ## Neue Funktionen
 

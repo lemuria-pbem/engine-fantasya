@@ -51,6 +51,7 @@ final class Teach extends UnitCommand implements Activity
 	}
 
 	protected function initialize(): void {
+		$this->newDefault = $this;
 		parent::initialize();
 		$ids = [];
 		$i   = 1;

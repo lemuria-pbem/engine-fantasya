@@ -70,14 +70,14 @@ final class ActivityProtocol
 	public function commit(UnitCommand $command): bool {
 		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
 		if ($command instanceof Activity) {
-			if (!$this->isAllowed($command)) {
-				return false;
-			}
-			$this->registerActivity($command);
 			$default = $command->getNewDefault();
 			if ($default) {
 				$this->addDefault($default);
 			}
+			if (!$this->isAllowed($command)) {
+				return false;
+			}
+			$this->activity[$command->Activity()] = true;
 		}
 		return true;
 	}
@@ -87,9 +87,5 @@ final class ActivityProtocol
 	 */
 	public function addDefault(UnitCommand $command): void {
 		Lemuria::Orders()->getDefault($this->unit->Id())[] = $command->Phrase();
-	}
-
-	protected function registerActivity(Activity $activity): void {
-		$this->activity[$activity->Activity()] = true;
 	}
 }
