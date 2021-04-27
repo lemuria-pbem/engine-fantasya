@@ -4,8 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler in 0.3
 
-- Fehlermeldung beim Lehren nicht anwesender Einheiten übersetzen
-- mehrere Aktivitäten als Default-Befehle ermöglichen
+- Aktivitätsprotokoll vor Befehlsausführung prüfen
 
 ## Neue Funktionen
 

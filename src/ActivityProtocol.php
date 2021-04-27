@@ -18,8 +18,6 @@ final class ActivityProtocol
 	 */
 	private array $activity = [];
 
-	private bool $hasDefault = false;
-
 	private ?Command $defaultCommand = null;
 
 	/**
@@ -76,11 +74,9 @@ final class ActivityProtocol
 				return false;
 			}
 			$this->registerActivity($command);
-			if (!$this->hasDefault) {
-				$default = $command->getNewDefault();
-				if ($default) {
-					$this->addDefault($default);
-				}
+			$default = $command->getNewDefault();
+			if ($default) {
+				$this->addDefault($default);
 			}
 		}
 		return true;
@@ -90,9 +86,6 @@ final class ActivityProtocol
 	 * Add a command to the default orders.
 	 */
 	public function addDefault(UnitCommand $command): void {
-		if ($command instanceof Activity) {
-			$this->hasDefault = true;
-		}
 		Lemuria::Orders()->getDefault($this->unit->Id())[] = $command->Phrase();
 	}
 
