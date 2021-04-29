@@ -4,6 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler in 0.3
 
+- Parteitarnung wird nicht gespeichert
 
 ## Neue Funktionen
 
