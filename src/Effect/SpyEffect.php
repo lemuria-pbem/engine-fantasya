@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Effect;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Command\Spy;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Id;
@@ -57,6 +58,12 @@ final class SpyEffect extends AbstractPartyEffect implements Reassignment
 			$id = $identifiable->Id()->Id();
 			unset($this->targets[$id]);
 		}
+	}
+
+	public function isRevealed(Unit $unit): bool {
+		$id    = $unit->Id()->Id();
+		$level = $this->targets[$id] ?? 0;
+		return $level >= Spy::LEVEL_REVEAL_DISGUISE;
 	}
 
 	public function addTarget(Unit $target, int $level): SpyEffect {

@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Engine\Fantasya\Effect\ContactEffect;
+use Lemuria\Engine\Fantasya\Effect\SpyEffect;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Census as ModelCensus;
@@ -36,6 +37,12 @@ class Census extends ModelCensus
 		$effect = Lemuria::Score()->find($effect->setParty($party));
 		// Contact order given.
 		if ($effect instanceof ContactEffect && $effect->From()->has($unit->Id())) {
+			return $foreign;
+		}
+		$effect = new SpyEffect(State::getInstance());
+		$effect = Lemuria::Score()->find($effect->setParty($party));
+		// Unit has been spied with disguise revealed.
+		if ($effect instanceof SpyEffect && $effect->isRevealed($unit)) {
 			return $foreign;
 		}
 		// Disguised unit.
