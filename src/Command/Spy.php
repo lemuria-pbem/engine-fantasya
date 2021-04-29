@@ -25,6 +25,8 @@ use Lemuria\Model\Fantasya\Unit;
 
 final class Spy extends UnitCommand implements Activity
 {
+	public const LEVEL_REVEAL_DISGUISE = 5;
+
 	private const SPY_BASE = 50;
 
 	private const SPY_BONUS = 10;
