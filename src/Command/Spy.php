@@ -4,12 +4,24 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Census;
+use Lemuria\Engine\Fantasya\Effect\SpyEffect;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\OneActivityTrait;
+use Lemuria\Engine\Fantasya\Message\Party\SpyRevealedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SpyDiscoveredMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SpyFailedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SpyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SpyNoChanceMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SpyNotHereMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SpyNotRevealedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SpyOwnUnitMessage;
 use Lemuria\Engine\Fantasya\Outlook;
+use Lemuria\Engine\Fantasya\State;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Espionage;
 use Lemuria\Model\Fantasya\Talent\Perception;
+use Lemuria\Model\Fantasya\Unit;
 
 final class Spy extends UnitCommand implements Activity
 {
@@ -29,20 +41,26 @@ final class Spy extends UnitCommand implements Activity
 		}
 		$i    = 1;
 		$unit = $this->nextId($i);
+		$region = $this->unit->Region();
+		if ($unit->Region() !== $region || !$this->calculus()->canDiscover($unit)) {
+			$this->message(SpyNotHereMessage::class)->e($unit);
+			return;
+		}
 
-		if ($unit->Party() === $this->unit->Party()) {
-			//TODO no need
+		$party = $unit->Party();
+		if ($party === $this->unit->Party()) {
+			$this->message(SpyOwnUnitMessage::class)->e($unit);
 			return;
 		}
 		$espionage = $this->calculus()->knowledge(Espionage::class)->Level();
 		if ($espionage <= 0) {
-			//TODO no chance
+			$this->message(SpyNoChanceMessage::class);
 			return;
 		}
-		$outlook = new Outlook(new Census($unit->Party()));
-		if ($outlook->Apparitions($this->unit->Region())->has($this->unit->Id())) {
-			//TODO discovered
-			//TODO spy is known
+		$outlook = new Outlook(new Census($party));
+		if ($outlook->Apparitions($region)->has($this->unit->Id())) {
+			$this->message(SpyDiscoveredMessage::class)->e($unit);
+			$this->message(SpyRevealedMessage::class, $party)->e($region)->e($this->unit, SpyRevealedMessage::UNIT);
 			return;
 		}
 
@@ -51,16 +69,29 @@ final class Spy extends UnitCommand implements Activity
 		$spyLevel   = $espionage - $camouflage;
 		$spySuccess = self::SPY_BASE + $spyLevel * self::SPY_BONUS;
 		if (rand(1, 100) <= $spySuccess) {
-			//TODO success
+			$this->addSpyEffect($unit, $spyLevel);
+			$this->message(SpyMessage::class)->e($unit);
 		} else {
-			//TODO failed
+			$this->message(SpyFailedMessage::class)->e($unit);
 		}
 
 		$perception      = $calculus->knowledge(Perception::class)->Level();
 		$discoverLevel   = $perception - $espionage;
 		$discoverSuccess = self::DISCOVER_BASE + $discoverLevel * self::DISCOVER_BONUS;
 		if (rand(1, 100) <= $discoverSuccess) {
-			//TODO spy is unknown
+			$this->message(SpyNotRevealedMessage::class, $unit);
 		}
+	}
+
+	private function addSpyEffect(Unit $unit, int $spyLevel): void {
+		$effect = new SpyEffect(State::getInstance());
+		$effect->setParty($unit->Party());
+		$existing = Lemuria::Score()->find($effect);
+		if ($existing) {
+			$effect = $existing;
+		} else {
+			Lemuria::Score()->add($effect);
+		}
+		$effect->addTarget($unit, $spyLevel);
 	}
 }
