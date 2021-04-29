@@ -52,7 +52,7 @@ final class CommandPriority
 		'Follow'         => 62,
 		'Teach'          => 65,
 		'Learn'          => 66,
-		// SPIONIERE => 68,
+		'Spy'            => 68,
 		'Sell'           => 71,
 		'Buy'            => 72,
 		'Construction'   => 74,

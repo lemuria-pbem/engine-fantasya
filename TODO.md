@@ -26,5 +26,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Ereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE
 - Seekampf/Piraterie
+- SABOTIERE (Spion versenkt Schiff)
 - VERSENKEN (Schiff vor Entern bewahren)
 - Monsterrasse bestimmt maximalen Übermacht-Faktor

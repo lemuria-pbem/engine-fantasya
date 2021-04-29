@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\OneActivityTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnProgressMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnTeachersMessage;
 use Lemuria\Engine\Fantasya\Phrase;
@@ -22,6 +23,8 @@ use Lemuria\Model\Fantasya\Talent;
  */
 final class Learn extends UnitCommand implements Activity
 {
+	use OneActivityTrait;
+
 	private Talent $talent;
 
 	private ?Ability $progress = null;
@@ -31,14 +34,6 @@ final class Learn extends UnitCommand implements Activity
 		$topic        = $this->phrase->getParameter();
 		$this->talent = $this->context->Factory()->talent($topic);
 		$this->calculus()->setStudent($this);
-	}
-
-	#[Pure] public function Activity(): string {
-		return microtime();
-	}
-
-	public function getNewDefault(): ?UnitCommand {
-		return $this;
 	}
 
 	#[Pure] public function getTalent(): Talent {

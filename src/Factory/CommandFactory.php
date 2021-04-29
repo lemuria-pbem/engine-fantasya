@@ -36,6 +36,7 @@ use Lemuria\Engine\Fantasya\Command\Route;
 use Lemuria\Engine\Fantasya\Command\Sell;
 use Lemuria\Engine\Fantasya\Command\Sentinel;
 use Lemuria\Engine\Fantasya\Command\Sort;
+use Lemuria\Engine\Fantasya\Command\Spy;
 use Lemuria\Engine\Fantasya\Command\Tax;
 use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Command\Travel;
@@ -195,6 +196,8 @@ class CommandFactory
 		'RUNDE'        => true,
 		'SORTIEREN'    => true,
 		'SORTIERUNG'   => 'SORTIEREN',
+		'SPIONAGE'     => 'SPIONIEREN',
+		'SPIONIEREN'   => true,
 		'TARNEN'       => true,
 		'TARNUNG'      => 'TARNEN',
 		'TAUSCHEN'     => 'SORTIEREN',
@@ -414,6 +417,7 @@ class CommandFactory
 				'ROUTE'        => Route::class,
 				'RUNDE'        => NullCommand::class,
 				'SORTIEREN'    => Sort::class,
+				'SPIONIEREN'   => Spy::class,
 				'TARNEN'       => Disguise::class,
 				'TREIBEN'      => Tax::class,
 				'UNTERHALTEN'  => Entertain::class,
