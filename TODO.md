@@ -4,14 +4,13 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler in 0.3
 
-- Parteitarnung wird nicht gespeichert
 
 ## Neue Funktionen
 
 ### Version 0.4
 
-- SPIONIEREN
 - STEHLEN
+- Silberverbrauch beim Talentlernen
 
 ### Version 0.5 und folgende
 
