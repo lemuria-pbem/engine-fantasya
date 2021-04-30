@@ -23,6 +23,11 @@ use Lemuria\Model\Fantasya\Talent\Espionage;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
 
+/**
+ * Implementation of SPIONIEREN (spy).
+ *
+ * - SPIONIEREN <unit>
+ */
 final class Spy extends UnitCommand implements Activity
 {
 	public const LEVEL_REVEAL_DISGUISE = 5;

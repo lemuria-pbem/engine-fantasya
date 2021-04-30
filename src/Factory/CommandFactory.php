@@ -37,6 +37,7 @@ use Lemuria\Engine\Fantasya\Command\Sell;
 use Lemuria\Engine\Fantasya\Command\Sentinel;
 use Lemuria\Engine\Fantasya\Command\Sort;
 use Lemuria\Engine\Fantasya\Command\Spy;
+use Lemuria\Engine\Fantasya\Command\Steal;
 use Lemuria\Engine\Fantasya\Command\Tax;
 use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Command\Travel;
@@ -143,9 +144,11 @@ class CommandFactory
 	protected array $verbs = [
 		'//'           => 'KOMMENTAR',
 		'BANNER'       => true,
+		'BEKLAUEN'     => 'STEHLEN',
 		'BENENNEN'     => 'NAME',
 		'BESCHREIBEN'  => 'BESCHREIBUNG',
 		'BESCHREIBUNG' => true,
+		'BESTEHLEN'    => 'STEHLEN',
 		'BESTEIGEN'    => true,
 		'BESTEUERN'    => 'TREIBEN',
 		'BESTEUERUNG'  => 'TREIBEN',
@@ -154,6 +157,7 @@ class CommandFactory
 		'BEWACHUNG'    => 'BEWACHEN',
 		'BOTSCHAFT'    => true,
 		'DEFAULT'      => 'VORLAGE',
+		'DIEBSTAHL'    => 'STEHLEN',
 		'EINHEIT'      => true,
 		'EINTREIBEN'   => 'TREIBEN',
 		'ENDE'         => true,
@@ -198,6 +202,7 @@ class CommandFactory
 		'SORTIERUNG'   => 'SORTIEREN',
 		'SPIONAGE'     => 'SPIONIEREN',
 		'SPIONIEREN'   => true,
+		'STEHLEN'      => true,
 		'TARNEN'       => true,
 		'TARNUNG'      => 'TARNEN',
 		'TAUSCHEN'     => 'SORTIEREN',
@@ -418,6 +423,7 @@ class CommandFactory
 				'RUNDE'        => NullCommand::class,
 				'SORTIEREN'    => Sort::class,
 				'SPIONIEREN'   => Spy::class,
+				'STEHLEN'      => Steal::class,
 				'TARNEN'       => Disguise::class,
 				'TREIBEN'      => Tax::class,
 				'UNTERHALTEN'  => Entertain::class,

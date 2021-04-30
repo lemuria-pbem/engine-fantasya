@@ -63,7 +63,7 @@ final class CommandPriority
 		'Unknown'        => 82,
 		'Tax'            => 84,
         'Entertain'      => 85,
-		// STEHLEN => 87,
+		'Steal'          => 87,
 		'Guard'          => 89,
 		'Sort'           => 92,
 		'Number'         => 93,

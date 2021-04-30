@@ -9,7 +9,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.4
 
-- STEHLEN
 - Silberverbrauch beim Talentlernen
 
 ### Version 0.5 und folgende
