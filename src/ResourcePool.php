@@ -117,7 +117,7 @@ class ResourcePool
 		}
 		if ($available > 0) {
 			$reservation = new Quantity($commodity, $available);
-			$reservations->add($reservation);
+			$reservations->add(new Quantity($commodity, $available));
 			$demand -= $available;
 			Lemuria::Log()->debug('Unit ' . $id . ' can only cover ' . $reservation . ' of demand.');
 		} else {

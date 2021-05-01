@@ -7,7 +7,6 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Context;
-use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\UnitTrait;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
@@ -31,20 +30,6 @@ abstract class UnitCommand extends AbstractCommand
 	}
 
 	/**
-	 * Execute the command.
-	 *
-	 * @throws CommandException
-	 */
-	public function execute(): Action {
-		parent::execute();
-		$protocol = $this->context->getProtocol($this->unit);
-		if (!$protocol->commit($this)) {
-			throw new ActivityException($this);
-		}
-		return $this;
-	}
-
-	/**
 	 * Get command as string.
 	 */
 	#[Pure] public function __toString(): string {
@@ -64,6 +49,7 @@ abstract class UnitCommand extends AbstractCommand
 	 */
 	protected function initialize(): void {
 		$this->context->setUnit($this->unit);
+		$this->commitCommand($this);
 	}
 
 	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {

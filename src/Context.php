@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Factory\CommandFactory;
+use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Id;
 use Lemuria\Identifiable;
@@ -178,6 +179,18 @@ final class Context implements Reassignment
 	 */
 	public function getWorkload(Unit $unit): Workload {
 		return $this->state->getWorkload($unit);
+	}
+
+	/**
+	 * Get a unit's travel route.
+	 */
+	public function getTravelRoute(Unit $unit): DirectionList {
+		$travelRoute = $this->state->getTravelRoute($unit);
+		if (!$travelRoute) {
+			$travelRoute = new DirectionList($this);
+			$this->state->setTravelRoute($unit, $travelRoute);
+		}
+		return $travelRoute;
 	}
 
 	/**

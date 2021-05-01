@@ -51,6 +51,7 @@ final class Teach extends UnitCommand implements Activity
 	}
 
 	protected function initialize(): void {
+		$this->newDefault = $this;
 		parent::initialize();
 		$ids = [];
 		$i   = 1;
@@ -60,10 +61,7 @@ final class Teach extends UnitCommand implements Activity
 				try {
 					$unit = $this->nextId($i);
 					if ($unit) {
-						$message = $this->checkUnit($unit);
-						if ($message) {
-							$this->message(TeachExceptionMessage::class)->p($message);
-						} else {
+						if ($this->checkUnit($unit)) {
 							$this->size += $this->teach($unit, true);
 							$ids[]       = $unit->Id();
 						}
@@ -89,17 +87,19 @@ final class Teach extends UnitCommand implements Activity
 		$this->message(TeachBonusMessage::class)->p($this->size, TeachBonusMessage::STUDENTS)->p($this->bonus, TeachBonusMessage::BONUS);
 	}
 
-	private function checkUnit(Unit $unit): ?string {
+	private function checkUnit(Unit $unit): bool {
 		if ($unit->Region() !== $this->unit->Region()) {
-			return 'Not in our region.';
+			$this->message(TeachRegionMessage::class)->e($unit);
+			return false;
 		}
 		if ($unit->Party() === $this->unit->Party()) {
-			return null;
+			return true;
 		}
 		if (!$this->checkVisibility($this->calculus(), $unit)) {
-			return 'Not in our region.';
+			$this->message(TeachRegionMessage::class)->e($unit);
+			return false;
 		}
-		return null;
+		return true;
 	}
 
 	/**

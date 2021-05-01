@@ -34,6 +34,8 @@ trait TravelTrait
 
 	private int $roadsLeft = 0;
 
+	private bool $hasTravelled = false;
+
 	protected function canMoveTo(string $direction): ?Region {
 		$region = $this->unit->Region();
 		/** @var Region $neighbour */
@@ -117,6 +119,8 @@ trait TravelTrait
 				$this->message(TravelUnitMessage::class, $region)->p((string)$this->unit);
 			}
 		}
+
+		$this->hasTravelled = true;
 	}
 
 	/**

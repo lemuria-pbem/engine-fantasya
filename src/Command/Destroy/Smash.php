@@ -52,6 +52,7 @@ final class Smash extends UnitCommand implements Activity
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		$this->initWorkload();
+		$this->newDefault = $this;
 	}
 
 	protected function run(): void {
@@ -105,13 +106,13 @@ final class Smash extends UnitCommand implements Activity
 		$remains  = $size - $damage;
 		$construction->setSize($remains);
 		if ($remains > 0) {
-			$this->newDefault = $this;
 			$this->message(SmashDamageConstructionMessage::class)->e($construction)->p($damage);
 		} else {
 			Lemuria::Catalog()->reassign($construction);
 			$construction->Inhabitants()->remove($this->unit);
 			$construction->Region()->Estate()->remove($construction);
 			Lemuria::Catalog()->remove($construction);
+			$this->newDefault = null;
 			$this->message(SmashDestroyConstructionMessage::class)->e($construction);
 		}
 	}
@@ -144,13 +145,13 @@ final class Smash extends UnitCommand implements Activity
 		$remains  = $size - $damage;
 		$vessel->setCompletion($remains / $wood);
 		if ($remains > 0) {
-			$this->newDefault = $this;
 			$this->message(SmashDamageVesselMessage::class)->e($vessel)->p($damage);
 		} else {
 			Lemuria::Catalog()->reassign($vessel);
 			$vessel->Passengers()->remove($this->unit);
 			$vessel->Region()->Fleet()->remove($vessel);
 			Lemuria::Catalog()->remove($vessel);
+			$this->newDefault = null;
 			$this->message(SmashDestroyVesselMessage::class)->e($vessel);
 		}
 	}
@@ -185,11 +186,11 @@ final class Smash extends UnitCommand implements Activity
 		$remains = $size - $damage;
 		if ($remains > 0) {
 			$roads[$direction] = $remains / $roadStones;
-			$this->newDefault  = $this;
 			$regain            = new Quantity($stone, $damage);
 			$this->message(SmashDestroyRoadMessage::class)->e($region)->p($direction)->i($regain);
 		} else {
 			unset($roads[$direction]);
+			$this->newDefault = null;
 			$this->message(SmashDestroyRoadMessage::class)->e($region)->p($direction);
 		}
 	}

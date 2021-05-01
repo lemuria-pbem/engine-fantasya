@@ -18,6 +18,7 @@ use Lemuria\Engine\Fantasya\Command\Disguise;
 use Lemuria\Engine\Fantasya\Command\End;
 use Lemuria\Engine\Fantasya\Command\Entertain;
 use Lemuria\Engine\Fantasya\Command\Fight;
+use Lemuria\Engine\Fantasya\Command\Follow;
 use Lemuria\Engine\Fantasya\Command\Handover;
 use Lemuria\Engine\Fantasya\Command\Handover\Grant;
 use Lemuria\Engine\Fantasya\Command\Help;
@@ -31,9 +32,12 @@ use Lemuria\Engine\Fantasya\Command\Origin;
 use Lemuria\Engine\Fantasya\Command\Party;
 use Lemuria\Engine\Fantasya\Command\Recruit;
 use Lemuria\Engine\Fantasya\Command\Reserve;
+use Lemuria\Engine\Fantasya\Command\Route;
 use Lemuria\Engine\Fantasya\Command\Sell;
 use Lemuria\Engine\Fantasya\Command\Sentinel;
 use Lemuria\Engine\Fantasya\Command\Sort;
+use Lemuria\Engine\Fantasya\Command\Spy;
+use Lemuria\Engine\Fantasya\Command\Steal;
 use Lemuria\Engine\Fantasya\Command\Tax;
 use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Command\Travel;
@@ -140,9 +144,11 @@ class CommandFactory
 	protected array $verbs = [
 		'//'           => 'KOMMENTAR',
 		'BANNER'       => true,
+		'BEKLAUEN'     => 'STEHLEN',
 		'BENENNEN'     => 'NAME',
 		'BESCHREIBEN'  => 'BESCHREIBUNG',
 		'BESCHREIBUNG' => true,
+		'BESTEHLEN'    => 'STEHLEN',
 		'BESTEIGEN'    => true,
 		'BESTEUERN'    => 'TREIBEN',
 		'BESTEUERUNG'  => 'TREIBEN',
@@ -151,12 +157,14 @@ class CommandFactory
 		'BEWACHUNG'    => 'BEWACHEN',
 		'BOTSCHAFT'    => true,
 		'DEFAULT'      => 'VORLAGE',
+		'DIEBSTAHL'    => 'STEHLEN',
 		'EINHEIT'      => true,
 		'EINTREIBEN'   => 'TREIBEN',
 		'ENDE'         => true,
 		'ENTLASSEN'    => true,
 		'ERESSEA'      => 'PARTEI',
 		'FANTASYA'     => 'PARTEI',
+		'FOLGEN'       => true,
 		'GIB'          => true,
 		'GEBEN'        => 'GIB',
 		'HELFEN'       => true,
@@ -188,9 +196,13 @@ class CommandFactory
 		'RESERVE'      => 'RESERVIEREN',
 		'RESERVIEREN'  => true,
 		'RESERVIERUNG' => 'RESERVIEREN',
+		'ROUTE'        => true,
 		'RUNDE'        => true,
 		'SORTIEREN'    => true,
 		'SORTIERUNG'   => 'SORTIEREN',
+		'SPIONAGE'     => 'SPIONIEREN',
+		'SPIONIEREN'   => true,
+		'STEHLEN'      => true,
 		'TARNEN'       => true,
 		'TARNUNG'      => 'TARNEN',
 		'TAUSCHEN'     => 'SORTIEREN',
@@ -387,6 +399,7 @@ class CommandFactory
 				'EINHEIT'      => Unit::class,
 				'ENDE'         => End::class,
 				'ENTLASSEN'    => Dismiss::class,
+				'FOLGEN'       => Follow::class,
 				'GIB'          => Handover::class,
 				'HELFEN'       => Help::class,
 				'KAUFEN'       => Buy::class,
@@ -406,8 +419,11 @@ class CommandFactory
 				'REISEN'       => Travel::class,
 				'REKRUTIEREN'  => Recruit::class,
 				'RESERVIEREN'  => Reserve::class,
+				'ROUTE'        => Route::class,
 				'RUNDE'        => NullCommand::class,
 				'SORTIEREN'    => Sort::class,
+				'SPIONIEREN'   => Spy::class,
+				'STEHLEN'      => Steal::class,
 				'TARNEN'       => Disguise::class,
 				'TREIBEN'      => Tax::class,
 				'UNTERHALTEN'  => Entertain::class,
@@ -471,6 +487,13 @@ class CommandFactory
 	public function commodity(string $commodity): Commodity {
 		$commodityClass = $this->identifySingleton($commodity, $this->commodities);
 		return self::createCommodity($commodityClass);
+	}
+
+	/**
+	 * Check if a direction is route stop.
+	 */
+	public function isRouteStop(string $direction): bool {
+		return str_starts_with('pause', strtolower($direction));
 	}
 
 	/**
