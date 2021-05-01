@@ -34,7 +34,7 @@ final class Sell extends CommerceCommand
 		}
 
 		if ($this->demand > 0) {
-			if ($this->count < $this->demand) {
+			if ($this->count < $this->demand && $this->demand < PHP_INT_MAX) {
 				$this->message(SellOnlyMessage::class)->i($this->goods())->i($this->cost(), SellOnlyMessage::PAYMENT);
 			} else {
 				$this->message(SellMessage::class)->i($this->goods())->i($this->cost(), SellMessage::PAYMENT);

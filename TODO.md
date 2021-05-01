@@ -2,7 +2,7 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Fehler in 0.3
+## Fehler in 0.4
 
 
 ## Neue Funktionen
@@ -11,11 +11,17 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 - Silberverbrauch beim Talentlernen
 
-### Version 0.5 und folgende
+### Version 0.5
+
+- Alchemie (Kräuter und Tränke, BENUTZEN)
+
+### Version 0.6
+
+- Magie (KAMPFZAUBER/ZAUBERN)
+
+### Version 0.7 und folgende
 
 - Kampf (ATTACKIEREN/BELAGERN)
-- Magie (KAMPFZAUBER/ZAUBERN)
-- Alchemie (Kräuter und Tränke, BENUTZEN)
 - Monster, besondere Gegenstände wie Greifeneier
 - Regeldatei für Magellan
 
