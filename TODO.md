@@ -7,10 +7,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
-### Version 0.4
-
-- Silberverbrauch beim Talentlernen
-
 ### Version 0.5
 
 - Alchemie (Kräuter und Tränke, BENUTZEN)
