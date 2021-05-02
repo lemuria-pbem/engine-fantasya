@@ -81,6 +81,11 @@
 
 ^(sp|spi|spio|spion|spiona|spionag|spionage|spioni|spionie|spionier|spioniere|spionieren) +[a-z0-9]{1,6}$
 
+^(st|ste|steh|stehl|stehle|stehlen) +[a-z0-9]{1,6}$
+^(bek|bekl|bekla|beklau|beklaue|beklauen) +[a-z0-9]{1,6}$
+^(besteh|bestehl|bestehle|bestehlen) +[a-z0-9]{1,6}$
+^(di|die|dieb|diebs|diebst|diebsta|diebstah|diebstahl) +[a-z0-9]{1,6}$
+
 ^(tar|tarn|tarne|tarnen|tarnu|tarnun|tarnung)( +([0-9]+|nein|nicht|partei( +[a-z0-9]{1,6})?))?$
 
 ^(tr|tre|trei|treib|treibe|treiben)( +[0-9]+)?$
