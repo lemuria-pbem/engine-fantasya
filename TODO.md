@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler in 0.4
 
-- Simulation sollte keine Hinweise zu fremden Einheiten liefern
 
 ## Neue Funktionen
 
