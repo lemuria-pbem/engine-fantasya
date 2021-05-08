@@ -102,7 +102,7 @@ class Travel extends UnitCommand implements Activity
 				$this->message(TravelNotCaptainMessage::class)->e($this->vessel);
 				return;
 			}
-			if ($this->calculus()->knowledge(Navigation::class) < $this->vessel->Ship()->Captain()) {
+			if ($this->calculus()->knowledge(Navigation::class)->Level() < $this->vessel->Ship()->Captain()) {
 				$this->message(TravelNoNavigationMessage::class)->e($this->vessel);
 				return;
 			}
