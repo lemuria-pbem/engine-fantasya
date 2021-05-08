@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
 use Lemuria\Engine\Fantasya\Command\Announcement;
+use Lemuria\Engine\Fantasya\Command\Apply;
 use Lemuria\Engine\Fantasya\Command\Banner;
 use Lemuria\Engine\Fantasya\Command\Buy;
 use Lemuria\Engine\Fantasya\Command\Comment;
@@ -17,6 +18,7 @@ use Lemuria\Engine\Fantasya\Command\Destroy\Lose;
 use Lemuria\Engine\Fantasya\Command\Disguise;
 use Lemuria\Engine\Fantasya\Command\End;
 use Lemuria\Engine\Fantasya\Command\Entertain;
+use Lemuria\Engine\Fantasya\Command\Explore;
 use Lemuria\Engine\Fantasya\Command\Fight;
 use Lemuria\Engine\Fantasya\Command\Follow;
 use Lemuria\Engine\Fantasya\Command\Handover;
@@ -146,6 +148,7 @@ class CommandFactory
 		'BANNER'       => true,
 		'BEKLAUEN'     => 'STEHLEN',
 		'BENENNEN'     => 'NAME',
+		'BENUTZEN'     => true,
 		'BESCHREIBEN'  => 'BESCHREIBUNG',
 		'BESCHREIBUNG' => true,
 		'BESTEHLEN'    => 'STEHLEN',
@@ -163,8 +166,10 @@ class CommandFactory
 		'ENDE'         => true,
 		'ENTLASSEN'    => true,
 		'ERESSEA'      => 'PARTEI',
+		'ERFORSCHEN'   => 'FORSCHEN',
 		'FANTASYA'     => 'PARTEI',
 		'FOLGEN'       => true,
+		'FORSCHEN'     => true,
 		'GIB'          => true,
 		'GEBEN'        => 'GIB',
 		'HELFEN'       => true,
@@ -391,6 +396,7 @@ class CommandFactory
 		try {
 			$command = match ($verb) {
 				'BANNER'       => Banner::class,
+				'BENUTZEN'     => Apply::class,
 				'BESCHREIBUNG' => Describe::class,
 				'BESTEIGEN'    => Board::class,
 				'BETRETEN'     => Trespass::class,
@@ -400,6 +406,7 @@ class CommandFactory
 				'ENDE'         => End::class,
 				'ENTLASSEN'    => Dismiss::class,
 				'FOLGEN'       => Follow::class,
+				'FORSCHEN'     => Explore::class,
 				'GIB'          => Handover::class,
 				'HELFEN'       => Help::class,
 				'KAUFEN'       => Buy::class,

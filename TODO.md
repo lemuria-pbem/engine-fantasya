@@ -4,6 +4,16 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler in 0.4
 
+    PHP Notice:  Object of class Lemuria\Model\Fantasya\Ability could not be converted to int in /home/sascha/Projekte/Lemuria/lemuria-alpha/vendor/lemuria-pbem/engine-fantasya/src/Command/Travel.php on line 105
+    TypeError: Unsupported operand types: int * Lemuria\Model\Fantasya\Ability in /home/sascha/Projekte/Lemuria/lemuria-alpha/vendor/lemuria-pbem/engine-fantasya/src/Factory/NavigationTrait.php:29
+    Stack trace:
+    /home/sascha/Projekte/Lemuria/lemuria-alpha/vendor/lemuria-pbem/engine-fantasya/src/Command/Travel.php(109): Lemuria\Engine\Fantasya\Command\Travel->navigationTalent()
+
+- Langer Default-Befehl muss aktuellen ersetzen
+- Angebotspreis speichern
+- Kriegshammer und Streitaxt anpassen
+- Boot-Fertigstellung in Magellan falsch
+- Simulation sollte keine Hinweise zu fremden Einheiten liefern
 
 ## Neue Funktionen
 
