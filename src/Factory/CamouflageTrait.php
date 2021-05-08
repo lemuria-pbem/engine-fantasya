@@ -8,6 +8,8 @@ use Lemuria\Model\Fantasya\Unit;
 
 trait CamouflageTrait
 {
+	use ContextTrait;
+
 	/**
 	 * Check recipients acceptance for foreign parties.
 	 */
@@ -21,6 +23,6 @@ trait CamouflageTrait
 		if ($calculus->canDiscover($target)) {
 			return true;
 		}
-		return $other->Diplomacy()->has(Relation::PERCEPTION, $unit);
+		return !$this->context->getTurnOptions()->IsSimulation() && $other->Diplomacy()->has(Relation::PERCEPTION, $unit);
 	}
 }

@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
-use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\EntertainGuardedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EntertainMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EntertainNoDemandMessage;

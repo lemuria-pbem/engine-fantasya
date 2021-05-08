@@ -66,7 +66,7 @@ final class Enter extends UnitCommand
 		if ($owner) {
 			$ownerParty = $owner->Party();
 			if ($ownerParty !== $this->unit->Party()) {
-				if (!$ownerParty->Diplomacy()->has(Relation::ENTER, $this->unit)) {
+				if ($this->context->getTurnOptions()->IsSimulation() || !$ownerParty->Diplomacy()->has(Relation::ENTER, $this->unit)) {
 					return false;
 				}
 			}

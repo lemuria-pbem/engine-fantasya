@@ -9,7 +9,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.5
 
-- Alchemie (Kräuter und Tränke, BENUTZEN)
+- Alchemie (Kräuter und Tränke, BENUTZEN, FORSCHEN, MACHEN)
 
 ### Version 0.6
 
