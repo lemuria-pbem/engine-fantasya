@@ -20,6 +20,8 @@ final class ActivityProtocol
 
 	private ?Command $defaultCommand = null;
 
+	private bool $hasNewDefault = false;
+
 	/**
 	 * Create new activity protocol for a unit.
 	 */
@@ -72,7 +74,9 @@ final class ActivityProtocol
 		if ($command instanceof Activity) {
 			$default = $command->getNewDefault();
 			if ($default) {
-				$this->addDefault($default);
+				if (!$this->hasNewDefault) {
+					$this->addDefault($default);
+				}
 			}
 			if (!$this->isAllowed($command)) {
 				return false;
@@ -87,5 +91,6 @@ final class ActivityProtocol
 	 */
 	public function addDefault(UnitCommand $command): void {
 		Lemuria::Orders()->getDefault($this->unit->Id())[] = $command->Phrase();
+		$this->hasNewDefault = true;
 	}
 }
