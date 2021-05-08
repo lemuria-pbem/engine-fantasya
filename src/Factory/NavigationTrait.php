@@ -26,7 +26,7 @@ trait NavigationTrait
 	private function navigationTalent(): int {
 		$talent = 0;
 		foreach ($this->vessel->Passengers() as $unit /* @var Unit $unit */) {
-			$talent += $unit->Size() * $this->context->getCalculus($unit)->knowledge(Navigation::class);
+			$talent += $unit->Size() * $this->context->getCalculus($unit)->knowledge(Navigation::class)->Level();
 		}
 		return $talent;
 	}
@@ -35,7 +35,7 @@ trait NavigationTrait
 		$ship       = $this->vessel->Ship();
 		$passengers = $this->vessel->Passengers();
 		$captain    = $passengers->Owner();
-		$knowledge  = $this->context->getCalculus($captain)->knowledge($this->navigation);
+		$knowledge  = $this->context->getCalculus($captain)->knowledge($this->navigation)->Level();
 		if ($knowledge <= $ship->Captain()) {
 			return false;
 		}
