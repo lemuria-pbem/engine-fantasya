@@ -34,9 +34,11 @@ final class Follow extends Travel
 		}
 		$i            = 1;
 		$this->leader = $this->nextId($i);
-		$route = $this->context->getTravelRoute($this->leader);
-		while ($route->hasMore()) {
-			$this->directions->add($route->next());
+		if ($this->calculus()->canDiscover($this->leader)) {
+			$route = $this->context->getTravelRoute($this->leader);
+			while ($route->hasMore()) {
+				$this->directions->add($route->next());
+			}
 		}
 	}
 
