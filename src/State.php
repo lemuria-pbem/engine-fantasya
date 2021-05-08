@@ -23,6 +23,8 @@ final class State
 		return self::$instance;
 	}
 
+	private ?TurnOptions $turnOptions = null;
+
 	/**
 	 * @var array(int=>Availability)
 	 */
@@ -57,6 +59,13 @@ final class State
 	 * @var array(int=>DirectionList)
 	 */
 	private array $travelRoute = [];
+
+	public function getTurnOptions(): TurnOptions {
+		if (!$this->turnOptions) {
+			$this->turnOptions = new TurnOptions();
+		}
+		return $this->turnOptions;
+	}
 
 	/**
 	 * Get a region's available resources.
@@ -134,6 +143,10 @@ final class State
 	 */
 	public function getAllCommerces(): array {
 		return array_values($this->commerce);
+	}
+
+	public function setTurnOptions(TurnOptions $options): void {
+		$this->turnOptions = $options;
 	}
 
 	public function setProtocol(ActivityProtocol $protocol): void {

@@ -52,8 +52,11 @@ class LemuriaTurn implements Turn
 	/**
 	 * Initialize turn.
 	 */
-	public function __construct(private bool $throwExceptions = false) {
-		$this->state    = State::getInstance();
+	public function __construct(?TurnOptions $options = null) {
+		$this->state = State::getInstance();
+		if ($options) {
+			$this->state->setTurnOptions($options);
+		}
 		$this->priority = CommandPriority::getInstance();
 		foreach (CommandPriority::ORDER as $priority) {
 			$this->queue[$priority] = [];
@@ -80,7 +83,7 @@ class LemuriaTurn implements Turn
 			} catch (UnknownCommandException|UnknownItemException $e) {
 				Lemuria::Log()->error($e->getMessage(), ['exception' => $e]);
 				$this->addExceptionMessage($e, $context);
-				if ($this->throwExceptions) {
+				if ($this->throwExceptions()) {
 					throw $e;
 				}
 				continue;
@@ -104,7 +107,7 @@ class LemuriaTurn implements Turn
 				} catch (CommandException $e) {
 					Lemuria::Log()->error($e->getMessage(), ['exception' => $e, 'command' => $command]);
 					$this->addExceptionMessage($e, $context);
-					if ($this->throwExceptions) {
+					if ($this->throwExceptions()) {
 						throw $e;
 					}
 				}
@@ -163,7 +166,7 @@ class LemuriaTurn implements Turn
 				} catch (ActionException $e) {
 					Lemuria::Log()->error($e->getMessage(), ['stage' => 'prepare', 'action' => $action]);
 					$this->addActionException($e, $action);
-					if ($this->throwExceptions) {
+					if ($this->throwExceptions()) {
 						throw $e;
 					}
 				}
@@ -178,7 +181,7 @@ class LemuriaTurn implements Turn
 				} catch (ActionException $e) {
 					Lemuria::Log()->error($e->getMessage(), ['stage' => 'execute', 'action' => $action]);
 					$this->addActionException($e, $action);
-					if ($this->throwExceptions) {
+					if ($this->throwExceptions()) {
 						throw $e;
 					}
 				}
@@ -234,13 +237,17 @@ class LemuriaTurn implements Turn
 		return $this;
 	}
 
+	private function throwExceptions(): bool {
+		return $this->state->getTurnOptions()->ThrowExceptions();
+	}
+
 	private function substituteParty(Id $id): void {
 		Lemuria::Log()->debug('Substitute Party ' . $id . '.');
 		try {
 			$party = Party::get($id);
 		} catch (NotRegisteredException $e) {
 			Lemuria::Log()->critical($e->getMessage(), ['exception' => $e]);
-			if ($this->throwExceptions) {
+			if ($this->throwExceptions()) {
 				throw $e;
 			}
 			return;
@@ -280,7 +287,7 @@ class LemuriaTurn implements Turn
 			}
 		} catch (NotRegisteredException $e) {
 			Lemuria::Log()->critical($e->getMessage(), ['exception' => $e]);
-			if ($this->throwExceptions) {
+			if ($this->throwExceptions()) {
 				throw $e;
 			}
 		}

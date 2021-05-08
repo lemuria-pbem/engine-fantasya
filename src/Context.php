@@ -194,6 +194,13 @@ final class Context implements Reassignment
 	}
 
 	/**
+	 * Get the turn options.
+	 */
+	public function getTurnOptions(): TurnOptions {
+		return $this->state->getTurnOptions();
+	}
+
+	/**
 	 * Set the Party whose commands are parsed.
 	 *
 	 * @throws CommandParserException
