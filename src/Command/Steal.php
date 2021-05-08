@@ -37,9 +37,12 @@ final class Steal extends UnitCommand implements Activity
 
 	private Commodity $silver;
 
+	private bool $isSimulation;
+
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
-		$this->silver = self::createCommodity(Silver::class);
+		$this->silver       = self::createCommodity(Silver::class);
+		$this->isSimulation = $context->getTurnOptions()->IsSimulation();
 	}
 
 	protected function run(): void {
@@ -60,21 +63,23 @@ final class Steal extends UnitCommand implements Activity
 			return;
 		}
 		$outlook = new Outlook(new Census($party));
-		if ($outlook->Apparitions($region)->has($this->unit->Id())) {
+		if (!$this->isSimulation && $outlook->Apparitions($region)->has($this->unit->Id())) {
 			$this->message(StealDiscoveredMessage::class)->e($unit);
 			$this->message(StealRevealedMessage::class, $party)->e($region)->e($this->unit, StealRevealedMessage::UNIT);
 			return;
 		}
 
 		$camouflage = $this->calculus()->knowledge(Camouflage::class)->Level();
-		$perception = $this->context->getCalculus($unit)->knowledge(Perception::class)->Level();
+		$perception = $this->isSimulation ? 0 : $this->context->getCalculus($unit)->knowledge(Perception::class)->Level();
 		$silver     = ($camouflage - $perception) * self::SILVER * $this->unit->Size();
 		$inventory  = $unit->Inventory();
-		$available  = $inventory[$this->silver]->Count();
+		$available  = $this->isSimulation ? $silver : $inventory[$this->silver]->Count();
 		$pickings   = min($available, $silver);
 		if ($pickings > 0) {
 			$quantity = new Quantity($this->silver, $pickings);
-			$inventory->remove($quantity);
+			if (!$this->isSimulation) {
+				$inventory->remove($quantity);
+			}
 			$this->unit->Inventory()->add($quantity);
 			if ($available < $silver) {
 				$this->message(StealOnlyMessage::class)->e($unit)->i($quantity);

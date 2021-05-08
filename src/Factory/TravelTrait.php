@@ -26,6 +26,8 @@ use Lemuria\Model\World;
 
 trait TravelTrait
 {
+	use ContextTrait;
+
 	private ?Vessel $vessel = null;
 
 	private Capacity $capacity;
@@ -133,7 +135,9 @@ trait TravelTrait
 		foreach ($intelligence->getGuards() as $guard /* @var Unit $guard */) {
 			$guardParty = $guard->Party();
 			if ($guardParty !== $this->unit->Party()) {
-				if (!$guardParty->Diplomacy()->has(Relation::GUARD, $this->unit)) {
+				if ($this->context->getTurnOptions()->IsSimulation()) {
+					$guards[$guardParty->Id()->Id()] = $guardParty;
+				} elseif (!$guardParty->Diplomacy()->has(Relation::GUARD, $this->unit)) {
 					if ($region instanceof Ocean) {
 						$guards[$guardParty->Id()->Id()] = $guardParty;
 					}

@@ -43,7 +43,9 @@ trait UnitTrait
 		foreach ($intelligence->getGuards() as $guard /* @var Unit $guard */) {
 			$guardParty = $guard->Party();
 			if ($guardParty !== $party) {
-				if (!$guardParty->Diplomacy()->has($agreement, $this->unit)) {
+				if ($this->context->getTurnOptions()->IsSimulation()) {
+					$guardParties[$guardParty->Id()->Id()] = $guardParty;
+				} elseif (!$guardParty->Diplomacy()->has($agreement, $this->unit)) {
 					$perception = $context->getCalculus($guard)->knowledge(Perception::class)->Level();
 					if ($perception >= $camouflage) {
 						$guardParties[$guardParty->Id()->Id()] = $guardParty;

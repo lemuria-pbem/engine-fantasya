@@ -58,7 +58,7 @@ trait GiftTrait
 	private function checkPermission(): bool {
 		$recipientParty = $this->recipient?->Party();
 		if ($recipientParty !== $this->unit->Party()) {
-			if (!$recipientParty?->Diplomacy()->has(Relation::GIVE, $this->unit)) {
+			if ($this->context->getTurnOptions()->IsSimulation() || !$recipientParty?->Diplomacy()->has(Relation::GIVE, $this->unit)) {
 				return false;
 			}
 		}

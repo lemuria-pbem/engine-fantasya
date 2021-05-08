@@ -62,7 +62,7 @@ final class Board extends UnitCommand
 		if ($captain) {
 			$captainParty = $captain->Party();
 			if ($captainParty !== $this->unit->Party()) {
-				if (!$captainParty->Diplomacy()->has(Relation::ENTER, $this->unit)) {
+				if ($this->context->getTurnOptions()->IsSimulation() || !$captainParty->Diplomacy()->has(Relation::ENTER, $this->unit)) {
 					return false;
 				}
 			}

@@ -136,6 +136,10 @@ final class Teach extends UnitCommand implements Activity
 	 * Check if teacher has more experience than student candidate.
 	 */
 	private function hasGreaterLevelThan(Unit $unit): ?bool {
+		if ($this->context->getTurnOptions()->IsSimulation() && $unit->Party() !== $this->unit->Party()) {
+			return null;
+		}
+
 		$calculus = $this->context->getCalculus($unit);
 		$learn    = $calculus->getStudent();
 		if ($learn) {

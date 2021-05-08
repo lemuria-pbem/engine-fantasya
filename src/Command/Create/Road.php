@@ -49,7 +49,6 @@ final class Road extends UnitCommand implements Activity
 	}
 
 	protected function run(): void {
-		throw new UnknownCommandException($this); //TODO
 		$n = $this->phrase->count();
 		if ($n < 2 || $n > 3) {
 			throw new UnknownCommandException($this);
