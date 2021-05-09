@@ -10,6 +10,8 @@
 
 ^(ba|ban|bann|banne|banner) +.*$
 
+^(benu|benut|benutz|benutze|benutzen)( +[0-9]+)? +(bauernlieb|berserkerblut|elixier der macht|gehirnschmalz|goliathwasser|heiltrank|pferdeglück|pferdeglueck|schaffenstrunk|siebenmeilentee|trank der wahrheit|wasser des lebens|wundsalbe)$
+
 ^(beschreibu|beschreibun|beschreibung|beschreibe|beschreiben|te|tex|text)( +(einheit|region|gebaeude|gebäude|burg|schiff|partei))? .+$
 
 ^(bestei|besteig|besteige|besteigen) +[a-z0-9]{1,6}$
@@ -28,7 +30,10 @@
 
 ^(ent|entl|entla|entlas|entlass|entlasse|entlassen) +.*$
 
-^(fo|fol|folg|folge|folgen) +[a-z0-9]{1,6}$
+^(fol|folg|folge|folgen) +[a-z0-9]{1,6}$
+
+^(erf|erfor|erfors|erforsc|erforsch|erforsche|erforschen|for|fors|forsc|forsch|forsche|forschen)$
+^(erf|erfor|erfors|erforsc|erforsch|erforsche|erforschen|for|fors|forsc|forsch|forsche|forschen) +(kraut|kräuter|kraeuter)$
 
 ^(gi|gib|ge|geb|gebe|geben) +[a-z0-9]{1,6} +.*$
 ^(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6} +.*$
@@ -53,14 +58,14 @@
 ^(m|ma|mac|mach|mache|machen) +(schiff|boot|drachenschiff|galeone|karavelle|langboot|trireme)( +[0-9]+)?$
 ^(m|ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|bergwerk|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|leuchtturm|leuchttürme|minen|mine|monument|monumente|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steuerturm|werkstatt)( +[0-9]+)$
 
-^(nam|name|ben|bene|benen|benenn|benenne|benennen)( +(einheit|region|gebäude|gebaeude|burg|schiff|partei))? +.+$
+^(nam|name|bene|benen|benenn|benenne|benennen)( +(einheit|region|gebäude|gebaeude|burg|schiff|partei))? +.+$
 
 ^(nä|näc|näch|nächs|nächst|nächste|nächster|nae|naec|naech|naechs|naechst|naechste|naechster)$
 
 ^(nu|num|numm|numme|nummer|i|id)( +(einheit|gebaeude|gebäude|burg|schiff|partei))? +[a-z0-9]{1,6}$
 
 ^(p|pa|par|part|parte|partei) +[a-z0-9]{1,6}( +.*)?$
-^(er|ere|eres|eress|eresse|eressea) +[a-z0-9]{1,6}( +.*)?$
+^(ere|eres|eress|eresse|eressea) +[a-z0-9]{1,6}( +.*)?$
 ^(f|fa|fan|fant|fanta|fantas|fantasy|fantasya) +[a-z0-9]{1,6}( +.*)?$
 ^(lem|lemu|lemur|lemuri|lemuria) +[a-z0-9]{1,6}( +.*)?$
 
