@@ -49,6 +49,9 @@ final class Unemployment extends AbstractRegionEffect
 	}
 
 	protected function run(): void {
-		$this->message(UnemploymentMessage::class, $this->Region())->p($this->peasants);
+		$region = $this->Region();
+		if ($region->Landscape()->Workplaces() > 0) {
+			$this->message(UnemploymentMessage::class, $region)->p($this->peasants);
+		}
 	}
 }
