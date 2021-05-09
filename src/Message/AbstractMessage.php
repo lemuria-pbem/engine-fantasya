@@ -87,8 +87,8 @@ abstract class AbstractMessage implements MessageType
 		return $this->getTranslatedName($property, $name, 'building');
 	}
 
-	protected function commodity(string $property, string $name): ?string {
-		return $this->getTranslatedName($property, $name, 'resource', 0);
+	protected function commodity(string $property, string $name, int $index = 0): ?string {
+		return $this->getTranslatedName($property, $name, 'resource', $index);
 	}
 
 	protected function item(string $property, string $name): ?string {

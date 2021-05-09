@@ -1,4 +1,11 @@
 {
+	"amount": {
+		"tiny": "sehr wenige",
+		"small": "wenige",
+		"average": "relativ viele",
+		"big": "viele",
+		"huge": "sehr viele"
+	},
 	"article": {
 		"Desert": "die",
 		"Forest": "der",
@@ -91,6 +98,9 @@
 		"AnnouncementRegionMessage": "Botschaft von der Partei $sender: \"$message\"",
 		"AnnouncementUnitMessage": "Die Einheit $id hat eine Botschaft von der Einheit $sender erhalten: \"$message\"",
 		"AnnouncementVesselMessage": "Botschaft von der Partei $sender: \"$message\"",
+		"ApplyMessage": "Die Einheit $id benutzt $potion.",
+		"ApplyNoneMessage": "Die Einheit $id hat {kein:$potion}.",
+		"ApplyOnlyMessage": "Die Einheit $id kann nur $potion benutzen.",
 		"BannerMessage": "Die Partei $id hat nun ein neues Banner.",
 		"BoardAlreadyMessage": "Die Einheit $id ist bereits an Bord des Schiffes $vessel.",
 		"BoardDeniedMessage": "Die Einheit $id kann das Schiff $vessel nicht ohne die Erlaubnis des Kapitäns betreten.",
@@ -163,6 +173,9 @@
 		"EntertainOnlyMessage": "Die Einheit kann nur $income mit $talent verdienen.",
 		"EntertainPreventMessage": "Unsere Wache hat die Einheit $unit vom Unterhalten abgehalten.",
 		"ExcessCargoMessage": "Das Schiff $id ist überladen und nimmt Schaden.",
+		"ExploreExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in Kräuterkunde für die Suche nach Kräutern.",
+		"ExploreMessage": "Die Einheit $id stellt fest, dass es $occurrence $herb in der Region $region gibt.",
+		"ExploreNothingMessage": "Die Einheit $id hat keine Kräuter in der Region $region gefunden.",
 		"FaunaGriffineggMessage": "In der Region $id legen die Greife $egg.",
 		"FaunaGrowthMessage": "In der Region $id {wird:$animals} geboren.",
 		"FaunaHungerMessage": "In der Region $id {verhungert:$animals}.",
