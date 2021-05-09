@@ -2,7 +2,7 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Fehler in 0.4
+## Fehler/Verbesserungen in 0.4
 
 
 ## Neue Funktionen
