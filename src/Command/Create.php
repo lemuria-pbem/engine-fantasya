@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Exception\LemuriaException;
 use function Lemuria\isInt;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command\Create\Resource;
@@ -32,12 +33,15 @@ final class Create extends DelegatedCommand
 		}
 
 		$param = $this->phrase->getParameter();
-		$upper = strtolower($param);
+		$lower = strtolower($param);
 		// MACHEN TEMP
-		if ($upper === 'temp') {
+		if ($lower === 'temp') {
 			return new Temp($this->phrase, $this->context);
 		}
-		if ($upper === 'straße' || $upper === 'strasse') {
+		if ($lower === 'kraut' || $lower === 'kraeuter' || $lower === 'kräuter') {
+			throw new LemuriaException('Not implemented yet.'); //TODO
+		}
+		if ($lower === 'straße' || $lower === 'strasse') {
 			return new Road($this->phrase, $this->context);
 		}
 

@@ -68,6 +68,27 @@ use Lemuria\Model\Fantasya\Commodity\Carriage;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg;
+use Lemuria\Model\Fantasya\Commodity\Herb\Bubblemorel;
+use Lemuria\Model\Fantasya\Commodity\Herb\Bugleweed;
+use Lemuria\Model\Fantasya\Commodity\Herb\CaveLichen;
+use Lemuria\Model\Fantasya\Commodity\Herb\CobaltFungus;
+use Lemuria\Model\Fantasya\Commodity\Herb\Elvendear;
+use Lemuria\Model\Fantasya\Commodity\Herb\FjordFungus;
+use Lemuria\Model\Fantasya\Commodity\Herb\Flatroot;
+use Lemuria\Model\Fantasya\Commodity\Herb\Gapgrowth;
+use Lemuria\Model\Fantasya\Commodity\Herb\IceBegonia;
+use Lemuria\Model\Fantasya\Commodity\Herb\Knotroot;
+use Lemuria\Model\Fantasya\Commodity\Herb\Mandrake;
+use Lemuria\Model\Fantasya\Commodity\Herb\Owlsgaze;
+use Lemuria\Model\Fantasya\Commodity\Herb\Peyote;
+use Lemuria\Model\Fantasya\Commodity\Herb\Rockweed;
+use Lemuria\Model\Fantasya\Commodity\Herb\Sandreeker;
+use Lemuria\Model\Fantasya\Commodity\Herb\Snowcrystal;
+use Lemuria\Model\Fantasya\Commodity\Herb\SpiderIvy;
+use Lemuria\Model\Fantasya\Commodity\Herb\TangyTemerity;
+use Lemuria\Model\Fantasya\Commodity\Herb\Waterfinder;
+use Lemuria\Model\Fantasya\Commodity\Herb\WhiteHemlock;
+use Lemuria\Model\Fantasya\Commodity\Herb\Windbag;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Iron;
 use Lemuria\Model\Fantasya\Commodity\Ironshield;
@@ -81,6 +102,18 @@ use Lemuria\Model\Fantasya\Commodity\Luxury\Silk;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Spice;
 use Lemuria\Model\Fantasya\Commodity\Mail;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Commodity\Potion\BerserkBlood;
+use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
+use Lemuria\Model\Fantasya\Commodity\Potion\DrinkOfCreation;
+use Lemuria\Model\Fantasya\Commodity\Potion\DrinkOfTruth;
+use Lemuria\Model\Fantasya\Commodity\Potion\ElixirOfPower;
+use Lemuria\Model\Fantasya\Commodity\Potion\GoliathWater;
+use Lemuria\Model\Fantasya\Commodity\Potion\HealingPotion;
+use Lemuria\Model\Fantasya\Commodity\Potion\HorseBliss;
+use Lemuria\Model\Fantasya\Commodity\Potion\PeasantJoy;
+use Lemuria\Model\Fantasya\Commodity\Potion\SevenLeagueTea;
+use Lemuria\Model\Fantasya\Commodity\Potion\WaterOfLife;
+use Lemuria\Model\Fantasya\Commodity\Potion\Woundshut;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Commodity\Stone;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
@@ -230,64 +263,123 @@ class CommandFactory
 	 * @var array(string=>string)
 	 */
 	protected array $buildings = [
-		'Baustelle' => Site::class,
-		'Befestigung' => Fort::class,
-		'Burg' => Site::class,
-		'Festung' => Stronghold::class,
-		'Gebäude' => Site::class,
-		'Gebaeude' => Site::class,
+		'Baustelle'       => Site::class,
+		'Befestigung'     => Fort::class,
+		'Burg'            => Site::class,
+		'Festung'         => Stronghold::class,
+		'Gebäude'         => Site::class,
+		'Gebaeude'        => Site::class,
 		'Holzfällerhütte' => Cabin::class,
-		'Palast' => Palace::class,
-		'Sägewerk' => Sawmill::class,
-		'Turm' => Tower::class,
-		'Zitadelle' => Citadel::class
+		'Palast'          => Palace::class,
+		'Sägewerk'        => Sawmill::class,
+		'Turm'            => Tower::class,
+		'Zitadelle'       => Citadel::class
 	];
 
 	/**
 	 * @var array(string=>string)
 	 */
 	protected array $commodities = [
-		'Armbrust'      => Crossbow::class,
-		'Armbrueste'    => Crossbow::class,
-		'Armbrüste'     => Crossbow::class,
-		'Balsame'       => Balsam::class,
-		'Bogen'         => Bow::class,
-		'Boegen'        => Bow::class,
-		'Bögen'         => Bow::class,
-		'Eisen'         => Iron::class,
-		'Eisenschilde'  => Ironshield::class,
-		'Elefanten'     => Elephant::class,
-		'Gewuerze'      => Spice::class,
-		'Gewürze'       => Spice::class,
-		'Greife'        => Griffin::class,
-		'Greifeneier'   => Griffinegg::class,
-		'Hoelzer'       => Wood::class,
-		'Holz'          => Wood::class,
-		'Holzschilde'   => Woodshield::class,
-		'Hölzer'        => Wood::class,
-		'Juwelen'       => Gem::class,
-		'Kamele'        => Camel::class,
-		'Katapulte'     => Catapult::class,
-		'Kettenhemden'  => Mail::class,
-		'Kriegshammer'  => Warhammer::class,
-		'Kriegshaemmer' => Warhammer::class,
-		'Kriegshämmer'  => Warhammer::class,
-		'Myrrhen'       => Myrrh::class,
-		'Oele'          => Oil::class,
-		'Öle'           => Oil::class,
-		'Pelze'         => Fur::class,
-		'Pferde'        => Horse::class,
-		'Plattenpanzer' => Armor::class,
-		'Schwerter'     => Sword::class,
-		'Seiden'        => Silk::class,
-		'Silber'        => Silver::class,
-		'Speere'        => Spear::class,
-		'Steine'        => Stone::class,
-		'Streitaxt'     => Battleaxe::class,
-		'Streitaexte'   => Battleaxe::class,
-		'Streitäxte'    => Battleaxe::class,
-		'Wagen'         => Carriage::class,
-		'Weihrauch'     => Olibanum::class
+		'Alraunen'             => Mandrake::class,
+		'Armbrust'             => Crossbow::class,
+		'Armbrueste'           => Crossbow::class,
+		'Armbrüste'            => Crossbow::class,
+		'Balsame'              => Balsam::class,
+		'Bauernliebe'          => PeasantJoy::class,
+		'Berserkerblute'       => BerserkBlood::class,
+		'Blasenmorcheln'       => Bubblemorel::class,
+		'Blaue Baumringel'     => CobaltFungus::class,
+		'Blauer Baumringel'    => CobaltFungus::class,
+		'Bogen'                => Bow::class,
+		'Boegen'               => Bow::class,
+		'Bögen'                => Bow::class,
+		'Eisblumen'            => IceBegonia::class,
+		'Eisen'                => Iron::class,
+		'Eisenschilde'         => Ironshield::class,
+		'Elefanten'            => Elephant::class,
+		'Elfenliebe'           => Elvendear::class,
+		'Elixier der Macht'    => ElixirOfPower::class,
+		'Elixiere der Macht'   => ElixirOfPower::class,
+		'Eulenaugen'           => Owlsgaze::class,
+		'Flachwurze'           => Flatroot::class,
+		'Fjordwuchse'          => FjordFungus::class,
+		'Gehirnschmalze'       => Brainpower::class,
+		'Gewuerze'             => Spice::class,
+		'Gewürze'              => Spice::class,
+		'Goliathwaesser'       => GoliathWater::class,
+		'Goliathwasser'        => GoliathWater::class,
+		'Goliathwässer'        => GoliathWater::class,
+		'Greife'               => Griffin::class,
+		'Greifeneier'          => Griffinegg::class,
+		'Gruene Spinneriche'   => SpiderIvy::class,
+		'Gruener Spinnerich'   => SpiderIvy::class,
+		'Grüne Spinneriche'    => SpiderIvy::class,
+		'Grüner Spinnerich'    => SpiderIvy::class,
+		'Gurgelkraeuter'       => Bugleweed::class,
+		'Gurgelkraute'         => Bugleweed::class,
+		'Gurgelkräuter'        => Bugleweed::class,
+		'Heiltrank'            => HealingPotion::class,
+		'Heiltränke'           => HealingPotion::class,
+		'Hoelzer'              => Wood::class,
+		'Holz'                 => Wood::class,
+		'Holzschilde'          => Woodshield::class,
+		'Hoehlenglimme'        => CaveLichen::class,
+		'Höhlenglimme'         => CaveLichen::class,
+		'Hölzer'               => Wood::class,
+		'Juwelen'              => Gem::class,
+		'Kakteenschwitze'      => Peyote::class,
+		'Kamele'               => Camel::class,
+		'Katapulte'            => Catapult::class,
+		'Kettenhemden'         => Mail::class,
+		'Knotige Saugwurze'    => Knotroot::class,
+		'Knotiger Saugwurz'    => Knotroot::class,
+		'Kriegshammer'         => Warhammer::class,
+		'Kriegshaemmer'        => Warhammer::class,
+		'Kriegshämmer'         => Warhammer::class,
+		'Myrrhen'              => Myrrh::class,
+		'Oele'                 => Oil::class,
+		'Öle'                  => Oil::class,
+		'Pelze'                => Fur::class,
+		'Pferde'               => Horse::class,
+		'Pferdegluecke'        => HorseBliss::class,
+		'Pferdeglücke'         => HorseBliss::class,
+		'Plattenpanzer'        => Armor::class,
+		'Sandfaeulen'          => Sandreeker::class,
+		'Sandfäulen'           => Sandreeker::class,
+		'Schaffenstrunke'      => DrinkOfCreation::class,
+		'Schaffenstrünke'      => DrinkOfCreation::class,
+		'Schneekristalle'      => Snowcrystal::class,
+		'Schwerter'            => Sword::class,
+		'Seiden'               => Silk::class,
+		'Siebenmeilentees'     => SevenLeagueTea::class,
+		'Silber'               => Silver::class,
+		'Spaltwachse'          => Gapgrowth::class,
+		'Speere'               => Spear::class,
+		'Steinbeisser'         => Rockweed::class,
+		'Steinbeißer'          => Rockweed::class,
+		'Steine'               => Stone::class,
+		'Streitaxt'            => Battleaxe::class,
+		'Streitaexte'          => Battleaxe::class,
+		'Streitäxte'           => Battleaxe::class,
+		'Traenke der Wahrheit' => DrinkOfTruth::class,
+		'Tränke der Wahrheit'  => DrinkOfTruth::class,
+		'Trank der Wahrheit'   => DrinkOfTruth::class,
+		'Wagen'                => Carriage::class,
+		'Waesser des Lebens'   => WaterOfLife::class,
+		'Wasser des Lebens'    => WaterOfLife::class,
+		'Wässer des Lebens'    => WaterOfLife::class,
+		'Wasserfinder'         => Waterfinder::class,
+		'Weihrauche'           => Olibanum::class,
+		'Weisse Wueteriche'    => WhiteHemlock::class,
+		'Weisser Wueterich'    => WhiteHemlock::class,
+		'Weiße Wüteriche'      => WhiteHemlock::class,
+		'Weißer Wüterich'      => WhiteHemlock::class,
+		'Windbeutel'           => Windbag::class,
+		'Wuerzige Wagemute'    => TangyTemerity::class,
+		'Wuerziger Wagemut'    => TangyTemerity::class,
+		'Wundsalben'           => Woundshut::class,
+		'Würzige Wagemute'     => TangyTemerity::class,
+		'Würziger Wagemut'     => TangyTemerity::class
 	];
 
 	/**

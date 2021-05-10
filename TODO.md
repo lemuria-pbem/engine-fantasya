@@ -4,6 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.4
 
+- Nachricht bei leerer Entnahme aus dem Materialpool verbessern
 
 ## Neue Funktionen
 

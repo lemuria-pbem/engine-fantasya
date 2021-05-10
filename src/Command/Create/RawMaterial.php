@@ -25,8 +25,8 @@ use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\RawMaterial as RawMaterialInterface;
 use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Fantasya\Requirement;
 use Lemuria\Model\Fantasya\Resources;
-use Lemuria\Model\Fantasya\Talent;
 
 /**
  * Implementation of command MACHEN <amount> <RawMaterial> (create raw material).
@@ -97,8 +97,9 @@ final class RawMaterial extends AllocationCommand implements Activity
 	 */
 	protected function createDemand(): void {
 		$resource         = $this->getCommodity();
-		$this->knowledge  = $this->calculus()->knowledge($this->getRequiredTalent());
-		$production       = $this->unit->Size() * $this->knowledge->Level();
+		$requirement      = $this->getRequiredTalent();
+		$this->knowledge  = $this->calculus()->knowledge($requirement->Talent());
+		$production       = (int)floor($this->unit->Size() * $this->knowledge->Level() / $requirement->Level());
 		$this->production = $this->reduceByWorkload($production);
 		if ($this->production > 0) {
 			if (count($this->phrase) === 2) {
@@ -132,10 +133,10 @@ final class RawMaterial extends AllocationCommand implements Activity
 	/**
 	 * Determine the required talent.
 	 */
-	private function getRequiredTalent(): Talent {
+	private function getRequiredTalent(): Requirement {
 		$resource = $this->job->getObject();
 		if ($resource instanceof RawMaterialInterface) {
-			return $resource->getTalent();
+			return $resource->getCraft();
 		}
 		throw new LemuriaException($resource . ' is not a raw material.');
 	}
