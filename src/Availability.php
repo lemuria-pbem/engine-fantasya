@@ -6,9 +6,12 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Effect\Unemployment;
 use Lemuria\Engine\Fantasya\Event\Population;
+use Lemuria\Engine\Fantasya\Factory\Model\Herb;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Herb as HerbInterface;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
@@ -16,6 +19,8 @@ use Lemuria\Model\Fantasya\Resources;
 class Availability
 {
 	use BuilderTrait;
+
+	protected const HERBS_PER_REGION = 100;
 
 	protected Resources $available;
 
@@ -35,7 +40,12 @@ class Availability
 			if (isset($resources[$offset])) {
 				$quantity = $resources[$offset];
 			} else {
-				$quantity = new Quantity(self::createCommodity($offset), 0);
+				if ($offset instanceof Commodity) {
+					$commodity = $offset;
+				} else {
+					$commodity = self::createCommodity($offset);
+				}
+				$quantity = new Quantity($commodity, 0);
 			}
 			$available = $this->calculateAvailability($quantity);
 			$this->available->add($available);
@@ -55,7 +65,8 @@ class Availability
 		$commodity = $quantity->Commodity();
 		$count     = match ($commodity::class) {
 			Peasant::class => $this->getUnemployedPeasants($quantity->Count()),
-			default        => $quantity->Count()
+			Herb::class    => $this->getHerbCount(),
+			default        => $this->getDefaultCount($quantity)
 		};
 		return new Quantity($commodity, $count);
 	}
@@ -65,5 +76,21 @@ class Availability
 		/** @var Unemployment $unemployment */
 		$unemployment = Lemuria::Score()->find($effect->setRegion($this->region));
 		return $unemployment?->Peasants() ?? (int)ceil(Population::UNEMPLOYMENT / 100.0 * $totalPeasants);
+	}
+
+	#[Pure] private function getHerbCount(?HerbInterface $herb = null):int {
+		$herbage = $this->region->Herbage();
+		if ($herbage && (!$herb || $herb === $herbage->Herb())) {
+			return $herbage->Occurrence() * self::HERBS_PER_REGION;
+		}
+		return 0;
+	}
+
+	#[Pure] private function getDefaultCount(Quantity $quantity): int {
+		$commodity = $quantity->Commodity();
+		if ($commodity instanceof HerbInterface) {
+			return $this->getHerbCount($commodity);
+		}
+		return $quantity->Count();
 	}
 }

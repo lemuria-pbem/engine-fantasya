@@ -294,7 +294,7 @@
 		"PopulationNewMessage": "{$peasants:wandert} in die Region $id ein.",
 		"RawMaterialCanMessage": "Die Einheit $id kann $quantity produzieren.",
 		"RawMaterialCannotMessage": "Die Einheit $id kann nicht mehr als $quantity produzieren.",
-		"RawMaterialExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um $material zu produzieren.",
+		"RawMaterialExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um {ein:$material} zu produzieren.",
 		"RawMaterialGuardedMessage": "Die Einheit $id kann {kein:$material} produzieren, die Region wird bewacht.",
 		"RawMaterialNoDemandMessage": "Die Einheit $id kann {kein:$material} produzieren.",
 		"RawMaterialOnlyMessage": "Die Einheit $id kann nur $output mit $talent produzieren.",
