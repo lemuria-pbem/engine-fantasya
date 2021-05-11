@@ -3,11 +3,6 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
 use function Lemuria\getClass;
-use Lemuria\Engine\Fantasya\Activity;
-use Lemuria\Engine\Fantasya\Command\AllocationCommand;
-use Lemuria\Engine\Fantasya\Context;
-use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
-use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialCanMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialCannotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialExperienceMessage;
@@ -17,14 +12,10 @@ use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialOutputMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialResourcesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialWantsMessage;
-use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity;
-use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\RawMaterial as RawMaterialInterface;
-use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Requirement;
 use Lemuria\Model\Fantasya\Resources;
 
@@ -36,23 +27,11 @@ use Lemuria\Model\Fantasya\Resources;
  * - MACHEN <RawMaterial>
  * - MACHEN <amount> <RawMaterial>
  */
-class RawMaterial extends AllocationCommand implements Activity
+final class Herb extends RawMaterial
 {
-	use DefaultActivityTrait;
-
-	protected Ability $knowledge;
-
-	protected ?int $demand = null;
-
-	protected int $production = 0;
-
-	public function __construct(Phrase $phrase, Context $context, protected Job $job) {
-		parent::__construct($phrase, $context);
-	}
-
 	public function allocate(Resources $resources): void {
 		parent::allocate($resources);
-
+return;
 		$resource   = $this->job->getObject();
 		$talent     = $this->knowledge->Talent();
 		$production = $this->getResource(getClass($resource))->Count();
@@ -78,18 +57,6 @@ class RawMaterial extends AllocationCommand implements Activity
 				$this->message(RawMaterialOutputMessage::class)->i($quantity)->s($talent);
 			}
 		}
-	}
-
-	/**
-	 * Check region guards before allocation.
-	 *
-	 * If region is guarded by other parties and there are no RESOURCES relations, this unit may only produce if it is
-	 * not in a building and has better camouflage than all the blocking guards' perception.
-	 *
-	 * @return Party[]
-	 */
-	protected function getCheckBeforeAllocation(): array {
-		return $this->getCheckByAgreement(Relation::RESOURCES);
 	}
 
 	/**

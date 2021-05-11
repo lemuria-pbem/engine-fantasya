@@ -4,16 +4,16 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use function Lemuria\isInt;
 use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Command\Create\Herb;
 use Lemuria\Engine\Fantasya\Command\Create\Resource;
 use Lemuria\Engine\Fantasya\Command\Create\Road;
 use Lemuria\Engine\Fantasya\Command\Create\Temp;
 use Lemuria\Engine\Fantasya\Command\Create\Unknown;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
-use Lemuria\Engine\Fantasya\Factory\Model\Herb;
+use Lemuria\Engine\Fantasya\Factory\Model\Herb as HerbModel;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Model\Fantasya\Herb as HerbInterface;
-use Lemuria\Singleton;
 
 /**
  * Implementation of command MACHEN.
@@ -47,7 +47,6 @@ final class Create extends DelegatedCommand
 			return new Road($this->phrase, $this->context);
 		}
 
-		// MACHEN <amount> Kräuter
 		// MACHEN <amount> <Ressource>
 		if (isInt($param)) {
 			$what   = $this->phrase->getParameter(2);
@@ -56,26 +55,22 @@ final class Create extends DelegatedCommand
 			$what   = $param;
 			$number = (int)$this->phrase->getParameter(2);
 		}
+
+		// MACHEN Kräuter
+		$lower = strtolower($what);
+		if ($lower === 'kraut' || $lower === 'kraeuter' || $lower === 'kräuter') {
+			return new Herb($this->phrase, $this->context, new Job(new HerbModel(), $number));
+		}
+
 		try {
-			$resource = $this->getResource($what);
-			return new Resource($this->phrase, $this->context, new Job($resource, $number));
+			$resource = $this->context->Factory()->resource($what);
+			$job      = new Job($resource, $number);
+			if ($resource instanceof HerbInterface) {
+				return new Herb($this->phrase, $this->context, $job);
+			}
+			return new Resource($this->phrase, $this->context, $job);
 		} catch (UnknownItemException $e) {
 			return new Unknown($this->phrase, $this->context, $e);
 		}
-	}
-
-	private function getResource(string $class): Singleton {
-		$resource = $this->context->Factory()->resource($class);
-
-		// If concrete herb is created, replace it with Herb delegate.
-		if ($resource instanceof HerbInterface) {
-			if ($resource::class !== Herb::class) {
-				if ($resource === $this->unit->Region()->Herbage()?->Herb()) {
-					$resource = $this->context->Factory()->resource('kraut');
-				}
-			}
-		}
-
-		return $resource;
 	}
 }

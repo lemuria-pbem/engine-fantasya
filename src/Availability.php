@@ -81,7 +81,7 @@ class Availability
 	#[Pure] private function getHerbCount(?HerbInterface $herb = null):int {
 		$herbage = $this->region->Herbage();
 		if ($herbage && (!$herb || $herb === $herbage->Herb())) {
-			return $herbage->Occurrence() * self::HERBS_PER_REGION;
+			return (int)round($herbage->Occurrence() * self::HERBS_PER_REGION);
 		}
 		return 0;
 	}

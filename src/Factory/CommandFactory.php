@@ -49,7 +49,6 @@ use Lemuria\Engine\Fantasya\Command\Unit;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
-use Lemuria\Engine\Fantasya\Factory\Model\Herb;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Artifact;
@@ -334,9 +333,6 @@ class CommandFactory
 		'Kettenhemden'         => Mail::class,
 		'Knotige Saugwurze'    => Knotroot::class,
 		'Knotiger Saugwurz'    => Knotroot::class,
-		'Kraut'                => Herb::class,
-		'Kraeuter'             => Herb::class,
-		'Kräuter'              => Herb::class,
 		'Kriegshammer'         => Warhammer::class,
 		'Kriegshaemmer'        => Warhammer::class,
 		'Kriegshämmer'         => Warhammer::class,

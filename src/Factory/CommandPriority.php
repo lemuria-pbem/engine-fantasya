@@ -60,6 +60,7 @@ final class CommandPriority
 		'Construction'   => 74,
 		'Vessel'         => 75,
 		"Road"           => 76,
+		'Herb'           => 78,
 		'Commodity'      => 79,
 		'RawMaterial'    => 80,
 		'Unknown'        => 82,
