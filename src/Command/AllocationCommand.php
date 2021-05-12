@@ -78,7 +78,7 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	 */
 	protected function initialize(): void {
 		parent::initialize();
-		$allocation     = $this->context->getAllocation($this->unit->Region());
+		$allocation = $this->context->getAllocation($this->unit->Region());
 		$this->initWorkload();
 		$this->createDemand();
 		if (count($this->resources)) {
