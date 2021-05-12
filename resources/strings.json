@@ -313,6 +313,7 @@
 		"ReserveEverythingMessage": "Die Einheit $id reserviert den gesamten Materialpool.",
 		"ReserveInvalidMessage": "Die Einheit $id versucht dummerweise, $reserve zu reservieren.",
 		"ReserveMessage": "Die Einheit $id reserviert $reserve aus dem Materialpool.",
+		"ReserveNothingMessage": "Die Einheit $id kann {kein:$commodity} aus dem Materialpool reservieren.",
 		"ReserveOnlyMessage": "Die Einheit $id kann nur $reserve aus dem Materialpool reservieren.",
 		"RoadAlreadyCompletedMessage": "Die Straße nach $direction in der Region $region ist schon fertiggestellt.",
 		"RoadCompletedMessage": "Die Einheit $id stellt in der Region $region die Straße nach $direction mit $stones fertig.",

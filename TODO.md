@@ -4,13 +4,23 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.4
 
-- Nachricht bei leerer Entnahme aus dem Materialpool verbessern
 
 ## Neue Funktionen
 
 ### Version 0.5
 
-- Alchemie (Kräuter und Tränke, BENUTZEN, FORSCHEN, MACHEN)
+- Effekt von Berserkerblut
+- Effekt von Gehirnschmalz
+- Effekt von Schaffenstrunk
+- Effekt von Trank der Wahrheit
+- Effekt von Elixier der Macht
+- Effekt von Goliathwasser
+- Effekt von Heiltrank
+- Effekt von Pferdeglück
+- Effekt von Bauernlieb
+- Effekt von Siebenmeilentee
+- Effekt von Wasser des Lebens
+- Effekt von Wundsalbe
 
 ### Version 0.6
 

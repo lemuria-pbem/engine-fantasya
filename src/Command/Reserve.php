@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\ReserveAllMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ReserveEverythingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ReserveInvalidMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ReserveMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ReserveNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ReserveOnlyMessage;
 use Lemuria\Model\Fantasya\Quantity;
 
@@ -42,10 +43,13 @@ final class Reserve extends UnitCommand
 			$commodity = $this->context->Factory()->commodity($commodity);
 			$quantity  = new Quantity($commodity, $amount);
 			if ($amount > 0) {
-				$reserved = $resourcePool->reserve($this->unit, $quantity);
-				if ($amount === PHP_INT_MAX) {
+				$reserved      = $resourcePool->reserve($this->unit, $quantity);
+				$reservedCount = $reserved->Count();
+				if ($reservedCount <= 0) {
+					$this->message(ReserveNothingMessage::class)->s($commodity);
+				} elseif ($amount === PHP_INT_MAX) {
 					$this->message(ReserveAllMessage::class)->s($commodity)->i($reserved);
-				} elseif ($amount > $reserved->Count()) {
+				} elseif ($amount > $reservedCount) {
 					$this->message(ReserveOnlyMessage::class)->i($reserved);
 				} else {
 					$this->message(ReserveMessage::class)->i($reserved);
