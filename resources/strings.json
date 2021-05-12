@@ -218,6 +218,7 @@
 		"HelpRegionNotMessage": "Die Einheit $id hat HELFEN $agreement für alle Parteien in der Region $region widerrufen.",
 		"HelpSelfMessage": "Die Einheit $id kann nicht der eigenen Partei helfen.",
 		"HelpUnknownPartyMessage": "Die Einheit $id kennt die Partei $party nicht, um ihr zu helfen.",
+		"HerbUnknownMessage": "Die Einheit $id kann in der Region $region keine Kräuter pflücken - die Gegend muss zuerst erforscht werden.",
 		"HungerMessage": "Die Gesundheit der Einheit $id sinkt auf {$health:Punkt}.",
 		"LayaboutMessage": "Die Einheit $id faulenzt in dieser Woche.",
 		"LearnOnlyMessage": "Die Einheit $id kann nur $silver Silber ausgeben, um $talent zu lernen.",

@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command\Create;
 
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
+use Lemuria\Engine\Fantasya\Message\Unit\HerbUnknownMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Fantasya\Herbage;
 use Lemuria\Engine\Fantasya\Factory\Model\Herb as HerbModel;
@@ -31,7 +32,7 @@ final class Herb extends RawMaterial
 	 */
 	protected function createDemand(): void {
 		if (!$this->herbage) {
-			//TODO unknown herbage
+			$this->message(HerbUnknownMessage::class)->e($this->unit->Region());
 			return;
 		}
 		parent::createDemand();

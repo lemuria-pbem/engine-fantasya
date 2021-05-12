@@ -54,7 +54,16 @@ class Availability
 	}
 
 	public function remove(Quantity $resource): void {
-		$this->getResource($resource->Commodity())->remove($resource);
+		$commodity = $resource->Commodity();
+		$available = $this->getResource($commodity);
+		$available->remove($resource);
+		if ($commodity instanceof HerbInterface) {
+			$herbage = $this->region->Herbage();
+			if ($commodity === $herbage->Herb()) {
+				$herbage->setOccurrence($available->Count() / self::HERBS_PER_REGION);
+				return;
+			}
+		}
 		$this->region->Resources()->remove($resource);
 	}
 

@@ -52,7 +52,7 @@ class RawMaterial extends AllocationCommand implements Activity
 
 	public function allocate(Resources $resources): void {
 		parent::allocate($resources);
-		$resource   = $this->job->getObject();
+		$resource   = $this->getCommodity();
 		$talent     = $this->knowledge->Talent();
 		$production = $this->getResource(getClass($resource))->Count();
 		if ($production <= 0) {
