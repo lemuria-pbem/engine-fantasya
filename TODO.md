@@ -4,10 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.5
 
-- Wache stoppt getarnte Einheit
-- TREIBEN taucht nicht in Simulation auf [mw]
-- Region hat kein Angebot in Magellan [Ost-Lanar]
-- LEHREN Temp für Defaultbefehle umschreiben
 - Effekt von Gehirnschmalz
 - Effekt von Goliathwasser
 - Effekt von Schaffenstrunk

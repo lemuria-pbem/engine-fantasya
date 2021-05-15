@@ -16,7 +16,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\TaxWithoutWeaponMessage;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Relation;
-use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Taxcollecting;
 
 /**
@@ -39,9 +38,8 @@ final class Tax extends AllocationCommand implements Activity
 
 	private int $level = 0;
 
-	public function allocate(Resources $resources): void {
-		parent::allocate($resources);
-
+	protected function run(): void {
+		parent::run();
 		$quantity = $this->getResource(Silver::class);
 		if ($quantity->Count() <= 0) {
 			if ($this->level <= 0) {

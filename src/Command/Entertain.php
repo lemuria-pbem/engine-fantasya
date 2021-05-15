@@ -13,7 +13,6 @@ use Lemuria\Engine\Fantasya\Message\Party\EntertainPreventMessage;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Relation;
-use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Entertaining;
 
 /**
@@ -43,9 +42,8 @@ final class Entertain extends AllocationCommand implements Activity
 		return self::QUOTA;
 	}
 
-	public function allocate(Resources $resources): void {
-		parent::allocate($resources);
-
+	protected function run(): void {
+		parent::run();
 		$quantity = $this->getResource(Silver::class);
 		if ($quantity->Count() <= 0) {
 			$guardParties = $this->checkBeforeAllocation();

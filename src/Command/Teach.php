@@ -4,11 +4,11 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
+use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachBonusMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachExceptionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachPartyMessage;

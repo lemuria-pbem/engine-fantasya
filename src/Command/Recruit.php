@@ -18,7 +18,6 @@ use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Relation;
-use Lemuria\Model\Fantasya\Resources;
 
 /**
  * Implementation of command REKRUTIEREN (recruit peasants).
@@ -34,9 +33,8 @@ final class Recruit extends AllocationCommand
 
 	private int $size;
 
-	public function allocate(Resources $resources): void {
-		parent::allocate($resources);
-
+	protected function run(): void {
+		parent::run();
 		$guardParties = $this->checkBeforeAllocation();
 		if (empty($guardParties)) {
 			$quantity = $this->getResource(Peasant::class);

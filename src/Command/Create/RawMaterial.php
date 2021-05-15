@@ -26,7 +26,6 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\RawMaterial as RawMaterialInterface;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Requirement;
-use Lemuria\Model\Fantasya\Resources;
 
 /**
  * Implementation of command MACHEN <amount> <RawMaterial> (create raw material).
@@ -50,8 +49,8 @@ class RawMaterial extends AllocationCommand implements Activity
 		parent::__construct($phrase, $context);
 	}
 
-	public function allocate(Resources $resources): void {
-		parent::allocate($resources);
+	protected function run(): void {
+		parent::run();
 		$resource   = $this->getCommodity();
 		$talent     = $this->knowledge->Talent();
 		$production = $this->getResource(getClass($resource))->Count();
