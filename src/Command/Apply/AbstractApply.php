@@ -13,6 +13,7 @@ abstract class AbstractApply
 		return true;
 	}
 
-	public function apply(int $amount) {
+	public function apply(int $amount): int {
+		return $amount;
 	}
 }

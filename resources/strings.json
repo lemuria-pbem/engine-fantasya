@@ -98,9 +98,11 @@
 		"AnnouncementRegionMessage": "Botschaft von der Partei $sender: \"$message\"",
 		"AnnouncementUnitMessage": "Die Einheit $id hat eine Botschaft von der Einheit $sender erhalten: \"$message\"",
 		"AnnouncementVesselMessage": "Botschaft von der Partei $sender: \"$message\"",
+		"ApplyAlreadyMessage": "Die Einheit $id kann keinen weiteren Trank benutzen.",
 		"ApplyMessage": "Die Einheit $id benutzt $potion.",
 		"ApplyNoneMessage": "Die Einheit $id hat {kein:$potion}.",
 		"ApplyOnlyMessage": "Die Einheit $id kann nur $potion benutzen.",
+		"ApplySaveMessage": "Die Einheit $id spart $potion ein.",
 		"BannerMessage": "Die Partei $id hat nun ein neues Banner.",
 		"BoardAlreadyMessage": "Die Einheit $id ist bereits an Bord des Schiffes $vessel.",
 		"BoardDeniedMessage": "Die Einheit $id kann das Schiff $vessel nicht ohne die Erlaubnis des Kapitäns betreten.",
@@ -293,6 +295,7 @@
 		"PopulationHungerMessage": "In der Region $id herrscht eine Hungersnot, {$peasants:verhungert}.",
 		"PopulationMigrantsMessage": "{$peasants:verlässt} die Region $id.",
 		"PopulationNewMessage": "{$peasants:wandert} in die Region $id ein.",
+		"PotionGiftMessage": "Die Einheit $unit hat einen fahrenden alten Zauberer und Alchemisten getroffen, und von ihm einen Trank als Geschenk erhalten: $gift.",
 		"RawMaterialCanMessage": "Die Einheit $id kann $quantity produzieren.",
 		"RawMaterialCannotMessage": "Die Einheit $id kann nicht mehr als $quantity produzieren.",
 		"RawMaterialExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um {ein:$material} zu produzieren.",
@@ -438,7 +441,11 @@
 		"VesselOnlyMessage": "Die Einheit $id kann nur {$size:Größenpunkt} am Schiff $vessel bauen.",
 		"VesselResourcesMessage": "Die Einheit $id hat kein Baumaterial, um am Schiff $vessel zu bauen.",
 		"VesselUnableMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um {ein:$ship} zu bauen.",
-		"WelcomeMessage": "Herzlich willkommen auf Lemuria! Du startest heute mit der Partei $party."
+		"WelcomeMessage": "Herzlich willkommen auf Lemuria! Du startest heute mit der Partei $party.",
+		"WoundshutDamageMessage": "Die Einheit $id hat $damage Schadenspunkte.",
+		"WoundshutFullMessage": "Die Einheit $id heilt alle ihre Wunden.",
+		"WoundshutMessage": "Die Einheit $id heilt ihre Wunden.",
+		"WoundshutNoneMessage": "Die Einheit $id benötigt keine $woundshut."
 	},
 	"preposition": {
 		"zu": {

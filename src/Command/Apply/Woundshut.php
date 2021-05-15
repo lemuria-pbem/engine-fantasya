@@ -2,10 +2,41 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Apply;
 
+use Lemuria\Engine\Fantasya\Factory\ActionTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\WoundshutDamageMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\WoundshutFullMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\WoundshutMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\WoundshutNoneMessage;
+use Lemuria\Model\Fantasya\Commodity\Potion\Woundshut as Potion;
+
 final class Woundshut extends AbstractUnitApply
 {
-	public function apply(int $amount) {
-		$this->getEffect()->setCount($amount);
-		//TODO: Regain hitpoints.
+	use ActionTrait;
+
+	public function apply(int $amount): int {
+		$used = $this->heal($amount);
+		$this->getEffect()->setCount($used);
+		return $used;
+	}
+
+	private function heal(int $amount): int {
+		$unit      = $this->apply->Unit();
+		$hitpoints = $unit->Size() * $unit->Race()->Hitpoints();
+		$health    = $unit->Health() * $hitpoints;
+		$damage    = $hitpoints - $health;
+		$this->message(WoundshutDamageMessage::class, $unit)->p($damage);
+
+		if ($damage > 0) {
+			$healing = $amount * Potion::HITPOINTS;
+			if ($damage > $healing) {
+				$this->message(WoundshutMessage::class, $unit);
+				return $amount;
+			} else {
+				$this->message(WoundshutFullMessage::class, $unit);
+				return (int)ceil($damage / Potion::HITPOINTS);
+			}
+		}
+		$this->message(WoundshutNoneMessage::class, $unit);
+		return 0;
 	}
 }

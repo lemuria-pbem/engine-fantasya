@@ -16,7 +16,7 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
- * The Timer event adds other events at predefined rounds.
+ * A unit finds a lost wallet containing a good amount of silver.
  */
 final class FindWallet extends AbstractEvent
 {

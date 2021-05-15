@@ -5,7 +5,7 @@ namespace Lemuria\Engine\Fantasya\Event;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Action;
-use Lemuria\Engine\Fantasya\Event\Game\FindWallet;
+use Lemuria\Engine\Fantasya\Event\Game\PotionGift;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 
@@ -15,8 +15,12 @@ use Lemuria\Lemuria;
 final class Timer extends DelegatedEvent
 {
 	private const SCHEDULE = [
-		5 => [
-			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 34, FindWallet::SILVER => 4000]]
+		10 => [
+			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 10,     PotionGift::POTION => 'Brainpower']],
+			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 22,     PotionGift::POTION => 'Brainpower']],
+			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 73,     PotionGift::POTION => 'Brainpower']],
+			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 36670,  PotionGift::POTION => 'Brainpower']],
+			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 812295, PotionGift::POTION => 'Brainpower']]
 		]
 	];
 

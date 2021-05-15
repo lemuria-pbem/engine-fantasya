@@ -8,19 +8,13 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - TREIBEN taucht nicht in Simulation auf [mw]
 - Region hat kein Angebot in Magellan [Ost-Lanar]
 - LEHREN Temp für Defaultbefehle umschreiben
-- Trank für alle Parteien als Ereignis
-- Effekt von Berserkerblut
 - Effekt von Gehirnschmalz
-- Effekt von Schaffenstrunk
-- Effekt von Trank der Wahrheit
-- Effekt von Elixier der Macht
 - Effekt von Goliathwasser
-- Effekt von Heiltrank
-- Effekt von Pferdeglück
-- Effekt von Bauernlieb
+- Effekt von Schaffenstrunk
 - Effekt von Siebenmeilentee
+- Effekt von Bauernlieb
+- Effekt von Pferdeglück
 - Effekt von Wasser des Lebens
-- Effekt von Wundsalbe
 
 ## Neue Funktionen
 
@@ -30,7 +24,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.7 und folgende
 
-- Kampf (ATTACKIEREN/BELAGERN)
+- Kampf (ATTACKIEREN/BELAGERN, Berserkerblut, Elixier der Macht, Heiltrank)
 - Monster, besondere Gegenstände wie Greifeneier
 - Regeldatei für Magellan
 
