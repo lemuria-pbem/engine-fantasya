@@ -2,13 +2,13 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Fehler/Verbesserungen in 0.4
+## Fehler/Verbesserungen in 0.5
 
-
-## Neue Funktionen
-
-### Version 0.5
-
+- Wache stoppt getarnte Einheit
+- TREIBEN taucht nicht in Simulation auf [mw]
+- Region hat kein Angebot in Magellan [Ost-Lanar]
+- LEHREN Temp für Defaultbefehle umschreiben
+- Trank für alle Parteien als Ereignis
 - Effekt von Berserkerblut
 - Effekt von Gehirnschmalz
 - Effekt von Schaffenstrunk
@@ -21,6 +21,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Effekt von Siebenmeilentee
 - Effekt von Wasser des Lebens
 - Effekt von Wundsalbe
+
+## Neue Funktionen
 
 ### Version 0.6
 

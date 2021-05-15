@@ -17,11 +17,6 @@ use Lemuria\Model\Fantasya\Quantity;
  */
 final class Apply extends UnitCommand
 {
-	protected function initialize(): void {
-		parent::initialize();
-		//TODO: Check for existing ApplyEffect.
-	}
-
 	protected function run(): void {
 		switch ($this->phrase->count()) {
 			case 1 :
@@ -43,6 +38,7 @@ final class Apply extends UnitCommand
 			throw new UnknownCommandException($this);
 		}
 
+		$apply     = $this->context->Factory()->applyPotion($potion);
 		$inventory = $this->unit->Inventory();
 		$available = $inventory[$class]->Count();
 		if ($available < $amount) {
@@ -50,15 +46,22 @@ final class Apply extends UnitCommand
 				$this->message(ApplyNoneMessage::class)->s($potion);
 				return;
 			}
+			if (!$apply->CanApply()) {
+				//TODO cannot
+				return;
+			}
 			$quantity = new Quantity($potion, $available);
 			$this->message(ApplyOnlyMessage::class)->i($quantity);
 		} else {
+			if (!$apply->CanApply()) {
+				//TODO cannot
+				return;
+			}
 			$quantity = new Quantity($potion, $amount);
 			$this->message(ApplyMessage::class)->i($quantity);
 		}
 
 		$inventory->remove($quantity);
-
-		//TODO: Implement potion effect.
+		$apply->apply($quantity->Count());
 	}
 }

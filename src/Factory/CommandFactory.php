@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Factory;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
 use Lemuria\Engine\Fantasya\Command\Announcement;
 use Lemuria\Engine\Fantasya\Command\Apply;
+use Lemuria\Engine\Fantasya\Command\Apply\AbstractApply;
 use Lemuria\Engine\Fantasya\Command\Banner;
 use Lemuria\Engine\Fantasya\Command\Buy;
 use Lemuria\Engine\Fantasya\Command\Comment;
@@ -50,6 +51,7 @@ use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Artifact;
 use Lemuria\Model\Fantasya\Building;
@@ -126,6 +128,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Commodity\Woodshield;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\RawMaterial;
 use Lemuria\Model\Fantasya\Ship;
 use Lemuria\Model\Fantasya\Ship\Boat;
@@ -165,6 +168,7 @@ use Lemuria\Model\Fantasya\Talent\Weaponry;
 use Lemuria\Model\Fantasya\Talent\Woodchopping;
 use Lemuria\Model\World;
 use Lemuria\Singleton;
+use function Lemuria\getClass;
 
 /**
  * Parser helper class to find a command class.
@@ -477,6 +481,8 @@ class CommandFactory
 		'Westen'         => World::WEST
 	];
 
+	protected const APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Apply\\';
+
 	public function __construct(protected Context $context) {
 	}
 
@@ -635,6 +641,15 @@ class CommandFactory
 	public function talent(string $talent): Talent {
 		$talentClass = $this->identifySingleton($talent, $this->talents);
 		return self::createTalent($talentClass);
+	}
+
+	public function applyPotion(Potion $potion): AbstractApply {
+		$potion = getClass($potion);
+		$class  = self::APPLY_NAMESPACE . $potion;
+		if (class_exists($class)) {
+			return new $class;
+		}
+		throw new LemuriaException('Apply for potion ' . $potion . ' is not implemented.');
 	}
 
 	/**
