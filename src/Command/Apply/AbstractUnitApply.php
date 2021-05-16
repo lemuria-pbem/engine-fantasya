@@ -10,8 +10,11 @@ abstract class AbstractUnitApply extends AbstractApply
 {
 	protected ?PotionEffect $effect = null;
 
+	private bool $isNew = false;
+
 	public function CanApply(): bool {
-		return !$this->getEffect()->IsFresh();
+		$effect = $this->getEffect();
+		return $this->isNew || !$effect->IsFresh();
 	}
 
 	protected function getEffect(): PotionEffect {
@@ -22,6 +25,8 @@ abstract class AbstractUnitApply extends AbstractApply
 			if ($existing instanceof PotionEffect) {
 				$this->effect = $existing;
 			} else {
+				$this->isNew = true;
+				$this->effect->setPotion($this->apply->Potion());
 				Lemuria::Score()->add($this->effect);
 			}
 		}

@@ -7,8 +7,10 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Combat\WeaponSkill;
 use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Teach;
+use Lemuria\Engine\Fantasya\Effect\PotionEffect;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Item;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
@@ -16,9 +18,11 @@ use Lemuria\Model\Fantasya\Commodity\Elephant;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Pegasus;
+use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Modification;
+use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
@@ -170,9 +174,16 @@ final class Calculus
 		foreach ($this->teachers as $teach /* @var Teach $teach */) {
 			$teachBonus += $teach->getBonus();
 		}
-		$teachBonus  = min(1.0, $teachBonus);
-		$probability = rand(750, 1250) / 1000;
-		$progress    = (int)round(100 * ($probability + $teachBonus));
+		$teachBonus = min(1.0, $teachBonus);
+		$brainpower = $this->hasApplied(Brainpower::class);
+		$count      = $brainpower?->Count();
+		if ($brainpower && $count) {
+			$boost       = min(1.0, $count * Brainpower::PERSONS / $this->unit->Size());
+			$probability = 1.25 * (1.0 + $boost);
+		} else {
+			$probability = rand(750, 1250) / 1000;
+		}
+		$progress = (int)round(100 * ($probability + $teachBonus));
 		return new Ability($talent, $progress);
 	}
 
@@ -232,6 +243,20 @@ final class Calculus
 		$camouflage = $calculus->knowledge(Camouflage::class);
 		$perception = $this->knowledge(Perception::class);
 		return $perception->Level() >= $camouflage->Level();
+	}
+
+	/**
+	 * Get a potion effect if the unit has applied the given potion.
+	 */
+	public function hasApplied(Potion|string $potion): ?PotionEffect {
+		if (is_string($potion)) {
+			$potion = self::createCommodity($potion);
+		}
+		$effect = new PotionEffect(State::getInstance());
+		$effect->setUnit($this->unit);
+		/** @var PotionEffect $existing */
+		$existing = Lemuria::Score()->find($effect);
+		return $existing?->Potion() === $potion ? $existing : null;
 	}
 
 	#[Pure] private function transport(?Item $quantity, int $reduceBy = 0): int {

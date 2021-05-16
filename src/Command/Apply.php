@@ -20,6 +20,12 @@ use Lemuria\Model\Fantasya\Quantity;
  */
 final class Apply extends UnitCommand
 {
+	private Potion $potion;
+
+	public function Potion(): Potion {
+		return $this->potion;
+	}
+
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n < 1) {
@@ -40,14 +46,15 @@ final class Apply extends UnitCommand
 		if ($amount <= 0) {
 			throw new UnknownCommandException($this);
 		}
-		$potion = self::createCommodity($class);
+		$potion = $this->context->Factory()->commodity($class);
 		if (!($potion instanceof Potion)) {
 			throw new UnknownCommandException($this);
 		}
+		$this->potion = $potion;
 
-		$apply     = $this->context->Factory()->applyPotion($potion);
+		$apply     = $this->context->Factory()->applyPotion($potion, $this);
 		$inventory = $this->unit->Inventory();
-		$available = $inventory[$class]->Count();
+		$available = $inventory[$potion]->Count();
 		if ($available < $amount) {
 			if ($available <= 0) {
 				$this->message(ApplyNoneMessage::class)->s($potion);

@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
+use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
 use Lemuria\Engine\Fantasya\Command\Announcement;
 use Lemuria\Engine\Fantasya\Command\Apply;
@@ -168,7 +169,6 @@ use Lemuria\Model\Fantasya\Talent\Weaponry;
 use Lemuria\Model\Fantasya\Talent\Woodchopping;
 use Lemuria\Model\World;
 use Lemuria\Singleton;
-use function Lemuria\getClass;
 
 /**
  * Parser helper class to find a command class.
@@ -481,7 +481,7 @@ class CommandFactory
 		'Westen'         => World::WEST
 	];
 
-	protected const APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Apply\\';
+	protected const APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Apply\\';
 
 	public function __construct(protected Context $context) {
 	}
@@ -643,11 +643,11 @@ class CommandFactory
 		return self::createTalent($talentClass);
 	}
 
-	public function applyPotion(Potion $potion): AbstractApply {
+	public function applyPotion(Potion $potion, Apply $apply): AbstractApply {
 		$potion = getClass($potion);
 		$class  = self::APPLY_NAMESPACE . $potion;
 		if (class_exists($class)) {
-			return new $class;
+			return new $class($apply);
 		}
 		throw new LemuriaException('Apply for potion ' . $potion . ' is not implemented.');
 	}
