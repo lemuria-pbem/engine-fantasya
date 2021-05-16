@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use function Lemuria\isInt;
+use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\ApplyAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ApplyMessage;
@@ -21,6 +22,10 @@ use Lemuria\Model\Fantasya\Quantity;
 final class Apply extends UnitCommand
 {
 	private Potion $potion;
+
+	public function Context(): Context {
+		return $this->context;
+	}
 
 	public function Potion(): Potion {
 		return $this->potion;

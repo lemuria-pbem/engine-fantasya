@@ -9,7 +9,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Effekt von Siebenmeilentee
 - Effekt von Bauernlieb
 - Effekt von Pferdeglück
-- Effekt von Wasser des Lebens
 
 ## Neue Funktionen
 
