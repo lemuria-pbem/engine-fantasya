@@ -24,13 +24,13 @@ use Lemuria\Model\Fantasya\Quantity;
 final class Reserve extends UnitCommand
 {
 	protected function run(): void {
-		$count     = $this->phrase->getParameter(1);
-		$commodity = $this->phrase->getParameter(2);
+		$count     = $this->phrase->getParameter();
+		$commodity = $this->phrase->getLine(2);
 
 		$amount = (int)$count; // RESERVIEREN <amount> <commodity>
 		if ((string)$amount !== $count) {
 			if (!str_starts_with('alles', strtolower($count))) { // RESERVIEREN Alles
-				$commodity = $count; // RESERVIEREN <commodity> (all of commodity)
+				$commodity = $count . ' ' . $commodity; // RESERVIEREN <commodity> (all of commodity)
 			}
 			$amount = PHP_INT_MAX;
 		}

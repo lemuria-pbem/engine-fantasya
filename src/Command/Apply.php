@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use function Lemuria\isInt;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\ApplyAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ApplyMessage;
@@ -20,17 +21,21 @@ use Lemuria\Model\Fantasya\Quantity;
 final class Apply extends UnitCommand
 {
 	protected function run(): void {
-		switch ($this->phrase->count()) {
-			case 1 :
-				$amount = 1;
-				$class  = $this->phrase->getParameter();
-				break;
-			case 2 :
-				$amount = (int)$this->phrase->getParameter();
-				$class  = $this->phrase->getParameter(2);
-				break;
-			default :
+		$n = $this->phrase->count();
+		if ($n < 1) {
+			throw new UnknownCommandException($this);
+		}
+
+		$first = $this->phrase->getParameter();
+		if (isInt($first)) {
+			if ($n < 2) {
 				throw new UnknownCommandException($this);
+			}
+			$amount = (int)$first;
+			$class  = $this->phrase->getLine(2);
+		} else {
+			$amount = 1;
+			$class  = $this->phrase->getLine();
 		}
 		if ($amount <= 0) {
 			throw new UnknownCommandException($this);

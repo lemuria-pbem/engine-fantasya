@@ -43,7 +43,7 @@ final class Give extends UnitCommand
 		$i               = 1;
 		$this->recipient = $this->nextId($i);
 		$count           = $this->phrase->getParameter($i++);
-		$commodity       = $this->phrase->getParameter($i);
+		$commodity       = $this->phrase->getLine($i);
 		if (!$this->recipient) {
 			throw new InvalidCommandException($this, 'No recipient parameter.');
 		}

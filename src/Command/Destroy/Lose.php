@@ -49,7 +49,7 @@ final class Lose extends UnitCommand
 			}
 			$count = $this->phrase->getParameter($p++);
 		}
-		$commodity = $this->phrase->getParameter($p);
+		$commodity = $this->phrase->getLine($p);
 
 		$this->parseObject($count, $commodity);
 		if ($this->commodity instanceof Everything) {

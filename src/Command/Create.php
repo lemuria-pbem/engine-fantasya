@@ -49,11 +49,17 @@ final class Create extends DelegatedCommand
 
 		// MACHEN <amount> <Ressource>
 		if (isInt($param)) {
-			$what   = $this->phrase->getParameter(2);
+			$what   = $this->phrase->getLine(2);
 			$number = (int)$param;
 		} else {
-			$what   = $param;
-			$number = (int)$this->phrase->getParameter(2);
+			$what  = $param;
+			$param = $this->phrase->getParameter(2);
+			if (isInt($param)) {
+				$number = (int)$param;
+			} else {
+				$what   = $this->phrase->getLine();
+				$number = 0;
+			}
 		}
 
 		// MACHEN Kräuter
