@@ -84,7 +84,7 @@ final class Teach extends UnitCommand implements Activity
 
 	protected function run(): void {
 		$this->calculateBonuses();
-		$this->message(TeachBonusMessage::class)->p($this->size, TeachBonusMessage::STUDENTS)->p($this->bonus, TeachBonusMessage::BONUS);
+		$this->message(TeachBonusMessage::class)->p($this->size, TeachBonusMessage::STUDENTS)->p(round($this->bonus, 3), TeachBonusMessage::BONUS);
 	}
 
 	private function checkUnit(Unit $unit): bool {
