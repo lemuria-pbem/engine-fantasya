@@ -4,9 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.5
 
-- Effekt von Goliathwasser
-- Effekt von Schaffenstrunk
-- Effekt von Siebenmeilentee
 - Effekt von Bauernlieb
 - Effekt von Pferdeglück
 

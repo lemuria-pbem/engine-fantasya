@@ -97,7 +97,8 @@ class RawMaterial extends AllocationCommand implements Activity
 		$resource         = $this->getCommodity();
 		$requirement      = $this->getRequiredTalent();
 		$this->knowledge  = $this->calculus()->knowledge($requirement->Talent());
-		$production       = (int)floor($this->unit->Size() * $this->knowledge->Level() / $requirement->Level());
+		$size             = $this->unit->Size();
+		$production       = (int)floor($this->potionBoost($size) * $size * $this->knowledge->Level() / $requirement->Level());
 		$this->production = $this->reduceByWorkload($production);
 		if ($this->production > 0) {
 			if (count($this->phrase) === 2) {

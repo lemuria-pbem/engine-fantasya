@@ -119,7 +119,8 @@ final class Construction extends AbstractProduct
 			return 0;
 		}
 
-		$points     = $this->unit->Size() * $level - $pointsUsed;
+		$unitSize   = $this->unit->Size();
+		$points     = $this->potionBoost($unitSize) * $unitSize * $level - $pointsUsed;
 		$production = (int)floor($points / $cost);
 		$newSize    = $size + $production;
 		$maxSize    = $castle->MaxSize();

@@ -44,7 +44,8 @@ final class Road extends UnitCommand implements Activity
 		$this->roadmaking = self::createTalent(Roadmaking::class);
 		$this->stone      = self::createCommodity(Stone::class);
 		$level            = $this->calculus()->knowledge($this->roadmaking)->Level();
-		$this->maximum    = $this->unit->Size() * $level;
+		$size             = $this->unit->Size();
+		$this->maximum    = $this->potionBoost($size) * $size * $level;
 		$this->initWorkload($this->maximum);
 	}
 
