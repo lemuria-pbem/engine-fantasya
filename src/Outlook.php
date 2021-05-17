@@ -42,7 +42,7 @@ final class Outlook
 		$camouflage = self::createTalent(Camouflage::class);
 		foreach ($region->Residents() as $unit /* @var Unit $unit */) {
 			if (!$unit->Construction() && !$unit->Vessel()) {
-				if ($unit->Party() === $party || !$unit->IsHiding()) {
+				if ($unit->Party() === $party || !$unit->IsHiding() || $unit->IsGuarding()) {
 					$units->add($unit);
 				} elseif ($unit->Party()->Diplomacy()->has(Relation::PERCEPTION, $this->census->Party())) {
 					$units->add($unit);
