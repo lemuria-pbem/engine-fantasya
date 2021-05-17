@@ -94,8 +94,8 @@ trait GiftTrait
 	}
 
 	private function peasantsToRegion(int $peasants): void {
-		$commodity = $this->context->Factory()->commodity(Peasant::class);
-		$quantity = new Quantity($commodity, $peasants);
+		$commodity = $this->context->Factory()->person();
+		$quantity  = new Quantity($commodity, $peasants);
 		$this->giftToRegion($quantity);
 	}
 

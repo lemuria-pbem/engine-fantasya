@@ -4,6 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.5
 
+- Wachen sind immer sichtbar
 - Effekt von Goliathwasser
 - Effekt von Schaffenstrunk
 - Effekt von Siebenmeilentee
