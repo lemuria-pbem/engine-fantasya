@@ -23,12 +23,18 @@ final class Apply extends UnitCommand
 {
 	private Potion $potion;
 
+	private int $count;
+
 	public function Context(): Context {
 		return $this->context;
 	}
 
 	public function Potion(): Potion {
 		return $this->potion;
+	}
+
+	public function Count(): int {
+		return $this->count;
 	}
 
 	protected function run(): void {
@@ -56,6 +62,7 @@ final class Apply extends UnitCommand
 			throw new UnknownCommandException($this);
 		}
 		$this->potion = $potion;
+		$this->count  = $amount;
 
 		$apply     = $this->context->Factory()->applyPotion($potion, $this);
 		$inventory = $this->unit->Inventory();
@@ -81,7 +88,7 @@ final class Apply extends UnitCommand
 		}
 
 		$count   = $quantity->Count();
-		$applied = $apply->apply($count);
+		$applied = $apply->apply();
 		if ($applied < $count) {
 			if ($applied > 0) {
 				$used = new Quantity($potion, $applied);

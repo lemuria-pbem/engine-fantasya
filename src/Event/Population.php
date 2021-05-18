@@ -18,11 +18,11 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Commodity\Potion\PeasantJoy;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Neighbours;
-
 /**
  * The peasant population grows or shrinks at the end of each turn.
  *
@@ -39,6 +39,8 @@ final class Population extends AbstractEvent
 	private const MIGRATION = 0.1;
 
 	private const WEALTH = 24;
+
+	private const BOOST = 10.0;
 
 	private Workplaces $workplaces;
 
@@ -68,7 +70,7 @@ final class Population extends AbstractEvent
 			$wealth     = $reserve / $peasants / Subsistence::SILVER;
 			$years      = $wealth / self::WEALTH;
 
-			$growth = $this->calculateGrowth($peasants, $available, $years);
+			$growth = $this->calculateGrowth($peasants, $available, $years, $region);
 			if ($growth > 0) {
 				$quantity = new Quantity($this->peasant, $growth);
 				$resources->add($quantity);
@@ -111,7 +113,7 @@ final class Population extends AbstractEvent
 		}
 	}
 
-	#[Pure] private function calculateGrowth(int $peasants, int $available, float $years): int {
+	private function calculateGrowth(int $peasants, int $available, float $years, Region $region): int {
 		$rate = self::RATE;
 		if ($available > 0) {
 			$rate += $years * self::RATE;
@@ -120,7 +122,9 @@ final class Population extends AbstractEvent
 		} elseif ($years < 1.0) {
 			$rate /= 10;
 		}
-		return (int)ceil($rate * $peasants);
+		$boostPeasants = $this->hasApplied(PeasantJoy::class, $region) * PeasantJoy::PEASANTS;
+		$boost         = min(1.0, $boostPeasants / $peasants);
+		return (int)ceil((1.0 - $boost) * $rate * $peasants + self::BOOST * $boost * $rate * $peasants);
 	}
 
 	#[Pure] private function calculateMigrants(int $peasants, int $workplaces, float $years): int {

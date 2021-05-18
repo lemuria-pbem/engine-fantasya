@@ -17,6 +17,12 @@ abstract class AbstractUnitApply extends AbstractApply
 		return $this->isNew || !$effect->IsFresh();
 	}
 
+	public function apply(): int {
+		$count = $this->apply->Count();
+		$this->getEffect()->setCount($count);
+		return $count;
+	}
+
 	protected function getEffect(): PotionEffect {
 		if (!$this->effect) {
 			$this->effect = new PotionEffect(State::getInstance());
@@ -26,7 +32,8 @@ abstract class AbstractUnitApply extends AbstractApply
 				$this->effect = $existing;
 			} else {
 				$this->isNew = true;
-				$this->effect->setPotion($this->apply->Potion());
+				$potion      = $this->apply->Potion();
+				$this->effect->setPotion($potion)->setWeeks($potion->Weeks());
 				Lemuria::Score()->add($this->effect);
 			}
 		}

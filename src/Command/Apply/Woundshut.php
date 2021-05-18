@@ -13,8 +13,8 @@ final class Woundshut extends AbstractUnitApply
 {
 	use ActionTrait;
 
-	public function apply(int $amount): int {
-		$used = $this->heal($amount);
+	public function apply(): int {
+		$used = $this->heal($this->apply->Count());
 		$this->getEffect()->setCount($used);
 		return $used;
 	}

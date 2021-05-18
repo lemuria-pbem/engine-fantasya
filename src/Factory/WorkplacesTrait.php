@@ -2,12 +2,16 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
+use Lemuria\Engine\Fantasya\Effect\PotionInfluence;
+use Lemuria\Engine\Fantasya\State;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\Region;
 
 trait WorkplacesTrait
@@ -31,7 +35,17 @@ trait WorkplacesTrait
 
 	private function getCultivatedWorkplaces(Region $region): int {
 		$resources = $region->Resources();
-		$peasants  = $resources[self::createCommodity(Peasant::class)]->Count();
-		return $peasants;
+		return $resources[self::createCommodity(Peasant::class)]->Count();
+	}
+
+	private function hasApplied(Potion|string $potion, Region $region): int {
+		if (is_string($potion)) {
+			$potion = self::createCommodity($potion);
+		}
+		$effect = new PotionInfluence(State::getInstance());
+		$effect->setRegion($region);
+		/** @var PotionInfluence $existing */
+		$existing = Lemuria::Score()->find($effect);
+		return $existing?->hasPotion($potion) ? $existing->getCount($potion) : 0;
 	}
 }

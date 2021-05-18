@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Factory\WorkplacesTrait;
@@ -19,6 +20,7 @@ use Lemuria\Model\Fantasya\Commodity\Elephant;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg;
 use Lemuria\Model\Fantasya\Commodity\Horse;
+use Lemuria\Model\Fantasya\Commodity\Potion\HorseBliss;
 use Lemuria\Model\Fantasya\Landscape\Desert;
 use Lemuria\Model\Fantasya\Landscape\Forest;
 use Lemuria\Model\Fantasya\Landscape\Glacier;
@@ -46,6 +48,8 @@ final class Fauna extends AbstractEvent
 		Horse::class    => [Plain::class   => 0.01, Forest::class   => 0.005, Highland::class => 0.005, Mountain::class => 0.002]
 	];
 
+	private const BOOST = [Camel::class => 0.0, Elephant::class => 0.0, Griffin::class => 0.0, Horse::class => 4.0];
+
 	private const MAX_RATE = 0.01;
 
 	private const MIGRATION = 0.2;
@@ -56,7 +60,7 @@ final class Fauna extends AbstractEvent
 
 	private Workplaces $workplaces;
 
-	public function __construct(State $state) {
+	#[Pure] public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
 		$this->workplaces = new Workplaces();
 	}
@@ -72,11 +76,14 @@ final class Fauna extends AbstractEvent
 				if ($count <= 0) {
 					continue;
 				}
-				$commodity = self::createCommodity($animal);
-				$rates     = self::RATE[$animal];
-				$rate      = $rates[get_class($landscape)] ?? 0.0;
+				$commodity    = self::createCommodity($animal);
+				$rates        = self::RATE[$animal];
+				$rate         = $rates[get_class($landscape)] ?? 0.0;
+				$boost        = self::BOOST[$animal];
+				$boostAnimals = $this->hasApplied(HorseBliss::class, $region) * HorseBliss::HORSES;
+				$boostRate    = min(1.0, $boostAnimals / $count);
 				if ($available > 0) {
-					$growth = (int)ceil($rate * $count);
+					$growth = (int)ceil((1.0 - $boostRate) * $rate * $count + $boost * $boostRate * $rate * $count);
 					if ($growth > 0) {
 						$quantity = new Quantity($commodity, $growth);
 						$resources->add($quantity);
@@ -165,7 +172,7 @@ final class Fauna extends AbstractEvent
 		} else {
 			$max = max($distribution) + 1;
 			reset($distribution);
-			while ($direction = key($distribution)) {
+			while (key($distribution)) {
 				$destination[] = $neighbours[key($distribution)];
 				$amount[]      = $max - current($distribution);
 				next($distribution);
