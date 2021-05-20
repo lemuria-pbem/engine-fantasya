@@ -4,6 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.5
 
+- Kräuterwachstum
 
 ## Neue Funktionen
 
