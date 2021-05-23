@@ -314,6 +314,7 @@
 		"RecruitPaymentMessage": "Die Einheit $id bezahlt $cost an {$size:Rekrut}.",
 		"RecruitPreventMessage": "Unsere Wache hat die Einheit $unit vom Rekrutieren abgehalten.",
 		"RecruitTooExpensiveMessage": "Die Einheit $id kann nur {$size:Rekrut} bezahlen.",
+		"RegrowMessage": "Das Kräutervorkommen von $herb in der Region $id ist nun $occurrence.",
 		"ReserveAllMessage": "Die Einheit $id reserviert {alle verfügbaren:$commodity}. Es {ist:$reserve} im Materialpool.",
 		"ReserveEverythingMessage": "Die Einheit $id reserviert den gesamten Materialpool.",
 		"ReserveInvalidMessage": "Die Einheit $id versucht dummerweise, $reserve zu reservieren.",

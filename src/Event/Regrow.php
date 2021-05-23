@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Factory\Model\Season;
+use Lemuria\Engine\Fantasya\Message\Region\RegrowMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
@@ -111,10 +112,10 @@ final class Regrow extends AbstractEvent
 			Season::FALL                   => 0.0,
 			Season::WINTER                 => self::SHRINK
 		};
+		Lemuria::Log()->debug('Herbage grow rate is ' . $this->rate . '.');
 	}
 
 	protected function run(): void {
-		Lemuria::Log()->debug('Herbage grow rate is ' . $this->rate . '.');
 		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region /* @var Region $region */) {
 			$landscape = $region->Landscape();
 			if ($landscape instanceof Ocean) {
@@ -177,6 +178,7 @@ final class Regrow extends AbstractEvent
 		$herbage    = $region->Herbage();
 		$occurrence = max(self::MINIMUM, min(1.0, $this->rate * $herbage->Occurrence()));
 		$herbage->setOccurrence($occurrence);
+		$this->message(RegrowMessage::class, $region)->s($herbage->Herb())->p($occurrence);
 	}
 
 	private function getNeighbourLandscapes(Region $region): array {
