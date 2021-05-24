@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.5
 
-- GEBEN m1 Schwert wird nicht erkannt
 - Magellan soll Reportbesitzer erkennen
 
 ## Neue Funktionen

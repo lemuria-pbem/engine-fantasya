@@ -40,7 +40,7 @@ trait GiftTrait
 				}
 			} else {
 				$this->amount = PHP_INT_MAX;
-				$commodity    = $count . ' ' . $commodity; // <COMMAND> <commodity>
+				$commodity    = trim($count . ' ' . $commodity); // <COMMAND> <commodity>
 			}
 		}
 		$this->commodity = match (strtolower($commodity)) {
