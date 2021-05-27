@@ -16,11 +16,12 @@ final class WaterOfLife extends AbstractUnitApply
 	use ActionTrait;
 	use BuilderTrait;
 
-	public function apply(int $amount): int {
+	public function apply(): int {
 		$unit     = $this->apply->Unit();
 		$wood     = self::createCommodity(Wood::class);
 		$quantity = $this->apply->Context()->getResourcePool($unit)->reserve($unit, new Quantity($wood, $amount));
 		$count    = $quantity->Count();
+		$amount   = $this->apply->Count();
 		if ($count < $amount) {
 			if ($count > 0) {
 				$this->message(WaterOfLifeOnlyMessage::class, $unit)->i($quantity);

@@ -2,12 +2,14 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\DefaultInvalidMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DefaultMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DefaultUnknownMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\State;
 
 /**
  * This command defines unit commands that are written to the order template.
@@ -21,7 +23,9 @@ final class DefaultCommand extends UnitCommand
 	protected function run(): void {
 		$default = trim($this->phrase->getLine(), "'\"");
 		try {
-			$command = $this->context->Factory()->create(new Phrase($default))->getDelegate();
+			$context = new Context(new State());
+			$context->setParty($this->unit->Party())->setUnit($this->unit);
+			$command = $context->Factory()->create(new Phrase($default))->getDelegate();
 		} catch (CommandParserException|UnknownCommandException) {
 			$this->message(DefaultUnknownMessage::class)->p($default);
 			return;

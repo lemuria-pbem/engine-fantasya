@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use function Lemuria\getClass;
+use function Lemuria\mbUcFirst;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
 use Lemuria\Engine\Fantasya\Command\Announcement;
 use Lemuria\Engine\Fantasya\Command\Apply;
@@ -139,6 +140,7 @@ use Lemuria\Model\Fantasya\Ship\Galleon;
 use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Ship\Trireme;
 use Lemuria\Model\Fantasya\Talent;
+use Lemuria\Model\Fantasya\Talent\Alchemy;
 use Lemuria\Model\Fantasya\Talent\Archery;
 use Lemuria\Model\Fantasya\Talent\Armory;
 use Lemuria\Model\Fantasya\Talent\Bladefighting;
@@ -151,6 +153,7 @@ use Lemuria\Model\Fantasya\Talent\Crossbowing;
 use Lemuria\Model\Fantasya\Talent\Entertaining;
 use Lemuria\Model\Fantasya\Talent\Espionage;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
+use Lemuria\Model\Fantasya\Talent\Herballore;
 use Lemuria\Model\Fantasya\Talent\Horsetaming;
 use Lemuria\Model\Fantasya\Talent\Magic;
 use Lemuria\Model\Fantasya\Talent\Mining;
@@ -405,6 +408,7 @@ class CommandFactory
 	 * @var array(string=>string)
 	 */
 	protected array $talents = [
+		'Alchemie'          => Alchemy::class,
 		'Armbrustschiessen' => Crossbowing::class,
 		'Armbrustschießen'  => Crossbowing::class,
 		'Ausdauer'          => Stamina::class,
@@ -421,6 +425,8 @@ class CommandFactory
 		'Katapultbedienung' => Catapulting::class,
 		'Katapultschiessen' => Catapulting::class,
 		'Katapultschießen'  => Catapulting::class,
+		'Kraeuterkunde'     => Herballore::class,
+		'Kräuterkunde'      => Herballore::class,
 		'Magie'             => Magic::class,
 		'Navigation'        => Navigation::class,
 		'Navigieren'        => Navigation::class,
@@ -692,7 +698,7 @@ class CommandFactory
 	 * Parse a singleton.
 	 */
 	protected function getCandidate(string $singleton, array $map): ?string {
-		$singleton  = ucfirst(strtolower($singleton));
+		$singleton  = mbUcFirst(mb_strtolower($singleton));
 		$candidates = [];
 		foreach ($map as $candidate => $singletonClass) {
 			if (str_starts_with($candidate, $singleton)) {

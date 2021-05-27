@@ -2,8 +2,12 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
+use Lemuria\Model\Fantasya\Commodity\Potion\DrinkOfCreation;
+
 trait WorkloadTrait
 {
+	use ContextTrait;
+
 	protected int $fullProduction;
 
 	protected Workload $workload;
@@ -23,5 +27,11 @@ trait WorkloadTrait
 
 	protected function addToWorkload(int $production): void {
 		$this->workload->add((int)round($production / $this->fullProduction * $this->workload->Maximum()));
+	}
+
+	protected function potionBoost(int $unitSize): float {
+		$effect     = $this->context->getCalculus($this->unit)->hasApplied(DrinkOfCreation::class);
+		$potionSize = $effect?->Count() * DrinkOfCreation::PERSONS;
+		return min(2.0, 1.0 + $potionSize / $unitSize);
 	}
 }
