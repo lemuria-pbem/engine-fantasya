@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.5
 
-- LERNEN falsches Talent
 - Magellan soll Reportbesitzer erkennen
 
 ## Neue Funktionen
