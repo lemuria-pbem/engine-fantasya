@@ -11,7 +11,7 @@
 		"pbem"
 	],
 	"version": "0.5.1",
-	"time": "2021-05-24",
+	"time": "2021-05-26",
 	"license": "GPL-3.0",
 	"authors": [
 		{
@@ -23,6 +23,7 @@
 	"require": {
 		"php": "~8.0",
 		"ext-json": "*",
+		"ext-mbstring": "*",
 		"lemuria-pbem/lemuria": "dev-dev",
 		"lemuria-pbem/model-fantasya": "dev-dev",
 		"monolog/monolog": "~2.2"
