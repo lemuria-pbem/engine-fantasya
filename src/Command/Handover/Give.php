@@ -17,6 +17,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\GivePersonsNoSpaceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GivePersonsOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GivePersonsReceivedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GivePersonsToOwnMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GiveReceivedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveRejectedMessage;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity;
@@ -129,6 +130,9 @@ final class Give extends UnitCommand
 	private function giveOnly(Quantity $gift): void {
 		$this->recipient->Inventory()->add($gift);
 		$this->message(GiveMessage::class)->e($this->recipient)->i($gift);
+		if ($this->recipient->Party() !== $this->unit->Party()) {
+			$this->message(GiveReceivedMessage::class, $this->recipient)->e($this->unit)->i($gift);
+		}
 	}
 
 	/**
