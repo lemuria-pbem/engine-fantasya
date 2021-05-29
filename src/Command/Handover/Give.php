@@ -73,8 +73,11 @@ final class Give extends UnitCommand
 			return;
 		}
 
-		if ($commodity instanceof Everything) {
+		if ($this->commodity instanceof Everything) {
 			$this->giveEverything();
+			if ($this->phrase->count() === 1) {
+				$this->givePersons($this->unit->Size());
+			}
 		} else {
 			$this->give($this->commodity, $this->amount);
 		}
