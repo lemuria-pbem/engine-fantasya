@@ -4,8 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.5
 
-- Leerer Materialpool in Text-Auswertung
-- Kräutervorkommen als Kommazahl
 - Defaultbefehl bei leerer Einheit ignorieren
 - Magellan soll Reportbesitzer erkennen
 
