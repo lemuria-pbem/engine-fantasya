@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\UnitTrait;
@@ -25,6 +26,13 @@ abstract class UnitCommand extends AbstractCommand
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		$this->unit = $context->Unit();
+	}
+
+	#[Pure] public function isPrepared(): bool {
+		if ($this instanceof Activity && $this->IsDefault() && $this->unit->Size() <= 0) {
+			return false;
+		}
+		return parent::isPrepared();
 	}
 
 	/**

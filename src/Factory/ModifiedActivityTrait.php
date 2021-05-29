@@ -9,6 +9,8 @@ use Lemuria\Engine\Fantasya\Command\UnitCommand;
 
 trait ModifiedActivityTrait
 {
+	use DefaultActivityTrait;
+
 	private ?UnitCommand $newDefault = null;
 
 	/**

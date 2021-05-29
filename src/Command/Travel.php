@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Factory\Command\Dummy;
+use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Capacity;
@@ -37,6 +38,8 @@ use Lemuria\Model\Fantasya\Unit;
  */
 class Travel extends UnitCommand implements Activity
 {
+	use DefaultActivityTrait;
+
 	protected const ACTIVITY = 'Travel';
 
 	use NavigationTrait;

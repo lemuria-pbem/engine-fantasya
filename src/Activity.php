@@ -15,7 +15,17 @@ interface Activity
 	public function Activity(): string;
 
 	/**
+	 * Check if this activity is the unit's default activity.
+	 */
+	public function IsDefault(): bool;
+
+	/**
 	 * Get the new default command.
 	 */
 	public function getNewDefault(): ?UnitCommand;
+
+	/**
+	 * Set the default status.
+	 */
+	public function setIsDefault(bool $isDefault = true): void;
 }

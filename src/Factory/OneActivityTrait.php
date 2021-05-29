@@ -8,6 +8,8 @@ use Lemuria\Engine\Fantasya\Command\UnitCommand;
 
 trait OneActivityTrait
 {
+	use DefaultActivityTrait;
+
 	#[Pure] public function Activity(): string {
 		return microtime();
 	}
