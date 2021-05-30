@@ -193,7 +193,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 		return $quantity;
 	}
 
-	protected function cost(): Quantity {
+	#[Pure] protected function cost(): Quantity {
 		return new Quantity($this->silver, $this->cost);
 	}
 }

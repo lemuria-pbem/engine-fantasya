@@ -29,6 +29,7 @@ final class ActivityProtocol
 		foreach (Lemuria::Orders()->getDefault($unit->Id()) as $order) {
 			$command = $context->Factory()->create(new Phrase($order));
 			if ($command instanceof Activity) {
+				$command->setIsDefault();
 				$this->defaultCommand = $command;
 				break;
 			}

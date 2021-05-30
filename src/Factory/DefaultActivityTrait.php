@@ -9,11 +9,20 @@ use Lemuria\Engine\Fantasya\Command\UnitCommand;
 
 trait DefaultActivityTrait
 {
+	private bool $isDefault = false;
+
 	/**
 	 * Get the activity class.
 	 */
 	#[Pure] public function Activity(): string {
 		return getClass($this);
+	}
+
+	/**
+	 * Check if this activity is the unit's default activity.
+	 */
+	public function IsDefault(): bool {
+		return $this->isDefault;
 	}
 
 	/**
@@ -24,5 +33,12 @@ trait DefaultActivityTrait
 			return $this;
 		}
 		return null;
+	}
+
+	/**
+	 * Set the default status.
+	 */
+	public function setIsDefault(bool $isDefault = true): void {
+		$this->isDefault = $isDefault;
 	}
 }

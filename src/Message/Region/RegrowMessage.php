@@ -22,6 +22,12 @@ class RegrowMessage extends AbstractRegionMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'herb') ?? parent::getTranslation($name);
+		if ($name === 'herb') {
+			return $this->commodity($name, 'herb');
+		}
+		if ($name === 'occurrence') {
+			return $this->number($name, 'occurrence');
+		}
+		return parent::getTranslation($name);
 	}
 }
