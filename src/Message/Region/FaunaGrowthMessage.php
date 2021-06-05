@@ -3,10 +3,13 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Region;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Item;
 
 class FaunaGrowthMessage extends AbstractRegionMessage
 {
+	protected int $section = Section::ECONOMY;
+
 	protected Item $animals;
 
 	protected function create(): string {

@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 
 class TaxDemandMessage extends AbstractUnitMessage
 {
@@ -12,6 +13,8 @@ class TaxDemandMessage extends AbstractUnitMessage
 	public const RATE = 'rate';
 
 	protected string $level = Message::DEBUG;
+
+	protected int $section = Section::PRODUCTION;
 
 	protected int $collectors;
 

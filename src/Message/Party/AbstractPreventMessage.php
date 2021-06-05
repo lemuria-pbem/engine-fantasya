@@ -4,11 +4,14 @@ namespace Lemuria\Engine\Fantasya\Message\Party;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 
 abstract class AbstractPreventMessage extends AbstractPartyMessage
 {
 	protected string $level = Message::SUCCESS;
+
+	protected int $section = Section::ECONOMY;
 
 	protected Id $unit;
 

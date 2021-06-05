@@ -11,6 +11,7 @@ use Lemuria\Item;
 use Lemuria\Singleton;
 use Lemuria\Engine\Report;
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 use Lemuria\Model\Dictionary;
 use Lemuria\SingletonTrait;
@@ -21,11 +22,17 @@ abstract class AbstractMessage implements MessageType
 
 	protected string $level = Message::DEBUG;
 
+	protected int $section = Section::EVENT;
+
 	protected Id $id;
 
 	#[ExpectedValues(valuesFromClass: Report::class)]
 	#[Pure] public function Level(): string {
 		return $this->level;
+	}
+
+	public function Section(): int {
+		return $this->section;
 	}
 
 	public function render(LemuriaMessage $message): string {

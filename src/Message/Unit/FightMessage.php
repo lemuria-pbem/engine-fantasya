@@ -4,10 +4,13 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 
 class FightMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::SUCCESS;
+
+	protected int $section = Section::BATTLE;
 
 	protected int $position;
 

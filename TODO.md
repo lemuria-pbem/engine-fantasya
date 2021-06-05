@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.5
 
-- Nachrichten-Sektion für Magellan einführen
 
 ## Neue Funktionen
 

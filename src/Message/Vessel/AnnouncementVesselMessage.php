@@ -4,12 +4,15 @@ namespace Lemuria\Engine\Fantasya\Message\Vessel;
 
 use Lemuria\Engine\Message;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message\Section;
 
 class AnnouncementVesselMessage extends AbstractVesselMessage
 {
 	public const SENDER = 'sender';
 
 	protected string $level = Message::EVENT;
+
+	protected int $section = Section::MAIL;
 
 	protected string $sender;
 

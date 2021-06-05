@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Model\Fantasya\Commodity\Potion\Woundshut;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Singleton;
@@ -13,6 +14,8 @@ class WoundshutNoneMessage extends AbstractUnitMessage
 	use BuilderTrait;
 
 	protected string $level = Message::FAILURE;
+
+	protected int $section = Section::MAGIC;
 
 	protected Singleton $woundshut;
 

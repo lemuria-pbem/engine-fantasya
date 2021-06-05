@@ -4,10 +4,13 @@ namespace Lemuria\Engine\Fantasya\Message\Region;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 
 class TravelUnitMessage extends AbstractRegionMessage
 {
 	protected string $level = Message::SUCCESS;
+
+	protected int $section = Section::MOVEMENT;
 
 	protected string $unit;
 

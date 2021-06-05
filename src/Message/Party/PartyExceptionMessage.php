@@ -4,10 +4,13 @@ namespace Lemuria\Engine\Fantasya\Message\Party;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 
 class PartyExceptionMessage extends AbstractPartyMessage
 {
 	protected string $level = Message::ERROR;
+
+	protected int $section = Section::ERROR;
 
 	protected string $exception;
 
