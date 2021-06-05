@@ -4,6 +4,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.5
 
+- Bewegung mit Wagen erlaubt zu viel Zuladung
+- Nachrichten-Sektion für Magellan einführen
 
 ## Neue Funktionen
 

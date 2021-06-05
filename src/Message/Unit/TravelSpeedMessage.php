@@ -10,7 +10,7 @@ class TravelSpeedMessage extends AbstractUnitMessage
 
 	protected int $speed;
 
-	protected int $weight;
+	protected int|float $weight;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' can move ' . $this->speed . ' regions (weight: ' . $this->weight . ').';
@@ -19,6 +19,12 @@ class TravelSpeedMessage extends AbstractUnitMessage
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
 		$this->speed  = $message->getParameter();
-		$this->weight = $message->getParameter(self::WEIGHT);
+		$weight       = $message->getParameter(self::WEIGHT);
+		$calculated   = $weight / 100;
+		$this->weight = $weight % 100 > 0 ? $calculated : (int)$calculated;
+	}
+
+	protected function getTranslation(string $name): string {
+		return $this->number($name, 'weight') ?? parent::getTranslation($name);
 	}
 }
