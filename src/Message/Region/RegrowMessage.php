@@ -3,10 +3,13 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Region;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Singleton;
 
 class RegrowMessage extends AbstractRegionMessage
 {
+	protected int $section = Section::ECONOMY;
+
 	protected Singleton $herb;
 
 	protected float $occurrence;

@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 
 class TravelMessage extends AbstractUnitMessage
 {
@@ -17,6 +18,8 @@ class TravelMessage extends AbstractUnitMessage
 	];
 
 	protected string $level = Message::SUCCESS;
+
+	protected int $section = Section::MOVEMENT;
 
 	protected string $move;
 

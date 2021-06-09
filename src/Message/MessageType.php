@@ -16,5 +16,7 @@ interface MessageType extends Singleton
 	#[Pure]
 	public function Report(): int;
 
+	public function Section(): int;
+
 	public function render(LemuriaMessage $message): string;
 }

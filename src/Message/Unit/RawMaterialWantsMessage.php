@@ -3,10 +3,13 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Item;
 
 class RawMaterialWantsMessage extends AbstractUnitMessage
 {
+	protected int $section = Section::PRODUCTION;
+
 	protected Item $quantity;
 
 	protected function create(): string {

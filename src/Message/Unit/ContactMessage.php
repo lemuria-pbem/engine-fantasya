@@ -3,10 +3,13 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 
 class ContactMessage extends AbstractUnitMessage
 {
+	protected int $section = Section::MAIL;
+
 	protected Id $unit;
 
 	protected function create(): string {

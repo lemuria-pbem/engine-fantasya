@@ -3,12 +3,15 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Party;
 
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Id;
 
 class AnnouncementNoPartyMessage extends AbstractPartyMessage
 {
 	protected string $level = Message::FAILURE;
+
+	protected int $section = Section::MAIL;
 
 	protected Id $party;
 

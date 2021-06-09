@@ -2,13 +2,16 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Construction;
 
-use Lemuria\Engine\Message;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 
 class AnnouncementNoConstructionMessage extends AbstractConstructionMessage
 {
 	protected string $level = Message::FAILURE;
+
+	protected int $section = Section::MAIL;
 
 	protected Id $construction;
 

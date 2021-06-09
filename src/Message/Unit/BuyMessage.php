@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Item;
 
 class BuyMessage extends AbstractUnitMessage
@@ -11,6 +12,8 @@ class BuyMessage extends AbstractUnitMessage
 	public const PAYMENT = 'payment';
 
 	protected string $level = Message::SUCCESS;
+
+	protected int $section = Section::PRODUCTION;
 
 	protected Item $goods;
 

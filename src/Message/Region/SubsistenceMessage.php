@@ -3,12 +3,14 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Region;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Item;
 
 class SubsistenceMessage extends AbstractRegionMessage
 {
 	public const SILVER = 'silver';
+
+	protected int $section = Section::ECONOMY;
 
 	protected Item $peasants;
 

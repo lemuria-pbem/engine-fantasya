@@ -4,10 +4,13 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Model\Fantasya\Quantity;
 
 class AllocationTakeMessage extends AbstractUnitMessage
 {
+	protected int $section = Section::PRODUCTION;
+
 	protected Quantity $item;
 
 	protected function create(): string {

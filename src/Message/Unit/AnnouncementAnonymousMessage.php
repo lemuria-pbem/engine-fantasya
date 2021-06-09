@@ -4,10 +4,13 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Message;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message\Section;
 
 class AnnouncementAnonymousMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::EVENT;
+
+	protected int $section = Section::MAIL;
 
 	protected string $message;
 

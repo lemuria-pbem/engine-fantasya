@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Party;
 
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 
 class AnnouncementPartyMessage extends AbstractPartyMessage
@@ -10,6 +11,8 @@ class AnnouncementPartyMessage extends AbstractPartyMessage
 	public const SENDER = 'sender';
 
 	protected string $level = Message::EVENT;
+
+	protected int $section = Section::MAIL;
 
 	protected string $sender;
 

@@ -4,11 +4,14 @@ namespace Lemuria\Engine\Fantasya\Message\Region;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Singleton;
 
 abstract class AbstractMarketUpdateMessage extends AbstractRegionMessage
 {
 	protected string $level = Message::EVENT;
+
+	protected int $section = Section::ECONOMY;
 
 	protected Singleton $luxury;
 

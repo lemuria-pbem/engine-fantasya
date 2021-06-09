@@ -3,12 +3,15 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message\Section;
 
 class TeachBonusMessage extends AbstractUnitMessage
 {
 	public const STUDENTS = 's';
 
 	public const BONUS = 'b';
+
+	protected int $section = Section::STUDY;
 
 	protected int $students;
 

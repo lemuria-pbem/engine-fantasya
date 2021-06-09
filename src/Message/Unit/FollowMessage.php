@@ -4,11 +4,14 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 
 class FollowMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::SUCCESS;
+
+	protected int $section = Section::MOVEMENT;
 
 	protected Id $leader;
 

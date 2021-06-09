@@ -73,7 +73,11 @@ class LemuriaMessage implements Message
 	}
 
 	#[Pure] public function Entity(): Id {
-		return $this->newAssignee ? $this->newAssignee : $this->assignee;
+		return $this->newAssignee ?? $this->assignee;
+	}
+
+	public function Section(): int {
+		return $this->type->Section();
 	}
 
 	public function setId(Id $id): Message {

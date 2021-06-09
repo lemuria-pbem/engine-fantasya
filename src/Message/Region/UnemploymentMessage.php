@@ -3,9 +3,12 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Region;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message\Section;
 
 class UnemploymentMessage extends AbstractRegionMessage
 {
+	protected int $section = Section::ECONOMY;
+
 	protected int $recruits;
 
 	protected function create(): string {

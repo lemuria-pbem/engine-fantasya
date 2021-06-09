@@ -2,14 +2,17 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Region;
 
-use Lemuria\Engine\Message;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 
 class AnnouncementRegionMessage extends AbstractRegionMessage
 {
 	public const SENDER = 'sender';
 
 	protected string $level = Message::EVENT;
+
+	protected int $section = Section::MAIL;
 
 	protected string $sender;
 

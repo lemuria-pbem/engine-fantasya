@@ -4,11 +4,14 @@ namespace Lemuria\Engine\Fantasya\Message\Vessel;
 
 use Lemuria\Engine\Message;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 
 class AnnouncementNoVesselMessage extends AbstractVesselMessage
 {
 	protected string $level = Message::FAILURE;
+
+	protected int $section = Section::MAIL;
 
 	protected Id $vessel;
 

@@ -118,15 +118,14 @@ final class Calculus
 		$ride   += $carriage ? $this->transport($horse, $carriage->Count() * 2) : $this->transport($horse);
 		$fly     = $this->transport($griffin) + $this->transport($pegasus);
 		$rideFly = $ride + $fly;
-		$walk    = $payload + $rideFly;
+		$walk    = $carriage ? $rideFly : $payload + $rideFly;
 
 		if ($carriage) {
 			$cars        = $carriage->Count();
 			$speed       = $this->speed([$carriage, $horse, $camel, $elephant, $griffin, $pegasus]);
 			$animals     = [$horse, $camel, $elephant, $griffin, $pegasus];
 			$talentDrive = $this->talent($animals, $size, true, $cars);
-			$talentWalk  = $this->talent($animals, $size, carriage: $cars);
-			return new Capacity($walk, $rideFly, Capacity::DRIVE, $weight, $speed, [$talentDrive, $talentWalk]);
+			return new Capacity($walk, $rideFly, Capacity::DRIVE, $weight, $speed, [$talentDrive, $talentDrive]);
 		}
 		if ($fly > 0 && !$horse && !$camel && !$elephant) {
 			$animals    = [$griffin, $pegasus];

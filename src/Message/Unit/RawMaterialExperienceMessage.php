@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Singleton;
 
 class RawMaterialExperienceMessage extends AbstractUnitMessage
@@ -13,6 +14,8 @@ class RawMaterialExperienceMessage extends AbstractUnitMessage
 	public const MATERIAL = 'material';
 
 	protected string $level = Message::FAILURE;
+
+	protected int $section = Section::PRODUCTION;
 
 	protected Singleton $talent;
 
