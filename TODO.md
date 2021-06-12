@@ -4,17 +4,23 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.5
 
+- Wachen sollten mehr Details von gestoppten Einheiten sehen
+- Befehlsvorlage verbessern: Regionsüberschrift, Gebäude, Trennlinien
 
 ## Neue Funktionen
 
 ### Version 0.6
 
-- Magie (KAMPFZAUBER/ZAUBERN)
+- Magie-Grundlagen (KAMPFZAUBER/ZAUBERN)
+- einige einfache Zaubersprüche
+- Textreport im Markdown-Format
+- Einstellen der erwünschten Reportformate
 
 ### Version 0.7 und folgende
 
 - Kampf (ATTACKIEREN/BELAGERN, Berserkerblut, Elixier der Macht, Heiltrank)
 - Monster, besondere Gegenstände wie Greifeneier
+- weitere Zauber
 - Regeldatei für Magellan
 
 ## Ideen
@@ -26,3 +32,4 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - SABOTIERE (Spion versenkt Schiff)
 - VERSENKEN (Schiff vor Entern bewahren)
 - Monsterrasse bestimmt maximalen Übermacht-Faktor
+- Schriftrollen mit unbekannten Zaubern erwerben, um diese zu erlernen
