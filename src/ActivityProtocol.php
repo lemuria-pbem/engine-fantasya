@@ -92,7 +92,9 @@ final class ActivityProtocol
 	 */
 	public function addDefault(UnitCommand $command): void {
 		Lemuria::Orders()->getDefault($this->unit->Id())[] = (string)$command->Phrase();
-		$this->hasNewDefault = true;
+		if ($command instanceof Activity) {
+			$this->hasNewDefault = true;
+		}
 	}
 
 	/**
