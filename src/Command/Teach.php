@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
@@ -50,6 +51,27 @@ final class Teach extends UnitCommand implements Activity
 		return $this->bonus;
 	}
 
+	public function hasTaught(Learn $student): void {
+		if (!$this->canTeach($student)) {
+			$id = $student->Unit()->Id()->Id();
+			unset($this->students[$id]);
+			$ids = [];
+			foreach ($this->students as $student /* @var Learn $student */) {
+				$ids[] = $student->Unit()->Id();
+			}
+			$protocol   = $this->context->getProtocol($this->unit);
+			$oldDefault = $this->newDefault;
+			if (empty($ids)) {
+				$protocol->replaceDefault($oldDefault);
+			} else {
+				$this->createNewDefault($ids);
+				if ($this->newDefault !== $oldDefault) {
+					$protocol->replaceDefault($oldDefault, $this->newDefault);
+				}
+			}
+		}
+	}
+
 	protected function initialize(): void {
 		$this->newDefault = $this;
 		parent::initialize();
@@ -80,11 +102,19 @@ final class Teach extends UnitCommand implements Activity
 			}
 		}
 		$this->createNewDefault($ids);
+		parent::commitCommand($this);
 	}
 
 	protected function run(): void {
 		$this->calculateBonuses();
 		$this->message(TeachBonusMessage::class)->p($this->size, TeachBonusMessage::STUDENTS)->p(round($this->bonus, 3), TeachBonusMessage::BONUS);
+	}
+
+	protected function commitCommand(UnitCommand $command): void {
+		$protocol = $this->context->getProtocol($this->unit);
+		if ($protocol->hasActivity()) {
+			throw new ActivityException($command);
+		}
 	}
 
 	private function checkUnit(Unit $unit): bool {
@@ -143,10 +173,7 @@ final class Teach extends UnitCommand implements Activity
 		$calculus = $this->context->getCalculus($unit);
 		$learn    = $calculus->getStudent();
 		if ($learn) {
-			$talent         = getClass($learn->getTalent());
-			$studentAbility = $calculus->knowledge($talent);
-			$teacherAbility = $this->calculus()->knowledge($talent);
-			if ($teacherAbility->Level() > $studentAbility->Level()) {
+			if ($this->canTeach($learn)) {
 				$calculus->addTeacher($this);
 				$this->students[$unit->Id()->Id()] = $learn;
 				return true;
@@ -155,6 +182,14 @@ final class Teach extends UnitCommand implements Activity
 		} else {
 			return null;
 		}
+	}
+
+	private function canTeach(Learn $student): bool {
+		$talent         = getClass($student->getTalent());
+		$calculus       = $this->context->getCalculus($student->Unit());
+		$studentAbility = $calculus->knowledge($talent);
+		$teacherAbility = $this->calculus()->knowledge($talent);
+		return $teacherAbility->Level() > $studentAbility->Level();
 	}
 
 	/**
