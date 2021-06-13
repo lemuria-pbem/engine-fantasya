@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.5
 
-- Wachen sollten mehr Details von gestoppten Einheiten sehen
 - Befehlsvorlage verbessern: Regionsüberschrift, Gebäude, Trennlinien
 
 ## Neue Funktionen
