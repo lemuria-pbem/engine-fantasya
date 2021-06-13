@@ -454,6 +454,15 @@
 		"WoundshutMessage": "Die Einheit $id heilt ihre Wunden.",
 		"WoundshutNoneMessage": "Die Einheit $id benötigt keine $woundshut."
 	},
+	"observable": {
+		"Camel": ["Kamel", "Kamelen"],
+		"Carriage": ["Wagen", "Wagen"],
+		"Catapult": ["Katapult", "Katapulten"],
+		"Elephant": ["Elefant", "Elefanten"],
+		"Griffin": ["Greif", "Greifen"],
+		"Horse": ["Pferd", "Pferden"],
+		"Pegasus": ["Pegasus", "Pegasi"]
+	},
 	"preposition": {
 		"zu": {
 			"der": "zum",
