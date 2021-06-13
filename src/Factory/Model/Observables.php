@@ -2,8 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
-use Lemuria\Engine\Fantasya\Command\Create\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
+use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Transport;
