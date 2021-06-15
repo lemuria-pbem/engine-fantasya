@@ -11,6 +11,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 - Magie-Grundlagen (KAMPFZAUBER/ZAUBERN)
 - einige einfache Zaubersprüche
+- Engine-Version in Reporten angeben
 - Textreport im Markdown-Format
 - Einstellen der erwünschten Reportformate
 
