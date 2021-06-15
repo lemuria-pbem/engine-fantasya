@@ -18,7 +18,7 @@ final class ActivityProtocol
 	 */
 	private array $activity = [];
 
-	private ?Command $defaultCommand = null;
+	private ?Activity $defaultCommand = null;
 
 	private bool $hasNewDefault = false;
 
@@ -91,7 +91,27 @@ final class ActivityProtocol
 	 * Add a command to the default orders.
 	 */
 	public function addDefault(UnitCommand $command): void {
-		Lemuria::Orders()->getDefault($this->unit->Id())[] = $command->Phrase();
-		$this->hasNewDefault = true;
+		Lemuria::Orders()->getDefault($this->unit->Id())[] = (string)$command->Phrase();
+		if ($command instanceof Activity) {
+			$this->hasNewDefault = true;
+		}
+	}
+
+	/**
+	 * Replace default orders that have changed after command execution.
+	 */
+	public function replaceDefault(UnitCommand $search, ?UnitCommand $replace = null): void {
+		$instructions = Lemuria::Orders()->getDefault($this->unit->Id());
+		$phrase       = (string)$search->Phrase();
+		foreach ($instructions as $i => $default) {
+			if ($default === $phrase) {
+				if ($replace) {
+					$instructions[$i] = (string)$replace->Phrase();
+				} else {
+					unset($instructions[$i]);
+				}
+				break;
+			}
+		}
 	}
 }

@@ -84,6 +84,9 @@ final class Learn extends UnitCommand implements Activity
 		}
 
 		$this->unit->Knowledge()->add($this->progress);
+		foreach ($this->calculus()->getTeachers() as $teacher /** @var Teach $teacher */) {
+			$teacher->hasTaught($this);
+		}
 		$this->message(LearnProgressMessage::class)->s($this->talent)->p($this->progress->Experience());
 	}
 }

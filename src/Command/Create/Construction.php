@@ -40,7 +40,7 @@ final class Construction extends AbstractProduct
 	protected function initialize(): void {
 		parent::initialize();
 		$castle = $this->context->getIntelligence($this->unit->Region())->getGovernment();
-		if ($castle->Size() > Site::MAX_SIZE) {
+		if ($castle?->Size() > Site::MAX_SIZE) {
 			$this->hasMarket = true;
 		}
 	}
