@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Message\Unit\PotionEffectContinuesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\PotionEffectEndsMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
@@ -96,7 +97,9 @@ final class PotionEffect extends AbstractUnitEffect
 
 	protected function run(): void {
 		$this->weeks--;
-		if ($this->weeks <= 0) {
+		if ($this->weeks > 0) {
+			$this->message(PotionEffectContinuesMessage::class, $this->Unit())->s($this->potion);
+		} else {
 			Lemuria::Score()->remove($this);
 			$this->message(PotionEffectEndsMessage::class, $this->Unit())->s($this->potion);
 		}

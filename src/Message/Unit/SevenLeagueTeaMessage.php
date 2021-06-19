@@ -2,9 +2,9 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
-class PotionEffectEndsMessage extends PotionEffectContinuesMessage
+class SevenLeagueTeaMessage extends AbstractUnitApplyMessage
 {
 	protected function create(): string {
-		return 'The effect of ' . $this->potion . ' ends.';
+		return 'Unit ' . $this->id . ' gets fast as the wind.';
 	}
 }
