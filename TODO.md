@@ -4,6 +4,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.5
 
+- Effekte als Meldungen ausgeben
+- Meldung bei Erhalt von Waren
 
 ## Neue Funktionen
 

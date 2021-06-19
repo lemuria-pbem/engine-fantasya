@@ -10,4 +10,8 @@ use Lemuria\Serializable;
  */
 interface Effect extends Action, Identifiable, Serializable
 {
+	/**
+	 * This flag can be set to execute newly created effects when the turn ends.
+	 */
+	public function needsAftercare(): bool;
 }

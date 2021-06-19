@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Message\Unit\PotionEffectEndsMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Exception\UnserializeEntityException;
@@ -28,6 +29,10 @@ final class PotionEffect extends AbstractUnitEffect
 
 	#[Pure] public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
+	}
+
+	public function needsAftercare(): bool {
+		return true;
 	}
 
 	public function IsFresh(): bool {
@@ -93,6 +98,7 @@ final class PotionEffect extends AbstractUnitEffect
 		$this->weeks--;
 		if ($this->weeks <= 0) {
 			Lemuria::Score()->remove($this);
+			$this->message(PotionEffectEndsMessage::class, $this->Unit())->s($this->potion);
 		}
 	}
 }

@@ -21,6 +21,11 @@ class LemuriaScore implements Score
 	 */
 	private array $effects = [];
 
+	/**
+	 * @var Effect[]
+	 */
+	private array $aftercare = [];
+
 	private bool $isLoaded = false;
 
 	private ?array $iterator = null;
@@ -97,6 +102,9 @@ class LemuriaScore implements Score
 		$id        = $effect->Id()->Id();
 		$class     = getClass($effect);
 		$this->effects[$namespace][$id][$class] = $effect;
+		if ($this->isLoaded && $effect instanceof Effect && $effect->needsAftercare()) {
+			$this->aftercare[] = $effect;
+		}
 		return $this;
 	}
 
@@ -139,5 +147,12 @@ class LemuriaScore implements Score
 		}
 		Lemuria::Game()->setEffects($effects);
 		return $this;
+	}
+
+	/**
+	 * @return Effect[]
+	 */
+	public function getAftercareEffects(): array {
+		return $this->aftercare;
 	}
 }
