@@ -113,6 +113,9 @@
 		"BuyMessage": "Die Einheit $id erwirbt $goods für $payment von den Bauern.",
 		"BuyNoneMessage": "Die Einheit $id kann keine $goods von den Bauern erwerben.",
 		"BuyOnlyMessage": "Die Einheit $id kann nur $goods für $payment von den Bauern erwerben.",
+		"CastExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in Magie, um $spell zu zaubern.",
+		"CastNoAuraMessage": "Die Einheit $id hat nicht genug Aura für den Spruch $spell übrig.",
+		"CastNoMagicianMessage": "Die Einheit $id ist kein Magier und kann nicht zaubern.",
 		"CommentMessage": "Kommentar für Einheit $id: $comment",
 		"CommerceNotPossibleMessage": "Die Einheit $id kann in der Region $region keinen Handel treiben - es gibt hier keine Burg mit einem Markt.",
 		"CommodityCreateMessage": "Die Einheit $id produziert $output mit $talent.",
@@ -793,6 +796,8 @@
 		"Galleon": "Galeone",
 		"Longboat": "Langboot",
 		"Trireme": "Trireme"
+	},
+	"spell": {
 	},
 	"talent": {
 		"Alchemy": "Alchemie",

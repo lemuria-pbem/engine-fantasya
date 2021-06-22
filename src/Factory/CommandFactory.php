@@ -10,6 +10,8 @@ use Lemuria\Engine\Fantasya\Command\Apply;
 use Lemuria\Engine\Fantasya\Command\Apply\AbstractApply;
 use Lemuria\Engine\Fantasya\Command\Banner;
 use Lemuria\Engine\Fantasya\Command\Buy;
+use Lemuria\Engine\Fantasya\Command\Cast;
+use Lemuria\Engine\Fantasya\Command\Cast\AbstractCast;
 use Lemuria\Engine\Fantasya\Command\Comment;
 use Lemuria\Engine\Fantasya\Command\Contact;
 use Lemuria\Engine\Fantasya\Command\Create;
@@ -139,6 +141,7 @@ use Lemuria\Model\Fantasya\Ship\Dragonship;
 use Lemuria\Model\Fantasya\Ship\Galleon;
 use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Ship\Trireme;
+use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Alchemy;
 use Lemuria\Model\Fantasya\Talent\Archery;
@@ -262,6 +265,8 @@ class CommandFactory
 		'VERLASSEN'    => true,
 		'VERLIEREN'    => true,
 		'VORLAGE'      => true,
+		'ZAUBERE'      => 'ZAUBERN',
+		'ZAUBERN'      => true,
 		'ZERSTÖREN'    => true,
 		'ZERSTOEREN'   => 'ZERSTÖREN'
 	];
@@ -394,6 +399,12 @@ class CommandFactory
 	/**
 	 * @var array(string=>string)
 	 */
+	protected array $spells = [
+	];
+
+	/**
+	 * @var array(string=>string)
+	 */
 	protected array $ships = [
 		'Boot'          => Boat::class,
 		'Drachenschiff' => Dragonship::class,
@@ -489,6 +500,8 @@ class CommandFactory
 
 	protected const APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Apply\\';
 
+	protected const CAST_NAMESPACE =  'Lemuria\\Engine\\Fantasya\\Command\\Cast\\';
+
 	public function __construct(protected Context $context) {
 	}
 
@@ -545,6 +558,7 @@ class CommandFactory
 				'VERLASSEN'    => Leave::class,
 				'VERLIEREN'    => Lose::class,
 				'VORLAGE'      => DefaultCommand::class,
+				'ZAUBERN'      => Cast::class,
 				'ZERSTÖREN'    => Destroy::class
 			};
 			return new $command($phrase, $this->context);
@@ -603,6 +617,16 @@ class CommandFactory
 	}
 
 	/**
+	 * Create a Spell.
+	 *
+	 * @throws UnknownCommandException
+	 */
+	public function spell(string $spell): Spell {
+		$spellClass = $this->identifySingleton($spell, $this->spells);
+		return self::createSpell($spellClass);
+	}
+
+	/**
 	 * Check if a direction is route stop.
 	 */
 	public function isRouteStop(string $direction): bool {
@@ -655,7 +679,16 @@ class CommandFactory
 		if (class_exists($class)) {
 			return new $class($apply);
 		}
-		throw new LemuriaException('Apply for potion ' . $potion . ' is not implemented.');
+		throw new LemuriaException('Applying potion ' . $potion . ' is not implemented.');
+	}
+
+	public function castSpell(Spell $spell, Cast $cast): AbstractCast {
+		$spell = getClass($spell);
+		$class = self::CAST_NAMESPACE . $spell;
+		if (class_exists($class)) {
+			return new $class($cast);
+		}
+		throw new LemuriaException('Casting spell ' . $spell . ' is not implemented.');
 	}
 
 	/**

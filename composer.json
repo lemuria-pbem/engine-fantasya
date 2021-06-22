@@ -10,8 +10,8 @@
 		"lemuria",
 		"pbem"
 	],
-	"version": "0.5.6",
-	"time": "2021-06-19",
+	"version": "0.6.0",
+	"time": "2021-06-22",
 	"license": "GPL-3.0",
 	"authors": [
 		{
@@ -24,8 +24,8 @@
 		"php": "~8.0",
 		"ext-json": "*",
 		"ext-mbstring": "*",
-		"lemuria-pbem/lemuria": "dev-dev",
-		"lemuria-pbem/model-fantasya": "dev-dev",
+		"lemuria-pbem/lemuria": "dev-feature/magic",
+		"lemuria-pbem/model-fantasya": "dev-feature/magic",
 		"monolog/monolog": "~2.2"
 	},
 	"require-dev": {
