@@ -30,6 +30,8 @@ $errors  = checkDirectory('Construction', $messages);
 $errors += checkDirectory('Party', $messages);
 $errors += checkDirectory('Region', $messages);
 $errors += checkDirectory('Unit', $messages);
+$errors += checkDirectory('Unit/Apply', $messages);
+$errors += checkDirectory('Unit/Cast', $messages);
 $errors += checkDirectory('Vessel', $messages);
 
 if (empty($messages)) {

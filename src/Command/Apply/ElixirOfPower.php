@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Apply;
 
-use Lemuria\Engine\Fantasya\Message\Unit\ElixirOfPowerMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Apply\ElixirOfPowerMessage;
 
 final class ElixirOfPower extends AbstractUnitApply
 {
