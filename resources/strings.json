@@ -310,6 +310,9 @@
 		"PotionEffectContinuesMessage": "Der Effekt des Tranks $potion hält weiter an.",
 		"PotionEffectEndsMessage": "Der Effekt des Tranks $potion schwindet.",
 		"PotionGiftMessage": "Die Einheit $unit hat einen fahrenden alten Zauberer und Alchemisten getroffen, und von ihm einen Trank als Geschenk erhalten: $gift.",
+		"QuacksalverMessage": "Die Einheit $id verdient $silver als Wunderdoktor.",
+		"QuacksalverNoneMessage": "Niemand wollte die Dienste des Wunderdoktors $id in Anspruch nehmen.",
+		"QuacksalverOnlyMessage": "Die Einheit $id hat leider nur $silver als Wunderdoktor verdient.",
 		"RawMaterialCanMessage": "Die Einheit $id kann $quantity produzieren.",
 		"RawMaterialCannotMessage": "Die Einheit $id kann nicht mehr als $quantity produzieren.",
 		"RawMaterialExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um {ein:$material} zu produzieren.",
@@ -798,6 +801,7 @@
 		"Trireme": "Trireme"
 	},
 	"spell": {
+		"Quacksalver": "Wunderdoktor"
 	},
 	"talent": {
 		"Alchemy": "Alchemie",

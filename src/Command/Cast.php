@@ -29,6 +29,10 @@ final class Cast extends UnitCommand
 		return $this->context;
 	}
 
+	public function Aura(): int {
+		return $this->spell->Aura() * $this->level;
+	}
+
 	public function Spell(): Spell {
 		return $this->spell;
 	}
