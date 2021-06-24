@@ -5,6 +5,6 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 class VesselUnableMessage extends VesselCreateMessage
 {
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' is not skilled enought to create a new ' . $this->ship . '.';
+		return 'Unit ' . $this->id . ' is not skilled enough to create a new ' . $this->ship . '.';
 	}
 }

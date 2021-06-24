@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
+use JetBrains\PhpStorm\Pure;
+
 use function Lemuria\getClass;
 use function Lemuria\mbUcFirst;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
@@ -9,6 +11,7 @@ use Lemuria\Engine\Fantasya\Command\Announcement;
 use Lemuria\Engine\Fantasya\Command\Apply;
 use Lemuria\Engine\Fantasya\Command\Apply\AbstractApply;
 use Lemuria\Engine\Fantasya\Command\Banner;
+use Lemuria\Engine\Fantasya\Command\BattleSpell;
 use Lemuria\Engine\Fantasya\Command\Buy;
 use Lemuria\Engine\Fantasya\Command\Cast;
 use Lemuria\Engine\Fantasya\Command\Cast\AbstractCast;
@@ -142,6 +145,8 @@ use Lemuria\Model\Fantasya\Ship\Galleon;
 use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Ship\Trireme;
 use Lemuria\Model\Fantasya\Spell;
+use Lemuria\Model\Fantasya\Spell\Fireball;
+use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Alchemy;
 use Lemuria\Model\Fantasya\Talent\Archery;
@@ -219,6 +224,7 @@ class CommandFactory
 		'HILFE'        => 'HELFEN',
 		'ID'           => 'NUMMER',
 		'KAMPF'        => 'KÄMPFEN',
+		'KAMPFZAUBER'  => true,
 		'KAEMPFEN'     => 'KÄMPFEN',
 		'KAUFEN'       => true,
 		'KÄMPFEN'      => true,
@@ -400,6 +406,8 @@ class CommandFactory
 	 * @var array(string=>string)
 	 */
 	protected array $spells = [
+		'Feuerball'    => Fireball::class,
+		'Wunderdoktor' => Quacksalver::class
 	];
 
 	/**
@@ -528,6 +536,7 @@ class CommandFactory
 				'FORSCHEN'     => Explore::class,
 				'GIB'          => Handover::class,
 				'HELFEN'       => Help::class,
+				'KAMPFZAUBER'  => BattleSpell::class,
 				'KAUFEN'       => Buy::class,
 				'KÄMPFEN'      => Fight::class,
 				'KOMMANDO'     => Grant::class,
@@ -535,18 +544,15 @@ class CommandFactory
 				'KONTAKTIEREN' => Contact::class,
 				'LEHREN'       => Teach::class,
 				'LERNEN'       => Learn::class,
-				'LOCALE'       => NullCommand::class,
 				'MACHEN'       => Create::class,
 				'NAME'         => Name::class,
 				'NÄCHSTER'     => Next::class,
 				'NUMMER'       => Number::class,
 				'PARTEI'       => Party::class,
-				'REGION'       => NullCommand::class,
 				'REISEN'       => Travel::class,
 				'REKRUTIEREN'  => Recruit::class,
 				'RESERVIEREN'  => Reserve::class,
 				'ROUTE'        => Route::class,
-				'RUNDE'        => NullCommand::class,
 				'SORTIEREN'    => Sort::class,
 				'SPIONIEREN'   => Spy::class,
 				'STEHLEN'      => Steal::class,
@@ -559,7 +565,9 @@ class CommandFactory
 				'VERLIEREN'    => Lose::class,
 				'VORLAGE'      => DefaultCommand::class,
 				'ZAUBERN'      => Cast::class,
-				'ZERSTÖREN'    => Destroy::class
+				'ZERSTÖREN'    => Destroy::class,
+
+				'LOCALE', 'REGION', 'RUNDE' => NullCommand::class
 			};
 			return new $command($phrase, $this->context);
 		} catch (\UnhandledMatchError) {
@@ -730,7 +738,7 @@ class CommandFactory
 	/**
 	 * Parse a singleton.
 	 */
-	protected function getCandidate(string $singleton, array $map): ?string {
+	#[Pure] protected function getCandidate(string $singleton, array $map): ?string {
 		$singleton  = mbUcFirst(mb_strtolower($singleton));
 		$candidates = [];
 		foreach ($map as $candidate => $singletonClass) {

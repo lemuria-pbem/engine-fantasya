@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Event;
 use Lemuria\Engine\Fantasya\Event\Acquaintance;
 use Lemuria\Engine\Fantasya\Event\Aftercare;
@@ -43,7 +41,7 @@ class DefaultProgress implements Progress
 
 	private int $count;
 
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		foreach (self::EVENTS as $event) {
 			$this->events[] = new $event($state);
 		}

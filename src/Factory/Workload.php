@@ -20,7 +20,7 @@ class Workload implements \Countable
 		return $this->maximum;
 	}
 
-	public function count() {
+	public function count(): int {
 		return $this->count;
 	}
 

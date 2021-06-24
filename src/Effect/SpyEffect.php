@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
+use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Action;
@@ -22,7 +23,7 @@ final class SpyEffect extends AbstractPartyEffect implements Reassignment
 	 */
 	private array $targets = [];
 
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		parent::__construct($state, Action::BEFORE);
 		Lemuria::Catalog()->addReassignment($this);
 	}
@@ -31,7 +32,8 @@ final class SpyEffect extends AbstractPartyEffect implements Reassignment
 		return $this->targets;
 	}
 
-	public function serialize(): array {
+	#[ArrayShape(['class' => "string", 'id' => "int", 'targets' => "array"])]
+	#[Pure] public function serialize(): array {
 		$data            = parent::serialize();
 		$data['targets'] = $this->targets;
 		return $data;
@@ -60,7 +62,7 @@ final class SpyEffect extends AbstractPartyEffect implements Reassignment
 		}
 	}
 
-	public function isRevealed(Unit $unit): bool {
+	#[Pure] public function isRevealed(Unit $unit): bool {
 		$id    = $unit->Id()->Id();
 		$level = $this->targets[$id] ?? 0;
 		return $level >= Spy::LEVEL_REVEAL_DISGUISE;

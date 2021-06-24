@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
 use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\Pure;
 use Ramsey\Uuid\Uuid;
 
 use function Lemuria\getClass;
@@ -79,7 +80,7 @@ class LemuriaNewcomer implements Newcomer, Serializable
 		'uuid' => "string", 'creation' => "int", 'name' => "string", 'description' => "string", 'race' => "null|string",
 		'landscape' => "null|string", 'origin' => "int", 'inventory' => "array"
 	])]
-	public function serialize(): array {
+	#[Pure] public function serialize(): array {
 		return ['uuid'      => $this->uuid,    'creation' => $this->creation,
 			    'name'      => $this->name, 'description' => $this->description,
 			    'race'      => $this->race ? getClass($this->race) : null,

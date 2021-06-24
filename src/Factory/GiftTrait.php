@@ -10,7 +10,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\DismissPeasantsMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DismissOnlyPeasantsMessage;
 use Lemuria\Item;
 use Lemuria\Model\Fantasya\Commodity;
-use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Heirs;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Relation;
@@ -26,6 +25,7 @@ trait GiftTrait
 
 	private ?Unit $recipient;
 
+	/** @noinspection PhpParamsInspection */
 	private function parseObject(string $count, string $commodity): void {
 		if ($count === '' || strtolower($count) === 'alles') {
 			$this->amount = PHP_INT_MAX; // <COMMAND> Alles [<commodity>]

@@ -39,7 +39,7 @@ final class Number extends UnitCommand
 			$type = 'Einheit';
 			$id   = $this->phrase->getParameter();
 		} else {
-			$type = $this->phrase->getParameter(1);
+			$type = $this->phrase->getParameter();
 			$id   = $this->phrase->getParameter(2);
 		}
 		try {

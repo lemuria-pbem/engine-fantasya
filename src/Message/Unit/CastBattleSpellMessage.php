@@ -2,9 +2,9 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
-class SortFirstMessage extends AbstractUnitMessage
+class CastBattleSpellMessage extends CastExperienceMessage
 {
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' reordered as first.';
+		return 'Spell ' . $this->spell . ' can be used in battle only.';
 	}
 }

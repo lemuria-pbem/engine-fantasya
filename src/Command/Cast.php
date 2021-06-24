@@ -5,9 +5,11 @@ namespace Lemuria\Engine\Fantasya\Command;
 use function Lemuria\isInt;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\CastBattleSpellMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastNoAuraMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastNoMagicianMessage;
+use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Talent\Magic;
 
@@ -62,7 +64,12 @@ final class Cast extends UnitCommand
 			$level = 1;
 			$class = $this->phrase->getLine();
 		}
-		$this->spell     = $this->context->Factory()->spell($class);
+		$this->spell = $this->context->Factory()->spell($class);
+		if ($this->spell instanceof BattleSpell) {
+			$this->message(CastBattleSpellMessage::class)->s($this->spell);
+			return;
+		}
+
 		$this->level     = min($level, $this->getMaxLevel());
 		$this->knowledge = $this->calculus()->knowledge(Magic::class)->Level();
 

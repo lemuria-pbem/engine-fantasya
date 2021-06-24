@@ -13,6 +13,7 @@ abstract class AbstractApply
 		return true;
 	}
 
+	/** @noinspection PhpPureAttributeCanBeAddedInspection */
 	public function apply(): int {
 		return $this->apply->Count();
 	}

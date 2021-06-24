@@ -4,6 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.6
 
+- Bei Baumwachstum Ebenen in Wälder ändern
 
 ## Neue Funktionen
 
@@ -11,6 +12,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 - Magie-Grundlagen (KAMPFZAUBER/ZAUBERN)
 - einige einfache Zaubersprüche
+- Kampfzauber im Report ausgeben
+- Zauberbuch (GEBEN, MACHEN, ZEIGEN)
 - Engine-Version in Reporten angeben
 - Textreport im Markdown-Format
 - Einstellen der erwünschten Reportformate

@@ -16,7 +16,7 @@ class VesselMessage extends AbstractUnitMessage
 	protected Singleton $ship;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' creates a new ' . $this->ship() . '.';
+		return 'Unit ' . $this->id . ' creates a new ' . $this->ship . '.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {

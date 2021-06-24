@@ -41,10 +41,9 @@ final class Sort extends UnitCommand
 		if ($n <= 0) {
 			throw new InvalidCommandException($this, 'No sort details given.');
 		}
-		if ($n === 1) {
+		$type = $this->phrase->getParameter();
+		if ($n >= 2) {
 			$type = $this->phrase->getParameter();
-		} else {
-			$type = $this->phrase->getParameter(1);
 			$i    = 2;
 			$with = $this->nextId($i);
 			if (!$with || $with->Party() !== $this->unit->Party() ) {
@@ -223,7 +222,7 @@ final class Sort extends UnitCommand
 	private function exchangeWith(Unit $unit): void {
 		if ($this->checkIdentity($unit)) {
 			$residents = $this->unit->Region()->Residents();
-			$residents->reorder($this->unit, $unit, Reorder::FLIP);
+			$residents->reorder($this->unit, $unit);
 			$this->message(SortFlipMessage::class)->e($unit);
 
 			$construction = $this->unit->Construction();
@@ -235,7 +234,7 @@ final class Sort extends UnitCommand
 						$inhabitants->reorder($this->unit, $owner, Reorder::AFTER);
 						$this->message(SortAfterOwnerMessage::class);
 					} else {
-						$inhabitants->reorder($this->unit, $unit, Reorder::FLIP);
+						$inhabitants->reorder($this->unit, $unit);
 						$this->message(SortFlipInConstructionMessage::class)->e($unit);
 					}
 				}
@@ -250,7 +249,7 @@ final class Sort extends UnitCommand
 						$passengers->reorder($this->unit, $captain, Reorder::AFTER);
 						$this->message(SortAfterCaptainMessage::class);
 					} else {
-						$passengers->reorder($this->unit, $unit, Reorder::FLIP);
+						$passengers->reorder($this->unit, $unit);
 						$this->message(SortFlipInVesselMessage::class)->e($unit);
 					}
 				}

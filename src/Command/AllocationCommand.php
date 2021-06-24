@@ -44,7 +44,7 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	/**
 	 * Get the requested resource quota that is available for allocation.
 	 */
-	#[Pure] public function getQuota(): float {
+	public function getQuota(): float {
 		return self::QUOTA;
 	}
 
@@ -107,6 +107,7 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 		}
 
 		/** @var Quantity $quantity */
+		/** @noinspection PhpUnnecessaryLocalVariableInspection */
 		$quantity = $this->resources[$class];
 		return $quantity;
 	}

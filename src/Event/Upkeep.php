@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
@@ -42,7 +40,7 @@ final class Upkeep extends AbstractEvent
 
 	private Estate $unmaintained;
 
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		parent::__construct($state, Action::MIDDLE);
 		$this->silver       = self::createCommodity(Silver::class);
 		$this->unmaintained = new Estate();
@@ -182,6 +180,7 @@ final class Upkeep extends AbstractEvent
 	private function effect(Construction $construction): Unmaintained {
 		$effect = new Unmaintained($this->state);
 		/** @var Unmaintained $effect */
+		/** @noinspection PhpUnnecessaryLocalVariableInspection */
 		$effect = Lemuria::Score()->find($effect->setConstruction($construction));
 		return $effect;
 	}

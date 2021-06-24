@@ -10,7 +10,7 @@ use Lemuria\Model\Fantasya\Combat;
 /**
  * This command is used to set the unit's behaviour in combat.
  *
- * - KÄMPFEN [Agressiv|Defensiv|Fliehe|Fliehen|Flucht|Hinten|Nicht|Vorn|Vorne]
+ * - KÄMPFEN [Aggressiv|Defensiv|Fliehe|Fliehen|Flucht|Hinten|Nicht|Vorn|Vorne]
  */
 final class Fight extends UnitCommand
 {
@@ -25,7 +25,7 @@ final class Fight extends UnitCommand
 		}
 
 		switch ($position) {
-			case 'agressiv' :
+			case 'aggressiv' :
 				$this->unit->setBattleRow(Combat::AGGRESSIVE);
 				break;
 			case 'defensiv' :

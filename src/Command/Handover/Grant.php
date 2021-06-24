@@ -8,7 +8,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\GrantFromOutsideMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantNotInsideMessage;
-use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Unit;

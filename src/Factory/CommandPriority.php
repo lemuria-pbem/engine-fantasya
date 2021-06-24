@@ -29,7 +29,7 @@ final class CommandPriority
 		'Unguard'        => 12,
 		'Origin'         => 14,
 		'Fight'          => 16,
-		// KAMPFZAUBER => 17,
+		'BattleSpell'    => 17,
 		'Help'           => 19,
 		'Contact'        => 21,
 		'Announcement'   => 23,

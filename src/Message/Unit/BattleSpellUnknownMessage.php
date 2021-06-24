@@ -3,18 +3,17 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Id;
 
-class TravelNotCaptainMessage extends TravelTooHeavyMessage
+class BattleSpellUnknownMessage extends BattleSpellNoMagicianMessage
 {
-	protected Id $vessel;
+	protected string $spell;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' must be the captain to steer the vessel ' . $this->vessel . '.';
+		return 'Unit ' . $this->id . ' will not cast ' . $this->spell . ' in combat anymore.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->vessel = $message->get();
+		$this->spell = $message->getParameter();
 	}
 }

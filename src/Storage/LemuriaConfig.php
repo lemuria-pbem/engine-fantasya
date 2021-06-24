@@ -121,7 +121,7 @@ class LemuriaConfig implements \ArrayAccess, Config
 		return new BaseCalendar();
 	}
 
-	public function Debut(): Debut {
+	#[Pure] public function Debut(): Debut {
 		return new LemuriaDebut();
 	}
 
@@ -152,7 +152,7 @@ class LemuriaConfig implements \ArrayAccess, Config
 	/**
 	 * @throws \Exception
 	 */
-	public function Log(): Log {
+	#[Pure] public function Log(): Log {
 		return $this->createLog($this->storagePath . DIRECTORY_SEPARATOR . self::LOG_DIR . DIRECTORY_SEPARATOR . self::LOG_FILE);
 	}
 
@@ -164,7 +164,7 @@ class LemuriaConfig implements \ArrayAccess, Config
 		$this->defaults = self::DEFAULTS;
 	}
 
-	protected function createLog(string $logPath): Log {
+	#[Pure] protected function createLog(string $logPath): Log {
 		return new LemuriaLog($logPath);
 	}
 }

@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
+use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
@@ -28,7 +29,7 @@ final class PotionEffect extends AbstractUnitEffect
 
 	private bool $isFresh = false;
 
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
 	}
 
@@ -48,7 +49,8 @@ final class PotionEffect extends AbstractUnitEffect
 		return $this->count;
 	}
 
-	public function serialize(): array {
+	#[ArrayShape(['class' => "string", 'id' => "int", 'weeks' => "int", 'count' => "int", 'potion' => "string"])]
+	#[Pure] public function serialize(): array {
 		$data = parent::serialize();
 		$data['potion'] = getClass($this->potion);
 		$data['count']  = $this->count;

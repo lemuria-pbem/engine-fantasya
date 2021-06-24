@@ -9,7 +9,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyRegionNotMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyUnknownMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpRegionNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpSelfMessage;
@@ -23,7 +22,7 @@ use Lemuria\Model\Fantasya\Relation;
 /**
  * This command is used to set diplomatic relations.
  *
- * - HELFEN 0|<Party> Abbau|Abbauen|Mache|Machen|Resourcen|Ressourcen [Nicht|Region] [Region|Nicht]
+ * - HELFEN 0|<Party> Abbau|Abbauen|Mache|Machen|Ressourcen [Nicht|Region] [Region|Nicht]
  * - HELFEN 0|<Party> Alles [Nicht|Region] [Region|Nicht]
  * - HELFEN 0|<Party> Betrete|Betreten [Nicht|Region] [Region|Nicht]
  * - HELFEN 0|<Party> Bewache|Bewachen [Nicht|Region] [Region|Nicht]
@@ -52,7 +51,7 @@ final class Help extends UnitCommand
 			$party = $this->unit->Party();
 		} else {
 			$partyId = Id::fromId($p);
-			if ($partyId->Id() === $this->unit->Party()->Id()) {
+			if ($partyId->Id() === $this->unit->Party()->Id()->Id()) {
 				$this->message(HelpSelfMessage::class);
 				return;
 			}
@@ -93,56 +92,23 @@ final class Help extends UnitCommand
 	}
 
 	private function getAgreement(string $agreement): ?int {
-		switch (strtolower($agreement)) {
-			case 'abbau' :
-			case 'abbauen' :
-			case 'mache' :
-			case 'machen' :
-			case 'resourcen' :
-			case 'ressourcen' :
-				return Relation::RESOURCES;
-			case 'alles' :
-				return Relation::ALL;
-			case 'betrete' :
-			case 'betreten' :
-				return Relation::ENTER;
-			case 'bewache' :
-			case 'bewachen' :
-				return Relation::GUARD;
-			case 'gib' :
-			case 'geben' :
-				return Relation::GIVE;
-			case 'handel' :
-			case 'handeln' :
-				return Relation::TRADE;
-			case 'kampf' :
-			case 'kämpfe' :
-			case 'kämpfen' :
-				return Relation::COMBAT;
-			case 'kontakt' :
-			case 'kontaktiere' :
-			case 'kontaktieren' :
-				return Relation::TELL;
-			case 'nahrung' :
-				return Relation::FOOD;
-			case 'nicht' :
-			case 'nichts' :
-				return Relation::NONE;
-			case 'parteitarnung' :
-				return Relation::DISGUISE;
-			case 'silber' :
-				return Relation::SILVER;
-			case 'tarne' :
-			case 'tarnen' :
-			case 'tarnung' :
-				return Relation::PERCEPTION;
-			case 'versorge' :
-			case 'versorgen' :
-			case 'versorgung' :
-				return Relation::EARN;
-			default :
-				return null;
-		}
+		return match (strtolower($agreement)) {
+			'abbau', 'abbauen', 'mache', 'machen', 'ressourcen' => Relation::RESOURCES,
+			'alles'                                             => Relation::ALL,
+			'betrete', 'betreten'                               => Relation::ENTER,
+			'bewache', 'bewachen'                               => Relation::GUARD,
+			'gib', 'geben'                                      => Relation::GIVE,
+			'handel', 'handeln'                                 => Relation::TRADE,
+			'kampf', 'kämpfe', 'kämpfen'                        => Relation::COMBAT,
+			'kontakt', 'kontaktiere', 'kontaktieren'            => Relation::TELL,
+			'nahrung'                                           => Relation::FOOD,
+			'nicht', 'nichts'                                   => Relation::NONE,
+			'parteitarnung'                                     => Relation::DISGUISE,
+			'silber'                                            => Relation::SILVER,
+			'tarne', 'tarnen', 'tarnung'                        => Relation::PERCEPTION,
+			'versorge', 'versorgen', 'versorgung'               => Relation::EARN,
+			default                                             => null
+		};
 	}
 
 	/**

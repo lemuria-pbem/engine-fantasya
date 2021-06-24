@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Storage;
 
 use JetBrains\PhpStorm\ArrayShape;
 
+use JetBrains\PhpStorm\Pure;
 use Lemuria\Model\Fantasya\Storage\JsonGame;
 use Lemuria\Model\Fantasya\Storage\JsonProvider;
 
@@ -15,10 +16,6 @@ class LemuriaGame extends JsonGame
 
 	private const STRINGS_FILE = 'strings.json';
 
-	private JsonProvider $readProvider;
-
-	private JsonProvider $writeProvider;
-
 	public function __construct(protected LemuriaConfig $config) {
 		parent::__construct();
 	}
@@ -27,10 +24,9 @@ class LemuriaGame extends JsonGame
 	 * @return array(string=>string)
 	 */
 	protected function getLoadStorage(): array {
-		$round              = $this->config[LemuriaConfig::ROUND];
-		$path               = $this->config->getStoragePath() . DIRECTORY_SEPARATOR . self::GAME_DIR . DIRECTORY_SEPARATOR . $round;
-		$this->readProvider = new JsonProvider($path);
-		return $this->addStringsStorage([JsonProvider::DEFAULT => $this->readProvider]);
+		$round = $this->config[LemuriaConfig::ROUND];
+		$path  = $this->config->getStoragePath() . DIRECTORY_SEPARATOR . self::GAME_DIR . DIRECTORY_SEPARATOR . $round;
+		return $this->addStringsStorage([JsonProvider::DEFAULT => new JsonProvider($path)]);
 	}
 
 	/**
@@ -38,16 +34,15 @@ class LemuriaGame extends JsonGame
 	 */
 	#[ArrayShape([JsonProvider::DEFAULT => '\Lemuria\Model\Fantasya\Storage\JsonProvider'])]
 	protected function getSaveStorage(): array {
-		$round               = $this->config[LemuriaConfig::ROUND] + 1;
-		$path                = $this->config->getStoragePath() . DIRECTORY_SEPARATOR . self::GAME_DIR . DIRECTORY_SEPARATOR . $round;
-		$this->writeProvider = new JsonProvider($path);
-		return [JsonProvider::DEFAULT => $this->writeProvider];
+		$round = $this->config[LemuriaConfig::ROUND] + 1;
+		$path  = $this->config->getStoragePath() . DIRECTORY_SEPARATOR . self::GAME_DIR . DIRECTORY_SEPARATOR . $round;
+		return [JsonProvider::DEFAULT => new JsonProvider($path)];
 	}
 
 	/**
 	 * @return array(string=>string)
 	 */
-	protected function addStringsStorage(array $storage): array {
+	#[Pure] protected function addStringsStorage(array $storage): array {
 		$storage[self::STRINGS_FILE] = new JsonProvider(self::STRINGS_DIR);
 		return $storage;
 	}

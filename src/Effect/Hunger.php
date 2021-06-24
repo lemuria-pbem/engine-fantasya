@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Message\Unit\HungerMessage;
 use Lemuria\Engine\Fantasya\State;
@@ -12,7 +10,7 @@ final class Hunger extends AbstractUnitEffect
 {
 	private float $hunger = 1.0;
 
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		parent::__construct($state, Action::BEFORE);
 	}
 

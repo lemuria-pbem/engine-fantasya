@@ -80,7 +80,7 @@ abstract class AbstractCommand implements Command
 	/**
 	 * Get the delegate to execute.
 	 */
-	#[Pure] public function getDelegate(): Command {
+	public function getDelegate(): Command {
 		return $this;
 	}
 

@@ -181,7 +181,7 @@ final class Initiate implements Command
 			return $this->newcomer->Race();
 		}
 		$races = array_keys(self::LANDSCAPES);
-		return self::createRace($races[array_rand($races, 1)]);
+		return self::createRace($races[array_rand($races)]);
 	}
 
 	private function pickOrigin(Race $race): Region {
@@ -215,6 +215,7 @@ final class Initiate implements Command
 			}
 			if ($locations->count()) {
 				/** @var Region $region */
+				/** @noinspection PhpUnnecessaryLocalVariableInspection */
 				$region = $locations->Atlas()->sort(FantasyaAtlas::BY_RESIDENTS)->current();
 				return $region;
 			}
