@@ -2,22 +2,25 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use function Lemuria\isInt;
+use Lemuria\Engine\Fantasya\Factory\SpellParser;
 use Lemuria\Engine\Fantasya\Context;
-use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\CastBattleSpellMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastExperienceMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\CastMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastNoAuraMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastNoMagicianMessage;
 use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Talent\Magic;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Cast a spell.
  *
  * - ZAUBERN <spell>
  * - ZAUBERN <spell> <level>
+ * - ZAUBERN <spell> <additional parameters>
+ * - ZAUBERN <spell> <level> <additional parameters>
  */
 final class Cast extends UnitCommand
 {
@@ -26,6 +29,8 @@ final class Cast extends UnitCommand
 	private int $level;
 
 	private int $knowledge;
+
+	private ?Unit $target;
 
 	public function Context(): Context {
 		return $this->context;
@@ -43,35 +48,26 @@ final class Cast extends UnitCommand
 		return $this->level;
 	}
 
+	public function Target(): ?Unit {
+		return $this->target;
+	}
+
 	public function Knowledge(): int {
 		return $this->knowledge;
 	}
 
 	protected function run(): void {
-		$n = $this->phrase->count();
-		if ($n < 1) {
-			throw new UnknownCommandException($this);
-		}
-
-		$last = $this->phrase->getParameter(0);
-		if (isInt($last)) {
-			if ($n < 2) {
-				throw new UnknownCommandException($this);
-			}
-			$level = (int)$last;
-			$class = $this->phrase->getLineUntil();
-		} else {
-			$level = 1;
-			$class = $this->phrase->getLine();
-		}
-		$this->spell = $this->context->Factory()->spell($class);
-		if ($this->spell instanceof BattleSpell) {
-			$this->message(CastBattleSpellMessage::class)->s($this->spell);
+		$parser = new SpellParser($this->phrase);
+		$spell  = $this->context->Factory()->spell($parser->Spell());
+		if ($spell instanceof BattleSpell) {
+			$this->message(CastBattleSpellMessage::class)->s($spell);
 			return;
 		}
 
-		$this->level     = min($level, $this->getMaxLevel());
+		$this->spell     = $spell;
+		$this->level     = min($parser->Level(), $this->getMaxLevel());
 		$this->knowledge = $this->calculus()->knowledge(Magic::class)->Level();
+		$this->target    = Unit::get($parser->Target());
 
 		if ($this->knowledge <= 0) {
 			$this->message(CastNoMagicianMessage::class);
@@ -87,6 +83,7 @@ final class Cast extends UnitCommand
 		}
 
 		$cast = $this->context->Factory()->castSpell($this->spell, $this);
+		$this->message(CastMessage::class)->s($this->spell);
 		$cast->cast();
 	}
 

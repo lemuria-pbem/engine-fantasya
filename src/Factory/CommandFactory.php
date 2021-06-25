@@ -145,8 +145,11 @@ use Lemuria\Model\Fantasya\Ship\Galleon;
 use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Ship\Trireme;
 use Lemuria\Model\Fantasya\Spell;
+use Lemuria\Model\Fantasya\Spell\AuraTransfer;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
+use Lemuria\Model\Fantasya\Spell\ShockWave;
+use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Alchemy;
 use Lemuria\Model\Fantasya\Talent\Archery;
@@ -406,7 +409,10 @@ class CommandFactory
 	 * @var array(string=>string)
 	 */
 	protected array $spells = [
+		'Auratransfer' => AuraTransfer::class,
 		'Feuerball'    => Fireball::class,
+		'Friedenslied' => SongOfPeace::class,
+		'Schockwelle'  => ShockWave::class,
 		'Wunderdoktor' => Quacksalver::class
 	];
 
@@ -630,7 +636,6 @@ class CommandFactory
 	 * @throws UnknownCommandException
 	 */
 	public function spell(string $spell): Spell {
-		$parser = new SpellParser($spell); //TODO
 		$spellClass = $this->identifySingleton($spell, $this->spells);
 		return self::createSpell($spellClass);
 	}
