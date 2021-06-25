@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Exception\ActionException;
 use Lemuria\Engine\Fantasya\Factory\SpellParser;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Message\Unit\CastBattleSpellMessage;
@@ -32,6 +33,8 @@ final class Cast extends UnitCommand
 
 	private ?Unit $target;
 
+	private ?ActionException $exception = null;
+
 	public function Context(): Context {
 		return $this->context;
 	}
@@ -56,19 +59,14 @@ final class Cast extends UnitCommand
 		return $this->knowledge;
 	}
 
-	protected function run(): void {
-		$parser = new SpellParser($this->phrase);
-		$spell  = $this->context->Factory()->spell($parser->Spell());
-		if ($spell instanceof BattleSpell) {
-			$this->message(CastBattleSpellMessage::class)->s($spell);
+	public function cast(): void {
+		$this->level     = min($this->level, $this->getMaxLevel());
+		$this->knowledge = $this->calculus()->knowledge(Magic::class)->Level();
+
+		if ($this->spell instanceof BattleSpell) {
+			$this->message(CastBattleSpellMessage::class)->s($this->spell);
 			return;
 		}
-
-		$this->spell     = $spell;
-		$this->level     = min($parser->Level(), $this->getMaxLevel());
-		$this->knowledge = $this->calculus()->knowledge(Magic::class)->Level();
-		$this->target    = Unit::get($parser->Target());
-
 		if ($this->knowledge <= 0) {
 			$this->message(CastNoMagicianMessage::class);
 			return;
@@ -85,6 +83,26 @@ final class Cast extends UnitCommand
 		$cast = $this->context->Factory()->castSpell($this->spell, $this);
 		$this->message(CastMessage::class)->s($this->spell);
 		$cast->cast();
+	}
+
+	public function setException(ActionException $exception): void {
+		$this->exception = $exception;
+	}
+
+	protected function initialize(): void {
+		parent::initialize();
+		$parser       = new SpellParser($this->phrase);
+		$this->spell  = $this->context->Factory()->spell($parser->Spell());
+		$this->level  = $parser->Level();
+		$this->target = Unit::get($parser->Target());
+		$this->context->getCasts()->add($this);
+	}
+
+	protected function run(): void {
+		$this->context->getCasts()->cast();
+		if ($this->exception) {
+			throw $this->exception;
+		}
 	}
 
 	private function getMaxLevel(): int {
