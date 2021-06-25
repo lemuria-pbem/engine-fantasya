@@ -630,6 +630,7 @@ class CommandFactory
 	 * @throws UnknownCommandException
 	 */
 	public function spell(string $spell): Spell {
+		$parser = new SpellParser($spell); //TODO
 		$spellClass = $this->identifySingleton($spell, $this->spells);
 		return self::createSpell($spellClass);
 	}

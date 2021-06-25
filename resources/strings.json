@@ -810,7 +810,11 @@
 		"Trireme": "Trireme"
 	},
 	"spell": {
-		"Quacksalver": "Wunderdoktor"
+		"AuraTransfer": "Auratransfer",
+		"Fireball": "Feuerball",
+		"Quacksalver": "Wunderdoktor",
+		"ShockWave": "Schockwelle",
+		"SongOfPeace": "Friedenslied"
 	},
 	"talent": {
 		"Alchemy": "Alchemie",
