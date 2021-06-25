@@ -33,6 +33,10 @@ abstract class AbstractEffect implements Effect
 		$this->context = new Context($state);
 	}
 
+	public function needsAftercare(): bool {
+		return false;
+	}
+
 	#[Pure] public function Id(): Id {
 		return $this->id;
 	}

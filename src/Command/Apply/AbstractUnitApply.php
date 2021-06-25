@@ -3,12 +3,17 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Apply;
 
 use Lemuria\Engine\Fantasya\Effect\PotionEffect;
+use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 
 abstract class AbstractUnitApply extends AbstractApply
 {
+	use MessageTrait;
+
 	protected ?PotionEffect $effect = null;
+
+	protected ?string $applyMessage = null;
 
 	private bool $isNew = false;
 
@@ -20,6 +25,7 @@ abstract class AbstractUnitApply extends AbstractApply
 	public function apply(): int {
 		$count = $this->apply->Count();
 		$this->getEffect()->setCount($count);
+		$this->applyMessage();
 		return $count;
 	}
 
@@ -38,5 +44,11 @@ abstract class AbstractUnitApply extends AbstractApply
 			}
 		}
 		return $this->effect;
+	}
+
+	protected function applyMessage(): void {
+		if ($this->applyMessage) {
+			$this->message($this->applyMessage, $this->apply->Unit());
+		}
 	}
 }
