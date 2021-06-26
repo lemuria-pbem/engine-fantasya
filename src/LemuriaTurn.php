@@ -32,6 +32,8 @@ use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Version\VersionFinder;
+use Lemuria\Version\VersionTag;
 
 /**
  * Main engine class.
@@ -210,6 +212,11 @@ class LemuriaTurn implements Turn
 			$this->addEffect($effect);
 		}
 		return $this;
+	}
+
+	public function getVersion(): VersionTag {
+		$versionFinder = new VersionFinder(__DIR__ . '/..');
+		return $versionFinder->get();
 	}
 
 	protected function enqueue(Action $action): void {

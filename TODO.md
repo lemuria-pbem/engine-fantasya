@@ -5,8 +5,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Fehler/Verbesserungen in 0.5
 
 - Engine-Version in Reporten angeben
-- Befehlscheck sollte Commodities prüfen
-- NUMMER sollte in Simulation immer Erfolg haben
 
 ## Neue Funktionen
 
