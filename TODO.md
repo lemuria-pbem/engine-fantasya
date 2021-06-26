@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.5
 
-- Bei Baumwachstum Ebenen in Wälder ändern
 - Engine-Version in Reporten angeben
 - Befehlscheck sollte Commodities prüfen
 - NUMMER sollte in Simulation immer Erfolg haben
