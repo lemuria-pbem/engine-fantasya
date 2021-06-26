@@ -44,6 +44,10 @@ final class Growth extends AbstractEvent
 	}
 
 	protected function run(): void {
+		if (!$this->isSeason) {
+			Lemuria::Log()->debug('We have no tree growth season.');
+		}
+
 		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region/* @var Region $region */) {
 			$landscape = $region->Landscape();
 			$resources = $region->Resources();
@@ -78,20 +82,16 @@ final class Growth extends AbstractEvent
 					$resources->add($newTrees);
 					$this->message(GrowthMessage::class, $region)->i($newTrees);
 				}
-			} else {
-				Lemuria::Log()->debug('We have no tree growth season.');
 			}
 
-			if ($landscape instanceof Plain) {
-				if ($trees >= Forest::TREES) {
-					$region->setLandscape(self::createLandscape(Forest::class));
-					Lemuria::Log()->debug('Region ' . $region . ' is a forest now.');
-				}
-			} elseif ($landscape instanceof Forest) {
-				if ($trees < Forest::TREES) {
-					$region->setLandscape(self::createLandscape(Plain::class));
-					Lemuria::Log()->debug('Region ' . $region . ' is a plain now.');
-				}
+			$plain  = self::createLandscape(Plain::class);
+			$forest = self::createLandscape(Forest::class);
+			if ($landscape === $plain && $trees >= Forest::TREES) {
+				$region->setLandscape($forest);
+				Lemuria::Log()->debug('Region ' . $region . ' is a forest now.');
+			} elseif ($landscape === $forest && $trees < Forest::TREES) {
+				$region->setLandscape($plain);
+				Lemuria::Log()->debug('Region ' . $region . ' is a plain now.');
 			}
 		}
 	}
