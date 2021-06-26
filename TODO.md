@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.5
 
-- Meldung bei Übernahme des Kommandos
 - Bei Baumwachstum Ebenen in Wälder ändern
 - Engine-Version in Reporten angeben
 - Befehlscheck sollte Commodities prüfen
