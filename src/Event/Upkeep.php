@@ -177,6 +177,7 @@ final class Upkeep extends AbstractEvent
 		return $help;
 	}
 
+	/** @noinspection PhpRedundantVariableDocTypeInspection */
 	private function effect(Construction $construction): Unmaintained {
 		$effect = new Unmaintained($this->state);
 		/** @var Unmaintained $effect */

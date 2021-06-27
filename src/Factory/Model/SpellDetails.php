@@ -2,10 +2,13 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
+use JetBrains\PhpStorm\Pure;
+
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Factory\SpellParser;
 use Lemuria\Model\Dictionary;
 use Lemuria\Model\Fantasya\BattleSpell;
+use Lemuria\Model\Fantasya\Exception\JsonException;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Storage\JsonProvider;
 use Lemuria\SerializableTrait;
@@ -26,6 +29,9 @@ class SpellDetails
 
 	protected array $json;
 
+	/**
+	 * @throws JsonException
+	 */
 	public function __construct(protected Spell $spell) {
 		if (!self::$provider) {
 			self::$provider = new JsonProvider(__DIR__ . '/../../../resources/spell');
@@ -42,7 +48,7 @@ class SpellDetails
 		return $this->spell;
 	}
 
-	public function Name(): string {
+	#[Pure] public function Name(): string {
 		return self::$dictionary->get('spell', $this->spell);
 	}
 
