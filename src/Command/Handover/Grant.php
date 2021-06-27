@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\GrantFromOutsideMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantNotInsideMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GrantTakeoverMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Unit;
@@ -36,6 +37,7 @@ final class Grant extends UnitCommand
 					$unit = Lemuria::Catalog()->get($id, Catalog::UNITS); /* @var Unit $unit */
 					$inhabitants->setOwner($unit);
 					$this->message(GrantMessage::class)->e($unit);
+					$this->message(GrantTakeoverMessage::class, $unit)->e($this->unit);
 				} else {
 					$this->message(GrantNotInsideMessage::class)->p($id->Id());
 				}
