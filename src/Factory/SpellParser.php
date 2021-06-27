@@ -11,6 +11,12 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Spell;
+use Lemuria\Model\Fantasya\Spell\AuraTransfer;
+use Lemuria\Model\Fantasya\Spell\Fireball;
+use Lemuria\Model\Fantasya\Spell\Quacksalver;
+use Lemuria\Model\Fantasya\Spell\ShockWave;
+use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 
 class SpellParser
 {
@@ -19,19 +25,27 @@ class SpellParser
 	/**
 	 * Spell has optional level.
 	 */
-	protected const LEVEL = 1;
+	public const LEVEL = 1;
 
 	/**
 	 * Spell has optional level and mandatory target unit ID.
 	 */
-	protected const LEVEL_AND_TARGET = 2;
+	public const LEVEL_AND_TARGET = 2;
+
+	protected const SYNTAX = [
+		AuraTransfer::class => self::LEVEL_AND_TARGET,
+		Fireball::class     => self::LEVEL,
+		Quacksalver::class  => self::LEVEL,
+		ShockWave::class    => self::LEVEL,
+		SongOfPeace::class  => self::LEVEL
+	];
 
 	protected const SPELLS = [
-		'Auratransfer' => self::LEVEL_AND_TARGET,
-		'Feuerball'    => self::LEVEL,
-		'Friedenslied' => self::LEVEL,
-		'Schockwelle'  => self::LEVEL,
-		'Wunderdoktor' => self::LEVEL
+		'Auratransfer' => AuraTransfer::class,
+		'Feuerball'    => Fireball::class,
+		'Friedenslied' => SongOfPeace::class,
+		'Schockwelle'  => ShockWave::class,
+		'Wunderdoktor' => Quacksalver::class
 		/*
 		'Zauber' => [
 			'mit' => [
@@ -49,6 +63,16 @@ class SpellParser
 
 	protected ?Id $target = null;
 
+	/**
+	 * @throws UnknownItemException
+	 */
+	public static function getSyntax(Spell $spell): int {
+		if (isset(self::SYNTAX[$spell::class])) {
+			return self::SYNTAX[$spell::class];
+		}
+		throw new UnknownItemException($spell);
+	}
+
 	public function __construct(Phrase $phrase) {
 		$spells = self::SPELLS;
 		$i      = 1;
@@ -58,9 +82,9 @@ class SpellParser
 			$part = strtolower($phrase->getParameter($i++));
 			foreach ($spells as $key => &$value) {
 				if (strtolower($key) === $part) {
-					if (is_int($value)) {
+					if (is_string($value)) {
 						$spell[] = $key;
-						$config  = $value;
+						$config  = self::SYNTAX[$value];
 					} else {
 						$spells = $value;
 					}

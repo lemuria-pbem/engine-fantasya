@@ -9,19 +9,17 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.6
 
-- Magie-Grundlagen (KAMPFZAUBER/ZAUBERN)
-- einige einfache Zaubersprüche
 - Kampfzauber im Report ausgeben
-- Zauberbuch (GEBEN, MACHEN, ZEIGEN)
+- Zauberbuch ausgeben
 
 ### Version 0.7 und folgende
 
 - Kampf (ATTACKIEREN/BELAGERN, Berserkerblut, Elixier der Macht, Heiltrank)
 - Monster, besondere Gegenstände wie Greifeneier
 - Statistische Daten erstellen
-    - Regionsentwicklung im Report anzeigen
-    - Veränderungen im Inventar anzeigen
-    - Talentveränderungen im Report anzeigen
+  - Regionsentwicklung im Report anzeigen
+  - Veränderungen im Inventar anzeigen
+  - Talentveränderungen im Report anzeigen
 - HTML-Report optisch verbessern
 - Regeldatei für Magellan
 
@@ -34,7 +32,9 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - SABOTIERE (Spion versenkt Schiff)
 - VERSENKEN (Schiff vor Entern bewahren)
 - Monsterrasse bestimmt maximalen Übermacht-Faktor
-- Schriftrollen mit unbekannten Zaubern erwerben, um diese zu erlernen
+- einzigartige Gegenstände
+  - Schriftrollen mit unbekannten Zaubern erwerben, um diese zu erlernen
+  - Zauberbuch schreiben, weitergeben, lesen
 - weitere Zauber
 - Textreport im Markdown-Format
 - Einstellen der erwünschten Reportformate
