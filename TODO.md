@@ -7,11 +7,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
-### Version 0.6
-
-- Kampfzauber im Report ausgeben
-- Zauberbuch ausgeben
-
 ### Version 0.7 und folgende
 
 - Kampf (ATTACKIEREN/BELAGERN, Berserkerblut, Elixier der Macht, Heiltrank)
