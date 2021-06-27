@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
-use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Spell;
@@ -82,9 +81,7 @@ final class Obtainment extends AbstractEvent
 	private function getMagicLevel(Party $party): int {
 		$level = 0;
 		foreach ($party->People() as $unit /* @var Unit $unit */) {
-			$knowledge = $unit->Knowledge();
-			/** @var Ability $ability */
-			$ability = $knowledge[$this->magic];
+			$ability = $this->context->getCalculus($unit)->knowledge($this->magic);
 			$level   = max($level, $ability->Level());
 		}
 		return $level;
