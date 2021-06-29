@@ -11,15 +11,18 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 - Magie-Grundlagen (KAMPFZAUBER/ZAUBERN)
 - einige einfache Zaubersprüche
-- Engine-Version in Reporten angeben
-- Textreport im Markdown-Format
-- Einstellen der erwünschten Reportformate
+- Kampfzauber im Report ausgeben
+- Zauberbuch (GEBEN, MACHEN, ZEIGEN)
 
 ### Version 0.7 und folgende
 
 - Kampf (ATTACKIEREN/BELAGERN, Berserkerblut, Elixier der Macht, Heiltrank)
 - Monster, besondere Gegenstände wie Greifeneier
-- weitere Zauber
+- Statistische Daten erstellen
+    - Regionsentwicklung im Report anzeigen
+    - Veränderungen im Inventar anzeigen
+    - Talentveränderungen im Report anzeigen
+- HTML-Report optisch verbessern
 - Regeldatei für Magellan
 
 ## Ideen
@@ -32,3 +35,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - VERSENKEN (Schiff vor Entern bewahren)
 - Monsterrasse bestimmt maximalen Übermacht-Faktor
 - Schriftrollen mit unbekannten Zaubern erwerben, um diese zu erlernen
+- weitere Zauber
+- Textreport im Markdown-Format
+- Einstellen der erwünschten Reportformate
+- Talentübersicht pro Region

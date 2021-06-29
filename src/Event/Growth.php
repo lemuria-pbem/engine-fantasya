@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Factory\Model\Season;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
@@ -14,6 +12,8 @@ use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Landscape\Forest;
+use Lemuria\Model\Fantasya\Landscape\Plain;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 
@@ -34,7 +34,7 @@ final class Growth extends AbstractEvent
 
 	private Commodity $tree;
 
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
 		$this->tree = self::createCommodity(Wood::class);
 	}
@@ -46,39 +46,52 @@ final class Growth extends AbstractEvent
 	protected function run(): void {
 		if (!$this->isSeason) {
 			Lemuria::Log()->debug('We have no tree growth season.');
-			return;
 		}
 
-		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region/* @var Region $region */) {
 			$landscape = $region->Landscape();
-			$place     = (int)round($landscape->Workplaces() / Workplaces::TREE);
-			if ($place <= 0) {
-				continue;
-			}
-
 			$resources = $region->Resources();
 			$trees     = $resources[$this->tree]->Count();
-			$rate      = $trees < $place ? self::RATE : self::RATE / 10;
-			$growth    = (int)ceil($rate * $trees);
-			$random    = $growth >= 30 ? 5 : 1;
-			$growth    = max(0, rand($growth - $random, $growth + $random));
 
-			if ($trees < 0.01 * $place) {
-				$neighbourTrees = $this->countNeighbourTrees($region);
-				$moreGrowth     = (int)round(self::NEIGHBOUR * $neighbourTrees);
-				if ($moreGrowth <= 0) {
-					$random = (int)(self::RANDOM * 100);
-					if (rand(0, 100) < $random) {
-						$moreGrowth++;
-					}
+			if ($this->isSeason) {
+				$place = (int)round($landscape->Workplaces() / Workplaces::TREE);
+				if ($place <= 0) {
+					continue;
 				}
-				$growth += $moreGrowth;
+
+				$rate   = $trees < $place ? self::RATE : self::RATE / 10;
+				$growth = (int)ceil($rate * $trees);
+				$random = $growth >= 30 ? 5 : 1;
+				$growth = max(0, rand($growth - $random, $growth + $random));
+
+				if ($trees < 0.01 * $place) {
+					$neighbourTrees = $this->countNeighbourTrees($region);
+					$moreGrowth     = (int)round(self::NEIGHBOUR * $neighbourTrees);
+					if ($moreGrowth <= 0) {
+						$random = (int)(self::RANDOM * 100);
+						if (rand(0, 100) < $random) {
+							$moreGrowth++;
+						}
+					}
+					$growth += $moreGrowth;
+				}
+
+				if ($growth > 0) {
+					$trees   += $growth;
+					$newTrees = new Quantity($this->tree, $growth);
+					$resources->add($newTrees);
+					$this->message(GrowthMessage::class, $region)->i($newTrees);
+				}
 			}
 
-			if ($growth > 0) {
-				$newTrees = new Quantity($this->tree, $growth);
-				$resources->add($newTrees);
-				$this->message(GrowthMessage::class, $region)->i($newTrees);
+			$plain  = self::createLandscape(Plain::class);
+			$forest = self::createLandscape(Forest::class);
+			if ($landscape === $plain && $trees >= Forest::TREES) {
+				$region->setLandscape($forest);
+				Lemuria::Log()->debug('Region ' . $region . ' is a forest now.');
+			} elseif ($landscape === $forest && $trees < Forest::TREES) {
+				$region->setLandscape($plain);
+				Lemuria::Log()->debug('Region ' . $region . ' is a plain now.');
 			}
 		}
 	}

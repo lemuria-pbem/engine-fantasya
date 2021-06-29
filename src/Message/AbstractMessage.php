@@ -59,6 +59,10 @@ abstract class AbstractMessage implements MessageType
 			$match = $matches[1];
 			$translation = str_replace($match, $this->replaceSuffix($match), $translation);
 		}
+		while (preg_match('/({[^=]+=\$[a-zA-Z]+})+/', $translation, $matches) === 1) {
+			$match = $matches[1];
+			$translation = str_replace($match, $this->replace($match), $translation);
+		}
 		foreach ($this->getVariables() as $name) {
 			$translation = str_replace('$' . $name, $this->getTranslation($name), $translation);
 		}
@@ -163,5 +167,16 @@ abstract class AbstractMessage implements MessageType
 			return $parts[0] . ' ' . $this->translateKey('replace.' . $key, $variable->Count() === 1 ? 0 : 1);
 		}
 		return $parts[0] . ' ' . '{' . $parts[1] . '}';
+	}
+
+	private function replace(string $match): string {
+		$parts    = explode('=', substr($match, 1, strlen($match) - 2));
+		$key      = $parts[0];
+		$name     = substr($parts[1], 1);
+		$variable = $this->$name;
+		if ($variable instanceof Singleton) {
+			return $this->translateKey('replace.' . $key . '.' . getClass($variable));
+		}
+		return '{' . $parts[0] . '}' . ' ' . $parts[1];
 	}
 }

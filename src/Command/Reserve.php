@@ -30,7 +30,7 @@ final class Reserve extends UnitCommand
 		$amount = (int)$count; // RESERVIEREN <amount> <commodity>
 		if ((string)$amount !== $count) {
 			if (!str_starts_with('alles', strtolower($count))) { // RESERVIEREN Alles
-				$commodity = $count . ' ' . $commodity; // RESERVIEREN <commodity> (all of commodity)
+				$commodity = trim($count . ' ' . $commodity); // RESERVIEREN <commodity> (all of commodity)
 			}
 			$amount = PHP_INT_MAX;
 		}
