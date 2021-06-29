@@ -19,6 +19,6 @@ class ReserveAllMessage extends ReserveMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'commodity') ?? parent::getTranslation($name);
+		return $this->commodity($name, 'commodity', 1) ?? parent::getTranslation($name);
 	}
 }
