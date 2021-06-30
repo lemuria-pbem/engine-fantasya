@@ -313,6 +313,7 @@
 		"NumberUnitUsedMessage": "Die Nummer der Einheit $id wurde nicht geändert. Die Nummer $newId ist schon vergeben.",
 		"NumberVesselMessage": "Die neue Nummer des Schiffes $oldId ist $id.",
 		"NumberVesselUsedMessage": "Die Nummer des Schiffes $id wurde nicht geändert. Die Nummer $newId ist schon vergeben.",
+		"ObtainmentMessage": "Die Einheit $unit hat einen neuen Zauberspruch für unser Zauberbuch gelernt: $spell",
 		"OriginMessage": "Der neue Kartenursprung liegt nun in der Region $name [$region].",
 		"OriginNotVisitedMessage": "Der Kartenursprung kann nicht auf die Region $region gesetzt werden - wir haben sie noch nicht besucht.",
 		"OriginUntoldMessage": "Der Kartenursprung kann nicht auf die Partei $party gesetzt werden - wir wissen nichts über sie.",

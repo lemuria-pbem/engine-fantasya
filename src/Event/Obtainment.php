@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Message\Party\ObtainmentMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
@@ -41,6 +42,8 @@ final class Obtainment extends AbstractEvent
 	 */
 	private array $spell = [];
 
+	private Unit $magician;
+
 	public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
 		$this->magic = self::createTalent(Magic::class);
@@ -70,6 +73,7 @@ final class Obtainment extends AbstractEvent
 				if (isset($this->spell[$level])) {
 					$spell = $this->spell[$level];
 					$spellBook->add($spell);
+					$this->message(ObtainmentMessage::class, $party)->e($this->magician)->s($spell);
 					Lemuria::Log()->debug('Party ' . $party->Id() . ' obtains level ' . $level . ' spell ' . $spell . '.');
 				} else {
 					Lemuria::Log()->debug('Party ' . $party->Id() . ' has no level ' . $level . ' spell.');
@@ -82,7 +86,12 @@ final class Obtainment extends AbstractEvent
 		$level = 0;
 		foreach ($party->People() as $unit /* @var Unit $unit */) {
 			$ability = $this->context->getCalculus($unit)->knowledge($this->magic);
-			$level   = max($level, $ability->Level());
+			$magic   = $ability->Level();
+			if ($magic > $level) {
+				$level = $magic;
+				/* @var Unit $unit */
+				$this->magician = $unit;
+			}
 		}
 		return $level;
 	}
