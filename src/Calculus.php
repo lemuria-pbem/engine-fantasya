@@ -148,6 +148,14 @@ final class Calculus
 	}
 
 	/**
+	 * Get a unit's hitpoints.
+	 */
+	public function hitpoints(): int {
+		//TODO: Calculate bonus of Ausdauer.
+		return $this->unit->Race()->Hitpoints();
+	}
+
+	/**
 	 * Calculate Ability in given Talent.
 	 */
 	public function knowledge(Talent|string $talent): Ability {
