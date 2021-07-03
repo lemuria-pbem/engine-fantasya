@@ -253,6 +253,7 @@
 		"HorseBlissNoneMessage": "Es gibt {kein:$animal} in der Region, um Pferdeglück anzuwenden.",
 		"HungerMessage": "Die Gesundheit der Einheit $id sinkt auf {$health:Punkt}.",
 		"LayaboutMessage": "Die Einheit $id faulenzt in dieser Woche.",
+		"LearnMagicMessage": "Die Einheit $id erreicht eine neue Magiestufe und erhält {$aura:Aurapunkt}.",
 		"LearnOnlyMessage": "Die Einheit $id kann nur $silver Silber ausgeben, um $talent zu lernen.",
 		"LearnProgressMessage": "Die Einheit $id lernt $talent mit $experience Lerntagen.",
 		"LearnSilverMessage": "Die Einheit $id gibt $silver Silber für das Lernen von $talent aus.",
