@@ -20,8 +20,6 @@ final class ActivityProtocol
 
 	private ?Activity $defaultCommand = null;
 
-	private bool $hasNewDefault = false;
-
 	/**
 	 * Create new activity protocol for a unit.
 	 */
@@ -51,7 +49,7 @@ final class ActivityProtocol
 	 * Check if an activity is allowed.
 	 *
 	 * Multiple activities of the same kind (e.g. multiple buy or sell commands) are allowed, but execution of a second
-	 * activity of a differenz kind than the first activity is forbidden.
+	 * activity of a different kind than the first activity is forbidden.
 	 */
 	public function isAllowed(Activity $activity): bool {
 		if (empty($this->activity) || isset($this->activity[$activity->Activity()])) {
@@ -74,10 +72,8 @@ final class ActivityProtocol
 		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
 		if ($command instanceof Activity) {
 			$default = $command->getNewDefault();
-			if ($default) {
-				if (!$this->hasNewDefault) {
-					$this->addDefault($default);
-				}
+			if ($default &&$this->isAllowed($default)) {
+				$this->addDefault($default);
 			}
 			if (!$this->isAllowed($command)) {
 				return false;
@@ -91,10 +87,8 @@ final class ActivityProtocol
 	 * Add a command to the default orders.
 	 */
 	public function addDefault(UnitCommand $command): void {
-		Lemuria::Orders()->getDefault($this->unit->Id())[] = (string)$command->Phrase();
-		if ($command instanceof Activity) {
-			$this->hasNewDefault = true;
-		}
+		$defaults   = Lemuria::Orders()->getDefault($this->unit->Id());
+		$defaults[] = (string)$command->Phrase();
 	}
 
 	/**
