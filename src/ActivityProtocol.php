@@ -88,7 +88,7 @@ final class ActivityProtocol
 	 */
 	public function addDefault(UnitCommand $command): void {
 		$defaults   = Lemuria::Orders()->getDefault($this->unit->Id());
-		$defaults[] = (string)$command->Phrase();
+		$defaults[] = $command;
 	}
 
 	/**

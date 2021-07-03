@@ -26,6 +26,11 @@ class LemuriaOrders implements Orders, Reassignment
 	 */
 	private array $default = [];
 
+	/**
+	 * @var array(int=>array)
+	 */
+	private array $commands = [];
+
 	private bool $isLoaded = false;
 
 	public function __construct() {
@@ -49,7 +54,8 @@ class LemuriaOrders implements Orders, Reassignment
 	public function getDefault(Id $id): Instructions {
 		$id = $id->Id();
 		if (!isset($this->default[$id])) {
-			$this->default[$id] = new StringList();
+			$this->default[$id]  = new LemuriaInstructions();
+			$this->commands[$id] = [];
 		}
 		return $this->default[$id];
 	}
@@ -104,6 +110,7 @@ class LemuriaOrders implements Orders, Reassignment
 		if ($identifiable->Catalog() === Catalog::UNITS) {
 			$this->replace($oldId->Id(), $identifiable->Id()->Id(), $this->current);
 			$this->replace($oldId->Id(), $identifiable->Id()->Id(), $this->default);
+			$this->replaceInDefaults($oldId, $identifiable->Id());
 		}
 	}
 
@@ -112,6 +119,7 @@ class LemuriaOrders implements Orders, Reassignment
 			$id = $identifiable->Id()->Id();
 			unset($this->current[$id]);
 			unset($this->default[$id]);
+			$this->replaceInDefaults($identifiable->Id());
 		}
 	}
 
@@ -140,6 +148,14 @@ class LemuriaOrders implements Orders, Reassignment
 			}
 		} else {
 			$instructions[$new] = $oldOrders;
+		}
+	}
+
+	private function replaceInDefaults(Id $old, ?Id $new = null): void {
+		$oldId = (string)$old;
+		$newId = $new ? (string)$new : null;
+		foreach ($this->default as $instructions /* @var LemuriaInstructions $instructions */) {
+			$instructions->replace($oldId, $newId);
 		}
 	}
 }
