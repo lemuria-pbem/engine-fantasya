@@ -4,16 +4,10 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
-use Lemuria\Engine\Message\Section;
-use Lemuria\Singleton;
 
-class LearnSilverMessage extends AbstractUnitMessage
+class LearnSilverMessage extends LearnNotMessage
 {
 	protected string $level = Message::SUCCESS;
-
-	protected int $section = Section::STUDY;
-
-	protected Singleton $talent;
 
 	protected int $silver;
 
@@ -23,11 +17,6 @@ class LearnSilverMessage extends AbstractUnitMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->talent = $message->getSingleton();
 		$this->silver = $message->getParameter();
-	}
-
-	protected function getTranslation(string $name): string {
-		return $this->talent($name, 'talent') ?? parent::getTranslation($name);
 	}
 }

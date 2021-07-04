@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\OneActivityTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnMagicMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LearnNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnProgressMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnSilverMessage;
@@ -74,8 +75,13 @@ final class Learn extends UnitCommand implements Activity
 		if ($this->expense > 0) {
 			$pool    = $this->context->getResourcePool($this->unit);
 			$expense = $pool->reserve($this->unit, new Quantity($this->silver, $this->expense));
-			$this->unit->Inventory()->remove($expense);
 			$silver  = $expense->Count();
+			if ($silver <= 0) {
+				$this->message(LearnNotMessage::class)->s($this->talent);
+				return;
+			}
+
+			$this->unit->Inventory()->remove($expense);
 			if ($silver < $this->expense) {
 				$experience = $this->progress->Experience();
 				$progress   = (int)floor(($expense->Count() / $this->expense) * $experience);
