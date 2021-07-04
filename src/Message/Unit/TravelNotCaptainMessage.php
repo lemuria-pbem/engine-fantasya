@@ -5,7 +5,7 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Id;
 
-class TravelNotCaptainMessage extends TravelTooHeayMessage
+class TravelNotCaptainMessage extends TravelTooHeavyMessage
 {
 	protected Id $vessel;
 

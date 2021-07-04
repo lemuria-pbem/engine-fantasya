@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Message\Vessel\ExcessCargoMessage;
 use Lemuria\Engine\Fantasya\State;
@@ -14,7 +12,7 @@ final class ExcessCargo extends AbstractVesselEffect
 
 	private const MAX_DAMAGE = 10;
 
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
 	}
 

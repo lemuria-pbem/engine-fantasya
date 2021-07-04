@@ -1,0 +1,7 @@
+{
+	"description": [
+		"Mit Hilfe dieses Zaubers kann ein Magier die eigene Aura im Verhältnis 2:1 an einen anderen Magier übertragen.",
+		"Pro Stufe überträgt der Magier einen Aurapunkt und verbraucht dabei zwei Aurapunkte. Damit ein Auratransfer an eine fremde Einheit gelingt, muss diese wie beim Befehl GEBEN die Annahme akzeptieren, also entweder HELFEN Geben gesetzt haben, oder den Magier zuvor KONTAKTIEREN."
+	],
+	"components": []
+}

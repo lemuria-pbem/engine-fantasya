@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
+use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Action;
@@ -15,7 +16,7 @@ final class ContactEffect extends AbstractPartyEffect
 {
 	private People $from;
 
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		parent::__construct($state, Action::BEFORE);
 		$this->from = new People();
 	}
@@ -24,7 +25,8 @@ final class ContactEffect extends AbstractPartyEffect
 		return $this->from;
 	}
 
-	public function serialize(): array {
+	#[ArrayShape(['class' => "string", 'id' => "int", 'from' => "int[]"])]
+	#[Pure] public function serialize(): array {
 		$data = parent::serialize();
 		$data['from'] = $this->from->serialize();
 		return $data;

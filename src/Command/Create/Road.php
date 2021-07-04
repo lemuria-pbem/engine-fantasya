@@ -13,7 +13,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\RoadCompletedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RoadExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RoadInOceanMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RoadMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\RoadNoRessourcesMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RoadNoResourcesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RoadOnlyMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Fantasya\Commodity;
@@ -108,7 +108,7 @@ final class Road extends UnitCommand implements Activity
 				$this->message(RoadCompletedMessage::class)->e($region)->p($direction)->i($reserve);
 			}
 		} else {
-			$this->message(RoadNoRessourcesMessage::class)->e($region)->p($direction);
+			$this->message(RoadNoResourcesMessage::class)->e($region)->p($direction);
 		}
 	}
 }

@@ -81,6 +81,7 @@ final class Construction extends AbstractProduct
 					$this->message(ConstructionMessage::class)->s($construction->Building());
 				}
 			}
+			$this->addToWorkload($yield);
 			$this->initializeMarket($construction);
 		} else {
 			if ($this->capability > 0) {
@@ -104,7 +105,9 @@ final class Construction extends AbstractProduct
 	 */
 	protected function calculateProduction(Requirement $craft): int {
 		if ($this->job->getObject() instanceof Castle) {
-			return $this->calculateCastleProduction($this->size);
+			$production = $this->calculateCastleProduction($this->size);
+			$this->reduceByWorkload($production);
+			return $production;
 		}
 		return parent::calculateProduction($craft);
 	}
@@ -120,7 +123,7 @@ final class Construction extends AbstractProduct
 		}
 
 		$unitSize   = $this->unit->Size();
-		$points     = $this->potionBoost($unitSize) * $unitSize * $level - $pointsUsed;
+		$points     = (int)floor($this->potionBoost($unitSize) * $unitSize * $level) - $pointsUsed;
 		$production = (int)floor($points / $cost);
 		$newSize    = $size + $production;
 		$maxSize    = $castle->MaxSize();
@@ -128,7 +131,8 @@ final class Construction extends AbstractProduct
 			return $production;
 		}
 
-		$production  = $maxSize - $size;
+		$newSize     = $maxSize;
+		$production  = $newSize - $size;
 		$delta       = $production * $cost;
 		$points     -= $delta;
 		$pointsUsed += $delta;

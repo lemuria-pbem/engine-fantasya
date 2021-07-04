@@ -35,7 +35,7 @@ final class Vessel extends AbstractProduct
 
 	protected function run(): void {
 		$vessel = $this->unit->Vessel();
-		if ($vessel->Completion() < 1.0) {
+		if ($vessel?->Completion() < 1.0) {
 			$ship             = $vessel?->Ship() ?: $this->getShip();
 			$size             = $vessel?->getUsedWood() ?? 0;
 			$wood             = $ship->Wood();

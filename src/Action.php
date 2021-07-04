@@ -20,7 +20,7 @@ interface Action extends \Stringable
 	/**
 	 * Get action as string.
 	 */
-	#[Pure] public function __toString(): string;
+	public function __toString(): string;
 
 	#[Pure] public function Priority(): int;
 

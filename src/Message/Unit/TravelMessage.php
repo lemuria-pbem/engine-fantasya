@@ -71,7 +71,7 @@ class TravelMessage extends AbstractUnitMessage
 					$route .= ' über die Regionen ';
 					$c      = --$v - 1;
 					for ($i = 0; $i < $v; $i++) {
-						$message .= $via[$i] . ($i < $c ? ', ' : ' ');
+						$route .= $via[$i] . ($i < $c ? ', ' : ' ');
 					}
 					$route .= 'und ' . $via[$v];
 				}

@@ -3,10 +3,10 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Apply;
 
 use Lemuria\Engine\Fantasya\Factory\ActionTrait;
-use Lemuria\Engine\Fantasya\Message\Unit\WoundshutDamageMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\WoundshutFullMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\WoundshutMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\WoundshutNoneMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Apply\WoundshutDamageMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Apply\WoundshutFullMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Apply\WoundshutMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Apply\WoundshutNoneMessage;
 use Lemuria\Model\Fantasya\Commodity\Potion\Woundshut as Potion;
 
 final class Woundshut extends AbstractUnitApply

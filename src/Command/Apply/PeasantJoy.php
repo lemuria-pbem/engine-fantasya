@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Apply;
 
 use Lemuria\Engine\Fantasya\Factory\ActionTrait;
-use Lemuria\Engine\Fantasya\Message\Unit\PeasantJoyNoneMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Apply\PeasantJoyNoneMessage;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Potion\PeasantJoy as Potion;
 

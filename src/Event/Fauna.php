@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Factory\WorkplacesTrait;
@@ -60,7 +59,7 @@ final class Fauna extends AbstractEvent
 
 	private Workplaces $workplaces;
 
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
 		$this->workplaces = new Workplaces();
 	}

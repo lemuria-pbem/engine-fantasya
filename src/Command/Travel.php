@@ -24,7 +24,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TravelNoNavigationMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNotCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelRoadMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelSpeedMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\TravelTooHeayMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelShipTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Phrase;
@@ -75,6 +75,7 @@ class Travel extends UnitCommand implements Activity
 		if ($this->directions->hasMore()) {
 			$travel = $this->phrase->getVerb() . ' ' . implode(' ', $this->directions->route());
 			/** @var Travel $command */
+			/** @noinspection PhpUnnecessaryLocalVariableInspection */
 			$command = $this->context->Factory()->create(new Phrase($travel));
 			return $command;
 		}
@@ -116,7 +117,7 @@ class Travel extends UnitCommand implements Activity
 		} else {
 			if ($weight > $this->capacity->Ride()) {
 				if ($weight > $this->capacity->Walk()) {
-					$this->message(TravelTooHeayMessage::class);
+					$this->message(TravelTooHeavyMessage::class);
 					return;
 				}
 				$movement = Capacity::WALK;

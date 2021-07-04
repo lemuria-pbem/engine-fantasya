@@ -28,7 +28,7 @@ abstract class UnitCommand extends AbstractCommand
 		$this->unit = $context->Unit();
 	}
 
-	#[Pure] public function isPrepared(): bool {
+	public function isPrepared(): bool {
 		if ($this instanceof Activity && $this->IsDefault() && $this->unit->Size() <= 0) {
 			return false;
 		}

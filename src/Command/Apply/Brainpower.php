@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Apply;
 
-use Lemuria\Engine\Fantasya\Message\Unit\BrainpowerMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Apply\BrainpowerMessage;
 
 final class Brainpower extends AbstractUnitApply
 {

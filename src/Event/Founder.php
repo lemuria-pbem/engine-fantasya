@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Effect\ExcessCargo;
@@ -27,7 +25,7 @@ use Lemuria\Model\Fantasya\Vessel;
  */
 final class Founder extends AbstractEvent
 {
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
 	}
 

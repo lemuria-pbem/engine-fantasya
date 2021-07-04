@@ -25,6 +25,8 @@ final class State
 
 	private ?TurnOptions $turnOptions = null;
 
+	private ?Casts $casts = null;
+
 	/**
 	 * @var array(int=>Availability)
 	 */
@@ -65,6 +67,13 @@ final class State
 			$this->turnOptions = new TurnOptions();
 		}
 		return $this->turnOptions;
+	}
+
+	public function getCasts(): Casts {
+		if (!$this->casts) {
+			$this->casts = new Casts();
+		}
+		return $this->casts;
 	}
 
 	/**

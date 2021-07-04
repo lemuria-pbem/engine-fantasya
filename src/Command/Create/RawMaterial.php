@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
+use Lemuria\Model\Fantasya\Talent;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command\AllocationCommand;
@@ -55,16 +56,7 @@ class RawMaterial extends AllocationCommand implements Activity
 		$talent     = $this->knowledge->Talent();
 		$production = $this->getResource(getClass($resource))->Count();
 		if ($production <= 0) {
-			if ($this->knowledge->Level() <= 0) {
-				$this->message(RawMaterialExperienceMessage::class)->s($talent, RawMaterialExperienceMessage::TALENT)->s($resource, RawMaterialExperienceMessage::MATERIAL);
-			} else {
-				$guardParties = $this->checkBeforeAllocation();
-				if (!empty($guardParties)) {
-					$this->message(RawMaterialGuardedMessage::class)->s($resource);
-				} else {
-					$this->message(RawMaterialResourcesMessage::class)->s($resource);
-				}
-			}
+			$this->runForEmptyDemand($talent, $resource);
 		} else {
 			$this->resources->rewind();
 			/* @var Quantity $quantity */
@@ -138,5 +130,18 @@ class RawMaterial extends AllocationCommand implements Activity
 			return $resource->getCraft();
 		}
 		throw new LemuriaException($resource . ' is not a raw material.');
+	}
+
+	protected function runForEmptyDemand(Talent $talent, Commodity $resource): void {
+		if ($this->knowledge->Level() <= 0) {
+			$this->message(RawMaterialExperienceMessage::class)->s($talent, RawMaterialExperienceMessage::TALENT)->s($resource, RawMaterialExperienceMessage::MATERIAL);
+		} else {
+			$guardParties = $this->checkBeforeAllocation();
+			if (!empty($guardParties)) {
+				$this->message(RawMaterialGuardedMessage::class)->s($resource);
+			} else {
+				$this->message(RawMaterialResourcesMessage::class)->s($resource);
+			}
+		}
 	}
 }

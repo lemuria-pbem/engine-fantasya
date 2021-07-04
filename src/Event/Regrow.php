@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Factory\Model\Season;
 use Lemuria\Engine\Fantasya\Message\Region\RegrowMessage;
@@ -102,7 +100,7 @@ final class Regrow extends AbstractEvent
 
 	private float $rate;
 
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
 	}
 

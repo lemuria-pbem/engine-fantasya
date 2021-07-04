@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Effect\Hunger;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
@@ -42,7 +40,7 @@ final class Support extends AbstractEvent
 
 	private People $hungryUnits;
 
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
 		$this->silver      = self::createCommodity(Silver::class);
 		$this->hungryUnits = new People();

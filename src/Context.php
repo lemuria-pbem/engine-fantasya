@@ -201,6 +201,13 @@ final class Context implements Reassignment
 	}
 
 	/**
+	 * Get the casts queue.
+	 */
+	public function getCasts(): Casts {
+		return $this->state->getCasts();
+	}
+
+	/**
 	 * Set the Party whose commands are parsed.
 	 *
 	 * @throws CommandParserException

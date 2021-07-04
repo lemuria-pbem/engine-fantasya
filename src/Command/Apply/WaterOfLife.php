@@ -3,9 +3,9 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Apply;
 
 use Lemuria\Engine\Fantasya\Factory\ActionTrait;
-use Lemuria\Engine\Fantasya\Message\Unit\WaterOfLifeMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\WaterOfLifeNoWoodMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\WaterOfLifeOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Apply\WaterOfLifeMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Apply\WaterOfLifeNoWoodMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Apply\WaterOfLifeOnlyMessage;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Commodity\Potion\WaterOfLife as Potion;

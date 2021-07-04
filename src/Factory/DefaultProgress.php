@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Event;
 use Lemuria\Engine\Fantasya\Event\Acquaintance;
 use Lemuria\Engine\Fantasya\Event\Aftercare;
@@ -15,7 +13,9 @@ use Lemuria\Engine\Fantasya\Event\Growth;
 use Lemuria\Engine\Fantasya\Event\Layabout;
 use Lemuria\Engine\Fantasya\Event\Liquidation;
 use Lemuria\Engine\Fantasya\Event\MarketUpdate;
+use Lemuria\Engine\Fantasya\Event\Obtainment;
 use Lemuria\Engine\Fantasya\Event\Population;
+use Lemuria\Engine\Fantasya\Event\Recreate;
 use Lemuria\Engine\Fantasya\Event\Regrow;
 use Lemuria\Engine\Fantasya\Event\Subsistence;
 use Lemuria\Engine\Fantasya\Event\Support;
@@ -34,7 +34,8 @@ class DefaultProgress implements Progress
 		Upkeep::class, Subsistence::class, Drift::class,
 		// after
 		MarketUpdate::class, Founder::class, Support::class, Population::class, Fauna::class, Growth::class,
-		Regrow::class, Decease::class, Liquidation::class, Acquaintance::class, Layabout::class, Aftercare::class
+		Regrow::class, Decease::class, Liquidation::class, Obtainment::class, Acquaintance::class, Recreate::class,
+		Layabout::class, Aftercare::class
 	];
 
 	private array $events = [];
@@ -43,7 +44,7 @@ class DefaultProgress implements Progress
 
 	private int $count;
 
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		foreach (self::EVENTS as $event) {
 			$this->events[] = new $event($state);
 		}

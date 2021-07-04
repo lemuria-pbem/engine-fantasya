@@ -7,6 +7,8 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\OneActivityTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\LearnMagicMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LearnNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnProgressMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnSilverMessage;
@@ -14,11 +16,13 @@ use Lemuria\Engine\Fantasya\Message\Unit\LearnTeachersMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Ability;
+use Lemuria\Model\Fantasya\Aura;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Talent;
+use Lemuria\Model\Fantasya\Talent\Magic;
 
 /**
  * Implementation of command LERNEN (a Unit learns a skill).
@@ -71,8 +75,13 @@ final class Learn extends UnitCommand implements Activity
 		if ($this->expense > 0) {
 			$pool    = $this->context->getResourcePool($this->unit);
 			$expense = $pool->reserve($this->unit, new Quantity($this->silver, $this->expense));
-			$this->unit->Inventory()->remove($expense);
 			$silver  = $expense->Count();
+			if ($silver <= 0) {
+				$this->message(LearnNotMessage::class)->s($this->talent);
+				return;
+			}
+
+			$this->unit->Inventory()->remove($expense);
 			if ($silver < $this->expense) {
 				$experience = $this->progress->Experience();
 				$progress   = (int)floor(($expense->Count() / $this->expense) * $experience);
@@ -83,10 +92,23 @@ final class Learn extends UnitCommand implements Activity
 			}
 		}
 
+		$level = $this->calculus()->knowledge($this->talent)->Level();
+
 		$this->unit->Knowledge()->add($this->progress);
 		foreach ($this->calculus()->getTeachers() as $teacher /** @var Teach $teacher */) {
 			$teacher->hasTaught($this);
 		}
 		$this->message(LearnProgressMessage::class)->s($this->talent)->p($this->progress->Experience());
+
+		if ($this->talent instanceof Magic) {
+			$newLevel = $this->calculus()->knowledge($this->talent)->Level();
+			if ($newLevel > 0 && $newLevel > $level) {
+				$aura     = $this->unit->Aura() ?? new Aura();
+				$addition = $newLevel ** 2 - $level ** 2;
+				$aura->setMaximum($aura->Aura() + $addition);
+				$this->unit->setAura($aura);
+				$this->message(LearnMagicMessage::class)->p($addition);
+			}
+		}
 	}
 }

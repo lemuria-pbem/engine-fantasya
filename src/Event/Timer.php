@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Event\Game\PotionGift;
 use Lemuria\Engine\Fantasya\State;
@@ -24,7 +22,7 @@ final class Timer extends DelegatedEvent
 		]
 	];
 
-	#[Pure] public function __construct(State $state) {
+	public function __construct(State $state) {
 		parent::__construct($state, Action::BEFORE);
 	}
 

@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Apply;
 
-use Lemuria\Engine\Fantasya\Message\Unit\GoliathWaterMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Apply\GoliathWaterMessage;
 
 final class GoliathWater extends AbstractUnitApply
 {

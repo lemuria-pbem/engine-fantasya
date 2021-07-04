@@ -44,6 +44,7 @@ final class Temp extends UnitCommand implements Immediate
 		return $this;
 	}
 
+	/** @noinspection PhpPossiblePolymorphicInvocationInspection */
 	protected function run(): void {
 		if ($this->context->UnitMapper()->has($this->getTempNumber())) {
 			$this->context->Parser()->skip();
@@ -114,7 +115,7 @@ final class Temp extends UnitCommand implements Immediate
 		} else {
 			try {
 				$id = Id::fromId($temp);
-			} catch (IdException $e) {
+			} catch (IdException) {
 			}
 		}
 

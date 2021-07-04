@@ -70,4 +70,19 @@ class Phrase implements \Countable, \Stringable
 		$parts = array_slice($this->parts, $from);
 		return implode(' ', $parts);
 	}
+
+	/**
+	 * Get a string containing all parameters but the last one(s), separated by space.
+	 */
+	#[Pure] public function getLineUntil(int $offset = 1): string {
+		if ($offset < 0) {
+			$offset = -$offset;
+		}
+		$n = $this->count();
+		if ($offset >= $n) {
+			return '';
+		}
+		$parts = array_slice($this->parts, 0, $n - $offset);
+		return implode(' ', $parts);
+	}
 }
