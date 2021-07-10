@@ -15,6 +15,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Serializable;
+use Lemuria\SingletonSet;
 
 final class PotionInfluence extends AbstractRegionEffect
 {
@@ -59,6 +60,14 @@ final class PotionInfluence extends AbstractRegionEffect
 			}
 		}
 		return $this;
+	}
+
+	public function getPotions(): SingletonSet {
+		$potions = new SingletonSet();
+		foreach (array_keys($this->potions) as $potion) {
+			$potions->add(self::createCommodity($potion));
+		}
+		return $potions;
 	}
 
 	#[Pure] public function hasPotion(Potion $potion): bool {
