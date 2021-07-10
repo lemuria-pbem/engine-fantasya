@@ -46,19 +46,6 @@ final class ActivityProtocol
 	}
 
 	/**
-	 * Check if an activity is allowed.
-	 *
-	 * Multiple activities of the same kind (e.g. multiple buy or sell commands) are allowed, but execution of a second
-	 * activity of a different kind than the first activity is forbidden.
-	 */
-	public function isAllowed(Activity $activity): bool {
-		if (empty($this->activity) || isset($this->activity[$activity->Activity()])) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Get the default command from the previous turn.
 	 */
 	#[Pure] public function getDefaultCommand(): ?Command {
@@ -72,7 +59,7 @@ final class ActivityProtocol
 		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
 		if ($command instanceof Activity) {
 			$default = $command->getNewDefault();
-			if ($default &&$this->isAllowed($default)) {
+			if ($default && $this->isAllowed($default)) {
 				$this->addDefault($default);
 			}
 			if (!$this->isAllowed($command)) {
@@ -89,6 +76,9 @@ final class ActivityProtocol
 	public function addDefault(UnitCommand $command): void {
 		$defaults   = Lemuria::Orders()->getDefault($this->unit->Id());
 		$defaults[] = $command;
+		if ($command instanceof Activity) {
+			$this->activity[$command->Activity()] = true;
+		}
 	}
 
 	/**
@@ -107,5 +97,18 @@ final class ActivityProtocol
 				break;
 			}
 		}
+	}
+
+	/**
+	 * Check if an activity is allowed.
+	 *
+	 * Multiple activities of the same kind (e.g. multiple buy or sell commands) are allowed, but execution of a second
+	 * activity of a different kind than the first activity is forbidden.
+	 */
+	private function isAllowed(Activity $activity): bool {
+		if (empty($this->activity) || isset($this->activity[$activity->Activity()])) {
+			return true;
+		}
+		return false;
 	}
 }

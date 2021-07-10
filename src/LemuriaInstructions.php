@@ -15,15 +15,18 @@ class LemuriaInstructions extends StringList
 
 	/**
 	 * @param int $offset
-	 * @param UnitCommand $value
+	 * @param UnitCommand|string $value
 	 */
 	public function offsetSet(mixed $offset, mixed $value): void {
-		if ($this->offsetExists($offset)) {
-			$this->commands[$offset] = $value;
-		} else {
-			$this->commands[] = $value;
+		if ($value instanceof UnitCommand) {
+			if ($this->offsetExists($offset)) {
+				$this->commands[$offset] = $value;
+			} else {
+				$this->commands[] = $value;
+			}
+			$value = (string)$value->Phrase();
 		}
-		parent::offsetSet($offset, (string)$value->Phrase());
+		parent::offsetSet($offset, $value);
 	}
 
 	/**

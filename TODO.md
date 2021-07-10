@@ -4,6 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.6
 
+- Effekte im Magellan-Report auflisten
 
 ## Neue Funktionen
 
