@@ -14,7 +14,7 @@ use Lemuria\Model\Fantasya\Unit;
 final class ActivityProtocol
 {
 	/**
-	 * @var array(string=>true)
+	 * @var array(string=>bool)
 	 */
 	private array $activity = [];
 
@@ -41,21 +41,8 @@ final class ActivityProtocol
 	/**
 	 * Check if unit has an activity already.
 	 */
-	#[Pure] public function hasActivity(): bool {
-		return !empty($this->activity);
-	}
-
-	/**
-	 * Check if an activity is allowed.
-	 *
-	 * Multiple activities of the same kind (e.g. multiple buy or sell commands) are allowed, but execution of a second
-	 * activity of a different kind than the first activity is forbidden.
-	 */
-	public function isAllowed(Activity $activity): bool {
-		if (empty($this->activity) || isset($this->activity[$activity->Activity()])) {
-			return true;
-		}
-		return false;
+	public function hasActivity(?Activity $command = null): bool {
+		return $command ? !$this->isAllowed($command) : !empty($this->activity);
 	}
 
 	/**
@@ -72,8 +59,8 @@ final class ActivityProtocol
 		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
 		if ($command instanceof Activity) {
 			$default = $command->getNewDefault();
-			if ($default &&$this->isAllowed($default)) {
-				$this->addDefault($default);
+			if ($default && $this->isAllowedAsDefault($default)) {
+				$this->addDefaultCommand($default);
 			}
 			if (!$this->isAllowed($command)) {
 				return false;
@@ -87,8 +74,12 @@ final class ActivityProtocol
 	 * Add a command to the default orders.
 	 */
 	public function addDefault(UnitCommand $command): void {
-		$defaults   = Lemuria::Orders()->getDefault($this->unit->Id());
-		$defaults[] = $command;
+		$this->addDefaultCommand($command);
+		if ($command instanceof Activity) {
+			$activity                  = $command->Activity();
+			$value                     = isset($this->activity[$activity]);
+			$this->activity[$activity] = $value;
+		}
 	}
 
 	/**
@@ -107,5 +98,38 @@ final class ActivityProtocol
 				break;
 			}
 		}
+	}
+
+	/**
+	 * Check if an activity is allowed.
+	 *
+	 * Multiple activities of the same kind (e.g. multiple buy or sell commands) are allowed, but execution of a second
+	 * activity of a different kind than the first activity is forbidden.
+	 */
+	private function isAllowed(Activity $activity): bool {
+		if (empty($this->activity)) {
+			return true;
+		}
+		$key = $activity->Activity();
+		if (array_key_exists($key, $this->activity)) {
+			return true;
+		}
+		return array_sum($this->activity) === 0;
+	}
+
+	private function isAllowedAsDefault(Activity $activity): bool {
+		if (empty($this->activity)) {
+			return true;
+		}
+		$key = $activity->Activity();
+		if (array_key_exists($key, $this->activity)) {
+			return $this->activity[$key] === false;
+		}
+		return false;
+	}
+
+	private function addDefaultCommand(UnitCommand $command): void {
+		$defaults   = Lemuria::Orders()->getDefault($this->unit->Id());
+		$defaults[] = $command;
 	}
 }

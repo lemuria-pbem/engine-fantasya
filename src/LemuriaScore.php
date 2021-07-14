@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use JetBrains\PhpStorm\Pure;
+
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Factory\EffectFactory;
 use Lemuria\Engine\Score;
@@ -92,6 +94,15 @@ class LemuriaScore implements Score
 			return $this->effects[$namespace][$id][$class] ?? null;
 		}
 		throw new LemuriaException('Expected instance of Effect.');
+	}
+
+	/**
+	 * @return Identifiable[]
+	 */
+	#[Pure] public function findAll(Identifiable $entity): array {
+		$namespace = $entity->Catalog();
+		$id        = $entity->Id()->Id();
+		return $this->effects[$namespace][$id] ?? [];
 	}
 
 	/**

@@ -44,7 +44,7 @@ class Phrase implements \Countable, \Stringable
 	 */
 	#[Pure] public function getVerb(): string {
 		$verb = $this->parts[0] ?? '';
-		return strtoupper($verb);
+		return mb_strtoupper($verb);
 	}
 
 	/**
