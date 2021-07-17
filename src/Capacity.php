@@ -21,6 +21,8 @@ class Capacity
 
 	private array $talent;
 
+	private int $walkSpeed;
+
 	#[Pure] public static function forVessel(Vessel $vessel): self {
 		$ship   = $vessel->Ship();
 		$weight = 0;
@@ -42,11 +44,16 @@ class Capacity
 	 * @param array|int $talent
 	 */
 	#[Pure] public function __construct(private int $walk, private int $ride, private string $movement,
-		                                private int $weight, private int $speed, mixed $talent = 0) {
+		                                private int $weight, private int $speed, mixed $talent = 0, int $walkSpeed = 0) {
 		if (is_array($talent)) {
 			$this->talent = $talent;
 		} else {
 			$this->talent = [$talent, $talent];
+		}
+		if ($walkSpeed > 0) {
+			$this->walkSpeed = $walkSpeed;
+		} else {
+			$this->walkSpeed = $this->speed;
 		}
 	}
 
@@ -76,5 +83,9 @@ class Capacity
 
 	public function WalkingTalent(): int {
 		return $this->talent[1];
+	}
+
+	public function WalkSpeed(): int {
+		return $this->walkSpeed;
 	}
 }

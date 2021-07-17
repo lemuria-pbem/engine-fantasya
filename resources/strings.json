@@ -455,6 +455,7 @@
 		"TravelNeighbourMessage": "Die Einheit $id kann sich in Richtung $direction nach $landscape $region bewegen.",
 		"TravelNoCrewMessage": "Die Einheit $id kann das Schiff $vessel nicht ohne eine erfahrene Crew steuern.",
 		"TravelNoNavigationMessage": "Die Einheit $id hat nicht genügend Erfahrung im Segeln, um das Schiff $vessel zu steuern.",
+		"TravelNoRidingMessage": "Die Einheit $id hat nicht genügend Erfahrung in Reiten, um zu reisen.",
 		"TravelNotCaptainMessage": "Die Einheit $id muss der Kapitän des Schiffes $vessel sein, um es zu steuern.",
 		"TravelOverLandMessage": "Das Schiff $id kann sich nicht über Land nach $direction bewegen.",
 		"TravelRegionMessage": "Die Einheit $id bewegt sich in die Region $region.",

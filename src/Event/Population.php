@@ -221,10 +221,7 @@ final class Population extends AbstractEvent
 			$percent /= 2.0;
 		}
 		if ($migrants > 0) {
-			$percent *= 2.0;
-		}
-		if ($migrants > 0) {
-			$percent *= 2.0;
+			$percent *= 4.0;
 		}
 		$unemployed = (int)ceil(($percent / 100.0) * ($peasants + $growth - $migrants - $hungry));
 		$unemployment->setPeasants($unemployed);

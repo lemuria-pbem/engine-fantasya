@@ -30,6 +30,7 @@ use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Perception;
+use Lemuria\Model\Fantasya\Talent\Riding;
 use Lemuria\Model\Fantasya\Transport;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Weapon;
@@ -114,37 +115,44 @@ final class Calculus
 		$pegasus      = $inventory[Pegasus::class] ?? null;
 		$weight       = $this->weight($this->unit->Weight(), [$carriage, $horse, $camel, $elephant, $griffin, $pegasus]);
 
-		$ride    = $this->transport($carriage) + $this->transport($camel) + $this->transport($elephant);
-		$ride   += $carriage ? $this->transport($horse, $carriage->Count() * 2) : $this->transport($horse);
-		$fly     = $this->transport($griffin) + $this->transport($pegasus);
-		$rideFly = $ride + $fly;
-		$walk    = $carriage ? $rideFly : $payload + $rideFly;
+		$ride       = $this->transport($carriage) + $this->transport($camel) + $this->transport($elephant);
+		$ride      += $carriage ? $this->transport($horse, $carriage->Count() * 2) : $this->transport($horse);
+		$fly        = $this->transport($griffin) + $this->transport($pegasus);
+		$rideFly    = $ride + $fly;
+		$walk       = $carriage ? $rideFly : $payload + $rideFly;
+		$riding     = $size * $this->knowledge(Riding::class)->Level();
+		$boostSize  = $this->hasApplied(SevenLeagueTea::class)?->Count() * SevenLeagueTea::PERSONS;
+		$speedBoost = ($boostSize >= $size ? 2 : 1) * $race->Speed();
 
 		if ($carriage) {
 			$cars        = $carriage->Count();
 			$speed       = $this->speed([$carriage, $horse, $camel, $elephant, $griffin, $pegasus]);
 			$animals     = [$horse, $camel, $elephant, $griffin, $pegasus];
 			$talentDrive = $this->talent($animals, $size, true, $cars);
-			return new Capacity($walk, $rideFly, Capacity::DRIVE, $weight, $speed, [$talentDrive, $talentDrive]);
+			if ($riding >= $talentDrive) {
+				return new Capacity($walk, $rideFly, Capacity::DRIVE, $weight, $speed, [$talentDrive, $talentDrive], $speedBoost);
+			}
 		}
 		if ($fly > 0 && !$horse && !$camel && !$elephant) {
 			$animals    = [$griffin, $pegasus];
 			$speed      = $this->speed($animals);
 			$talentFly  = $this->talent($animals, $size, true);
 			$talentWalk = $this->talent($animals, $size);
-			return new Capacity($walk, $fly, Capacity::FLY, $weight, $speed, [$talentFly, $talentWalk]);
+			if ($riding >= $talentFly) {
+				return new Capacity($walk, $fly, Capacity::FLY, $weight, $speed, [$talentFly, $talentWalk], $speedBoost);
+			}
 		}
 		if ($rideFly > 0) {
 			$speed      = $this->speed([$horse, $camel, $elephant]);
 			$animals    = [$horse, $camel, $elephant, $griffin, $pegasus];
 			$talentRide = $this->talent($animals, $size, true);
 			$talentWalk = $this->talent($animals, $size);
-			return new Capacity($walk, $rideFly, Capacity::RIDE, $weight, $speed, [$talentRide, $talentWalk]);
+			if ($riding >= $talentRide) {
+				return new Capacity($walk, $rideFly, Capacity::RIDE, $weight, $speed, [$talentRide, $talentWalk], $speedBoost);
+			}
 		}
-		$weight    -= $size * $race->Weight();
-		$boostSize  = $this->hasApplied(SevenLeagueTea::class)?->Count() * SevenLeagueTea::PERSONS;
-		$speedBoost = $boostSize >= $size ? 2 : 1;
-		return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speedBoost * $race->Speed());
+		$weight -= $size * $race->Weight();
+		return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speedBoost);
 	}
 
 	/**
