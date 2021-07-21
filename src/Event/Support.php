@@ -51,7 +51,7 @@ final class Support extends AbstractEvent
 		if ($this->hungryUnits->count()) {
 			Lemuria::Log()->debug($this->hungryUnits->count() . ' parties have units that cannot pay their support.');
 		} else {
-			Lemuria::Log()->debug('All parties have payed their support.');
+			Lemuria::Log()->debug('All parties have paid their support.');
 		}
 		foreach ($this->hungryUnits as $unit /* @var Unit $unit */) {
 			$hunger = $this->payCharity($unit);
