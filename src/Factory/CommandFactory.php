@@ -10,6 +10,7 @@ use Lemuria\Engine\Fantasya\Command\AbstractCommand;
 use Lemuria\Engine\Fantasya\Command\Announcement;
 use Lemuria\Engine\Fantasya\Command\Apply;
 use Lemuria\Engine\Fantasya\Command\Apply\AbstractApply;
+use Lemuria\Engine\Fantasya\Command\Attack;
 use Lemuria\Engine\Fantasya\Command\Banner;
 use Lemuria\Engine\Fantasya\Command\BattleSpell;
 use Lemuria\Engine\Fantasya\Command\Buy;
@@ -196,6 +197,10 @@ class CommandFactory
 	 */
 	protected array $verbs = [
 		'//'           => 'KOMMENTAR',
+		'ANGREIFEN'    => 'ATTACKIEREN',
+		'ANGRIFF'      => 'ATTACKIEREN',
+		'ATTACKE'      => 'ATTACKIEREN',
+		'ATTACKIEREN'  => true,
 		'BANNER'       => true,
 		'BEKLAUEN'     => 'STEHLEN',
 		'BENENNEN'     => 'NAME',
@@ -528,6 +533,7 @@ class CommandFactory
 		$verb = $this->identifyVerb($phrase->getVerb());
 		try {
 			$command = match ($verb) {
+				'ATTACKIEREN'  => Attack::class,
 				'BANNER'       => Banner::class,
 				'BENUTZEN'     => Apply::class,
 				'BESCHREIBUNG' => Describe::class,

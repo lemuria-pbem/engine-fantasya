@@ -42,7 +42,7 @@ final class CommandPriority
 		'Give'           => 40,
 		'Dismiss'        => 41,
 		'Lose'           => 42,
-		// ATTACKIEREN => 45,
+		'Attack'         => 45,
 		'Recruit'        => 48,
 		'EFFECT_MIDDLE'  => 50,
 		'EVENT_MIDDLE'   => 51,

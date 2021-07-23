@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Combat\Battle;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Factory\CommandFactory;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
@@ -191,6 +192,13 @@ final class Context implements Reassignment
 			$this->state->setTravelRoute($unit, $travelRoute);
 		}
 		return $travelRoute;
+	}
+
+	/**
+	 * Get the battle of a region.
+	 */
+	public function getBattle(Region $region): Battle {
+		return $this->state->getBattle($region);
 	}
 
 	/**

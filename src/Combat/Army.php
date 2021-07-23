@@ -7,6 +7,7 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -15,38 +16,47 @@ use Lemuria\Model\Fantasya\Unit;
  */
 class Army
 {
+	private static int $nextId = 0;
+
+	private int $id;
+
+	private People $units;
+
 	/**
 	 * @var Combatant[]
 	 */
 	private array $combatants = [];
 
-	/**
-	 * Create a parties' army.
-	 */
 	#[Pure] public function __construct(private Party $party) {
+		$this->id    = ++self::$nextId;
+		$this->units = new People();
+	}
+
+	public function Id(): int {
+		return $this->id;
 	}
 
 	/**
-	 * Get all combatants.
-	 *
 	 * @return Combatant[]
 	 */
-	#[Pure] public function Combatants(): array {
+	public function Combatants(): array {
 		return $this->combatants;
 	}
 
-	#[Pure] public function Party(): Party {
+	public function Party(): Party {
 		return $this->party;
 	}
 
-	/**
-	 * Add a unit from the party.
-	 */
+	public function Units(): People {
+		return $this->units;
+	}
+
 	public function add(Unit $unit): Army {
 		if ($unit->Party()->Id() !== $this->party->Id()) {
 			throw new LemuriaException('Only units from the same party can build an army.');
 		}
 
+		$this->units->add($unit);
 		$partyUnit = $unit;
 		while (true) {
 			// Calculate best weapon skill.

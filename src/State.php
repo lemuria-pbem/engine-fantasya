@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Combat\Battle;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Exception\LemuriaException;
@@ -61,6 +62,11 @@ final class State
 	 * @var array(int=>DirectionList)
 	 */
 	private array $travelRoute = [];
+
+	/**
+	 * @var array(int=>Battle)
+	 */
+	private array $battles = [];
 
 	public function getTurnOptions(): TurnOptions {
 		if (!$this->turnOptions) {
@@ -142,9 +148,23 @@ final class State
 		return $this->workload[$id];
 	}
 
+	/**
+	 * Get the travel route of a unit.
+	 */
 	#[Pure] public function getTravelRoute(Unit $unit): ?DirectionList {
 		$id = $unit->Id()->Id();
 		return $this->travelRoute[$id] ?? null;
+	}
+
+	/**
+	 * Get the battle of a region.
+	 */
+	public function getBattle(Region $region): Battle {
+		$id = $region->Id()->Id();
+		if (!isset($this->battles[$id])) {
+			$this->battles[$id] = new Battle($region);
+		}
+		return $this->battles[$id];
 	}
 
 	/**
