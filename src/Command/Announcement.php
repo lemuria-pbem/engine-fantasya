@@ -8,11 +8,16 @@ use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Message\Construction\AbstractConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\AnnouncementConstructionMessage;
-use Lemuria\Engine\Fantasya\Message\Party\AnnouncementNoPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Party\AnnouncementPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Region\AnnouncementRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementAnonymousMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementNoConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementNoPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementNoUnitMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementNoVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementToPartyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementToUnitAnonymousMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementToUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\AnnouncementVesselMessage;
 use Lemuria\Engine\Fantasya\Outlook;
@@ -73,8 +78,10 @@ final class Announcement extends UnitCommand
 			if ($calculus->canDiscover($this->unit)) {
 				$sender = $this->unit->Name();
 				$this->message(AnnouncementUnitMessage::class, $unit)->p($message)->p($sender, AnnouncementUnitMessage::SENDER);
+				$this->message(AnnouncementToUnitMessage::class)->p($message)->e($unit);
 			} else {
 				$this->message(AnnouncementAnonymousMessage::class, $unit)->p($message);
+				$this->message(AnnouncementToUnitAnonymousMessage::class)->p($message)->e($unit);
 			}
 		} else {
 			$this->message(AnnouncementNoUnitMessage::class)->e($unit);
@@ -88,6 +95,7 @@ final class Announcement extends UnitCommand
 				$message = $this->getMessage();
 				$sender  = $this->unit->Party()->Name();
 				$this->message(AnnouncementPartyMessage::class, $party)->p($message)->p($sender, AnnouncementConstructionMessage::SENDER);
+				$this->message(AnnouncementToPartyMessage::class)->p($message)->e($party);
 				return;
 			}
 		}
@@ -100,7 +108,7 @@ final class Announcement extends UnitCommand
 			$sender  = $this->unit->Party()->Name();
 			$this->message(AbstractConstructionMessage::class, $construction)->p($message)->p($sender, AnnouncementConstructionMessage::SENDER);
 		} else {
-			$this->message(AnnouncementConstructionMessage::class)->e($construction);
+			$this->message(AnnouncementNoConstructionMessage::class)->e($construction);
 		}
 	}
 
@@ -110,7 +118,7 @@ final class Announcement extends UnitCommand
 			$sender  = $this->unit->Party()->Name();
 			$this->message(AnnouncementVesselMessage::class, $vessel)->p($message)->p($sender, AnnouncementVesselMessage::SENDER);
 		} else {
-			$this->message(AnnouncementVesselMessage::class)->e($vessel);
+			$this->message(AnnouncementNoVesselMessage::class)->e($vessel);
 		}
 	}
 
