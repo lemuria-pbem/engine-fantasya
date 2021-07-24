@@ -85,6 +85,9 @@ final class Acquaintance extends AbstractEvent
 		foreach ($this->network as $id => $network) {
 			$party = Party::get(new Id($id));
 			foreach ($network as $fid => $pairs) {
+				if ($fid <= 0) {
+					continue;
+				}
 				$foreign = Party::get(new Id($fid));
 				foreach ($pairs as $pair) {
 					/** @var Census $census */
