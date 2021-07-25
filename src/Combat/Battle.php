@@ -2,65 +2,58 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use JetBrains\PhpStorm\Pure;
-
-use Lemuria\Model\Fantasya\Region;
-use Lemuria\Model\Fantasya\Unit;
-
 class Battle
 {
 	/**
-	 * @var array(int=>Army)
-	 */
-	private array $armies = [];
-
-	/**
-	 * @var array(int=>true)
+	 * @var Army[]
 	 */
 	private array $attackers = [];
 
 	/**
-	 * @var array(int=>true)
+	 * @var Army[]
 	 */
 	private array $defenders = [];
 
-	#[Pure] public function __construct(private Region $region) {
+	public function addAttacker(Army $army): Battle {
+		$this->attackers[] = $army;
+		return $this;
 	}
 
-	public function getArmy(Unit $unit): Army {
-		$army = $this->findArmy($unit);
-		if (!$army) {
-			$army = new Army($unit->Party());
-			$this->addArmy($army->add($unit));
-		}
-		return $army;
-	}
-
-	public function addAttack(Army $attacker, Army $defender): Battle {
-		$this->attackers[$this->addArmy($attacker)] = true;
-		$this->defenders[$this->addArmy($defender)] = true;
+	public function addDefender(Army $army): Battle {
+		$this->defenders[] = $army;
 		return $this;
 	}
 
 	public function commence(): Battle {
+		if (empty($this->attackers)) {
+			throw new \RuntimeException('No attackers in battle.');
+		}
+		if (empty($this->defenders)) {
+			throw new \RuntimeException('No defenders in battle.');
+		}
 		//TODO
 		return $this;
 	}
 
-	protected function findArmy(Unit $unit): ?Army {
-		foreach ($this->armies as $army) {
-			if ($army->Units()->has($unit->Id())) {
-				return $army;
-			}
+	public function merge(Battle $battle): Battle {
+		$armies = [];
+		foreach ($this->attackers as $army) {
+			$armies[$army->Id()] = $army;
 		}
-		return null;
-	}
+		foreach ($battle->attackers as $army) {
+			$armies[$army->Id()] = $army;
+		}
+		$this->attackers = array_values($armies);
 
-	protected function addArmy(Army $army): int {
-		$id = $army->Id();
-		if (!isset($this->armies[$id])) {
-			$this->armies[$id] = $army;
+		$armies = [];
+		foreach ($this->defenders as $army) {
+			$armies[$army->Id()] = $army;
 		}
-		return $id;
+		foreach ($battle->defenders as $army) {
+			$armies[$army->Id()] = $army;
+		}
+		$this->defenders = array_values($armies);
+
+		return $this;
 	}
 }

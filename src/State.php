@@ -4,7 +4,7 @@ namespace Lemuria\Engine\Fantasya;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Fantasya\Combat\Battle;
+use Lemuria\Engine\Fantasya\Combat\Campaign;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Exception\LemuriaException;
@@ -64,9 +64,9 @@ final class State
 	private array $travelRoute = [];
 
 	/**
-	 * @var array(int=>Battle)
+	 * @var array(int=>Campaign)
 	 */
-	private array $battles = [];
+	private array $campaigns = [];
 
 	public function getTurnOptions(): TurnOptions {
 		if (!$this->turnOptions) {
@@ -159,12 +159,12 @@ final class State
 	/**
 	 * Get the battle of a region.
 	 */
-	public function getBattle(Region $region): Battle {
+	public function getCampaign(Region $region): Campaign {
 		$id = $region->Id()->Id();
-		if (!isset($this->battles[$id])) {
-			$this->battles[$id] = new Battle($region);
+		if (!isset($this->campaigns[$id])) {
+			$this->campaigns[$id] = new Campaign($region);
 		}
-		return $this->battles[$id];
+		return $this->campaigns[$id];
 	}
 
 	/**

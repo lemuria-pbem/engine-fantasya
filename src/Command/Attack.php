@@ -45,12 +45,18 @@ final class Attack extends UnitCommand
 	}
 
 	protected function run(): void {
-		$this->context->getBattle($this->unit->Region())->commence();
+		$campaign = $this->context->getCampaign($this->unit->Region());
+		if ($campaign->mount()) {
+			foreach ($campaign->Battles() as $battle) {
+				//TODO battle between
+				$battle->commence();
+			}
+		}
 	}
 
 	protected function commitCommand(UnitCommand $command): void {
 		if (!empty($this->units)) {
-			$battle = $this->context->getBattle($this->unit->Region());
+			$battle = $this->context->getCampaign($this->unit->Region());
 			foreach ($this->units as $unit) {
 				$battle->addAttack($battle->getArmy($this->unit), $battle->getArmy($unit));
 				$this->message(AttackMessage::class)->e($unit);
