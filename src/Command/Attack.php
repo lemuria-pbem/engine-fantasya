@@ -56,9 +56,9 @@ final class Attack extends UnitCommand
 
 	protected function commitCommand(UnitCommand $command): void {
 		if (!empty($this->units)) {
-			$battle = $this->context->getCampaign($this->unit->Region());
+			$campaign = $this->context->getCampaign($this->unit->Region());
 			foreach ($this->units as $unit) {
-				$battle->addAttack($battle->getArmy($this->unit), $battle->getArmy($unit));
+				$campaign->addAttack($this->unit, $unit);
 				$this->message(AttackMessage::class)->e($unit);
 				$this->message(AttackFromMessage::class, $unit)->e($this->unit->Party());
 			}

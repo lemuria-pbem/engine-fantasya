@@ -2,25 +2,33 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
+use JetBrains\PhpStorm\Pure;
+
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Unit;
+
 class Battle
 {
 	/**
-	 * @var Army[]
+	 * @var Unit[]
 	 */
 	private array $attackers = [];
 
 	/**
-	 * @var Army[]
+	 * @var Unit[]
 	 */
 	private array $defenders = [];
 
-	public function addAttacker(Army $army): Battle {
-		$this->attackers[] = $army;
+	#[Pure] public function __construct(private Region $region) {
+	}
+
+	public function addAttacker(Unit $unit): Battle {
+		$this->attackers[] = $unit;
 		return $this;
 	}
 
-	public function addDefender(Army $army): Battle {
-		$this->defenders[] = $army;
+	public function addDefender(Unit $unit): Battle {
+		$this->defenders[] = $unit;
 		return $this;
 	}
 
@@ -37,20 +45,20 @@ class Battle
 
 	public function merge(Battle $battle): Battle {
 		$armies = [];
-		foreach ($this->attackers as $army) {
-			$armies[$army->Id()] = $army;
+		foreach ($this->attackers as $unit) {
+			$armies[$unit->Id()->Id()] = $unit;
 		}
-		foreach ($battle->attackers as $army) {
-			$armies[$army->Id()] = $army;
+		foreach ($battle->attackers as $unit) {
+			$armies[$unit->Id()->Id()] = $unit;
 		}
 		$this->attackers = array_values($armies);
 
 		$armies = [];
-		foreach ($this->defenders as $army) {
-			$armies[$army->Id()] = $army;
+		foreach ($this->defenders as $unit) {
+			$armies[$unit->Id()->Id()] = $unit;
 		}
-		foreach ($battle->defenders as $army) {
-			$armies[$army->Id()] = $army;
+		foreach ($battle->defenders as $unit) {
+			$armies[$unit->Id()->Id()] = $unit;
 		}
 		$this->defenders = array_values($armies);
 
