@@ -44,7 +44,7 @@ use Lemuria\Model\Fantasya\Region;
 use function Lemuria\getClass;
 
 /**
- * Forests grow in the spring.
+ * Herbs grow in the spring and summer and reduce in winter.
  */
 final class Regrow extends AbstractEvent
 {
@@ -52,9 +52,9 @@ final class Regrow extends AbstractEvent
 
 	private const MINIMUM = 0.01;
 
-	private const GROW = 0.035;
+	private const GROW = 0.025;
 
-	private const SHRINK = -0.025;
+	private const SHRINK = -0.05;
 
 	private const MIGRATE = -0.05;
 
