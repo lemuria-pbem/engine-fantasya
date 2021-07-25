@@ -3,9 +3,10 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Action;
-use Lemuria\Engine\Fantasya\Event\Game\PotionGift;
+use Lemuria\Engine\Fantasya\Event\Game\BrokenCarriage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Commodity\Griffinegg;
 
 /**
  * The Timer event adds other events at predefined rounds.
@@ -13,12 +14,19 @@ use Lemuria\Lemuria;
 final class Timer extends DelegatedEvent
 {
 	private const SCHEDULE = [
-		10 => [
-			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 10,     PotionGift::POTION => 'Brainpower']],
-			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 22,     PotionGift::POTION => 'Brainpower']],
-			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 73,     PotionGift::POTION => 'Brainpower']],
-			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 36670,  PotionGift::POTION => 'Brainpower']],
-			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 812295, PotionGift::POTION => 'Brainpower']]
+		20 => [
+			['class' => BrokenCarriage::class, 'options' => [BrokenCarriage::PARTY => 4, BrokenCarriage::REGION => 58, BrokenCarriage::CARGO => [Griffinegg::class => 3]]],
+			['class' => BrokenCarriage::class, 'options' => [BrokenCarriage::PARTY => 5, BrokenCarriage::REGION => 35, BrokenCarriage::CARGO => [Griffinegg::class => 3]]],
+			['class' => BrokenCarriage::class, 'options' => [BrokenCarriage::PARTY => 7, BrokenCarriage::REGION => 29, BrokenCarriage::CARGO => [Griffinegg::class => 3]]],
+			['class' => BrokenCarriage::class, 'options' => [BrokenCarriage::PARTY => 824, BrokenCarriage::REGION => 68, BrokenCarriage::CARGO => [Griffinegg::class => 3]]],
+			['class' => BrokenCarriage::class, 'options' => [BrokenCarriage::PARTY => 27742, BrokenCarriage::REGION => 54, BrokenCarriage::CARGO => [Griffinegg::class => 3]]]
+		],
+		21 => [
+			['class' => BrokenCarriage::class, 'options' => [BrokenCarriage::PARTY => 4, BrokenCarriage::REGION => 58]],
+			['class' => BrokenCarriage::class, 'options' => [BrokenCarriage::PARTY => 5, BrokenCarriage::REGION => 35]],
+			['class' => BrokenCarriage::class, 'options' => [BrokenCarriage::PARTY => 7, BrokenCarriage::REGION => 29]],
+			['class' => BrokenCarriage::class, 'options' => [BrokenCarriage::PARTY => 824, BrokenCarriage::REGION => 68]],
+			['class' => BrokenCarriage::class, 'options' => [BrokenCarriage::PARTY => 27742, BrokenCarriage::REGION => 54]]
 		]
 	];
 

@@ -112,7 +112,7 @@ final class Teach extends UnitCommand implements Activity
 
 	protected function commitCommand(UnitCommand $command): void {
 		$protocol = $this->context->getProtocol($this->unit);
-		if ($protocol->hasActivity()) {
+		if ($protocol->hasActivity($this)) {
 			throw new ActivityException($command);
 		}
 	}

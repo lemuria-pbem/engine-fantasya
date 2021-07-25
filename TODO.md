@@ -10,10 +10,13 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ### Version 0.7
 
 - Kampf (ATTACKIEREN/BELAGERN, Berserkerblut, Elixier der Macht, Heiltrank)
-- Monster, besondere Gegenstände wie Greifeneier
+- Monster, besondere Gegenstände wie Greifeneier, Wagenwracks
+- NPC- und Monsterparteien
+- besondere Gebäude wie Ruinen
 
-### Version 0.8 und folgede
+### Version 0.8 und folgende
 
+- weitere Gebäude und deren Effekte
 - Statistische Daten erstellen
   - Regionsentwicklung im Report anzeigen
   - Veränderungen im Inventar anzeigen
