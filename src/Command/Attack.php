@@ -7,8 +7,11 @@ use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackAllyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFightingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFoundMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackOwnUnitMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackSelfMessage;
+use Lemuria\Model\Fantasya\Combat;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -28,6 +31,11 @@ final class Attack extends UnitCommand
 
 	protected function initialize(): void {
 		parent::initialize();
+		if ($this->unit->BattleRow() <= Combat::BYSTANDER) {
+			$this->message(AttackNotFightingMessage::class);
+			return;
+		}
+
 		$i = 1;
 		do {
 			$unit = null;
@@ -68,6 +76,10 @@ final class Attack extends UnitCommand
 
 	private function checkUnit(?Unit $unit): bool {
 		if (!$unit) {
+			return false;
+		}
+		if ($unit === $this->unit) {
+			$this->message(AttackSelfMessage::class);
 			return false;
 		}
 		$party = $this->unit->Party();
