@@ -2,13 +2,10 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\People;
-use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -16,6 +13,14 @@ use Lemuria\Model\Fantasya\Unit;
  */
 class Army
 {
+	public const NEUTRAL = 0;
+
+	public const ALLY = 1;
+
+	public const DEFENDER = 2;
+
+	public const ATTACKER = 3;
+
 	private static int $nextId = 0;
 
 	private int $id;
@@ -27,7 +32,7 @@ class Army
 	 */
 	private array $combatants = [];
 
-	#[Pure] public function __construct(private Party $party) {
+	public function __construct(private Party $party) {
 		$this->id    = ++self::$nextId;
 		$this->units = new People();
 	}
@@ -57,42 +62,19 @@ class Army
 		}
 
 		$this->units->add($unit);
-		$partyUnit = $unit;
-		while (true) {
-			// Calculate best weapon skill.
-			$calculus           = new Calculus($unit);
-			$weaponSkill        = $calculus->bestWeaponSkill();
-			$combatant          = new Combatant($partyUnit);
-			$this->combatants[] = $combatant->setWeapon($weaponSkill);
-			$combatantSize      = $combatant->Size();
-			$remaining          = $unit->Size() - $combatantSize;
-			if ($remaining < 0) {
-				throw new LemuriaException('Remaining unit has negative size.');
-			}
-			if ($remaining === 0) {
-				break;
-			}
+		$calculus     = new Calculus($unit);
+		$weaponSkills = $calculus->weaponSkill();
+		$skill        = 0;
+		$remaining    = $unit->Size();
+		$isMelee      = Combat::getBattleRow($unit) === Combat::FRONT;
 
-			// Prepare next combatant.
-			$weapon   = $weaponSkill->Weapon()->Commodity();
-			$nextUnit = new Unit();
-			$nextUnit->setRace($unit->Race())->setSize($remaining)->Knowledge()->fill($unit->Knowledge());
-			$inventory = $nextUnit->Inventory();
-			foreach ($unit->Inventory() as $quantity /* @var Quantity $quantity */) {
-				$commodity = $quantity->Commodity();
-				$count     = $quantity->Count();
-				if ($commodity === $weapon) {
-					$count -= $combatantSize;
-					if ($count < 0){
-						throw new LemuriaException('Too many weapons were assigned to the combatant.');
-					}
-					if ($count === 0) {
-						continue;
-					}
-				}
-				$inventory->add(new Quantity($commodity, $count));
+		while ($remaining > 0) {
+			$weaponSkill = $weaponSkills[$skill++];
+			if ($isMelee && $weaponSkill->isMelee() || !$isMelee && $weaponSkill->isDistant() || $weaponSkill->isUnarmed()) {
+				$combatant          = new Combatant($unit);
+				$this->combatants[] = $combatant->setWeapon($weaponSkill);
+				$remaining         -= min($combatant->Size(), $remaining);
 			}
-			$unit = $nextUnit;
 		}
 
 		return $this;

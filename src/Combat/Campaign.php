@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use Lemuria\Id;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Combat;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
@@ -17,14 +16,6 @@ use Lemuria\Model\Fantasya\Unit;
  */
 class Campaign
 {
-	protected const NEUTRAL = 0;
-
-	protected const ALLY = 1;
-
-	protected const DEFENDER = 2;
-
-	protected const ATTACKER = 3;
-
 	/**
 	 * @var array(int=>Unit)
 	 */
@@ -60,7 +51,7 @@ class Campaign
 	public function __construct(private Region $region) {
 		$this->intelligence = new Intelligence($this->region);
 		foreach ($this->intelligence->getParties() as $party) {
-			$this->status[$party->Id()->Id()] = self::NEUTRAL;
+			$this->status[$party->Id()->Id()] = Army::NEUTRAL;
 		}
 	}
 
@@ -142,14 +133,14 @@ class Campaign
 			$unit   = $this->armies[$defId];
 			$battle->addDefender($unit);
 			$id                = $party->Id()->Id();
-			$this->status[$id] = self::DEFENDER;
+			$this->status[$id] = Army::DEFENDER;
 			$defenders[$id]    = true;
 			Lemuria::Log()->debug('Unit ' . $unit . ' is attacked in battle of defending party ' . $party . '.');
 			foreach ($attackers as $attId) {
 				$unit = $this->armies[$attId];
 				$battle->addAttacker($unit);
 				$party = $this->party($attId)->Id()->Id();
-				$this->status[$party] = self::ATTACKER;
+				$this->status[$party] = Army::ATTACKER;
 				Lemuria::Log()->debug('Unit ' . $unit . ' attacks in battle for party ' . $party . '.');
 			}
 		}
@@ -174,10 +165,10 @@ class Campaign
 
 	private function addDefenderAlliedUnits(): void {
 		foreach ($this->status as $alliedId => $neutral) {
-			if ($neutral === self::NEUTRAL) {
+			if ($neutral === Army::NEUTRAL) {
 				$ally = Party::get(new Id($alliedId));
 				foreach ($this->status as $partyId => $defender) {
-					if ($defender === self::DEFENDER) {
+					if ($defender === Army::DEFENDER) {
 						$party = Party::get(new Id($partyId));
 						if ($ally->Diplomacy()->has(Relation::COMBAT, $party)) {
 							$battle = $this->battle($party);
@@ -187,7 +178,7 @@ class Campaign
 									Lemuria::Log()->debug('Unit ' . $unit . ' gets drawn into battle as ally.');
 								}
 							}
-							$this->status[$alliedId] = self::ALLY;
+							$this->status[$alliedId] = Army::ALLY;
 						}
 					}
 				}

@@ -39,7 +39,23 @@ class Battle
 		if (empty($this->defenders)) {
 			throw new \RuntimeException('No defenders in battle.');
 		}
-		//TODO
+
+		$combat = new Combat();
+		foreach ($this->attackers as $unit) {
+			$combat->addAttacker($unit);
+		}
+		foreach ($this->defenders as $unit) {
+			$combat->addDefender($unit);
+		}
+
+		$unit = $this->getBestTacticsUnit();
+		if ($unit) {
+			$combat->tacticsRound($unit);
+		}
+		while ($combat->hasAttackers() && $combat->hasDefenders()) {
+			$combat->nextRound();
+		}
+
 		return $this;
 	}
 
@@ -63,5 +79,10 @@ class Battle
 		$this->defenders = array_values($armies);
 
 		return $this;
+	}
+
+	protected function getBestTacticsUnit(): ?Unit {
+		//TODO
+		return null;
 	}
 }

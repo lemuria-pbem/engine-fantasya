@@ -21,6 +21,7 @@ use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Potion\GoliathWater;
 use Lemuria\Model\Fantasya\Commodity\Potion\SevenLeagueTea;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Dingbats;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Modification;
@@ -31,6 +32,7 @@ use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Talent\Riding;
+use Lemuria\Model\Fantasya\Talent\Stoning;
 use Lemuria\Model\Fantasya\Transport;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Weapon;
@@ -212,15 +214,15 @@ final class Calculus
 	/**
 	 * Calculate available fighting abilities for the unit's talents and inventory.
 	 *
-	 * If a unit has no weapons or fighting talents, the Fistfight skill is returned.
-	 *
 	 * @return WeaponSkill[]
 	 */
 	public function weaponSkill(): array {
 		$fistfight = $this->knowledge(Fistfight::class);
 		$fists     = new Quantity(self::createCommodity(Fists::class), $this->unit->Size());
-		$skills    = [new WeaponSkill($fistfight, $fists)];
-		$order     = [0];
+		$stoning   = $this->knowledge(Stoning::class);
+		$dingbats  = new Quantity(self::createCommodity(Dingbats::class), $this->unit->Size());
+		$skills    = [new WeaponSkill($fistfight, $fists), new WeaponSkill($stoning, $dingbats)];
+		$order     = [0, 0];
 
 		foreach ($this->unit->Inventory() as $item /* @var Quantity $item */) {
 			$commodity = $item->Commodity();
@@ -241,14 +243,6 @@ final class Calculus
 			$weaponSkills[] = $skills[$i];
 		}
 		return $weaponSkills;
-	}
-
-	/**
-	 * Calculate best fighting ability for the unit's talents and inventory.
-	 */
-	public function bestWeaponSkill(): WeaponSkill {
-		$weaponSkill = $this->weaponSkill();
-		return $weaponSkill[0];
 	}
 
 	/**

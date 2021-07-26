@@ -14,6 +14,7 @@ use Lemuria\Model\Fantasya\Talent\Catapulting;
 use Lemuria\Model\Fantasya\Talent\Crossbowing;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Spearfighting;
+use Lemuria\Model\Fantasya\Talent\Stoning;
 
 /**
  * Helper class for battle configuration of a unit.
@@ -33,6 +34,8 @@ class WeaponSkill
 	private static Talent $fistfight;
 
 	private static Talent $spearfighting;
+
+	private static Talent $stoning;
 
 	public function __construct(private Ability $skill, private Quantity $weapon) {
 		$this->initTalents();
@@ -77,10 +80,11 @@ class WeaponSkill
 	}
 
 	/**
-	 * Check if weapon skill is unarmed fist fight.
+	 * Check if weapon skill is unarmed.
 	 */
 	#[Pure] public function isUnarmed(): bool {
-		return $this->skill->Talent() === self::$fistfight;
+		$talent = $this->skill->Talent();
+		return $talent === self::$fistfight || $talent === self::$stoning;
 	}
 
 	/**
@@ -94,6 +98,7 @@ class WeaponSkill
 			self::$crossbowing   = self::createTalent(Crossbowing::class);
 			self::$fistfight     = self::createTalent(Fistfight::class);
 			self::$spearfighting = self::createTalent(Spearfighting::class);
+			self::$stoning       = self::createTalent(Stoning::class);
 		}
 	}
 }
