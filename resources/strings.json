@@ -110,6 +110,7 @@
 		"ApplyOnlyMessage": "Die Einheit $id kann nur $potion benutzen.",
 		"ApplySaveMessage": "Die Einheit $id spart $potion ein.",
 		"AttackAllyMessage": "Die Einheit $id kann die allierte Einheit $unit nicht angreifen.",
+		"AttackBattleMessage": "In der Region $id findet ein Kampf statt: $attacker greifen $defender an.",
 		"AttackFromMessage": "Die Einheit $id wird von Einheiten der Partei $party angegriffen.",
 		"AttackMessage": "Die Einheit $id greift die Einheit $unit an.",
 		"AttackNotFightingMessage": "Die Einheit $id wird in keinem Angriff kämpfen.",

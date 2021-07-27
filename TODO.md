@@ -10,6 +10,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ### Version 0.7
 
 - Kampf (ATTACKIEREN/BELAGERN, Berserkerblut, Elixier der Macht, Heiltrank)
+- erbeutete Waffen/Rüstungen reparieren
 - Monster, besondere Gegenstände wie Greifeneier, Wagenwracks
 - NPC- und Monsterparteien
 - besondere Gebäude wie Ruinen

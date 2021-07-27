@@ -6,7 +6,6 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Archery;
 use Lemuria\Model\Fantasya\Talent\Bladefighting;
@@ -37,16 +36,19 @@ class WeaponSkill
 
 	private static Talent $stoning;
 
-	public function __construct(private Ability $skill, private Quantity $weapon) {
+	public static function isSkill(Talent $talent): bool {
+		return match ($talent) {
+			self::$bladefighting, self::$spearfighting,	self::$archery, self::$crossbowing, self::$catapulting => true,
+			default => false
+		};
+	}
+
+	public function __construct(private Ability $skill) {
 		$this->initTalents();
 	}
 
 	#[Pure] public function Skill(): Ability {
 		return $this->skill;
-	}
-
-	#[Pure] public function Weapon(): Quantity {
-		return $this->weapon;
 	}
 
 	/**

@@ -8,10 +8,12 @@ use Lemuria\Engine\Fantasya\Combat\WeaponSkill;
 use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Effect\PotionEffect;
+use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Item;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
+use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
@@ -21,12 +23,11 @@ use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Potion\GoliathWater;
 use Lemuria\Model\Fantasya\Commodity\Potion\SevenLeagueTea;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Dingbats;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Modification;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
@@ -35,7 +36,6 @@ use Lemuria\Model\Fantasya\Talent\Riding;
 use Lemuria\Model\Fantasya\Talent\Stoning;
 use Lemuria\Model\Fantasya\Transport;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Model\Fantasya\Weapon;
 
 /**
  * Helper for unit calculations.
@@ -160,7 +160,7 @@ final class Calculus
 	/**
 	 * Get a unit's hitpoints.
 	 */
-	public function hitpoints(): int {
+	#[Pure] public function hitpoints(): int {
 		//TODO: Calculate bonus of Ausdauer.
 		return $this->unit->Race()->Hitpoints();
 	}
@@ -218,20 +218,17 @@ final class Calculus
 	 */
 	public function weaponSkill(): array {
 		$fistfight = $this->knowledge(Fistfight::class);
-		$fists     = new Quantity(self::createCommodity(Fists::class), $this->unit->Size());
 		$stoning   = $this->knowledge(Stoning::class);
-		$dingbats  = new Quantity(self::createCommodity(Dingbats::class), $this->unit->Size());
-		$skills    = [new WeaponSkill($fistfight, $fists), new WeaponSkill($stoning, $dingbats)];
+		$skills    = [new WeaponSkill($fistfight), new WeaponSkill($stoning)];
 		$order     = [0, 0];
 
-		foreach ($this->unit->Inventory() as $item /* @var Quantity $item */) {
-			$commodity = $item->Commodity();
-			if ($commodity instanceof Weapon) {
-				$weaponSkill = $commodity->getSkill()->Talent();
-				$skill       = $this->knowledge($weaponSkill::class);
+		foreach ($this->unit->Knowledge() as $ability /* @var Ability $ability */) {
+			$talent = $ability->Talent();
+			if (WeaponSkill::isSkill($talent)) {
+				$skill       = $this->knowledge($talent);
 				$experience  = $skill->Experience();
 				if ($experience > 0) {
-					$skills[] = new WeaponSkill($skill, $item);
+					$skills[] = new WeaponSkill($skill);
 					$order[]  = $experience;
 				}
 			}
@@ -243,6 +240,70 @@ final class Calculus
 			$weaponSkills[] = $skills[$i];
 		}
 		return $weaponSkills;
+	}
+
+	/**
+	 * @return Distribution[]
+	 */
+	public function inventoryDistribution(): array {
+		$maxSize   = $this->unit->Size();
+		$inventory = $this->unit->Inventory();
+		if (empty($inventory)) {
+			$distribution = new Distribution();
+			return [$distribution->setSize($maxSize)];
+		}
+
+		$distributions = [];
+		$amount        = [];
+		$excess        = new Resources();
+		foreach ($inventory as $quantity /* @var Quantity $quantity */) {
+			$commodity = $quantity->Commodity();
+			$count     = $quantity->Count();
+			$surplus   = $count - $maxSize;
+			if ($surplus > 0) {
+				$excess->add(new Quantity($commodity, $surplus));
+				$count = $maxSize;
+			}
+			if (!isset($amount[$count])) {
+				$amount[$count] = [];
+			}
+			$amount[$count][] = $commodity;
+		}
+		ksort($amount);
+
+		$distributed = 0;
+		while (!empty($amount)) {
+			$distribution = new Distribution();
+			reset($amount);
+			$first     = key($amount);
+			$remaining = $first - $distributed;
+			foreach ($amount as $count => $commodities) {
+				$remaining   = $count - $distributed;
+				$distributed = $remaining;
+				foreach ($commodities as $commodity/* @var Commodity $commodity */) {
+					$distribution->add(new Quantity($commodity, $remaining));
+				}
+			}
+			$distribution->setSize($remaining);
+			$distributions[] = $distribution;
+			$distributed    += $remaining;
+			unset($amount[$first]);
+		}
+
+		foreach ($excess as $quantity /* @var Quantity $quantity */) {
+			$count     = $quantity->Count();
+			$bonus     = (int)floor($count / $maxSize);
+			$remaining = $count % $maxSize;
+			foreach ($distributions as $distribution /* @var Distribution $distribution */) {
+				$amount = $bonus + ($remaining-- > 0 ? 1 : 0);
+				if ($amount <= 0) {
+					break;
+				}
+				$distribution->add(new Quantity($quantity->Commodity(), $amount));
+			}
+		}
+
+		return $distributions;
 	}
 
 	/**

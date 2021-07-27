@@ -4,6 +4,9 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
+use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -14,29 +17,53 @@ class Combatant
 {
 	use BuilderTrait;
 
+	private int $battleRow;
+
+	private Distribution $distribution;
+
 	private WeaponSkill $weapon;
 
-	public function __construct(private Unit $unit) {
+	public static function getWeaponSkill(Unit $unit, int $battleRow): WeaponSkill {
+		$calculus = new Calculus($unit);
+		$isMelee  = $battleRow !== Combat::BACK;
+		foreach ($calculus->weaponSkill() as $weaponSkill) {
+			if ($isMelee && $weaponSkill->isMelee() || !$isMelee && $weaponSkill->isDistant() || $weaponSkill->isUnarmed()) {
+				return $weaponSkill;
+			}
+		}
+		throw new LemuriaException('Unexpected missing weapon skill.');
+	}
+
+	#[Pure] public function __construct(private Unit $unit) {
+		$this->battleRow = Combat::getBattleRow($this->unit);
 	}
 
 	public function Unit(): Unit {
 		return $this->unit;
 	}
 
+	public function BattleRow(): int {
+		return $this->battleRow;
+	}
+
+	public function Distribution(): Distribution {
+		return $this->distribution;
+	}
+
 	public function Weapon(): WeaponSkill {
 		return $this->weapon;
 	}
 
-	/**
-	 * Get the number of persons.
-	 */
-	#[Pure] public function Size(): int {
-		return $this->weapon->Weapon()->Count();
+	public function setBattleRow(int $battleRow): Combatant {
+		$this->battleRow = $battleRow;
+		return $this;
 	}
 
-	/**
-	 * Set a weapon filter.
-	 */
+	public function setDistribution(Distribution $distribution): Combatant {
+		$this->distribution = $distribution;
+		return $this;
+	}
+
 	public function setWeapon(WeaponSkill $weaponSkill): Combatant {
 		$this->weapon = $weaponSkill;
 		return $this;

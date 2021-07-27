@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
+use Lemuria\Engine\Fantasya\Message\Region\AttackBattleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackAllyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackMessage;
@@ -11,6 +12,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFightingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFoundMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackOwnUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackSelfMessage;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Unit;
@@ -53,10 +55,21 @@ final class Attack extends UnitCommand
 	}
 
 	protected function run(): void {
-		$campaign = $this->context->getCampaign($this->unit->Region());
+		$region   = $this->unit->Region();
+		$campaign = $this->context->getCampaign($region);
 		if ($campaign->mount()) {
+			$i = 0;
 			foreach ($campaign->Battles() as $battle) {
-				//TODO battle between
+				Lemuria::Log()->debug('Beginning battle ' . ++$i . ' in region ' . $battle->Region() . '.');
+				$attacker = [];
+				foreach ($battle->Attacker() as $party) {
+					$attacker[] = $party->Name();
+				}
+				$defender = [];
+				foreach ($battle->Defender() as $party) {
+					$defender[] = $party->Name();
+				}
+				$this->message(AttackBattleMessage::class, $region)->p($attacker, AttackBattleMessage::ATTACKER)->p($defender, AttackBattleMessage::DEFENDER);
 				$battle->commence();
 			}
 		}

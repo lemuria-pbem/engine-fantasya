@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Exception\LemuriaException;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Unit;
@@ -35,6 +36,7 @@ class Army
 	public function __construct(private Party $party) {
 		$this->id    = ++self::$nextId;
 		$this->units = new People();
+		Lemuria::Log()->debug('New army ' . $this->id . ' for party ' . $this->party . '.');
 	}
 
 	public function Id(): int {
@@ -62,21 +64,15 @@ class Army
 		}
 
 		$this->units->add($unit);
-		$calculus     = new Calculus($unit);
-		$weaponSkills = $calculus->weaponSkill();
-		$skill        = 0;
-		$remaining    = $unit->Size();
-		$isMelee      = Combat::getBattleRow($unit) === Combat::FRONT;
-
-		while ($remaining > 0) {
-			$weaponSkill = $weaponSkills[$skill++];
-			if ($isMelee && $weaponSkill->isMelee() || !$isMelee && $weaponSkill->isDistant() || $weaponSkill->isUnarmed()) {
-				$combatant          = new Combatant($unit);
-				$this->combatants[] = $combatant->setWeapon($weaponSkill);
-				$remaining         -= min($combatant->Size(), $remaining);
-			}
+		$calculus    = new Calculus($unit);
+		$battleRow   = Combat::getBattleRow($unit);
+		$weaponSkill = Combatant::getWeaponSkill($unit, $battleRow);
+		foreach ($calculus->inventoryDistribution() as $distribution) {
+			$combatant = new Combatant($unit);
+			$combatant->setBattleRow($battleRow)->setDistribution($distribution)->setWeapon($weaponSkill);
+			$this->combatants[] = $combatant;
 		}
-
+		Lemuria::Log()->debug('Army ' . $this->id . ': Unit ' . $unit . ' (size: ' . $unit->Size() . ') forms ' . count($this->combatants) . ' combatants.');
 		return $this;
 	}
 }

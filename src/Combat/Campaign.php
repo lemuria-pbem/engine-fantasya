@@ -53,6 +53,7 @@ class Campaign
 		foreach ($this->intelligence->getParties() as $party) {
 			$this->status[$party->Id()->Id()] = Army::NEUTRAL;
 		}
+		Lemuria::Log()->debug('Beginning new campaign in region ' . $this->region . '.');
 	}
 
 	public function Region(): Region {
@@ -73,6 +74,7 @@ class Campaign
 		$this->armies[$defendId]      = $defender;
 		$this->attackers[$attackId][] = $defendId;
 		$this->defenders[$defendId][] = $attackId;
+		Lemuria::Log()->debug('Unit ' . $attacker . ' attacks unit ' . $defender . ' in region ' . $this->region . '.');
 		return $this;
 	}
 
@@ -81,12 +83,14 @@ class Campaign
 			return false;
 		}
 
+		Lemuria::Log()->debug('Mounting campaign in region ' . $this->region . '.');
 		$this->battles = [];
 		$defenders     = $this->createDefenderBattles();
 		$this->addDefenderOtherUnits($defenders);
 		$this->addDefenderAlliedUnits();
 		$this->mergeAttackerBattles();
 		$this->battles = array_values($this->battles);
+		Lemuria::Log()->debug('Campaign in region ' . $this->region . ' consists of ' . count($this->battles) . ' battles.');
 		return true;
 	}
 

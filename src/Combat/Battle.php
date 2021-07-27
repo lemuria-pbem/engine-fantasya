@@ -4,6 +4,8 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -20,6 +22,18 @@ class Battle
 	private array $defenders = [];
 
 	#[Pure] public function __construct(private Region $region) {
+	}
+
+	public function Region(): Region {
+		return $this->region;
+	}
+
+	public function Attacker(): Gathering {
+		return $this->getParties($this->attackers);
+	}
+
+	public function Defender(): Gathering {
+		return $this->getParties($this->defenders);
 	}
 
 	public function addAttacker(Unit $unit): Battle {
@@ -51,6 +65,8 @@ class Battle
 		$unit = $this->getBestTacticsUnit();
 		if ($unit) {
 			$combat->tacticsRound($unit);
+		} else {
+			Lemuria::Log()->debug('Both sides are tactically equal.');
 		}
 		while ($combat->hasAttackers() && $combat->hasDefenders()) {
 			$combat->nextRound();
@@ -79,6 +95,15 @@ class Battle
 		$this->defenders = array_values($armies);
 
 		return $this;
+	}
+
+	protected function getParties(array $units): Gathering {
+		$parties = new Gathering();
+		foreach ($units as $unit) {
+			//TODO: disguised
+			$parties->add($unit->Party());
+		}
+		return $parties;
 	}
 
 	protected function getBestTacticsUnit(): ?Unit {

@@ -4,12 +4,21 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
+use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
 
 class Combat extends CombatModel
 {
 	protected const BATTLE_ROWS = [self::REFUGEE, self::BYSTANDER, self::BACK, self::FRONT];
+
+	protected const ROW_NAME = [self::REFUGEE => 'refugees', self::BYSTANDER => 'bystanders', self::BACK => 'back'];
+
+	protected const OVERRUN = 3.0;
+
+	protected int $round = 0;
 
 	/**
 	 * @var array(int=>array)
@@ -36,33 +45,13 @@ class Combat extends CombatModel
 		return match ($battleRow) {
 			self::DEFENSIVE  => self::BACK,
 			self::AGGRESSIVE => self::FRONT,
-			default => $battleRow
+			default          => $battleRow
 		};
 	}
 
 	public function __construct() {
 		$this->attacker = array_fill_keys(self::BATTLE_ROWS, []);
 		$this->defender = array_fill_keys(self::BATTLE_ROWS, []);
-	}
-
-	public function addAttacker(Unit $unit): Combat {
-		$army = $this->getArmy($unit);
-		$row  = self::getBattleRow($unit);
-		foreach ($army->add($unit)->Combatants() as $combatant) {
-			$this->attacker[$row][] = $combatant;
-		}
-		$this->isAttacker[$army->Party()->Id()->Id()] = true;
-		return $this;
-	}
-
-	public function addDefender(Unit $unit): Combat {
-		$army = $this->getArmy($unit);
-		$row  = self::getBattleRow($unit);
-		foreach ($army->add($unit)->Combatants() as $combatant) {
-			$this->defender[$row][] = $combatant;
-		}
-		$this->isAttacker[$army->Party()->Id()->Id()] = false;
-		return $this;
 	}
 
 	public function hasAttackers(): bool {
@@ -83,11 +72,31 @@ class Combat extends CombatModel
 		return false;
 	}
 
+	public function addAttacker(Unit $unit): Combat {
+		$army = $this->getArmy($unit);
+		foreach ($army->add($unit)->Combatants() as $combatant) {
+			$this->attacker[$combatant->BattleRow()][] = $combatant;
+		}
+		$this->isAttacker[$army->Party()->Id()->Id()] = true;
+		return $this;
+	}
+
+	public function addDefender(Unit $unit): Combat {
+		$army = $this->getArmy($unit);
+		foreach ($army->add($unit)->Combatants() as $combatant) {
+			$this->defender[$combatant->BattleRow()][] = $combatant;
+		}
+		$this->isAttacker[$army->Party()->Id()->Id()] = false;
+		return $this;
+	}
+
 	public function tacticsRound(Unit $unit): Combat {
 		$this->arrangeBattleRows();
 		if ($this->isAttacker[$this->getArmy($unit)->Party()->Id()->Id()]) {
+			Lemuria::Log()->debug('Attacker gets the first strike.');
 			$this->attack($this->attacker, $this->defender);
 		} else {
+			Lemuria::Log()->debug('Defender gets the first strike.');
 			$this->attack($this->defender, $this->attacker);
 		}
 		return $this;
@@ -95,6 +104,8 @@ class Combat extends CombatModel
 
 	public function nextRound(): Combat {
 		$this->arrangeBattleRows();
+		$this->round++;
+		Lemuria::Log()->debug('Next combat round: ' . $this->round . '.');
 		$this->attack($this->attacker, $this->defender);
 		$this->attack($this->defender, $this->attacker);
 		return $this;
@@ -109,11 +120,124 @@ class Combat extends CombatModel
 		return $this->armies[$id];
 	}
 
+	/**
+	 * @return array(int=>int)|int
+	 */
+	#[Pure] protected function countCombatants(array $side, ?int $row = null): array|int {
+		if (is_int($row)) {
+			$count = 0;
+			foreach ($side[$row] as $combatant /* @var Combatant $combatant */) {
+				$count += $combatant->Distribution()->Size();
+			}
+			return $count;
+		}
+
+		$count = array_fill_keys(self::BATTLE_ROWS, 0);
+		foreach ($side as $row => $combatants) {
+			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
+				$count[$row] += $combatant->Distribution()->Size();
+			}
+		}
+		return $count;
+	}
+
 	protected function arrangeBattleRows(): void {
-		//TODO
+		$this->logSideDistribution();
+		$attackers = $this->countCombatants($this->attacker, self::FRONT);
+		$defenders = $this->countCombatants($this->defender, self::FRONT);
+		$ratio = $defenders > 0 ? $attackers / $defenders : PHP_INT_MAX;
+		if ($ratio > self::OVERRUN) {
+			$additional = (int)ceil($attackers / self::OVERRUN) - $defenders;
+			$side       = &$this->defender;
+			$who        = 'Defender';
+		} elseif ($ratio < 1.0 / self::OVERRUN) {
+			$additional = (int)ceil($defenders / self::OVERRUN) - $attackers;
+			$side       = &$this->attacker;
+			$who        = 'Attacker';
+		} else {
+			return;
+		}
+		Lemuria::Log()->debug($who . ' is overrun.');
+
+		if ($additional > 0) {
+			$additional = $this->arrangeFromRow($side, $who, self::BACK, $additional);
+		}
+		if ($additional > 0) {
+			$additional = $this->arrangeFromRow($side, $who, self::BYSTANDER, $additional);
+		}
+		if ($additional > 0) {
+			$additional = $this->arrangeFromRow($side, $who, self::REFUGEE, $additional);
+		}
+		if ($additional > 0) {
+			$who = $ratio > 0.0 ? 'Defender' : 'Attacker';
+			Lemuria::Log()->debug($who . ' has no more forces to reinforce the front.');
+		}
+		$this->logSideDistribution();
 	}
 
 	protected function attack(array &$attacker, array &$defender): void {
 		//TODO
+		throw new \RuntimeException('Attack not implemented yet.');
+	}
+
+	protected function arrangeFromRow(array &$side, string $who, int $battleRow, int $additional): int {
+		$n    = count($side[$battleRow]);
+		$name = self::ROW_NAME[$battleRow];
+		if ($n <= 0) {
+			Lemuria::Log()->debug($who . ' has no combatants in ' . $name . ' row to send to the front.');
+			return $additional;
+		}
+
+		for ($i = $n - 1; $i >= 0; $i--) {
+			/** @var Combatant $combatant */
+			$combatant    = $side[$battleRow][$i];
+			$unit         = $combatant->Unit();
+			$distribution = $combatant->Distribution();
+			$size         = $distribution->Size();
+			$weaponSkill  = Combatant::getWeaponSkill($unit, self::FRONT);
+			if ($size <= $additional) {
+				$side[self::FRONT][] = $combatant->setBattleRow(self::FRONT);
+				unset($side[$battleRow][$i]);
+				$additional -= $size;
+				Lemuria::Log()->debug($who . ' sends combatant ' . $i . ' (size ' . $size . ') from ' . $name . ' row to the front.');
+			} else {
+				$newDistribution = new Distribution();
+				foreach ($distribution as $quantity /* @var Quantity $quantity */) {
+					$count = (int)round($additional * $quantity->Count() / $size);
+					$newDistribution->add(new Quantity($quantity->Commodity(), $count));
+				}
+				foreach ($newDistribution as $quantity /* @var Quantity $quantity */) {
+					$distribution->remove(new Quantity($quantity->Commodity(), $quantity->Count()));
+				}
+				$newDistribution->setSize($additional);
+				$newCombatant = new Combatant($unit);
+				$newCombatant->setBattleRow(self::FRONT)->setWeapon($weaponSkill)->setDistribution($distribution);
+				$distribution->setSize($size - $additional);
+				$additional = 0;
+				Lemuria::Log()->debug($who . ' sends ' . $additional . ' persons from combatant ' . $i . ' in ' . $name . ' row to the front.');
+				break;
+			}
+		}
+		return $additional;
+	}
+
+	protected function logSideDistribution(): void {
+		$attacker = [];
+		foreach ($this->attacker as $row => $combatants) {
+			$count = 0;
+			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
+				$count += $combatant->Distribution()->Size();
+			}
+			$attacker[] = self::ROW_NAME[$row] . ':' . $count;
+		}
+		$defender = [];
+		foreach ($this->defender as $row => $combatants) {
+			$count = 0;
+			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
+				$count += $combatant->Distribution()->Size();
+			}
+			$defender[] = self::ROW_NAME[$row] . ':' . $count;
+		}
+		Lemuria::Log()->debug('Combatant distribution is ' . implode(' | ', $attacker) . ' vs. ' . implode(' | ', $defender) . '.');
 	}
 }
