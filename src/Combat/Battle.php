@@ -4,9 +4,14 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Factory\Model\DisguisedParty;
+use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Gathering;
+use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Talent\Tactics;
 use Lemuria\Model\Fantasya\Unit;
 
 class Battle
@@ -62,9 +67,9 @@ class Battle
 			$combat->addDefender($unit);
 		}
 
-		$unit = $this->getBestTacticsUnit();
-		if ($unit) {
-			$combat->tacticsRound($unit);
+		$party = $this->getBestTacticsParty();
+		if ($party) {
+			$combat->tacticsRound($party);
 		} else {
 			Lemuria::Log()->debug('Both sides are tactically equal.');
 		}
@@ -99,15 +104,63 @@ class Battle
 
 	protected function getParties(array $units): Gathering {
 		$parties = new Gathering();
-		foreach ($units as $unit) {
-			//TODO: disguised
-			$parties->add($unit->Party());
+		foreach ($units as $unit /* @var Unit $unit */) {
+			$disguise = $unit->Disguise();
+			if ($disguise) {
+				$parties->add($disguise);
+			} elseif ($disguise === null) {
+				$parties->add(new DisguisedParty());
+			} else {
+				$parties->add($unit->Party());
+			}
 		}
 		return $parties;
 	}
 
-	protected function getBestTacticsUnit(): ?Unit {
-		//TODO
-		return null;
+	/**
+	 * @noinspection DuplicatedCode
+	 */
+	protected function getBestTacticsParty(): ?Party {
+		$tactics    = [];
+		$isAttacker = [];
+		foreach ($this->attackers as $unit) {
+			$party = $unit->Party()->Id()->Id();
+			if (!isset($tactics[$party])) {
+				$tactics[$party]    = 0;
+				$isAttacker[$party] = true;
+			}
+			$calculus         = new Calculus($unit);
+			$level            = $calculus->knowledge(Tactics::class)->Level();
+			$tactics[$party] += $unit->Size() * $level ** 3;
+		}
+		foreach ($this->defenders as $unit) {
+			$party = $unit->Party()->Id()->Id();
+			if (!isset($tactics[$party])) {
+				$tactics[$party]    = 0;
+				$isAttacker[$party] = false;
+			}
+			$calculus         = new Calculus($unit);
+			$level            = $calculus->knowledge(Tactics::class)->Level();
+			$tactics[$party] += $unit->Size() * $level ** 3;
+		}
+
+		arsort($tactics);
+		$candidates = [0];
+		$n          = count($tactics);
+		$party      = array_keys($tactics);
+		$talent     = array_values($tactics);
+		for ($i = 1; $i < $n; $i++) {
+			if ($talent[$i] < $talent[0]) {
+				break;
+			}
+			$candidates[] = $i;
+		}
+		foreach ($candidates as $i) {
+			if ($isAttacker[$party[$i]] !== $isAttacker[$party[0]]) {
+				return null;
+			}
+		}
+		$chosen = $candidates[array_rand($candidates)];
+		return Party::get(new Id($party[$chosen]));
 	}
 }

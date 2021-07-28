@@ -7,6 +7,7 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
+use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -90,9 +91,9 @@ class Combat extends CombatModel
 		return $this;
 	}
 
-	public function tacticsRound(Unit $unit): Combat {
+	public function tacticsRound(Party $party): Combat {
 		$this->arrangeBattleRows();
-		if ($this->isAttacker[$this->getArmy($unit)->Party()->Id()->Id()]) {
+		if ($this->isAttacker[$party->Id()->Id()]) {
 			Lemuria::Log()->debug('Attacker gets the first strike.');
 			$this->attack($this->attacker, $this->defender);
 		} else {
