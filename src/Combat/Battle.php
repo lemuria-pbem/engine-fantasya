@@ -16,6 +16,8 @@ use Lemuria\Model\Fantasya\Unit;
 
 class Battle
 {
+	protected const EXHAUSTION_ROUNDS = 10;
+
 	/**
 	 * @var Unit[]
 	 */
@@ -73,8 +75,35 @@ class Battle
 		} else {
 			Lemuria::Log()->debug('Both sides are tactically equal.');
 		}
+		$countNoDamage = 0;
 		while ($combat->hasAttackers() && $combat->hasDefenders()) {
-			$combat->nextRound();
+			$damage = $combat->nextRound();
+			if ($damage > 0) {
+				$countNoDamage = 0;
+				Lemuria::Log()->debug($damage . ' damage dealt in last round.');
+			} else {
+				if (++$countNoDamage >= self::EXHAUSTION_ROUNDS) {
+					break;
+				}
+			}
+		}
+
+		if ($combat->hasAttackers()) {
+			if ($combat->hasDefenders()) {
+				Lemuria::Log()->debug('Battle ended in a draw due to exhaustion (' . self::EXHAUSTION_ROUNDS . ' rounds without damage).');
+				//TODO Both sides take loot
+			} else {
+				Lemuria::Log()->debug('Attacker has won the battle, defender is destroyed.');
+				//TODO Attacker gets loot
+			}
+		} else {
+			if ($combat->hasDefenders()) {
+				Lemuria::Log()->debug('Defender has won the battle, attacker is destroyed.');
+				//TODO Defender gets loot
+			} else {
+				Lemuria::Log()->debug('Battle ended with both sides destroyed.');
+				//TODO Loot is distributed randomly
+			}
 		}
 
 		return $this;

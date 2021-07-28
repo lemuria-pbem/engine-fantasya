@@ -15,7 +15,8 @@ class Combat extends CombatModel
 {
 	protected const BATTLE_ROWS = [self::REFUGEE, self::BYSTANDER, self::BACK, self::FRONT];
 
-	protected const ROW_NAME = [self::REFUGEE => 'refugees', self::BYSTANDER => 'bystanders', self::BACK => 'back'];
+	protected const ROW_NAME = [self::REFUGEE => 'refugees', self::BYSTANDER => 'bystanders', self::BACK => 'back',
+		                        self::FRONT => 'front'];
 
 	protected const OVERRUN = 3.0;
 
@@ -94,22 +95,22 @@ class Combat extends CombatModel
 	public function tacticsRound(Party $party): Combat {
 		$this->arrangeBattleRows();
 		if ($this->isAttacker[$party->Id()->Id()]) {
-			Lemuria::Log()->debug('Attacker gets the first strike.');
+			Lemuria::Log()->debug('Attacker gets first strike in tactics round.');
 			$this->attack($this->attacker, $this->defender);
 		} else {
-			Lemuria::Log()->debug('Defender gets the first strike.');
+			Lemuria::Log()->debug('Defender gets first strike in tactics round.');
 			$this->attack($this->defender, $this->attacker);
 		}
 		return $this;
 	}
 
-	public function nextRound(): Combat {
+	public function nextRound(): int {
 		$this->arrangeBattleRows();
 		$this->round++;
-		Lemuria::Log()->debug('Next combat round: ' . $this->round . '.');
-		$this->attack($this->attacker, $this->defender);
-		$this->attack($this->defender, $this->attacker);
-		return $this;
+		Lemuria::Log()->debug('Combat round ' . $this->round . ' starts.');
+		$damage  = $this->attack($this->attacker, $this->defender);
+		$damage += $this->attack($this->defender, $this->attacker);
+		return $damage;
 	}
 
 	protected function getArmy(Unit $unit): Army {
@@ -158,7 +159,7 @@ class Combat extends CombatModel
 		} else {
 			return;
 		}
-		Lemuria::Log()->debug($who . ' is overrun.');
+		Lemuria::Log()->debug($who . ' is overrun (need ' . $additional . ' more in front row).');
 
 		if ($additional > 0) {
 			$additional = $this->arrangeFromRow($side, $who, self::BACK, $additional);
@@ -176,9 +177,10 @@ class Combat extends CombatModel
 		$this->logSideDistribution();
 	}
 
-	protected function attack(array &$attacker, array &$defender): void {
+	protected function attack(array &$attacker, array &$defender): int {
 		//TODO
-		throw new \RuntimeException('Attack not implemented yet.');
+		Lemuria::Log()->debug('Attack is not implemented yet.');
+		return 0;
 	}
 
 	protected function arrangeFromRow(array &$side, string $who, int $battleRow, int $additional): int {
@@ -200,7 +202,10 @@ class Combat extends CombatModel
 				$side[self::FRONT][] = $combatant->setBattleRow(self::FRONT);
 				unset($side[$battleRow][$i]);
 				$additional -= $size;
-				Lemuria::Log()->debug($who . ' sends combatant ' . $i . ' (size ' . $size . ') from ' . $name . ' row to the front.');
+				Lemuria::Log()->debug($who . ' ' . $unit . ' sends combatant ' . $i . ' (size ' . $size . ') from ' . $name . ' row to the front.');
+				if ($additional <= 0) {
+					break;
+				}
 			} else {
 				$newDistribution = new Distribution();
 				foreach ($distribution as $quantity /* @var Quantity $quantity */) {
@@ -215,7 +220,7 @@ class Combat extends CombatModel
 				$newCombatant->setBattleRow(self::FRONT)->setWeapon($weaponSkill)->setDistribution($distribution);
 				$distribution->setSize($size - $additional);
 				$additional = 0;
-				Lemuria::Log()->debug($who . ' sends ' . $additional . ' persons from combatant ' . $i . ' in ' . $name . ' row to the front.');
+				Lemuria::Log()->debug($who . ' ' . $unit . ' sends ' . $additional . ' persons from combatant ' . $i . ' in ' . $name . ' row to the front.');
 				break;
 			}
 		}

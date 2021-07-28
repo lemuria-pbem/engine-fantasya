@@ -53,7 +53,7 @@ class Campaign
 		foreach ($this->intelligence->getParties() as $party) {
 			$this->status[$party->Id()->Id()] = Army::NEUTRAL;
 		}
-		Lemuria::Log()->debug('Beginning new campaign in region ' . $this->region . '.');
+		Lemuria::Log()->debug('Beginning new campaign in ' . $this->region . '.');
 	}
 
 	public function Region(): Region {
@@ -74,7 +74,7 @@ class Campaign
 		$this->armies[$defendId]      = $defender;
 		$this->attackers[$attackId][] = $defendId;
 		$this->defenders[$defendId][] = $attackId;
-		Lemuria::Log()->debug('Unit ' . $attacker . ' attacks unit ' . $defender . ' in region ' . $this->region . '.');
+		Lemuria::Log()->debug($attacker . ' attacks ' . $defender . ' in ' . $this->region . '.');
 		return $this;
 	}
 
@@ -83,14 +83,14 @@ class Campaign
 			return false;
 		}
 
-		Lemuria::Log()->debug('Mounting campaign in region ' . $this->region . '.');
+		Lemuria::Log()->debug('Mounting campaign in ' . $this->region . '.');
 		$this->battles = [];
 		$defenders     = $this->createDefenderBattles();
 		$this->addDefenderOtherUnits($defenders);
 		$this->addDefenderAlliedUnits();
 		$this->mergeAttackerBattles();
 		$this->battles = array_values($this->battles);
-		Lemuria::Log()->debug('Campaign in region ' . $this->region . ' consists of ' . count($this->battles) . ' battles.');
+		Lemuria::Log()->debug('Campaign in ' . $this->region . ' consists of ' . count($this->battles) . ' battles.');
 		return true;
 	}
 
@@ -113,7 +113,7 @@ class Campaign
 			$otherParty = Party::get(new Id($partyId));
 			if ($otherParty->Diplomacy()->has(Relation::COMBAT, $party)) {
 				$this->partyBattle[$id] = $battleId;
-				Lemuria::Log()->debug('Allied party ' . $party . ' enters battle #' . $battleId . ' in region ' . $this->region . '.');
+				Lemuria::Log()->debug('Allied party ' . $party . ' enters battle #' . $battleId . ' in ' . $this->region . '.');
 				return $this->battles[$battleId];
 			}
 		}
@@ -122,7 +122,7 @@ class Campaign
 		$battleId               = count($this->battles);
 		$this->partyBattle[$id] = $battleId;
 		$this->battles[]        = $battle;
-		Lemuria::Log()->debug('New battle #' . $battleId . ' in region ' . $this->region . ' started by party ' . $party . '.');
+		Lemuria::Log()->debug('New battle #' . $battleId . ' in ' . $this->region . ' started for defender ' . $party . '.');
 		return $battle;
 	}
 
@@ -139,13 +139,14 @@ class Campaign
 			$id                = $party->Id()->Id();
 			$this->status[$id] = Army::DEFENDER;
 			$defenders[$id]    = true;
-			Lemuria::Log()->debug('Unit ' . $unit . ' is attacked in battle of defending party ' . $party . '.');
+			Lemuria::Log()->debug($unit . ' is attacked in battle of defender ' . $party . '.');
 			foreach ($attackers as $attId) {
 				$unit = $this->armies[$attId];
 				$battle->addAttacker($unit);
-				$party = $this->party($attId)->Id()->Id();
-				$this->status[$party] = Army::ATTACKER;
-				Lemuria::Log()->debug('Unit ' . $unit . ' attacks in battle for party ' . $party . '.');
+				$party                  = $this->party($attId);
+				$partyId                = $party->Id()->Id();
+				$this->status[$partyId] = Army::ATTACKER;
+				Lemuria::Log()->debug($unit . ' attacks in battle of attacker ' . $party . '.');
 			}
 		}
 		return array_keys($defenders);
@@ -160,7 +161,7 @@ class Campaign
 					$id = $unit->Id()->Id();
 					if (!isset($this->defenders[$id])) {
 						$battle->addDefender($unit);
-						Lemuria::Log()->debug('Unit ' . $unit . ' gets drawn into battle as defender.');
+						Lemuria::Log()->debug($unit . ' gets drawn into battle as defender.');
 					}
 				}
 			}
@@ -179,7 +180,7 @@ class Campaign
 							foreach ($this->intelligence->getUnits($ally) as $unit /* @var Unit $unit */) {
 								if ($unit->BattleRow() >= Combat::DEFENSIVE) {
 									$battle->addDefender($unit);
-									Lemuria::Log()->debug('Unit ' . $unit . ' gets drawn into battle as ally.');
+									Lemuria::Log()->debug($unit . ' gets drawn into battle as ally.');
 								}
 							}
 							$this->status[$alliedId] = Army::ALLY;
@@ -201,7 +202,7 @@ class Campaign
 			$battles = array_keys($battles);
 			$count   = count($battles);
 			if ($count >= 2) {
-				Lemuria::Log()->debug('Merging ' . $count . ' battles into one.');
+				Lemuria::Log()->debug('Merging ' . $count . ' battles into one for common attacker.');
 			}
 			while (count($battles) > 1) {
 				$second  = array_pop($battles);
