@@ -9,15 +9,20 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.7
 
-- Kampf (ATTACKIEREN/BELAGERN, Berserkerblut, Elixier der Macht, Heiltrank)
+- Kampf: ATTACKIEREN
+- Wirkung von Berserkerblut, Elixier der Macht, Heiltrank
+
+### Version 0.8
+
+- BELAGERN
 - erbeutete Waffen/Rüstungen reparieren
 - Monster, besondere Gegenstände wie Greifeneier, Wagenwracks
 - NPC- und Monsterparteien
+- weitere Gebäude und deren Effekte
 - besondere Gebäude wie Ruinen
 
-### Version 0.8 und folgende
+### Version 0.9 und folgende
 
-- weitere Gebäude und deren Effekte
 - Statistische Daten erstellen
   - Regionsentwicklung im Report anzeigen
   - Veränderungen im Inventar anzeigen

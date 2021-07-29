@@ -178,7 +178,7 @@ class Combat extends CombatModel
 	}
 
 	protected function attack(array &$attacker, array &$defender): int {
-		//TODO
+		//TODO combatants fight one-on-one (1:1/2/3 or 1/2/3:1) - no data structure, just calculation
 		Lemuria::Log()->debug('Attack is not implemented yet.');
 		return 0;
 	}
