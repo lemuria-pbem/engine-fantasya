@@ -10,6 +10,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\CastExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastNoAuraMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastNoMagicianMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\CastOnlyMessage;
 use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Talent\Magic;
@@ -60,6 +61,7 @@ final class Cast extends UnitCommand
 	}
 
 	public function cast(): void {
+		$demandLevel     = $this->level;
 		$this->level     = min($this->level, $this->getMaxLevel());
 		$this->knowledge = $this->calculus()->knowledge(Magic::class)->Level();
 
@@ -81,7 +83,11 @@ final class Cast extends UnitCommand
 		}
 
 		$cast = $this->context->Factory()->castSpell($this->spell, $this);
-		$this->message(CastMessage::class)->s($this->spell);
+		if ($demandLevel > $this->level) {
+			$this->message(CastOnlyMessage::class)->s($this->spell)->p($this->level);
+		} else {
+			$this->message(CastMessage::class)->s($this->spell);
+		}
 		$cast->cast();
 	}
 
@@ -92,9 +98,10 @@ final class Cast extends UnitCommand
 	protected function initialize(): void {
 		parent::initialize();
 		$parser       = new SpellParser($this->phrase);
+		$target       = $parser->Target();
 		$this->spell  = $this->context->Factory()->spell($parser->Spell());
 		$this->level  = $parser->Level();
-		$this->target = Unit::get($parser->Target());
+		$this->target = $target ? Unit::get($target) : null;
 		$this->context->getCasts()->add($this);
 	}
 

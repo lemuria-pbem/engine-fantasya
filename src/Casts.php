@@ -29,7 +29,7 @@ class Casts
 			foreach ($this->casts as $order => $casts) {
 				Lemuria::Log()->debug('Casting spells of order ' . $order . '.');
 				foreach ($casts as $cast /* @var Cast $cast */) {
-					Lemuria::Log()->debug('Casting ' . $casts . '.');
+					Lemuria::Log()->debug('Casting ' . $cast . '.');
 					try {
 						$cast->cast();
 					} catch (ActionException $e) {
