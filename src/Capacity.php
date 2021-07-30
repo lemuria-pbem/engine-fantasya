@@ -42,6 +42,7 @@ class Capacity
 	 * @param int $weight
 	 * @param int $speed
 	 * @param array|int $talent
+	 * @param int $walkSpeed
 	 */
 	#[Pure] public function __construct(private int $walk, private int $ride, private string $movement,
 		                                private int $weight, private int $speed, mixed $talent = 0, int $walkSpeed = 0) {

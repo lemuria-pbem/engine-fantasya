@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Cast;
 
+use Lemuria\Engine\Fantasya\Message\Region\QuacksalverRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\QuacksalverMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\QuacksalverNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\QuacksalverOnlyMessage;
