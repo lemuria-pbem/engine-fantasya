@@ -17,7 +17,8 @@ final class Quacksalver extends AbstractCast
 
 	public function cast(): void {
 		$unit      = $this->cast->Unit();
-		$resources = $unit->Region()->Resources();
+		$region    = $unit->Region();
+		$resources = $region->Resources();
 		$silver    = self::createCommodity(Silver::class);
 		$demand    = $this->cast->Level() * self::SILVER;
 		$reserve   = $resources[$silver]->Count();
@@ -36,5 +37,6 @@ final class Quacksalver extends AbstractCast
 		} else {
 			$this->message(QuacksalverMessage::class, $unit)->i($quantity);
 		}
+		$this->message(QuacksalverRegionMessage::class, $region)->i($quantity);
 	}
 }
