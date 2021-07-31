@@ -11,6 +11,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 - Kampf: ATTACKIEREN
 - Wirkung von Berserkerblut, Elixier der Macht, Heiltrank
+- Terraineffekt der einzelnen Rassen auf Talente
 
 ### Version 0.8
 
