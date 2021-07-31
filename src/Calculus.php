@@ -176,18 +176,22 @@ final class Calculus
 			throw new LemuriaException('Invalid talent.');
 		}
 
-		$experience = 0;
 		if ($this->unit->Size() > 0) {
 			$ability = $this->unit->Knowledge()->offsetGet($talent);
 			if ($ability instanceof Ability) {
-				$modification = $this->unit->Race()->Modifications()->offsetGet($talent);
+				$race         = $this->unit->Race();
+				$modification = $race->Modifications()->offsetGet($talent);
 				if ($modification instanceof Modification) {
-					return $modification->getModified($ability);
+					$ability = $modification->getModified($ability);
 				}
-				$experience = $ability->Experience();
+				$modification = $race->TerrainEffect()->getEffect($this->unit->Region()->Landscape(), $talent);
+				if ($modification instanceof Modification) {
+					$ability = $modification->getModified($ability);
+				}
+				return $ability;
 			}
 		}
-		return new Ability($talent, $experience);
+		return new Ability($talent, 0);
 	}
 
 	/**
