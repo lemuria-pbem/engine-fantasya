@@ -135,7 +135,7 @@ final class Population extends AbstractEvent
 		} else {
 			$migrants *= $years;
 		}
-		return (int)ceil($migrants);
+		return min($peasants, (int)ceil($migrants));
 	}
 
 	private function getMigrantDistribution(Neighbours $neighbours): array {
