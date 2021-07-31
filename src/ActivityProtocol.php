@@ -77,7 +77,7 @@ final class ActivityProtocol
 		$this->addDefaultCommand($command);
 		if ($command instanceof Activity) {
 			$activity                  = $command->Activity();
-			$value                     = isset($this->activity[$activity]);
+			$value                     = isset($this->activity[$activity]) && $this->activity[$activity];
 			$this->activity[$activity] = $value;
 		}
 	}
