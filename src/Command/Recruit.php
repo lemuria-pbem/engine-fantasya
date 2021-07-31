@@ -17,7 +17,11 @@ use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Race\Orc;
 use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Fantasya\Talent;
+use Lemuria\Model\Fantasya\Talent\Bladefighting;
+use Lemuria\Model\Fantasya\Talent\Spearfighting;
 
 /**
  * Implementation of command REKRUTIEREN (recruit peasants).
@@ -124,6 +128,25 @@ final class Recruit extends AllocationCommand
 				$ability->removeItem(new Ability($ability->Talent(), $experience - $newExperience));
 			}
 			$this->message(RecruitKnowledgeMessage::class)->p((int)round(100.0 * $percent));
+		}
+
+		if ($this->unit->Race() instanceof Orc) {
+			$minimum = Ability::getExperience(1);
+			$this->setMinimumExperience(self::createTalent(Bladefighting::class), $minimum);
+			$this->setMinimumExperience(self::createTalent(Spearfighting::class), $minimum);
+		}
+	}
+
+	private function setMinimumExperience(Talent $talent, int $minimum): void {
+		$knowledge = $this->unit->Knowledge();
+		if (isset($knowledge[$talent])) {
+			$ability    = $knowledge[$talent];
+			$experience = $ability->Experience();
+			if ($experience < $minimum) {
+				$ability->addItem(new Ability($talent, $experience - $minimum));
+			}
+		} else {
+			$knowledge->add(new Ability($talent, $minimum));
 		}
 	}
 }
