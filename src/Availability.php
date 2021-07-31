@@ -13,6 +13,7 @@ use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Herb as HerbInterface;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\RawMaterial;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
 
@@ -61,6 +62,11 @@ class Availability
 			$herbage = $this->region->Herbage();
 			if ($commodity === $herbage->Herb()) {
 				$herbage->setOccurrence($available->Count() / self::HERBS_PER_REGION);
+				return;
+			}
+		}
+		if ($commodity instanceof RawMaterial) {
+			if ($commodity->IsInfinite()) {
 				return;
 			}
 		}

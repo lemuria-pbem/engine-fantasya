@@ -8,6 +8,7 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
+use Lemuria\Id;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Serializable;
 
@@ -26,13 +27,13 @@ final class BrokenCarriageEffect extends AbstractPartyEffect
 	#[ArrayShape(['class' => "string", 'id' => "int", 'unit' => "int"])]
 	#[Pure] public function serialize(): array {
 		$data = parent::serialize();
-		$data['unit'] = $this->unit->serialize();
+		$data['unit'] = $this->unit->Id()->Id();
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->unit->unserialize($data['unit']);
+		$this->unit = Unit::get(new Id($data['unit']));
 		return $this;
 	}
 

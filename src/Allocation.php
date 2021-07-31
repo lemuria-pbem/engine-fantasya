@@ -83,27 +83,27 @@ final class Allocation
 	 * Start resource distribution.
 	 */
 	public function distribute(Consumer $consumer): void {
-		$id = $consumer->getId();
-		if (!isset($this->consumers[$id])) {
-			throw new AllocationException($consumer, $this->Region());
-		}
-		if ($consumer->checkBeforeAllocation()) {
-			$this->unregister($consumer);
-		}
-		unset($this->consumersLeft[$id]);
-
 		$round = $this->priority->getPriority($consumer);
 		if ($round > $this->round) {
-			if (empty($this->consumersLeft)) {
-				$this->analyze($round);
-				foreach (array_keys($this->distribution) as $class) {
-					$this->fillDemand($class);
+			foreach (array_keys($this->consumersLeft) as $id) {
+				if (!isset($this->consumers[$id])) {
+					throw new AllocationException($consumer, $this->Region());
 				}
-				$this->createAllocations();
-				$this->round = $round;
-				foreach ($this->rounds[$round] as $id) {
-					$this->allocate($this->consumers[$id]);
+				$consumer = $this->consumers[$id];
+				if ($consumer->checkBeforeAllocation()) {
+					$this->unregister($consumer);
 				}
+				unset ($this->consumersLeft[$id]);
+			}
+
+			$this->analyze($round);
+			foreach (array_keys($this->distribution) as $class) {
+				$this->fillDemand($class);
+			}
+			$this->createAllocations();
+			$this->round = $round;
+			foreach ($this->rounds[$round] as $id) {
+				$this->allocate($this->consumers[$id]);
 			}
 		}
 	}
