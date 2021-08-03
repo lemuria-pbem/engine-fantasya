@@ -12,7 +12,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Kampf: ATTACKIEREN
 - Wirkung von Berserkerblut, Elixier der Macht, Heiltrank
 - Hunger und Regeneration (Gesundheit, Aura) abhängig von Rasse
-- Trolle können Wagen ziehen
 
 ### Version 0.8
 

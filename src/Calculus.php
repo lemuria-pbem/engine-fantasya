@@ -27,6 +27,7 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Modification;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Race\Troll;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
@@ -131,9 +132,23 @@ final class Calculus
 			$speed       = $this->speed([$carriage, $horse, $camel, $elephant, $griffin, $pegasus]);
 			$animals     = [$horse, $camel, $elephant, $griffin, $pegasus];
 			$talentDrive = $this->talent($animals, $size, true, $cars);
-			if ($riding >= $talentDrive) {
-				return new Capacity($walk, $rideFly, Capacity::DRIVE, $weight, $speed, [$talentDrive, $talentDrive], $speedBoost);
+			$horseCount  = $horse?->Count();
+			if ($riding >= $talentDrive && $horseCount >= 2 * $cars) {
+				return new Capacity($walk, $rideFly, Capacity::DRIVE, $weight, $speed, $talentDrive, $speedBoost);
 			}
+			if ($race instanceof Troll) {
+				$needed = 2 * $cars;
+				if ($size >= $needed) {
+					$riding     = $needed * $this->knowledge(Riding::class)->Level();
+					$talentWalk = $this->talent($animals, $size - $needed) + $riding;
+					$weight    -= $size * $race->Weight();
+					return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speedBoost, $talentWalk);
+				}
+			}
+			$walk   = $this->transport($camel) + $this->transport($elephant) + $this->transport($horse);
+			$walk  += $this->transport($griffin) + $this->transport($pegasus) + $payload;
+			$weight = $this->unit->Weight() - $size * $race->Weight();
+			return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speedBoost, $talentDrive);
 		}
 		if ($fly > 0 && !$horse && !$camel && !$elephant) {
 			$animals    = [$griffin, $pegasus];
@@ -373,14 +388,16 @@ final class Calculus
 	 */
 	#[Pure] private function talent(array $transports, int $size, bool $max = false,
 		                            int $carriage = 0): int {
-		$talent = 0;
+		$talent    = 0;
+		$hasHorses = 0;
 		foreach ($transports as $item /* @var Item $item */) {
 			if ($item) {
 				$transport = $item->getObject();
 				$count     = $item->Count();
 				switch ($transport::class) {
 					case Horse::class :
-						$count = max($count, $carriage * 2);
+						$count     = max($count, $carriage * 2);
+						$hasHorses = true;
 					case Camel::class :
 					case Pegasus::class :
 						if ($max) {
@@ -396,6 +413,9 @@ final class Calculus
 						$talent += $count * 6;
 				}
 			}
+		}
+		if ($carriage && !$hasHorses) {
+			$talent += $carriage * 2;
 		}
 		return $talent;
 	}
