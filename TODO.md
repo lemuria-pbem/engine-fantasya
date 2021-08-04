@@ -49,3 +49,4 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Textreport im Markdown-Format
 - Einstellen der erwünschten Reportformate
 - Talentübersicht pro Region
+- Übersetzungen auf MessageFormat umstellen

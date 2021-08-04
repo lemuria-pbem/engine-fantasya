@@ -17,6 +17,11 @@ class Combatant
 {
 	use BuilderTrait;
 
+	/**
+	 * @var Fighter[]
+	 */
+	public array $fighters;
+
 	private int $battleRow;
 
 	private Distribution $distribution;
@@ -54,13 +59,19 @@ class Combatant
 		return $this->weapon;
 	}
 
+	public function Size(): int {
+		return count($this->fighters);
+	}
+
 	public function setBattleRow(int $battleRow): Combatant {
 		$this->battleRow = $battleRow;
 		return $this;
 	}
 
 	public function setDistribution(Distribution $distribution): Combatant {
+		$calculus           = new Calculus($this->unit);
 		$this->distribution = $distribution;
+		$this->fighters     = array_fill(0, $distribution->Size(), new Fighter($calculus->hitpoints()));
 		return $this;
 	}
 

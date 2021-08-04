@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
@@ -129,7 +130,7 @@ class Combat extends CombatModel
 		if (is_int($row)) {
 			$count = 0;
 			foreach ($side[$row] as $combatant /* @var Combatant $combatant */) {
-				$count += $combatant->Distribution()->Size();
+				$count += $combatant->Size();
 			}
 			return $count;
 		}
@@ -137,7 +138,7 @@ class Combat extends CombatModel
 		$count = array_fill_keys(self::BATTLE_ROWS, 0);
 		foreach ($side as $row => $combatants) {
 			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
-				$count[$row] += $combatant->Distribution()->Size();
+				$count[$row] += $combatant->Size();
 			}
 		}
 		return $count;
@@ -178,7 +179,52 @@ class Combat extends CombatModel
 	}
 
 	protected function attack(array &$attacker, array &$defender): int {
-		//TODO combatants fight one-on-one (1:1/2/3 or 1/2/3:1) - no data structure, just calculation
+		$a     = count($attacker[self::FRONT]);
+		$a1    = $this->countCombatants($attacker, self::FRONT);
+		$d     = count($defender[self::FRONT]);
+		$d1    = $this->countCombatants($defender, self::FRONT);
+		$rate  = $d1 / $a1;
+		$nextA = 0;
+		$nextD = 0;
+		$sum   = 0;
+		$last  = 0;
+
+		$cA = -1;
+		$fA = 0;
+		$nA = 0;
+		$cD = -1;
+		$fD = 0;
+		$nD = 0;
+		while ($cA < $a && $cD < $d) {
+			if ($fA >= $nA) {
+				/** @var Combatant $comA */
+				$comA = $attacker[self::FRONT][++$cA] ?? null;
+				$nA   = $comA?->Size();
+				$fA   = 0;
+				continue;
+			}
+			if ($fD >= $nD) {
+				$sum += $nD;
+				/** @var Combatant $comD */
+				$comD = $defender[self::FRONT][++$cD] ?? null;
+				$nD   = $comD?->Size();
+				$last = $sum + $nD;
+				$fD   = $nextD - $sum;
+				continue;
+			}
+			if ($nextD >= $last) {
+				$fD = $nD;
+				continue;
+			}
+			$comA->fighters[$fA]->opponent = $cD;
+			$comA->fighters[$fA]->fighter  = $fD;
+			//TODO: Attack!
+			$comD->fighters[$fD]->health = -1;
+			$fA++;
+			$nextD = (int)floor(++$nextA * $rate);
+		}
+
+		//TODO
 		Lemuria::Log()->debug('Attack is not implemented yet.');
 		return 0;
 	}
@@ -196,7 +242,7 @@ class Combat extends CombatModel
 			$combatant    = $side[$battleRow][$i];
 			$unit         = $combatant->Unit();
 			$distribution = $combatant->Distribution();
-			$size         = $distribution->Size();
+			$size         = $combatant->Size();
 			$weaponSkill  = Combatant::getWeaponSkill($unit, self::FRONT);
 			if ($size <= $additional) {
 				$side[self::FRONT][] = $combatant->setBattleRow(self::FRONT);
@@ -232,7 +278,7 @@ class Combat extends CombatModel
 		foreach ($this->attacker as $row => $combatants) {
 			$count = 0;
 			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
-				$count += $combatant->Distribution()->Size();
+				$count += $combatant->Size();
 			}
 			$attacker[] = self::ROW_NAME[$row] . ':' . $count;
 		}
@@ -240,7 +286,7 @@ class Combat extends CombatModel
 		foreach ($this->defender as $row => $combatants) {
 			$count = 0;
 			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
-				$count += $combatant->Distribution()->Size();
+				$count += $combatant->Size();
 			}
 			$defender[] = self::ROW_NAME[$row] . ':' . $count;
 		}
