@@ -113,6 +113,9 @@ final class Regrow extends AbstractEvent
 		Lemuria::Log()->debug('Herbage grow rate is ' . $this->rate . '.');
 	}
 
+	/**
+	 * @noinspection PhpConditionAlreadyCheckedInspection
+	 */
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region /* @var Region $region */) {
 			$landscape = $region->Landscape();

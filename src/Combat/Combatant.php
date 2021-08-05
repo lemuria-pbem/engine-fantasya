@@ -7,6 +7,7 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Exception\LemuriaException;
+use Lemuria\Model\Fantasya\Combat as CombatModel;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -30,7 +31,7 @@ class Combatant
 
 	public static function getWeaponSkill(Unit $unit, int $battleRow): WeaponSkill {
 		$calculus = new Calculus($unit);
-		$isMelee  = $battleRow !== Combat::BACK;
+		$isMelee  = $battleRow !== CombatModel::BACK;
 		foreach ($calculus->weaponSkill() as $weaponSkill) {
 			if ($isMelee && $weaponSkill->isMelee() || !$isMelee && $weaponSkill->isDistant() || $weaponSkill->isUnarmed()) {
 				return $weaponSkill;

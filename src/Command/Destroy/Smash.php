@@ -38,7 +38,7 @@ use Lemuria\Model\Fantasya\Unit;
  * Implementation of command ZERSTÖREN for constructions and vessels.
  *
  * This command is an ongoing activity that destroys parts of a building/ship until it is completely wiped out. The
- * destroying unit gets back some of the resources that were used when building the building/ship.
+ * destroying unit gets back some part of the resources that were used when building the building/ship.
  *
  * - ZERSTÖREN Burg|Gebäude|Gebaeude <construction>
  * - ZERSTÖREN Schiff <vessel>

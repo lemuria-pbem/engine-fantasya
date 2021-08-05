@@ -104,7 +104,7 @@ final class Upkeep extends AbstractEvent
 					$help->Inventory()->remove($helpSilver);
 					$inventory->add($helpSilver);
 					$neededSilver -= $charity;
-					$this->message(UpkeepDonateMessage::class, $help)->e($construction)->e($unit, UpkeepDonateMessage::UNIT)->i($helpSilver);
+					$this->message(UpkeepDonateMessage::class, $help)->e($construction)->e($unit, UpkeepCharityMessage::UNIT)->i($helpSilver);
 					$this->message(UpkeepCharityMessage::class, $unit)->e($help)->e($help, UpkeepCharityMessage::UNIT)->i($helpSilver);
 				}
 			}

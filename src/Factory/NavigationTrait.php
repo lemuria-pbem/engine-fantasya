@@ -63,6 +63,9 @@ trait NavigationTrait
 		return $coastlines;
 	}
 
+	/**
+	 * @noinspection PhpConditionAlreadyCheckedInspection
+	 */
 	#[Pure] private function canSailTo(Landscape $landscape): bool {
 		if ($this->vessel->Ship() instanceof Boat) {
 			return true;

@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use Lemuria\Id;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Combat;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;

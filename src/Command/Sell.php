@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Merchant;
+use Lemuria\Engine\Fantasya\Message\Unit\BuyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CommerceNotPossibleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellNoneMessage;
@@ -35,9 +36,9 @@ final class Sell extends CommerceCommand
 
 		if ($this->demand > 0) {
 			if ($this->count < $this->demand && $this->demand < PHP_INT_MAX) {
-				$this->message(SellOnlyMessage::class)->i($this->goods())->i($this->cost(), SellOnlyMessage::PAYMENT);
+				$this->message(SellOnlyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
 			} else {
-				$this->message(SellMessage::class)->i($this->goods())->i($this->cost(), SellMessage::PAYMENT);
+				$this->message(SellMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
 			}
 		} else {
 			$this->message(SellNoneMessage::class)->s($this->goods()->Commodity());

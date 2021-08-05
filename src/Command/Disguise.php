@@ -68,7 +68,6 @@ final class Disguise extends UnitCommand
 						$this->message(DisguiseUnknownPartyMessage::class)->e($party);
 					}
 				}
-				return;
 			}
 		} elseif ($n === 1 && in_array($p, ['nein', 'nicht'])) {
 			$this->unit->setIsHiding(false);

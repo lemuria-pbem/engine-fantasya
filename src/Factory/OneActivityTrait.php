@@ -15,6 +15,6 @@ trait OneActivityTrait
 	}
 
 	public function getNewDefault(): ?UnitCommand {
-		return $this instanceof UnitCommand ? $this : null;
+		return $this;
 	}
 }

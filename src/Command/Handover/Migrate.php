@@ -61,7 +61,7 @@ final class Migrate extends UnitCommand
 				$this->message(MigrateRejectedMessage::class, $to)->e($this->unit);
 			}
 		} else {
-			$this->message(MigrateIncompatibleMessage::class, $from)->e($this->unit)->e($to, MigrateIncompatibleMessage::PARTY);
+			$this->message(MigrateIncompatibleMessage::class, $from)->e($this->unit)->e($to, MigrateFromMessage::PARTY);
 		}
 	}
 }

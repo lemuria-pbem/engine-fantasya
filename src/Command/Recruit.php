@@ -140,6 +140,7 @@ final class Recruit extends AllocationCommand
 	private function setMinimumExperience(Talent $talent, int $minimum): void {
 		$knowledge = $this->unit->Knowledge();
 		if (isset($knowledge[$talent])) {
+			/** @var Ability $ability */
 			$ability    = $knowledge[$talent];
 			$experience = $ability->Experience();
 			if ($experience < $minimum) {
