@@ -80,7 +80,6 @@ class Battle
 			$damage = $combat->nextRound();
 			if ($damage > 0) {
 				$countNoDamage = 0;
-				Lemuria::Log()->debug($damage . ' damage dealt in last round.');
 			} else {
 				if (++$countNoDamage >= self::EXHAUSTION_ROUNDS) {
 					break;

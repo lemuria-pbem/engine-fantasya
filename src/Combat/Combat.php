@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
@@ -97,10 +96,10 @@ class Combat extends CombatModel
 		$this->arrangeBattleRows();
 		if ($this->isAttacker[$party->Id()->Id()]) {
 			Lemuria::Log()->debug('Attacker gets first strike in tactics round.');
-			$this->attack($this->attacker, $this->defender);
+			$this->attack($this->attacker, $this->defender, 'Attacker');
 		} else {
 			Lemuria::Log()->debug('Defender gets first strike in tactics round.');
-			$this->attack($this->defender, $this->attacker);
+			$this->attack($this->defender, $this->attacker, 'Defender');
 		}
 		return $this;
 	}
@@ -109,8 +108,9 @@ class Combat extends CombatModel
 		$this->arrangeBattleRows();
 		$this->round++;
 		Lemuria::Log()->debug('Combat round ' . $this->round . ' starts.');
-		$damage  = $this->attack($this->attacker, $this->defender);
-		$damage += $this->attack($this->defender, $this->attacker);
+		$damage  = $this->attack($this->attacker, $this->defender, 'Attacker');
+		$damage += $this->attack($this->defender, $this->attacker, 'Defender');
+		Lemuria::Log()->debug($damage . ' damage done in round ' . $this->round . '.');
 		return $damage;
 	}
 
@@ -126,7 +126,15 @@ class Combat extends CombatModel
 	/**
 	 * @return array(int=>int)|int
 	 */
-	#[Pure] protected function countCombatants(array $side, ?int $row = null): array|int {
+	#[Pure] protected function countCombatants(array $side, int|false|null $row = null): array|int {
+		if ($row === false) {
+			$count = 0;
+			foreach ($side as $combatant /* @var Combatant $combatant */) {
+				$count += $combatant->Size();
+			}
+			return $count;
+		}
+
 		if (is_int($row)) {
 			$count = 0;
 			foreach ($side[$row] as $combatant /* @var Combatant $combatant */) {
@@ -142,6 +150,26 @@ class Combat extends CombatModel
 			}
 		}
 		return $count;
+	}
+
+	protected function logSideDistribution(): void {
+		$attacker = [];
+		foreach ($this->attacker as $row => $combatants) {
+			$count = 0;
+			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
+				$count += $combatant->Size();
+			}
+			$attacker[] = self::ROW_NAME[$row] . ':' . $count;
+		}
+		$defender = [];
+		foreach ($this->defender as $row => $combatants) {
+			$count = 0;
+			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
+				$count += $combatant->Size();
+			}
+			$defender[] = self::ROW_NAME[$row] . ':' . $count;
+		}
+		Lemuria::Log()->debug('Combatant distribution is ' . implode(' | ', $attacker) . ' vs. ' . implode(' | ', $defender) . '.');
 	}
 
 	protected function arrangeBattleRows(): void {
@@ -176,57 +204,6 @@ class Combat extends CombatModel
 			Lemuria::Log()->debug($who . ' has no more forces to reinforce the front.');
 		}
 		$this->logSideDistribution();
-	}
-
-	protected function attack(array &$attacker, array &$defender): int {
-		$a     = count($attacker[self::FRONT]);
-		$a1    = $this->countCombatants($attacker, self::FRONT);
-		$d     = count($defender[self::FRONT]);
-		$d1    = $this->countCombatants($defender, self::FRONT);
-		$rate  = $d1 / $a1;
-		$nextA = 0;
-		$nextD = 0;
-		$sum   = 0;
-		$last  = 0;
-
-		$cA = -1;
-		$fA = 0;
-		$nA = 0;
-		$cD = -1;
-		$fD = 0;
-		$nD = 0;
-		while ($cA < $a && $cD < $d) {
-			if ($fA >= $nA) {
-				/** @var Combatant $comA */
-				$comA = $attacker[self::FRONT][++$cA] ?? null;
-				$nA   = $comA?->Size();
-				$fA   = 0;
-				continue;
-			}
-			if ($fD >= $nD) {
-				$sum += $nD;
-				/** @var Combatant $comD */
-				$comD = $defender[self::FRONT][++$cD] ?? null;
-				$nD   = $comD?->Size();
-				$last = $sum + $nD;
-				$fD   = $nextD - $sum;
-				continue;
-			}
-			if ($nextD >= $last) {
-				$fD = $nD;
-				continue;
-			}
-			$comA->fighters[$fA]->opponent = $cD;
-			$comA->fighters[$fA]->fighter  = $fD;
-			//TODO: Attack!
-			$comD->fighters[$fD]->health = -1;
-			$fA++;
-			$nextD = (int)floor(++$nextA * $rate);
-		}
-
-		//TODO
-		Lemuria::Log()->debug('Attack is not implemented yet.');
-		return 0;
 	}
 
 	protected function arrangeFromRow(array &$side, string $who, int $battleRow, int $additional): int {
@@ -273,23 +250,104 @@ class Combat extends CombatModel
 		return $additional;
 	}
 
-	protected function logSideDistribution(): void {
-		$attacker = [];
-		foreach ($this->attacker as $row => $combatants) {
-			$count = 0;
-			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
-				$count += $combatant->Size();
-			}
-			$attacker[] = self::ROW_NAME[$row] . ':' . $count;
+	protected function attack(array &$attacker, array &$defender, string $who): int {
+		$message = $who . ': Front row attacks.';
+		$damage  = $this->attackRowAgainstRow($attacker[self::FRONT], $defender[self::FRONT], $message);
+		$message = $who . ': Back row attacks.';
+		$damage += $this->attackRowAgainstRow($attacker[self::BACK], $defender[self::FRONT], $message);
+		$this->removeTheDead($attacker);
+		$this->removeTheDead($defender);
+		return $damage;
+	}
+
+	protected function attackRowAgainstRow(array $attacker, array $defender, string $message): int {
+		$a  = count($attacker);
+		$a1 = $this->countCombatants($attacker, false);
+		if ($a <= 0 || $a1 <= 0) {
+			return 0;
 		}
-		$defender = [];
-		foreach ($this->defender as $row => $combatants) {
-			$count = 0;
-			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
-				$count += $combatant->Size();
+		Lemuria::Log()->debug($message);
+
+		$damage = 0;
+		$d      = count($defender);
+		$d1     = $this->countCombatants($defender, false);
+		$rate   = $d1 / $a1;
+		$nextA  = 0;
+		$nextD  = 0;
+		$sum    = 0;
+		$last   = 0;
+		$cA     = -1;
+		$fA     = 0;
+		$nA     = 0;
+		$cD     = -1;
+		$fD     = 0;
+		$nD     = 0;
+		$comA   = null;
+		$comD   = null;
+		while ($cA < $a && $cD < $d) {
+			if ($fA >= $nA) {
+				/** @var Combatant $comA */
+				$comA = $attacker[++$cA] ?? null;
+				$nA   = $comA?->Size();
+				$fA   = 0;
+				continue;
 			}
-			$defender[] = self::ROW_NAME[$row] . ':' . $count;
+			if ($fD >= $nD) {
+				$sum += $nD;
+				/** @var Combatant $comD */
+				$comD = $defender[++$cD] ?? null;
+				$nD   = $comD?->Size();
+				$last = $sum + $nD;
+				$fD   = $nextD - $sum;
+				continue;
+			}
+			if ($nextD >= $last) {
+				$fD = $nD;
+				continue;
+			}
+
+			if ($comA->fighters[$fA]->health > 0) {
+				$health                      = $comD->fighters[$fD]->health;
+				$damage                      = rand(0, 10); //TODO: Attack!
+				$health                     -= $damage;
+				$comD->fighters[$fD]->health = $health;
+				Lemuria::Log()->debug('Fighter ' . $cA . '/' . $fA . ' deals ' . $damage . ' damage to enemy ' . $cD . '/' . $fD . '.');
+				if ($health <= 0) {
+					Lemuria::Log()->debug('Enemy ' . $cD . '/' . $fD . ' is dead.');
+				}
+			} else {
+				Lemuria::Log()->debug('Fighter ' . $cA . '/' . $fA . ' is dead.');
+			}
+
+			$fA++;
+			$nextD = (int)floor(++$nextA * $rate);
 		}
-		Lemuria::Log()->debug('Combatant distribution is ' . implode(' | ', $attacker) . ' vs. ' . implode(' | ', $defender) . '.');
+
+		return $damage;
+	}
+
+	protected function removeTheDead(array &$combatantRows): void {
+		foreach ($combatantRows as &$combatants) {
+			foreach ($combatants as $c => &$combatant /* @var Combatant $combatant */) {
+				$size = $combatant->Size();
+				foreach ($combatant->fighters as $f => $fighter) {
+					if ($fighter->health <= 0) {
+						unset($combatant->fighters[$f]);
+					}
+				}
+				$deceased = $size - $combatant->Size();
+				if ($deceased > 0) {
+					$unit = $combatant->Unit();
+					$unit->setSize($unit->Size() - $deceased);
+					//TODO lose inventory
+					if ($combatant->Size() <= 0) {
+						unset($combatants[$c]);
+						$combatants = array_values($combatants);
+					} else {
+						$combatant->fighters = array_values($combatant->fighters);
+					}
+				}
+			}
+		}
 	}
 }
