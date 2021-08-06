@@ -40,8 +40,12 @@ class Combatant
 		throw new LemuriaException('Unexpected missing weapon skill.');
 	}
 
-	#[Pure] public function __construct(private Unit $unit) {
+	#[Pure] public function __construct(private Army $army, private Unit $unit) {
 		$this->battleRow = Combat::getBattleRow($this->unit);
+	}
+
+	public function Army(): Army {
+		return $this->army;
 	}
 
 	public function Unit(): Unit {

@@ -7,6 +7,7 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\People;
+use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -28,6 +29,8 @@ class Army
 
 	private People $units;
 
+	private Resources $loss;
+
 	/**
 	 * @var Combatant[]
 	 */
@@ -36,6 +39,7 @@ class Army
 	public function __construct(private Party $party) {
 		$this->id    = ++self::$nextId;
 		$this->units = new People();
+		$this->loss  = new Resources();
 		Lemuria::Log()->debug('New army ' . $this->id . ' for party ' . $this->party . '.');
 	}
 
@@ -58,6 +62,10 @@ class Army
 		return $this->units;
 	}
 
+	public function Loss(): Resources {
+		return $this->loss;
+	}
+
 	public function add(Unit $unit): Army {
 		if ($unit->Party()->Id() !== $this->party->Id()) {
 			throw new LemuriaException('Only units from the same party can build an army.');
@@ -68,7 +76,7 @@ class Army
 		$battleRow   = Combat::getBattleRow($unit);
 		$weaponSkill = Combatant::getWeaponSkill($unit, $battleRow);
 		foreach ($calculus->inventoryDistribution() as $distribution) {
-			$combatant = new Combatant($unit);
+			$combatant = new Combatant($this, $unit);
 			$combatant->setBattleRow($battleRow)->setDistribution($distribution)->setWeapon($weaponSkill);
 			$this->combatants[] = $combatant;
 		}

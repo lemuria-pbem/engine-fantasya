@@ -74,22 +74,22 @@ class Combat extends CombatModel
 		return false;
 	}
 
-	public function addAttacker(Unit $unit): Combat {
+	public function addAttacker(Unit $unit): Army {
 		$army = $this->getArmy($unit);
 		foreach ($army->add($unit)->Combatants() as $combatant) {
 			$this->attacker[$combatant->BattleRow()][] = $combatant;
 		}
 		$this->isAttacker[$army->Party()->Id()->Id()] = true;
-		return $this;
+		return $army;
 	}
 
-	public function addDefender(Unit $unit): Combat {
+	public function addDefender(Unit $unit): Army {
 		$army = $this->getArmy($unit);
 		foreach ($army->add($unit)->Combatants() as $combatant) {
 			$this->defender[$combatant->BattleRow()][] = $combatant;
 		}
 		$this->isAttacker[$army->Party()->Id()->Id()] = false;
-		return $this;
+		return $army;
 	}
 
 	public function tacticsRound(Party $party): Combat {
@@ -239,7 +239,7 @@ class Combat extends CombatModel
 					$distribution->remove(new Quantity($quantity->Commodity(), $quantity->Count()));
 				}
 				$newDistribution->setSize($additional);
-				$newCombatant = new Combatant($unit);
+				$newCombatant = new Combatant($combatant->Army(), $unit);
 				$newCombatant->setBattleRow(self::FRONT)->setWeapon($weaponSkill)->setDistribution($distribution);
 				$distribution->setSize($size - $additional);
 				$additional = 0;
@@ -339,7 +339,10 @@ class Combat extends CombatModel
 				if ($deceased > 0) {
 					$unit = $combatant->Unit();
 					$unit->setSize($unit->Size() - $deceased);
-					//TODO lose inventory
+					foreach ($combatant->Distribution()->lose($deceased) as $quantity /* @var Quantity $quantity*/) {
+						$combatant->Unit()->Inventory()->remove($quantity);
+						$combatant->Army()->Loss()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
+					}
 					if ($combatant->Size() <= 0) {
 						unset($combatants[$c]);
 						$combatants = array_values($combatants);

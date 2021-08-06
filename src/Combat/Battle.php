@@ -24,9 +24,19 @@ class Battle
 	private array $attackers = [];
 
 	/**
+	 * @var array(int=>Army)
+	 */
+	private array $attackArmies = [];
+
+	/**
 	 * @var Unit[]
 	 */
 	private array $defenders = [];
+
+	/**
+	 * @var array(int=>Army)
+	 */
+	private array $defendArmies = [];
 
 	#[Pure] public function __construct(private Region $region) {
 	}
@@ -61,15 +71,8 @@ class Battle
 			throw new \RuntimeException('No defenders in battle.');
 		}
 
-		$combat = new Combat();
-		foreach ($this->attackers as $unit) {
-			$combat->addAttacker($unit);
-		}
-		foreach ($this->defenders as $unit) {
-			$combat->addDefender($unit);
-		}
-
-		$party = $this->getBestTacticsParty();
+		$combat = $this->embattleForCombat();
+		$party  = $this->getBestTacticsParty();
 		if ($party) {
 			$combat->tacticsRound($party);
 		} else {
@@ -86,26 +89,7 @@ class Battle
 				}
 			}
 		}
-
-		if ($combat->hasAttackers()) {
-			if ($combat->hasDefenders()) {
-				Lemuria::Log()->debug('Battle ended in a draw due to exhaustion (' . self::EXHAUSTION_ROUNDS . ' rounds without damage).');
-				//TODO Both sides take loot
-			} else {
-				Lemuria::Log()->debug('Attacker has won the battle, defender is destroyed.');
-				//TODO Attacker gets loot
-			}
-		} else {
-			if ($combat->hasDefenders()) {
-				Lemuria::Log()->debug('Defender has won the battle, attacker is destroyed.');
-				//TODO Defender gets loot
-			} else {
-				Lemuria::Log()->debug('Battle ended with both sides destroyed.');
-				//TODO Loot is distributed randomly
-			}
-		}
-
-		return $this;
+		return $this->takeLoot($combat);
 	}
 
 	public function merge(Battle $battle): Battle {
@@ -190,5 +174,41 @@ class Battle
 		}
 		$chosen = $candidates[array_rand($candidates)];
 		return Party::get(new Id($party[$chosen]));
+	}
+
+	protected function embattleForCombat(): Combat {
+		$combat = new Combat();
+		foreach ($this->attackers as $unit) {
+			$army                    = $combat->addAttacker($unit);
+			$id                      = $army->Id();
+			$this->attackArmies[$id] = $army;
+		}
+		foreach ($this->defenders as $unit) {
+			$army                    = $combat->addDefender($unit);
+			$id                      = $army->Id();
+			$this->defendArmies[$id] = $army;
+		}
+		return $combat;
+	}
+
+	protected function takeLoot(Combat $combat): Battle {
+		if ($combat->hasAttackers()) {
+			if ($combat->hasDefenders()) {
+				Lemuria::Log()->debug('Battle ended in a draw due to exhaustion (' . self::EXHAUSTION_ROUNDS . ' rounds without damage).');
+				//TODO Both sides take loot
+			} else {
+				Lemuria::Log()->debug('Attacker has won the battle, defender is destroyed.');
+				//TODO Attacker gets loot
+			}
+		} else {
+			if ($combat->hasDefenders()) {
+				Lemuria::Log()->debug('Defender has won the battle, attacker is destroyed.');
+				//TODO Defender gets loot
+			} else {
+				Lemuria::Log()->debug('Battle ended with both sides destroyed.');
+				//TODO Loot is distributed randomly
+			}
+		}
+		return $this;
 	}
 }
