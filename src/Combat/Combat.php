@@ -342,12 +342,15 @@ class Combat extends CombatModel
 					foreach ($combatant->Distribution()->lose($deceased) as $quantity /* @var Quantity $quantity*/) {
 						$combatant->Unit()->Inventory()->remove($quantity);
 						$combatant->Army()->Loss()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
+						Lemuria::Log()->debug('Unit ' . $unit . ' loses ' . $quantity . '.');
 					}
 					if ($combatant->Size() <= 0) {
 						unset($combatants[$c]);
 						$combatants = array_values($combatants);
+						Lemuria::Log()->debug('Combatant ' . $c . ' of ' . $unit . ' was wiped out.');
 					} else {
 						$combatant->fighters = array_values($combatant->fighters);
+						Lemuria::Log()->debug('Combatant ' . $c . ' of ' . $unit . ' has ' . $deceased . ' losses.');
 					}
 				}
 			}

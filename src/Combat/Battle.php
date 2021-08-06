@@ -9,8 +9,12 @@ use Lemuria\Engine\Fantasya\Factory\Model\DisguisedParty;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Gathering;
+use Lemuria\Model\Fantasya\Heirs;
+use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Tactics;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -38,7 +42,10 @@ class Battle
 	 */
 	private array $defendArmies = [];
 
+	private Intelligence $intelligence;
+
 	#[Pure] public function __construct(private Region $region) {
+		$this->intelligence = new Intelligence($this->region);
 	}
 
 	public function Region(): Region {
@@ -192,23 +199,50 @@ class Battle
 	}
 
 	protected function takeLoot(Combat $combat): Battle {
+		$attackerLoot = $this->collectLoot($this->attackArmies);
+		$defenderLoot = $this->collectLoot($this->defendArmies);
 		if ($combat->hasAttackers()) {
 			if ($combat->hasDefenders()) {
 				Lemuria::Log()->debug('Battle ended in a draw due to exhaustion (' . self::EXHAUSTION_ROUNDS . ' rounds without damage).');
-				//TODO Both sides take loot
+				$heirs = $this->intelligence->getHeirs($this->attackers[0], true);
+				$this->giveLootToHeirs($heirs, $attackerLoot);
+				$heirs = $this->intelligence->getHeirs($this->defenders[0], true);
+				$this->giveLootToHeirs($heirs, $defenderLoot);
 			} else {
 				Lemuria::Log()->debug('Attacker has won the battle, defender is destroyed.');
-				//TODO Attacker gets loot
+				$heirs = $this->intelligence->getHeirs($this->attackers[0], true);
+				$this->giveLootToHeirs($heirs, $attackerLoot);
+				$this->giveLootToHeirs($heirs, $defenderLoot);
 			}
 		} else {
 			if ($combat->hasDefenders()) {
 				Lemuria::Log()->debug('Defender has won the battle, attacker is destroyed.');
-				//TODO Defender gets loot
+				$heirs = $this->intelligence->getHeirs($this->defenders[0], true);
+				$this->giveLootToHeirs($heirs, $attackerLoot);
+				$this->giveLootToHeirs($heirs, $defenderLoot);
 			} else {
 				Lemuria::Log()->debug('Battle ended with both sides destroyed.');
-				//TODO Loot is distributed randomly
+				$heirs = $this->intelligence->getHeirs($this->attackers[0], false);
+				$this->giveLootToHeirs($heirs, $attackerLoot);
+				$this->giveLootToHeirs($heirs, $defenderLoot);
 			}
 		}
 		return $this;
+	}
+
+	protected function collectLoot(array $armies): Resources {
+		$loot = new Resources();
+		foreach ($armies as $army /* @var Army $army */) {
+			$loot->fill($army->Loss());
+		}
+		return $loot;
+	}
+
+	protected function giveLootToHeirs(Heirs $heirs, Resources $loot): void {
+		foreach ($loot as $quantity /* @var Quantity $quantity */) {
+			$unit = $heirs->random();
+			$unit->Inventory()->add($quantity);
+			Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
+		}
 	}
 }
