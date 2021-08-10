@@ -55,7 +55,7 @@ class Supply implements \Countable
 		}
 		$factor = (int)floor($this->count / $this->step);
 		if ($this->isOffer) {
-			return ($factor + 1) * $this->luxury->Value();
+			return $factor * $this->luxury->Value() + $this->offer->Price();
 		}
 		return $this->offer->Price() - $factor * $this->luxury->Value();
 	}
@@ -76,22 +76,23 @@ class Supply implements \Countable
 	 */
 	#[Pure] public function estimate(int $count): int {
 		$count = min($count, $this->count());
-		$steps = (int)floor($count / $this->step);
-		$rest  = $count % (int)floor($this->step);
+		$step  = (int)floor($this->step);
+		$steps = (int)floor($count / $step);
+		$rest  = $count % $step;
 		$value = $this->luxury->Value();
 		$total = 0.0;
 		$i     = 0;
 
 		if ($this->isOffer) {
-			$price = $value;
+			$price = $this->offer->Price();
 			while ($i++ < $steps) {
-				$total += $this->step * $price;
+				$total += $step * $price;
 				$price += $value;
 			}
 		} else {
 			$price = $this->offer->Price();
 			while ($i++ < $steps) {
-				$total += $this->step * $price;
+				$total += $step * $price;
 				$price -= $value;
 			}
 		}
@@ -109,7 +110,7 @@ class Supply implements \Countable
 		}
 		$factor = (int)floor($this->count++ / $this->step);
 		if ($this->isOffer) {
-			return ($factor + 1) * $this->luxury->Value();
+			return $factor * $this->luxury->Value() + $this->offer->Price();
 		}
 		return $this->offer->Price() - $factor * $this->luxury->Value();
 	}

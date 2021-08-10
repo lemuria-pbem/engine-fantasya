@@ -72,6 +72,10 @@
 			"agreement_4095": "Alles"
 		}
 	},
+	"health": {
+		"default": ["gesund", "erschöpft", "verletzt", "schwer verletzt", "dem Tode nah"],
+		"hunger": ["gesund", "hungert", "hungert sehr", "ausgezehrt", "fast verhungert"]
+	},
 	"landscape": {
 		"Desert": "Wüste",
 		"Forest": "Wald",
