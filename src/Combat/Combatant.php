@@ -7,6 +7,7 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Exception\LemuriaException;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Unit;
@@ -83,5 +84,22 @@ class Combatant
 	public function setWeapon(WeaponSkill $weaponSkill): Combatant {
 		$this->weapon = $weaponSkill;
 		return $this;
+	}
+
+	/**
+	 * Receive an attack from an assaulting attacker and return the damage done to the defending fighter.
+	 */
+	public function assault(int $cD, int $fighter, Combatant $attacker, int $cA, int $assaulter): int {
+		$health = $this->fighters[$fighter]->health;
+
+		$damage = rand(0, 10); //TODO: Attack!
+
+		if ($damage > 0) {
+			$health                          -= $damage;
+			$this->fighters[$fighter]->health = $health;
+			Lemuria::Log()->debug('Fighter ' . $cA . '/' . $assaulter . ' deals ' . $damage . ' damage to enemy ' . $cD . '/' . $fighter . '.');
+		}
+
+		return $damage;
 	}
 }

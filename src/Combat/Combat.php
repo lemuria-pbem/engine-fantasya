@@ -307,12 +307,9 @@ class Combat extends CombatModel
 			}
 
 			if ($comA->fighters[$fA]->health > 0) {
-				$health                      = $comD->fighters[$fD]->health;
-				$damage                      = rand(0, 10); //TODO: Attack!
-				$health                     -= $damage;
-				$comD->fighters[$fD]->health = $health;
-				Lemuria::Log()->debug('Fighter ' . $cA . '/' . $fA . ' deals ' . $damage . ' damage to enemy ' . $cD . '/' . $fD . '.');
-				if ($health <= 0) {
+				$health = $comD->fighters[$fD]->health;
+				$damage = $comD->assault($cD, $fD, $comA, $cA, $fA);
+				if ($damage >= $health) {
 					Lemuria::Log()->debug('Enemy ' . $cD . '/' . $fD . ' is dead.');
 				}
 			} else {
