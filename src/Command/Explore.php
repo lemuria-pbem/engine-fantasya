@@ -54,7 +54,7 @@ final class Explore extends UnitCommand implements Activity
 		$region  = $this->unit->Region();
 		$herbage = $region->Herbage();
 		$this->unit->Party()->HerbalBook()->record($region, $herbage);
-		if ($herbage) {
+		if ($herbage && !$this->context->getTurnOptions()->IsSimulation()) {
 			$herb       = $herbage->Herb();
 			$occurrence = $this->occurrence($herbage);
 			$this->message(ExploreMessage::class)->e($region)->s($herb)->p($occurrence);
