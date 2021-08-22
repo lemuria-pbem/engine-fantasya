@@ -50,3 +50,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Einstellen der erwünschten Reportformate
 - Talentübersicht pro Region
 - Übersetzungen auf MessageFormat umstellen
+- Befehlsvorlage intelligenter gestalten
+  - ALTERNATIVE für LERNEN ohne Lehrer
+  - FORST, HERDE für automatisches Baumfällen und Dressieren

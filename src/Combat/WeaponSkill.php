@@ -14,6 +14,15 @@ use Lemuria\Model\Fantasya\Talent\Crossbowing;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Spearfighting;
 use Lemuria\Model\Fantasya\Talent\Stoning;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Dingbats;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 
 /**
  * Helper class for battle configuration of a unit.
@@ -21,6 +30,14 @@ use Lemuria\Model\Fantasya\Talent\Stoning;
 class WeaponSkill
 {
 	use BuilderTrait;
+
+	public const WEAPONS = [
+		Archery::class       => [Bow::class],
+		Bladefighting::class => [Battleaxe::class, Warhammer::class, Sword::class],
+		Catapulting::class   => [Catapult::class],
+		Crossbowing::class   => [Crossbow::class],
+		Spearfighting::class => [Spear::class]
+	];
 
 	private static ?Talent $archery = null;
 

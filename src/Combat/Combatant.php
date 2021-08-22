@@ -33,6 +33,7 @@ class Combatant
 	public static function getWeaponSkill(Unit $unit, int $battleRow): WeaponSkill {
 		$calculus = new Calculus($unit);
 		$isMelee  = $battleRow !== CombatModel::BACK;
+		//TODO Check for available weapon in inventory.
 		foreach ($calculus->weaponSkill() as $weaponSkill) {
 			if ($isMelee && $weaponSkill->isMelee() || !$isMelee && $weaponSkill->isDistant() || $weaponSkill->isUnarmed()) {
 				return $weaponSkill;
