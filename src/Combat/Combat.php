@@ -220,7 +220,6 @@ class Combat extends CombatModel
 			$unit         = $combatant->Unit();
 			$distribution = $combatant->Distribution();
 			$size         = $combatant->Size();
-			$weaponSkill  = Combatant::getWeaponSkill($unit, self::FRONT);
 			if ($size <= $additional) {
 				$side[self::FRONT][] = $combatant->setBattleRow(self::FRONT);
 				unset($side[$battleRow][$i]);
@@ -240,7 +239,7 @@ class Combat extends CombatModel
 				}
 				$newDistribution->setSize($additional);
 				$newCombatant = new Combatant($combatant->Army(), $unit);
-				$newCombatant->setBattleRow(self::FRONT)->setWeapon($weaponSkill)->setDistribution($distribution);
+				$newCombatant->setBattleRow(self::FRONT)->setDistribution($distribution);
 				$distribution->setSize($size - $additional);
 				$additional = 0;
 				Lemuria::Log()->debug($who . ' ' . $unit . ' sends ' . $additional . ' persons from combatant ' . $i . ' in ' . $name . ' row to the front.');

@@ -11,6 +11,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Fantasya\Weapon;
 
 /**
  * Combatants are groups of persons from a unit that fight with the same equipment.
@@ -28,19 +29,9 @@ class Combatant
 
 	private Distribution $distribution;
 
-	private WeaponSkill $weapon;
+	private ?Weapon $weapon = null;
 
-	public static function getWeaponSkill(Unit $unit, int $battleRow): WeaponSkill {
-		$calculus = new Calculus($unit);
-		$isMelee  = $battleRow !== CombatModel::BACK;
-		//TODO Check for available weapon in inventory.
-		foreach ($calculus->weaponSkill() as $weaponSkill) {
-			if ($isMelee && $weaponSkill->isMelee() || !$isMelee && $weaponSkill->isDistant() || $weaponSkill->isUnarmed()) {
-				return $weaponSkill;
-			}
-		}
-		throw new LemuriaException('Unexpected missing weapon skill.');
-	}
+	private ?WeaponSkill $weaponSkill = null;
 
 	#[Pure] public function __construct(private Army $army, private Unit $unit) {
 		$this->battleRow = Combat::getBattleRow($this->unit);
@@ -62,8 +53,18 @@ class Combatant
 		return $this->distribution;
 	}
 
-	public function Weapon(): WeaponSkill {
+	public function Weapon(): Weapon {
+		if (!$this->weapon) {
+			$this->initWeaponSkill();
+		}
 		return $this->weapon;
+	}
+
+	public function WeaponSkill(): WeaponSkill {
+		if (!$this->weaponSkill) {
+			$this->initWeaponSkill();
+		}
+		return $this->weaponSkill;
 	}
 
 	public function Size(): int {
@@ -82,11 +83,6 @@ class Combatant
 		return $this;
 	}
 
-	public function setWeapon(WeaponSkill $weaponSkill): Combatant {
-		$this->weapon = $weaponSkill;
-		return $this;
-	}
-
 	/**
 	 * Receive an attack from an assaulting attacker and return the damage done to the defending fighter.
 	 */
@@ -102,5 +98,40 @@ class Combatant
 		}
 
 		return $damage;
+	}
+
+	protected function initWeaponSkill(): void {
+		$this->weaponSkill = $this->getWeaponSkill();
+	}
+
+	protected function getWeaponSkill(): WeaponSkill {
+		$calculus = new Calculus($this->unit);
+		$isMelee  = $this->battleRow !== CombatModel::BACK;
+		foreach ($calculus->weaponSkill() as $weaponSkill) {
+			if ($isMelee && $weaponSkill->isMelee() && $this->hasOneWeaponOf($weaponSkill)) {
+				return $weaponSkill;
+			}
+			if (!$isMelee && $weaponSkill->isDistant() && $this->hasOneWeaponOf($weaponSkill)) {
+				return $weaponSkill;
+			}
+			if ($weaponSkill->isUnarmed() && $this->hasOneWeaponOf($weaponSkill)) {
+				return $weaponSkill;
+			}
+		}
+		throw new LemuriaException('Unexpected missing weapon skill.');
+	}
+
+	protected function hasOneWeaponOf(WeaponSkill $weaponSkill): bool {
+		$talent = $weaponSkill->Skill()->Talent()::class;
+		if (!isset(WeaponSkill::WEAPONS[$talent])) {
+			throw new LemuriaException('WeaponSkill does not define weapons for ' . $talent . '.');
+		}
+		foreach (WeaponSkill::WEAPONS[$talent] as $weapon /* @var Weapon $weapon */) {
+			if ($this->distribution->offsetExists($weapon)) {
+				$this->weapon = $weapon;
+				return true;
+			}
+		}
+		return false;
 	}
 }

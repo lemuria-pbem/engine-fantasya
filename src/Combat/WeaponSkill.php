@@ -36,7 +36,9 @@ class WeaponSkill
 		Bladefighting::class => [Battleaxe::class, Warhammer::class, Sword::class],
 		Catapulting::class   => [Catapult::class],
 		Crossbowing::class   => [Crossbow::class],
-		Spearfighting::class => [Spear::class]
+		Fistfight::class     => [Fists::class],
+		Spearfighting::class => [Spear::class],
+		Stoning::class       => [Dingbats::class]
 	];
 
 	private static ?Talent $archery = null;

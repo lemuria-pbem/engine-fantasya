@@ -72,12 +72,11 @@ class Army
 		}
 
 		$this->units->add($unit);
-		$calculus    = new Calculus($unit);
-		$battleRow   = Combat::getBattleRow($unit);
-		$weaponSkill = Combatant::getWeaponSkill($unit, $battleRow);
+		$calculus  = new Calculus($unit);
+		$battleRow = Combat::getBattleRow($unit);
 		foreach ($calculus->inventoryDistribution() as $distribution) {
 			$combatant = new Combatant($this, $unit);
-			$combatant->setBattleRow($battleRow)->setDistribution($distribution)->setWeapon($weaponSkill);
+			$combatant->setBattleRow($battleRow)->setDistribution($distribution);
 			$this->combatants[] = $combatant;
 		}
 		Lemuria::Log()->debug('Army ' . $this->id . ': Unit ' . $unit . ' (size: ' . $unit->Size() . ') forms ' . count($this->combatants) . ' combatants.');
