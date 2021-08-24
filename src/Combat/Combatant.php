@@ -25,16 +25,19 @@ class Combatant
 	 */
 	public array $fighters;
 
-	private int $battleRow;
+	private ?int $battleRow = null;
 
-	private Distribution $distribution;
+	private ?Distribution $distribution = null;
 
 	private ?Weapon $weapon = null;
 
 	private ?WeaponSkill $weaponSkill = null;
 
+	private Attack $attack;
+
 	#[Pure] public function __construct(private Army $army, private Unit $unit) {
 		$this->battleRow = Combat::getBattleRow($this->unit);
+		$this->attack    = new Attack($this);
 	}
 
 	public function Army(): Army {
@@ -54,16 +57,10 @@ class Combatant
 	}
 
 	public function Weapon(): Weapon {
-		if (!$this->weapon) {
-			$this->initWeaponSkill();
-		}
 		return $this->weapon;
 	}
 
 	public function WeaponSkill(): WeaponSkill {
-		if (!$this->weaponSkill) {
-			$this->initWeaponSkill();
-		}
 		return $this->weaponSkill;
 	}
 
@@ -73,6 +70,7 @@ class Combatant
 
 	public function setBattleRow(int $battleRow): Combatant {
 		$this->battleRow = $battleRow;
+		$this->initWeaponSkill();
 		return $this;
 	}
 
@@ -80,6 +78,7 @@ class Combatant
 		$calculus           = new Calculus($this->unit);
 		$this->distribution = $distribution;
 		$this->fighters     = array_fill(0, $distribution->Size(), new Fighter($calculus->hitpoints()));
+		$this->initWeaponSkill();
 		return $this;
 	}
 
@@ -87,21 +86,20 @@ class Combatant
 	 * Receive an attack from an assaulting attacker and return the damage done to the defending fighter.
 	 */
 	public function assault(int $cD, int $fighter, Combatant $attacker, int $cA, int $assaulter): int {
-		$health = $this->fighters[$fighter]->health;
-
-		$damage = rand(0, 10); //TODO: Attack!
-
+		$health  = $this->fighters[$fighter]->health;
+		$damage  = $attacker->attack->perform($cA, $assaulter, $this, $cD, $fighter);
+		$health -= $damage > $health ? $health : $damage;
 		if ($damage > 0) {
-			$health                          -= $damage;
-			$this->fighters[$fighter]->health = $health;
 			Lemuria::Log()->debug('Fighter ' . $cA . '/' . $assaulter . ' deals ' . $damage . ' damage to enemy ' . $cD . '/' . $fighter . '.');
 		}
-
+		$this->fighters[$fighter]->health = $health;
 		return $damage;
 	}
 
 	protected function initWeaponSkill(): void {
-		$this->weaponSkill = $this->getWeaponSkill();
+		if (is_int($this->battleRow) && $this->distribution) {
+			$this->weaponSkill = $this->getWeaponSkill();
+		}
 	}
 
 	protected function getWeaponSkill(): WeaponSkill {
@@ -128,7 +126,7 @@ class Combatant
 		}
 		foreach (WeaponSkill::WEAPONS[$talent] as $weapon /* @var Weapon $weapon */) {
 			if ($this->distribution->offsetExists($weapon)) {
-				$this->weapon = $weapon;
+				$this->weapon = self::createWeapon($weapon);
 				return true;
 			}
 		}
