@@ -9,6 +9,11 @@ use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
+use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Commodity\Armor;
+use Lemuria\Model\Fantasya\Commodity\Ironshield;
+use Lemuria\Model\Fantasya\Commodity\Mail;
+use Lemuria\Model\Fantasya\Commodity\Woodshield;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Weapon;
@@ -32,6 +37,10 @@ class Combatant
 	private ?Weapon $weapon = null;
 
 	private ?WeaponSkill $weaponSkill = null;
+
+	private ?Commodity $shield = null;
+
+	private ?Commodity $armor = null;
 
 	private Attack $attack;
 
@@ -64,6 +73,14 @@ class Combatant
 		return $this->weaponSkill;
 	}
 
+	public function Shield(): ?Commodity {
+		return $this->shield;
+	}
+
+	public function Armor(): ?Commodity {
+		return $this->armor;
+	}
+
 	public function Size(): int {
 		return count($this->fighters);
 	}
@@ -79,6 +96,8 @@ class Combatant
 		$this->distribution = $distribution;
 		$this->fighters     = array_fill(0, $distribution->Size(), new Fighter($calculus->hitpoints()));
 		$this->initWeaponSkill();
+		$this->initShield();
+		$this->initArmor();
 		return $this;
 	}
 
@@ -131,5 +150,23 @@ class Combatant
 			}
 		}
 		return false;
+	}
+
+	protected function initShield(): void {
+		if ($this->distribution->offsetExists(Ironshield::class)) {
+			$this->shield = self::createCommodity(Ironshield::class);
+		}
+		if ($this->distribution->offsetExists(Woodshield::class)) {
+			$this->shield = self::createCommodity(Woodshield::class);
+		}
+	}
+
+	protected function initArmor(): void {
+		if ($this->distribution->offsetExists(Armor::class)) {
+			$this->armor = self::createCommodity(Armor::class);
+		}
+		if ($this->distribution->offsetExists(Mail::class)) {
+			$this->armor = self::createCommodity(Mail::class);
+		}
 	}
 }
