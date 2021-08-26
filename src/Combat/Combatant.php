@@ -30,7 +30,14 @@ class Combatant
 	 */
 	public array $fighters;
 
-	private ?int $battleRow = null;
+	/**
+	 * @var array(int=>int)
+	 */
+	protected static array $ids = [];
+
+	private string $id;
+
+	private int $battleRow;
 
 	private ?Distribution $distribution = null;
 
@@ -45,8 +52,13 @@ class Combatant
 	private Attack $attack;
 
 	#[Pure] public function __construct(private Army $army, private Unit $unit) {
+		$this->initId();
 		$this->battleRow = Combat::getBattleRow($this->unit);
 		$this->attack    = new Attack($this);
+	}
+
+	public function Id(): string {
+		return $this->id;
 	}
 
 	public function Army(): Army {
@@ -101,15 +113,19 @@ class Combatant
 		return $this;
 	}
 
+	public function getId(int $fighter): string {
+		return $this->id . '-' . ++$fighter;
+	}
+
 	/**
 	 * Receive an attack from an assaulting attacker and return the damage done to the defending fighter.
 	 */
-	public function assault(int $cD, int $fighter, Combatant $attacker, int $cA, int $assaulter): int {
+	public function assault(int $fighter, Combatant $attacker, int $assaulter): int {
 		$health  = $this->fighters[$fighter]->health;
-		$damage  = $attacker->attack->perform($cA, $assaulter, $this, $cD, $fighter);
+		$damage  = $attacker->attack->perform($assaulter, $this, $fighter);
 		$health -= $damage > $health ? $health : $damage;
 		if ($damage > 0) {
-			Lemuria::Log()->debug('Fighter ' . $cA . '/' . $assaulter . ' deals ' . $damage . ' damage to enemy ' . $cD . '/' . $fighter . '.');
+			Lemuria::Log()->debug('Fighter ' . $attacker->getId($assaulter) . ' deals ' . $damage . ' damage to enemy ' . $this->getId($fighter) . '.');
 		}
 		$this->fighters[$fighter]->health = $health;
 		return $damage;
@@ -168,5 +184,13 @@ class Combatant
 		if ($this->distribution->offsetExists(Mail::class)) {
 			$this->armor = self::createCommodity(Mail::class);
 		}
+	}
+
+	private function initId(): void {
+		$id = $this->unit->Id()->Id();
+		if (!isset(self::$ids[$id])) {
+			self::$ids[$id] = 0;
+		}
+		$this->id = $this->unit->Id() . '-' . ++self::$ids[$id];
 	}
 }

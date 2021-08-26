@@ -16,6 +16,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Commodity\Woodshield;
+use function Lemuria\getClass;
 
 class Attack
 {
@@ -65,11 +66,11 @@ class Attack
 	public function __construct(private Combatant $combatant) {
 	}
 
-	public function perform(int $cA, int $fA, Combatant $defender, int $cD, int $fD): int {
+	public function perform(int $fA, Combatant $defender, int $fD): int {
 		$weapon   = $this->combatant->Weapon()::class;
 		$interval = self::INTERVAL[$weapon] ?? 1;
 		if ($this->round++ % $interval > 0) {
-			Lemuria::Log()->debug('Fighter ' . $cA . '/' . $fA . ' is not ready yet.');
+			Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA) . ' is not ready yet.');
 			return 0;
 		}
 
@@ -82,40 +83,47 @@ class Attack
 		$sClass = $shield ? $shield::class : null;
 
 		if ($this->isSuccessful($skill, $block, $aClass, $sClass)) {
-			Lemuria::Log()->debug('Fighter ' . $cA . '/' . $fA . ' hits enemy ' . $cD . '/' . $fD . '.');
+			Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA) . ' hits enemy ' . $defender->getId($fD) . '.');
 			$armor  = $defender->Armor();
 			$aClass = $armor ? $armor::class : null;
 			$damage = $this->calculateDamage($weapon, $skill, $aClass, $sClass);
 		} else {
-			Lemuria::Log()->debug('Enemy ' . $cD . '/' . $fD . ' blocks attack from ' . $cA . '/' . $fA . '.');
+			Lemuria::Log()->debug('Enemy ' . $defender->getId($fD) . ' blocks attack from ' . $this->combatant->getId($fA) . '.');
 		}
 		return $damage;
 	}
 
 	protected function isSuccessful(int $skill, int $block, ?string $armor, ?string $shield): bool {
+		$malus = 0;
 		if ($armor) {
-			$skill -= self::ATTACK_MALUS[$armor];
+			$malus = self::ATTACK_MALUS[$armor];
 		}
+		$bonus = 0;
 		if ($shield) {
-			$block += self::BLOCK_BONUS[$shield];
+			$bonus = self::BLOCK_BONUS[$shield];
 		}
-		$sum = $skill + $block - 1;
+		$attSkill = $skill - $malus;
+		$defSkill = $block + $bonus;
+		$sum = $attSkill + $defSkill - 1;
 		if ($sum > 0) {
 			$hit = rand(0, $sum);
-			return $hit < $skill;
+			Lemuria::Log()->debug('Attack/Block calculation: A:' . $skill . '-' . $malus . ' B:' . $block . '+' . $bonus . ' hit:' . $hit . '/' . $sum);
+			return $hit < $attSkill;
 		}
 		return false;
 	}
 
 	protected function calculateDamage(string $weapon, int $skill, ?string $armor, ?string $shield): int {
 		$damage = self::DAMAGE[$weapon];
-		$dice   = $damage[1];
+		$n      = $damage[0];
+		$d      = $damage[1];
+		$p      = $damage[2];
+		$dice   = $d;
 		$bonus  = self::DAMAGE_BONUS[$weapon] ?? 0.0;
-		if ($bonus > 0.0) {
-			$dice += (int)floor($bonus * $skill);
-		}
-		$attack = $damage[0] * rand(1, $dice) + $damage[2];
+		$b      = $bonus > 0.0 ? (int)floor($bonus * $skill) : 0;
+		$attack = $n * rand(1, $dice + $b) + $p;
 		$block  = ($shield ? self::BLOCK[$shield] : 0) + ($armor ? self::BLOCK[$armor] : 0);
+		Lemuria::Log()->debug('Damage calculation: ' . getClass($weapon) . ':' . $n . 'd' . $d . '+' . $p . ' bonus:' . $b . ' damage:' . $attack . '-' . $block);
 		return max(0, $attack - $block);
 	}
 }

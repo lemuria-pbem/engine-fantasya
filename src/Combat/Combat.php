@@ -224,7 +224,7 @@ class Combat extends CombatModel
 				$side[self::FRONT][] = $combatant->setBattleRow(self::FRONT);
 				unset($side[$battleRow][$i]);
 				$additional -= $size;
-				Lemuria::Log()->debug($who . ' ' . $unit . ' sends combatant ' . $i . ' (size ' . $size . ') from ' . $name . ' row to the front.');
+				Lemuria::Log()->debug($who . ' ' . $unit . ' sends combatant ' . $combatant->Id() . ' (size ' . $size . ') from ' . $name . ' row to the front.');
 				if ($additional <= 0) {
 					break;
 				}
@@ -242,7 +242,7 @@ class Combat extends CombatModel
 				$newCombatant->setBattleRow(self::FRONT)->setDistribution($distribution);
 				$distribution->setSize($size - $additional);
 				$additional = 0;
-				Lemuria::Log()->debug($who . ' ' . $unit . ' sends ' . $additional . ' persons from combatant ' . $i . ' in ' . $name . ' row to the front.');
+				Lemuria::Log()->debug($who . ' ' . $unit . ' sends ' . $additional . ' persons from combatant ' . $combatant->Id() . ' in ' . $name . ' row to the front as combatant ' . $newCombatant->Id() . '.');
 				break;
 			}
 		}
@@ -307,12 +307,12 @@ class Combat extends CombatModel
 
 			if ($comA->fighters[$fA]->health > 0) {
 				$health = $comD->fighters[$fD]->health;
-				$damage = $comD->assault($cD, $fD, $comA, $cA, $fA);
+				$damage = $comD->assault($fD, $comA, $fA);
 				if ($damage >= $health) {
-					Lemuria::Log()->debug('Enemy ' . $cD . '/' . $fD . ' is dead.');
+					Lemuria::Log()->debug('Enemy ' . $comD->getId($fD) . ' is dead.');
 				}
 			} else {
-				Lemuria::Log()->debug('Fighter ' . $cA . '/' . $fA . ' is dead.');
+				Lemuria::Log()->debug('Fighter ' . $comA->getId($fA) . ' is dead.');
 			}
 
 			$fA++;
@@ -343,10 +343,10 @@ class Combat extends CombatModel
 					if ($combatant->Size() <= 0) {
 						unset($combatants[$c]);
 						$combatants = array_values($combatants);
-						Lemuria::Log()->debug('Combatant ' . $c . ' of ' . $unit . ' was wiped out.');
+						Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' was wiped out.');
 					} else {
 						$combatant->fighters = array_values($combatant->fighters);
-						Lemuria::Log()->debug('Combatant ' . $c . ' of ' . $unit . ' has ' . $deceased . ' losses.');
+						Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' has ' . $deceased . ' losses.');
 					}
 				}
 			}
