@@ -76,12 +76,16 @@ final class Support extends AbstractEvent
 				/** @var Unit $unit */
 				$hungry->clear();
 				foreach ($intelligence->getUnits($party) as $unit) {
-					if (!$this->payFromInventory($unit)) {
+					if ($this->payFromInventory($unit)) {
+						Lemuria::Score()->remove($this->effect($unit));
+					} else {
 						$hungry->add($unit);
 					}
 				}
 				foreach ($hungry as $unit) {
-					if (!$this->payFromResourcePool($unit)) {
+					if ($this->payFromResourcePool($unit)) {
+						Lemuria::Score()->remove($this->effect($unit));
+					} else {
 						$this->hungryUnits->add($unit);
 					}
 				}

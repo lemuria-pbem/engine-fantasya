@@ -17,4 +17,8 @@ class ConstructionExperienceMessage extends ConstructionResourcesMessage
 		parent::getData($message);
 		$this->talent = $message->getSingleton();
 	}
+
+	protected function getTranslation(string $name): string {
+		return $this->talent($name, 'talent') ?? parent::getTranslation($name);
+	}
 }

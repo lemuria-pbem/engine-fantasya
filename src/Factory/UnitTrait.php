@@ -36,7 +36,7 @@ trait UnitTrait
 		$context      = $this->context;
 		$intelligence = $context->getIntelligence($this->unit->Region());
 		$camouflage   = PHP_INT_MIN;
-		if (!$this->unit->Construction()) {
+		if (!$this->unit->Construction() && $this->unit->IsHiding() && !$this->unit->IsGuarding()) {
 			$camouflage = $this->calculus()->knowledge(Camouflage::class)->Level();
 		}
 
