@@ -2,16 +2,14 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Fehler/Verbesserungen in 0.6
+## Fehler/Verbesserungen in 0.7
 
-
-## Neue Funktionen
-
-### Version 0.7
-
-- Kampf: ATTACKIEREN
+- ATTACKIEREN:
+  - Flucht, Rückzug bei Verletzung
 - Wirkung von Berserkerblut, Elixier der Macht, Heiltrank
 - Hunger und Regeneration (Gesundheit, Aura) abhängig von Rasse
+
+## Neue Funktionen
 
 ### Version 0.8
 
