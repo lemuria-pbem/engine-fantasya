@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Effect\ContactEffect;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\ContactMessage;
@@ -35,8 +36,13 @@ final class Contact extends UnitCommand
 		$diplomacy = $we->Diplomacy();
 		$i         = 1;
 		while ($i <= $n) {
-			$id    = null;
-			$unit  = $this->nextId($i, $id);
+			$id = null;
+			try {
+				$unit = $this->nextId($i, $id);
+			} catch (CommandException) {
+				$this->message(ContactNotFoundMessage::class)->p($id);
+				return;
+			}
 			$party = $unit ? $census->getParty($unit) : null;
 			if ($unit && $party !== $we && $unit->Region() === $region && $this->checkVisibility($this->calculus(), $unit)) {
 				$diplomacy->contact($unit);

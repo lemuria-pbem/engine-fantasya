@@ -258,7 +258,7 @@ final class Calculus
 		if ($unit->Construction() || $unit->Vessel()) {
 			return true;
 		}
-		if (!$unit->IsHiding()) {
+		if (!$unit->IsHiding() || $unit->IsGuarding()) {
 			return true;
 		}
 		$calculus   = new self($unit);
