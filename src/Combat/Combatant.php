@@ -77,6 +77,10 @@ class Combatant
 		return $this->distribution;
 	}
 
+	public function Hits(): int {
+		return $this->attack->Hits();
+	}
+
 	public function Weapon(): Weapon {
 		return $this->weapon;
 	}

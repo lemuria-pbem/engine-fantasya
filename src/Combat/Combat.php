@@ -123,30 +123,21 @@ class Combat extends CombatModel
 		return $this->armies[$id];
 	}
 
-	/**
-	 * @return array(int=>int)|int
-	 */
-	#[Pure] protected function countCombatants(array $side, int|false|null $row = null): array|int {
-		if ($row === false) {
-			$count = 0;
-			foreach ($side as $combatant /* @var Combatant $combatant */) {
-				$count += $combatant->Size();
-			}
-			return $count;
+	#[Pure] protected function countRowCombatants(array $side, int $row): int {
+		$count = 0;
+		foreach ($side[$row] as $combatant /* @var Combatant $combatant */) {
+			$count += $combatant->Size();
 		}
+		return $count;
+	}
 
-		if (is_int($row)) {
-			$count = 0;
-			foreach ($side[$row] as $combatant /* @var Combatant $combatant */) {
+	protected function countCombatants(array $side, bool $isAttack = false): int {
+		$count = 0;
+		foreach ($side as $combatant /* @var Combatant $combatant */) {
+			if ($isAttack) {
+				$count += $combatant->Size() * $combatant->Hits();
+			} else {
 				$count += $combatant->Size();
-			}
-			return $count;
-		}
-
-		$count = array_fill_keys(self::BATTLE_ROWS, 0);
-		foreach ($side as $row => $combatants) {
-			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
-				$count[$row] += $combatant->Size();
 			}
 		}
 		return $count;
@@ -174,8 +165,8 @@ class Combat extends CombatModel
 
 	protected function arrangeBattleRows(): void {
 		$this->logSideDistribution();
-		$attackers = $this->countCombatants($this->attacker, self::FRONT);
-		$defenders = $this->countCombatants($this->defender, self::FRONT);
+		$attackers = $this->countRowCombatants($this->attacker, self::FRONT);
+		$defenders = $this->countRowCombatants($this->defender, self::FRONT);
 		$ratio = $defenders > 0 ? $attackers / $defenders : PHP_INT_MAX;
 		if ($ratio > self::OVERRUN) {
 			$additional = (int)ceil($attackers / self::OVERRUN) - $defenders;
@@ -261,7 +252,7 @@ class Combat extends CombatModel
 
 	protected function attackRowAgainstRow(array $attacker, array $defender, string $message): int {
 		$a  = count($attacker);
-		$a1 = $this->countCombatants($attacker, false);
+		$a1 = $this->countCombatants($attacker, true);
 		if ($a <= 0 || $a1 <= 0) {
 			return 0;
 		}
@@ -269,7 +260,7 @@ class Combat extends CombatModel
 
 		$damage = 0;
 		$d      = count($defender);
-		$d1     = $this->countCombatants($defender, false);
+		$d1     = $this->countCombatants($defender);
 		$rate   = $d1 / $a1;
 		$nextA  = 0;
 		$nextD  = 0;
@@ -278,6 +269,8 @@ class Combat extends CombatModel
 		$cA     = -1;
 		$fA     = 0;
 		$nA     = 0;
+		$hit    = 0;
+		$hits   = 1;
 		$cD     = -1;
 		$fD     = 0;
 		$nD     = 0;
@@ -288,7 +281,9 @@ class Combat extends CombatModel
 				/** @var Combatant $comA */
 				$comA = $attacker[++$cA] ?? null;
 				$nA   = $comA?->Size();
+				$hits = $comA?->Hits();
 				$fA   = 0;
+				$hit  = 0;
 				continue;
 			}
 			if ($fD >= $nD) {
@@ -315,7 +310,10 @@ class Combat extends CombatModel
 				Lemuria::Log()->debug('Fighter ' . $comA->getId($fA) . ' is dead.');
 			}
 
-			$fA++;
+			if ($hit >= $hits) {
+				$fA++;
+				$hit = 0;
+			}
 			$nextD = (int)floor(++$nextA * $rate);
 		}
 

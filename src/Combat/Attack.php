@@ -2,6 +2,9 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
+use JetBrains\PhpStorm\Pure;
+
+use function Lemuria\getClass;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Armor;
 use Lemuria\Model\Fantasya\Commodity\Ironshield;
@@ -16,10 +19,13 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Commodity\Woodshield;
-use function Lemuria\getClass;
 
 class Attack
 {
+	protected const HITS = [
+		Catapult::class => 3
+	];
+
 	protected const INTERVAL = [
 		Catapult::class => 5,
 		Crossbow::class => 2
@@ -31,7 +37,7 @@ class Attack
 	protected const DAMAGE = [
 		Battleaxe::class => [1, 8, 8],
 		Bow::class       => [1, 4, 4],
-		Catapult::class  => [3, 20, 0],
+		Catapult::class  => [3, 10, 5],
 		Crossbow::class  => [2, 4, 6],
 		Dingbats::class  => [1, 5, 0],
 		Fists::class     => [1, 5, 0],
@@ -64,6 +70,11 @@ class Attack
 	protected int $round = 0;
 
 	public function __construct(private Combatant $combatant) {
+	}
+
+	#[Pure] public function Hits(): int {
+		$weapon = $this->combatant->Weapon()::class;
+		return self::HITS[$weapon] ?? 1;
 	}
 
 	public function perform(int $fA, Combatant $defender, int $fD): int {
