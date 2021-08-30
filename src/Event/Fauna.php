@@ -176,7 +176,7 @@ final class Fauna extends AbstractEvent
 				$amount[]      = $max - current($distribution);
 				next($distribution);
 			}
-			$n = 5;
+			$n = count($destination);
 		}
 		$sum = array_sum($amount);
 
