@@ -21,6 +21,6 @@ class ContactNotFoundMessage extends AbstractUnitMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->unit = new Id($message->getParameter());
+		$this->unit = Id::fromId($message->getParameter());
 	}
 }
