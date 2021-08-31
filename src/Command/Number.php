@@ -68,6 +68,10 @@ final class Number extends UnitCommand
 		}
 	}
 
+	protected function checkSize(): bool {
+		return true;
+	}
+
 	private function setUnitId(Id $id): void {
 		if (Lemuria::Catalog()->has($id, Catalog::UNITS)) {
 			$this->message(NumberUnitUsedMessage::class)->p($id->Id());

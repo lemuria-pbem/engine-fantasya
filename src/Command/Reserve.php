@@ -62,4 +62,8 @@ final class Reserve extends UnitCommand
 			$this->message(ReserveEverythingMessage::class);
 		}
 	}
+
+	protected function checkSize(): bool {
+		return true;
+	}
 }

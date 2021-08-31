@@ -43,6 +43,10 @@ final class Origin extends UnitCommand
 		}
 	}
 
+	protected function checkSize(): bool {
+		return true;
+	}
+
 	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
 		return $message->setAssignee($this->unit->Party()->Id());
 	}

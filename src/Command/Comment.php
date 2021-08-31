@@ -15,4 +15,8 @@ final class Comment extends UnitCommand
 		$this->context->getProtocol($this->unit)->addDefault($this);
 		$this->message(CommentMessage::class)->p($this->phrase->getLine());
 	}
+
+	protected function checkSize(): bool {
+		return true;
+	}
 }

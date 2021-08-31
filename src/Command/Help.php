@@ -91,6 +91,10 @@ final class Help extends UnitCommand
 		$this->updateDiplomacy($party, $inRegion, $agreement, $isNot);
 	}
 
+	protected function checkSize(): bool {
+		return true;
+	}
+
 	private function getAgreement(string $agreement): ?int {
 		return match (strtolower($agreement)) {
 			'abbau', 'abbauen', 'mache', 'machen', 'ressourcen' => Relation::RESOURCES,

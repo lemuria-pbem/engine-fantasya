@@ -8,7 +8,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Waffen mit mehreren Treffern pro Runde
   - Flucht, Rückzug bei Verletzung
   - Kampfbericht
-- Einheiten ohne Personen sollten keine Befehle mehr ausführen
 - Wirkung von Berserkerblut, Elixier der Macht, Heiltrank
 - Hunger und Regeneration (Gesundheit, Aura) abhängig von Rasse
 

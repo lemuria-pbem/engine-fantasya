@@ -46,7 +46,9 @@ trait ActionTrait
 	protected function prepareAction(): void {
 		try {
 			$this->initialize();
-			$this->isPrepared = true;
+			if ($this->checkSize()) {
+				$this->isPrepared = true;
+			}
 		} catch (CommandException $e) {
 			throw $e;
 		} catch (\Exception $e) {
@@ -78,5 +80,9 @@ trait ActionTrait
 	 */
 	protected function run(): void {
 		throw new LemuriaException('This action cannot be executed directly.');
+	}
+
+	protected function checkSize(): bool {
+		return true;
 	}
 }

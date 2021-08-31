@@ -67,6 +67,10 @@ final class Recruit extends AllocationCommand
 		}
 	}
 
+	protected function checkSize(): bool {
+		return true;
+	}
+
 	/**
 	 * Do the check before allocation.
 	 */

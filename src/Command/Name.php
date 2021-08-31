@@ -72,6 +72,10 @@ final class Name extends UnitCommand
 	}
 
 
+	protected function checkSize(): bool {
+		return true;
+	}
+
 	private function renameParty(string $name): void {
 		$party = $this->unit->Party();
 		$party->setName($name);

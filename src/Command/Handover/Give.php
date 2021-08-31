@@ -85,6 +85,10 @@ final class Give extends UnitCommand
 		}
 	}
 
+	protected function checkSize(): bool {
+		return true;
+	}
+
 	/**
 	 * Give a single commodity.
 	 *

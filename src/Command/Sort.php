@@ -92,6 +92,10 @@ final class Sort extends UnitCommand
 		}
 	}
 
+	protected function checkSize(): bool {
+		return true;
+	}
+
 	/**
 	 * Find first unit and sort this unit before it.
 	 */

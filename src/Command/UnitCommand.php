@@ -55,16 +55,19 @@ abstract class UnitCommand extends AbstractCommand
 	 */
 	protected function initialize(): void {
 		$this->context->setUnit($this->unit);
-		$this->commitCommand($this);
+		if ($this->checkSize()) {
+			$this->commitCommand($this);
+		}
+	}
+
+	protected function checkSize(): bool {
+		return $this->unit->Size() > 0;
 	}
 
 	protected function initMessage(LemuriaMessage $message, ?Entity $target = null): LemuriaMessage {
 		return $message->setAssignee($target ? $target->Id() : $this->unit->Id());
 	}
 
-	/**
-	 * Get the calculus.
-	 */
 	protected function calculus(): Calculus {
 		return $this->context->getCalculus($this->unit);
 	}

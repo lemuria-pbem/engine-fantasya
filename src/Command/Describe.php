@@ -71,6 +71,10 @@ final class Describe extends UnitCommand
 		}
 	}
 
+	protected function checkSize(): bool {
+		return true;
+	}
+
 	private function describeParty(string $description): void {
 		$party = $this->unit->Party();
 		$party->setDescription($description);
