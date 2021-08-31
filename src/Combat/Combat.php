@@ -333,14 +333,16 @@ class Combat extends CombatModel
 				if ($deceased > 0) {
 					$unit = $combatant->Unit();
 					$unit->setSize($unit->Size() - $deceased);
+					$inventory = $unit->Inventory();
 					foreach ($combatant->Distribution()->lose($deceased) as $quantity /* @var Quantity $quantity*/) {
-						$combatant->Unit()->Inventory()->remove($quantity);
+						$inventory->remove($quantity);
 						$combatant->Army()->Loss()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
 						Lemuria::Log()->debug('Unit ' . $unit . ' loses ' . $quantity . '.');
 					}
 					if ($combatant->Size() <= 0) {
 						unset($combatants[$c]);
 						$combatants = array_values($combatants);
+						$unit->setIsGuarding(false)->setIsHiding(false);
 						Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' was wiped out.');
 					} else {
 						$combatant->fighters = array_values($combatant->fighters);
