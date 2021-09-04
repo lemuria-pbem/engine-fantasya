@@ -104,15 +104,21 @@ class Supply implements \Countable
 	/**
 	 * Reserve one piece of the current luxury and get its price.
 	 */
+	public function ask(): int {
+		if (!$this->hasMore()) {
+			throw new LemuriaException('Cannot reserve more of the luxury.');
+		}
+		return $this->askPrice($this->count + 1);
+	}
+
+	/**
+	 * Buy one piece of the current luxury and get its price.
+	 */
 	public function one(): int {
 		if (!$this->hasMore()) {
 			throw new LemuriaException('Cannot reserve more of the luxury.');
 		}
-		$factor = (int)floor($this->count++ / $this->step);
-		if ($this->isOffer) {
-			return $factor * $this->luxury->Value() + $this->offer->Price();
-		}
-		return $this->offer->Price() - $factor * $this->luxury->Value();
+		return $this->askPrice(++$this->count);
 	}
 
 	/**
@@ -138,5 +144,13 @@ class Supply implements \Countable
 		}
 		$this->count = 0;
 		return $this;
+	}
+
+	#[Pure] protected function askPrice(int $count): int {
+		$factor = (int)floor($count / $this->step);
+		if ($this->isOffer) {
+			return $factor * $this->luxury->Value() + $this->offer->Price();
+		}
+		return $this->offer->Price() - $factor * $this->luxury->Value();
 	}
 }
