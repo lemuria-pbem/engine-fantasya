@@ -101,6 +101,10 @@ class Combatant
 		return count($this->fighters);
 	}
 
+	public function FlightChance(): float {
+		return 1.0; //TODO
+	}
+
 	public function setBattleRow(int $battleRow): Combatant {
 		$this->battleRow = $battleRow;
 		$this->initWeaponSkill();

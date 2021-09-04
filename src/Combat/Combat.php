@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
+use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
@@ -19,6 +20,13 @@ class Combat extends CombatModel
 		                        self::FRONT => 'front'];
 
 	protected const OVERRUN = 3.0;
+
+	protected const FLIGHT = [
+		self::REFUGEE    => 1.0,
+		self::BYSTANDER  => 0.9, self::DEFENSIVE => 0.9,
+		self::BACK       => 0.2, self::FRONT     => 0.2,
+		self::AGGRESSIVE => 0.0
+	];
 
 	protected int $round = 0;
 
@@ -93,25 +101,38 @@ class Combat extends CombatModel
 	}
 
 	public function tacticsRound(Party $party): Combat {
-		$this->arrangeBattleRows();
-		if ($this->isAttacker[$party->Id()->Id()]) {
-			Lemuria::Log()->debug('Attacker gets first strike in tactics round.');
-			$this->attack($this->attacker, $this->defender, 'Attacker');
+		$this->everybodyTryToFlee();
+		if ($this->arrangeBattleRows()) {
+			$this->fleeFromBattle($this->attacker[self::REFUGEE], 'Attacker', true);
+			$this->fleeFromBattle($this->defender[self::REFUGEE], 'Defender', true);
+			if ($this->isAttacker[$party->Id()->Id()]) {
+				Lemuria::Log()->debug('Attacker gets first strike in tactics round.');
+				$this->attack($this->attacker, $this->defender, 'Attacker');
+			} else {
+				Lemuria::Log()->debug('Defender gets first strike in tactics round.');
+				$this->attack($this->defender, $this->attacker, 'Defender');
+			}
 		} else {
-			Lemuria::Log()->debug('Defender gets first strike in tactics round.');
-			$this->attack($this->defender, $this->attacker, 'Defender');
+			Lemuria::Log()->debug('Everyone has fled before the battle could begin.');
 		}
 		return $this;
 	}
 
 	public function nextRound(): int {
-		$this->arrangeBattleRows();
-		$this->round++;
-		Lemuria::Log()->debug('Combat round ' . $this->round . ' starts.');
-		$damage  = $this->attack($this->attacker, $this->defender, 'Attacker');
-		$damage += $this->attack($this->defender, $this->attacker, 'Defender');
-		Lemuria::Log()->debug($damage . ' damage done in round ' . $this->round . '.');
-		return $damage;
+		$this->everybodyTryToFlee();
+		if ($this->arrangeBattleRows()) {
+			$this->fleeFromBattle($this->attacker[self::REFUGEE], 'Attacker', true);
+			$this->fleeFromBattle($this->defender[self::REFUGEE], 'Defender', true);
+			$this->round++;
+			Lemuria::Log()->debug('Combat round ' . $this->round . ' starts.');
+			$damage = $this->attack($this->attacker, $this->defender, 'Attacker');
+			$damage += $this->attack($this->defender, $this->attacker, 'Defender');
+			Lemuria::Log()->debug($damage . ' damage done in round ' . $this->round . '.');
+			return $damage;
+		} else {
+			Lemuria::Log()->debug('Everyone has fled and the battle has ended.');
+			return 0;
+		}
 	}
 
 	protected function getArmy(Unit $unit): Army {
@@ -163,7 +184,7 @@ class Combat extends CombatModel
 		Lemuria::Log()->debug('Combatant distribution is ' . implode(' | ', $attacker) . ' vs. ' . implode(' | ', $defender) . '.');
 	}
 
-	protected function arrangeBattleRows(): void {
+	protected function arrangeBattleRows(): bool {
 		$this->logSideDistribution();
 		$attackers = $this->countRowCombatants($this->attacker, self::FRONT);
 		$defenders = $this->countRowCombatants($this->defender, self::FRONT);
@@ -177,10 +198,10 @@ class Combat extends CombatModel
 			$side       = &$this->attacker;
 			$who        = 'Attacker';
 		} else {
-			return;
+			return true;
 		}
-		Lemuria::Log()->debug($who . ' is overrun (need ' . $additional . ' more in front row).');
 
+		Lemuria::Log()->debug($who . ' is overrun (need ' . $additional . ' more in front row).');
 		if ($additional > 0) {
 			$additional = $this->arrangeFromRow($side, $who, self::BACK, $additional);
 		}
@@ -195,6 +216,7 @@ class Combat extends CombatModel
 			Lemuria::Log()->debug($who . ' has no more forces to reinforce the front.');
 		}
 		$this->logSideDistribution();
+		return true;
 	}
 
 	protected function arrangeFromRow(array &$side, string $who, int $battleRow, int $additional): int {
@@ -238,6 +260,36 @@ class Combat extends CombatModel
 			}
 		}
 		return $additional;
+	}
+
+	protected function everybodyTryToFlee(): void {
+		$this->fleeIfWounded($this->attacker[self::FRONT], 'Attacker');
+		$this->fleeIfWounded($this->attacker[self::BACK], 'Attacker');
+		$this->fleeIfWounded($this->attacker[self::BYSTANDER], 'Attacker');
+		$this->fleeFromBattle($this->attacker[self::REFUGEE], 'Attacker');
+		$this->fleeIfWounded($this->defender[self::FRONT], 'Defender');
+		$this->fleeIfWounded($this->defender[self::BACK], 'Defender');
+		$this->fleeIfWounded($this->defender[self::BYSTANDER], 'Defender');
+		$this->fleeFromBattle($this->defender[self::REFUGEE], 'Defender');
+	}
+
+	protected function fleeIfWounded(array $combatantRow, string $who): void {
+		//TODO
+	}
+
+	protected function fleeFromBattle(array $combatantRow, string $who, $fleeSuccessfully = false): void {
+		foreach (array_keys($combatantRow) as $i) {
+			/** @var Combatant $combatant */
+			$combatant = $combatantRow[$i];
+			if ($fleeSuccessfully) {
+				unset($combatantRow[$i]);
+				Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' flees from battle.');
+			} elseif (randChance($combatant->FlightChance())) {
+				Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' managed to flee from battle.');
+			} else {
+				Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' tried to flee from battle.');
+			}
+		}
 	}
 
 	protected function attack(array &$attacker, array &$defender, string $who): int {
@@ -310,7 +362,7 @@ class Combat extends CombatModel
 				Lemuria::Log()->debug('Fighter ' . $comA->getId($fA) . ' is dead.');
 			}
 
-			if ($hit >= $hits) {
+			if ($hit++ >= $hits) {
 				$fA++;
 				$hit = 0;
 			}

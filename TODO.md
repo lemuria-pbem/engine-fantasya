@@ -5,7 +5,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Fehler/Verbesserungen in 0.7
 
 - ATTACKIEREN:
-  - Waffen mit mehreren Treffern pro Runde
   - Flucht, Rückzug bei Verletzung
   - Kampfbericht
 - Wirkung von Berserkerblut, Elixier der Macht, Heiltrank
