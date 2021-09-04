@@ -82,4 +82,14 @@ class Army
 		Lemuria::Log()->debug('Army ' . $this->id . ': Unit ' . $unit . ' (size: ' . $unit->Size() . ') forms ' . count($this->combatants) . ' combatants.');
 		return $this;
 	}
+
+	public function addCombatant(Combatant $combatant): Army {
+		if ($combatant->Unit()->Party()->Id() !== $this->party->Id()) {
+			throw new LemuriaException('Only combatants from the same party can add to its army.');
+		}
+
+		$this->combatants[] = $combatant;
+		Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' was added to army ' . $this->id . '.');
+		return $this;
+	}
 }

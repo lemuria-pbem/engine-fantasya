@@ -96,6 +96,7 @@ class Battle
 				}
 			}
 		}
+		$this->treatInjuredUnits();
 		return $this->takeLoot($combat);
 	}
 
@@ -243,6 +244,45 @@ class Battle
 			$unit = $heirs->random();
 			$unit->Inventory()->add($quantity);
 			Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
+		}
+	}
+
+	protected function treatInjuredUnits(): void {
+		foreach ($this->attackArmies as $army /* @var Army $army */) {
+			$this->treatUnitsOfArmy($army);
+		}
+		foreach ($this->defendArmies as $army /* @var Army $army */) {
+			$this->treatUnitsOfArmy($army);
+		}
+	}
+
+	protected function treatUnitsOfArmy(Army $army): void {
+		$units     = [];
+		$hitpoints = [];
+		foreach ($army->Combatants() as $combatant) {
+			$unit = $combatant->Unit();
+			$id   = $unit->Id()->Id();
+			if (!isset($units[$id])) {
+				$units[$id]     = $unit;
+				$hitpoints[$id] = 0;
+			}
+			foreach ($combatant->fighters as $fighter) {
+				$hitpoints[$id] += $fighter->health;
+			}
+		}
+
+		foreach ($units as $id => $unit) {
+			$size = $unit->Size();
+			if ($size <= 0) {
+				$unit->setHealth(0.0);
+				Lemuria::Log()->debug('Unit ' . $unit . ' of army ' . $army->Id() . ' is destroyed.');
+			} else {
+				$calculus     = new Calculus($unit);
+				$maxHitpoints = $calculus->hitpoints();
+				$health       = $hitpoints[$id] / ($size * $maxHitpoints);
+				$unit->setHealth($health);
+				Lemuria::Log()->debug('Unit ' . $unit . ' of army ' . $army->Id() . ' has health ' . $health . '.');
+			}
 		}
 	}
 }

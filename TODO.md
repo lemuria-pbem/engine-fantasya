@@ -9,6 +9,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Kampfbericht
 - Wirkung von Berserkerblut, Elixier der Macht, Heiltrank
 - Hunger und Regeneration (Gesundheit, Aura) abhängig von Rasse
+- Verletzte Einheiten im Report markieren
 
 ## Neue Funktionen
 

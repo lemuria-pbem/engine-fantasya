@@ -39,6 +39,8 @@ class Combatant
 
 	private int $battleRow;
 
+	private float $flight;
+
 	private ?Distribution $distribution = null;
 
 	private ?Weapon $weapon = null;
@@ -51,10 +53,13 @@ class Combatant
 
 	private Attack $attack;
 
+	private array $refugees = [];
+
 	#[Pure] public function __construct(private Army $army, private Unit $unit) {
 		$this->initId();
 		$this->battleRow = Combat::getBattleRow($this->unit);
 		$this->attack    = new Attack($this);
+		$this->flight    = Combat::FLIGHT[$this->unit->BattleRow()];
 	}
 
 	public function Id(): string {
@@ -101,6 +106,10 @@ class Combatant
 		return count($this->fighters);
 	}
 
+	public function Flight(): float {
+		return $this->flight;
+	}
+
 	public function FlightChance(): float {
 		return 1.0; //TODO
 	}
@@ -137,6 +146,17 @@ class Combatant
 		}
 		$this->fighters[$fighter]->health = $health;
 		return $damage;
+	}
+
+	public function flee(?int $fighter = null): Combatant {
+		if (is_int($fighter)) {
+			$this->refugees[] = $this->fighters[$fighter];
+			unset($this->fighters[$fighter]);
+		} else {
+			$this->fighters = $this->refugees;
+			$this->refugees = [];
+		}
+		return $this;
 	}
 
 	protected function initWeaponSkill(): void {

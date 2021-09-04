@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Combat;
 use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\randChance;
+use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
@@ -14,19 +15,19 @@ use Lemuria\Model\Fantasya\Unit;
 
 class Combat extends CombatModel
 {
+	public const FLIGHT = [
+		self::REFUGEE    => 1.0,
+		self::BYSTANDER  => 0.9, self::DEFENSIVE => 0.9,
+		self::BACK       => 0.2, self::FRONT     => 0.2,
+		self::AGGRESSIVE => 0.0
+	];
+
 	protected const BATTLE_ROWS = [self::REFUGEE, self::BYSTANDER, self::BACK, self::FRONT];
 
 	protected const ROW_NAME = [self::REFUGEE => 'refugees', self::BYSTANDER => 'bystanders', self::BACK => 'back',
 		                        self::FRONT => 'front'];
 
 	protected const OVERRUN = 3.0;
-
-	protected const FLIGHT = [
-		self::REFUGEE    => 1.0,
-		self::BYSTANDER  => 0.9, self::DEFENSIVE => 0.9,
-		self::BACK       => 0.2, self::FRONT     => 0.2,
-		self::AGGRESSIVE => 0.0
-	];
 
 	protected int $round = 0;
 
@@ -255,6 +256,7 @@ class Combat extends CombatModel
 				$newCombatant->setBattleRow(self::FRONT)->setDistribution($distribution);
 				$distribution->setSize($size - $additional);
 				$additional = 0;
+				$combatant->Army()->addCombatant($newCombatant);
 				Lemuria::Log()->debug($who . ' ' . $unit . ' sends ' . $additional . ' persons from combatant ' . $combatant->Id() . ' in ' . $name . ' row to the front as combatant ' . $newCombatant->Id() . '.');
 				break;
 			}
@@ -273,22 +275,52 @@ class Combat extends CombatModel
 		$this->fleeFromBattle($this->defender[self::REFUGEE], 'Defender');
 	}
 
-	protected function fleeIfWounded(array $combatantRow, string $who): void {
-		//TODO
+	protected function fleeIfWounded(array &$combatantRow, string $who): void {
+		$hasChanges = false;
+		foreach (array_keys($combatantRow) as $i) {
+			/** @var Combatant $combatant */
+			$combatant    = $combatantRow[$i];
+			$calculus     = new Calculus($combatant->Unit());
+			$minHitpoints = (int)ceil($calculus->hitpoints() * $combatant->Flight());
+			foreach ($combatant->fighters as $f => $fighter) {
+				if ($fighter->health < $minHitpoints) {
+					if (randChance($combatant->FlightChance())) {
+						$combatant->flee($f);
+						$hasChanges = true;
+						Lemuria::Log()->debug($who . ' fighter ' . $combatant->getId($f) . ' flees from battle.');
+					}
+				}
+			}
+			if ($combatant->Size() <= 0) {
+				$combatant->flee();
+				unset($combatantRow[$i]);
+				Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' has fled from battle.');
+			}
+		}
+		if ($hasChanges) {
+			$combatantRow = array_values($combatantRow);
+		}
 	}
 
-	protected function fleeFromBattle(array $combatantRow, string $who, $fleeSuccessfully = false): void {
+	protected function fleeFromBattle(array &$combatantRow, string $who, $fleeSuccessfully = false): void {
+		$hasChanges = false;
 		foreach (array_keys($combatantRow) as $i) {
 			/** @var Combatant $combatant */
 			$combatant = $combatantRow[$i];
 			if ($fleeSuccessfully) {
 				unset($combatantRow[$i]);
+				$hasChanges = true;
 				Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' flees from battle.');
 			} elseif (randChance($combatant->FlightChance())) {
+				unset($combatantRow[$i]);
+				$hasChanges = true;
 				Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' managed to flee from battle.');
 			} else {
 				Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' tried to flee from battle.');
 			}
+		}
+		if ($hasChanges) {
+			$combatantRow = array_values($combatantRow);
 		}
 	}
 
