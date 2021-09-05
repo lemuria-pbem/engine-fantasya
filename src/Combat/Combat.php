@@ -117,12 +117,12 @@ class Combat extends CombatModel
 			$this->fleeFromBattle($this->defender[self::REFUGEE], 'Defender', true);
 			$this->round++;
 			Lemuria::Log()->debug('Combat round ' . $this->round . ' starts.');
-			$damage = $this->attack($this->attacker, $this->defender, 'Attacker');
+			$damage  = $this->attack($this->attacker, $this->defender, 'Attacker');
 			$damage += $this->attack($this->defender, $this->attacker, 'Defender');
 			Lemuria::Log()->debug($damage . ' damage done in round ' . $this->round . '.');
 			return $damage;
 		} else {
-			Lemuria::Log()->debug('Everyone has fled and the battle has ended.');
+			Lemuria::Log()->debug('All enemies have fled and the battle has ended.');
 			return 0;
 		}
 	}
@@ -208,7 +208,8 @@ class Combat extends CombatModel
 			Lemuria::Log()->debug($who . ' has no more forces to reinforce the front.');
 		}
 		$this->logSideDistribution();
-		return true;
+
+		return $this->hasAttackers() && $this->hasDefenders();
 	}
 
 	protected function arrangeFromRow(array &$side, string $who, int $battleRow, int $additional): int {
