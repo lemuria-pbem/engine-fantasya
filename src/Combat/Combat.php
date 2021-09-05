@@ -4,8 +4,6 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
-use function Lemuria\randChance;
-use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
@@ -15,13 +13,6 @@ use Lemuria\Model\Fantasya\Unit;
 
 class Combat extends CombatModel
 {
-	public const FLIGHT = [
-		self::REFUGEE    => 1.0,
-		self::BYSTANDER  => 0.9, self::DEFENSIVE => 0.9,
-		self::BACK       => 0.2, self::FRONT     => 0.2,
-		self::AGGRESSIVE => 0.0
-	];
-
 	protected const BATTLE_ROWS = [self::REFUGEE, self::BYSTANDER, self::BACK, self::FRONT];
 
 	protected const ROW_NAME = [self::REFUGEE => 'refugees', self::BYSTANDER => 'bystanders', self::BACK => 'back',
@@ -153,7 +144,7 @@ class Combat extends CombatModel
 		return $count;
 	}
 
-	protected function countCombatants(array $side, bool $isAttack = false): int {
+	#[Pure] protected function countCombatants(array $side, bool $isAttack = false): int {
 		$count = 0;
 		foreach ($side as $combatant /* @var Combatant $combatant */) {
 			if ($isAttack) {
@@ -279,15 +270,16 @@ class Combat extends CombatModel
 		$hasChanges = false;
 		foreach (array_keys($combatantRow) as $i) {
 			/** @var Combatant $combatant */
-			$combatant    = $combatantRow[$i];
-			$calculus     = new Calculus($combatant->Unit());
-			$minHitpoints = (int)ceil($calculus->hitpoints() * $combatant->Flight());
+			$combatant = $combatantRow[$i];
 			foreach ($combatant->fighters as $f => $fighter) {
-				if ($fighter->health < $minHitpoints) {
-					if (randChance($combatant->FlightChance())) {
+				$chance = $combatant->isFleeing($fighter);
+				if (is_float($chance)) {
+					if ($chance >= 0.0) {
 						$combatant->flee($f);
 						$hasChanges = true;
-						Lemuria::Log()->debug($who . ' fighter ' . $combatant->getId($f) . ' flees from battle.');
+						Lemuria::Log()->debug($who . ' fighter ' . $combatant->getId($f) . ' is wounded and flees from battle (chance: ' . $chance . ').');
+					} else {
+						Lemuria::Log()->debug($who . ' fighter ' . $combatant->getId($f) . ' is wounded, but could not flee from battle (chance: ' . -$chance . ').');
 					}
 				}
 			}
@@ -311,12 +303,15 @@ class Combat extends CombatModel
 				unset($combatantRow[$i]);
 				$hasChanges = true;
 				Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' flees from battle.');
-			} elseif (randChance($combatant->FlightChance())) {
-				unset($combatantRow[$i]);
-				$hasChanges = true;
-				Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' managed to flee from battle.');
 			} else {
-				Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' tried to flee from battle.');
+				$chance = $combatant->canFlee();
+				if ($chance >= 0.0) {
+					unset($combatantRow[$i]);
+					$hasChanges = true;
+					Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' managed to flee from battle (chance: ' . $chance . ').');
+				} else {
+					Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' tried to flee from battle (chance: ' . -$chance . ').');
+				}
 			}
 		}
 		if ($hasChanges) {

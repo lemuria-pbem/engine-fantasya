@@ -5,8 +5,11 @@ namespace Lemuria\Engine\Fantasya\Combat;
 use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
+use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Combat;
 use Lemuria\Model\Fantasya\Commodity\Armor;
+use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Ironshield;
 use Lemuria\Model\Fantasya\Commodity\Mail;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
@@ -19,6 +22,15 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Commodity\Woodshield;
+use Lemuria\Model\Fantasya\Race\Aquan;
+use Lemuria\Model\Fantasya\Race\Dwarf;
+use Lemuria\Model\Fantasya\Race\Elf;
+use Lemuria\Model\Fantasya\Race\Halfling;
+use Lemuria\Model\Fantasya\Race\Human;
+use Lemuria\Model\Fantasya\Race\Orc;
+use Lemuria\Model\Fantasya\Race\Troll;
+use Lemuria\Model\Fantasya\Talent\Camouflage;
+use Lemuria\Model\Fantasya\Talent\Riding;
 
 class Attack
 {
@@ -67,14 +79,55 @@ class Attack
 		Mail::class  => 1
 	];
 
+	protected const FLIGHT = [
+		Combat::REFUGEE    => 1.0,
+		Combat::BYSTANDER  => 0.9, Combat::DEFENSIVE => 0.9,
+		Combat::BACK       => 0.2, Combat::FRONT     => 0.2,
+		Combat::AGGRESSIVE => 0.0
+	];
+
+	protected const FLIGHT_CHANCE = [
+		Aquan::class    => 0.25,
+		Dwarf::class    => 0.25,
+		Elf::class      => 0.25,
+		Human::class    => 0.25,
+		Halfling::class => 0.5,
+		Orc::class      => 0.25,
+		Troll::class    => 0.25
+	];
+
 	protected int $round = 0;
 
-	public function __construct(private Combatant $combatant) {
+	private float $flight;
+
+	#[Pure] public function __construct(private Combatant $combatant) {
+		$this->flight = self::FLIGHT[$combatant->Unit()->BattleRow()];
 	}
 
 	#[Pure] public function Hits(): int {
 		$weapon = $this->combatant->Weapon()::class;
 		return self::HITS[$weapon] ?? 1;
+	}
+
+	public function Flight(): float {
+		return $this->flight;
+	}
+
+	public function getFlightChance(bool $isFighting = false): float {
+		$unit     = $this->combatant->Unit();
+		$calculus = new Calculus($unit);
+		$chance   = self::FLIGHT_CHANCE[$unit->Race()::class];
+		if ($isFighting) {
+			$chance += $this->combatant->WeaponSkill()->Skill()->Level() * 0.05;
+			if ($this->combatant->Distribution()->offsetExists(Horse::class)) {
+				if ($calculus->knowledge(Riding::class)->Level() > 0) {
+					$chance += 0.25;
+				}
+			}
+		} else {
+			$chance += $calculus->knowledge(Camouflage::class)->Level() * 0.05;
+		}
+		return min(1.0, $chance);
 	}
 
 	public function perform(int $fA, Combatant $defender, int $fD): int {

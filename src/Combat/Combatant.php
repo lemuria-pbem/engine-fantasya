@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
+use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Exception\LemuriaException;
@@ -39,8 +40,6 @@ class Combatant
 
 	private int $battleRow;
 
-	private float $flight;
-
 	private ?Distribution $distribution = null;
 
 	private ?Weapon $weapon = null;
@@ -55,11 +54,10 @@ class Combatant
 
 	private array $refugees = [];
 
-	#[Pure] public function __construct(private Army $army, private Unit $unit) {
+	public function __construct(private Army $army, private Unit $unit) {
 		$this->initId();
 		$this->battleRow = Combat::getBattleRow($this->unit);
 		$this->attack    = new Attack($this);
-		$this->flight    = Combat::FLIGHT[$this->unit->BattleRow()];
 	}
 
 	public function Id(): string {
@@ -82,7 +80,7 @@ class Combatant
 		return $this->distribution;
 	}
 
-	public function Hits(): int {
+	#[Pure] public function Hits(): int {
 		return $this->attack->Hits();
 	}
 
@@ -106,12 +104,19 @@ class Combatant
 		return count($this->fighters);
 	}
 
-	public function Flight(): float {
-		return $this->flight;
+	public function canFlee(): float {
+		$chance = $this->attack->getFlightChance();
+		return randChance($chance) ? $chance : -$chance;
 	}
 
-	public function FlightChance(): float {
-		return 1.0; //TODO
+	public function isFleeing(Fighter $fighter): float|false {
+		$calculus     = new Calculus($this->unit);
+		$minHitpoints = (int)ceil($calculus->hitpoints() * $this->attack->Flight());
+		if ($fighter->health < $minHitpoints) {
+			$chance = $this->attack->getFlightChance(true);
+			return randChance($chance) ? $chance : -$chance;
+		}
+		return false;
 	}
 
 	public function setBattleRow(int $battleRow): Combatant {
