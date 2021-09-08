@@ -45,6 +45,8 @@
 		]
 	},
 	"combat": {
+		"and": "und",
+		"attack": ["greift", "greifen"],
 		"battleRow": {
 			"position_0": "im Kampf fliehen",
 			"position_1": "nicht kämpfen",
@@ -52,7 +54,11 @@
 			"position_3": "hinten kämpfen",
 			"position_4": "vorne kämpfen",
 			"position_5": "aggressiv kämpfen"
-		}
+		},
+		"message": {
+			"BattleBegins": "In der Region $region findet ein Kampf statt: $theparty $attackers $attack $theparty $defenders an."
+		},
+		"theParty": ["die Partei", "die Parteien"]
 	},
 	"diplomacy": {
 		"relation": {
