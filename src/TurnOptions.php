@@ -4,9 +4,15 @@ namespace Lemuria\Engine\Fantasya;
 
 class TurnOptions
 {
+	private bool $debugBattles = false;
+
 	private bool $isSimulation = false;
 
 	private bool $throwExceptions = false;
+
+	public function DebugBattles(): bool {
+		return $this->debugBattles;
+	}
 
 	public function IsSimulation(): bool {
 		return $this->isSimulation;
@@ -14,6 +20,11 @@ class TurnOptions
 
 	public function ThrowExceptions(): bool {
 		return $this->throwExceptions;
+	}
+
+	public function setDebugBattles(bool $debugBattles): TurnOptions {
+		$this->debugBattles = $debugBattles;
+		return $this;
 	}
 
 	public function setIsSimulation(bool $isSimulation): TurnOptions {

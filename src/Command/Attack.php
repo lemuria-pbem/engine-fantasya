@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Combat\BattleLog;
+use Lemuria\Engine\Fantasya\Combat\Log\BattleBegins;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Message\Region\AttackBattleMessage;
@@ -70,7 +72,11 @@ final class Attack extends UnitCommand
 					$defender[] = $party->Name();
 				}
 				$this->message(AttackBattleMessage::class, $region)->p($attacker, AttackBattleMessage::ATTACKER)->p($defender, AttackBattleMessage::DEFENDER);
+
+				$log = new BattleLog($battle);
+				BattleLog::init($log)->add(new BattleBegins(($battle)));
 				$battle->commence();
+				Lemuria::Hostilities()->add($log);
 			}
 		}
 	}

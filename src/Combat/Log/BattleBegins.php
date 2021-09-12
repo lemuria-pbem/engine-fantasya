@@ -2,30 +2,37 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log;
 
+use JetBrains\PhpStorm\Pure;
+
+use Lemuria\Engine\Fantasya\Combat\Battle;
+
 class BattleBegins extends AbstractMessage
 {
-	protected string $region;
+	protected Entity $region;
 
+	/**
+	 * @var array(int=>string)
+	 */
 	protected array $attackers = [];
 
+	/**
+	 * @var array(int=>string)
+	 */
 	protected array $defenders = [];
 
-	protected function create(): string {
-		$attacker = count($this->attackers) > 1 ? 'parties ' : 'party ';
-		$attacks  = count($this->attackers) > 1 ? ' attack ' : ' attacks ';
-		$defender = count($this->defenders) > 1 ? 'parties ' : 'party ';
-		return 'In region ' . $this->region . ' a battle is raging: The ' . $attacker . $this->parties($this->attackers) . $attacks . $defender . $this->parties($this->defenders) . '.';
+	public function __construct(Battle $battle) {
+		parent::__construct($battle);
+		$this->region = new Entity($battle->Region());
+		foreach ($battle->Attacker() as $party) {
+			$this->attackers[] = new Entity($party);
+		}
+		foreach ($battle->Defender() as $party) {
+			$this->defenders[] = new Entity($party);
+		}
 	}
 
-	private function parties(array $parties): string {
-		$n = count($parties);
-		if ($n > 2) {
-			$firstParties = array_slice($parties, 0, $n - 1);
-			return implode(', ', $firstParties) . ' and ' . $parties[$n - 1];
-		} elseif ($n > 1) {
-			return $parties[0] . ' and ' . $parties[1];
-		} else {
-			return (string)$parties[0];
-		}
+	#[Pure] public function __toString(): string {
+		return 'In region ' . $this->region . ' a battle is raging: ' .
+			   'Parties ' . implode(', ', $this->attackers) . ' attack parties ' . implode(', ', $this->defenders) . '.';
 	}
 }
