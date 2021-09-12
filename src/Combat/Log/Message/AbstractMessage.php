@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Fantasya\Combat\Log;
+namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use JetBrains\PhpStorm\ArrayShape;
 
 use function Lemuria\getClass;
-use Lemuria\Engine\Fantasya\Combat\Battle;
+use Lemuria\Engine\Fantasya\Combat\Log\Message;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
@@ -16,10 +16,7 @@ abstract class AbstractMessage implements Message
 
 	private static ?bool $isDebug = null;
 
-	public function __construct(Battle $battle) {
-	}
-
-	#[ArrayShape(['type' => "string"])]
+	#[ArrayShape(['type' => 'string'])]
 	public function serialize(): array {
 		$data = ['type' => getClass($this)];
 		foreach ($this->getParameters() as $key => $value) {

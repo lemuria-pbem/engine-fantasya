@@ -1,12 +1,13 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Fantasya\Combat\Log;
+namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Combat\Battle;
+use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 
-class BattleBegins extends AbstractMessage
+class BattleBeginsMessage extends AbstractMessage
 {
 	protected Entity $region;
 
@@ -21,7 +22,6 @@ class BattleBegins extends AbstractMessage
 	protected array $defenders = [];
 
 	public function __construct(Battle $battle) {
-		parent::__construct($battle);
 		$this->region = new Entity($battle->Region());
 		foreach ($battle->Attacker() as $party) {
 			$this->attackers[] = new Entity($party);

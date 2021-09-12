@@ -84,7 +84,6 @@ class Campaign
 			return false;
 		}
 
-		Lemuria::Log()->debug('Mounting campaign in ' . $this->region . '.');
 		$this->battles = [];
 		$defenders     = $this->createDefenderBattles();
 		$this->addDefenderOtherUnits($defenders);
@@ -203,7 +202,9 @@ class Campaign
 			$battles = array_keys($battles);
 			$count   = count($battles);
 			if ($count >= 2) {
-				Lemuria::Log()->debug('Merging ' . $count . ' battles into one for common attacker.');
+				$all   = implode(',', $battles);
+				$first = $battles[0];
+				Lemuria::Log()->debug('Merging ' . $count . ' battles #' . $all . ' into #' . $first . ' for common attacker.');
 			}
 			while (count($battles) > 1) {
 				$second  = array_pop($battles);

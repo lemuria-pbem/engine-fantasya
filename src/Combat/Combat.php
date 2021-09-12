@@ -4,6 +4,17 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Combat\Log\Entity;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerNoReinforcementMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerOverrunMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerSideMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerTacticsRoundMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderNoReinforcementMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderOverrunMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderSideMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderTacticsRoundMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\EveryoneHasFledMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Participant;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
@@ -41,6 +52,16 @@ class Combat extends CombatModel
 	 * @var array(int=>Army)
 	 */
 	protected array $armies = [];
+
+	/**
+	 * @var Participant[]
+	 */
+	protected array $attackParticipants = [];
+
+	/**
+	 * @var Participant[]
+	 */
+	protected array $defendParticipants = [];
 
 	#[Pure] public static function getBattleRow(Unit $unit): int {
 		$battleRow = $unit->BattleRow();
@@ -80,6 +101,7 @@ class Combat extends CombatModel
 			$this->attacker[$combatant->BattleRow()][] = $combatant;
 		}
 		$this->isAttacker[$army->Party()->Id()->Id()] = true;
+		$this->attackParticipants[] = new Participant(new Entity($unit), $army->Combatants());
 		return $army;
 	}
 
@@ -89,7 +111,15 @@ class Combat extends CombatModel
 			$this->defender[$combatant->BattleRow()][] = $combatant;
 		}
 		$this->isAttacker[$army->Party()->Id()->Id()] = false;
+		$this->defendParticipants[] = new Participant(new Entity($unit), $army->Combatants());
 		return $army;
+	}
+
+	public function embattle(): Combat {
+		$log = BattleLog::getInstance();
+		$log->add(new AttackerSideMessage($this->attackParticipants));
+		$log->add(new DefenderSideMessage($this->defendParticipants));
+		return $this;
 	}
 
 	public function tacticsRound(Party $party): Combat {
@@ -99,13 +129,16 @@ class Combat extends CombatModel
 			$this->fleeFromBattle($this->defender[self::REFUGEE], 'Defender', true);
 			if ($this->isAttacker[$party->Id()->Id()]) {
 				Lemuria::Log()->debug('Attacker gets first strike in tactics round.');
+				BattleLog::getInstance()->add(new AttackerTacticsRoundMessage());
 				$this->attack($this->attacker, $this->defender, 'Attacker');
 			} else {
 				Lemuria::Log()->debug('Defender gets first strike in tactics round.');
+				BattleLog::getInstance()->add(new DefenderTacticsRoundMessage());
 				$this->attack($this->defender, $this->attacker, 'Defender');
 			}
 		} else {
 			Lemuria::Log()->debug('Everyone has fled before the battle could begin.');
+			BattleLog::getInstance()->add(new EveryoneHasFledMessage());
 		}
 		return $this;
 	}
@@ -184,39 +217,41 @@ class Combat extends CombatModel
 		if ($ratio > self::OVERRUN) {
 			$additional = (int)ceil($attackers / self::OVERRUN) - $defenders;
 			$side       = &$this->defender;
-			$who        = 'Defender';
+			$isAttacker = false;
+			BattleLog::getInstance()->add(new DefenderOverrunMessage($additional));
 		} elseif ($ratio < 1.0 / self::OVERRUN) {
 			$additional = (int)ceil($defenders / self::OVERRUN) - $attackers;
 			$side       = &$this->attacker;
-			$who        = 'Attacker';
+			$isAttacker = true;
+			BattleLog::getInstance()->add(new AttackerOverrunMessage($additional));
 		} else {
 			return true;
 		}
 
-		Lemuria::Log()->debug($who . ' is overrun (need ' . $additional . ' more in front row).');
 		if ($additional > 0) {
-			$additional = $this->arrangeFromRow($side, $who, self::BACK, $additional);
+			$additional = $this->arrangeFromRow($side, $isAttacker, self::BACK, $additional);
 		}
 		if ($additional > 0) {
-			$additional = $this->arrangeFromRow($side, $who, self::BYSTANDER, $additional);
+			$additional = $this->arrangeFromRow($side, $isAttacker, self::BYSTANDER, $additional);
 		}
 		if ($additional > 0) {
-			$additional = $this->arrangeFromRow($side, $who, self::REFUGEE, $additional);
+			$additional = $this->arrangeFromRow($side, $isAttacker, self::REFUGEE, $additional);
 		}
 		if ($additional > 0) {
-			$who = $ratio > 0.0 ? 'Defender' : 'Attacker';
-			Lemuria::Log()->debug($who . ' has no more forces to reinforce the front.');
+			if ($isAttacker) {
+				BattleLog::getInstance()->add(new AttackerNoReinforcementMessage());
+			} else {
+				BattleLog::getInstance()->add(new DefenderNoReinforcementMessage());
+			}
 		}
-		$this->logSideDistribution();
 
 		return $this->hasAttackers() && $this->hasDefenders();
 	}
 
-	protected function arrangeFromRow(array &$side, string $who, int $battleRow, int $additional): int {
+	protected function arrangeFromRow(array &$side, bool $isAttacker, int $battleRow, int $additional): int {
 		$n    = count($side[$battleRow]);
 		$name = self::ROW_NAME[$battleRow];
 		if ($n <= 0) {
-			Lemuria::Log()->debug($who . ' has no combatants in ' . $name . ' row to send to the front.');
 			return $additional;
 		}
 
@@ -230,6 +265,7 @@ class Combat extends CombatModel
 				$side[self::FRONT][] = $combatant->setBattleRow(self::FRONT);
 				unset($side[$battleRow][$i]);
 				$additional -= $size;
+				$who         = $isAttacker ? 'Attacker' : 'Defender';
 				Lemuria::Log()->debug($who . ' ' . $unit . ' sends combatant ' . $combatant->Id() . ' (size ' . $size . ') from ' . $name . ' row to the front.');
 				if ($additional <= 0) {
 					break;
@@ -249,6 +285,7 @@ class Combat extends CombatModel
 				$distribution->setSize($size - $additional);
 				$additional = 0;
 				$combatant->Army()->addCombatant($newCombatant);
+				$who = $isAttacker ? 'Attacker' : 'Defender';
 				Lemuria::Log()->debug($who . ' ' . $unit . ' sends ' . $additional . ' persons from combatant ' . $combatant->Id() . ' in ' . $name . ' row to the front as combatant ' . $newCombatant->Id() . '.');
 				break;
 			}

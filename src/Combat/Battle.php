@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Combat;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\NoTacticsRoundMessage;
 use Lemuria\Engine\Fantasya\Factory\Model\DisguisedParty;
 use Lemuria\Id;
 use Lemuria\Lemuria;
@@ -84,6 +85,7 @@ class Battle
 			$combat->tacticsRound($party);
 		} else {
 			Lemuria::Log()->debug('Both sides are tactically equal.');
+			BattleLog::getInstance()->add(new NoTacticsRoundMessage());
 		}
 		$countNoDamage = 0;
 		while ($combat->hasAttackers() && $combat->hasDefenders()) {
@@ -196,7 +198,7 @@ class Battle
 			$id                      = $army->Id();
 			$this->defendArmies[$id] = $army;
 		}
-		return $combat;
+		return $combat->embattle();
 	}
 
 	protected function takeLoot(Combat $combat): Battle {

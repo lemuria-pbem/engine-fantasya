@@ -45,7 +45,7 @@ class BattleLog implements BattleModel
 		return $log;
 	}
 
-	public function __construct(?Battle $battle = null) {
+	public function __construct(private ?Battle $battle = null) {
 		if ($battle) {
 			$this->region = $battle->Region();
 			foreach ($battle->Attacker() as $party) {
@@ -55,6 +55,10 @@ class BattleLog implements BattleModel
 				$this->parties[] = $party;
 			}
 		}
+	}
+
+	public function Battle(): Battle {
+		return $this->battle;
 	}
 
 	#[ArrayShape(['region' => "int", 'parties' => "array", 'messages' => "array"])]

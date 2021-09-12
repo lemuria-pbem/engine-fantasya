@@ -13,6 +13,13 @@ final class Entity implements \Stringable
 
 	public string $name;
 
+	public static function create(int $id, string $name): Entity {
+		$entity       = new self();
+		$entity->id   = new Id($id);
+		$entity->name = $name;
+		return $entity;
+	}
+
 	#[Pure] public function __construct(?EntityModel $entity = null) {
 		if ($entity) {
 			$this->id   = $entity->Id();
