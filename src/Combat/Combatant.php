@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultHitMessage;
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
@@ -143,14 +144,18 @@ class Combatant
 	 * Receive an attack from an assaulting attacker and return the damage done to the defending fighter.
 	 */
 	public function assault(int $fighter, Combatant $attacker, int $assaulter): int {
-		$health  = $this->fighters[$fighter]->health;
-		$damage  = $attacker->attack->perform($assaulter, $this, $fighter);
-		$health -= $damage > $health ? $health : $damage;
+		$health = $this->fighters[$fighter]->health;
+		$damage = $attacker->attack->perform($assaulter, $this, $fighter);
 		if ($damage > 0) {
+			$health -= $damage > $health ? $health : $damage;
 			Lemuria::Log()->debug('Fighter ' . $attacker->getId($assaulter) . ' deals ' . $damage . ' damage to enemy ' . $this->getId($fighter) . '.');
 		}
-		$this->fighters[$fighter]->health = $health;
-		return $damage;
+		if (is_int($damage)) {
+			BattleLog::getInstance()->add(new AssaultHitMessage($attacker->getId($assaulter), $this->getId($fighter), $damage));
+			$this->fighters[$fighter]->health = $health;
+			return $damage;
+		}
+		return 0;
 	}
 
 	public function flee(?int $fighter = null): Combatant {

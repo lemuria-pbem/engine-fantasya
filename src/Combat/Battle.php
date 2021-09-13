@@ -5,7 +5,13 @@ namespace Lemuria\Engine\Fantasya\Combat;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerWonMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleEndedInDrawMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleExhaustionMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderWonMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\NoTacticsRoundMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\TakeLootMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\UnitDiedMessage;
 use Lemuria\Engine\Fantasya\Factory\Model\DisguisedParty;
 use Lemuria\Id;
 use Lemuria\Lemuria;
@@ -207,24 +213,28 @@ class Battle
 		if ($combat->hasAttackers()) {
 			if ($combat->hasDefenders()) {
 				Lemuria::Log()->debug('Battle ended in a draw due to exhaustion (' . self::EXHAUSTION_ROUNDS . ' rounds without damage).');
+				BattleLog::getInstance()->add(new BattleExhaustionMessage(self::EXHAUSTION_ROUNDS));
 				$heirs = $this->intelligence->getHeirs($this->attackers[0], true);
 				$this->giveLootToHeirs($heirs, $attackerLoot);
 				$heirs = $this->intelligence->getHeirs($this->defenders[0], true);
 				$this->giveLootToHeirs($heirs, $defenderLoot);
 			} else {
-				Lemuria::Log()->debug('Attacker has won the battle, defender is destroyed.');
+				Lemuria::Log()->debug('Attacker has won the battle, defender is defeated.');
+				BattleLog::getInstance()->add(new AttackerWonMessage());
 				$heirs = $this->intelligence->getHeirs($this->attackers[0], true);
 				$this->giveLootToHeirs($heirs, $attackerLoot);
 				$this->giveLootToHeirs($heirs, $defenderLoot);
 			}
 		} else {
 			if ($combat->hasDefenders()) {
-				Lemuria::Log()->debug('Defender has won the battle, attacker is destroyed.');
+				Lemuria::Log()->debug('Defender has won the battle, attacker is defeated.');
+				BattleLog::getInstance()->add(new DefenderWonMessage());
 				$heirs = $this->intelligence->getHeirs($this->defenders[0], true);
 				$this->giveLootToHeirs($heirs, $attackerLoot);
 				$this->giveLootToHeirs($heirs, $defenderLoot);
 			} else {
-				Lemuria::Log()->debug('Battle ended with both sides destroyed.');
+				Lemuria::Log()->debug('Battle ended with both sides defeated each other.');
+				BattleLog::getInstance()->add(new BattleEndedInDrawMessage());
 				$heirs = $this->intelligence->getHeirs($this->attackers[0], false);
 				$this->giveLootToHeirs($heirs, $attackerLoot);
 				$this->giveLootToHeirs($heirs, $defenderLoot);
@@ -246,6 +256,7 @@ class Battle
 			$unit = $heirs->random();
 			$unit->Inventory()->add($quantity);
 			Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
+			BattleLog::getInstance()->add(new TakeLootMessage($unit, $quantity));
 		}
 	}
 
@@ -278,6 +289,7 @@ class Battle
 			if ($size <= 0) {
 				$unit->setHealth(0.0);
 				Lemuria::Log()->debug('Unit ' . $unit . ' of army ' . $army->Id() . ' is destroyed.');
+				BattleLog::getInstance()->add(new UnitDiedMessage($unit));
 			} else {
 				$calculus     = new Calculus($unit);
 				$maxHitpoints = $calculus->hitpoints();

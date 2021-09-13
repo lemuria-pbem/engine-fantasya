@@ -7,13 +7,24 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerNoReinforcementMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerOverrunMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerReinforcementMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerSideMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerSplitMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerTacticsRoundMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\CombatRoundMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderNoReinforcementMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderOverrunMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderReinforcementMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderSideMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderSplitMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderTacticsRoundMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\EveryoneHasFledMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\FighterCouldNotFighterMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\FighterFleesMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\FighterIsDeadMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\FleeFromBattleMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\ManagedToFleeFromBattleMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\TriedToFleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Participant;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Lemuria;
@@ -24,10 +35,10 @@ use Lemuria\Model\Fantasya\Unit;
 
 class Combat extends CombatModel
 {
-	protected const BATTLE_ROWS = [self::REFUGEE, self::BYSTANDER, self::BACK, self::FRONT];
+	public const ROW_NAME = [self::REFUGEE => 'refugees', self::BYSTANDER => 'bystanders', self::BACK => 'back',
+							 self::FRONT => 'front'];
 
-	protected const ROW_NAME = [self::REFUGEE => 'refugees', self::BYSTANDER => 'bystanders', self::BACK => 'back',
-		                        self::FRONT => 'front'];
+	protected const BATTLE_ROWS = [self::REFUGEE, self::BYSTANDER, self::BACK, self::FRONT];
 
 	protected const OVERRUN = 3.0;
 
@@ -149,13 +160,14 @@ class Combat extends CombatModel
 			$this->fleeFromBattle($this->attacker[self::REFUGEE], 'Attacker', true);
 			$this->fleeFromBattle($this->defender[self::REFUGEE], 'Defender', true);
 			$this->round++;
-			Lemuria::Log()->debug('Combat round ' . $this->round . ' starts.');
+			BattleLog::getInstance()->add(new CombatRoundMessage($this->round));
 			$damage  = $this->attack($this->attacker, $this->defender, 'Attacker');
 			$damage += $this->attack($this->defender, $this->attacker, 'Defender');
 			Lemuria::Log()->debug($damage . ' damage done in round ' . $this->round . '.');
 			return $damage;
 		} else {
 			Lemuria::Log()->debug('All enemies have fled and the battle has ended.');
+			BattleLog::getInstance()->add(new EveryoneHasFledMessage());
 			return 0;
 		}
 	}
@@ -210,7 +222,6 @@ class Combat extends CombatModel
 	}
 
 	protected function arrangeBattleRows(): bool {
-		$this->logSideDistribution();
 		$attackers = $this->countRowCombatants($this->attacker, self::FRONT);
 		$defenders = $this->countRowCombatants($this->defender, self::FRONT);
 		$ratio = $defenders > 0 ? $attackers / $defenders : PHP_INT_MAX;
@@ -245,6 +256,7 @@ class Combat extends CombatModel
 			}
 		}
 
+		$this->logSideDistribution();
 		return $this->hasAttackers() && $this->hasDefenders();
 	}
 
@@ -267,6 +279,12 @@ class Combat extends CombatModel
 				$additional -= $size;
 				$who         = $isAttacker ? 'Attacker' : 'Defender';
 				Lemuria::Log()->debug($who . ' ' . $unit . ' sends combatant ' . $combatant->Id() . ' (size ' . $size . ') from ' . $name . ' row to the front.');
+				if ($isAttacker) {
+					$message = new AttackerReinforcementMessage(new Entity($unit), $combatant, $size, $battleRow);
+				} else {
+					$message = new DefenderReinforcementMessage(new Entity($unit), $combatant, $size, $battleRow);
+				}
+				BattleLog::getInstance()->add($message);
 				if ($additional <= 0) {
 					break;
 				}
@@ -287,6 +305,12 @@ class Combat extends CombatModel
 				$combatant->Army()->addCombatant($newCombatant);
 				$who = $isAttacker ? 'Attacker' : 'Defender';
 				Lemuria::Log()->debug($who . ' ' . $unit . ' sends ' . $additional . ' persons from combatant ' . $combatant->Id() . ' in ' . $name . ' row to the front as combatant ' . $newCombatant->Id() . '.');
+				if ($isAttacker) {
+					$message = new AttackerSplitMessage(new Entity($unit), $combatant, $newCombatant, $size, $battleRow);
+				} else {
+					$message = new DefenderSplitMessage(new Entity($unit), $combatant, $newCombatant, $size, $battleRow);
+				}
+				BattleLog::getInstance()->add($message);
 				break;
 			}
 		}
@@ -316,8 +340,10 @@ class Combat extends CombatModel
 						$combatant->flee($f);
 						$hasChanges = true;
 						Lemuria::Log()->debug($who . ' fighter ' . $combatant->getId($f) . ' is wounded and flees from battle (chance: ' . $chance . ').');
+						BattleLog::getInstance()->add(new FighterFleesMessage($combatant->getId($f)));
 					} else {
 						Lemuria::Log()->debug($who . ' fighter ' . $combatant->getId($f) . ' is wounded, but could not flee from battle (chance: ' . -$chance . ').');
+						BattleLog::getInstance()->add(new FighterCouldNotFighterMessage($combatant->getId($f)));
 					}
 				}
 			}
@@ -341,14 +367,17 @@ class Combat extends CombatModel
 				unset($combatantRow[$i]);
 				$hasChanges = true;
 				Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' flees from battle.');
+				BattleLog::getInstance()->add(new FleeFromBattleMessage($combatant));
 			} else {
 				$chance = $combatant->canFlee();
 				if ($chance >= 0.0) {
 					unset($combatantRow[$i]);
 					$hasChanges = true;
 					Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' managed to flee from battle (chance: ' . $chance . ').');
+					BattleLog::getInstance()->add(new ManagedToFleeFromBattleMessage($combatant));
 				} else {
 					Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' tried to flee from battle (chance: ' . -$chance . ').');
+					BattleLog::getInstance()->add(new TriedToFleeFromBattleMessage($combatant));
 				}
 			}
 		}
@@ -373,7 +402,7 @@ class Combat extends CombatModel
 		if ($a <= 0 || $a1 <= 0) {
 			return 0;
 		}
-		Lemuria::Log()->debug($message);
+		// Lemuria::Log()->debug($message);
 
 		$damage = 0;
 		$d      = count($defender);
@@ -422,9 +451,11 @@ class Combat extends CombatModel
 				$damage = $comD->assault($fD, $comA, $fA);
 				if ($damage >= $health) {
 					Lemuria::Log()->debug('Enemy ' . $comD->getId($fD) . ' is dead.');
+					BattleLog::getInstance()->add(new FighterIsDeadMessage($comD->getId($fD)));
 				}
 			} else {
 				Lemuria::Log()->debug('Fighter ' . $comA->getId($fA) . ' is dead.');
+				BattleLog::getInstance()->add(new FighterIsDeadMessage($comA->getId($fA)));
 			}
 
 			if ($hit++ >= $hits) {
@@ -454,16 +485,16 @@ class Combat extends CombatModel
 					foreach ($combatant->Distribution()->lose($deceased) as $quantity /* @var Quantity $quantity*/) {
 						$inventory->remove($quantity);
 						$combatant->Army()->Loss()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
-						Lemuria::Log()->debug('Unit ' . $unit . ' loses ' . $quantity . '.');
+						// Lemuria::Log()->debug('Unit ' . $unit . ' loses ' . $quantity . '.');
 					}
 					if ($combatant->Size() <= 0) {
 						unset($combatants[$c]);
 						$combatants = array_values($combatants);
 						$unit->setIsGuarding(false)->setIsHiding(false);
-						Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' was wiped out.');
+						// Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' was wiped out.');
 					} else {
 						$combatant->fighters = array_values($combatant->fighters);
-						Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' has ' . $deceased . ' losses.');
+						// Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' has ' . $deceased . ' losses.');
 					}
 				}
 			}

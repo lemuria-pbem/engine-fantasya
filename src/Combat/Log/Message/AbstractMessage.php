@@ -29,6 +29,7 @@ abstract class AbstractMessage implements Message
 	}
 
 	public function unserialize(array $data): Serializable {
+		$this->validateSerializedData($data);
 		return $this;
 	}
 

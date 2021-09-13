@@ -32,7 +32,7 @@ final class Participant implements \Stringable, Serializable
 	}
 
 	#[ArrayShape(['id' => "\Lemuria\Id", 'name' => "string", 'combatants' => "int", 'fighters' => "int"])]
-	public function serialize(): array {
+	#[Pure] public function serialize(): array {
 		return ['id'         => $this->unit->id->Id(), 'name'     => $this->unit->name,
 				'combatants' => $this->combatants,     'fighters' => $this->fighters];
 	}

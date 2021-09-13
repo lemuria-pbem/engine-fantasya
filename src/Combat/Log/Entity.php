@@ -13,7 +13,7 @@ final class Entity implements \Stringable
 
 	public string $name;
 
-	public static function create(int $id, string $name): Entity {
+	#[Pure] public static function create(int $id, string $name): Entity {
 		$entity       = new self();
 		$entity->id   = new Id($id);
 		$entity->name = $name;
