@@ -167,7 +167,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 
 	protected function getMaximum(): int {
 		if ($this->maximum === null) {
-			$this->maximum = $this->calculus()->knowledge(Trading::class)->Level() * 10;
+			$this->maximum = $this->unit->Size() * $this->calculus()->knowledge(Trading::class)->Level() * 10;
 			$this->trades->setMaximum($this->maximum);
 			$this->remaining = max(0, $this->maximum - $this->trades->count());
 		}
