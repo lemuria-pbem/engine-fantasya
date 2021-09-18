@@ -180,7 +180,7 @@ final class Commerce
 		$traded = 0;
 		while ($n > 0 && ($isOpen || $supply->hasMore())) {
 			if (!$isOpen) {
-				$price  = $supply->one();
+				$price  = $supply->ask();
 				$isOpen = true;
 			}
 			$id = $merchants[$i];
@@ -192,6 +192,7 @@ final class Commerce
 			}
 			$trades = $this->getWorkload($merchant->Unit());
 			if ($trades->CanWork() && $this->tradeOne($merchant, $good, $price)) {
+				$supply->one();
 				$trades->add();
 				$isOpen = false;
 				$i++;

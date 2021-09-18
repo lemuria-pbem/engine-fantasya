@@ -265,6 +265,7 @@
 		"GuardAlreadyMessage": "Die Einheit $id bewacht bereits die Region.",
 		"GuardMessage": "Die Einheit $id bewacht nun die Region.",
 		"GuardWithoutWeaponMessage": "Die Einheit $id kann die Region nicht ohne Waffen bewachen.",
+		"HatchGriffinEggMessage": "Aus einem der Greifeneier von Einheit $unit schlüpft ein Greif.",
 		"HelpMessage": "Die Einheit $id hat HELFEN $agreement für alle Parteien gesetzt.",
 		"HelpNotMessage": "Die Einheit $id hat HELFEN $agreement für alle Parteien widerrufen.",
 		"HelpPartyMessage": "Die Einheit $id hat HELFEN $agreement für die Partei $party gesetzt.",
