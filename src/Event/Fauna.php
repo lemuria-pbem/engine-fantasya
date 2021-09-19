@@ -158,6 +158,9 @@ final class Fauna extends AbstractEvent
 		return $n;
 	}
 
+	/**
+	 * @noinspection DuplicatedCode
+	 */
 	private function distributeMigrants(Quantity $quantity, Neighbours $neighbours, array $distribution, int $n): void {
 		$amount      = [];
 		$destination = [];

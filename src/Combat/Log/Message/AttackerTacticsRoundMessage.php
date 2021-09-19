@@ -6,7 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 class AttackerTacticsRoundMessage extends AbstractMessage
 {
-	#[Pure] public function __toString(): string {
+	#[Pure] public function getDebug(): string {
 		return 'Attacker gets first strike in tactics round.';
 	}
 }

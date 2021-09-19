@@ -31,7 +31,7 @@ class BattleBeginsMessage extends AbstractMessage
 		}
 	}
 
-	#[Pure] public function __toString(): string {
+	#[Pure] public function getDebug(): string {
 		return 'In region ' . $this->region . ' a battle is raging: ' .
 			   'Parties ' . implode(', ', $this->attackers) . ' attack parties ' . implode(', ', $this->defenders) . '.';
 	}

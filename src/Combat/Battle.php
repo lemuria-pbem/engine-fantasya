@@ -207,6 +207,9 @@ class Battle
 		return $combat->embattle();
 	}
 
+	/**
+	 * @noinspection PhpIfWithCommonPartsInspection
+	 */
 	protected function takeLoot(Combat $combat): Battle {
 		$attackerLoot = $this->collectLoot($this->attackArmies);
 		$defenderLoot = $this->collectLoot($this->defendArmies);

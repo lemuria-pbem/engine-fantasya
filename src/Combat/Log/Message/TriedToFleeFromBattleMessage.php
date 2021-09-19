@@ -4,7 +4,7 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 class TriedToFleeFromBattleMessage extends AbstractFleeFromBattleMessage
 {
-	public function __toString(): string {
+	public function getDebug(): string {
 		return 'Combatant ' . $this->combatant . ' tried to flee from battle.';
 	}
 }

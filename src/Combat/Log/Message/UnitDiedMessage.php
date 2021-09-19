@@ -19,7 +19,7 @@ class UnitDiedMessage extends AbstractMessage
 		}
 	}
 
-	public function __toString(): string {
+	public function getDebug(): string {
 		return $this->unit . ' is destroyed.';
 	}
 

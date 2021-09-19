@@ -4,7 +4,7 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 class AttackerWonMessage extends AbstractMessage
 {
-	public function __toString(): string {
+	public function getDebug(): string {
 		return 'Attacker has won the battle, defender is defeated.';
 	}
 }

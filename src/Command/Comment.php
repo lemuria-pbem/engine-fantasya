@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Message\Unit\CommentMessage;
 
 /**
@@ -16,7 +18,7 @@ final class Comment extends UnitCommand
 		$this->message(CommentMessage::class)->p($this->phrase->getLine());
 	}
 
-	protected function checkSize(): bool {
+	#[Pure] protected function checkSize(): bool {
 		return true;
 	}
 }

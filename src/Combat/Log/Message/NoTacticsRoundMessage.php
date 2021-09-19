@@ -6,7 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 class NoTacticsRoundMessage extends AbstractMessage
 {
-	#[Pure] public function __toString(): string {
+	#[Pure] public function getDebug(): string {
 		return 'Both sides are tactically equal.';
 	}
 }

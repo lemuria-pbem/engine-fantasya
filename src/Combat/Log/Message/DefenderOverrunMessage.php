@@ -6,7 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 class DefenderOverrunMessage extends AbstractOverrunMessage
 {
-	#[Pure] public function __toString(): string {
+	#[Pure] public function getDebug(): string {
 		return 'Defender is overrun (need ' . $this->additional . ' more fighters in front row.';
 	}
 }

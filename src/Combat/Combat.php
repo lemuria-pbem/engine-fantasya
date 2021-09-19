@@ -19,7 +19,7 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderSideMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderSplitMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderTacticsRoundMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\EveryoneHasFledMessage;
-use Lemuria\Engine\Fantasya\Combat\Log\Message\FighterCouldNotFighterMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\FighterCouldNotFleeMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\FighterFleesMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\FighterIsDeadMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\FleeFromBattleMessage;
@@ -343,7 +343,7 @@ class Combat extends CombatModel
 						BattleLog::getInstance()->add(new FighterFleesMessage($combatant->getId($f)));
 					} else {
 						Lemuria::Log()->debug($who . ' fighter ' . $combatant->getId($f) . ' is wounded, but could not flee from battle (chance: ' . -$chance . ').');
-						BattleLog::getInstance()->add(new FighterCouldNotFighterMessage($combatant->getId($f)));
+						BattleLog::getInstance()->add(new FighterCouldNotFleeMessage($combatant->getId($f)));
 					}
 				}
 			}
@@ -396,6 +396,9 @@ class Combat extends CombatModel
 		return $damage;
 	}
 
+	/**
+	 * @noinspection PhpUnusedParameterInspection
+	 */
 	protected function attackRowAgainstRow(array $attacker, array $defender, string $message): int {
 		$a  = count($attacker);
 		$a1 = $this->countCombatants($attacker, true);

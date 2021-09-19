@@ -6,7 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 class AttackerNoReinforcementMessage extends AbstractMessage
 {
-	#[Pure] public function __toString(): string {
+	#[Pure] public function getDebug(): string {
 		return 'Attacker has no more forces to reinforce the front.';
 	}
 }

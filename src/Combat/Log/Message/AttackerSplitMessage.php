@@ -7,7 +7,7 @@ use Lemuria\Engine\Fantasya\Combat\Combat;
 
 class AttackerSplitMessage extends AbstractSplitMessage
 {
-	#[Pure] public function __toString(): string {
+	#[Pure] public function getDebug(): string {
 		return 'Attacker unit ' . $this->unit . ' sends ' . $this->count . ' fighters from ' .
 			   Combat::ROW_NAME[$this->battleRow] . ' combatant ' . $this->from . ' to the front as combatant ' .
 			   $this->to . '.';

@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Effect\ContactEffect;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
@@ -55,7 +57,7 @@ final class Contact extends UnitCommand
 		}
 	}
 
-	protected function checkSize(): bool {
+	#[Pure] protected function checkSize(): bool {
 		return true;
 	}
 

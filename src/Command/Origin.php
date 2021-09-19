@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Party\OriginMessage;
@@ -43,7 +45,7 @@ final class Origin extends UnitCommand
 		}
 	}
 
-	protected function checkSize(): bool {
+	#[Pure] protected function checkSize(): bool {
 		return true;
 	}
 

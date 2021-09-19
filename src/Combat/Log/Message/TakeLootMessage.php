@@ -24,7 +24,7 @@ class TakeLootMessage extends AbstractMessage
 		}
 	}
 
-	public function __toString(): string {
+	public function getDebug(): string {
 		return $this->unit . ' takes loot: ' . $this->loot . '.';
 	}
 

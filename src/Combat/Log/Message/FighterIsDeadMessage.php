@@ -4,7 +4,7 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 class FighterIsDeadMessage extends AbstractFighterMessage
 {
-	public function __toString(): string {
+	public function getDebug(): string {
 		return 'Fighter ' . $this->fighter . ' is dead.';
 	}
 }

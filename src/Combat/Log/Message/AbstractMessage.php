@@ -7,6 +7,7 @@ use JetBrains\PhpStorm\ArrayShape;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Log\Message;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Model\Dictionary;
 use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
 
@@ -16,6 +17,13 @@ abstract class AbstractMessage implements Message
 
 	private static ?bool $isDebug = null;
 
+	public function __toString(): string {
+		$dictionary = new Dictionary();
+		$key        = 'combat.message.' . getClass($this);
+		$message    = $dictionary->get($key);
+		return $message === $key ? $this->getDebug() : $this->translate($message);
+	}
+
 	#[ArrayShape(['type' => 'string'])]
 	public function serialize(): array {
 		$data = ['type' => getClass($this)];
@@ -23,7 +31,7 @@ abstract class AbstractMessage implements Message
 			$data[$key] = $value;
 		}
 		if ($this->isDebug()) {
-			$data['debug'] = (string)$this;
+			$data['debug'] = $this->getDebug();
 		}
 		return $data;
 	}
@@ -32,6 +40,12 @@ abstract class AbstractMessage implements Message
 		$this->validateSerializedData($data);
 		return $this;
 	}
+
+	protected function translate(string $template): string {
+		return $template;
+	}
+
+	abstract protected function getDebug(): string;
 
 	protected function getParameters(): array {
 		return [];

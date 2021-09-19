@@ -13,7 +13,7 @@ class AssaultHitMessage extends AbstractMessage
 										protected ?int $damage = null) {
 	}
 
-	#[Pure] public function __toString(): string {
+	#[Pure] public function getDebug(): string {
 		return 'Fighter ' . $this->attacker . ' deals ' . $this->damage . ' damage to enemy ' . $this->defender . '.';
 	}
 

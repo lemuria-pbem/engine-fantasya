@@ -12,7 +12,7 @@ class CombatRoundMessage extends AbstractMessage
 	public function __construct(protected ?int $round = null) {
 	}
 
-	#[Pure] public function __toString(): string {
+	#[Pure] public function getDebug(): string {
 		return 'Combat round ' . $this->round . ' starts.';
 	}
 

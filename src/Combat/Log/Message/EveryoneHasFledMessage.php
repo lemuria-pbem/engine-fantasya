@@ -6,7 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 class EveryoneHasFledMessage extends AbstractMessage
 {
-	#[Pure] public function __toString(): string {
+	#[Pure] public function getDebug(): string {
 		return 'Everyone has fled before the battle could begin.';
 	}
 }

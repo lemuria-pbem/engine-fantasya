@@ -60,7 +60,7 @@ abstract class UnitCommand extends AbstractCommand
 		}
 	}
 
-	protected function checkSize(): bool {
+	#[Pure] protected function checkSize(): bool {
 		return $this->unit->Size() > 0;
 	}
 

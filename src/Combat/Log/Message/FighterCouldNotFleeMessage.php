@@ -2,9 +2,9 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-class FighterCouldNotFighterMessage extends AbstractFighterMessage
+class FighterCouldNotFleeMessage extends AbstractFighterMessage
 {
-	public function __toString(): string {
+	public function getDebug(): string {
 		return 'Fighter ' . $this->fighter . ' is wounded, but could not flee from battle.';
 	}
 }

@@ -12,7 +12,7 @@ class AssaultBlockMessage extends AbstractMessage
 	#[Pure] public function __construct(protected ?string $attacker = null, protected ?string $defender = null) {
 	}
 
-	#[Pure] public function __toString(): string {
+	#[Pure] public function getDebug(): string {
 		return 'Fighter ' . $this->defender . ' blocks attack from ' . $this->attacker . '.';
 	}
 

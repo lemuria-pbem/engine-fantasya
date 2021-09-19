@@ -6,7 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 class DefenderSideMessage extends AbstractBattleSideMessage
 {
-	#[Pure] public function __toString(): string {
+	#[Pure] public function getDebug(): string {
 		return 'On the defending side there are participants ' . implode(', ', $this->participants) . '.';
 	}
 }

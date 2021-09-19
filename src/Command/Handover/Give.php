@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Handover;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
@@ -85,7 +87,7 @@ final class Give extends UnitCommand
 		}
 	}
 
-	protected function checkSize(): bool {
+	#[Pure] protected function checkSize(): bool {
 		return true;
 	}
 

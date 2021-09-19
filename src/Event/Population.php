@@ -169,6 +169,9 @@ final class Population extends AbstractEvent
 		return $n;
 	}
 
+	/**
+	 * @noinspection DuplicatedCode
+	 */
 	private function distributeMigrants(int $migrants, Neighbours $neighbours, array $distribution, int $n): void {
 		$amount      = [];
 		$destination = [];

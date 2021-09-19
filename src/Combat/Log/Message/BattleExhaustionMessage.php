@@ -12,7 +12,7 @@ class BattleExhaustionMessage extends AbstractMessage
 	#[Pure] public function __construct(protected ?int $rounds = null) {
 	}
 
-	public function __toString(): string {
+	public function getDebug(): string {
 		return 'Battle ended in a draw due to exhaustion (' . $this->rounds. ' rounds without damage).';
 	}
 

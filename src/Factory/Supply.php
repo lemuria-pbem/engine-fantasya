@@ -83,14 +83,13 @@ class Supply implements \Countable
 		$total = 0.0;
 		$i     = 0;
 
+		$price = $this->offer->Price();
 		if ($this->isOffer) {
-			$price = $this->offer->Price();
 			while ($i++ < $steps) {
 				$total += $step * $price;
 				$price += $value;
 			}
 		} else {
-			$price = $this->offer->Price();
 			while ($i++ < $steps) {
 				$total += $step * $price;
 				$price -= $value;
