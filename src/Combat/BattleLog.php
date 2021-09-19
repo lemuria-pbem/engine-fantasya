@@ -5,12 +5,14 @@ namespace Lemuria\Engine\Fantasya\Combat;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\CountableTrait;
 use Lemuria\Engine\Combat\Battle as BattleModel;
 use Lemuria\Engine\Fantasya\Combat\Log\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait;
 use Lemuria\Exception\UnserializeException;
 use Lemuria\Id;
+use Lemuria\IteratorTrait;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Location;
@@ -20,6 +22,8 @@ use Lemuria\SerializableTrait;
 class BattleLog implements BattleModel
 {
 	use BuilderTrait;
+	use CountableTrait;
+	use IteratorTrait;
 	use SerializableTrait;
 
 	private Region $region;
@@ -55,6 +59,18 @@ class BattleLog implements BattleModel
 				$this->parties[] = $party;
 			}
 		}
+		$this->initIterator($this->log);
+	}
+
+	#[Pure] public function Location(): Location {
+		return $this->region;
+	}
+
+	/**
+	 * @return Party[]
+	 */
+	public function Participants(): array {
+		return $this->parties;
 	}
 
 	public function Battle(): Battle {
@@ -89,19 +105,9 @@ class BattleLog implements BattleModel
 		return $this;
 	}
 
-	#[Pure] public function Location(): Location {
-		return $this->region;
-	}
-
-	/**
-	 * @return Party[]
-	 */
-	public function Participants(): array {
-		return $this->parties;
-	}
-
 	public function add(Message $message): BattleLog {
 		$this->log[] = $message;
+		$this->count++;
 		return $this;
 	}
 
