@@ -59,7 +59,6 @@ class BattleLog implements BattleModel
 				$this->parties[] = $party;
 			}
 		}
-		$this->initIterator($this->log);
 	}
 
 	#[Pure] public function Location(): Location {
@@ -75,6 +74,10 @@ class BattleLog implements BattleModel
 
 	public function Battle(): Battle {
 		return $this->battle;
+	}
+
+	public function current(): Message {
+		return $this->log[$this->index];
 	}
 
 	#[ArrayShape(['region' => "int", 'parties' => "array", 'messages' => "array"])]
