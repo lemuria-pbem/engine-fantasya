@@ -8,6 +8,8 @@ use Lemuria\Serializable;
 
 abstract class AbstractOverrunMessage extends AbstractMessage
 {
+	protected array $simpleParameters = ['additional'];
+
 	public function __construct(protected ?int $additional = null) {
 	}
 
@@ -20,6 +22,15 @@ abstract class AbstractOverrunMessage extends AbstractMessage
 	#[ArrayShape(['additional' => 'int'])]
 	#[Pure] protected function getParameters(): array {
 		return ['additional' => $this->additional];
+	}
+
+	protected function translate(string $template): string {
+		$message = parent::translate($template);
+		$index   = $this->additional > 1 ? 1 : 0;
+		$will    = parent::dictionary()->get('combat.will', $index);
+		$message = str_replace('$will', $will, $message);
+		$fighter = parent::dictionary()->get('combat.fighter', $index);
+		return str_replace('$fighter', $fighter, $message);
 	}
 
 	protected function validateSerializedData(array &$data): void {

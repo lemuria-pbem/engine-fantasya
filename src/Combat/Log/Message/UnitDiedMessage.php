@@ -11,6 +11,8 @@ use Lemuria\Serializable;
 
 class UnitDiedMessage extends AbstractMessage
 {
+	protected array $simpleParameters = ['unit'];
+
 	protected Entity $unit;
 
 	#[Pure] public function __construct(?Unit $unit = null) {

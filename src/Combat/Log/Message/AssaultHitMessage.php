@@ -9,6 +9,8 @@ use Lemuria\Serializable;
 
 class AssaultHitMessage extends AbstractMessage
 {
+	protected array $simpleParameters = ['attacker', 'damage', 'defender'];
+
 	#[Pure] public function __construct(protected ?string $attacker = null, protected ?string $defender = null,
 										protected ?int $damage = null) {
 	}
@@ -28,6 +30,12 @@ class AssaultHitMessage extends AbstractMessage
 	#[ArrayShape(['attacker' => 'string', 'defender' => 'string', 'damage' => 'int'])]
 	#[Pure] protected function getParameters(): array {
 		return ['attacker' => $this->attacker, 'defender' => $this->defender, 'damage' => $this->damage];
+	}
+
+	protected function translate(string $template): string {
+		$message  = parent::translate($template);
+		$hitpoint = parent::dictionary()->get('combat.hitpoint', $this->damage > 1 ? 1 : 0);
+		return str_replace('$hitpoint', $hitpoint, $message);
 	}
 
 	protected function validateSerializedData(array &$data): void {

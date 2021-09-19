@@ -9,11 +9,13 @@ use Lemuria\Serializable;
 
 class AssaultBlockMessage extends AbstractMessage
 {
+	protected array $simpleParameters = ['attacker', 'defender'];
+
 	#[Pure] public function __construct(protected ?string $attacker = null, protected ?string $defender = null) {
 	}
 
 	#[Pure] public function getDebug(): string {
-		return 'Fighter ' . $this->defender . ' blocks attack from ' . $this->attacker . '.';
+		return $this->defender . ' blocks attack from ' . $this->attacker . '.';
 	}
 
 	public function unserialize(array $data): Serializable {

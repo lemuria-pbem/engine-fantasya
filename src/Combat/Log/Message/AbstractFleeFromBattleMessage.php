@@ -10,6 +10,8 @@ use Lemuria\Serializable;
 
 abstract class AbstractFleeFromBattleMessage extends AbstractMessage
 {
+	protected array $simpleParameters = ['combatant'];
+
 	protected string $combatant;
 
 	#[Pure] public function __construct(?Combatant $combatant = null) {

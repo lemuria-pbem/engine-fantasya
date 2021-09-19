@@ -9,6 +9,8 @@ use Lemuria\Serializable;
 
 class BattleExhaustionMessage extends AbstractMessage
 {
+	protected array $simpleParameters = ['rounds'];
+
 	#[Pure] public function __construct(protected ?int $rounds = null) {
 	}
 

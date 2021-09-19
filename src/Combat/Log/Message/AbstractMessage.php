@@ -17,10 +17,16 @@ abstract class AbstractMessage implements Message
 
 	private static ?bool $isDebug = null;
 
+	protected static ?Dictionary $dictionary = null;
+
+	/**
+	 * @var string[]
+	 */
+	protected array $simpleParameters = [];
+
 	public function __toString(): string {
-		$dictionary = new Dictionary();
-		$key        = 'combat.message.' . getClass($this);
-		$message    = $dictionary->get($key);
+		$key     = 'combat.message.' . getClass($this);
+		$message = self::dictionary()->get($key);
 		return $message === $key ? $this->getDebug() : $this->translate($message);
 	}
 
@@ -41,8 +47,19 @@ abstract class AbstractMessage implements Message
 		return $this;
 	}
 
+	protected static function dictionary(): Dictionary {
+		if (!self::$dictionary) {
+			self::$dictionary = new Dictionary();
+		}
+		return self::$dictionary;
+	}
+
 	protected function translate(string $template): string {
-		return $template;
+		$message = $template;
+		foreach ($this->simpleParameters as $name) {
+			$message = str_replace('$' . $name, (string)$this->$name, $message);
+		}
+		return $message;
 	}
 
 	abstract protected function getDebug(): string;

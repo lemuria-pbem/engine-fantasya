@@ -5,12 +5,15 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Combat\Combat;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 use Lemuria\Serializable;
 
 abstract class AbstractReinforcementMessage extends AbstractMessage
 {
+	protected array $simpleParameters = ['combatant', 'count', 'unit'];
+
 	protected string $combatant;
 
 	#[Pure] public function __construct(protected ?Entity $unit = null, ?Combatant $combatant = null,
@@ -33,6 +36,14 @@ abstract class AbstractReinforcementMessage extends AbstractMessage
 	#[Pure] protected function getParameters(): array {
 		return ['id'    => $this->unit->id->Id(), 'name'      => $this->unit->name, 'combatant' => $this->combatant,
 			    'count' => $this->count,          'battleRow' => $this->battleRow];
+	}
+
+	protected function translate(string $template): string {
+		$message   = parent::translate($template);
+		$fighter   = parent::dictionary()->get('combat.fighter', $this->count > 1 ? 1 : 0);
+		$message   = str_replace('$fighter', $fighter, $message);
+		$battleRow = parent::dictionary()->get('combat.battleRow.' . Combat::ROW_NAME[$this->battleRow]);
+		return str_replace('$battleRow', $battleRow, $message);
 	}
 
 	protected function validateSerializedData(array &$data): void {

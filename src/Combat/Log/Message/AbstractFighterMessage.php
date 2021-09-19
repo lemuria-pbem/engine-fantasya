@@ -9,6 +9,8 @@ use Lemuria\Serializable;
 
 abstract class AbstractFighterMessage extends AbstractMessage
 {
+	protected array $simpleParameters = ['fighter'];
+
 	#[Pure] public function __construct(protected ?string $fighter = null) {
 	}
 

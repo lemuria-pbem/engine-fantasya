@@ -11,6 +11,8 @@ use Lemuria\Serializable;
 
 abstract class AbstractSplitMessage extends AbstractMessage
 {
+	protected array $simpleParameters = ['count', 'from', 'to', 'unit'];
+
 	protected string $from;
 
 	protected string $to;
