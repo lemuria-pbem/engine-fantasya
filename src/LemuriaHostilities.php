@@ -19,6 +19,11 @@ class LemuriaHostilities implements Hostilities
 	private array $regionParty = [];
 
 	/**
+	 * @var array(int=>array)
+	 */
+	private array $party = [];
+
+	/**
 	 * @var BattleLog[]
 	 */
 	private array $logs = [];
@@ -29,7 +34,8 @@ class LemuriaHostilities implements Hostilities
 	 * Search for the battle in a location where a specific entity is engaged.
 	 */
 	#[Pure] public function find(Location $location, Identifiable $entity): ?Battle {
-		return $this->regionParty[$location->Id()->Id()][$entity->Id()->Id()] ?? null;
+		$id = $this->regionParty[$location->Id()->Id()][$entity->Id()->Id()] ?? null;
+		return $id ? $this->logs[$id] : null;
 	}
 
 	/**
@@ -40,7 +46,30 @@ class LemuriaHostilities implements Hostilities
 	#[Pure] public function findAll(Location $location): array {
 		$id = $location->Id()->Id();
 		if (isset($this->regionParty[$id])) {
-			return array_values($this->regionParty[$id]);
+			$logs = [];
+			foreach ($this->regionParty[$id] as $parties) {
+				foreach ($parties as $battle) {
+					$logs[] = $this->logs[$battle];
+				}
+			}
+			return $logs;
+		}
+		return [];
+	}
+
+	/**
+	 * Search for all battles where a specific entity is engaged.
+	 *
+	 * @return Battle[]
+	 */
+	#[Pure] public function findFor(Identifiable $entity): array {
+		$id = $entity->Id()->Id();
+		if (isset($this->party[$id])) {
+			$logs = [];
+			foreach ($this->party[$id] as $battle) {
+				$logs[] = $this->logs[$battle];
+			}
+			return $logs;
 		}
 		return [];
 	}
@@ -54,6 +83,7 @@ class LemuriaHostilities implements Hostilities
 		$regionId = $battle->Location()->Id()->Id();
 		foreach ($battle->Participants() as $party) {
 			$partyId = $party->Id()->Id();
+			$this->party[$partyId][]                = $id;
 			$this->regionParty[$regionId][$partyId] = $id;
 		}
 		return $this;
