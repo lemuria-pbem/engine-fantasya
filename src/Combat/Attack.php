@@ -167,12 +167,17 @@ class Attack
 		}
 		$attSkill = $skill - $malus;
 		$defSkill = $block + $bonus;
-		$sum = $attSkill + $defSkill - 1;
-		if ($sum > 0) {
-			$hit = rand(0, $sum);
-			// Lemuria::Log()->debug('Attack/Block calculation: A:' . $skill . '-' . $malus . ' B:' . $block . '+' . $bonus . ' hit:' . $hit . '/' . $sum);
-			return $hit < $attSkill;
+		if ($attSkill > 0) {
+			if ($defSkill > 0) {
+				$sum = $attSkill + $defSkill - 1;
+				$hit = rand(0, $sum);
+				// Lemuria::Log()->debug('Attack/Block calculation: A:' . $skill . '-' . $malus . ' B:' . $block . '+' . $bonus . ' hit:' . $hit . '/' . $sum);
+				return $hit < $attSkill;
+			}
+			// Lemuria::Log()->debug('Attack is successful, defender has no skill.');
+			return true;
 		}
+		// Lemuria::Log()->debug('Attack is not successful, attacker has no skill.');
 		return false;
 	}
 

@@ -26,7 +26,6 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\FleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\ManagedToFleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\TriedToFleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Participant;
-use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
 use Lemuria\Model\Fantasya\Party;
@@ -224,21 +223,30 @@ class Combat extends CombatModel
 	protected function arrangeBattleRows(): bool {
 		$attackers = $this->countRowCombatants($this->attacker, self::FRONT);
 		$defenders = $this->countRowCombatants($this->defender, self::FRONT);
-		$ratio = $defenders > 0 ? $attackers / $defenders : PHP_INT_MAX;
-		if ($ratio > self::OVERRUN) {
-			$additional = (int)ceil($attackers / self::OVERRUN) - $defenders;
-			$side       = &$this->defender;
-			$isAttacker = false;
-			BattleLog::getInstance()->add(new DefenderOverrunMessage($additional));
-		} elseif ($ratio < 1.0 / self::OVERRUN) {
-			$additional = (int)ceil($defenders / self::OVERRUN) - $attackers;
-			$side       = &$this->attacker;
-			$isAttacker = true;
-			BattleLog::getInstance()->add(new AttackerOverrunMessage($additional));
+		if ($attackers > 0 || $defenders > 0) {
+			$ratio = $defenders > 0 ? $attackers / $defenders : PHP_INT_MAX;
+			if ($ratio > self::OVERRUN) {
+				$additional = (int)ceil($attackers / self::OVERRUN) - $defenders;
+				BattleLog::getInstance()->add(new DefenderOverrunMessage($additional));
+				$this->arrangeRows($additional, $this->defender, false);
+			} elseif ($ratio < 1.0 / self::OVERRUN) {
+				$additional = (int)ceil($defenders / self::OVERRUN) - $attackers;
+				BattleLog::getInstance()->add(new AttackerOverrunMessage($additional));
+				$this->arrangeRows($additional, $this->attacker, true);
+			} else {
+				return true;
+			}
 		} else {
-			return true;
+			BattleLog::getInstance()->add(new AttackerOverrunMessage(1));
+			$this->arrangeRows(1, $this->attacker, true);
+			BattleLog::getInstance()->add(new DefenderOverrunMessage(1));
+			$this->arrangeRows(1, $this->defender, false);
 		}
+		$this->logSideDistribution();
+		return $this->hasAttackers() && $this->hasDefenders();
+	}
 
+	protected function arrangeRows(int $additional, array &$side, $isAttacker): void {
 		if ($additional > 0) {
 			$additional = $this->arrangeFromRow($side, $isAttacker, self::BACK, $additional);
 		}
@@ -255,9 +263,6 @@ class Combat extends CombatModel
 				BattleLog::getInstance()->add(new DefenderNoReinforcementMessage());
 			}
 		}
-
-		$this->logSideDistribution();
-		return $this->hasAttackers() && $this->hasDefenders();
 	}
 
 	protected function arrangeFromRow(array &$side, bool $isAttacker, int $battleRow, int $additional): int {
@@ -269,10 +274,9 @@ class Combat extends CombatModel
 
 		for ($i = $n - 1; $i >= 0; $i--) {
 			/** @var Combatant $combatant */
-			$combatant    = $side[$battleRow][$i];
-			$unit         = $combatant->Unit();
-			$distribution = $combatant->Distribution();
-			$size         = $combatant->Size();
+			$combatant = $side[$battleRow][$i];
+			$unit      = $combatant->Unit();
+			$size      = $combatant->Size();
 			if ($size <= $additional) {
 				$side[self::FRONT][] = $combatant->setBattleRow(self::FRONT);
 				unset($side[$battleRow][$i]);
@@ -289,28 +293,18 @@ class Combat extends CombatModel
 					break;
 				}
 			} else {
-				$newDistribution = new Distribution();
-				foreach ($distribution as $quantity /* @var Quantity $quantity */) {
-					$count = (int)round($additional * $quantity->Count() / $size);
-					$newDistribution->add(new Quantity($quantity->Commodity(), $count));
-				}
-				foreach ($newDistribution as $quantity /* @var Quantity $quantity */) {
-					$distribution->remove(new Quantity($quantity->Commodity(), $quantity->Count()));
-				}
-				$newDistribution->setSize($additional);
-				$newCombatant = new Combatant($combatant->Army(), $unit);
-				$newCombatant->setBattleRow(self::FRONT)->setDistribution($distribution);
-				$distribution->setSize($size - $additional);
-				$additional = 0;
+				$newCombatant = $combatant->split($additional);
 				$combatant->Army()->addCombatant($newCombatant);
-				$who = $isAttacker ? 'Attacker' : 'Defender';
+				$side[self::FRONT][] = $newCombatant;
+				$who                 = $isAttacker ? 'Attacker' : 'Defender';
 				Lemuria::Log()->debug($who . ' ' . $unit . ' sends ' . $additional . ' persons from combatant ' . $combatant->Id() . ' in ' . $name . ' row to the front as combatant ' . $newCombatant->Id() . '.');
 				if ($isAttacker) {
-					$message = new AttackerSplitMessage(new Entity($unit), $combatant, $newCombatant, $size, $battleRow);
+					$message = new AttackerSplitMessage(new Entity($unit), $combatant, $newCombatant, $additional, $battleRow);
 				} else {
-					$message = new DefenderSplitMessage(new Entity($unit), $combatant, $newCombatant, $size, $battleRow);
+					$message = new DefenderSplitMessage(new Entity($unit), $combatant, $newCombatant, $additional, $battleRow);
 				}
 				BattleLog::getInstance()->add($message);
+				$additional = 0;
 				break;
 			}
 		}
@@ -461,7 +455,7 @@ class Combat extends CombatModel
 				BattleLog::getInstance()->add(new FighterIsDeadMessage($comA->getId($fA)));
 			}
 
-			if ($hit++ >= $hits) {
+			if (++$hit >= $hits) {
 				$fA++;
 				$hit = 0;
 			}

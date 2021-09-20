@@ -4,9 +4,9 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultHitMessage;
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultHitMessage;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
@@ -17,6 +17,7 @@ use Lemuria\Model\Fantasya\Commodity\Ironshield;
 use Lemuria\Model\Fantasya\Commodity\Mail;
 use Lemuria\Model\Fantasya\Commodity\Woodshield;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Weapon;
 
@@ -127,9 +128,13 @@ class Combatant
 	}
 
 	public function setDistribution(Distribution $distribution): Combatant {
+		$n                  = $distribution->Size();
 		$calculus           = new Calculus($this->unit);
 		$this->distribution = $distribution;
-		$this->fighters     = array_fill(0, $distribution->Size(), new Fighter($calculus->hitpoints()));
+		$this->fighters     = array_fill(0, $n, null);
+		for ($i = 0; $i < $n; $i++) {
+			$this->fighters[$i] = new Fighter($calculus->hitpoints());
+		}
 		$this->initWeaponSkill();
 		$this->initShield();
 		$this->initArmor();
@@ -169,6 +174,34 @@ class Combatant
 		return $this;
 	}
 
+	public function split(int $size): Combatant {
+		if ($size >= $this->Size()) {
+			throw new LemuriaException('Split would result in empty combatant.');
+		}
+
+		$newDistribution = new Distribution();
+		foreach ($this->distribution as $quantity /* @var Quantity $quantity */) {
+			$count = (int)round($size * $quantity->Count() / $this->Size());
+			$newDistribution->add(new Quantity($quantity->Commodity(), $count));
+		}
+		foreach ($newDistribution as $quantity /* @var Quantity $quantity */) {
+			$this->distribution->remove(new Quantity($quantity->Commodity(), $quantity->Count()));
+		}
+		$this->distribution->setSize($this->Size() - $size);
+		$newDistribution->setSize($size);
+
+		$newCombatant = new Combatant($this->army, $this->unit);
+		$newCombatant->setBattleRow(CombatModel::FRONT);
+
+		$newCombatant->distribution = $newDistribution;
+		$newCombatant->fighters     = array_splice($this->fighters, -$size, $size);
+		$newCombatant->initWeaponSkill();
+		$newCombatant->initShield();
+		$newCombatant->initArmor();
+
+		return $newCombatant;
+	}
+
 	protected function initWeaponSkill(): void {
 		if (is_int($this->battleRow) && $this->distribution) {
 			$this->weaponSkill = $this->getWeaponSkill();
@@ -185,7 +218,7 @@ class Combatant
 			if (!$isMelee && $weaponSkill->isDistant() && $this->hasOneWeaponOf($weaponSkill)) {
 				return $weaponSkill;
 			}
-			if ($weaponSkill->isUnarmed() && $this->hasOneWeaponOf($weaponSkill)) {
+			if ($weaponSkill->isUnarmed()) {
 				return $weaponSkill;
 			}
 		}

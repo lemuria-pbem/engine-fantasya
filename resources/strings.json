@@ -16,6 +16,7 @@
 		"Plain": "die",
 		"Swamp": "der"
 	},
+	"battleRow": ["flieht aus dem Kampf", "kämpft nicht", "kämpft defensiv", "kämpft hinten", "kämpft vorne", "kämpft aggressiv"],
 	"building": {
 		"Cabin": "Holzfällerhütte",
 		"Citadel": "Zitadelle",

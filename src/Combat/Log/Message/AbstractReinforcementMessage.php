@@ -38,6 +38,9 @@ abstract class AbstractReinforcementMessage extends AbstractMessage
 			    'count' => $this->count,          'battleRow' => $this->battleRow];
 	}
 
+	/**
+	 * @noinspection DuplicatedCode
+	 */
 	protected function translate(string $template): string {
 		$message   = parent::translate($template);
 		$fighter   = parent::dictionary()->get('combat.fighter', $this->count > 1 ? 1 : 0);
