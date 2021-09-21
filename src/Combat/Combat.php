@@ -444,17 +444,8 @@ class Combat extends CombatModel
 			}
 
 			if ($comA->fighters[$fA]->health > 0) {
-				$health = $comD->fighters[$fD]->health;
-				$damage = $comD->assault($fD, $comA, $fA);
-				if ($damage >= $health) {
-					Lemuria::Log()->debug('Enemy ' . $comD->getId($fD) . ' is dead.');
-					BattleLog::getInstance()->add(new FighterIsDeadMessage($comD->getId($fD)));
-				}
-			} else {
-				Lemuria::Log()->debug('Fighter ' . $comA->getId($fA) . ' is dead.');
-				BattleLog::getInstance()->add(new FighterIsDeadMessage($comA->getId($fA)));
+				$damage += $comD->assault($fD, $comA, $fA);
 			}
-
 			if (++$hit >= $hits) {
 				$fA++;
 				$hit = 0;
@@ -471,6 +462,9 @@ class Combat extends CombatModel
 				$size = $combatant->Size();
 				foreach ($combatant->fighters as $f => $fighter) {
 					if ($fighter->health <= 0) {
+						$id = $combatant->getId($f);
+						Lemuria::Log()->debug('Fighter ' . $id . ' is dead.');
+						BattleLog::getInstance()->add(new FighterIsDeadMessage($id));
 						unset($combatant->fighters[$f]);
 					}
 				}

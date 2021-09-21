@@ -152,12 +152,16 @@ class Combatant
 		$health = $this->fighters[$fighter]->health;
 		$damage = $attacker->attack->perform($assaulter, $this, $fighter);
 		if ($damage > 0) {
-			$health -= $damage > $health ? $health : $damage;
+			if ($health > $damage) {
+				$this->fighters[$fighter]->health -= $damage;
+			} else {
+				$this->fighters[$fighter]->health  = 0;
+				$this->fighters[$fighter]->hasDied = true;
+			}
 			Lemuria::Log()->debug('Fighter ' . $attacker->getId($assaulter) . ' deals ' . $damage . ' damage to enemy ' . $this->getId($fighter) . '.');
 		}
 		if (is_int($damage)) {
 			BattleLog::getInstance()->add(new AssaultHitMessage($attacker->getId($assaulter), $this->getId($fighter), $damage));
-			$this->fighters[$fighter]->health = $health;
 			return $damage;
 		}
 		return 0;
