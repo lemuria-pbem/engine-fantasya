@@ -7,6 +7,7 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerWonMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleEndedInDrawMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleEndsMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleExhaustionMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderWonMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\NoTacticsRoundMessage;
@@ -104,6 +105,7 @@ class Battle
 				}
 			}
 		}
+		BattleLog::getInstance()->add(new BattleEndsMessage());
 		$this->treatInjuredUnits();
 		return $this->takeLoot($combat);
 	}
