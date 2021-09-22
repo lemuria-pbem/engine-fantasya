@@ -336,7 +336,7 @@ class Combat extends CombatModel
 						Lemuria::Log()->debug($who . ' fighter ' . $combatant->getId($f) . ' is wounded and flees from battle (chance: ' . $chance . ').');
 						BattleLog::getInstance()->add(new FighterFleesMessage($combatant->getId($f)));
 					} else {
-						Lemuria::Log()->debug($who . ' fighter ' . $combatant->getId($f) . ' is wounded, but could not flee from battle (chance: ' . -$chance . ').');
+						// Lemuria::Log()->debug($who . ' fighter ' . $combatant->getId($f) . ' is wounded, but could not flee from battle (chance: ' . -$chance . ').');
 						BattleLog::getInstance()->add(new FighterCouldNotFleeMessage($combatant->getId($f)));
 					}
 				}
@@ -344,7 +344,7 @@ class Combat extends CombatModel
 			if ($combatant->Size() <= 0) {
 				$combatant->flee();
 				unset($combatantRow[$i]);
-				Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' has fled from battle.');
+				// Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' has fled from battle.');
 			}
 		}
 		if ($hasChanges) {

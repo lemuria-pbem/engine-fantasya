@@ -260,7 +260,7 @@ class Battle
 		foreach ($loot as $quantity /* @var Quantity $quantity */) {
 			$unit = $heirs->random();
 			$unit->Inventory()->add($quantity);
-			Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
+			// Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
 			BattleLog::getInstance()->add(new TakeLootMessage($unit, $quantity));
 		}
 	}

@@ -156,7 +156,6 @@ class Combatant
 				$this->fighters[$fighter]->health -= $damage;
 			} else {
 				$this->fighters[$fighter]->health  = 0;
-				$this->fighters[$fighter]->hasDied = true;
 			}
 			Lemuria::Log()->debug('Fighter ' . $attacker->getId($assaulter) . ' deals ' . $damage . ' damage to enemy ' . $this->getId($fighter) . '.');
 		}

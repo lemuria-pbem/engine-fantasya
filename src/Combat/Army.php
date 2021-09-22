@@ -40,7 +40,7 @@ class Army
 		$this->id    = ++self::$nextId;
 		$this->units = new People();
 		$this->loss  = new Resources();
-		Lemuria::Log()->debug('New army ' . $this->id . ' for party ' . $this->party . '.');
+		// Lemuria::Log()->debug('New army ' . $this->id . ' for party ' . $this->party . '.');
 	}
 
 	public function Id(): int {
@@ -79,7 +79,7 @@ class Army
 			$combatant->setBattleRow($battleRow)->setDistribution($distribution);
 			$this->combatants[] = $combatant;
 		}
-		Lemuria::Log()->debug('Army ' . $this->id . ': Unit ' . $unit . ' (size: ' . $unit->Size() . ') forms ' . count($this->combatants) . ' combatants.');
+		// Lemuria::Log()->debug('Army ' . $this->id . ': Unit ' . $unit . ' (size: ' . $unit->Size() . ') forms ' . count($this->combatants) . ' combatants.');
 		return $this;
 	}
 
