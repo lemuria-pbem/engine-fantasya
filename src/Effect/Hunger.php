@@ -3,8 +3,10 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
 use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Message\Unit\HungerMessage;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Lemuria;
 
 final class Hunger extends AbstractUnitEffect
 {
@@ -25,16 +27,14 @@ final class Hunger extends AbstractUnitEffect
 	}
 
 	protected function run(): void {
-		$unit   = $this->Unit();
-		$health = $unit->Health();
-		if ($health >= 0.9) {
-			$hunger = $this->hunger < 0.5 ? 15 : 25;
-		} else {
-			$hunger = $this->hunger < 0.5 ? 25 : 40;
-		}
-		$hunger = round(rand($hunger - 3, $hunger + 3) / 100, 2);
-		$health = max(0.0, $health - $hunger);
+		$unit         = $this->Unit();
+		$calculus     = new Calculus($unit);
+		$hitpoints    = $calculus->hitpoints();
+		$hunger       = $calculus->hunger($unit, $this->hunger);
+		$newHitpoints = $unit->Health() * $hitpoints - $hunger;
+		$health       = max(0.0, round($newHitpoints / $hitpoints, 2));
 		$unit->setHealth($health);
+		Lemuria::Log()->debug('Unit ' . $unit . ' takes ' . $hunger . ' damage from hunger.');
 		$this->message(HungerMessage::class, $unit)->p($health);
 	}
 }

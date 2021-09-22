@@ -5,7 +5,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Fehler/Verbesserungen in 0.7
 
 - Wirkung von Berserkerblut, Elixier der Macht, Heiltrank
-- Hunger und Regeneration (Gesundheit, Aura) abhängig von Rasse
 
 ## Neue Funktionen
 

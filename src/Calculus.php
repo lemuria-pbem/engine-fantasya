@@ -355,6 +355,16 @@ final class Calculus
 		return $existing?->Potion() === $potion ? $existing : null;
 	}
 
+	#[Pure] public function hunger(Unit $unit, float $currentHunger = 0.0): int {
+		$health = $unit->Health();
+		if ($health >= 0.9) {
+			$factor = $currentHunger < 0.5 ? 1.1 : 1.2;
+		} else {
+			$factor = $currentHunger < 0.5 ? 1.2 : 1.3;
+		}
+		return (int)round($factor * $unit->Race()->Hunger());
+	}
+
 	#[Pure] private function transport(?Item $quantity, int $reduceBy = 0): int {
 		$transport = $quantity?->getObject();
 		if ($transport instanceof Transport) {

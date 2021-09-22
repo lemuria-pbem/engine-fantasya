@@ -16,10 +16,6 @@ use Lemuria\Model\Fantasya\Unit;
  */
 final class Recreate extends AbstractEvent
 {
-	private const HEALTH_RATE = 0.3;
-
-	private const AURA_RATE = 0.2;
-
 	public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
 	}
@@ -47,10 +43,10 @@ final class Recreate extends AbstractEvent
 		$hitpoints  = $this->context->getCalculus($unit)->hitpoints();
 		$health     = (int)floor($unit->Health() * $hitpoints);
 		$difference = $hitpoints - $health;
-		$healing    = (int)floor(self::HEALTH_RATE * $unit->Race()->Hitpoints());
-		$heal       = min($difference, $healing);
+		$heal       = min($difference, $unit->Race()->Hunger());
 		$healed     = ($health + $heal) / $hitpoints;
 		$unit->setHealth($healed);
+		Lemuria::Log()->debug('Unit ' . $unit . ' regenerates ' . $heal . ' hitpoints.');
 		$this->message(RecreateHealthMessage::class, $unit)->p($heal);
 	}
 
@@ -60,8 +56,9 @@ final class Recreate extends AbstractEvent
 		$maximum    = $aura->Maximum();
 		$difference = $maximum - $current;
 		if ($difference > 0) {
-			$regain = min($difference, max(1, (int)floor(self::AURA_RATE * $maximum)));
+			$regain = min($difference, max(1, (int)floor($unit->Race()->Refill() * $maximum)));
 			$aura->setAura($current + $regain);
+			Lemuria::Log()->debug('Unit ' . $unit . ' regenerates ' . $regain . ' aura.');
 			$this->message(RecreateAuraMessage::class, $unit)->p($regain);
 		}
 	}
