@@ -6,12 +6,21 @@ use Lemuria\Model\Fantasya\Potion;
 
 class Fighter
 {
-	public int $opponent;
-
-	public int $fighter;
-
 	public ?Potion $potion = null;
 
+	private bool $hasBeenHealed = false;
+
 	public function __construct(public int $health) {
+	}
+
+	public function HasBeenHealed(): bool {
+		return $this->hasBeenHealed;
+	}
+
+	public function heal(): Fighter {
+		$this->health = 1;
+		$this->potion = null;
+		$this->hasBeenHealed = true;
+		return $this;
 	}
 }

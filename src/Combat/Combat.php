@@ -465,8 +465,7 @@ class Combat extends CombatModel
 				foreach ($combatant->fighters as $f => $fighter) {
 					if ($fighter->health <= 0) {
 						if ($fighter->potion instanceof HealingPotion) {
-							$combatant->fighters[$f]->health = 1;
-							$combatant->fighters[$f]->potion = null;
+							$combatant->fighters[$f]->heal();
 							Lemuria::Log()->debug('Fighter ' . $combatant->getId($f) . ' is saved from a deadly strike by a healing potion.');
 							BattleLog::getInstance()->add(new FighterSavedMessage($combatant->getId($f)));
 						} else {

@@ -116,6 +116,10 @@ class Combatant
 	}
 
 	public function isFleeing(Fighter $fighter): float|false {
+		if ($fighter->HasBeenHealed()) {
+			return 1.0;
+		}
+
 		$calculus     = new Calculus($this->unit);
 		$minHitpoints = (int)ceil($calculus->hitpoints() * $this->attack->Flight());
 		if ($fighter->health < $minHitpoints) {
