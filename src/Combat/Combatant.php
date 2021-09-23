@@ -18,8 +18,12 @@ use Lemuria\Model\Fantasya\Commodity\Mail;
 use Lemuria\Model\Fantasya\Commodity\Woodshield;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Talent\Fistfight;
+use Lemuria\Model\Fantasya\Talent\Stoning;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Weapon;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Dingbats;
 
 /**
  * Combatants are groups of persons from a unit that fight with the same equipment.
@@ -221,7 +225,7 @@ class Combatant
 			if (!$isMelee && $weaponSkill->isDistant() && $this->hasOneWeaponOf($weaponSkill)) {
 				return $weaponSkill;
 			}
-			if ($weaponSkill->isUnarmed()) {
+			if ($weaponSkill->isUnarmed() && $this->hasOneWeaponOf($weaponSkill)) {
 				return $weaponSkill;
 			}
 		}
@@ -230,6 +234,14 @@ class Combatant
 
 	protected function hasOneWeaponOf(WeaponSkill $weaponSkill): bool {
 		$talent = $weaponSkill->Skill()->Talent()::class;
+		if ($talent === Fistfight::class) {
+			$this->weapon = self::createWeapon(Fists::class);
+			return true;
+		}
+		if ($talent === Stoning::class) {
+			$this->weapon = self::createWeapon(Dingbats::class);
+			return true;
+		}
 		if (!isset(WeaponSkill::WEAPONS[$talent])) {
 			throw new LemuriaException('WeaponSkill does not define weapons for ' . $talent . '.');
 		}

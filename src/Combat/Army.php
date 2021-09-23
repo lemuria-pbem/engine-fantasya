@@ -142,9 +142,9 @@ class Army
 				$bonus = (int)floor(ElixirOfPowerEffect::BONUS * $calculus->hitpoints());
 			}
 			Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' uses ' . $potion . ' effect for ' . $fighters . ' fighter.');
-			while ($remaining > 0 && $i++ < $n) {
-				$combatant->fighters[$i]->health += $bonus;
-				$combatant->fighters[$i]->potion  = $potion->Potion();
+			while ($remaining > 0 && $i < $n) {
+				$combatant->fighters[$i]->health  += $bonus;
+				$combatant->fighters[$i++]->potion = $potion->Potion();
 				$remaining--;
 			}
 		}
