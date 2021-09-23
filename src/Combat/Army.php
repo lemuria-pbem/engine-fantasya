@@ -87,7 +87,9 @@ class Army
 			$combatant = new Combatant($this, $unit);
 			$combatant->setBattleRow($battleRow)->setDistribution($distribution);
 			$this->combatants[] = $combatant;
-			$this->applyPotionEffect($calculus, $combatant, $potion, $remaining);
+			if ($potion) {
+				$this->applyPotionEffect($calculus, $combatant, $potion, $remaining);
+			}
 		}
 		// Lemuria::Log()->debug('Army ' . $this->id . ': Unit ' . $unit . ' (size: ' . $unit->Size() . ') forms ' . count($this->combatants) . ' combatants.');
 		return $this;
