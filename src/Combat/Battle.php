@@ -298,7 +298,7 @@ class Battle
 			} else {
 				$calculus     = new Calculus($unit);
 				$maxHitpoints = $calculus->hitpoints();
-				$health       = $hitpoints[$id] / ($size * $maxHitpoints);
+				$health       = min(1.0, $hitpoints[$id] / ($size * $maxHitpoints));
 				$unit->setHealth($health);
 				Lemuria::Log()->debug('Unit ' . $unit . ' of army ' . $army->Id() . ' has health ' . $health . '.');
 			}

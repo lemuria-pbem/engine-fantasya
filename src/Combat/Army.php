@@ -2,9 +2,16 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Command\Apply\ElixirOfPower as ElixirOfPowerEffect;
+use Lemuria\Engine\Fantasya\Effect\PotionEffect;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Commodity\Potion\BerserkBlood;
+use Lemuria\Model\Fantasya\Commodity\Potion\ElixirOfPower;
+use Lemuria\Model\Fantasya\Commodity\Potion\HealingPotion;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Resources;
@@ -74,10 +81,13 @@ class Army
 		$this->units->add($unit);
 		$calculus  = new Calculus($unit);
 		$battleRow = Combat::getBattleRow($unit);
+		$potion    = $this->getPotionEffect($calculus);
+		$remaining = $potion ? $this->getPotionFighters($potion) : 0;
 		foreach ($calculus->inventoryDistribution() as $distribution) {
 			$combatant = new Combatant($this, $unit);
 			$combatant->setBattleRow($battleRow)->setDistribution($distribution);
 			$this->combatants[] = $combatant;
+			$this->applyPotionEffect($calculus, $combatant, $potion, $remaining);
 		}
 		// Lemuria::Log()->debug('Army ' . $this->id . ': Unit ' . $unit . ' (size: ' . $unit->Size() . ') forms ' . count($this->combatants) . ' combatants.');
 		return $this;
@@ -91,5 +101,51 @@ class Army
 		$this->combatants[] = $combatant;
 		Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' was added to army ' . $this->id . '.');
 		return $this;
+	}
+
+	protected function getPotionEffect(Calculus $calculus): ?PotionEffect {
+		$effect = $calculus->hasApplied(BerserkBlood::class);
+		if ($effect) {
+			return $effect;
+		}
+		$effect = $calculus->hasApplied(ElixirOfPower::class);
+		if ($effect) {
+			return $effect;
+		}
+		$effect = $calculus->hasApplied(HealingPotion::class);
+		if ($effect) {
+			return $effect;
+		}
+		return null;
+	}
+
+	#[Pure] protected function getPotionFighters(PotionEffect $effect): int {
+		$potion = $effect->Potion();
+		if ($potion instanceof BerserkBlood) {
+			return $effect->Count() * BerserkBlood::PERSONS;
+		}
+		if ($potion instanceof ElixirOfPower) {
+			return $effect->Count() * ElixirOfPower::PERSONS;
+		}
+		return $effect->Count();
+	}
+
+	protected function applyPotionEffect(Calculus $calculus, Combatant $combatant, PotionEffect $potion, int $remaining): int {
+		if ($remaining > 0) {
+			$i        = 0;
+			$n        = $combatant->Size();
+			$fighters = min($remaining, $n);
+			$bonus    = 0;
+			if ($potion->Potion() instanceof ElixirOfPower) {
+				$bonus = (int)floor(ElixirOfPowerEffect::BONUS * $calculus->hitpoints());
+			}
+			Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' uses ' . $potion . ' effect for ' . $fighters . ' fighter.');
+			while ($remaining > 0 && $i++ < $n) {
+				$combatant->fighters[$i]->health += $bonus;
+				$combatant->fighters[$i]->potion  = $potion->Potion();
+				$remaining--;
+			}
+		}
+		return $remaining;
 	}
 }

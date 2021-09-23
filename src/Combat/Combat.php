@@ -22,12 +22,14 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\EveryoneHasFledMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\FighterCouldNotFleeMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\FighterFleesMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\FighterIsDeadMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\FighterSavedMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\FleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\ManagedToFleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\TriedToFleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Participant;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
+use Lemuria\Model\Fantasya\Commodity\Potion\HealingPotion;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
@@ -462,10 +464,17 @@ class Combat extends CombatModel
 				$size = $combatant->Size();
 				foreach ($combatant->fighters as $f => $fighter) {
 					if ($fighter->health <= 0) {
-						$id = $combatant->getId($f);
-						Lemuria::Log()->debug('Fighter ' . $id . ' is dead.');
-						BattleLog::getInstance()->add(new FighterIsDeadMessage($id));
-						unset($combatant->fighters[$f]);
+						if ($fighter->potion instanceof HealingPotion) {
+							$combatant->fighters[$f]->health = 1;
+							$combatant->fighters[$f]->potion = null;
+							Lemuria::Log()->debug('Fighter ' . $combatant->getId($f) . ' is saved from a deadly strike by a healing potion.');
+							BattleLog::getInstance()->add(new FighterSavedMessage($combatant->getId($f)));
+						} else {
+							$id = $combatant->getId($f);
+							Lemuria::Log()->debug('Fighter ' . $id . ' is dead.');
+							BattleLog::getInstance()->add(new FighterIsDeadMessage($id));
+							unset($combatant->fighters[$f]);
+						}
 					}
 				}
 				$deceased = $size - $combatant->Size();

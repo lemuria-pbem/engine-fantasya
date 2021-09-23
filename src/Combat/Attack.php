@@ -6,11 +6,13 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultBlockMessage;
+use Lemuria\Engine\Fantasya\Command\Apply\BerserkBlood as BerserkBloodEffect;
 use Lemuria\Model\Fantasya\Combat;
 use Lemuria\Model\Fantasya\Commodity\Armor;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Ironshield;
 use Lemuria\Model\Fantasya\Commodity\Mail;
+use Lemuria\Model\Fantasya\Commodity\Potion\BerserkBlood;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
@@ -137,14 +139,15 @@ class Attack
 			return null;
 		}
 
-		$skill  = $this->combatant->WeaponSkill()->Skill()->Level();
-		$block  = $defender->WeaponSkill()->Skill()->Level();
-		$armor  = $this->combatant->Armor();
-		$aClass = $armor ? $armor::class : null;
-		$shield = $defender->Shield();
-		$sClass = $shield ? $shield::class : null;
+		$skill    = $this->combatant->WeaponSkill()->Skill()->Level();
+		$block    = $defender->WeaponSkill()->Skill()->Level();
+		$armor    = $this->combatant->Armor();
+		$aClass   = $armor ? $armor::class : null;
+		$shield   = $defender->Shield();
+		$sClass   = $shield ? $shield::class : null;
+		$hasBonus = $this->combatant->fighters[$fA]->potion instanceof BerserkBlood;
 
-		if ($this->isSuccessful($skill, $block, $aClass, $sClass)) {
+		if ($this->isSuccessful($skill, $block, $aClass, $sClass, $hasBonus)) {
 			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA) . ' hits enemy ' . $defender->getId($fD) . '.');
 			$armor  = $defender->Armor();
 			$aClass = $armor ? $armor::class : null;
@@ -156,9 +159,11 @@ class Attack
 		}
 	}
 
-	protected function isSuccessful(int $skill, int $block, ?string $armor, ?string $shield): bool {
+	protected function isSuccessful(int $skill, int $block, ?string $armor, ?string $shield, bool $hasAttackBonus): bool {
 		$malus = 0;
-		if ($armor) {
+		if ($hasAttackBonus) {
+			$malus = BerserkBloodEffect::BONUS;
+		} elseif ($armor) {
 			$malus = self::ATTACK_MALUS[$armor];
 		}
 		$bonus = 0;
