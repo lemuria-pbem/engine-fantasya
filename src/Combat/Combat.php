@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Combat;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerHasFledMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerNoReinforcementMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerOverrunMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerReinforcementMessage;
@@ -12,6 +13,7 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerSideMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerSplitMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerTacticsRoundMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\CombatRoundMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderHasFledMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderNoReinforcementMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderOverrunMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderReinforcementMessage;
@@ -167,8 +169,16 @@ class Combat extends CombatModel
 			Lemuria::Log()->debug($damage . ' damage done in round ' . $this->round . '.');
 			return $damage;
 		} else {
-			Lemuria::Log()->debug('All enemies have fled and the battle has ended.');
-			BattleLog::getInstance()->add(new EveryoneHasFledMessage());
+			if ($this->hasAttackers()) {
+				Lemuria::Log()->debug('All defenders have fled and the battle has ended.');
+				BattleLog::getInstance()->add(new DefenderHasFledMessage());
+			} elseif ($this->hasDefenders()) {
+				Lemuria::Log()->debug('All attackers have fled and the battle has ended.');
+				BattleLog::getInstance()->add(new AttackerHasFledMessage());
+			} else {
+				Lemuria::Log()->debug('Everyone has fled and the battle has ended.');
+				BattleLog::getInstance()->add(new EveryoneHasFledMessage());
+			}
 			return 0;
 		}
 	}

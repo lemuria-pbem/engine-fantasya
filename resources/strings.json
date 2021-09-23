@@ -66,6 +66,7 @@
 		"message": {
 			"AssaultBlockMessage": "$defender blockt den Angriff von $attacker.",
 			"AssaultHitMessage": "$attacker fügt $defender $damage $hitpoint zu.",
+			"AttackerHasFledMessage": "Alle Angreifer sind vom Schlachtfeld geflohen und der Kampf ist vorbei.",
 			"AttackerNoReinforcementMessage": "Die angreifende Seite kann keine weiteren Kräfte an die Front schicken.",
 			"AttackerOverrunMessage": "Die angreifende Seite wurde überrannt - es $will $additional $fighter an der Front benötigt.",
 			"AttackerReinforcementMessage": "Die Einheit $unit schickt die Abteilung $combatant mit $count $fighter aus der $battleRow an die Front.",
@@ -78,6 +79,7 @@
 			"BattleEndsMessage": "Kampfende",
 			"BattleExhaustionMessage": "Der Kampf endet unentschieden, beide Seiten sind nach $rounds Runden ohne Treffer erschöpft.",
 			"CombatRoundMessage": "Kampfrunde $round",
+			"DefenderHasFledMessage": "Alle Verteidiger sind vom Schlachtfeld geflohen und der Kampf ist vorbei.",
 			"DefenderNoReinforcementMessage": "Die verteidigende Seite kann keine weiteren Kräfte an die Front schicken.",
 			"DefenderOverrunMessage": "Die verteidigende Seite wurde überrannt - es $will $additional $fighter an der Front benötigt.",
 			"DefenderReinforcementMessage": "Die Einheit $unit schickt die Abteilung $combatant mit $count $fighter aus der $battleRow an die Front.",
