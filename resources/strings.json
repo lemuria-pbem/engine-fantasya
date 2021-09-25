@@ -63,6 +63,7 @@
 		"fighter": ["Kämpfer", "Kämpfer"],
 		"fighterIn": ["Kämpfer in", "Kämpfern in"],
 		"hitpoint": ["Schadenspunkt", "Schadenspunkte"],
+		"leave": ["verlässt", "verlassen"],
 		"message": {
 			"AssaultBlockMessage": "$defender blockt den Angriff von $attacker.",
 			"AssaultHitMessage": "$attacker fügt $defender $damage $hitpoint zu.",
@@ -78,6 +79,8 @@
 			"BattleEndedInDrawMessage": "Der Kampf endet unentschieden, beide Seiten haben sich gegenseitig besiegt.",
 			"BattleEndsMessage": "Kampfende",
 			"BattleExhaustionMessage": "Der Kampf endet unentschieden, beide Seiten sind nach $rounds Runden ohne Treffer erschöpft.",
+			"BattleSpellCastMessage": "Die Einheit $unit zaubert $spell auf Stufe $grade.",
+			"BattleSpellNoAuraMessage": "Die Einheit $unit hat nicht genügend Aurapunkte, um $spell zu zaubern.",
 			"CombatRoundMessage": "Kampfrunde $round",
 			"DefenderHasFledMessage": "Alle Verteidiger sind vom Schlachtfeld geflohen und der Kampf ist vorbei.",
 			"DefenderNoReinforcementMessage": "Die verteidigende Seite kann keine weiteren Kräfte an die Front schicken.",
@@ -95,6 +98,8 @@
 			"FleeFromBattleMessage": "Die Abteilung $combatant zieht sich aus der Schlacht zurück.",
 			"ManagedToFleeFromBattleMessage": "Der Abteilung $combatant ist der Rückzug aus der Schlacht gelungen.",
 			"NoTacticsRoundMessage": "Keine Seite hat einen taktischen Vorteil.",
+			"SongOfPeaceCombatantMessage": "Die Abteilung $combatant verlässt friedlich das Schlachtfeld.",
+			"SongOfPeaceFighterMessage": "$fighter Kämpfer der Abteilung $combatant $leave friedlich das Schlachtfeld.",
 			"TakeLootMessage": "Die Einheit $unit erbeutet $loot.",
 			"TriedToFleeFromBattleMessage": "Die Abteilung $combatant hat erfolglos versucht, sich aus der Schlacht zurückzuziehen.",
 			"UnitDiedMessage": "Die Einheit $unit wurde vernichtet."

@@ -29,6 +29,7 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\FleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\ManagedToFleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\TriedToFleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Participant;
+use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
 use Lemuria\Model\Fantasya\Commodity\Potion\HealingPotion;
@@ -86,7 +87,7 @@ class Combat extends CombatModel
 		};
 	}
 
-	public function __construct() {
+	public function __construct(private Context $context) {
 		$this->attacker = array_fill_keys(self::BATTLE_ROWS, []);
 		$this->defender = array_fill_keys(self::BATTLE_ROWS, []);
 	}
@@ -133,6 +134,28 @@ class Combat extends CombatModel
 		$log = BattleLog::getInstance();
 		$log->add(new AttackerSideMessage($this->attackParticipants));
 		$log->add(new DefenderSideMessage($this->defendParticipants));
+		return $this;
+	}
+
+	public function castPreparationSpells(?Party $first): Combat {
+		if ($first) {
+			if ($this->isAttacker[$first->Id()->Id()]) {
+				$units = $this->prepareBattleSpells($this->attacker);
+				$this->castPreparationSpell($units, $this->attacker, $this->defender);
+				$units = $this->prepareBattleSpells($this->defender);
+				$this->castPreparationSpell($units, $this->defender, $this->attacker);
+			} else {
+				$units = $this->prepareBattleSpells($this->defender);
+				$this->castPreparationSpell($units, $this->defender, $this->attacker);
+				$units = $this->prepareBattleSpells($this->attacker);
+				$this->castPreparationSpell($units, $this->attacker, $this->defender);
+			}
+		} else {
+			$units1 = $this->prepareBattleSpells($this->attacker);
+			$units2 = $this->prepareBattleSpells($this->defender);
+			$this->castPreparationSpell($units1, $this->attacker, $this->defender);
+			$this->castPreparationSpell($units2, $this->defender, $this->attacker);
+		}
 		return $this;
 	}
 
@@ -210,6 +233,37 @@ class Combat extends CombatModel
 			}
 		}
 		return $count;
+	}
+
+	/**
+	 * @return Unit[]
+	 */
+	protected function prepareBattleSpells(array $caster): array {
+		$units = [];
+		foreach ($caster[self::FRONT] as $combatant /* @var Combatant $combatant */) {
+			$unit = $combatant->Unit();
+			if ($unit->BattleSpells()?->Preparation()) {
+				$units[$unit->Id()->Id()] = $unit;
+			}
+		}
+		foreach ($caster[self::BACK] as $combatant /* @var Combatant $combatant */) {
+			$unit = $combatant->Unit();
+			if ($unit->BattleSpells()?->Preparation()) {
+				$units[$unit->Id()->Id()] = $unit;
+			}
+		}
+		return array_values($units);
+	}
+
+	/**
+	 * @param Unit[] $units
+	 */
+	protected function castPreparationSpell(array $units, array $caster, array $victim): void {
+		foreach ($units as $unit) {
+			$grade = $unit->BattleSpells()->Preparation();
+			$spell = $this->context->Factory()->castBattleSpell($grade);
+			$spell->setCaster($caster)->setVictim($victim)->cast($unit);
+		}
 	}
 
 	protected function logSideDistribution(): void {

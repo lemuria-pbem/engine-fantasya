@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Factory;
 
 use function Lemuria\getClass;
 use function Lemuria\mbUcFirst;
+use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
 use Lemuria\Engine\Fantasya\Command\Announcement;
 use Lemuria\Engine\Fantasya\Command\Apply;
@@ -144,6 +145,7 @@ use Lemuria\Model\Fantasya\Ship\Galleon;
 use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Ship\Trireme;
 use Lemuria\Model\Fantasya\Spell;
+use Lemuria\Model\Fantasya\SpellGrade;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
@@ -519,6 +521,8 @@ class CommandFactory
 
 	protected const APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Apply\\';
 
+	protected const BATTLE_SPELL_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Combat\\Spell';
+
 	protected const CAST_NAMESPACE =  'Lemuria\\Engine\\Fantasya\\Command\\Cast\\';
 
 	public function __construct(protected Context $context) {
@@ -709,6 +713,15 @@ class CommandFactory
 			return new $class($cast);
 		}
 		throw new LemuriaException('Casting spell ' . $spell . ' is not implemented.');
+	}
+
+	public function castBattleSpell(SpellGrade $grade): AbstractBattleSpell {
+		$spell = getClass($grade->Spell());
+		$class = self::BATTLE_SPELL_NAMESPACE . $spell;
+		if (class_exists($class)) {
+			return new $class($grade);
+		}
+		throw new LemuriaException('Casting battle spell ' . $spell . ' is not implemented.');
 	}
 
 	/**

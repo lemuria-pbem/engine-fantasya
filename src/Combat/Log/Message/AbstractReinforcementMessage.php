@@ -17,7 +17,7 @@ abstract class AbstractReinforcementMessage extends AbstractMessage
 	protected string $combatant;
 
 	#[Pure] public function __construct(protected ?Entity $unit = null, ?Combatant $combatant = null,
-										protected ?int    $count = null, protected ?int $battleRow = null) {
+		                                protected ?int    $count = null, protected ?int $battleRow = null) {
 		if ($combatant) {
 			$this->combatant = $combatant->Id();
 		}

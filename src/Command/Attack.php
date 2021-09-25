@@ -79,7 +79,7 @@ final class Attack extends UnitCommand
 
 				$log = new BattleLog($battle);
 				BattleLog::init($log)->add(new BattleBeginsMessage($battle));
-				$battle->commence();
+				$battle->commence($this->context);
 				Lemuria::Hostilities()->add($log);
 			}
 		}

@@ -5,7 +5,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Fehler/Verbesserungen in 0.7
 
 - Kampfzauber Feuerball
-- Kampfzauber Friedenslied
 - Kampfzauber Schockwelle
 
 ## Neue Funktionen

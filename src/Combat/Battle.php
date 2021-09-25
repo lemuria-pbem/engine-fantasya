@@ -13,6 +13,7 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderWonMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\NoTacticsRoundMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\TakeLootMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\UnitDiedMessage;
+use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\Model\DisguisedParty;
 use Lemuria\Id;
 use Lemuria\Lemuria;
@@ -78,7 +79,7 @@ class Battle
 		return $this;
 	}
 
-	public function commence(): Battle {
+	public function commence(Context $context): Battle {
 		if (empty($this->attackers)) {
 			throw new \RuntimeException('No attackers in battle.');
 		}
@@ -86,8 +87,9 @@ class Battle
 			throw new \RuntimeException('No defenders in battle.');
 		}
 
-		$combat = $this->embattleForCombat();
+		$combat = $this->embattleForCombat($context);
 		$party  = $this->getBestTacticsParty();
+		$combat->castPreparationSpells($party);
 		if ($party) {
 			$combat->tacticsRound($party);
 		} else {
@@ -174,9 +176,13 @@ class Battle
 			$tactics[$party] += $unit->Size() * $level ** 3;
 		}
 
+		$n = count($tactics);
+		if ($n <= 0) {
+			return null;
+		}
+
 		arsort($tactics);
 		$candidates = [0];
-		$n          = count($tactics);
 		$party      = array_keys($tactics);
 		$talent     = array_values($tactics);
 		for ($i = 1; $i < $n; $i++) {
@@ -194,8 +200,8 @@ class Battle
 		return Party::get(new Id($party[$chosen]));
 	}
 
-	protected function embattleForCombat(): Combat {
-		$combat = new Combat();
+	protected function embattleForCombat(Context $context): Combat {
+		$combat = new Combat($context);
 		foreach ($this->attackers as $unit) {
 			$army                    = $combat->addAttacker($unit);
 			$id                      = $army->Id();
