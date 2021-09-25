@@ -159,7 +159,7 @@ final class Calculus
 				return new Capacity($walk, $fly, Capacity::FLY, $weight, $speed, [$talentFly, $talentWalk], $speedBoost);
 			}
 		}
-		if ($rideFly > 0) {
+		if ($rideFly > 0 && $weight <= $rideFly) {
 			$speed      = $this->speed([$horse, $camel, $elephant]);
 			$animals    = [$horse, $camel, $elephant, $griffin, $pegasus];
 			$talentRide = $this->talent($animals, $size, true);
