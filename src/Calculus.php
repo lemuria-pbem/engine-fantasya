@@ -34,6 +34,7 @@ use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Talent\Riding;
+use Lemuria\Model\Fantasya\Talent\Stamina;
 use Lemuria\Model\Fantasya\Talent\Stoning;
 use Lemuria\Model\Fantasya\Transport;
 use Lemuria\Model\Fantasya\Unit;
@@ -175,9 +176,10 @@ final class Calculus
 	/**
 	 * Get a unit's hitpoints.
 	 */
-	#[Pure] public function hitpoints(): int {
-		//TODO: Calculate bonus of Ausdauer.
-		return $this->unit->Race()->Hitpoints();
+	public function hitpoints(): int {
+		$endurance = $this->knowledge(Stamina::class)->Level();
+		$factor    = $endurance > 0 ? 1.05 ** $endurance : 1.0;
+		return (int)floor($factor * $this->unit->Race()->Hitpoints());
 	}
 
 	/**
