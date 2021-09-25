@@ -58,7 +58,7 @@ final class BattleSpell extends UnitCommand
 			$level = 0;
 			$class = $this->phrase->getLineUntil();
 		} else {
-			$level = (int)$last;
+			$level = 1;
 			$class = $this->phrase->getLine();
 		}
 
