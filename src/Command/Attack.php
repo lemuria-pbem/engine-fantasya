@@ -57,6 +57,10 @@ final class Attack extends UnitCommand
 	}
 
 	protected function run(): void {
+		if ($this->context->getTurnOptions()->IsSimulation()) {
+			return;
+		}
+
 		$region   = $this->unit->Region();
 		$campaign = $this->context->getCampaign($region);
 		if ($campaign->mount()) {
