@@ -4,6 +4,9 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.7
 
+- KAMPFZAUBER Feuerball funktioniert nicht [ari]
+- Last zu schwer [1h]
+- Steuereintreiben nicht möglich [s4]
 
 ## Neue Funktionen
 
