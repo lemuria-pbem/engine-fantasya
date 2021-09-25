@@ -2,10 +2,11 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Handover;
 
-use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Message\Unit\GrantAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantFromOutsideMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GrantNoConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantNotInsideMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantTakeoverMessage;
@@ -18,13 +19,16 @@ use Lemuria\Model\Fantasya\Unit;
  *
  * - GIB <Unit> Kommando
  * - KOMMANDO <Unit>
+ * - KOMMANDO
  */
 final class Grant extends UnitCommand
 {
 	protected function run(): void {
-		if ($this->phrase->count() < 1) {
-			throw new InvalidCommandException($this, 'Missing unit parameter.');
+		if ($this->phrase->count() <= 0) {
+			$this->takeOver();
+			return;
 		}
+
 		$i    = 1;
 		$unit = $this->nextId($i);
 		$id   = $unit->Id();
@@ -32,7 +36,12 @@ final class Grant extends UnitCommand
 		$construction = $this->unit->Construction();
 		if ($construction) {
 			$inhabitants = $construction->Inhabitants();
-			if ($inhabitants->Owner()->Id()->Id() === $this->unit->Id()->Id()) {
+			$owner       = $inhabitants->Owner();
+			if ($this->unit === $owner) {
+				$this->message(GrantAlreadyMessage::class);
+				return;
+			}
+			if ($owner->Id()->Id() === $this->unit->Id()->Id()) {
 				if ($inhabitants->has($id)) {
 					$unit = Lemuria::Catalog()->get($id, Catalog::UNITS); /* @var Unit $unit */
 					$inhabitants->setOwner($unit);
@@ -46,6 +55,27 @@ final class Grant extends UnitCommand
 			}
 		} else {
 			$this->message(GrantFromOutsideMessage::class);
+		}
+	}
+
+	protected function takeOver(): void {
+		$construction = $this->unit->Construction();
+		if ($construction) {
+			$inhabitants = $construction->Inhabitants();
+			$owner       = $inhabitants->Owner();
+			if ($this->unit === $owner) {
+				$this->message(GrantAlreadyMessage::class);
+				return;
+			}
+			if ($owner->Party() === $this->unit->Party()) {
+				$inhabitants->setOwner($this->unit);
+				$this->message(GrantMessage::class, $owner)->e($this->unit);
+				$this->message(GrantTakeoverMessage::class)->e($owner);
+			} else {
+				$this->message(GrantNothingMessage::class);
+			}
+		} else {
+			$this->message(GrantNoConstructionMessage::class);
 		}
 	}
 }
