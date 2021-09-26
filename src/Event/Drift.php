@@ -1,4 +1,5 @@
 <?php
+/** @noinspection GrazieInspection */
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
@@ -19,7 +20,7 @@ use Lemuria\Model\Fantasya\Vessel;
 /**
  * Ships on sea that cannot be controlled anymore will drift with the wind.
  *
- * - If captain or crew loose their Navigation talent below the required level, the ship cannot be controlled anymore.
+ * - If captain or crew lose their Navigation talent below the required level, the ship cannot be controlled anymore.
  * - If the payload becomes too heavy for the ship, it cannot be controlled anymore.
  * - If the excess payload is not jettisoned overboard, the ship takes damage.
  * - Uncontrollable ships on open sea (no adjacent land region) will drift to a random direction.

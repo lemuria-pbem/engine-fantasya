@@ -30,6 +30,8 @@ der Befehl eindeutig von anderen Befehlen unterschieden werden kann.
 
 ### Belagerung
 
-Einheiten, die in der vorherigen Runde Wache gehalten haben, können eine Burg
-belagern. Wenn sie Katapulte dabeihaben, können sie die Burgmauern angreifen,
-ohne ihr Leben im normalen Kampf zu riskieren.
+Einheiten, die seit Beginn einer Runde Wache gehalten haben, können eine Burg
+belagern. Wenn sie Katapulte dabeihaben, greifen sie die Burgmauern an, ohne ihr
+Leben im normalen Kampf zu riskieren.
+Die Belagerten (dazu zählen nur die Einheiten in der Burg) können diese nur
+verlassen, indem sie gleichzeitig die Belagerer angreifen.

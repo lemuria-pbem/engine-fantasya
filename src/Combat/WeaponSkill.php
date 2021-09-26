@@ -6,7 +6,6 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Archery;
 use Lemuria\Model\Fantasya\Talent\Bladefighting;
@@ -14,6 +13,16 @@ use Lemuria\Model\Fantasya\Talent\Catapulting;
 use Lemuria\Model\Fantasya\Talent\Crossbowing;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Spearfighting;
+use Lemuria\Model\Fantasya\Talent\Stoning;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Dingbats;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 
 /**
  * Helper class for battle configuration of a unit.
@@ -21,6 +30,16 @@ use Lemuria\Model\Fantasya\Talent\Spearfighting;
 class WeaponSkill
 {
 	use BuilderTrait;
+
+	public const WEAPONS = [
+		Archery::class       => [Bow::class],
+		Bladefighting::class => [Battleaxe::class, Warhammer::class, Sword::class],
+		Catapulting::class   => [Catapult::class],
+		Crossbowing::class   => [Crossbow::class],
+		Fistfight::class     => [Fists::class],
+		Spearfighting::class => [Spear::class],
+		Stoning::class       => [Dingbats::class]
+	];
 
 	private static ?Talent $archery = null;
 
@@ -34,16 +53,21 @@ class WeaponSkill
 
 	private static Talent $spearfighting;
 
-	public function __construct(private Ability $skill, private Quantity $weapon) {
+	private static Talent $stoning;
+
+	public static function isSkill(Talent $talent): bool {
+		return match ($talent) {
+			self::$bladefighting, self::$spearfighting,	self::$archery, self::$crossbowing, self::$catapulting => true,
+			default => false
+		};
+	}
+
+	public function __construct(private Ability $skill) {
 		$this->initTalents();
 	}
 
 	#[Pure] public function Skill(): Ability {
 		return $this->skill;
-	}
-
-	#[Pure] public function Weapon(): Quantity {
-		return $this->weapon;
 	}
 
 	/**
@@ -77,10 +101,11 @@ class WeaponSkill
 	}
 
 	/**
-	 * Check if weapon skill is unarmed fist fight.
+	 * Check if weapon skill is unarmed.
 	 */
 	#[Pure] public function isUnarmed(): bool {
-		return $this->skill->Talent() === self::$fistfight;
+		$talent = $this->skill->Talent();
+		return $talent === self::$fistfight || $talent === self::$stoning;
 	}
 
 	/**
@@ -94,6 +119,7 @@ class WeaponSkill
 			self::$crossbowing   = self::createTalent(Crossbowing::class);
 			self::$fistfight     = self::createTalent(Fistfight::class);
 			self::$spearfighting = self::createTalent(Spearfighting::class);
+			self::$stoning       = self::createTalent(Stoning::class);
 		}
 	}
 }

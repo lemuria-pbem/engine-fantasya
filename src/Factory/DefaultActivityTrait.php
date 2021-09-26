@@ -29,10 +29,7 @@ trait DefaultActivityTrait
 	 * Get the new default command.
 	 */
 	public function getNewDefault(): ?UnitCommand {
-		if ($this instanceof UnitCommand) {
-			return $this;
-		}
-		return null;
+		return $this;
 	}
 
 	/**

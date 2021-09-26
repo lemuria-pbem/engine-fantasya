@@ -11,7 +11,7 @@ trait CamouflageTrait
 	use ContextTrait;
 
 	/**
-	 * Check recipients acceptance for foreign parties.
+	 * Check recipients' acceptance for foreign parties.
 	 */
 	private function checkVisibility(Calculus $calculus, Unit $target): bool {
 		$unit  = $calculus->Unit();

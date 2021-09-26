@@ -1,6 +1,9 @@
 <?php
+/** @noinspection GrazieInspection */
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
+
+use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\ReserveAllMessage;
@@ -30,7 +33,7 @@ final class Reserve extends UnitCommand
 		$amount = (int)$count; // RESERVIEREN <amount> <commodity>
 		if ((string)$amount !== $count) {
 			if (!str_starts_with('alles', strtolower($count))) { // RESERVIEREN Alles
-				$commodity = trim($count . ' ' . $commodity); // RESERVIEREN <commodity> (all of commodity)
+				$commodity = trim($count . ' ' . $commodity); // RESERVIEREN <commodity> (every piece of a commodity)
 			}
 			$amount = PHP_INT_MAX;
 		}
@@ -61,5 +64,9 @@ final class Reserve extends UnitCommand
 			$resourcePool->reserveEverything($this->unit);
 			$this->message(ReserveEverythingMessage::class);
 		}
+	}
+
+	#[Pure] protected function checkSize(): bool {
+		return true;
 	}
 }

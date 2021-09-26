@@ -2,21 +2,22 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Fehler/Verbesserungen in 0.6
+## Fehler/Verbesserungen in 0.7
 
 
 ## Neue Funktionen
 
-### Version 0.7
+### Version 0.8
 
-- Kampf (ATTACKIEREN/BELAGERN, Berserkerblut, Elixier der Macht, Heiltrank)
+- BELAGERN
+- erbeutete Waffen/Rüstungen reparieren
 - Monster, besondere Gegenstände wie Greifeneier, Wagenwracks
 - NPC- und Monsterparteien
+- weitere Gebäude und deren Effekte
 - besondere Gebäude wie Ruinen
 
-### Version 0.8 und folgende
+### Version 0.9 und folgende
 
-- weitere Gebäude und deren Effekte
 - Statistische Daten erstellen
   - Regionsentwicklung im Report anzeigen
   - Veränderungen im Inventar anzeigen
@@ -42,3 +43,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Textreport im Markdown-Format
 - Einstellen der erwünschten Reportformate
 - Talentübersicht pro Region
+- Übersetzungen auf MessageFormat umstellen
+- Befehlsvorlage intelligenter gestalten
+  - ALTERNATIVE für LERNEN ohne Lehrer
+  - FORST, HERDE für automatisches Baumfällen und Dressieren

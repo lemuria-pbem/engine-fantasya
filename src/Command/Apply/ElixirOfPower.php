@@ -6,5 +6,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\Apply\ElixirOfPowerMessage;
 
 final class ElixirOfPower extends AbstractUnitApply
 {
+	public const BONUS = 0.4;
+
 	protected ?string $applyMessage = ElixirOfPowerMessage::class;
 }

@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\SortAfterCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortAfterInVesselMessage;
@@ -90,6 +92,10 @@ final class Sort extends UnitCommand
 			default :
 				throw new InvalidCommandException($this, 'Invalid type "' . $type . '".');
 		}
+	}
+
+	#[Pure] protected function checkSize(): bool {
+		return true;
 	}
 
 	/**

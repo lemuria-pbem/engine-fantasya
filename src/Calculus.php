@@ -8,10 +8,12 @@ use Lemuria\Engine\Fantasya\Combat\WeaponSkill;
 use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Effect\PotionEffect;
+use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Item;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
+use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
@@ -21,19 +23,21 @@ use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Potion\GoliathWater;
 use Lemuria\Model\Fantasya\Commodity\Potion\SevenLeagueTea;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Modification;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Race\Troll;
+use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Talent\Riding;
+use Lemuria\Model\Fantasya\Talent\Stamina;
+use Lemuria\Model\Fantasya\Talent\Stoning;
 use Lemuria\Model\Fantasya\Transport;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Model\Fantasya\Weapon;
 
 /**
  * Helper for unit calculations.
@@ -129,9 +133,23 @@ final class Calculus
 			$speed       = $this->speed([$carriage, $horse, $camel, $elephant, $griffin, $pegasus]);
 			$animals     = [$horse, $camel, $elephant, $griffin, $pegasus];
 			$talentDrive = $this->talent($animals, $size, true, $cars);
-			if ($riding >= $talentDrive) {
-				return new Capacity($walk, $rideFly, Capacity::DRIVE, $weight, $speed, [$talentDrive, $talentDrive], $speedBoost);
+			$horseCount  = $horse?->Count();
+			if ($riding >= $talentDrive && $horseCount >= 2 * $cars) {
+				return new Capacity($walk, $rideFly, Capacity::DRIVE, $weight, $speed, $talentDrive, $speedBoost);
 			}
+			if ($race instanceof Troll) {
+				$needed = 2 * $cars;
+				if ($size >= $needed) {
+					$riding     = $needed * $this->knowledge(Riding::class)->Level();
+					$talentWalk = $this->talent($animals, $size - $needed) + $riding;
+					$weight    -= $size * $race->Weight();
+					return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speedBoost, $talentWalk);
+				}
+			}
+			$walk   = $this->transport($camel) + $this->transport($elephant) + $this->transport($horse);
+			$walk  += $this->transport($griffin) + $this->transport($pegasus) + $payload;
+			$weight = $this->unit->Weight() - $size * $race->Weight();
+			return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speedBoost, $talentDrive);
 		}
 		if ($fly > 0 && !$horse && !$camel && !$elephant) {
 			$animals    = [$griffin, $pegasus];
@@ -142,7 +160,7 @@ final class Calculus
 				return new Capacity($walk, $fly, Capacity::FLY, $weight, $speed, [$talentFly, $talentWalk], $speedBoost);
 			}
 		}
-		if ($rideFly > 0) {
+		if ($rideFly > 0 && $weight <= $rideFly) {
 			$speed      = $this->speed([$horse, $camel, $elephant]);
 			$animals    = [$horse, $camel, $elephant, $griffin, $pegasus];
 			$talentRide = $this->talent($animals, $size, true);
@@ -159,8 +177,9 @@ final class Calculus
 	 * Get a unit's hitpoints.
 	 */
 	public function hitpoints(): int {
-		//TODO: Calculate bonus of Ausdauer.
-		return $this->unit->Race()->Hitpoints();
+		$endurance = $this->knowledge(Stamina::class)->Level();
+		$factor    = $endurance > 0 ? 1.05 ** $endurance : 1.0;
+		return (int)floor($factor * $this->unit->Race()->Hitpoints());
 	}
 
 	/**
@@ -174,18 +193,22 @@ final class Calculus
 			throw new LemuriaException('Invalid talent.');
 		}
 
-		$experience = 0;
 		if ($this->unit->Size() > 0) {
 			$ability = $this->unit->Knowledge()->offsetGet($talent);
 			if ($ability instanceof Ability) {
-				$modification = $this->unit->Race()->Modifications()->offsetGet($talent);
+				$race         = $this->unit->Race();
+				$modification = $race->Modifications()->offsetGet($talent);
 				if ($modification instanceof Modification) {
-					return $modification->getModified($ability);
+					$ability = $modification->getModified($ability);
 				}
-				$experience = $ability->Experience();
+				$modification = $race->TerrainEffect()->getEffect($this->unit->Region()->Landscape(), $talent);
+				if ($modification instanceof Modification) {
+					$ability = $modification->getModified($ability);
+				}
+				return $ability;
 			}
 		}
-		return new Ability($talent, $experience);
+		return new Ability($talent, 0);
 	}
 
 	/**
@@ -212,24 +235,21 @@ final class Calculus
 	/**
 	 * Calculate available fighting abilities for the unit's talents and inventory.
 	 *
-	 * If a unit has no weapons or fighting talents, the Fistfight skill is returned.
-	 *
 	 * @return WeaponSkill[]
 	 */
 	public function weaponSkill(): array {
 		$fistfight = $this->knowledge(Fistfight::class);
-		$fists     = new Quantity(self::createCommodity(Fists::class), $this->unit->Size());
-		$skills    = [new WeaponSkill($fistfight, $fists)];
-		$order     = [0];
+		$stoning   = $this->knowledge(Stoning::class);
+		$skills    = [new WeaponSkill($fistfight), new WeaponSkill($stoning)];
+		$order     = [0, 0];
 
-		foreach ($this->unit->Inventory() as $item /* @var Quantity $item */) {
-			$commodity = $item->Commodity();
-			if ($commodity instanceof Weapon) {
-				$weaponSkill = $commodity->getSkill()->Talent();
-				$skill       = $this->knowledge($weaponSkill::class);
+		foreach ($this->unit->Knowledge() as $ability /* @var Ability $ability */) {
+			$talent = $ability->Talent();
+			if (WeaponSkill::isSkill($talent)) {
+				$skill       = $this->knowledge($talent);
 				$experience  = $skill->Experience();
 				if ($experience > 0) {
-					$skills[] = new WeaponSkill($skill, $item);
+					$skills[] = new WeaponSkill($skill);
 					$order[]  = $experience;
 				}
 			}
@@ -244,11 +264,67 @@ final class Calculus
 	}
 
 	/**
-	 * Calculate best fighting ability for the unit's talents and inventory.
+	 * @return Distribution[]
 	 */
-	public function bestWeaponSkill(): WeaponSkill {
-		$weaponSkill = $this->weaponSkill();
-		return $weaponSkill[0];
+	public function inventoryDistribution(): array {
+		$maxSize   = $this->unit->Size();
+		$inventory = $this->unit->Inventory();
+		if (empty($inventory)) {
+			$distribution = new Distribution();
+			return [$distribution->setSize($maxSize)];
+		}
+
+		$distributions = [];
+		$amount        = [];
+		$excess        = new Resources();
+		foreach ($inventory as $quantity /* @var Quantity $quantity */) {
+			$commodity = $quantity->Commodity();
+			$count     = $quantity->Count();
+			$surplus   = $count - $maxSize;
+			if ($surplus > 0) {
+				$excess->add(new Quantity($commodity, $surplus));
+				$count = $maxSize;
+			}
+			if (!isset($amount[$count])) {
+				$amount[$count] = [];
+			}
+			$amount[$count][] = $commodity;
+		}
+		ksort($amount);
+
+		$distributed = 0;
+		while (!empty($amount)) {
+			$distribution = new Distribution();
+			reset($amount);
+			$first     = key($amount);
+			$remaining = $first - $distributed;
+			foreach ($amount as $count => $commodities) {
+				$remaining   = $count - $distributed;
+				$distributed = $remaining;
+				foreach ($commodities as $commodity/* @var Commodity $commodity */) {
+					$distribution->add(new Quantity($commodity, $remaining));
+				}
+			}
+			$distribution->setSize($remaining);
+			$distributions[] = $distribution;
+			$distributed    += $remaining;
+			unset($amount[$first]);
+		}
+
+		foreach ($excess as $quantity /* @var Quantity $quantity */) {
+			$count     = $quantity->Count();
+			$bonus     = (int)floor($count / $maxSize);
+			$remaining = $count % $maxSize;
+			foreach ($distributions as $distribution /* @var Distribution $distribution */) {
+				$amount = $bonus + ($remaining-- > 0 ? 1 : 0);
+				if ($amount <= 0) {
+					break;
+				}
+				$distribution->add(new Quantity($quantity->Commodity(), $amount));
+			}
+		}
+
+		return $distributions;
 	}
 
 	/**
@@ -279,6 +355,16 @@ final class Calculus
 		/** @var PotionEffect $existing */
 		$existing = Lemuria::Score()->find($effect);
 		return $existing?->Potion() === $potion ? $existing : null;
+	}
+
+	#[Pure] public function hunger(Unit $unit, float $currentHunger = 0.0): int {
+		$health = $unit->Health();
+		if ($health >= 0.9) {
+			$factor = $currentHunger < 0.5 ? 1.1 : 1.2;
+		} else {
+			$factor = $currentHunger < 0.5 ? 1.2 : 1.3;
+		}
+		return (int)round($factor * $unit->Race()->Hunger());
 	}
 
 	#[Pure] private function transport(?Item $quantity, int $reduceBy = 0): int {
@@ -314,14 +400,16 @@ final class Calculus
 	 */
 	#[Pure] private function talent(array $transports, int $size, bool $max = false,
 		                            int $carriage = 0): int {
-		$talent = 0;
+		$talent    = 0;
+		$hasHorses = 0;
 		foreach ($transports as $item /* @var Item $item */) {
 			if ($item) {
 				$transport = $item->getObject();
 				$count     = $item->Count();
 				switch ($transport::class) {
 					case Horse::class :
-						$count = max($count, $carriage * 2);
+						$count     = max($count, $carriage * 2);
+						$hasHorses = true;
 					case Camel::class :
 					case Pegasus::class :
 						if ($max) {
@@ -337,6 +425,9 @@ final class Calculus
 						$talent += $count * 6;
 				}
 			}
+		}
+		if ($carriage && !$hasHorses) {
+			$talent += $carriage * 2;
 		}
 		return $talent;
 	}

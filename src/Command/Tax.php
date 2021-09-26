@@ -38,6 +38,8 @@ final class Tax extends AllocationCommand implements Activity
 
 	private int $level = 0;
 
+	private int $collectors = 0;
+
 	protected function run(): void {
 		parent::run();
 		$quantity = $this->getResource(Silver::class);
@@ -51,6 +53,9 @@ final class Tax extends AllocationCommand implements Activity
 					foreach ($guardParties as $party) {
 						$this->message(TaxPreventMessage::class, $party)->e($this->unit);
 					}
+				} elseif ($this->collectors > 0) {
+					$silver = self::createCommodity(Silver::class);
+					$this->message(TaxOnlyMessage::class)->i(new Quantity($silver, 0));
 				} else {
 					$this->message(TaxWithoutWeaponMessage::class);
 				}
@@ -80,9 +85,9 @@ final class Tax extends AllocationCommand implements Activity
 		}
 		$this->level = $this->calculus()->knowledge(Taxcollecting::class)->Level();
 		if ($this->level > 0) {
-			$collectors = $this->getNumberOfTaxCollectors();
-			if ($collectors > 0) {
-				$this->rate = $collectors * $this->level * self::RATE;
+			$this->collectors = $this->getNumberOfTaxCollectors();
+			if ($this->collectors > 0) {
+				$this->rate = $this->collectors * $this->level * self::RATE;
 				$this->rate = $this->reduceByWorkload($this->rate);
 				if ($this->demand > 0 && $this->demand < $this->rate) {
 					$this->rate = $this->demand;
@@ -90,7 +95,7 @@ final class Tax extends AllocationCommand implements Activity
 				$silver = self::createCommodity(Silver::class);
 				$this->addToWorkload($this->rate);
 				$this->resources->add(new Quantity($silver, $this->rate));
-				$this->message(TaxDemandMessage::class)->p($collectors, TaxDemandMessage::COLLECTORS)->p($this->rate, TaxDemandMessage::RATE);
+				$this->message(TaxDemandMessage::class)->p($this->collectors, TaxDemandMessage::COLLECTORS)->p($this->rate, TaxDemandMessage::RATE);
 			} else {
 				$this->message(TaxNoCollectorsMessage::class);
 			}

@@ -11,6 +11,7 @@ use Lemuria\Factory\SingletonGroup;
 class SingletonCatalog implements SingletonCatalogInterface
 {
 	private const GROUPS = [
+		'Combat\\Log\\Message',
 		'Message\\Construction', 'Message\\Party', 'Message\\Region',
 		'Message\\Unit', 'Message\\Unit\\Apply', 'Message\\Unit\\Cast',
 		'Message\\Vessel'

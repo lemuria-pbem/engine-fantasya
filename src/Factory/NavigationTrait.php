@@ -10,6 +10,7 @@ use Lemuria\Model\Fantasya\Landscape;
 use Lemuria\Model\Fantasya\Landscape\Forest;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Landscape\Plain;
+use Lemuria\Model\Fantasya\Race\Aquan;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Ship\Boat;
 use Lemuria\Model\Fantasya\Vessel;
@@ -62,11 +63,30 @@ trait NavigationTrait
 		return $coastlines;
 	}
 
+	/**
+	 * @noinspection PhpConditionAlreadyCheckedInspection
+	 */
 	#[Pure] private function canSailTo(Landscape $landscape): bool {
 		if ($this->vessel->Ship() instanceof Boat) {
 			return true;
 		}
 		return $landscape instanceof Plain || $landscape instanceof Forest || $landscape instanceof Ocean;
+	}
+
+	private function isNavigatedByAquans(): bool {
+		$passengers = $this->vessel->Passengers();
+		$captain    = $passengers->Owner();
+		if ($captain->Race() instanceof Aquan) {
+			$points = 0;
+			foreach ($passengers as $unit /* @var Unit $unit */) {
+				if ($unit->Race() instanceof Aquan) {
+					$level   = $this->context->getCalculus($unit)->knowledge(Navigation::class)->Level();
+					$points += $unit->Size() * $level;
+				}
+			}
+			return $points >= $this->vessel->Ship()->Crew();
+		}
+		return false;
 	}
 
 	private function moveVessel(Region $destination): void {

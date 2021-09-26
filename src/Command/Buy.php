@@ -35,7 +35,7 @@ final class Buy extends CommerceCommand
 
 		if ($this->demand > 0) {
 			if ($this->count < $this->demand && $this->demand < PHP_INT_MAX) {
-				$this->message(BuyOnlyMessage::class)->i($this->goods())->i($this->cost(), BuyOnlyMessage::PAYMENT);
+				$this->message(BuyOnlyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
 			} else {
 				$this->message(BuyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
 			}

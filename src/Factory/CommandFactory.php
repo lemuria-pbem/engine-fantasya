@@ -2,14 +2,14 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use function Lemuria\mbUcFirst;
+use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
 use Lemuria\Engine\Fantasya\Command\Announcement;
 use Lemuria\Engine\Fantasya\Command\Apply;
 use Lemuria\Engine\Fantasya\Command\Apply\AbstractApply;
+use Lemuria\Engine\Fantasya\Command\Attack;
 use Lemuria\Engine\Fantasya\Command\Banner;
 use Lemuria\Engine\Fantasya\Command\BattleSpell;
 use Lemuria\Engine\Fantasya\Command\Buy;
@@ -145,6 +145,7 @@ use Lemuria\Model\Fantasya\Ship\Galleon;
 use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Ship\Trireme;
 use Lemuria\Model\Fantasya\Spell;
+use Lemuria\Model\Fantasya\SpellGrade;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
@@ -196,6 +197,10 @@ class CommandFactory
 	 */
 	protected array $verbs = [
 		'//'           => 'KOMMENTAR',
+		'ANGREIFEN'    => 'ATTACKIEREN',
+		'ANGRIFF'      => 'ATTACKIEREN',
+		'ATTACKE'      => 'ATTACKIEREN',
+		'ATTACKIEREN'  => true,
 		'BANNER'       => true,
 		'BEKLAUEN'     => 'STEHLEN',
 		'BENENNEN'     => 'NAME',
@@ -516,6 +521,8 @@ class CommandFactory
 
 	protected const APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Apply\\';
 
+	protected const BATTLE_SPELL_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Combat\\Spell';
+
 	protected const CAST_NAMESPACE =  'Lemuria\\Engine\\Fantasya\\Command\\Cast\\';
 
 	public function __construct(protected Context $context) {
@@ -530,6 +537,7 @@ class CommandFactory
 		$verb = $this->identifyVerb($phrase->getVerb());
 		try {
 			$command = match ($verb) {
+				'ATTACKIEREN'  => Attack::class,
 				'BANNER'       => Banner::class,
 				'BENUTZEN'     => Apply::class,
 				'BESCHREIBUNG' => Describe::class,
@@ -707,6 +715,15 @@ class CommandFactory
 		throw new LemuriaException('Casting spell ' . $spell . ' is not implemented.');
 	}
 
+	public function castBattleSpell(SpellGrade $grade): AbstractBattleSpell {
+		$spell = getClass($grade->Spell());
+		$class = self::BATTLE_SPELL_NAMESPACE . $spell;
+		if (class_exists($class)) {
+			return new $class($grade);
+		}
+		throw new LemuriaException('Casting battle spell ' . $spell . ' is not implemented.');
+	}
+
 	/**
 	 * Match the command verb with a defined verb.
 	 *
@@ -746,7 +763,7 @@ class CommandFactory
 	/**
 	 * Parse a singleton.
 	 */
-	#[Pure] protected function getCandidate(string $singleton, array $map): ?string {
+	protected function getCandidate(string $singleton, array $map): ?string {
 		$singleton  = mbUcFirst(mb_strtolower($singleton));
 		$candidates = [];
 		foreach ($map as $candidate => $singletonClass) {

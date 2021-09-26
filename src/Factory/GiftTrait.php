@@ -25,7 +25,6 @@ trait GiftTrait
 
 	private ?Unit $recipient;
 
-	/** @noinspection PhpParamsInspection */
 	private function parseObject(string $count, string $commodity): void {
 		if ($count === '' || strtolower($count) === 'alles') {
 			$this->amount = PHP_INT_MAX; // <COMMAND> Alles [<commodity>]
@@ -51,7 +50,7 @@ trait GiftTrait
 	}
 
 	/**
-	 * Check recipients acceptance for foreign parties.
+	 * Check recipients' acceptance for foreign parties.
 	 *
 	 * @return bool
 	 */
@@ -115,9 +114,7 @@ trait GiftTrait
 
 	private function giftToRandom(Heirs $heirs, Quantity $quantity): ?Unit {
 		$unit = $heirs->random();
-		if ($unit) {
-			$unit->Inventory()->add($quantity);
-		}
+		$unit?->Inventory()->add($quantity);
 		return $unit;
 	}
 }

@@ -127,6 +127,7 @@ trait TravelTrait
 
 	/**
 	 * @return Party[]
+	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
 	protected function unitIsStoppedByGuards(Region $region): array {
 		$guards       = [];

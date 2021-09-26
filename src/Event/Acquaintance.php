@@ -65,7 +65,7 @@ final class Acquaintance extends AbstractEvent
 						$ids[$id] = min($previous, $camouflage);
 					}
 				}
-				// Then collect foreign units for the later telling of information.
+				// Then collect foreign units for telling of information later.
 				foreach ($region->Estate() as $construction /* @var Construction $construction */) {
 					foreach ($construction->Inhabitants() as $unit /* @var Unit $unit */) {
 						$this->addToNetwork($ids, $unit, $census);

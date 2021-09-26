@@ -121,6 +121,9 @@ class Travel extends UnitCommand implements Activity
 				$this->message(TravelNoCrewMessage::class)->e($this->vessel);
 				return;
 			}
+			if ($this->isNavigatedByAquans()) {
+				$speed++;
+			}
 		} else {
 			$riding = $this->Unit()->Size() * $this->calculus()->knowledge($this->riding)->Level();
 			if ($weight > $this->capacity->Ride() || $riding < $this->capacity->Talent()) {

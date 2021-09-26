@@ -207,7 +207,7 @@ final class Initiate implements Command
 			$locations->reset();
 		}
 
-		// Second try: Use the region with least residents.
+		// Second try: Use the region with the least residents.
 		foreach ($landscapes as $type) {
 			$locations->landscape(self::createLandscape($type));
 			if ($race instanceof Aquan) {

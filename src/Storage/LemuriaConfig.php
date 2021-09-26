@@ -6,11 +6,13 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Debut;
 use Lemuria\Engine\Fantasya\LemuriaDebut;
+use Lemuria\Engine\Fantasya\LemuriaHostilities;
 use Lemuria\Engine\Fantasya\LemuriaLog;
 use Lemuria\Engine\Fantasya\LemuriaOrders;
 use Lemuria\Engine\Fantasya\LemuriaReport;
 use Lemuria\Engine\Fantasya\LemuriaScore;
 use Lemuria\Engine\Fantasya\SingletonCatalog as EngineSingletonCatalog;
+use Lemuria\Engine\Hostilities;
 use Lemuria\Engine\Orders;
 use Lemuria\Engine\Report;
 use Lemuria\Engine\Score;
@@ -143,6 +145,10 @@ class LemuriaConfig implements \ArrayAccess, Config
 
 	public function Score(): Score {
 		return new LemuriaScore();
+	}
+
+	#[Pure] public function Hostilities(): Hostilities {
+		return new LemuriaHostilities();
 	}
 
 	#[Pure] public function Registry(): Registry {
