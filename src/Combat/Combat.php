@@ -151,10 +151,10 @@ class Combat extends CombatModel
 				$this->castPreparationSpell($units, $this->attacker, $this->defender);
 			}
 		} else {
-			$units1 = $this->prepareBattleSpells($this->attacker);
-			$units2 = $this->prepareBattleSpells($this->defender);
-			$this->castPreparationSpell($units1, $this->attacker, $this->defender);
-			$this->castPreparationSpell($units2, $this->defender, $this->attacker);
+			$attacker = $this->prepareBattleSpells($this->attacker);
+			$defender = $this->prepareBattleSpells($this->defender);
+			$this->castPreparationSpell($attacker, $this->attacker, $this->defender);
+			$this->castPreparationSpell($defender, $this->defender, $this->attacker);
 		}
 		return $this;
 	}
@@ -187,6 +187,7 @@ class Combat extends CombatModel
 			$this->fleeFromBattle($this->defender[self::REFUGEE], 'Defender', true);
 			$this->round++;
 			BattleLog::getInstance()->add(new CombatRoundMessage($this->round));
+			$this->castCombatSpells();
 			$damage  = $this->attack($this->attacker, $this->defender, 'Attacker');
 			$damage += $this->attack($this->defender, $this->attacker, 'Defender');
 			Lemuria::Log()->debug($damage . ' damage done in round ' . $this->round . '.');
@@ -262,7 +263,22 @@ class Combat extends CombatModel
 		foreach ($units as $unit) {
 			$grade = $unit->BattleSpells()->Preparation();
 			$spell = $this->context->Factory()->castBattleSpell($grade);
-			$spell->setCaster($caster)->setVictim($victim)->cast($unit);
+			$grade = $spell->setCaster($caster)->setVictim($victim)->cast($unit);
+			if ($grade > 0) {
+				$this->setHasCast($unit, $caster[self::FRONT]);
+				$this->setHasCast($unit, $caster[self::BACK]);
+			}
+		}
+	}
+
+	/**
+	 * @param Combatant[] $combatants
+	 */
+	protected function setHasCast(Unit $unit, array $combatants): void {
+		foreach ($combatants as $combatant) {
+			if ($combatant->Unit() === $unit) {
+				$combatant->hasCast = true;
+			}
 		}
 	}
 
@@ -446,7 +462,50 @@ class Combat extends CombatModel
 		}
 	}
 
+	protected function castCombatSpells(): void {
+		$attacker = $this->prepareCombatSpells($this->attacker);
+		$defender = $this->prepareCombatSpells($this->defender);
+		$this->castCombatSpell($attacker, $this->attacker, $this->defender);
+		$this->castCombatSpell($defender, $this->defender, $this->attacker);
+	}
+
+	/**
+	 * @return Unit[]
+	 */
+	protected function prepareCombatSpells(array $caster): array {
+		$units = [];
+		foreach ($caster[self::FRONT] as $combatant /* @var Combatant $combatant */) {
+			$unit = $combatant->Unit();
+			if ($unit->BattleSpells()?->Combat()) {
+				$units[$unit->Id()->Id()] = $unit;
+			}
+		}
+		foreach ($caster[self::BACK] as $combatant /* @var Combatant $combatant */) {
+			$unit = $combatant->Unit();
+			if ($unit->BattleSpells()?->Combat()) {
+				$units[$unit->Id()->Id()] = $unit;
+			}
+		}
+		return array_values($units);
+	}
+
+	/**
+	 * @param Unit[] $units
+	 */
+	protected function castCombatSpell(array $units, array $caster, array $victim): void {
+		foreach ($units as $unit) {
+			$grade = $unit->BattleSpells()->Combat();
+			$spell = $this->context->Factory()->castBattleSpell($grade);
+			$grade = $spell->setCaster($caster)->setVictim($victim)->cast($unit);
+			if ($grade > 0) {
+				$this->setHasCast($unit, $caster[self::FRONT]);
+				$this->setHasCast($unit, $caster[self::BACK]);
+			}
+		}
+	}
+
 	protected function attack(array &$attacker, array &$defender, string $who): int {
+
 		$message = $who . ': Front row attacks.';
 		$damage  = $this->attackRowAgainstRow($attacker[self::FRONT], $defender[self::FRONT], $message);
 		$message = $who . ': Back row attacks.';
@@ -486,8 +545,8 @@ class Combat extends CombatModel
 		$comA   = null;
 		$comD   = null;
 		while ($cA < $a && $cD < $d) {
-			if ($fA >= $nA) {
-				/** @var Combatant $comA */
+			/** @var Combatant $comA */
+			if ($comA?->hasCast || $fA >= $nA) {
 				$comA = $attacker[++$cA] ?? null;
 				$nA   = $comA?->Size();
 				$hits = $comA?->Hits();
@@ -525,7 +584,9 @@ class Combat extends CombatModel
 	protected function removeTheDead(array &$combatantRows): void {
 		foreach ($combatantRows as &$combatants) {
 			foreach ($combatants as $c => &$combatant /* @var Combatant $combatant */) {
-				$size = $combatant->Size();
+				$size                  = $combatant->Size();
+				$combatant->distracted = 0;
+				$combatant->hasCast    = false;
 				foreach ($combatant->fighters as $f => $fighter) {
 					if ($fighter->health <= 0) {
 						if ($fighter->potion instanceof HealingPotion) {

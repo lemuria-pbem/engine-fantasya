@@ -138,14 +138,24 @@ class Attack
 			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA) . ' is not ready yet.');
 			return null;
 		}
+		if ($fA < $this->combatant->distracted) {
+			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA) . ' is distracted.');
+			return null;
+		}
 
 		$skill    = $this->combatant->WeaponSkill()->Skill()->Level();
-		$block    = $defender->WeaponSkill()->Skill()->Level();
 		$armor    = $this->combatant->Armor();
 		$aClass   = $armor ? $armor::class : null;
-		$shield   = $defender->Shield();
-		$sClass   = $shield ? $shield::class : null;
 		$hasBonus = $this->combatant->fighters[$fA]->potion instanceof BerserkBlood;
+
+		if ($fD < $defender->distracted) {
+			$block  = 0;
+			$sClass = null;
+		} else {
+			$block  = $defender->WeaponSkill()->Skill()->Level();
+			$shield = $defender->Shield();
+			$sClass = $shield ? $shield::class : null;
+		}
 
 		if ($this->isSuccessful($skill, $block, $aClass, $sClass, $hasBonus)) {
 			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA) . ' hits enemy ' . $defender->getId($fD) . '.');
@@ -162,7 +172,7 @@ class Attack
 	protected function isSuccessful(int $skill, int $block, ?string $armor, ?string $shield, bool $hasAttackBonus): bool {
 		$malus = 0;
 		if ($hasAttackBonus) {
-			$malus = BerserkBloodEffect::BONUS;
+			$malus = -BerserkBloodEffect::BONUS;
 		} elseif ($armor) {
 			$malus = self::ATTACK_MALUS[$armor];
 		}

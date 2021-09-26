@@ -37,6 +37,10 @@ class Combatant
 	 */
 	public array $fighters;
 
+	public int $distracted = 0;
+
+	public bool $hasCast = false;
+
 	/**
 	 * @var array(int=>int)
 	 */
