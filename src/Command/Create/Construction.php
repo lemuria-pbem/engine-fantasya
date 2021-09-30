@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command\Create;
 use Lemuria\Engine\Fantasya\Factory\MarketBuilder;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionBuildMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionCreateMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ConstructionDependencyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionOnlyMessage;
@@ -46,8 +47,14 @@ final class Construction extends AbstractProduct
 	}
 
 	protected function run(): void {
-		$construction     = $this->unit->Construction();
-		$building         = $construction?->Building() ?? $this->getBuilding();
+		$construction = $this->unit->Construction();
+		$building     = $construction?->Building() ?? $this->getBuilding();
+		if (!$this->checkDependency($building)) {
+			$dependency = $building->Dependency();
+			$this->message(ConstructionDependencyMessage::class)->s($building)->s($dependency, ConstructionDependencyMessage::DEPENDENCY);
+			return;
+		}
+
 		$this->size       = $construction?->Size() ?? 0;
 		$demand           = $this->job->Count();
 		$talent           = $building->getCraft()->Talent();
@@ -98,6 +105,20 @@ final class Construction extends AbstractProduct
 				}
 			}
 		}
+	}
+
+	protected function checkDependency(Building $building): bool {
+		$dependency = $building->Dependency();
+		if ($dependency) {
+			foreach ($this->unit->Region()->Estate() as $construction /* @var ConstructionModel $construction */) {
+				if ($construction->Building() === $dependency) {
+					if ($construction->Inhabitants()->Owner()?->Party() === $this->unit->Party()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	/**

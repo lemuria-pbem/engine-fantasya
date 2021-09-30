@@ -4,16 +4,18 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.7
 
+- Effekt Holzfällerhütte
+- Baukosten und Effekt Sägewerk
+- weitere Gebäude
 
 ## Neue Funktionen
 
 ### Version 0.8
 
-- BELAGERN
-- erbeutete Waffen/Rüstungen reparieren
-- Monster, besondere Gegenstände wie Greifeneier, Wagenwracks
 - NPC- und Monsterparteien
-- weitere Gebäude und deren Effekte
+- Monster, besondere Gegenstände wie Greifeneier, Wagenwracks
+- erbeutete Waffen/Rüstungen reparieren
+- BELAGERN
 - besondere Gebäude wie Ruinen
 
 ### Version 0.9 und folgende
