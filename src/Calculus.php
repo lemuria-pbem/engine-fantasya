@@ -209,6 +209,14 @@ final class Calculus
 				if ($modification instanceof Modification) {
 					$ability = $modification->getModified($ability);
 				}
+
+				$construction = $this->unit->Construction();
+				if ($construction) {
+					$modification = $construction->Building()->BuildingEffect()->getEffect($talent);
+					if ($modification instanceof Modification) {
+						$ability = $modification->getModified($ability);
+					}
+				}
 				return $ability;
 			}
 		}
