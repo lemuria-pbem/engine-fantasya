@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Combat\WeaponSkill;
 use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Effect\PotionEffect;
+use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Item;
@@ -210,9 +211,8 @@ final class Calculus
 					$ability = $modification->getModified($ability);
 				}
 
-				$construction = $this->unit->Construction();
-				if ($construction) {
-					$modification = $construction->Building()->BuildingEffect()->getEffect($talent);
+				if ($this->isInMaintainedConstruction()) {
+					$modification = $this->unit->Construction()->Building()->BuildingEffect()->getEffect($talent);
 					if ($modification instanceof Modification) {
 						$ability = $modification->getModified($ability);
 					}
@@ -377,6 +377,15 @@ final class Calculus
 			$factor = $currentHunger < 0.5 ? 1.2 : 1.3;
 		}
 		return (int)round($factor * $unit->Race()->Hunger());
+	}
+
+	public function isInMaintainedConstruction(): bool {
+		$construction = $this->unit->Construction();
+		if ($construction) {
+			$effect = new Unmaintained(State::getInstance());
+			return Lemuria::Score()->find($effect->setConstruction($construction)) === null;
+		}
+		return false;
 	}
 
 	#[Pure] private function transport(?Item $quantity, int $reduceBy = 0): int {
