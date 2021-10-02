@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
-use Lemuria\Model\Fantasya\Talent;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command\AllocationCommand;
@@ -27,6 +26,7 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\RawMaterial as RawMaterialInterface;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Requirement;
+use Lemuria\Model\Fantasya\Talent;
 
 /**
  * Implementation of command MACHEN <amount> <RawMaterial> (create raw material).
@@ -84,9 +84,10 @@ class RawMaterial extends AllocationCommand implements Activity
 
 	/**
 	 * Determine the demand.
+	 *
+	 * @noinspection DuplicatedCode
 	 */
 	protected function createDemand(): void {
-		$resource         = $this->getCommodity();
 		$requirement      = $this->getRequiredTalent();
 		$this->knowledge  = $this->calculus()->knowledge($requirement->Talent());
 		$size             = $this->unit->Size();
@@ -110,7 +111,7 @@ class RawMaterial extends AllocationCommand implements Activity
 			$this->addToWorkload($this->production);
 			$this->resources->add($quantity);
 		} else {
-			$this->message(RawMaterialNoDemandMessage::class)->s($resource);
+			$this->message(RawMaterialNoDemandMessage::class)->s($this->getCommodity());
 		}
 	}
 

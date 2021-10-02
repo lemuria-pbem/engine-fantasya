@@ -9,6 +9,8 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Fantasya\Artifact as ArtifactInterface;
+use Lemuria\Model\Fantasya\Building\Sawmill;
+use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\RawMaterial as RawMaterialInterface;
 
 /**
@@ -34,6 +36,9 @@ final class Resource extends DelegatedCommand
 		$resource = $this->job->getObject();
 		if ($resource instanceof ArtifactInterface) {
 			return new Artifact($this->phrase, $this->context, $this->job);
+		}
+		if ($resource instanceof Wood && $this->unit->Construction()?->Building() instanceof Sawmill) {
+			return new SawmillWood($this->phrase, $this->context, $this->job);
 		}
 		if ($resource instanceof RawMaterialInterface) {
 			return new RawMaterial($this->phrase, $this->context, $this->job);

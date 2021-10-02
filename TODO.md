@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.7
 
-- Baukosten und Effekt Sägewerk
 - weitere Gebäude
 
 ## Neue Funktionen
