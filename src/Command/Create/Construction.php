@@ -117,8 +117,9 @@ final class Construction extends AbstractProduct
 					}
 				}
 			}
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	/**

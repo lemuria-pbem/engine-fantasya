@@ -137,6 +137,10 @@ final class Calculus
 			if ($riding >= $talentDrive && $horseCount >= 2 * $cars) {
 				return new Capacity($walk, $rideFly, Capacity::DRIVE, $weight, $speed, $talentDrive, $speedBoost);
 			}
+			$talentWalk = $this->talent($animals, $size, false, $cars);
+			if ($riding >= $talentWalk) {
+				return new Capacity($walk, $rideFly, Capacity::WALK, $weight, 1, $talentWalk, $speedBoost);
+			}
 			if ($race instanceof Troll) {
 				$needed = 2 * $cars;
 				if ($size >= $needed) {
@@ -398,18 +402,15 @@ final class Calculus
 	/**
 	 * @noinspection PhpMissingBreakStatementInspection
 	 */
-	#[Pure] private function talent(array $transports, int $size, bool $max = false,
-		                            int $carriage = 0): int {
-		$talent    = 0;
-		$hasHorses = 0;
+	#[Pure] private function talent(array $transports, int $size, bool $max = false, int $carriage = 0): int {
+		$talent = 0;
 		foreach ($transports as $item /* @var Item $item */) {
 			if ($item) {
 				$transport = $item->getObject();
 				$count     = $item->Count();
 				switch ($transport::class) {
 					case Horse::class :
-						$count     = max($count, $carriage * 2);
-						$hasHorses = true;
+						$count = max($count, $carriage * 2);
 					case Camel::class :
 					case Pegasus::class :
 						if ($max) {
@@ -426,8 +427,8 @@ final class Calculus
 				}
 			}
 		}
-		if ($carriage && !$hasHorses) {
-			$talent += $carriage * 2;
+		if ($carriage) {
+			$talent = max($talent, $carriage * 2);
 		}
 		return $talent;
 	}
