@@ -4,7 +4,16 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.7
 
-- weitere Gebäude
+- weitere Gebäude:
+  - Hafen
+  - Küche
+  - Leuchtturm
+  - Sattlerei
+  - Schmiede
+  - Seehafen
+  - Steg
+  - Steuerturm
+  - Werkstatt
 
 ## Neue Funktionen
 

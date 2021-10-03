@@ -6,7 +6,7 @@ use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 
-final class CabinLodging extends AbstractConstructionEffect
+final class WorkerLodging extends AbstractConstructionEffect
 {
 	private int $booking = 0;
 
@@ -18,7 +18,7 @@ final class CabinLodging extends AbstractConstructionEffect
 		return $this->booking;
 	}
 
-	public function book(int $places): CabinLodging {
+	public function book(int $places): WorkerLodging {
 		$this->booking += $places;
 		return $this;
 	}

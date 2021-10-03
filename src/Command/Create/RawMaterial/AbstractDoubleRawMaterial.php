@@ -1,39 +1,37 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Fantasya\Command\Create;
+namespace Lemuria\Engine\Fantasya\Command\Create\RawMaterial;
 
-use Lemuria\Engine\Fantasya\Effect\CabinLodging;
+use Lemuria\Engine\Fantasya\Effect\WorkerLodging;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialCanMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialCannotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialNoDemandMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialWantsMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\SawmillWoodUnusable;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Building\Cabin;
-use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\RawMaterial;
 use Lemuria\Model\Fantasya\Relation;
 
 /**
- * Special implementation of command MACHEN Holz (create wood) when unit is in a Sawmill.
+ * Special implementation of command MACHEN <raw material> (create raw material) when unit is in an advanced facility.
  *
- * - MACHEN Holz
- * - MACHEN <amount> Holz
+ * - MACHEN <raw material>
+ * - MACHEN <amount> <raw material>
  */
-final class SawmillWood extends RawMaterial
+abstract class AbstractDoubleRawMaterial extends BasicRawMaterial
 {
-	private bool $hasCabin = false;
+	protected bool $hasLodging = false;
 
 	protected function initialize(): void {
-		$this->checkForFriendlyCabin();
+		$this->checkForFriendlyLodge();
 		parent::initialize();
 	}
 
 	protected function run(): void {
-		if ($this->hasCabin) {
-			$this->doubleResourcesBySawmill();
+		if ($this->hasLodging) {
+			$this->doubleResourcesByFacility();
 		}
 		parent::run();
 	}
@@ -44,15 +42,15 @@ final class SawmillWood extends RawMaterial
 	 * @noinspection DuplicatedCode
 	 */
 	protected function createDemand(): void {
-		$wood = $this->getCommodity();
-		if ($this->hasCabin) {
-			$woodchopping    = $this->getRequiredTalent();
-			$this->knowledge = $this->calculus()->knowledge($woodchopping->Talent());
+		$resource = $this->getCommodity();
+		if ($this->hasLodging) {
+			$talent          = $this->getRequiredTalent();
+			$this->knowledge = $this->calculus()->knowledge($talent->Talent());
 			$size            = $this->unit->Size();
-			$production      = (int)floor($this->potionBoost($size) * $size * $this->knowledge->Level() / $woodchopping->Level());
+			$production      = (int)floor($this->potionBoost($size) * $size * $this->knowledge->Level() / $talent->Level());
 		} else {
 			$production = 0;
-			$this->message(SawmillWoodUnusable::class)->s($wood);
+			$this->addUnusableMessage();
 		}
 		$this->production = $this->reduceByWorkload($production);
 
@@ -73,19 +71,22 @@ final class SawmillWood extends RawMaterial
 			}
 			$this->addToWorkload($this->production);
 
-			$trees = new Quantity($wood, (int)ceil($quantity->Count() / 2));
-			$this->resources->add($trees);
-		} elseif ($this->hasCabin) {
-			$this->message(RawMaterialNoDemandMessage::class)->s($wood);
+			$material = new Quantity($resource, (int)ceil($quantity->Count() / 2));
+			$this->resources->add($material);
+		} elseif ($this->hasLodging) {
+			$this->message(RawMaterialNoDemandMessage::class)->s($resource);
 		}
 	}
 
-	private function checkForFriendlyCabin(): void {
-		$needed    = $this->unit->Size();
-		$party     = $this->unit->Party();
-		$diplomacy = $party->Diplomacy();
+	abstract protected function addUnusableMessage(): void;
+
+	private function checkForFriendlyLodge(): void {
+		$needed     = $this->unit->Size();
+		$party      = $this->unit->Party();
+		$diplomacy  = $party->Diplomacy();
+		$dependency = $this->unit->Construction()->Building()->Dependency();
 		foreach ($this->unit->Region()->Estate() as $construction /* @var Construction $construction */) {
-			if ($construction->Building() instanceof Cabin) {
+			if ($construction->Building() === $dependency) {
 				$inhabitants = $construction->Inhabitants();
 				$owner       = $inhabitants->Owner();
 				if ($owner->Party() === $party || $diplomacy->has(Relation::ENTER, $owner)) {
@@ -96,7 +97,7 @@ final class SawmillWood extends RawMaterial
 						$lodging->book($bookPlaces);
 						$needed -= $bookPlaces;
 						if ($needed <= 0) {
-							$this->hasCabin = true;
+							$this->hasLodging = true;
 							break;
 						}
 					}
@@ -105,18 +106,18 @@ final class SawmillWood extends RawMaterial
 		}
 	}
 
-	private function doubleResourcesBySawmill(): void {
-		/** @var Wood $wood */
-		$wood  = $this->getCommodity();
-		$count = $this->resources[$wood]->Count();
+	private function doubleResourcesByFacility(): void {
+		/** @var RawMaterial */
+		$material = $this->getCommodity();
+		$count    = $this->resources[$material]->Count();
 		if ($count > 0) {
-			$this->resources->add(new Quantity($wood, $count));
+			$this->resources->add(new Quantity($material, $count));
 		}
 	}
 
-	private function getLodging(Construction $construction): CabinLodging {
-		$effect = new CabinLodging(State::getInstance());
-		/** @var CabinLodging $lodging */
+	private function getLodging(Construction $construction): WorkerLodging {
+		$effect = new WorkerLodging(State::getInstance());
+		/** @var WorkerLodging $lodging */
 		$lodging = Lemuria::Score()->find($effect->setConstruction($construction));
 		if ($lodging) {
 			return $lodging;
