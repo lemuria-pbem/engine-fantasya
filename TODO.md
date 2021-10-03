@@ -5,14 +5,11 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Fehler/Verbesserungen in 0.7
 
 - weitere Gebäude:
-  - Hafen
-  - Küche
-  - Leuchtturm
   - Sattlerei
   - Schmiede
-  - Seehafen
   - Steg
-  - Steuerturm
+  - Wegweiser
+  - Werft
   - Werkstatt
 
 ## Neue Funktionen
@@ -20,10 +17,22 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ### Version 0.8
 
 - NPC- und Monsterparteien
-- Monster, besondere Gegenstände wie Greifeneier, Wagenwracks
+- Monster
+- besondere Gegenstände:
+  - Greifeneier
+  - Kriegsbeute
+  - Trophäen
+  - Wagenwracks
+- Lederrüstung aus Elefantenhaut
 - erbeutete Waffen/Rüstungen reparieren
 - BELAGERN
-- besondere Gebäude wie Ruinen
+- weitere Gebäude:
+  - Akropolis
+  - Hafen
+  - Leuchtturm
+  - Magierturm
+  - Steuerturm
+  - Taverne
 
 ### Version 0.9 und folgende
 
@@ -33,10 +42,20 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Talentveränderungen im Report anzeigen
 - HTML-Report optisch verbessern
 - Regeldatei für Magellan
+- Kriegselefanten
+- weitere Gebäude:
+  - Akademie
+  - Alchemistenküche
+  - Kamelzucht
+  - Megapolis
+  - Monument
+  - Pferdezucht
+  - Steinkreis
 
 ## Ideen
 
 - Befehle in der Vorlage wiederholen (LIEFERE bzw. @BEFEHL in Fantasya)
+- besondere Gebäude wie Ruinen
 - Ereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE
 - Seekampf/Piraterie
