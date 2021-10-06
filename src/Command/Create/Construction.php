@@ -110,10 +110,25 @@ final class Construction extends AbstractProduct
 	protected function checkDependency(Building $building): bool {
 		$dependency = $building->Dependency();
 		if ($dependency) {
+			if ($dependency instanceof Castle) {
+				$isCastle = true;
+				$minSize  = $dependency->MinSize();
+			} else {
+				$isCastle = false;
+				$minSize  = 0;
+			}
 			foreach ($this->unit->Region()->Estate() as $construction /* @var ConstructionModel $construction */) {
-				if ($construction->Building() === $dependency) {
-					if ($construction->Inhabitants()->Owner()?->Party() === $this->unit->Party()) {
-						return true;
+				if ($isCastle) {
+					if ($construction->Building() instanceof Castle && $construction->Size() >= $minSize) {
+						if ($construction->Inhabitants()->Owner()?->Party() === $this->unit->Party()) {
+							return true;
+						}
+					}
+				} else {
+					if ($construction->Building() === $dependency) {
+						if ($construction->Inhabitants()->Owner()?->Party() === $this->unit->Party()) {
+							return true;
+						}
 					}
 				}
 			}
