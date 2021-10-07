@@ -14,6 +14,7 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Item;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
+use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
@@ -24,11 +25,14 @@ use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Potion\GoliathWater;
 use Lemuria\Model\Fantasya\Commodity\Potion\SevenLeagueTea;
+use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Modification;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Race\Troll;
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
@@ -384,6 +388,22 @@ final class Calculus
 		if ($construction) {
 			$effect = new Unmaintained(State::getInstance());
 			return Lemuria::Score()->find($effect->setConstruction($construction)) === null;
+		}
+		return false;
+	}
+
+	public function canEnter(Region $region, Building $building): bool {
+		$party      = $this->unit->Party();
+		$diplomacy  = $party->Diplomacy();
+		foreach ($region->Estate() as $construction /* @var Construction $construction */) {
+			if ($construction->Building() === $building) {
+				$inhabitants = $construction->Inhabitants();
+				$owner       = $inhabitants->Owner();
+				if ($owner->Party() === $party || $diplomacy->has(Relation::ENTER, $owner)) {
+					$calculus = new self($owner);
+					return $calculus->isInMaintainedConstruction();
+				}
+			}
 		}
 		return false;
 	}

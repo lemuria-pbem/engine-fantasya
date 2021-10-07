@@ -2,17 +2,18 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Landscape;
+use Lemuria\Model\Fantasya\Building\Quay;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Landscape\Forest;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Landscape\Plain;
 use Lemuria\Model\Fantasya\Race\Aquan;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Ship\Boat;
+use Lemuria\Model\Fantasya\Ship\Dragonship;
+use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Vessel;
 use Lemuria\Model\Fantasya\Talent\Navigation;
 use Lemuria\Model\Fantasya\Unit;
@@ -20,6 +21,8 @@ use Lemuria\Model\Neighbours;
 
 trait NavigationTrait
 {
+	use BuilderTrait;
+
 	protected Context $context;
 
 	private ?Vessel $vessel = null;
@@ -66,11 +69,21 @@ trait NavigationTrait
 	/**
 	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
-	#[Pure] private function canSailTo(Landscape $landscape): bool {
-		if ($this->vessel->Ship() instanceof Boat) {
+	private function canSailTo(Region $region): bool {
+		$landscape = $region->Landscape();
+		$ship      = $this->vessel->Ship();
+		if ($ship instanceof Boat) {
 			return true;
 		}
-		return $landscape instanceof Plain || $landscape instanceof Forest || $landscape instanceof Ocean;
+		if ($landscape instanceof Plain || $landscape instanceof Forest || $landscape instanceof Ocean) {
+			return true;
+		}
+		if ($ship instanceof Longboat || $ship instanceof Dragonship) {
+			$calculus = $this->context->getCalculus($this->vessel->Passengers()->Owner());
+			$quay     = self::createBuilding(Quay::class);
+			return $calculus->canEnter($region, $quay);
+		}
+		return false;
 	}
 
 	private function isNavigatedByAquans(): bool {

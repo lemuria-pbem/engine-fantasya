@@ -59,7 +59,7 @@ final class Drift extends AbstractEvent
 				/** @var Region $driftRegion */
 				$driftRegion = $neighbours[$direction];
 				$landscape   = $driftRegion->Landscape();
-				if ($landscape instanceof Ocean || $this->canSailTo($landscape)) {
+				if ($landscape instanceof Ocean || $this->canSailTo($driftRegion)) {
 					$this->moveVessel($driftRegion);
 					$this->message(DriftMessage::class, $vessel)->p($direction);
 				} else {
