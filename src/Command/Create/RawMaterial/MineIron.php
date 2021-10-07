@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create\RawMaterial;
 
+use Lemuria\Engine\Fantasya\Message\Unit\MineUnmaintainedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\MineUnusableMessage;
 
 /**
@@ -10,9 +11,13 @@ use Lemuria\Engine\Fantasya\Message\Unit\MineUnusableMessage;
  * - MACHEN Eisen
  * - MACHEN <amount> Eisen
  */
-final class MineIron extends BasicRawMaterial
+final class MineIron extends AbstractDoubleRawMaterial
 {
 	protected function addUnusableMessage(): void {
 		$this->message(MineUnusableMessage::class);
+	}
+
+	protected function addUnmaintainedMessage(): void {
+		$this->message(MineUnmaintainedMessage::class);
 	}
 }

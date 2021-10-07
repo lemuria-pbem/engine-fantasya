@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create\RawMaterial;
 
+use Lemuria\Engine\Fantasya\Message\Unit\QuarryUnmaintainedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\QuarryUnusableMessage;
 
 /**
@@ -14,5 +15,9 @@ final class QuarryStone extends AbstractDoubleRawMaterial
 {
 	protected function addUnusableMessage(): void {
 		$this->message(QuarryUnusableMessage::class);
+	}
+
+	protected function addUnmaintainedMessage(): void {
+		$this->message(QuarryUnmaintainedMessage::class);
 	}
 }

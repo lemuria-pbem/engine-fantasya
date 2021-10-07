@@ -2,15 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
-use Lemuria\Engine\Message;
-use Lemuria\Engine\Message\Section;
-
-class QuarryUnusableMessage extends AbstractUnitMessage
+class QuarryUnusableMessage extends QuarryUnmaintainedMessage
 {
-	protected string $level = Message::FAILURE;
-
-	protected int $section = Section::PRODUCTION;
-
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot produce stone in the quarry, not enough space in the shack.';
 	}

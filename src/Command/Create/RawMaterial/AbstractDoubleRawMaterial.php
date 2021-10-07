@@ -42,15 +42,19 @@ abstract class AbstractDoubleRawMaterial extends BasicRawMaterial
 	 * @noinspection DuplicatedCode
 	 */
 	protected function createDemand(): void {
-		$resource = $this->getCommodity();
-		if ($this->hasLodging) {
-			$talent          = $this->getRequiredTalent();
-			$this->knowledge = $this->calculus()->knowledge($talent->Talent());
-			$size            = $this->unit->Size();
-			$production      = (int)floor($this->potionBoost($size) * $size * $this->knowledge->Level() / $talent->Level());
+		$resource   = $this->getCommodity();
+		$production = 0;
+		if ($this->calculus()->isInMaintainedConstruction()) {
+			if ($this->hasLodging) {
+				$talent          = $this->getRequiredTalent();
+				$this->knowledge = $this->calculus()->knowledge($talent->Talent());
+				$size            = $this->unit->Size();
+				$production      = (int)floor($this->potionBoost($size) * $size * $this->knowledge->Level() / $talent->Level());
+			} else {
+				$this->addUnusableMessage();
+			}
 		} else {
-			$production = 0;
-			$this->addUnusableMessage();
+			$this->addUnmaintainedMessage();
 		}
 		$this->production = $this->reduceByWorkload($production);
 
@@ -80,6 +84,8 @@ abstract class AbstractDoubleRawMaterial extends BasicRawMaterial
 
 	abstract protected function addUnusableMessage(): void;
 
+	abstract protected function addUnmaintainedMessage(): void;
+
 	private function checkForFriendlyLodge(): void {
 		$needed     = $this->unit->Size();
 		$party      = $this->unit->Party();
@@ -90,15 +96,17 @@ abstract class AbstractDoubleRawMaterial extends BasicRawMaterial
 				$inhabitants = $construction->Inhabitants();
 				$owner       = $inhabitants->Owner();
 				if ($owner->Party() === $party || $diplomacy->has(Relation::ENTER, $owner)) {
-					$lodging    = $this->getLodging($construction);
-					$freePlaces = $construction->Size() - $inhabitants->count() - $lodging->Booking();
-					if ($freePlaces >= 0) {
-						$bookPlaces = min($freePlaces, $needed);
-						$lodging->book($bookPlaces);
-						$needed -= $bookPlaces;
-						if ($needed <= 0) {
-							$this->hasLodging = true;
-							break;
+					if ($this->context->getCalculus($owner)->isInMaintainedConstruction()) {
+						$lodging    = $this->getLodging($construction);
+						$freePlaces = $construction->Size() - $inhabitants->count() - $lodging->Booking();
+						if ($freePlaces >= 0) {
+							$bookPlaces = min($freePlaces, $needed);
+							$lodging->book($bookPlaces);
+							$needed -= $bookPlaces;
+							if ($needed <= 0) {
+								$this->hasLodging = true;
+								break;
+							}
 						}
 					}
 				}

@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create\RawMaterial;
 
+use Lemuria\Engine\Fantasya\Message\Unit\SawmillUnmaintainedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SawmillUnusableMessage;
 
 /**
@@ -14,5 +15,9 @@ final class SawmillWood extends AbstractDoubleRawMaterial
 {
 	protected function addUnusableMessage(): void {
 		$this->message(SawmillUnusableMessage::class);
+	}
+
+	protected function addUnmaintainedMessage(): void {
+		$this->message(SawmillUnmaintainedMessage::class);
 	}
 }
