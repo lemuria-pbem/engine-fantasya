@@ -4,24 +4,30 @@ namespace Lemuria\Engine\Fantasya\Message\Region;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message\Section;
-use Lemuria\Item;
+use Lemuria\Singleton;
 
 class GrowthMessage extends AbstractRegionMessage
 {
 	protected int $section = Section::ECONOMY;
 
-	protected Item $trees;
+	protected int $trees;
+
+	protected Singleton $tree;
 
 	protected function create(): string {
-		return 'In region ' . $this->id . ' ' . $this->trees . ' are growing.';
+		return 'In region ' . $this->id . ' ' . $this->trees . ' trees are growing.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->trees = $message->getQuantity();
+		$this->trees = $message->getParameter();
+		$this->tree  = $message->getSingleton();
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->item($name, 'trees') ?? parent::getTranslation($name);
+		if ($name === 'tree') {
+			return parent::translateKey('replace.tree', $this->trees > 1 ? 1 : 0);
+		}
+		return $this->number($name, 'trees') ?? parent::getTranslation($name);
 	}
 }

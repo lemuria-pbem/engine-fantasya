@@ -80,7 +80,7 @@ final class Growth extends AbstractEvent
 					$trees   += $growth;
 					$newTrees = new Quantity($this->tree, $growth);
 					$resources->add($newTrees);
-					$this->message(GrowthMessage::class, $region)->i($newTrees);
+					$this->message(GrowthMessage::class, $region)->p($growth)->s($this->tree);
 				}
 			}
 

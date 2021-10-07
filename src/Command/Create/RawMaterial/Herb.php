@@ -1,6 +1,6 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Fantasya\Command\Create;
+namespace Lemuria\Engine\Fantasya\Command\Create\RawMaterial;
 
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
@@ -22,7 +22,7 @@ use Lemuria\Model\Fantasya\Talent\Herballore;
  * - MACHEN Kraut|Kraeuter|Kräuter
  * - MACHEN <amount> Kraut|Kraeuter|Kräuter
  */
-final class Herb extends RawMaterial
+final class Herb extends BasicRawMaterial
 {
 	private ?Herbage $herbage;
 

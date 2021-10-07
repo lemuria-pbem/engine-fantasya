@@ -6,12 +6,14 @@ use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterDeniedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EnterForbiddenMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterNotFoundMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterTooLargeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
 use Lemuria\Id;
+use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Relation;
 
@@ -22,6 +24,8 @@ use Lemuria\Model\Fantasya\Relation;
  */
 final class Enter extends UnitCommand
 {
+	private const FORBIDDEN = [Signpost::class];
+
 	protected function run(): void {
 		if ($this->phrase->count() < 1) {
 			throw new InvalidCommandException($this);
@@ -37,10 +41,17 @@ final class Enter extends UnitCommand
 			$this->message(EnterNotFoundMessage::class)->p($id->Id());
 			return;
 		}
+
 		$newConstruction = Construction::get($id);
+		$building        = $newConstruction->Building();
+		if (isset(self::FORBIDDEN[$building::class])) {
+			$this->message(EnterForbiddenMessage::class)->s($building);
+			return;
+		}
+
 		if ($newConstruction->getFreeSpace() < $this->unit->Size()) {
 			$this->message(EnterTooLargeMessage::class)->e($newConstruction);
-			return ;
+			return;
 		}
 		if (!$this->checkPermission($newConstruction)) {
 			$this->message(EnterDeniedMessage::class)->e($newConstruction);

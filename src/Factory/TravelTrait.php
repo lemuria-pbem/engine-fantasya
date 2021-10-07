@@ -61,7 +61,7 @@ trait TravelTrait
 				return $neighbour;
 			}
 			if ($region->Landscape() instanceof Ocean) {
-				if (!$this->canSailTo($landscape)) {
+				if (!$this->canSailTo($region)) {
 					$this->message(TravelLandMessage::class, $this->vessel)->p($direction)->s($landscape)->e($neighbour);
 					return null;
 				}

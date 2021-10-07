@@ -8,11 +8,13 @@ use Lemuria\Engine\Fantasya\Combat\WeaponSkill;
 use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Effect\PotionEffect;
+use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Item;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
+use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
@@ -23,11 +25,14 @@ use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Potion\GoliathWater;
 use Lemuria\Model\Fantasya\Commodity\Potion\SevenLeagueTea;
+use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Modification;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Race\Troll;
+use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
@@ -137,6 +142,10 @@ final class Calculus
 			if ($riding >= $talentDrive && $horseCount >= 2 * $cars) {
 				return new Capacity($walk, $rideFly, Capacity::DRIVE, $weight, $speed, $talentDrive, $speedBoost);
 			}
+			$talentWalk = $this->talent($animals, $size, false, $cars);
+			if ($riding >= $talentWalk) {
+				return new Capacity($walk, $rideFly, Capacity::WALK, $weight, 1, $talentWalk, $speedBoost);
+			}
 			if ($race instanceof Troll) {
 				$needed = 2 * $cars;
 				if ($size >= $needed) {
@@ -204,6 +213,13 @@ final class Calculus
 				$modification = $race->TerrainEffect()->getEffect($this->unit->Region()->Landscape(), $talent);
 				if ($modification instanceof Modification) {
 					$ability = $modification->getModified($ability);
+				}
+
+				if ($this->isInMaintainedConstruction()) {
+					$modification = $this->unit->Construction()->Building()->BuildingEffect()->getEffect($talent);
+					if ($modification instanceof Modification) {
+						$ability = $modification->getModified($ability);
+					}
 				}
 				return $ability;
 			}
@@ -367,6 +383,31 @@ final class Calculus
 		return (int)round($factor * $unit->Race()->Hunger());
 	}
 
+	public function isInMaintainedConstruction(): bool {
+		$construction = $this->unit->Construction();
+		if ($construction) {
+			$effect = new Unmaintained(State::getInstance());
+			return Lemuria::Score()->find($effect->setConstruction($construction)) === null;
+		}
+		return false;
+	}
+
+	public function canEnter(Region $region, Building $building): bool {
+		$party      = $this->unit->Party();
+		$diplomacy  = $party->Diplomacy();
+		foreach ($region->Estate() as $construction /* @var Construction $construction */) {
+			if ($construction->Building() === $building) {
+				$inhabitants = $construction->Inhabitants();
+				$owner       = $inhabitants->Owner();
+				if ($owner->Party() === $party || $diplomacy->has(Relation::ENTER, $owner)) {
+					$calculus = new self($owner);
+					return $calculus->isInMaintainedConstruction();
+				}
+			}
+		}
+		return false;
+	}
+
 	#[Pure] private function transport(?Item $quantity, int $reduceBy = 0): int {
 		$transport = $quantity?->getObject();
 		if ($transport instanceof Transport) {
@@ -398,18 +439,15 @@ final class Calculus
 	/**
 	 * @noinspection PhpMissingBreakStatementInspection
 	 */
-	#[Pure] private function talent(array $transports, int $size, bool $max = false,
-		                            int $carriage = 0): int {
-		$talent    = 0;
-		$hasHorses = 0;
+	#[Pure] private function talent(array $transports, int $size, bool $max = false, int $carriage = 0): int {
+		$talent = 0;
 		foreach ($transports as $item /* @var Item $item */) {
 			if ($item) {
 				$transport = $item->getObject();
 				$count     = $item->Count();
 				switch ($transport::class) {
 					case Horse::class :
-						$count     = max($count, $carriage * 2);
-						$hasHorses = true;
+						$count = max($count, $carriage * 2);
 					case Camel::class :
 					case Pegasus::class :
 						if ($max) {
@@ -426,8 +464,8 @@ final class Calculus
 				}
 			}
 		}
-		if ($carriage && !$hasHorses) {
-			$talent += $carriage * 2;
+		if ($carriage) {
+			$talent = max($talent, $carriage * 2);
 		}
 		return $talent;
 	}

@@ -2,20 +2,24 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
+use Lemuria\Engine\Fantasya\Effect\SignpostEffect;
 use Lemuria\Engine\Fantasya\Factory\MarketBuilder;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionBuildMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionCreateMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ConstructionDependencyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionResourcesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionUnableMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\AbstractCastle;
 use Lemuria\Model\Fantasya\Building\Castle;
+use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Construction as ConstructionModel;
 use Lemuria\Model\Fantasya\Quantity;
@@ -46,8 +50,14 @@ final class Construction extends AbstractProduct
 	}
 
 	protected function run(): void {
-		$construction     = $this->unit->Construction();
-		$building         = $construction?->Building() ?? $this->getBuilding();
+		$construction = $this->unit->Construction();
+		$building     = $construction?->Building() ?? $this->getBuilding();
+		if (!$this->checkDependency($building)) {
+			$dependency = $building->Dependency();
+			$this->message(ConstructionDependencyMessage::class)->s($building)->s($dependency, ConstructionDependencyMessage::DEPENDENCY);
+			return;
+		}
+
 		$this->size       = $construction?->Size() ?? 0;
 		$demand           = $this->job->Count();
 		$talent           = $building->getCraft()->Talent();
@@ -57,7 +67,8 @@ final class Construction extends AbstractProduct
 		if ($production > 0) {
 			$yield = min($production, $demand);
 			foreach ($building->getMaterial() as $quantity /* @var Quantity $quantity */) {
-				$consumption = new Quantity($quantity->Commodity(), $yield * $quantity->Count());
+				$count       = (int)ceil($this->consumption * $yield * $quantity->Count());
+				$consumption = new Quantity($quantity->Commodity(), $count);
 				$this->unit->Inventory()->remove($consumption);
 			}
 
@@ -83,6 +94,11 @@ final class Construction extends AbstractProduct
 			}
 			$this->addToWorkload($yield);
 			$this->initializeMarket($construction);
+
+			if ($building instanceof Signpost) {
+				$effect = $this->signpostEffect($construction);
+				Lemuria::Score()->add($effect->resetAge());
+			}
 		} else {
 			if ($this->capability > 0) {
 				if ($construction) {
@@ -98,6 +114,36 @@ final class Construction extends AbstractProduct
 				}
 			}
 		}
+	}
+
+	protected function checkDependency(Building $building): bool {
+		$dependency = $building->Dependency();
+		if ($dependency) {
+			if ($dependency instanceof Castle) {
+				$isCastle = true;
+				$minSize  = $dependency->MinSize();
+			} else {
+				$isCastle = false;
+				$minSize  = 0;
+			}
+			foreach ($this->unit->Region()->Estate() as $construction /* @var ConstructionModel $construction */) {
+				if ($isCastle) {
+					if ($construction->Building() instanceof Castle && $construction->Size() >= $minSize) {
+						if ($construction->Inhabitants()->Owner()?->Party() === $this->unit->Party()) {
+							return true;
+						}
+					}
+				} else {
+					if ($construction->Building() === $dependency) {
+						if ($construction->Inhabitants()->Owner()?->Party() === $this->unit->Party()) {
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -166,5 +212,12 @@ final class Construction extends AbstractProduct
 			$marketBuilder->initPrices();
 			Lemuria::Log()->debug('Market opens the first time in region ' . $region . ' - prices have been initialized.');
 		}
+	}
+
+	private function signpostEffect(ConstructionModel $signpost): SignpostEffect {
+		$effect = new SignpostEffect(State::getInstance());
+		/** @var SignpostEffect $signpostEffect */
+		$signpostEffect = Lemuria::Score()->find($effect->setConstruction($signpost));
+		return $signpostEffect ?? $effect;
 	}
 }

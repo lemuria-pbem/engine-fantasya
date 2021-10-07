@@ -5,7 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use function Lemuria\isInt;
 use Lemuria\Engine\Fantasya\Command;
-use Lemuria\Engine\Fantasya\Command\Create\Herb;
+use Lemuria\Engine\Fantasya\Command\Create\RawMaterial\Herb;
 use Lemuria\Engine\Fantasya\Command\Create\Resource;
 use Lemuria\Engine\Fantasya\Command\Create\Road;
 use Lemuria\Engine\Fantasya\Command\Create\Temp;

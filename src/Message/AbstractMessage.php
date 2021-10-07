@@ -156,6 +156,9 @@ abstract class AbstractMessage implements MessageType
 		if ($variable instanceof Item) {
 			return $this->translateKey('replace.' . $key, $variable->Count() === 1 ? 0 : 1) . ' ' . $parts[1];
 		}
+		if (is_int($variable)) {
+			return $this->translateKey('replace.' . $key, $variable === 1 ? 0 : 1) . ' ' . $parts[1];
+		}
 		return '{' . $parts[0] . '}' . ' ' . $parts[1];
 	}
 

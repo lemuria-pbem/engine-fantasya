@@ -4,27 +4,24 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
-use Lemuria\Engine\Message\Section;
 use Lemuria\Singleton;
 
-class CommodityResourcesMessage extends AbstractUnitMessage
+class EnterForbiddenMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::PRODUCTION;
-
-	protected Singleton $artifact;
+	protected Singleton $building;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' has no material to create ' . $this->artifact . '.';
+		return 'Unit '. $this->id . ' cannot enter a ' . $this->building . '.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->artifact = $message->getSingleton();
+		$this->building = $message->getSingleton();
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'artifact', 1) ?? parent::getTranslation($name);
+		return $this->building($name, 'building') ?? parent::getTranslation($name);
 	}
 }

@@ -9,12 +9,23 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.8
 
-- BELAGERN
-- erbeutete Waffen/Rüstungen reparieren
-- Monster, besondere Gegenstände wie Greifeneier, Wagenwracks
 - NPC- und Monsterparteien
-- weitere Gebäude und deren Effekte
-- besondere Gebäude wie Ruinen
+- Monster
+- besondere Gegenstände:
+  - Greifeneier
+  - Kriegsbeute
+  - Trophäen
+  - Wagenwracks
+- Lederrüstung aus Elefantenhaut
+- erbeutete Waffen/Rüstungen reparieren
+- BELAGERN
+- weitere Gebäude:
+  - Akropolis
+  - Hafen
+  - Leuchtturm
+  - Magierturm
+  - Steuerturm
+  - Taverne
 
 ### Version 0.9 und folgende
 
@@ -24,10 +35,20 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Talentveränderungen im Report anzeigen
 - HTML-Report optisch verbessern
 - Regeldatei für Magellan
+- Kriegselefanten
+- weitere Gebäude:
+  - Akademie
+  - Alchemistenküche
+  - Kamelzucht
+  - Megapolis
+  - Monument
+  - Pferdezucht
+  - Steinkreis
 
 ## Ideen
 
 - Befehle in der Vorlage wiederholen (LIEFERE bzw. @BEFEHL in Fantasya)
+- besondere Gebäude wie Ruinen
 - Ereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE
 - Seekampf/Piraterie
