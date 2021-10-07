@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
+use Lemuria\Engine\Fantasya\Effect\SignpostEffect;
 use Lemuria\Engine\Fantasya\Factory\MarketBuilder;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionBuildMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionCreateMessage;
@@ -11,12 +12,14 @@ use Lemuria\Engine\Fantasya\Message\Unit\ConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionResourcesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionUnableMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\AbstractCastle;
 use Lemuria\Model\Fantasya\Building\Castle;
+use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Construction as ConstructionModel;
 use Lemuria\Model\Fantasya\Quantity;
@@ -91,6 +94,11 @@ final class Construction extends AbstractProduct
 			}
 			$this->addToWorkload($yield);
 			$this->initializeMarket($construction);
+
+			if ($building instanceof Signpost) {
+				$effect = $this->signpostEffect($construction);
+				Lemuria::Score()->add($effect->resetAge());
+			}
 		} else {
 			if ($this->capability > 0) {
 				if ($construction) {
@@ -204,5 +212,12 @@ final class Construction extends AbstractProduct
 			$marketBuilder->initPrices();
 			Lemuria::Log()->debug('Market opens the first time in region ' . $region . ' - prices have been initialized.');
 		}
+	}
+
+	private function signpostEffect(ConstructionModel $signpost): SignpostEffect {
+		$effect = new SignpostEffect(State::getInstance());
+		/** @var SignpostEffect $signpostEffect */
+		$signpostEffect = Lemuria::Score()->find($effect->setConstruction($signpost));
+		return $signpostEffect ?? $effect;
 	}
 }

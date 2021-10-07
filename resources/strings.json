@@ -474,6 +474,7 @@
 		"SellNoneMessage": "Die Einheit $id kann den Bauern keine $goods verkaufen.",
 		"SellOnlyMessage": "Die Einheit $id kann den Bauern nur $goods für $payment verkaufen.",
 		"SevenLeagueTeaMessage": "Die Einheit $id wird schnell wie der Wind.",
+		"SignpostDecayMessage": "Der Wegweiser '$name' ist vollständig zerfallen.",
 		"SmashDamageConstructionMessage": "Die Einheit $id zerstört {$damage:Größenpunkt} am Gebäude $construction.",
 		"SmashDamageRoadMessage": "Die Einheit $id beschädigt die Straße nach $direction in der Region $region und erhält $stones.",
 		"SmashDamageVesselMessage": "Die Einheit $id fügt dem Schiff $vessel {$damage:Schadenspunkt} zu.",
