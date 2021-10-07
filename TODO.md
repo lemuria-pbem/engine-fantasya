@@ -4,8 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.7
 
-- weitere Gebäude:
-  - Wegweiser
+- Wegweiser: Zerfall nach einigen Jahren
 
 ## Neue Funktionen
 
