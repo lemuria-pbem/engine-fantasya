@@ -69,8 +69,15 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 		if ($product instanceof Artifact) {
 			$building = $this->unit->Construction()?->Building();
 			if ($building) {
-				$talent            = $product->getCraft();
-				$this->consumption = self::CONSUMPTION[$talent::class][$building::class] ?? 1.0;
+				$talent      = $product->getCraft();
+				$consumption = self::CONSUMPTION[$talent::class][$building::class] ?? null;
+				if ($consumption) {
+					if ($this->calculus()->isInMaintainedConstruction()) {
+						$this->consumption = $consumption;
+					} else {
+						$this->consumption = 0.0;
+					}
+				}
 			}
 		}
 	}
@@ -83,7 +90,7 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 		$talent     = $craft->Talent();
 		$cost       = $craft->Level();
 		$level      = $this->calculus()->knowledge($talent::class)->Level();
-		if ($level >= $cost) {
+		if ($this->consumption > 0.0 && $level >= $cost) {
 			$size       = $this->unit->Size();
 			$production = (int)floor($this->potionBoost($size) * $size * $level / $cost);
 			return $this->reduceByWorkload($production);
@@ -95,6 +102,10 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 	 * Get maximum amount that can be produced by resources.
 	 */
 	protected function calculateResources(Resources $resources): int {
+		if ($this->consumption <= 0.0) {
+			return 0;
+		}
+
 		$reserves   = $this->unit->Inventory();
 		$production = PHP_INT_MAX;
 		foreach ($resources as $quantity /* @var Quantity $quantity */) {

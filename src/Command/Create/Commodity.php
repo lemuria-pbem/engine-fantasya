@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\CommodityExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CommodityResourcesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CommodityCreateMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CommodityOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\CommodityUnmaintainedMessage;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Artifact as ArtifactInterface;
 use Lemuria\Model\Fantasya\Commodity as CommodityModel;
@@ -49,7 +50,10 @@ final class Commodity extends AbstractProduct
 				$this->message(CommodityCreateMessage::class)->i($output)->s($talent);
 			}
 		} else {
-			if ($this->capability > 0) {
+			if ($this->consumption <= 0.0) {
+				$building = $this->unit->Construction()->Building();
+				$this->message(CommodityUnmaintainedMessage::class)->s($artifact)->s($building, CommodityUnmaintainedMessage::BUILDING);
+			} elseif ($this->capability > 0) {
 				$this->message(CommodityResourcesMessage::class)->s($artifact);
 			} else {
 				$this->message(CommodityExperienceMessage::class)->s($talent, CommodityExperienceMessage::TALENT)->s($artifact, CommodityExperienceMessage::ARTIFACT);
