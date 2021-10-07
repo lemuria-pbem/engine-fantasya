@@ -64,7 +64,8 @@ final class Construction extends AbstractProduct
 		if ($production > 0) {
 			$yield = min($production, $demand);
 			foreach ($building->getMaterial() as $quantity /* @var Quantity $quantity */) {
-				$consumption = new Quantity($quantity->Commodity(), $yield * $quantity->Count());
+				$count       = (int)ceil($this->consumption * $yield * $quantity->Count());
+				$consumption = new Quantity($quantity->Commodity(), $count);
 				$this->unit->Inventory()->remove($consumption);
 			}
 

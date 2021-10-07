@@ -31,7 +31,8 @@ final class Commodity extends AbstractProduct
 			$count = $this->job->Count();
 			$yield = min($production, $count);
 			foreach ($artifact->getMaterial() as $quantity /* @var Quantity $quantity */) {
-				$consumption = new Quantity($quantity->Commodity(), $yield * $quantity->Count());
+				$count       = (int)ceil($this->consumption * $yield * $quantity->Count());
+				$consumption = new Quantity($quantity->Commodity(), $count);
 				$this->unit->Inventory()->remove($consumption);
 			}
 			/* @var CommodityModel $commodity */
