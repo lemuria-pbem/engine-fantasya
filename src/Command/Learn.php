@@ -105,7 +105,7 @@ final class Learn extends UnitCommand implements Activity
 			if ($newLevel > 0 && $newLevel > $level) {
 				$aura     = $this->unit->Aura() ?? new Aura();
 				$addition = $newLevel ** 2 - $level ** 2;
-				$aura->setMaximum($aura->Aura() + $addition);
+				$aura->setMaximum($aura->Maximum() + $addition);
 				$this->unit->setAura($aura);
 				$this->message(LearnMagicMessage::class)->p($addition);
 			}
