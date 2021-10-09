@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Message\Region\TravelVesselMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Quay;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -117,5 +118,7 @@ trait NavigationTrait
 			$destination->Residents()->add($unit);
 			$unit->Party()->Chronicle()->add($destination);
 		}
+
+		$this->message(TravelVesselMessage::class, $region)->p((string)$this->vessel);
 	}
 }
