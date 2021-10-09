@@ -24,6 +24,8 @@ final class State
 		return self::$instance;
 	}
 
+	public bool $isTravelling = false;
+
 	private ?TurnOptions $turnOptions = null;
 
 	private ?Casts $casts = null;

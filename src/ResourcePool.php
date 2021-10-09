@@ -31,13 +31,16 @@ class ResourcePool
 	 */
 	protected array $reservations = [];
 
-	public function __construct(Unit $unit) {
+	public function __construct(Unit $unit, Context $context) {
 		$this->party  = $unit->Party();
 		$this->region = $unit->Region();
 		$intelligence = new Intelligence($this->region);
-		$this->units  = $intelligence->getUnits($this->party);
-		foreach ($this->units as $unit) {
-			$this->reservations[$unit->Id()->Id()] = new Resources();
+		$this->units  = new People();
+		foreach ($intelligence->getUnits($this->party) as $unit /* @var Unit $unit */) {
+			if (!$context->isTravelling($unit)) {
+				$this->units->add($unit);
+				$this->reservations[$unit->Id()->Id()] = new Resources();
+			}
 		}
 	}
 

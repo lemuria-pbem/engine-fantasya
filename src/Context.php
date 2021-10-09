@@ -163,7 +163,7 @@ final class Context implements Reassignment
 	public function getResourcePool(Unit $unit): ResourcePool {
 		$id = self::resourcePoolId($unit);
 		if (!isset($this->resourcePool[$id])) {
-			$this->resourcePool[$id] = new ResourcePool($unit);
+			$this->resourcePool[$id] = new ResourcePool($unit, $this);
 		}
 		return $this->resourcePool[$id];
 	}
@@ -180,6 +180,13 @@ final class Context implements Reassignment
 	 */
 	public function getWorkload(Unit $unit): Workload {
 		return $this->state->getWorkload($unit);
+	}
+
+	/**
+	 * Check if a unit is travelling.
+	 */
+	#[Pure] public function isTravelling(Unit $unit): bool {
+		return $this->state->isTravelling && $this->state->getTravelRoute($unit) !== null;
 	}
 
 	/**
