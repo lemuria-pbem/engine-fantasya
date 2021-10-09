@@ -80,6 +80,10 @@ class LemuriaMessage implements Message
 		return $this->type->Section();
 	}
 
+	public function MessageClass(): string {
+		return $this->type::class;
+	}
+
 	public function setId(Id $id): Message {
 		if ($this->id) {
 			throw new LemuriaException('Cannot set ID twice.');
