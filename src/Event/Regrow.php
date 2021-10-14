@@ -52,7 +52,7 @@ final class Regrow extends AbstractEvent
 
 	private const MINIMUM = 0.01;
 
-	private const GROW = 0.025;
+	private const GROW = 0.04;
 
 	private const SHRINK = -0.05;
 

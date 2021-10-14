@@ -40,6 +40,10 @@ final class Drift extends AbstractEvent
 		$this->navigation = self::createTalent(Navigation::class);
 	}
 
+	protected function prepareAction(): void {
+		$this->state->isTravelling = true;
+	}
+
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Catalog::VESSELS) as $vessel /* @var Vessel $vessel */) {
 			$this->vessel = $vessel;
