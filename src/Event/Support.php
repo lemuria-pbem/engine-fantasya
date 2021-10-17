@@ -47,6 +47,7 @@ final class Support extends AbstractEvent
 	}
 
 	protected function prepareAction(): void {
+		parent::prepareAction();
 		$this->state->isTravelling = false;
 	}
 
