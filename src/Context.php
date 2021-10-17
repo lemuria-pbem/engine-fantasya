@@ -11,6 +11,7 @@ use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Id;
 use Lemuria\Identifiable;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
@@ -241,6 +242,17 @@ final class Context implements Reassignment
 	public function setUnit(Unit $unit): Context {
 		$this->unit = $unit;
 		return $this;
+	}
+
+	/**
+	 * Clears all existing resource pools when units have moved.
+	 */
+	public function resetResourcePools(): void {
+		$n = count($this->resourcePool);
+		if ($n > 0) {
+			$this->resourcePool = [];
+			Lemuria::Log()->debug('Clearing ' . $n . ' resource pools.');
+		}
 	}
 
 	private static function resourcePoolId(Unit $unit): string {
