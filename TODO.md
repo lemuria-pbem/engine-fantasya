@@ -65,6 +65,16 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Einstellen der erwünschten Reportformate
 - Talentübersicht pro Region
 - Übersetzungen auf MessageFormat umstellen
-- Befehlsvorlage intelligenter gestalten
-  - ALTERNATIVE für LERNEN ohne Lehrer
-  - FORST, HERDE für automatisches Baumfällen und Dressieren
+
+### Weiterentwicklung des Spielkonzepts
+
+Die angedachte Weiterentwicklung hat das generelle Ziel, Mikromanagement zu
+reduzieren. Dabei würden viele Befehle und Konzepte aus Fantasya verworfen und
+stattdessen vom Spieler Rahmenbedingungen vorgebenen, aus denen „Kontingente“
+von arbeitenden Bauern berechnet werden, die unter der Anleitung von
+„Meistereinheiten“ mit Erfahrung in bestimmten Talenten effektiver arbeiten
+können. Transporte können durch Einrichtung von Transportrouten automatisiert
+werden, und Handel kann analog über Handelsrouten organisiert werden.
+
+- ALTERNATIVE für LERNEN ohne Lehrer
+- FORST, HERDE für automatisches Baumfällen und Dressieren
