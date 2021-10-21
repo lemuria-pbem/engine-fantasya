@@ -20,14 +20,16 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - erbeutete Waffen/Rüstungen reparieren
 - BELAGERN
 - weitere Gebäude:
-  - Akropolis
   - Hafen
   - Leuchtturm
   - Magierturm
   - Steuerturm
   - Taverne
+- weitere Zauber:
+  - Astrales Chaos (6) (erschwert Magie im Kampf)
+  - Tagtraum (7) (unterbricht Bewachung, verringert Produktivität)
 
-### Version 0.9 und folgende
+### Version 0.9
 
 - Statistische Daten erstellen
   - Regionsentwicklung im Report anzeigen
@@ -37,13 +39,30 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Regeldatei für Magellan
 - Kriegselefanten
 - weitere Gebäude:
-  - Akademie
+  - Akropolis
   - Alchemistenküche
   - Kamelzucht
+  - Pferdezucht
+- weitere Zauber:
+  - Beschleunigung (8) (mehrfache Angriffe)
+  - Erdbeben (9) (zerstört Gebäude)
+
+### Version 0.10
+
+- ERSCHAFFEN einzigartiger Gegenstände (Unicum)
+  - Unicum hat bestimmte Aktionen (GEBEN, LESEN, SCHREIBEN, BENUTZEN)
+  - Aktion hat Lebensdauer (Zeit oder Anzahl)
+  - Schriftrollen mit unbekannten Zaubern erwerben, um diese zu erlernen
+  - Zauberbuch schreiben, weitergeben, lesen
+- weitere Gebäude:
+  - Akademie
   - Megapolis
   - Monument
-  - Pferdezucht
   - Steinkreis
+- weitere Zauber:
+  - Ring der Unsichtbarkeit (10) (erschafft einen Ring)
+  - Luftschiff (11) (Einheit mit Wagen/Schiff reist durch die Luft)
+  - Erwecke Ents (12) (Ents bewachen den Wald, kämpfen im Kampf)
 
 ## Ideen
 
@@ -54,13 +73,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Seekampf/Piraterie
 - SABOTIERE (Spion versenkt Schiff)
 - VERSENKEN (Schiff vor Entern bewahren)
-- ERSCHAFFEN einzigartiger Gegenstände (Unicum)
-  - Unicum hat bestimmte Aktionen (GEBEN, LESEN, SCHREIBEN, BENUTZEN)
-  - Aktion hat Lebensdauer (Zeit oder Anzahl)
-  - Schriftrollen mit unbekannten Zaubern erwerben, um diese zu erlernen
-  - Zauberbuch schreiben, weitergeben, lesen
 - Monsterrasse bestimmt maximalen Übermacht-Faktor
-- weitere Zauber
 - Textreport im Markdown-Format
 - Einstellen der erwünschten Reportformate
 - Talentübersicht pro Region
