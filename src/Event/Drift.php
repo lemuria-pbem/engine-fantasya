@@ -41,6 +41,7 @@ final class Drift extends AbstractEvent
 	}
 
 	protected function prepareAction(): void {
+		parent::prepareAction();
 		$this->state->isTravelling = true;
 	}
 

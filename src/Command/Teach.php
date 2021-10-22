@@ -200,7 +200,8 @@ final class Teach extends UnitCommand implements Activity
 		foreach ($this->students as $learn /* @var Learn $learn */) {
 			$people += $learn->Unit()->Size();
 		}
-		$this->bonus = $people > 0 ? min(self::MAX_STUDENTS / $people, 1.0) ** 2 : 1.0;
+		$maxStudents = $this->unit->Size() * self::MAX_STUDENTS;
+		$this->bonus = $people > 0 ? min($maxStudents / $people, 1.0) ** 2 : 1.0;
 	}
 
 	private function createNewDefault(array $ids): void {

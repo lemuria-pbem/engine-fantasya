@@ -62,14 +62,24 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Artifact;
 use Lemuria\Model\Fantasya\Building;
+use Lemuria\Model\Fantasya\Building\Blacksmith;
 use Lemuria\Model\Fantasya\Building\Cabin;
 use Lemuria\Model\Fantasya\Building\Citadel;
+use Lemuria\Model\Fantasya\Building\Dockyard;
 use Lemuria\Model\Fantasya\Building\Fort;
+use Lemuria\Model\Fantasya\Building\Mine;
 use Lemuria\Model\Fantasya\Building\Palace;
+use Lemuria\Model\Fantasya\Building\Pit;
+use Lemuria\Model\Fantasya\Building\Quarry;
+use Lemuria\Model\Fantasya\Building\Quay;
+use Lemuria\Model\Fantasya\Building\Saddlery;
 use Lemuria\Model\Fantasya\Building\Sawmill;
+use Lemuria\Model\Fantasya\Building\Shack;
+use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Building\Stronghold;
 use Lemuria\Model\Fantasya\Building\Tower;
+use Lemuria\Model\Fantasya\Building\Workshop;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Armor;
 use Lemuria\Model\Fantasya\Commodity\Camel;
@@ -289,17 +299,31 @@ class CommandFactory
 	 * @var array(string=>string)
 	 */
 	protected array $buildings = [
-		'Baustelle'       => Site::class,
-		'Befestigung'     => Fort::class,
-		'Burg'            => Site::class,
-		'Festung'         => Stronghold::class,
-		'Gebäude'         => Site::class,
-		'Gebaeude'        => Site::class,
-		'Holzfällerhütte' => Cabin::class,
-		'Palast'          => Palace::class,
-		'Sägewerk'        => Sawmill::class,
-		'Turm'            => Tower::class,
-		'Zitadelle'       => Citadel::class
+		'Baustelle'         => Site::class,
+		'Befestigung'       => Fort::class,
+		'Bergwerk'          => Mine::class,
+		'Burg'              => Site::class,
+		'Festung'           => Stronghold::class,
+		'Gebäude'           => Site::class,
+		'Gebaeude'          => Site::class,
+		'Holzfällerhütte'   => Cabin::class,
+		'Holzfaellerhuette' => Cabin::class,
+		'Mine'              => Pit::class,
+		'Palast'            => Palace::class,
+		'Sägewerk'          => Sawmill::class,
+		'Saegewerk'         => Sawmill::class,
+		'Sattlerei'         => Saddlery::class,
+		'Schiffswerft'      => Dockyard::class,
+		'Schloss'           => Palace::class,
+		'Schmiede'          => Blacksmith::class,
+		'Steg'              => Quay::class,
+		'Steinbruch'        => Quarry::class,
+		'Steingrube'        => Shack::class,
+		'Turm'              => Tower::class,
+		'Wegweiser'         => Signpost::class,
+		'Werft'             => Dockyard::class,
+		'Werkstatt'         => Workshop::class,
+		'Zitadelle'         => Citadel::class
 	];
 
 	/**

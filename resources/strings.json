@@ -351,7 +351,7 @@
 		"LearnMagicMessage": "Die Einheit $id erreicht eine neue Magiestufe und erhält {$aura:Aurapunkt}.",
 		"LearnNotMessage": "Die Einheit $id kann kein Silber ausgeben, um $talent zu lernen.",
 		"LearnOnlyMessage": "Die Einheit $id kann nur $silver Silber ausgeben, um $talent zu lernen.",
-		"LearnProgressMessage": "Die Einheit $id lernt $talent mit $experience Lerntagen.",
+		"LearnProgressMessage": "Die Einheit $id lernt $talent mit $experience Erfahrungspunkten.",
 		"LearnSilverMessage": "Die Einheit $id gibt $silver Silber für das Lernen von $talent aus.",
 		"LearnTeachersMessage": "Die Einheit $id hat $teachers Lehrer.",
 		"LeaveConstructionDebugMessage": "Die Einheit $id hat das Gebäude $construction verlassen.",

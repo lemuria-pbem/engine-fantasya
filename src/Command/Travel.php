@@ -90,6 +90,7 @@ class Travel extends UnitCommand implements Activity
 
 	protected function initialize(): void {
 		parent::initialize();
+		$this->context->resetResourcePools();
 		$this->vessel   = $this->unit->Vessel();
 		$this->capacity = $this->calculus()->capacity();
 		$this->workload->setMaximum(min($this->workload->Maximum(), $this->capacity->Speed()));
