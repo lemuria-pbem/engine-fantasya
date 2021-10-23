@@ -4,8 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.7
 
-- Kampfstatus "vorsichtig" (wie "vorne", jedoch Rückzug bei 90%)
-- Luxuswarenproduktion nur bei Vorhandensein von Bauern anzeigen
 
 ## Neue Funktionen
 
@@ -30,6 +28,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - weitere Zauber:
   - Astrales Chaos (6) (erschwert Magie im Kampf)
   - Tagtraum (7) (unterbricht Bewachung, verringert Produktivität)
+- Kampfstatus "vorsichtig" (wie "vorne", jedoch Rückzug bei 90%)
 
 ### Version 0.9
 
@@ -80,6 +79,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Einstellen der erwünschten Reportformate
 - Talentübersicht pro Region
 - Übersetzungen auf MessageFormat umstellen
+- Luxuswarenangebot neu definieren, wenn der erste Bauer eine Region besiedelt
 
 ### Weiterentwicklung des Spielkonzepts
 
