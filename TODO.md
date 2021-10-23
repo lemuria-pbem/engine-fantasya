@@ -4,6 +4,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.7
 
+- Kampfstatus "vorsichtig" (wie "vorne", jedoch Rückzug bei 90%)
+- Luxuswarenproduktion nur bei Vorhandensein von Bauern anzeigen
 
 ## Neue Funktionen
 

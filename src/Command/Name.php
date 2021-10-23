@@ -156,6 +156,7 @@ final class Name extends UnitCommand
 	}
 
 	private function trimName(string $name): string {
-		return trim($name, "\"'`'^°!§$%&/()=?{[]}\\+*~#<>|,.-;:_ ");
+		$name = ltrim($name, "\"'`'^°!$%&/()=?{[]}\\+~#<>|,.-;:_ ");
+		return rtrim($name, "\"'`'^°§$&/(={[]}\\~#<>|,-;:_ ");
 	}
 }
