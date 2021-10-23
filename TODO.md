@@ -32,13 +32,11 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.9
 
-- Statistische Daten erstellen
-  - Regionsentwicklung im Report anzeigen
-  - Veränderungen im Inventar anzeigen
-  - Talentveränderungen im Report anzeigen
-- HTML-Report optisch verbessern
-- Regeldatei für Magellan
-- Kriegselefanten
+- ERSCHAFFEN einzigartiger Gegenstände (Unicum)
+  - Unicum hat bestimmte Aktionen (GEBEN, LESEN, SCHREIBEN, BENUTZEN)
+  - Aktion hat Lebensdauer (Zeit oder Anzahl)
+  - Schriftrollen mit unbekannten Zaubern erwerben, um diese zu erlernen
+  - Zauberbuch schreiben, weitergeben, lesen
 - weitere Gebäude:
   - Akropolis
   - Alchemistenküche
@@ -50,11 +48,13 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.10
 
-- ERSCHAFFEN einzigartiger Gegenstände (Unicum)
-  - Unicum hat bestimmte Aktionen (GEBEN, LESEN, SCHREIBEN, BENUTZEN)
-  - Aktion hat Lebensdauer (Zeit oder Anzahl)
-  - Schriftrollen mit unbekannten Zaubern erwerben, um diese zu erlernen
-  - Zauberbuch schreiben, weitergeben, lesen
+- Statistische Daten erstellen
+  - Regionsentwicklung im Report anzeigen
+  - Veränderungen im Inventar anzeigen
+  - Talentveränderungen im Report anzeigen
+- HTML-Report optisch verbessern
+- Regeldatei für Magellan
+- Kriegselefanten
 - weitere Gebäude:
   - Akademie
   - Megapolis

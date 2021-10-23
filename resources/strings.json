@@ -620,6 +620,8 @@
 		"Elf": ["Elf", "Elfen"],
 		"Halfling": ["Halbling", "Halblinge"],
 		"Human": ["Mensch", "Menschen"],
+		"Monster": ["Monster", "Monster"],
+		"NonPlayerCharacter": ["Nichtspielercharakter", "Nichtspielercharaktere"],
 		"Orc": ["Ork", "Orks"],
 		"Troll": ["Troll", "Trolle"]
 	},
