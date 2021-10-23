@@ -28,7 +28,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - weitere Zauber:
   - Astrales Chaos (6) (erschwert Magie im Kampf)
   - Tagtraum (7) (unterbricht Bewachung, verringert Produktivität)
-- Kampfstatus "vorsichtig" (wie "vorne", jedoch Rückzug bei 90%)
+- Kampfstatus "vorsichtig" (wie "vorne", jedoch Rückzug bei 90 %)
 
 ### Version 0.9
 
@@ -85,7 +85,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 Die angedachte Weiterentwicklung hat das generelle Ziel, Mikromanagement zu
 reduzieren. Dabei würden viele Befehle und Konzepte aus Fantasya verworfen und
-stattdessen vom Spieler Rahmenbedingungen vorgebenen, aus denen „Kontingente“
+stattdessen vom Spieler Rahmenbedingungen vorgegeben, aus denen „Kontingente“
 von arbeitenden Bauern berechnet werden, die unter der Anleitung von
 „Meistereinheiten“ mit Erfahrung in bestimmten Talenten effektiver arbeiten
 können. Transporte können durch Einrichtung von Transportrouten automatisiert

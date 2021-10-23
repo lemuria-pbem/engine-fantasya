@@ -8,6 +8,8 @@ use Lemuria\Engine\Fantasya\Exception\ActionException;
 
 /**
  * Actions change the world of Lemuria when a turn is running.
+ *
+ * @noinspection PhpMultipleClassDeclarationsInspection
  */
 interface Action extends \Stringable
 {

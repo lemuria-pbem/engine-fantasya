@@ -5,6 +5,9 @@ namespace Lemuria\Engine\Fantasya\Combat\Log;
 use Lemuria\Serializable;
 use Lemuria\Singleton;
 
+/**
+ * @noinspection PhpMultipleClassDeclarationsInspection
+ */
 interface Message extends \Stringable, Serializable, Singleton
 {
 }
