@@ -32,6 +32,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.9
 
+- Migration to PHP 8.1
 - ERSCHAFFEN einzigartiger Gegenstände (Unicum)
   - Unicum hat bestimmte Aktionen (GEBEN, LESEN, SCHREIBEN, BENUTZEN)
   - Aktion hat Lebensdauer (Zeit oder Anzahl)
