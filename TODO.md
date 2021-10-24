@@ -2,11 +2,6 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Fehler/Verbesserungen in 0.7
-
-
-## Neue Funktionen
-
 ### Version 0.8
 
 - NPC- und Monsterparteien
@@ -29,6 +24,11 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Astrales Chaos (6) (erschwert Magie im Kampf)
   - Tagtraum (7) (unterbricht Bewachung, verringert Produktivität)
 - Kampfstatus "vorsichtig" (wie "vorne", jedoch Rückzug bei 90 %)
+
+## Fehler/Verbesserungen in 0.8
+
+
+## Neue Funktionen
 
 ### Version 0.9
 
