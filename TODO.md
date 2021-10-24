@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.8
 
-- NPC- und Monsterparteien
 - Monster
 - besondere Gegenstände:
   - Greifeneier
@@ -23,7 +22,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - weitere Zauber:
   - Astrales Chaos (6) (erschwert Magie im Kampf)
   - Tagtraum (7) (unterbricht Bewachung, verringert Produktivität)
-- Kampfstatus "vorsichtig" (wie "vorne", jedoch Rückzug bei 90 %)
 
 ## Fehler/Verbesserungen in 0.8
 

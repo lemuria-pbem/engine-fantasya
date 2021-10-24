@@ -40,7 +40,7 @@ use Lemuria\Model\Fantasya\Unit;
 class Combat extends CombatModel
 {
 	public const ROW_NAME = [self::REFUGEE => 'refugees', self::BYSTANDER => 'bystanders', self::BACK => 'back',
-							 self::FRONT => 'front'];
+							 self::FRONT   => 'front'];
 
 	protected const BATTLE_ROWS = [self::REFUGEE, self::BYSTANDER, self::BACK, self::FRONT];
 
@@ -81,9 +81,9 @@ class Combat extends CombatModel
 	#[Pure] public static function getBattleRow(Unit $unit): int {
 		$battleRow = $unit->BattleRow();
 		return match ($battleRow) {
-			self::DEFENSIVE  => self::BACK,
-			self::AGGRESSIVE => self::FRONT,
-			default          => $battleRow
+			self::DEFENSIVE                 => self::BACK,
+			self::CAREFUL, self::AGGRESSIVE => self::FRONT,
+			default                         => $battleRow
 		};
 	}
 

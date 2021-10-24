@@ -65,8 +65,9 @@
 			"position_1": "nicht kämpfen",
 			"position_2": "defensiv kämpfen",
 			"position_3": "hinten kämpfen",
-			"position_4": "vorne kämpfen",
-			"position_5": "aggressiv kämpfen",
+			"position_4": "vorsichtig kämpfen",
+			"position_5": "vorne kämpfen",
+			"position_6": "aggressiv kämpfen",
 			"refugees": "Reihe der Fliehenden"
 		},
 		"combatant": ["Abteilung", "Abteilungen"],

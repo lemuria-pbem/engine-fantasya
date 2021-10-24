@@ -82,7 +82,7 @@ class Attack
 
 	protected const FLIGHT = [
 		Combat::REFUGEE    => 1.0,
-		Combat::BYSTANDER  => 0.9, Combat::DEFENSIVE => 0.9,
+		Combat::BYSTANDER  => 0.9, Combat::DEFENSIVE => 0.9, Combat::CAREFUL => 0.9,
 		Combat::BACK       => 0.2, Combat::FRONT     => 0.2,
 		Combat::AGGRESSIVE => 0.0
 	];
