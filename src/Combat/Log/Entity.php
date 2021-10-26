@@ -7,9 +7,6 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Id;
 use Lemuria\Entity as EntityModel;
 
-/**
- * @noinspection PhpMultipleClassDeclarationsInspection
- */
 final class Entity implements \Stringable
 {
 	public Id $id;

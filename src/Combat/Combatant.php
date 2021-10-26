@@ -10,14 +10,12 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultHitMessage;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Armature;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
-use Lemuria\Model\Fantasya\Commodity;
-use Lemuria\Model\Fantasya\Commodity\Armor;
-use Lemuria\Model\Fantasya\Commodity\Ironshield;
-use Lemuria\Model\Fantasya\Commodity\Mail;
-use Lemuria\Model\Fantasya\Commodity\Woodshield;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Protection;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Shield;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Stoning;
 use Lemuria\Model\Fantasya\Unit;
@@ -56,9 +54,9 @@ class Combatant
 
 	private ?WeaponSkill $weaponSkill = null;
 
-	private ?Commodity $shield = null;
+	private ?Protection $shield = null;
 
-	private ?Commodity $armor = null;
+	private ?Protection $armor = null;
 
 	private Attack $attack;
 
@@ -102,11 +100,11 @@ class Combatant
 		return $this->weaponSkill;
 	}
 
-	public function Shield(): ?Commodity {
+	public function Shield(): ?Protection {
 		return $this->shield;
 	}
 
-	public function Armor(): ?Commodity {
+	public function Armor(): ?Protection {
 		return $this->armor;
 	}
 
@@ -148,8 +146,7 @@ class Combatant
 			$this->fighters[$i] = new Fighter($calculus->hitpoints());
 		}
 		$this->initWeaponSkill();
-		$this->initShield();
-		$this->initArmor();
+		$this->initShieldAndArmor();
 		return $this;
 	}
 
@@ -211,8 +208,7 @@ class Combatant
 		$newCombatant->distribution = $newDistribution;
 		$newCombatant->fighters     = array_splice($this->fighters, -$size, $size);
 		$newCombatant->initWeaponSkill();
-		$newCombatant->initShield();
-		$newCombatant->initArmor();
+		$newCombatant->initShieldAndArmor();
 
 		return $newCombatant;
 	}
@@ -262,21 +258,18 @@ class Combatant
 		return false;
 	}
 
-	protected function initShield(): void {
-		if ($this->distribution->offsetExists(Ironshield::class)) {
-			$this->shield = self::createCommodity(Ironshield::class);
-		}
-		if ($this->distribution->offsetExists(Woodshield::class)) {
-			$this->shield = self::createCommodity(Woodshield::class);
-		}
-	}
-
-	protected function initArmor(): void {
-		if ($this->distribution->offsetExists(Armor::class)) {
-			$this->armor = self::createCommodity(Armor::class);
-		}
-		if ($this->distribution->offsetExists(Mail::class)) {
-			$this->armor = self::createCommodity(Mail::class);
+	protected function initShieldAndArmor(): void {
+		foreach ($this->distribution as $item) {
+			$protection = $item->getObject();
+			if ($protection instanceof Shield) {
+				if (!$this->shield || $protection->Block() > $this->shield->Block()) {
+					$this->shield = $protection;
+				}
+			} elseif ($protection instanceof Armature) {
+				if (!$this->armor || $protection->Block() > $this->armor->Block()) {
+					$this->armor = $protection;
+				}
+			}
 		}
 	}
 

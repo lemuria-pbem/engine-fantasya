@@ -10,10 +10,10 @@ use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\FireballHitMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat;
-use Lemuria\Model\Fantasya\Commodity\Armor;
-use Lemuria\Model\Fantasya\Commodity\Ironshield;
-use Lemuria\Model\Fantasya\Commodity\Mail;
-use Lemuria\Model\Fantasya\Commodity\Woodshield;
+use Lemuria\Model\Fantasya\Commodity\Protection\Armor;
+use Lemuria\Model\Fantasya\Commodity\Protection\Ironshield;
+use Lemuria\Model\Fantasya\Commodity\Protection\Mail;
+use Lemuria\Model\Fantasya\Commodity\Protection\Woodshield;
 use Lemuria\Model\Fantasya\Talent\Magic;
 use Lemuria\Model\Fantasya\Unit;
 

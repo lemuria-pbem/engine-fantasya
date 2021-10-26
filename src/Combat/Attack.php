@@ -8,28 +8,17 @@ use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultBlockMessage;
 use Lemuria\Engine\Fantasya\Command\Apply\BerserkBlood as BerserkBloodEffect;
 use Lemuria\Model\Fantasya\Combat;
-use Lemuria\Model\Fantasya\Commodity\Armor;
 use Lemuria\Model\Fantasya\Commodity\Horse;
-use Lemuria\Model\Fantasya\Commodity\Ironshield;
-use Lemuria\Model\Fantasya\Commodity\Mail;
 use Lemuria\Model\Fantasya\Commodity\Potion\BerserkBlood;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
+use Lemuria\Model\Fantasya\Commodity\Protection\Armor;
+use Lemuria\Model\Fantasya\Commodity\Protection\Ironshield;
+use Lemuria\Model\Fantasya\Commodity\Protection\Mail;
+use Lemuria\Model\Fantasya\Commodity\Protection\Woodshield;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Dingbats;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
-use Lemuria\Model\Fantasya\Commodity\Woodshield;
-use Lemuria\Model\Fantasya\Race\Aquan;
-use Lemuria\Model\Fantasya\Race\Dwarf;
-use Lemuria\Model\Fantasya\Race\Elf;
-use Lemuria\Model\Fantasya\Race\Halfling;
-use Lemuria\Model\Fantasya\Race\Human;
-use Lemuria\Model\Fantasya\Race\Orc;
-use Lemuria\Model\Fantasya\Race\Troll;
+use Lemuria\Model\Fantasya\Protection;
+use Lemuria\Model\Fantasya\Race\Monster;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Riding;
 
@@ -44,30 +33,8 @@ class Attack
 		Crossbow::class => 2
 	];
 
-	/**
-	 * Weapon damage definition like "1 W6 + 3".
-	 */
-	protected const DAMAGE = [
-		Battleaxe::class => [1, 8, 8],
-		Bow::class       => [1, 4, 4],
-		Catapult::class  => [3, 10, 5],
-		Crossbow::class  => [2, 4, 6],
-		Dingbats::class  => [1, 5, 0],
-		Fists::class     => [1, 5, 0],
-		Spear::class     => [1, 7, 3],
-		Sword::class     => [1, 8, 4],
-		Warhammer::class => [1, 8, 8],
-	];
-
 	protected const DAMAGE_BONUS = [
 		Bow::class => 0.5
-	];
-
-	protected const BLOCK = [
-		Armor::class      => 7,
-		Ironshield::class => 6,
-		Mail::class       => 5,
-		Woodshield::class => 4
 	];
 
 	protected const BLOCK_BONUS = [
@@ -85,16 +52,6 @@ class Attack
 		Combat::BYSTANDER  => 0.9, Combat::DEFENSIVE => 0.9, Combat::CAREFUL => 0.9,
 		Combat::BACK       => 0.2, Combat::FRONT     => 0.2,
 		Combat::AGGRESSIVE => 0.0
-	];
-
-	protected const FLIGHT_CHANCE = [
-		Aquan::class    => 0.25,
-		Dwarf::class    => 0.25,
-		Elf::class      => 0.25,
-		Human::class    => 0.25,
-		Halfling::class => 0.5,
-		Orc::class      => 0.25,
-		Troll::class    => 0.25
 	];
 
 	protected int $round = 0;
@@ -117,7 +74,7 @@ class Attack
 	public function getFlightChance(bool $isFighting = false): float {
 		$unit     = $this->combatant->Unit();
 		$calculus = new Calculus($unit);
-		$chance   = self::FLIGHT_CHANCE[$unit->Race()::class];
+		$chance   = $unit->Race()->FlightChance();
 		if ($isFighting) {
 			$chance += $this->combatant->WeaponSkill()->Skill()->Level() * 0.05;
 			if ($this->combatant->Distribution()->offsetExists(Horse::class)) {
@@ -145,23 +102,17 @@ class Attack
 
 		$skill    = $this->combatant->WeaponSkill()->Skill()->Level();
 		$armor    = $this->combatant->Armor();
-		$aClass   = $armor ? $armor::class : null;
 		$hasBonus = $this->combatant->fighters[$fA]->potion instanceof BerserkBlood;
+		$shield   = $defender->Shield();
+		$block    = $fD < $defender->distracted ? 0 : $defender->WeaponSkill()->Skill()->Level();
 
-		if ($fD < $defender->distracted) {
-			$block  = 0;
-			$sClass = null;
-		} else {
-			$block  = $defender->WeaponSkill()->Skill()->Level();
-			$shield = $defender->Shield();
-			$sClass = $shield ? $shield::class : null;
-		}
-
-		if ($this->isSuccessful($skill, $block, $aClass, $sClass, $hasBonus)) {
+		if ($this->isSuccessful($skill, $block, $armor, $shield, $hasBonus)) {
 			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA) . ' hits enemy ' . $defender->getId($fD) . '.');
-			$armor  = $defender->Armor();
-			$aClass = $armor ? $armor::class : null;
-			return $this->calculateDamage($weapon, $skill, $aClass, $sClass);
+			$race = $defender->Unit()->Race();
+			/** @noinspection PhpPossiblePolymorphicInvocationInspection */
+			$block = $race instanceof Monster ? $race->Block() : 0;
+			$armor = $defender->Armor();
+			return $this->calculateDamage($weapon, $skill, $block, $armor, $shield);
 		} else {
 			// Lemuria::Log()->debug('Enemy ' . $defender->getId($fD) . ' blocks attack from ' . $this->combatant->getId($fA) . '.');
 			BattleLog::getInstance()->add(new AssaultBlockMessage($this->combatant->getId($fA), $defender->getId($fD)));
@@ -169,17 +120,15 @@ class Attack
 		}
 	}
 
-	protected function isSuccessful(int $skill, int $block, ?string $armor, ?string $shield, bool $hasAttackBonus): bool {
+	protected function isSuccessful(int $skill, int $block, ?Protection $armor, ?Protection $shield, bool $hasAttackBonus): bool {
 		$malus = 0;
 		if ($hasAttackBonus) {
 			$malus = -BerserkBloodEffect::BONUS;
 		} elseif ($armor) {
-			$malus = self::ATTACK_MALUS[$armor];
+			$malus = self::ATTACK_MALUS[$armor::class];
 		}
-		$bonus = 0;
-		if ($shield) {
-			$bonus = self::BLOCK_BONUS[$shield];
-		}
+		$bonus = $shield ? self::BLOCK_BONUS[$shield::class] : 0;
+
 		$attSkill = $skill - $malus;
 		$defSkill = $block + $bonus;
 		if ($attSkill > 0) {
@@ -196,17 +145,13 @@ class Attack
 		return false;
 	}
 
-	protected function calculateDamage(string $weapon, int $skill, ?string $armor, ?string $shield): int {
-		$damage = self::DAMAGE[$weapon];
-		$n      = $damage[0];
-		$d      = $damage[1];
-		$p      = $damage[2];
-		$dice   = $d;
-		$bonus  = self::DAMAGE_BONUS[$weapon] ?? 0.0;
-		$b      = $bonus > 0.0 ? (int)floor($bonus * $skill) : 0;
-		$attack = $n * rand(1, $dice + $b) + $p;
-		$block  = ($shield ? self::BLOCK[$shield] : 0) + ($armor ? self::BLOCK[$armor] : 0);
-		// Lemuria::Log()->debug('Damage calculation: ' . getClass($weapon) . ':' . $n . 'd' . $d . '+' . $p . ' bonus:' . $b . ' damage:' . $attack . '-' . $block);
+	protected function calculateDamage(string $weapon, int $skill, int $block, ?Protection $armor, ?Protection $shield): int {
+		$damage  = $this->combatant->Weapon()->Damage();
+		$bonus   = self::DAMAGE_BONUS[$weapon] ?? 0.0;
+		$b       = $bonus > 0.0 ? (int)floor($bonus * $skill) : 0;
+		$attack  = $damage->Count() * rand(1, $damage->Dice() + $b) + $damage->Addition();
+		$block  += $shield?->Block() + $armor?->Block();
+		// Lemuria::Log()->debug('Damage calculation: ' . getClass($weapon) . ':' . $damage . ' bonus:' . $b . ' damage:' . $attack . '-' . $block);
 		return max(0, $attack - $block);
 	}
 }

@@ -9,9 +9,6 @@ use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
 
-/**
- * @noinspection PhpMultipleClassDeclarationsInspection
- */
 final class Participant implements \Stringable, Serializable
 {
 	use SerializableTrait;

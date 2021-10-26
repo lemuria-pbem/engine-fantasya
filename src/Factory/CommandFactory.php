@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
+use JetBrains\PhpStorm\Pure;
 use function Lemuria\getClass;
 use function Lemuria\mbUcFirst;
 use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
@@ -81,7 +82,6 @@ use Lemuria\Model\Fantasya\Building\Stronghold;
 use Lemuria\Model\Fantasya\Building\Tower;
 use Lemuria\Model\Fantasya\Building\Workshop;
 use Lemuria\Model\Fantasya\Commodity;
-use Lemuria\Model\Fantasya\Commodity\Armor;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
@@ -110,7 +110,6 @@ use Lemuria\Model\Fantasya\Commodity\Herb\WhiteHemlock;
 use Lemuria\Model\Fantasya\Commodity\Herb\Windbag;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Iron;
-use Lemuria\Model\Fantasya\Commodity\Ironshield;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Balsam;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Fur;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Gem;
@@ -119,7 +118,6 @@ use Lemuria\Model\Fantasya\Commodity\Luxury\Oil;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Olibanum;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Silk;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Spice;
-use Lemuria\Model\Fantasya\Commodity\Mail;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Potion\BerserkBlood;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
@@ -133,6 +131,10 @@ use Lemuria\Model\Fantasya\Commodity\Potion\PeasantJoy;
 use Lemuria\Model\Fantasya\Commodity\Potion\SevenLeagueTea;
 use Lemuria\Model\Fantasya\Commodity\Potion\WaterOfLife;
 use Lemuria\Model\Fantasya\Commodity\Potion\Woundshut;
+use Lemuria\Model\Fantasya\Commodity\Protection\Armor;
+use Lemuria\Model\Fantasya\Commodity\Protection\Ironshield;
+use Lemuria\Model\Fantasya\Commodity\Protection\Mail;
+use Lemuria\Model\Fantasya\Commodity\Protection\Woodshield;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Commodity\Stone;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
@@ -143,7 +145,6 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Commodity\Wood;
-use Lemuria\Model\Fantasya\Commodity\Woodshield;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\RawMaterial;
@@ -556,7 +557,6 @@ class CommandFactory
 	 * Create a Command.
 	 *
 	 * @throws UnknownCommandException
-	 * @noinspection PhpMultipleClassDeclarationsInspection
 	 */
 	public function create(Phrase $phrase): AbstractCommand {
 		$verb = $this->identifyVerb($phrase->getVerb());
@@ -788,7 +788,7 @@ class CommandFactory
 	/**
 	 * Parse a singleton.
 	 */
-	protected function getCandidate(string $singleton, array $map): ?string {
+	#[Pure] protected function getCandidate(string $singleton, array $map): ?string {
 		$singleton  = mbUcFirst(mb_strtolower($singleton));
 		$candidates = [];
 		foreach ($map as $candidate => $singletonClass) {

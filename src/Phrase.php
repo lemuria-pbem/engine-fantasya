@@ -7,8 +7,6 @@ use JetBrains\PhpStorm\Pure;
 
 /**
  * Helper class for a single command.
- *
- * @noinspection PhpMultipleClassDeclarationsInspection
  */
 #[Immutable]
 class Phrase implements \Countable, \Stringable
