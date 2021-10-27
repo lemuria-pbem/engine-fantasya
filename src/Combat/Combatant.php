@@ -11,6 +11,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Armature;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Protection;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Shield;
@@ -233,6 +234,13 @@ class Combatant
 	protected function hasOneWeaponOf(WeaponSkill $weaponSkill): bool {
 		$talent = $weaponSkill->Skill()->Talent()::class;
 		if ($talent === Fistfight::class) {
+			$race = $this->unit->Race();
+			if ($race instanceof Monster) {
+				$this->weapon = $race->Weapon();
+				if ($this->weapon) {
+					return true;
+				}
+			}
 			$this->weapon = self::createWeapon(Fists::class);
 			return true;
 		}
