@@ -15,24 +15,14 @@ use Lemuria\Model\Fantasya\Commodity\Protection\Ironshield;
 use Lemuria\Model\Fantasya\Commodity\Protection\Mail;
 use Lemuria\Model\Fantasya\Commodity\Protection\Woodshield;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
 use Lemuria\Model\Fantasya\Protection;
 use Lemuria\Model\Fantasya\Race\Monster;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Riding;
+use Lemuria\Model\Fantasya\Weapon;
 
 class Attack
 {
-	protected const HITS = [
-		Catapult::class => 3
-	];
-
-	protected const INTERVAL = [
-		Catapult::class => 5,
-		Crossbow::class => 2
-	];
-
 	protected const DAMAGE_BONUS = [
 		Bow::class => 0.5
 	];
@@ -62,11 +52,6 @@ class Attack
 		$this->flight = self::FLIGHT[$combatant->Unit()->BattleRow()];
 	}
 
-	#[Pure] public function Hits(): int {
-		$weapon = $this->combatant->Weapon()::class;
-		return self::HITS[$weapon] ?? 1;
-	}
-
 	public function Flight(): float {
 		return $this->flight;
 	}
@@ -89,8 +74,8 @@ class Attack
 	}
 
 	public function perform(int $fA, Combatant $defender, int $fD): ?int {
-		$weapon   = $this->combatant->Weapon()::class;
-		$interval = self::INTERVAL[$weapon] ?? 1;
+		$weapon   = $this->combatant->Weapon();
+		$interval = $weapon->Interval();
 		if ($this->round++ % $interval > 0) {
 			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA) . ' is not ready yet.');
 			return null;
@@ -145,9 +130,9 @@ class Attack
 		return false;
 	}
 
-	protected function calculateDamage(string $weapon, int $skill, int $block, ?Protection $armor, ?Protection $shield): int {
+	protected function calculateDamage(Weapon $weapon, int $skill, int $block, ?Protection $armor, ?Protection $shield): int {
 		$damage  = $this->combatant->Weapon()->Damage();
-		$bonus   = self::DAMAGE_BONUS[$weapon] ?? 0.0;
+		$bonus   = self::DAMAGE_BONUS[$weapon::class] ?? 0.0;
 		$b       = $bonus > 0.0 ? (int)floor($bonus * $skill) : 0;
 		$attack  = $damage->Count() * rand(1, $damage->Dice() + $b) + $damage->Addition();
 		$block  += $shield?->Block() + $armor?->Block();

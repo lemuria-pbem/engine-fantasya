@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultHitMessage;
@@ -86,10 +84,6 @@ class Combatant
 
 	public function Distribution(): Distribution {
 		return $this->distribution;
-	}
-
-	#[Pure] public function Hits(): int {
-		return $this->attack->Hits();
 	}
 
 	public function Weapon(): Weapon {

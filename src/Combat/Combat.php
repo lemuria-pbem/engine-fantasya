@@ -228,7 +228,7 @@ class Combat extends CombatModel
 		$count = 0;
 		foreach ($side as $combatant /* @var Combatant $combatant */) {
 			if ($isAttack) {
-				$count += $combatant->Size() * $combatant->Hits();
+				$count += $combatant->Size() * $combatant->Weapon()->Hits();
 			} else {
 				$count += $combatant->Size();
 			}
@@ -549,7 +549,7 @@ class Combat extends CombatModel
 			if ($comA?->hasCast || $fA >= $nA) {
 				$comA = $attacker[++$cA] ?? null;
 				$nA   = $comA?->Size();
-				$hits = $comA?->Hits();
+				$hits = $comA?->Weapon()->Hits();
 				$fA   = 0;
 				$hit  = 0;
 				continue;
