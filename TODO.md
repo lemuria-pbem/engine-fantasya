@@ -28,16 +28,16 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - weitere Zauber:
   - Astrales Chaos (6) (erschwert Magie im Kampf)
   - Tagtraum (7) (unterbricht Bewachung, verringert Produktivität)
+- Kampfstatus "vorsichtig" (wie "vorne", jedoch Rückzug bei 90 %)
 
 ### Version 0.9
 
-- Statistische Daten erstellen
-  - Regionsentwicklung im Report anzeigen
-  - Veränderungen im Inventar anzeigen
-  - Talentveränderungen im Report anzeigen
-- HTML-Report optisch verbessern
-- Regeldatei für Magellan
-- Kriegselefanten
+- Migration to PHP 8.1
+- ERSCHAFFEN einzigartiger Gegenstände (Unicum)
+  - Unicum hat bestimmte Aktionen (GEBEN, LESEN, SCHREIBEN, BENUTZEN)
+  - Aktion hat Lebensdauer (Zeit oder Anzahl)
+  - Schriftrollen mit unbekannten Zaubern erwerben, um diese zu erlernen
+  - Zauberbuch schreiben, weitergeben, lesen
 - weitere Gebäude:
   - Akropolis
   - Alchemistenküche
@@ -49,11 +49,13 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.10
 
-- ERSCHAFFEN einzigartiger Gegenstände (Unicum)
-  - Unicum hat bestimmte Aktionen (GEBEN, LESEN, SCHREIBEN, BENUTZEN)
-  - Aktion hat Lebensdauer (Zeit oder Anzahl)
-  - Schriftrollen mit unbekannten Zaubern erwerben, um diese zu erlernen
-  - Zauberbuch schreiben, weitergeben, lesen
+- Statistische Daten erstellen
+  - Regionsentwicklung im Report anzeigen
+  - Veränderungen im Inventar anzeigen
+  - Talentveränderungen im Report anzeigen
+- HTML-Report optisch verbessern
+- Regeldatei für Magellan
+- Kriegselefanten
 - weitere Gebäude:
   - Akademie
   - Megapolis
@@ -78,12 +80,13 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Einstellen der erwünschten Reportformate
 - Talentübersicht pro Region
 - Übersetzungen auf MessageFormat umstellen
+- Luxuswarenangebot neu definieren, wenn der erste Bauer eine Region besiedelt
 
 ### Weiterentwicklung des Spielkonzepts
 
 Die angedachte Weiterentwicklung hat das generelle Ziel, Mikromanagement zu
 reduzieren. Dabei würden viele Befehle und Konzepte aus Fantasya verworfen und
-stattdessen vom Spieler Rahmenbedingungen vorgebenen, aus denen „Kontingente“
+stattdessen vom Spieler Rahmenbedingungen vorgegeben, aus denen „Kontingente“
 von arbeitenden Bauern berechnet werden, die unter der Anleitung von
 „Meistereinheiten“ mit Erfahrung in bestimmten Talenten effektiver arbeiten
 können. Transporte können durch Einrichtung von Transportrouten automatisiert

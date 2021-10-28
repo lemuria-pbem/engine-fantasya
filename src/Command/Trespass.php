@@ -22,6 +22,8 @@ final class Trespass extends DelegatedCommand
 {
 	/**
 	 * Create the delegate.
+	 *
+	 * @noinspection PhpMultipleClassDeclarationsInspection
 	 */
 	protected function createDelegate(): Command {
 		$n = count($this->phrase);
