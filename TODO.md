@@ -10,7 +10,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Kriegsbeute
   - Trophäen
   - Wagenwracks
-- Lederrüstung aus Elefantenhaut
 - erbeutete Waffen/Rüstungen reparieren
 - BELAGERN
 - weitere Gebäude:

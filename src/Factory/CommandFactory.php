@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use JetBrains\PhpStorm\Pure;
+
 use function Lemuria\getClass;
 use function Lemuria\mbUcFirst;
 use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
@@ -133,6 +134,7 @@ use Lemuria\Model\Fantasya\Commodity\Potion\WaterOfLife;
 use Lemuria\Model\Fantasya\Commodity\Potion\Woundshut;
 use Lemuria\Model\Fantasya\Commodity\Protection\Armor;
 use Lemuria\Model\Fantasya\Commodity\Protection\Ironshield;
+use Lemuria\Model\Fantasya\Commodity\Protection\LeatherArmor;
 use Lemuria\Model\Fantasya\Commodity\Protection\Mail;
 use Lemuria\Model\Fantasya\Commodity\Protection\Woodshield;
 use Lemuria\Model\Fantasya\Commodity\Silver;
@@ -389,6 +391,8 @@ class CommandFactory
 		'Kriegshammer'         => Warhammer::class,
 		'Kriegshaemmer'        => Warhammer::class,
 		'Kriegshämmer'         => Warhammer::class,
+		'Lederruestungen'      => LeatherArmor::class,
+		'Lederrüstungen'       => LeatherArmor::class,
 		'Myrrhen'              => Myrrh::class,
 		'Oele'                 => Oil::class,
 		'Öle'                  => Oil::class,

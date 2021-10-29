@@ -12,6 +12,7 @@ use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Potion\BerserkBlood;
 use Lemuria\Model\Fantasya\Commodity\Protection\Armor;
 use Lemuria\Model\Fantasya\Commodity\Protection\Ironshield;
+use Lemuria\Model\Fantasya\Commodity\Protection\LeatherArmor;
 use Lemuria\Model\Fantasya\Commodity\Protection\Mail;
 use Lemuria\Model\Fantasya\Commodity\Protection\Woodshield;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
@@ -34,6 +35,7 @@ class Attack
 
 	protected const ATTACK_MALUS = [
 		Armor::class => 2,
+		LeatherArmor::class => 0,
 		Mail::class  => 1
 	];
 
