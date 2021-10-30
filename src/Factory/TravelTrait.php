@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Message\Construction\LeaveNewOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNoOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Region\TravelUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardCancelMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoChaosMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoOceanMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNeighbourMessage;
@@ -95,6 +96,11 @@ trait TravelTrait
 
 	protected function moveTo(Region $destination): void {
 		$region = $this->unit->Region();
+
+		if ($this->unit->IsGuarding()) {
+			$this->unit->setIsGuarding(false);
+			$this->message(TravelGuardCancelMessage::class);
+		}
 
 		$construction = $this->unit->Construction();
 		if ($construction) {
