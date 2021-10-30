@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Capacity;
+use Lemuria\Engine\Fantasya\Effect\TravelEffect;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNewOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNoOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Region\TravelUnitMessage;
@@ -14,6 +15,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TravelNeighbourMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelAnchorMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelLandMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelOverLandMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Party;
@@ -122,6 +124,7 @@ trait TravelTrait
 		} else {
 			$region->Residents()->remove($this->unit);
 			$destination->Residents()->add($this->unit);
+			$this->createTravelEffect();
 			$this->unit->Party()->Chronicle()->add($destination);
 			if (!$this->unit->IsHiding()) {
 				$this->message(TravelUnitMessage::class, $region)->p((string)$this->unit);
@@ -181,5 +184,12 @@ trait TravelTrait
 		}
 		$this->roadsLeft -= 2;
 		return false;
+	}
+
+	private function createTravelEffect(): void {
+		$effect = new TravelEffect(State::getInstance());
+		if (!Lemuria::Score()->find($effect->setUnit($this->unit))) {
+			Lemuria::Score()->add($effect);
+		}
 	}
 }

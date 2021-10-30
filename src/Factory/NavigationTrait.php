@@ -3,7 +3,10 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Effect\TravelEffect;
 use Lemuria\Engine\Fantasya\Message\Region\TravelVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardCancelMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Quay;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -114,11 +117,25 @@ trait NavigationTrait
 		}
 
 		foreach ($this->vessel->Passengers() as $unit /* @var Unit $unit */) {
+			if ($unit->IsGuarding()) {
+				$unit->setIsGuarding(false);
+				$this->message(TravelGuardCancelMessage::class, $unit);
+			}
+
 			$region->Residents()->remove($unit);
 			$destination->Residents()->add($unit);
+			$this->createNavigationEffect($unit);
 			$unit->Party()->Chronicle()->add($destination);
 		}
 
 		$this->message(TravelVesselMessage::class, $region)->p((string)$this->vessel);
 	}
+
+	private function createNavigationEffect(Unit $unit): void {
+		$effect = new TravelEffect(State::getInstance());
+		if (!Lemuria::Score()->find($effect->setUnit($unit))) {
+			Lemuria::Score()->add($effect);
+		}
+	}
+
 }
