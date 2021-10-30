@@ -16,7 +16,14 @@
 		"Plain": "die",
 		"Swamp": "der"
 	},
-	"battleRow": ["flieht aus dem Kampf", "kämpft nicht", "kämpft defensiv", "kämpft hinten", "kämpft vorne", "kämpft aggressiv"],
+	"battleRow": [
+		["flieht aus dem Kampf", "fliehen aus dem Kampf"],
+		["kämpft nicht", "kämpfen nicht"],
+		["kämpft defensiv", "kämpfen defensiv"],
+		["kämpft hinten", "kämpfen hinten"],
+		["kämpft vorne", "kämpfen vorne"],
+		["kämpft aggressiv", "kämpfen aggressiv"]
+	],
 	"building": {
 		"Blacksmith": "Schmiede",
 		"Cabin": "Holzfällerhütte",
@@ -549,6 +556,7 @@
 		"TeachUnableMessage": "Die Einheit $id kann die Einheit $student nicht mehr lehren.",
 		"TempMessage": "Neue Einheit $id erzeugt.",
 		"TravelAnchorMessage": "Das Schiff $id ankert im $anchor und kann nicht nach $direction auslaufen.",
+		"TravelGuardCancelMessage": "Die Bewachung der Region wurde durch die Abreise aufgehoben.",
 		"TravelGuardedMessage": "Die Einheit $id wurde in der Region $region von den Wachen gestoppt.",
 		"TravelGuardMessage": "Unsere Wachen haben die Einheit $unit in der Region $region aufgehalten.",
 		"TravelIntoChaosMessage": "Die Einheit $id kann sich nicht nach $direction ins Chaos bewegen.",
