@@ -4,6 +4,9 @@ namespace Lemuria\Engine\Fantasya\Command\Create;
 
 use Lemuria\Engine\Fantasya\Effect\SignpostEffect;
 use Lemuria\Engine\Fantasya\Factory\MarketBuilder;
+use Lemuria\Engine\Fantasya\Factory\Model\AnyBuilding;
+use Lemuria\Engine\Fantasya\Factory\Model\AnyCastle;
+use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionBuildMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionCreateMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionDependencyMessage;
@@ -42,6 +45,7 @@ final class Construction extends AbstractProduct
 	private bool $hasMarket = false;
 
 	protected function initialize(): void {
+		$this->replacePlaceholderJob();
 		parent::initialize();
 		$castle = $this->context->getIntelligence($this->unit->Region())->getGovernment();
 		if ($castle?->Size() > Site::MAX_SIZE) {
@@ -156,6 +160,21 @@ final class Construction extends AbstractProduct
 			return $production;
 		}
 		return parent::calculateProduction($craft);
+	}
+
+	private function replacePlaceholderJob(): void {
+		$building = $this->job->getObject();
+		if ($building instanceof AnyCastle) {
+			$building = $this->unit->Construction()?->Building();
+			if ($building instanceof Castle) {
+				$this->job = new Job($building, $this->job->Count());
+			}
+		} elseif ($building instanceof AnyBuilding) {
+			$building = $this->unit->Construction()?->Building();
+			if ($building) {
+				$this->job = new Job($building, $this->job->Count());
+			}
+		}
 	}
 
 	private function calculateCastleProduction(int $size, int $pointsUsed = 0): int {

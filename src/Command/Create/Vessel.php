@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
+use Lemuria\Engine\Fantasya\Factory\Model\AnyShip;
+use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselAlreadyFinishedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselBuildMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselCreateMessage;
@@ -32,6 +34,11 @@ use Lemuria\Model\Fantasya\Vessel as VesselModel;
 final class Vessel extends AbstractProduct
 {
 	private int $remaining;
+
+	protected function initialize(): void {
+		$this->replacePlaceholderJob();
+		parent::initialize();
+	}
 
 	protected function run(): void {
 		$vessel = $this->unit->Vessel();
@@ -102,6 +109,16 @@ final class Vessel extends AbstractProduct
 	protected function calculateProduction(Requirement $craft): int {
 		$production = parent::calculateProduction($craft);
 		return $production <= $this->remaining ? $production : $this->remaining;
+	}
+
+	private function replacePlaceholderJob(): void {
+		$ship = $this->job->getObject();
+		if ($ship instanceof AnyShip) {
+			$ship = $this->unit->Vessel()?->Ship();
+			if ($ship) {
+				$this->job = new Job($ship, $this->job->Count());
+			}
+		}
 	}
 
 	private function getShip(): Ship {
