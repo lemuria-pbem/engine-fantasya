@@ -59,6 +59,9 @@ use Lemuria\Engine\Fantasya\Command\Unit;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
+use Lemuria\Engine\Fantasya\Factory\Model\AnyBuilding;
+use Lemuria\Engine\Fantasya\Factory\Model\AnyCastle;
+use Lemuria\Engine\Fantasya\Factory\Model\AnyShip;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
@@ -305,10 +308,10 @@ class CommandFactory
 		'Baustelle'         => Site::class,
 		'Befestigung'       => Fort::class,
 		'Bergwerk'          => Mine::class,
-		'Burg'              => Site::class,
+		'Burg'              => AnyCastle::class,
 		'Festung'           => Stronghold::class,
-		'Gebäude'           => Site::class,
-		'Gebaeude'          => Site::class,
+		'Gebäude'           => AnyBuilding::class,
+		'Gebaeude'          => AnyBuilding::class,
 		'Holzfällerhütte'   => Cabin::class,
 		'Holzfaellerhuette' => Cabin::class,
 		'Mine'              => Pit::class,
@@ -461,7 +464,7 @@ class CommandFactory
 		'Galeone'       => Galleon::class,
 		'Karavelle'     => Caravel::class,
 		'Langboot'      => Longboat::class,
-		'Schiff'        => Boat::class,
+		'Schiff'        => AnyShip::class,
 		'Trireme'       => Trireme::class
 	];
 
@@ -640,11 +643,17 @@ class CommandFactory
 		}
 		$building = $this->getCandidate($artifact, $this->buildings);
 		if ($building) {
-			return self::createBuilding($building);
+			return match ($building) {
+				AnyBuilding::class, AnyCastle::class => new $building(),
+				default                              => self::createBuilding($building)
+			};
 		}
 		$ship = $this->getCandidate($artifact, $this->ships);
 		if ($ship) {
-			return self::createShip($ship);
+			return match ($ship) {
+				AnyShip::class => new $ship(),
+				default        => self::createShip($ship)
+			};
 		}
 		throw new UnknownItemException($artifact);
 	}

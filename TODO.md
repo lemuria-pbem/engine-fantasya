@@ -54,6 +54,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Regeldatei für Magellan
 - Kriegselefanten
 - weitere Gebäude:
+  - Greifenzucht
   - Akademie
   - Megapolis
   - Monument
