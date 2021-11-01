@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use Lemuria\Engine\Fantasya\ActivityProtocol;
+use Lemuria\Model\Fantasya\Unit;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Context;
@@ -49,5 +51,9 @@ abstract class AbstractEvent implements Event
 		Lemuria::Log()->debug('Executing ' . $this . '.');
 		$this->executeAction();
 		return $this;
+	}
+
+	protected function initActivityProtocol(Unit $unit): void {
+		$this->state->setProtocol(new ActivityProtocol($unit, new Context($this->state)));
 	}
 }

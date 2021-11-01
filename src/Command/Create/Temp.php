@@ -56,7 +56,7 @@ final class Temp extends UnitCommand implements Immediate
 		$this->creator     = $this->context->Unit();
 		$this->createdUnit = new Unit();
 		$id                = $this->createId();
-		$this->createdUnit->setId($id)->setName('Einheit ' . $id)->setDescription('');
+		$this->createdUnit->setId($id)->setName('Einheit ' . $id);
 		$this->createdUnit->setRace($party->Race());
 
 		$party->People()->add($this->createdUnit);
