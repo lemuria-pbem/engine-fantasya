@@ -168,6 +168,8 @@ final class Construction extends AbstractProduct
 			$building = $this->unit->Construction()?->Building();
 			if ($building instanceof Castle) {
 				$this->job = new Job($building, $this->job->Count());
+			} else {
+				$this->job = new Job(self::createBuilding(Site::class), $this->job->Count());
 			}
 		} elseif ($building instanceof AnyBuilding) {
 			$building = $this->unit->Construction()?->Building();
