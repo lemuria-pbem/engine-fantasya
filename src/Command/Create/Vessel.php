@@ -62,7 +62,7 @@ final class Vessel extends AbstractProduct
 
 				if ($vessel) {
 					$vessel->setCompletion(($size + $yield) / $wood);
-					if ($this->job->hasCount() && $demand > $production) {
+					if ($this->job->hasCount() && $demand > $production && $demand < PHP_INT_MAX) {
 						$this->message(VesselOnlyMessage::class)->e($vessel)->p($yield);
 					} else {
 						$this->message(VesselBuildMessage::class)->e($vessel)->p($yield);
@@ -74,7 +74,7 @@ final class Vessel extends AbstractProduct
 					$vessel->Passengers()->add($this->unit);
 					$this->unit->Region()->Fleet()->add($vessel);
 					$vessel->setShip($ship)->setCompletion($yield / $wood);
-					if ($this->job->hasCount() && $demand > $production) {
+					if ($this->job->hasCount() && $demand > $production && $demand < PHP_INT_MAX) {
 						$this->message(VesselOnlyMessage::class)->e($vessel)->p($yield);
 					} else {
 						$this->message(VesselMessage::class)->s($ship);
