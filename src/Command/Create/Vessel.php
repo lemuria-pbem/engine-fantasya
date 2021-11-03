@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
+use Lemuria\Engine\Fantasya\Factory\Model\AnyShip;
+use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselAlreadyFinishedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselBuildMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselCreateMessage;
@@ -33,6 +35,11 @@ final class Vessel extends AbstractProduct
 {
 	private int $remaining;
 
+	protected function initialize(): void {
+		$this->replacePlaceholderJob();
+		parent::initialize();
+	}
+
 	protected function run(): void {
 		$vessel = $this->unit->Vessel();
 		if ($vessel?->Completion() < 1.0) {
@@ -55,7 +62,7 @@ final class Vessel extends AbstractProduct
 
 				if ($vessel) {
 					$vessel->setCompletion(($size + $yield) / $wood);
-					if ($this->job->hasCount() && $demand > $production) {
+					if ($this->job->hasCount() && $demand > $production && $demand < PHP_INT_MAX) {
 						$this->message(VesselOnlyMessage::class)->e($vessel)->p($yield);
 					} else {
 						$this->message(VesselBuildMessage::class)->e($vessel)->p($yield);
@@ -67,7 +74,7 @@ final class Vessel extends AbstractProduct
 					$vessel->Passengers()->add($this->unit);
 					$this->unit->Region()->Fleet()->add($vessel);
 					$vessel->setShip($ship)->setCompletion($yield / $wood);
-					if ($this->job->hasCount() && $demand > $production) {
+					if ($this->job->hasCount() && $demand > $production && $demand < PHP_INT_MAX) {
 						$this->message(VesselOnlyMessage::class)->e($vessel)->p($yield);
 					} else {
 						$this->message(VesselMessage::class)->s($ship);
@@ -102,6 +109,16 @@ final class Vessel extends AbstractProduct
 	protected function calculateProduction(Requirement $craft): int {
 		$production = parent::calculateProduction($craft);
 		return $production <= $this->remaining ? $production : $this->remaining;
+	}
+
+	private function replacePlaceholderJob(): void {
+		$ship = $this->job->getObject();
+		if ($ship instanceof AnyShip) {
+			$ship = $this->unit->Vessel()?->Ship();
+			if ($ship) {
+				$this->job = new Job($ship, $this->job->Count());
+			}
+		}
 	}
 
 	private function getShip(): Ship {

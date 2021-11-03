@@ -3,16 +3,19 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Capacity;
+use Lemuria\Engine\Fantasya\Effect\TravelEffect;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNewOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNoOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Region\TravelUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardCancelMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoChaosMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoOceanMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNeighbourMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelAnchorMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelLandMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelOverLandMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Party;
@@ -96,6 +99,11 @@ trait TravelTrait
 	protected function moveTo(Region $destination): void {
 		$region = $this->unit->Region();
 
+		if ($this->unit->IsGuarding()) {
+			$this->unit->setIsGuarding(false);
+			$this->message(TravelGuardCancelMessage::class);
+		}
+
 		$construction = $this->unit->Construction();
 		if ($construction) {
 			$isOwner = $construction->Inhabitants()->Owner() === $this->unit;
@@ -116,6 +124,7 @@ trait TravelTrait
 		} else {
 			$region->Residents()->remove($this->unit);
 			$destination->Residents()->add($this->unit);
+			$this->createTravelEffect();
 			$this->unit->Party()->Chronicle()->add($destination);
 			if (!$this->unit->IsHiding()) {
 				$this->message(TravelUnitMessage::class, $region)->p((string)$this->unit);
@@ -131,20 +140,24 @@ trait TravelTrait
 	 */
 	protected function unitIsStoppedByGuards(Region $region): array {
 		$guards       = [];
+		$isOnVessel   = (bool)$this->unit->Vessel();
 		$intelligence = $this->context->getIntelligence($region);
 		$camouflage   = $this->calculus()->knowledge(Camouflage::class)->Level();
 		foreach ($intelligence->getGuards() as $guard /* @var Unit $guard */) {
 			$guardParty = $guard->Party();
 			if ($guardParty !== $this->unit->Party()) {
-				if ($this->context->getTurnOptions()->IsSimulation()) {
-					$guards[$guardParty->Id()->Id()] = $guardParty;
-				} elseif (!$guardParty->Diplomacy()->has(Relation::GUARD, $this->unit)) {
-					if ($region instanceof Ocean) {
+				$guardOnVessel = (bool)$guard->Vessel();
+				if ($guardOnVessel === $isOnVessel) {
+					if ($this->context->getTurnOptions()->IsSimulation()) {
 						$guards[$guardParty->Id()->Id()] = $guardParty;
-					}
-					$perception = $this->context->getCalculus($guard)->knowledge(Perception::class)->Level();
-					if ($perception >= $camouflage) {
-						$guards[$guardParty->Id()->Id()] = $guardParty;
+					} elseif (!$guardParty->Diplomacy()->has(Relation::GUARD, $this->unit)) {
+						if ($region instanceof Ocean) {
+							$guards[$guardParty->Id()->Id()] = $guardParty;
+						}
+						$perception = $this->context->getCalculus($guard)->knowledge(Perception::class)->Level();
+						if ($perception >= $camouflage) {
+							$guards[$guardParty->Id()->Id()] = $guardParty;
+						}
 					}
 				}
 			}
@@ -175,5 +188,12 @@ trait TravelTrait
 		}
 		$this->roadsLeft -= 2;
 		return false;
+	}
+
+	private function createTravelEffect(): void {
+		$effect = new TravelEffect(State::getInstance());
+		if (!Lemuria::Score()->find($effect->setUnit($this->unit))) {
+			Lemuria::Score()->add($effect);
+		}
 	}
 }
