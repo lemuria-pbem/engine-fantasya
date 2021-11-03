@@ -78,7 +78,7 @@ final class Construction extends AbstractProduct
 
 			if ($construction) {
 				$construction->setSize($construction->Size() + $yield);
-				if ($this->job->hasCount() && $demand > $production) {
+				if ($this->job->hasCount() && $demand > $production && $demand < PHP_INT_MAX) {
 					$this->message(ConstructionOnlyMessage::class)->e($construction)->p($yield);
 				} else {
 					$this->message(ConstructionBuildMessage::class)->e($construction)->p($yield);
@@ -90,7 +90,7 @@ final class Construction extends AbstractProduct
 				$construction->Inhabitants()->add($this->unit);
 				$this->unit->Region()->Estate()->add($construction);
 				$construction->setBuilding($building)->setSize($yield);
-				if ($this->job->hasCount() && $demand > $production) {
+				if ($this->job->hasCount() && $demand > $production && $demand < PHP_INT_MAX) {
 					$this->message(ConstructionOnlyMessage::class)->e($construction)->p($yield);
 				} else {
 					$this->message(ConstructionMessage::class)->s($construction->Building());
