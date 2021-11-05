@@ -78,6 +78,10 @@ final class Support extends AbstractEvent
 		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region /* @var Region $region */) {
 			$intelligence = $this->context->getIntelligence($region);
 			foreach ($intelligence->getParties() as $party /* @var Party $party */) {
+				if ($party->Type() !== Party::PLAYER) {
+					continue;
+				}
+
 				/** @var Unit $unit */
 				$hungry->clear();
 				foreach ($intelligence->getUnits($party) as $unit) {

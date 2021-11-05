@@ -59,6 +59,10 @@ final class Obtainment extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Catalog::PARTIES) as $party /* @var Party $party */) {
+			if ($party->Type() !== Party::PLAYER) {
+				continue;
+			}
+
 			$magic = $this->getMagicLevel($party);
 			if ($magic <= 0) {
 				continue;

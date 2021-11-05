@@ -47,6 +47,10 @@ final class Acquaintance extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Catalog::PARTIES) as $party /* @var Party $party */) {
+			if ($party->Type() !== Party::PLAYER) {
+				continue;
+			}
+
 			$census  = new Census($party);
 			$outlook = new Outlook($census);
 			foreach ($census->getAtlas() as $region /* @var Region $region */) {
@@ -134,8 +138,10 @@ final class Acquaintance extends AbstractEvent
 		}
 		foreach ($ids as $id => $camouflage) {
 			$foreign                    = $census->getParty($unit);
-			$fid                        = $foreign ? $foreign->Id()->Id() : 0;
-			$this->network[$id][$fid][] = [$census, $unit, $camouflage];
+			if ($foreign?->Type() === Party::PLAYER) {
+				$fid                        = $foreign ? $foreign->Id()->Id() : 0;
+				$this->network[$id][$fid][] = [$census, $unit, $camouflage];
+			}
 		}
 	}
 }

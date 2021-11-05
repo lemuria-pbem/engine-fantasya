@@ -12,7 +12,7 @@ use Lemuria\Model\Fantasya\Party\Census;
 use Lemuria\Model\Fantasya\Region;
 
 /**
- * Units that have no health left will die.
+ *
  */
 final class Visit extends AbstractEvent
 {

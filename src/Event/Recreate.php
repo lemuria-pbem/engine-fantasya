@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\RecreateHealthMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
+use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -22,6 +23,10 @@ final class Recreate extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Catalog::UNITS) as $unit /* @var Unit $unit */) {
+			if ($unit->Party()->Type() !== Party::PLAYER) {
+				continue;
+			}
+
 			if (!$this->hasHunger($unit)) {
 				if ($unit->Health() < 1.0) {
 					$this->recreateHealth($unit);

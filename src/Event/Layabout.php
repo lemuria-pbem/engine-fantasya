@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\LayaboutMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
+use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -20,10 +21,14 @@ final class Layabout extends AbstractEvent
 
 	protected function run(): void {
 		$count = 0;
-		foreach (Lemuria::Catalog()->getAll(Catalog::UNITS) as $unit /* @var Unit $unit */) {
-			if (!$this->state->getProtocol($unit)->hasActivity()) {
-				$this->message(LayaboutMessage::class, $unit);
-				$count++;
+		foreach (Lemuria::Catalog()->getAll(Catalog::PARTIES) as $party /* @var Party $party */) {
+			if ($party->Type() === Party::PLAYER) {
+				foreach ($party->People() as $unit /* @var Unit $unit */) {
+					if (!$this->state->getProtocol($unit)->hasActivity()) {
+						$this->message(LayaboutMessage::class, $unit);
+						$count++;
+					}
+				}
 			}
 		}
 		Lemuria::Log()->debug($count . ' units had no activity.');
