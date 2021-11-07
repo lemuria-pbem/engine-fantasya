@@ -2,13 +2,23 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-### Version 0.8
+## Fehler/Verbesserungen in 0.8
 
-- Monster
+- Monsterverhalten
+- besondere Gegenstände:
+  - Trophäen
+- weitere Zauber:
+  - Astrales Chaos (6) (erschwert Magie im Kampf)
+- weitere Gebäude:
+  - Taverne
+
+## Neue Funktionen
+
+### Version 0.9
+
 - besondere Gegenstände:
   - Greifeneier
   - Kriegsbeute
-  - Trophäen
   - Wagenwracks
 - erbeutete Waffen/Rüstungen reparieren
 - BELAGERN
@@ -17,17 +27,10 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Leuchtturm
   - Magierturm
   - Steuerturm
-  - Taverne
 - weitere Zauber:
-  - Astrales Chaos (6) (erschwert Magie im Kampf)
   - Tagtraum (7) (unterbricht Bewachung, verringert Produktivität)
 
-## Fehler/Verbesserungen in 0.8
-
-
-## Neue Funktionen
-
-### Version 0.9
+### Version 0.10
 
 - Migration to PHP 8.1
 - ERSCHAFFEN einzigartiger Gegenstände (Unicum)
@@ -44,7 +47,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Beschleunigung (8) (mehrfache Angriffe)
   - Erdbeben (9) (zerstört Gebäude)
 
-### Version 0.10
+### Version 0.11
 
 - Statistische Daten erstellen
   - Regionsentwicklung im Report anzeigen
@@ -67,8 +70,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Ideen
 
 - Befehle in der Vorlage wiederholen (LIEFERE bzw. @BEFEHL in Fantasya)
-- besondere Gebäude wie Ruinen
-- Ereignisse
+- besondere Gebäude/Orte wie Ruinen oder Höhlen
+- Umweltereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE
 - Seekampf/Piraterie
 - SABOTIERE (Spion versenkt Schiff)
