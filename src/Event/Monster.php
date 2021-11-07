@@ -8,7 +8,7 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Party;
-use Lemuria\Model\Fantasya\Race\Monster as MonsterModel;
+use Lemuria\Model\Fantasya\Monster as MonsterModel;
 use Lemuria\Model\Fantasya\Unit;
 
 /**

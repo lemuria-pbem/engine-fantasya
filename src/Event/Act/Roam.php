@@ -45,22 +45,27 @@ class Roam implements Act
 		}
 
 		foreach ($environment as $landscape) {
-			$neighbours[getClass($landscape)] = [];
+			$regions[getClass($landscape)] = [];
 		}
 
 		$region = $this->unit->Region();
-		foreach (Lemuria::World()->getNeighbours($region) as $neighbour /* @var Region $neighbour */) {
+		foreach (Lemuria::World()->getNeighbours($region)->getAll() as $neighbour /* @var Region $neighbour */) {
 			$landscape = getClass($neighbour->Landscape());
-			if (isset($neighbours[$landscape])) {
-				$neighbours[$landscape][] = $neighbour;
+			if (isset($regions[$landscape])) {
+				$regions[$landscape][] = $neighbour;
 			}
 		}
 		$landscape = getClass($region->Landscape());
-		if (isset($neighbours[$landscape])) {
-			$neighbours[$landscape][] = $region;
+		if (isset($regions[$landscape])) {
+			$regions[$landscape][] = $region;
 		}
 
-		return $regions;
+		foreach (array_keys($regions) as $landscape) {
+			if (empty($regions[$landscape])) {
+				unset($regions[$landscape]);
+			}
+		}
+		return array_values($regions);
 	}
 
 	protected function chooseLandscape(array $regions): array {
