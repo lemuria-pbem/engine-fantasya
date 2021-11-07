@@ -12,6 +12,7 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleExhaustionMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderWonMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\NoTacticsRoundMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\TakeLootMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\TakeTrophiesMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\UnitDiedMessage;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\Model\DisguisedParty;
@@ -235,6 +236,7 @@ class Battle
 				$heirs = $this->intelligence->getHeirs($this->attackers[0], true);
 				$this->giveLootToHeirs($heirs, $attackerLoot);
 				$this->giveLootToHeirs($heirs, $defenderLoot);
+				$this->takeTrophies($heirs, $this->defendArmies);
 			}
 		} else {
 			if ($combat->hasDefenders()) {
@@ -243,6 +245,7 @@ class Battle
 				$heirs = $this->intelligence->getHeirs($this->defenders[0], true);
 				$this->giveLootToHeirs($heirs, $attackerLoot);
 				$this->giveLootToHeirs($heirs, $defenderLoot);
+				$this->takeTrophies($heirs, $this->attackArmies);
 			} else {
 				Lemuria::Log()->debug('Battle ended with both sides defeated each other.');
 				BattleLog::getInstance()->add(new BattleEndedInDrawMessage());
@@ -265,9 +268,20 @@ class Battle
 	protected function giveLootToHeirs(Heirs $heirs, Resources $loot): void {
 		foreach ($loot as $quantity /* @var Quantity $quantity */) {
 			$unit = $heirs->random();
-			$unit->Inventory()->add($quantity);
+			$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
 			// Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
 			BattleLog::getInstance()->add(new TakeLootMessage($unit, $quantity));
+		}
+	}
+
+	protected function takeTrophies(Heirs $heirs, array $armies): void {
+		foreach ($armies as $army /* @var Army $army */) {
+			foreach ($army->Trophies() as $quantity /* @var Quantity $quantity */) {
+				$unit = $heirs->random();
+				$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
+				// Lemuria::Log()->debug($unit . ' takes trophies: ' . $quantity);
+				BattleLog::getInstance()->add(new TakeTrophiesMessage($unit, $quantity));
+			}
 		}
 	}
 

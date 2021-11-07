@@ -28,10 +28,12 @@ final class Monster extends AbstractEvent
 		foreach (Lemuria::Catalog()->getAll(Catalog::PARTIES) as $party /* @var Party $party */) {
 			if ($party->Type() === Party::MONSTER) {
 				foreach ($party->People() as $unit /* @var Unit $unit */) {
-					$race = $unit->Race();
-					if ($race instanceof MonsterModel) {
-						$behaviour = self::getBehaviour($race);
-						$behaviour?->setUnit($unit)->conduct();
+					if ($unit->Size() > 0) {
+						$race = $unit->Race();
+						if ($race instanceof MonsterModel) {
+							$behaviour = self::getBehaviour($race);
+							$behaviour?->setUnit($unit)->conduct();
+						}
 					}
 				}
 			}

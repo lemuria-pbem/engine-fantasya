@@ -122,6 +122,7 @@
 			"SongOfPeaceCombatantMessage": "Die Abteilung $combatant verlässt friedlich das Schlachtfeld.",
 			"SongOfPeaceFighterMessage": "$fighter Kämpfer der Abteilung $combatant $leave friedlich das Schlachtfeld.",
 			"TakeLootMessage": "Die Einheit $unit erbeutet $loot.",
+			"TakeTrophiesMessage": "Die Einheit $unit sammelt $loot als Trophäe des Sieges über den Feind.",
 			"TriedToFleeFromBattleMessage": "Die Abteilung $combatant hat erfolglos versucht, sich aus der Schlacht zurückzuziehen.",
 			"UnitDiedMessage": "Die Einheit $unit wurde vernichtet."
 		},

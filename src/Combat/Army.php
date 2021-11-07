@@ -38,15 +38,18 @@ class Army
 
 	private Resources $loss;
 
+	private Resources $trophies;
+
 	/**
 	 * @var Combatant[]
 	 */
 	private array $combatants = [];
 
 	public function __construct(private Party $party) {
-		$this->id    = ++self::$nextId;
-		$this->units = new People();
-		$this->loss  = new Resources();
+		$this->id       = ++self::$nextId;
+		$this->units    = new People();
+		$this->loss     = new Resources();
+		$this->trophies = new Resources();
 		// Lemuria::Log()->debug('New army ' . $this->id . ' for party ' . $this->party . '.');
 	}
 
@@ -71,6 +74,10 @@ class Army
 
 	public function Loss(): Resources {
 		return $this->loss;
+	}
+
+	public function Trophies(): Resources {
+		return $this->trophies;
 	}
 
 	public function add(Unit $unit): Army {

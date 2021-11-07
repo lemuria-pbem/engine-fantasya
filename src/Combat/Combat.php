@@ -33,6 +33,7 @@ use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
 use Lemuria\Model\Fantasya\Commodity\Potion\HealingPotion;
+use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
@@ -605,10 +606,16 @@ class Combat extends CombatModel
 				if ($deceased > 0) {
 					$unit = $combatant->Unit();
 					$unit->setSize($unit->Size() - $deceased);
+					$army   = $combatant->Army();
+					$race   = $unit->Race();
+					$trophy = $race instanceof Monster ? $race->Trophy() : null;
+					if ($trophy) {
+						$army->Trophies()->add(new Quantity($trophy, $deceased));
+					}
 					$inventory = $unit->Inventory();
 					foreach ($combatant->Distribution()->lose($deceased) as $quantity /* @var Quantity $quantity*/) {
 						$inventory->remove($quantity);
-						$combatant->Army()->Loss()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
+						$army->Loss()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
 						// Lemuria::Log()->debug('Unit ' . $unit . ' loses ' . $quantity . '.');
 					}
 					if ($combatant->Size() <= 0) {
