@@ -3,8 +3,6 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Game;
 
 use Lemuria\Engine\Fantasya\Action;
-use Lemuria\Engine\Fantasya\ActivityProtocol;
-use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\BrokenCarriageEffect;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;

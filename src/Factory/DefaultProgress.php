@@ -13,6 +13,7 @@ use Lemuria\Engine\Fantasya\Event\Growth;
 use Lemuria\Engine\Fantasya\Event\Layabout;
 use Lemuria\Engine\Fantasya\Event\Liquidation;
 use Lemuria\Engine\Fantasya\Event\MarketUpdate;
+use Lemuria\Engine\Fantasya\Event\Monster;
 use Lemuria\Engine\Fantasya\Event\Obtainment;
 use Lemuria\Engine\Fantasya\Event\Population;
 use Lemuria\Engine\Fantasya\Event\Recreate;
@@ -31,7 +32,7 @@ class DefaultProgress implements Progress
 		// before
 		Visit::class, Timer::class,
 		// middle
-		Upkeep::class, Subsistence::class, Drift::class,
+		Upkeep::class, Monster::class, Subsistence::class, Drift::class,
 		// after
 		MarketUpdate::class, Founder::class, Support::class, Population::class, Fauna::class, Growth::class,
 		Regrow::class, Decease::class, Liquidation::class, Obtainment::class, Acquaintance::class, Recreate::class,

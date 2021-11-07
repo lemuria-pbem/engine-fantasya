@@ -20,7 +20,7 @@ use Lemuria\Model\Fantasya\Party;
 final class Timer extends DelegatedEvent
 {
 	private const SCHEDULE = [
-		34 => [
+		35 => [
 			['class' => Spawn::class, 'options' => [Spawn::PARTY => Party::MONSTER, Spawn::REGION => 14, Spawn::SIZE => 13, Spawn::RACE => Goblin::class]],
 			['class' => Spawn::class, 'options' => [Spawn::PARTY => Party::MONSTER, Spawn::REGION => 18, Spawn::SIZE =>  1, Spawn::RACE => Kraken::class]],
 			['class' => Spawn::class, 'options' => [Spawn::PARTY => Party::MONSTER, Spawn::REGION => 18, Spawn::SIZE =>  2, Spawn::RACE => Kraken::class]],
