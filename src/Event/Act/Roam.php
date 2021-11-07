@@ -7,6 +7,10 @@ use function Lemuria\randDistribution23;
 use function Lemuria\random;
 use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
+use Lemuria\Engine\Fantasya\Factory\MessageTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\RoamHereMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\RoamMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\RoamStayMessage;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Region;
@@ -17,20 +21,21 @@ use Lemuria\Model\Fantasya\Region;
 class Roam implements Act
 {
 	use ActTrait;
+	use MessageTrait;
 
 	public function act(): Roam {
 		$region  = $this->unit->Region();
 		$regions = $this->getPossibleRegions();
 		if (empty($regions)) {
-			Lemuria::Log()->debug($this->unit . ' in ' . $region . ' must stay here.');
+			$this->message(RoamStayMessage::class, $this->unit)->e($region);
 		} else {
 			$regions = $this->chooseLandscape($regions);
 			$target  = $regions[rand(0, count($regions) - 1)];
 			if ($target === $region) {
-				Lemuria::Log()->debug($this->unit . ' in ' . $region . ' roams here.');
+				$this->message(RoamHereMessage::class, $this->unit)->e($region);
 			} else {
 				$this->moveTo($target);
-				Lemuria::Log()->debug($this->unit . ' in ' . $region . ' roams to ' . $target . '.');
+				$this->message(RoamMessage::class, $this->unit)->e($region);
 			}
 		}
 		return $this;

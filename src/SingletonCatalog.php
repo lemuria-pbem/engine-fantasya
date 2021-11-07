@@ -13,7 +13,7 @@ class SingletonCatalog implements SingletonCatalogInterface
 	private const GROUPS = [
 		'Combat\\Log\\Message',
 		'Message\\Construction', 'Message\\Party', 'Message\\Region',
-		'Message\\Unit', 'Message\\Unit\\Apply', 'Message\\Unit\\Cast',
+		'Message\\Unit', 'Message\\Unit\\Act', 'Message\\Unit\\Apply', 'Message\\Unit\\Cast',
 		'Message\\Vessel'
 	];
 
