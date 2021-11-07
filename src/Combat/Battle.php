@@ -216,9 +216,6 @@ class Battle
 		return $combat->embattle();
 	}
 
-	/**
-	 * @noinspection PhpIfWithCommonPartsInspection
-	 */
 	protected function takeLoot(Combat $combat): Battle {
 		$attackerLoot = $this->collectLoot($this->attackArmies);
 		$defenderLoot = $this->collectLoot($this->defendArmies);
@@ -268,9 +265,11 @@ class Battle
 	protected function giveLootToHeirs(Heirs $heirs, Resources $loot): void {
 		foreach ($loot as $quantity /* @var Quantity $quantity */) {
 			$unit = $heirs->random();
-			$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
-			// Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
-			BattleLog::getInstance()->add(new TakeLootMessage($unit, $quantity));
+			if ($unit->Party()->Type() === Party::PLAYER) {
+				$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
+				// Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
+				BattleLog::getInstance()->add(new TakeLootMessage($unit, $quantity));
+			}
 		}
 	}
 
@@ -278,9 +277,11 @@ class Battle
 		foreach ($armies as $army /* @var Army $army */) {
 			foreach ($army->Trophies() as $quantity /* @var Quantity $quantity */) {
 				$unit = $heirs->random();
-				$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
-				// Lemuria::Log()->debug($unit . ' takes trophies: ' . $quantity);
-				BattleLog::getInstance()->add(new TakeTrophiesMessage($unit, $quantity));
+				if ($unit->Party()->Type() === Party::PLAYER) {
+					$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
+					// Lemuria::Log()->debug($unit . ' takes trophies: ' . $quantity);
+					BattleLog::getInstance()->add(new TakeTrophiesMessage($unit, $quantity));
+				}
 			}
 		}
 	}

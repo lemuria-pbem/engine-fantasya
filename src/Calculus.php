@@ -285,7 +285,7 @@ final class Calculus
 	public function inventoryDistribution(): array {
 		$maxSize   = $this->unit->Size();
 		$inventory = $this->unit->Inventory();
-		if (empty($inventory)) {
+		if ($inventory->isEmpty()) {
 			$distribution = new Distribution();
 			return [$distribution->setSize($maxSize)];
 		}
