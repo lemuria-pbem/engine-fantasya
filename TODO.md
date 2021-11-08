@@ -6,7 +6,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 - Monsterverhalten erweitern
 - Beute von Monstern individualisieren
-- Kampfbericht soll verwendete Waffen auflisten
 - Beuteverteilung nach dem Kampf verbessern
 - weitere Zauber:
   - Astrales Chaos (6) (erschwert Magie im Kampf)

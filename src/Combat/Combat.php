@@ -5,20 +5,27 @@ namespace Lemuria\Engine\Fantasya\Combat;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
+use Lemuria\Engine\Fantasya\Combat\Log\Message;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerHasFledMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerNoReinforcementMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerOverrunMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerReinforcementMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerReinforcementWeaponMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerSideMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerSplitMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerSplitWeaponMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerTacticsRoundMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\CombatantNoWeaponMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\CombatantWeaponMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\CombatRoundMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderHasFledMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderNoReinforcementMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderOverrunMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderReinforcementMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderReinforcementWeaponMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderSideMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderSplitMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderSplitWeaponMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\DefenderTacticsRoundMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\EveryoneHasFledMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\FighterCouldNotFleeMessage;
@@ -33,6 +40,7 @@ use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
 use Lemuria\Model\Fantasya\Commodity\Potion\HealingPotion;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Native;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
@@ -134,7 +142,17 @@ class Combat extends CombatModel
 	public function embattle(): Combat {
 		$log = BattleLog::getInstance();
 		$log->add(new AttackerSideMessage($this->attackParticipants));
+		foreach ($this->attacker as $combatants) {
+			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
+				$log->add($this->getCombatantMessage($combatant));
+			}
+		}
 		$log->add(new DefenderSideMessage($this->defendParticipants));
+		foreach ($this->defender as $combatants) {
+			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
+				$log->add($this->getCombatantMessage($combatant));
+			}
+		}
 		return $this;
 	}
 
@@ -283,6 +301,13 @@ class Combat extends CombatModel
 		}
 	}
 
+	#[Pure] protected function getCombatantMessage(Combatant $combatant): Message {
+		if ($combatant->Weapon() instanceof Native) {
+			return new CombatantNoWeaponMessage($combatant);
+		}
+		return new CombatantWeaponMessage($combatant);
+	}
+
 	protected function logSideDistribution(): void {
 		$attacker = [];
 		foreach ($this->attacker as $row => $combatants) {
@@ -366,10 +391,15 @@ class Combat extends CombatModel
 				$additional -= $size;
 				$who         = $isAttacker ? 'Attacker' : 'Defender';
 				Lemuria::Log()->debug($who . ' ' . $unit . ' sends combatant ' . $combatant->Id() . ' (size ' . $size . ') from ' . $name . ' row to the front.');
+				$hasWeapon = !($combatant->Weapon() instanceof Native);
 				if ($isAttacker) {
-					$message = new AttackerReinforcementMessage(new Entity($unit), $combatant, $size, $battleRow);
+					$message = $hasWeapon ?
+						new AttackerReinforcementWeaponMessage(new Entity($unit), $combatant, $size, $battleRow) :
+						new AttackerReinforcementMessage(new Entity($unit), $combatant, $size, $battleRow);
 				} else {
-					$message = new DefenderReinforcementMessage(new Entity($unit), $combatant, $size, $battleRow);
+					$message = $hasWeapon ?
+						new DefenderReinforcementWeaponMessage(new Entity($unit), $combatant, $size, $battleRow) :
+						new DefenderReinforcementMessage(new Entity($unit), $combatant, $size, $battleRow);
 				}
 				BattleLog::getInstance()->add($message);
 				if ($additional <= 0) {
@@ -380,11 +410,16 @@ class Combat extends CombatModel
 				$combatant->Army()->addCombatant($newCombatant);
 				$side[self::FRONT][] = $newCombatant;
 				$who                 = $isAttacker ? 'Attacker' : 'Defender';
+				$hasWeapon           = !($newCombatant->Weapon() instanceof Native);
 				Lemuria::Log()->debug($who . ' ' . $unit . ' sends ' . $additional . ' persons from combatant ' . $combatant->Id() . ' in ' . $name . ' row to the front as combatant ' . $newCombatant->Id() . '.');
 				if ($isAttacker) {
-					$message = new AttackerSplitMessage(new Entity($unit), $combatant, $newCombatant, $additional, $battleRow);
+					$message = $hasWeapon ?
+						new AttackerSplitWeaponMessage(new Entity($unit), $combatant, $newCombatant, $additional, $battleRow) :
+						new AttackerSplitMessage(new Entity($unit), $combatant, $newCombatant, $additional, $battleRow);
 				} else {
-					$message = new DefenderSplitMessage(new Entity($unit), $combatant, $newCombatant, $additional, $battleRow);
+					$message = $hasWeapon ?
+						new DefenderSplitWeaponMessage(new Entity($unit), $combatant, $newCombatant, $additional, $battleRow) :
+						new DefenderSplitMessage(new Entity($unit), $combatant, $newCombatant, $additional, $battleRow);
 				}
 				BattleLog::getInstance()->add($message);
 				$additional = 0;
