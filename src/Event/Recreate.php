@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\RecreateHealthMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
+use Lemuria\Model\Fantasya\Building\Tavern;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -45,10 +46,11 @@ final class Recreate extends AbstractEvent
 	}
 
 	private function recreateHealth(Unit $unit): void {
+		$boost      = $unit->Construction()?->Building() instanceof Tavern ? 2 : 1;
 		$hitpoints  = $this->context->getCalculus($unit)->hitpoints();
 		$health     = (int)floor($unit->Health() * $hitpoints);
 		$difference = $hitpoints - $health;
-		$heal       = min($difference, $unit->Race()->Hunger());
+		$heal       = min($difference, $boost * $unit->Race()->Hunger());
 		$healed     = ($health + $heal) / $hitpoints;
 		$unit->setHealth($healed);
 		Lemuria::Log()->debug('Unit ' . $unit . ' regenerates ' . $heal . ' hitpoints.');

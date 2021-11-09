@@ -7,8 +7,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Monsterverhalten erweitern
 - Beute von Monstern individualisieren
 - Beuteverteilung nach dem Kampf verbessern
-- weitere Gebäude:
-  - Taverne
 
 ## Neue Funktionen
 
