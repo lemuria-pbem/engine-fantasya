@@ -11,6 +11,7 @@ use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Spell;
+use Lemuria\Model\Fantasya\Spell\AstralChaos;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
@@ -32,7 +33,8 @@ final class Obtainment extends AbstractEvent
 		2 => SongOfPeace::class,
 		3 => Fireball::class,
 		4 => AuraTransfer::class,
-		5 => ShockWave::class
+		5 => ShockWave::class,
+		6 => AstralChaos::class
 	];
 
 	private Talent $magic;
