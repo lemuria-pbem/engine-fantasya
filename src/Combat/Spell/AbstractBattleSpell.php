@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Spell;
 
+use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellFailedMessage;
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
@@ -48,7 +49,7 @@ abstract class AbstractBattleSpell
 			Lemuria::Log()->debug('Unit ' . $unit . ' casts ' . $this->grade->Spell() . ' with grade ' . $grade . '.');
 			BattleLog::getInstance()->add(new BattleSpellCastMessage($unit, $this->grade->Spell(), $grade));
 		} elseif ($initialGrade > 0) {
-			//TODO Spell failed.
+			BattleLog::getInstance()->add(new BattleSpellFailedMessage($unit, $this->grade->Spell()));
 		} else {
 			BattleLog::getInstance()->add(new BattleSpellNoAuraMessage($unit, $this->grade->Spell()));
 		}

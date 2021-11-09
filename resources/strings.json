@@ -101,6 +101,7 @@
 			"BattleEndsMessage": "Kampfende",
 			"BattleExhaustionMessage": "Der Kampf endet unentschieden, beide Seiten sind nach $rounds Runden ohne Treffer erschöpft.",
 			"BattleSpellCastMessage": "Die Einheit $unit zaubert $spell auf Stufe $grade.",
+			"BattleSpellFailedMessage": "Die Einheit $unit hat versucht, $spell zu zaubern, doch der Zauber ist fehlgeschlagen.",
 			"BattleSpellNoAuraMessage": "Die Einheit $unit hat nicht genügend Aurapunkte, um $spell zu zaubern.",
 			"CombatRoundMessage": "Kampfrunde $round",
 			"CombatantNoWeaponMessage": "$combatant, $count $fighter, $battleRow",
