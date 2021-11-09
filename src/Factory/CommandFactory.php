@@ -62,6 +62,7 @@ use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyBuilding;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyCastle;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyShip;
+use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
@@ -161,7 +162,6 @@ use Lemuria\Model\Fantasya\Ship\Galleon;
 use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Ship\Trireme;
 use Lemuria\Model\Fantasya\Spell;
-use Lemuria\Model\Fantasya\SpellGrade;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
@@ -753,7 +753,7 @@ class CommandFactory
 		throw new LemuriaException('Casting spell ' . $spell . ' is not implemented.');
 	}
 
-	public function castBattleSpell(SpellGrade $grade): AbstractBattleSpell {
+	public function castBattleSpell(BattleSpellGrade $grade): AbstractBattleSpell {
 		$spell = getClass($grade->Spell());
 		$class = self::BATTLE_SPELL_NAMESPACE . $spell;
 		if (class_exists($class)) {

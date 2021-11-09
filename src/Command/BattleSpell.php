@@ -85,6 +85,9 @@ final class BattleSpell extends UnitCommand
 		if ($level <= 0) {
 			$this->removeBattleSpell($spell);
 		} else {
+			if (!$spell->IsIncremental()) {
+				$level = 1;
+			}
 			$this->addBattleSpell(new SpellGrade($spell, $level));
 		}
 	}

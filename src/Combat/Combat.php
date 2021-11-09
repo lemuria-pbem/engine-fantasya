@@ -37,6 +37,7 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\ManagedToFleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\TriedToFleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Participant;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat as CombatModel;
 use Lemuria\Model\Fantasya\Commodity\Potion\HealingPotion;
@@ -87,6 +88,8 @@ class Combat extends CombatModel
 	 */
 	protected array $defendParticipants = [];
 
+	protected Effects $effects;
+
 	#[Pure] public static function getBattleRow(Unit $unit): int {
 		$battleRow = $unit->BattleRow();
 		return match ($battleRow) {
@@ -96,9 +99,14 @@ class Combat extends CombatModel
 		};
 	}
 
-	public function __construct(private Context $context) {
+	#[Pure] public function __construct(private Context $context) {
 		$this->attacker = array_fill_keys(self::BATTLE_ROWS, []);
 		$this->defender = array_fill_keys(self::BATTLE_ROWS, []);
+		$this->effects  = new Effects();
+	}
+
+	public function Effects(): Effects {
+		return $this->effects;
 	}
 
 	public function hasAttackers(): bool {
@@ -280,7 +288,7 @@ class Combat extends CombatModel
 	 */
 	protected function castPreparationSpell(array $units, array $caster, array $victim): void {
 		foreach ($units as $unit) {
-			$grade = $unit->BattleSpells()->Preparation();
+			$grade = new BattleSpellGrade($unit->BattleSpells()->Preparation(), $this);
 			$spell = $this->context->Factory()->castBattleSpell($grade);
 			$grade = $spell->setCaster($caster)->setVictim($victim)->cast($unit);
 			if ($grade > 0) {
@@ -530,7 +538,7 @@ class Combat extends CombatModel
 	 */
 	protected function castCombatSpell(array $units, array $caster, array $victim): void {
 		foreach ($units as $unit) {
-			$grade = $unit->BattleSpells()->Combat();
+			$grade = new BattleSpellGrade($unit->BattleSpells()->Combat(), $this);
 			$spell = $this->context->Factory()->castBattleSpell($grade);
 			$grade = $spell->setCaster($caster)->setVictim($victim)->cast($unit);
 			if ($grade > 0) {

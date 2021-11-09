@@ -2,23 +2,31 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Spell;
 
+use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
+use Lemuria\Engine\Fantasya\Combat\CombatEffect;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellCastMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellNoAuraMessage;
+use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\SpellGrade;
+use Lemuria\Model\Fantasya\BattleSpell;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Spell;
+use Lemuria\Model\Fantasya\Spell\AstralChaos;
 use Lemuria\Model\Fantasya\Unit;
 
 abstract class AbstractBattleSpell
 {
+	use BuilderTrait;
+
 	protected array $caster;
 
 	protected array $victim;
 
 	protected Calculus $calculus;
 
-	public function __construct(protected SpellGrade $grade) {
+	public function __construct(protected BattleSpellGrade $grade) {
 	}
 
 	public function setCaster(array $combatantRows): AbstractBattleSpell {
@@ -33,11 +41,14 @@ abstract class AbstractBattleSpell
 
 	public function cast(Unit $unit): int {
 		$this->calculus = new Calculus($unit);
-		$grade          = $this->grade($unit);
+		$initialGrade   = $this->grade($unit);
+		$grade          = $this->modifyReliability($initialGrade);
 		if ($grade > 0) {
 			$this->consume($unit, $grade);
 			Lemuria::Log()->debug('Unit ' . $unit . ' casts ' . $this->grade->Spell() . ' with grade ' . $grade . '.');
 			BattleLog::getInstance()->add(new BattleSpellCastMessage($unit, $this->grade->Spell(), $grade));
+		} elseif ($initialGrade > 0) {
+			//TODO Spell failed.
 		} else {
 			BattleLog::getInstance()->add(new BattleSpellNoAuraMessage($unit, $this->grade->Spell()));
 		}
@@ -51,9 +62,54 @@ abstract class AbstractBattleSpell
 		return min($maximum, $this->grade->Level());
 	}
 
+	protected function modifyReliability(int $grade): int {
+		// 1. Apply effects that influence reliability and grade.
+		$astralChaos = $this->getCombatEffect(self::createSpell(AstralChaos::class));
+		if ($astralChaos) {
+			$grade = $this->applyAstralChaos($astralChaos, $grade);
+		}
+		// 2. Check reliability chance.
+		if (!randChance($this->grade->Reliability())) {
+			$grade = 0;
+		}
+		return $grade;
+	}
+
 	protected function consume(Unit $unit, int $grade): void {
 		$aura      = $unit->Aura();
 		$available = $aura->Aura();
 		$aura->setAura($available - $grade * $this->grade->Spell()->Aura());
+	}
+
+	protected function getCombatEffect(Spell $spell): ?CombatEffect {
+		if ($spell instanceof BattleSpell) {
+			$effect = $this->grade->Combat()->Effects()[$spell];
+			if ($effect instanceof CombatEffect) {
+				return $effect;
+			}
+		}
+		return null;
+	}
+
+	protected function applyAstralChaos(CombatEffect $astralChaos, int $grade): int {
+		$chaosPoints = $astralChaos->Points();
+		$spell       = $this->grade->Spell();
+		$difficulty  = $grade * $spell->Difficulty();
+		$aura        = $grade * $spell->Aura();
+		$spellPower  = sqrt($difficulty * $aura);
+		if ($spellPower <= 0.0) {
+			return 0;
+		}
+
+		// 1. Reduce grade.
+		$reducedPower = max(0.0, $spellPower - $chaosPoints);
+		$grade        = (int)ceil($reducedPower / $spellPower);
+
+		// 2. Decrease reliability.
+		$decrease    = $chaosPoints / $spellPower;
+		$reliability = max(0.0, $this->grade->Reliability() - $decrease);
+		$this->grade->setReliability($reliability);
+
+		return $grade;
 	}
 }
