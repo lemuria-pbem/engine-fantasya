@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Lemuria;
 
 /**
  * This event finishes the monsters' behaviour.
@@ -15,6 +16,8 @@ final class Finish extends AbstractEvent
 	}
 
 	protected function run(): void {
+		$monsters = $this->state->getAllMonsters();
+		Lemuria::Log()->debug('Behaviour of ' . count($monsters) . ' monsters is finished.');
 		foreach ($this->state->getAllMonsters() as $behaviour) {
 			$behaviour->finish();
 		}

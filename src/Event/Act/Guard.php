@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Act;
 
 use function Lemuria\randChance;
-use Lemuria\Engine\Fantasya\Message\Unit\GuardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnguardMessage;
 use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
@@ -39,7 +38,6 @@ class Guard implements Act
 		} else {
 			if (randChance(self::GUARD)) {
 				$this->isGuarding = true;
-				$this->message(GuardMessage::class, $this->unit);
 			}
 		}
 		return $this;

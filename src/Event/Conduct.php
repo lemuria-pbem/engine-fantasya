@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Lemuria;
 
 /**
  * This event conducts the monsters' behaviour.
@@ -15,7 +16,9 @@ final class Conduct extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach ($this->state->getAllMonsters() as $behaviour) {
+		$monsters = $this->state->getAllMonsters();
+		Lemuria::Log()->debug('Behaviour of ' . count($monsters) . ' monsters is conducted.');
+		foreach ($monsters as $behaviour) {
 			$behaviour->conduct();
 		}
 	}

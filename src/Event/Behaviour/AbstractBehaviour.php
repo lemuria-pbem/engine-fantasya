@@ -8,10 +8,14 @@ use Lemuria\Engine\Fantasya\Event\Act\Guard;
 use Lemuria\Engine\Fantasya\Event\Act\Roam;
 use Lemuria\Engine\Fantasya\Event\Act\Seek;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
+use Lemuria\Engine\Fantasya\Factory\MessageTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\GuardMessage;
 use Lemuria\Model\Fantasya\Unit;
 
 abstract class AbstractBehaviour implements Behaviour
 {
+	use MessageTrait;
+
 	protected Unit $unit;
 
 	protected ?Act $act = null;
@@ -37,6 +41,7 @@ abstract class AbstractBehaviour implements Behaviour
 		if ($this->act instanceof Guard) {
 			if ($this->act->IsGuarding()) {
 				$this->unit->setIsGuarding(true);
+				$this->message(GuardMessage::class, $this->unit);
 			}
 		}
 		return $this;

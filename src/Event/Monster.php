@@ -25,6 +25,7 @@ final class Monster extends AbstractEvent
 	}
 
 	protected function run(): void {
+		$count = 0;
 		foreach (Lemuria::Catalog()->getAll(Catalog::PARTIES) as $party /* @var Party $party */) {
 			if ($party->Type() === Party::MONSTER) {
 				foreach ($party->People() as $unit /* @var Unit $unit */) {
@@ -34,12 +35,14 @@ final class Monster extends AbstractEvent
 							$behaviour = self::getBehaviour($race);
 							if ($behaviour?->setUnit($unit)->prepare()) {
 								$this->state->addMonster($behaviour);
+								$count++;
 							}
 						}
 					}
 				}
 			}
 		}
+		Lemuria::Log()->debug('Behaviours for ' . $count . ' monster units have been added.');
 	}
 
 	private static function getBehaviour(MonsterModel $race): ?Behaviour {
