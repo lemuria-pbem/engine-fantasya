@@ -10,5 +10,9 @@ interface Behaviour
 
 	public function setUnit(Unit $unit): Behaviour;
 
+	public function prepare(): Behaviour;
+
 	public function conduct(): Behaviour;
+
+	public function finish(): Behaviour;
 }

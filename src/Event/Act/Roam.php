@@ -24,8 +24,6 @@ class Roam implements Act
 	use ActTrait;
 	use MessageTrait;
 
-	protected bool $mayStayHere = true;
-
 	public function act(): Roam {
 		$region  = $this->unit->Region();
 		$regions = $this->getPossibleRegions();
@@ -63,12 +61,9 @@ class Roam implements Act
 				$regions[$landscape][] = $neighbour;
 			}
 		}
-
-		if ($this->mayStayHere) {
-			$landscape = getClass($region->Landscape());
-			if (isset($regions[$landscape])) {
-				$regions[$landscape][] = $region;
-			}
+		$landscape = getClass($region->Landscape());
+		if (isset($regions[$landscape])) {
+			$regions[$landscape][] = $region;
 		}
 
 		foreach (array_keys($regions) as $landscape) {

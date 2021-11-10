@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Combat\Campaign;
+use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Exception\LemuriaException;
@@ -69,6 +70,11 @@ final class State
 	 * @var array(int=>Campaign)
 	 */
 	private array $campaigns = [];
+
+	/**
+	 * @var Behaviour[]
+	 */
+	private array $monsters = [];
 
 	public function getTurnOptions(): TurnOptions {
 		if (!$this->turnOptions) {
@@ -176,6 +182,13 @@ final class State
 		return array_values($this->commerce);
 	}
 
+	/**
+	 * @return Behaviour[]
+	 */
+	public function getAllMonsters(): array {
+		return $this->monsters;
+	}
+
 	public function setTurnOptions(TurnOptions $options): void {
 		$this->turnOptions = $options;
 	}
@@ -191,5 +204,9 @@ final class State
 	public function setTravelRoute(Unit $unit, DirectionList $travelRoute): void {
 		$id = $unit->Id()->Id();
 		$this->travelRoute[$id] = $travelRoute;
+	}
+
+	public function addMonster(Behaviour $monster): void {
+		$this->monsters[] = $monster;
 	}
 }

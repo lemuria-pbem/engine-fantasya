@@ -5,9 +5,11 @@ namespace Lemuria\Engine\Fantasya\Factory;
 use Lemuria\Engine\Fantasya\Event;
 use Lemuria\Engine\Fantasya\Event\Acquaintance;
 use Lemuria\Engine\Fantasya\Event\Aftercare;
+use Lemuria\Engine\Fantasya\Event\Conduct;
 use Lemuria\Engine\Fantasya\Event\Decease;
 use Lemuria\Engine\Fantasya\Event\Drift;
 use Lemuria\Engine\Fantasya\Event\Fauna;
+use Lemuria\Engine\Fantasya\Event\Finish;
 use Lemuria\Engine\Fantasya\Event\Founder;
 use Lemuria\Engine\Fantasya\Event\Growth;
 use Lemuria\Engine\Fantasya\Event\Layabout;
@@ -30,13 +32,13 @@ class DefaultProgress implements Progress
 {
 	public const EVENTS = [
 		// before
-		Visit::class, Timer::class,
+		Visit::class, Monster::class, Timer::class,
 		// middle
-		Upkeep::class, Monster::class, Subsistence::class, Drift::class,
+		Conduct::class, Upkeep::class, Subsistence::class, Drift::class,
 		// after
-		MarketUpdate::class, Founder::class, Support::class, Population::class, Fauna::class, Growth::class,
-		Regrow::class, Decease::class, Liquidation::class, Obtainment::class, Acquaintance::class, Recreate::class,
-		Layabout::class, Aftercare::class
+		Finish::class, MarketUpdate::class, Founder::class, Support::class, Population::class, Fauna::class,
+		Growth::class, Regrow::class, Decease::class, Liquidation::class, Obtainment::class, Acquaintance::class,
+		Recreate::class, Layabout::class, Aftercare::class
 	];
 
 	private array $events = [];

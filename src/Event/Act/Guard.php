@@ -22,15 +22,23 @@ class Guard implements Act
 
 	protected const UNGUARD = 0.2;
 
+	protected bool $isGuarding;
+
+	public function IsGuarding(): bool {
+		return $this->isGuarding;
+	}
+
 	public function act(): Guard {
-		if ($this->unit->IsGuarding()) {
+		$this->isGuarding = $this->unit->IsGuarding();
+		if ($this->isGuarding) {
 			if (randChance(self::UNGUARD)) {
+				$this->isGuarding = false;
 				$this->unit->setIsGuarding(false);
 				$this->message(UnguardMessage::class, $this->unit);
 			}
 		} else {
 			if (randChance(self::GUARD)) {
-				$this->unit->setIsGuarding(true);
+				$this->isGuarding = true;
 				$this->message(GuardMessage::class, $this->unit);
 			}
 		}

@@ -3,30 +3,47 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Act;
 
 use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Event\Act;
+use Lemuria\Engine\Fantasya\Event\ActTrait;
+use Lemuria\Engine\Fantasya\Factory\MessageTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\SeekMessage;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
- * A seeking monster will roam until it has spotted outdoor player units in the region.
+ * A seeking monster tries to spot a random outdoor player unit in the region.
  */
-class Seek extends Roam
+class Seek implements Act
 {
-	protected bool $mayStayHere = false;
+	use ActTrait;
+	use MessageTrait;
 
-	public function act(): Roam {
+	protected ?Unit $enemy = null;
+
+	public function Enemy(): ?Unit {
+		return $this->enemy;
+	}
+
+	public function act(): Act {
+		$enemies  = [];
 		$calculus = new Calculus($this->unit);
-		foreach ($this->unit->Region()->Residents() as $unit /* @var Unit $unit */) {
-			if ($unit->Party()->Type() === Party::PLAYER) {
+		$region   = $this->unit->Region();
+		foreach ($region->Residents() as $unit /* @var Unit $unit */) {
+			if ($unit->Party()->Type() !== Party::PLAYER) {
 				continue;
 			}
 			if ($unit->Construction() || $unit->Vessel()) {
 				continue;
 			}
 			if ($calculus->canDiscover($unit)) {
-				//TODO found someone
-				return $this;
+				$enemies[] = $unit;
 			}
 		}
-		return parent::act();
+
+		if (!empty($enemies)) {
+			$this->enemy = $enemies[array_rand($enemies)];
+			$this->message(SeekMessage::class, $this->unit)->e($region);
+		}
+		return $this;
 	}
 }

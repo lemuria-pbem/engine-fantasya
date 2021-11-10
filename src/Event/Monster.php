@@ -12,7 +12,7 @@ use Lemuria\Model\Fantasya\Monster as MonsterModel;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
- * This event conducts the monsters' behaviour.
+ * This event prepares the monsters' behaviour.
  */
 final class Monster extends AbstractEvent
 {
@@ -21,7 +21,7 @@ final class Monster extends AbstractEvent
 	private static array $behaviours = [];
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::MIDDLE);
+		parent::__construct($state, Action::BEFORE);
 	}
 
 	protected function run(): void {
@@ -32,7 +32,9 @@ final class Monster extends AbstractEvent
 						$race = $unit->Race();
 						if ($race instanceof MonsterModel) {
 							$behaviour = self::getBehaviour($race);
-							$behaviour?->setUnit($unit)->conduct();
+							if ($behaviour?->setUnit($unit)->prepare()) {
+								$this->state->addMonster($behaviour);
+							}
 						}
 					}
 				}

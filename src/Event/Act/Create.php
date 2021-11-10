@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Factory\Namer\RaceNamer;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
+use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Combat;
 use Lemuria\Model\Fantasya\Commodity\Monster\Goblin;
 use Lemuria\Model\Fantasya\Commodity\Monster\Skeleton;
@@ -16,6 +17,8 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gang;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Talent;
+use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -37,6 +40,11 @@ class Create implements Act
 		Zombie::class   => Combat::AGGRESSIVE
 	];
 
+	protected const IS_HIDING = [
+		''            => 0,
+		Goblin::class => 5
+	];
+
 	/**
 	 * @var Gang[]
 	 */
@@ -47,7 +55,10 @@ class Create implements Act
 	 */
 	protected array $units = [];
 
+	private Talent $camouflage;
+
 	public function __construct(protected Party $party, protected Region $region) {
+		$this->camouflage = self::createTalent(Camouflage::class);
 	}
 
 	public function act(): Create {
@@ -66,8 +77,14 @@ class Create implements Act
 			$namer = new $namerClass();
 			$namer->name($unit);
 
-			$battleRow     = self::BATTLE_ROW[$race] ?? self::BATTLE_ROW[''];
-			$this->units[] = $unit->setBattleRow($battleRow);
+			$battleRow = self::BATTLE_ROW[$race] ?? self::BATTLE_ROW[''];
+			$unit->setBattleRow($battleRow);
+			$camouflage = self::IS_HIDING[$race] ?? self::IS_HIDING[''];
+			if ($camouflage > 0) {
+				$unit->Knowledge()->add(new Ability($this->camouflage, Ability::getExperience($camouflage)));
+				$unit->setIsHiding(true);
+			}
+			$this->units[] = $unit;
 			Lemuria::Log()->debug('A new unit of ' . $gang . ' has been spawned in ' . $this->region . '.');
 		}
 		return $this;
