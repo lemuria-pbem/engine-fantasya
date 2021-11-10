@@ -16,12 +16,15 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Region;
 
 /**
- * A roaming monster.
+ * A monster will roam according to its preferred landscapes with decreasing possibility.
+ * If there are no matching landscapes around, it will stay in its current region.
  */
 class Roam implements Act
 {
 	use ActTrait;
 	use MessageTrait;
+
+	protected bool $mayStayHere = true;
 
 	public function act(): Roam {
 		$region  = $this->unit->Region();
@@ -60,9 +63,12 @@ class Roam implements Act
 				$regions[$landscape][] = $neighbour;
 			}
 		}
-		$landscape = getClass($region->Landscape());
-		if (isset($regions[$landscape])) {
-			$regions[$landscape][] = $region;
+
+		if ($this->mayStayHere) {
+			$landscape = getClass($region->Landscape());
+			if (isset($regions[$landscape])) {
+				$regions[$landscape][] = $region;
+			}
 		}
 
 		foreach (array_keys($regions) as $landscape) {
