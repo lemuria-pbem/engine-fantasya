@@ -130,6 +130,9 @@ final class Population extends AbstractEvent
 	#[Pure] private function calculateMigrants(int $peasants, int $workplaces, float $years): int {
 		$pressure = -$workplaces / $peasants;
 		$migrants = $peasants * $pressure * self::MIGRATION;
+		if ($years < 1 / self::WEALTH) {
+			$years = 1 / self::WEALTH;
+		}
 		if ($migrants > 0.0) {
 			$migrants /= $years;
 		} else {
