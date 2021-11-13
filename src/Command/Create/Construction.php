@@ -15,6 +15,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\ConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionResourcesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionUnableMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
@@ -54,14 +55,14 @@ final class Construction extends AbstractProduct
 	}
 
 	protected function run(): void {
-		$construction = $this->unit->Construction();
-		$building     = $construction?->Building() ?? $this->getBuilding();
+		$building = $this->getBuilding();
 		if (!$this->checkDependency($building)) {
 			$dependency = $building->Dependency();
 			$this->message(ConstructionDependencyMessage::class)->s($building)->s($dependency, ConstructionDependencyMessage::DEPENDENCY);
 			return;
 		}
 
+		$construction     = $this->leaveCurrentConstructionFor($building);
 		$this->size       = $construction?->Size() ?? 0;
 		$demand           = $this->job->Count();
 		$talent           = $building->getCraft()->Talent();
@@ -221,6 +222,17 @@ final class Construction extends AbstractProduct
 			return $resource;
 		}
 		throw new LemuriaException('Expected a building resource.');
+	}
+
+	private function leaveCurrentConstructionFor(Building $building): ?ConstructionModel {
+		$construction    = $this->unit->Construction();
+		$currentBuilding = $construction?->Building();
+		if ($currentBuilding === $building) {
+			return $construction;
+		}
+		$construction->Inhabitants()->remove($this->unit);
+		$this->message(LeaveConstructionMessage::class)->e($construction);
+		return null;
 	}
 
 	private function initializeMarket(ConstructionModel $construction): void {

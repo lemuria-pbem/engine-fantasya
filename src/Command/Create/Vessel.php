@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command\Create;
 
 use Lemuria\Engine\Fantasya\Factory\Model\AnyShip;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
+use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselAlreadyFinishedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselBuildMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselCreateMessage;
@@ -41,9 +42,9 @@ final class Vessel extends AbstractProduct
 	}
 
 	protected function run(): void {
-		$vessel = $this->unit->Vessel();
+		$ship   = $this->getShip();
+		$vessel = $this->leaveCurrentVesselFor($ship);
 		if ($vessel?->Completion() < 1.0) {
-			$ship             = $vessel?->Ship() ?: $this->getShip();
 			$size             = $vessel?->getUsedWood() ?? 0;
 			$wood             = $ship->Wood();
 			$this->remaining  = $vessel?->getRemainingWood() ?? $wood;
@@ -119,6 +120,17 @@ final class Vessel extends AbstractProduct
 				$this->job = new Job($ship, $this->job->Count());
 			}
 		}
+	}
+
+	private function leaveCurrentVesselFor(Ship $ship): ?VesselModel {
+		$vessel      = $this->unit->Vessel();
+		$currentShip = $vessel?->Ship();
+		if ($currentShip === $ship) {
+			return $vessel;
+		}
+		$vessel->Passengers()->remove($this->unit);
+		$this->message(LeaveVesselMessage::class)->e($vessel);
+		return null;
 	}
 
 	private function getShip(): Ship {

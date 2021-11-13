@@ -3,7 +3,6 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use function Lemuria\mbUcFirst;
 use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
