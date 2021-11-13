@@ -35,7 +35,6 @@ use Lemuria\Engine\Fantasya\Command\Handover;
 use Lemuria\Engine\Fantasya\Command\Handover\Grant;
 use Lemuria\Engine\Fantasya\Command\Help;
 use Lemuria\Engine\Fantasya\Command\Learn;
-use Lemuria\Engine\Fantasya\Command\Leave;
 use Lemuria\Engine\Fantasya\Command\Name;
 use Lemuria\Engine\Fantasya\Command\Next;
 use Lemuria\Engine\Fantasya\Command\NullCommand;
@@ -56,6 +55,7 @@ use Lemuria\Engine\Fantasya\Command\Travel;
 use Lemuria\Engine\Fantasya\Command\Trespass;
 use Lemuria\Engine\Fantasya\Command\Trespass\Board;
 use Lemuria\Engine\Fantasya\Command\Unit;
+use Lemuria\Engine\Fantasya\Command\Vacate;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
@@ -609,7 +609,7 @@ class CommandFactory
 				'UNTERHALTEN'  => Entertain::class,
 				'URSPRUNG'     => Origin::class,
 				'VERKAUFEN'    => Sell::class,
-				'VERLASSEN'    => Leave::class,
+				'VERLASSEN'    => Vacate::class,
 				'VERLIEREN'    => Lose::class,
 				'VORLAGE'      => DefaultCommand::class,
 				'ZAUBERN'      => Cast::class,

@@ -1,7 +1,8 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Fantasya\Command;
+namespace Lemuria\Engine\Fantasya\Command\Vacate;
 
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNewOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNoOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionMessage;

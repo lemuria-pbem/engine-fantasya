@@ -18,14 +18,19 @@ final class State
 {
 	private static ?self $instance = null;
 
-	public static function getInstance(): State {
+	public static function getInstance(LemuriaTurn $turn = null): State {
 		if (!self::$instance) {
 			self::$instance = new self();
+		}
+		if ($turn) {
+			self::$instance->turn = $turn;
 		}
 		return self::$instance;
 	}
 
 	public bool $isTravelling = false;
+
+	private LemuriaTurn $turn;
 
 	private ?TurnOptions $turnOptions = null;
 
@@ -208,5 +213,9 @@ final class State
 
 	public function addMonster(Behaviour $monster): void {
 		$this->monsters[] = $monster;
+	}
+
+	public function injectIntoTurn(Action $action): void {
+		$this->turn->inject($action);
 	}
 }

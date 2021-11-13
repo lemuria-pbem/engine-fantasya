@@ -47,7 +47,7 @@ class AnyBuilding implements Building
 
 	public function getCraft(): Requirement {
 		$talent = self::createTalent(Constructing::class);
-		return new Requirement($talent, 0);
+		return new Requirement($talent);
 	}
 
 	#[Pure] public function getMaterial(): Resources {

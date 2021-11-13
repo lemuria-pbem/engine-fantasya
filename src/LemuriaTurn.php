@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Engine\Exception\EngineException;
+use Lemuria\Engine\Fantasya\Command\CompositeCommand;
 use Lemuria\Engine\Fantasya\Command\Initiate;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Event\DelegatedEvent;
@@ -49,13 +50,15 @@ class LemuriaTurn implements Turn
 	 */
 	protected array $queue = [];
 
+	protected int $currentPriority = 0;
+
 	private State $state;
 
 	/**
 	 * Initialize turn.
 	 */
 	public function __construct(?TurnOptions $options = null) {
-		$this->state = State::getInstance();
+		$this->state = State::getInstance($this);
 		if ($options) {
 			$this->state->setTurnOptions($options);
 		}
@@ -125,6 +128,16 @@ class LemuriaTurn implements Turn
 	}
 
 	/**
+	 * Inject an action into the running turn.
+	 */
+	public function inject(Action $action): void {
+		if ($this->priority->getPriority($action) <= $this->currentPriority) {
+			throw new LemuriaException('Cannot inject action into this running evaluation.');
+		}
+		$this->enqueue($action);
+	}
+
+	/**
 	 * Bring a new party into the game.
 	 *
 	 * @noinspection PhpConditionAlreadyCheckedInspection
@@ -162,8 +175,11 @@ class LemuriaTurn implements Turn
 	public function evaluate(): Turn {
 		Lemuria::Orders()->clear();
 		Lemuria::Log()->debug('Executing queued actions.', ['queues' => count($this->queue)]);
-		foreach ($this->queue as $priority => $actions) {
+		foreach (array_keys($this->queue) as $priority) {
+			$this->currentPriority = $priority;
+			$actions               = $this->queue[$priority];
 			Lemuria::Log()->debug('Queue ' . $priority . ' has ' . count($actions) . ' actions.');
+
 			foreach ($actions as $action /* @var Action $action */) {
 				try {
 					$action->prepare();
@@ -175,6 +191,7 @@ class LemuriaTurn implements Turn
 					}
 				}
 			}
+
 			foreach ($actions as $action /* @var Action $action */) {
 				try {
 					if ($action->isPrepared()) {
@@ -222,8 +239,13 @@ class LemuriaTurn implements Turn
 	}
 
 	protected function enqueue(Action $action): void {
-		$priority                 = $this->priority->getPriority($action);
-		$this->queue[$priority][] = $action;
+		if ($action instanceof CompositeCommand) {
+			foreach ($action->getCommands() as $command) {
+				$this->addAction($command);
+			}
+		} else {
+			$this->addAction($action);
+		}
 	}
 
 	protected function addEvent(Event $event): Turn {
@@ -342,5 +364,10 @@ class LemuriaTurn implements Turn
 			$message->setAssignee($action->Unit()->Id())->setType($messageType);
 			$message->p($exception->getMessage())->p((string)$action->Phrase(), UnitExceptionMessage::ACTION)->setId($id);
 		}
+	}
+
+	private function addAction(Action $action): void {
+		$priority                 = $this->priority->getPriority($action);
+		$this->queue[$priority][] = $action;
 	}
 }
