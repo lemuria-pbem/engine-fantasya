@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\Act\Attack;
 use Lemuria\Engine\Fantasya\Event\Act\Guard;
+use Lemuria\Engine\Fantasya\Event\Act\PickPocket;
 use Lemuria\Engine\Fantasya\Event\Act\Roam;
 use Lemuria\Engine\Fantasya\Event\Act\Seek;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
@@ -77,6 +78,19 @@ abstract class AbstractBehaviour implements Behaviour
 		if ($this->unit->Size() > 0) {
 			if ($this->act instanceof Seek && $this->act->Enemy()) {
 				$attack = new Attack($this);
+				$attack->setEnemy($this->act->Enemy())->act();
+			} else {
+				$roam = new Roam($this);
+				$roam->act();
+			}
+		}
+		return $this;
+	}
+
+	protected function roamOrPickPocket(): Behaviour {
+		if ($this->unit->Size() > 0) {
+			if ($this->act instanceof Seek && $this->act->Enemy()) {
+				$attack = new PickPocket($this);
 				$attack->setEnemy($this->act->Enemy())->act();
 			} else {
 				$roam = new Roam($this);

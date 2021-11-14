@@ -1,0 +1,17 @@
+<?php
+declare(strict_types = 1);
+namespace Lemuria\Engine\Fantasya\Event\Behaviour\Monster;
+
+use Lemuria\Engine\Fantasya\Event\Behaviour;
+use Lemuria\Engine\Fantasya\Event\Behaviour\AbstractBehaviour;
+
+class Goblin extends AbstractBehaviour
+{
+	public function prepare(): Behaviour {
+		return $this->seek();
+	}
+
+	public function conduct(): Behaviour {
+		return $this->roamOrPickPocket();
+	}
+}
