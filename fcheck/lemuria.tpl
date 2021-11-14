@@ -2,7 +2,7 @@
 ; - fcheck-Template für Lemuria Alpha -
 ; -------------------------------------
 
-^(\/\/ +)|(komme|kommen|komment|kommenta|kommentar) +.*$
+^(\/\/)|(komme|kommen|komment|kommenta|kommentar).*$
 ^;.*$
 
 ^(locale) +[a-zA-Z0-9]+$
@@ -52,13 +52,14 @@
 
 ^(leh|lehr|lehre|lehren|lehrer)( +[a-z0-9]{1,6})+$
 
-^(ler|lern|lerne|lernen) +(alchemie|armbrustschießen|armbrustschiessen|ausdauer|bergbau|bogenbau|bogenschießen|bogenschiessen|burgenbau|handel|handeln|hiebwaffen|holzfaellen|holzfällen|katapultbedienung|katapultschießen|katapultschiessen|kräuterkunde|kraeuterkunde|magie|navigation|navigieren|pferdedressur|reiten|ruestungsbau|rüstungsbau|schiffbau|segeln|speerkämpfen|speerkaempfen|speerkampf|spionage|spionieren|steinbau|steuereintreiben|steuereintreibung|strassenbau|straßenbau|taktik|tarnen|tarnung|unterhalten|unterhaltung|waffenbauen|waffenbau|wagenbau|wahrnehmen|wahrnehmung)$
+^(ler|lern|lerne|lernen) +(alchemie|armbrustschießen|armbrustschiessen|ausdauer|bergbau|bogenbau|bogenschießen|bogenschiessen|burgenbau|handel|handeln|hiebwaffen|holzfaellen|holzfällen|katapultbedienung|katapultschießen|katapultschiessen|kräuterkunde|kraeuterkunde|magie|navigation|navigieren|pferdedressur|reiten|ruestungsbau|rüstungsbau|schiffbau|segeln|speerkämpfen|speerkaempfen|speerkampf|spionage|spionieren|stangenwaffen|steinbau|steuereintreiben|steuereintreibung|strassenbau|straßenbau|taktik|tarnen|tarnung|unterhalten|unterhaltung|waffenbauen|waffenbau|wagenbau|wahrnehmen|wahrnehmung)$
 
 ^(m|ma|mac|mach|mache|machen) +(temp) +[a-z0-9]{1,6}$
 ^(m|ma|mac|mach|mache|machen) +[a-zäöüß]+$
 ^(m|ma|mac|mach|mache|machen) +[0-9]+ +[a-zäöüß]+$
 ^(m|ma|mac|mach|mache|machen) +(schiff|boot|drachenschiff|galeone|karavelle|langboot|trireme)( +[0-9]+)?$
-^(m|ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|bergwerk|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|leuchtturm|leuchttürme|minen|mine|monument|monumente|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steuerturm|werkstatt)( +[0-9]+)$
+^(m|ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|bergwerk|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|leuchtturm|leuchttürme|minen|mine|monument|monumente|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steingrube|steuerturm|taverne|werkstatt)( +[0-9]+)$
+^(m|ma|mac|mach|mache|machen) +straße +(no|o|so|sw|w|nw)$
 
 ^(nam|name|bene|benen|benenn|benenne|benennen)( +(einheit|region|gebäude|gebaeude|burg|schiff|partei))? +.+$
 
