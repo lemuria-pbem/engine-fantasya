@@ -16,17 +16,13 @@ abstract class AbstractBehaviour implements Behaviour
 {
 	use MessageTrait;
 
-	protected Unit $unit;
-
 	protected ?Act $act = null;
+
+	public function __construct(protected Unit $unit) {
+	}
 
 	public function Unit(): Unit {
 		return $this->unit;
-	}
-
-	public function setUnit(Unit $unit): Behaviour {
-		$this->unit = $unit;
-		return $this;
 	}
 
 	public function prepare(): Behaviour {

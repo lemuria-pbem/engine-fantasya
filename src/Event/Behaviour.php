@@ -6,9 +6,9 @@ use Lemuria\Model\Fantasya\Unit;
 
 interface Behaviour
 {
-	public function Unit(): Unit;
+	public function __construct(Unit $unit);
 
-	public function setUnit(Unit $unit): Behaviour;
+	public function Unit(): Unit;
 
 	public function prepare(): Behaviour;
 
