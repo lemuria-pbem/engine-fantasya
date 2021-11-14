@@ -366,6 +366,8 @@
 		"HelpSelfMessage": "Die Einheit $id kann nicht der eigenen Partei helfen.",
 		"HelpUnknownPartyMessage": "Die Einheit $id kennt die Partei $party nicht, um ihr zu helfen.",
 		"HerbUnknownMessage": "Die Einheit $id kann in der Region $region keine Kräuter pflücken - die Gegend muss zuerst erforscht werden.",
+		"HomeMessage": "Die Einheit $id gelangt auf der Suche nach einer Heimat in die Region $region.",
+		"HomeNowhereMessage": "Die Einheit $id verzweifelt, weil sie niemals eine Heimat finden wird.",
 		"HorseBlissNoneMessage": "Es gibt {kein:$animal} in der Region, um Pferdeglück anzuwenden.",
 		"HungerMessage": "Die Gesundheit der Einheit $id sinkt auf {$health:Punkt}.",
 		"LayaboutMessage": "Die Einheit $id faulenzt in dieser Woche.",

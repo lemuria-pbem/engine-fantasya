@@ -4,9 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.8
 
-- Monsterverhalten erweitern
-  - Ghoul
-  - Skelett
 - Monsterangriffe auf Spieler
 - Beute von Monstern individualisieren
 - Beuteverteilung nach dem Kampf verbessern
