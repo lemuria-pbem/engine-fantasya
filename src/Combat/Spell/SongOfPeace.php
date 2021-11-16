@@ -41,10 +41,10 @@ class SongOfPeace extends AbstractBattleSpell
 			$combatant = $combatants[$i];
 			$size      = $combatant->Size();
 			if ($size > $gradePoints) {
-				array_splice($combatant->fighters, 0, $gradePoints);
-				$gradePoints = 0;
+				array_splice($combatant->fighters, -$gradePoints, $gradePoints);
 				Lemuria::Log()->debug($gradePoints . ' fighters of combatant ' . $combatant->Id() . ' leave the battlefield in peace.');
 				BattleLog::getInstance()->add(new SongOfPeaceFighterMessage($combatant, $gradePoints));
+				$gradePoints = 0;
 			} else {
 				unset($combatants[$i]);
 				$gradePoints -= $size;

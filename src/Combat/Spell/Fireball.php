@@ -55,11 +55,11 @@ class Fireball extends AbstractBattleSpell
 			$size      = min($combatant->Size(), $victims);
 			for ($i = 0; $i < $size; $i++) {
 				if ($damage > 0) {
-					$health                          = $combatant->fighters[$i]->health;
-					$health                          = max(0, $health - $damage);
-					$combatant->fighters[$i]->health = $health;
-					Lemuria::Log()->debug('Fighter ' . $combatant->getId($i) . ' is hit by a Fireball and receives ' . $damage . ' damage.');
-					BattleLog::getInstance()->add(new FireballHitMessage($combatant->getId($i), $damage));
+					$health                         = $combatant->fighter($i)->health;
+					$health                         = max(0, $health - $damage);
+					$combatant->fighter($i)->health = $health;
+					Lemuria::Log()->debug('Fighter ' . $combatant->getId($i, true) . ' is hit by a Fireball and receives ' . $damage . ' damage.');
+					BattleLog::getInstance()->add(new FireballHitMessage($combatant->getId($i, true), $damage));
 				}
 				$victims--;
 			}

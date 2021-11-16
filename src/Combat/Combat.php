@@ -612,7 +612,7 @@ class Combat extends CombatModel
 				continue;
 			}
 
-			if ($comA->fighters[$fA]->health > 0) {
+			if ($comA->fighter($fA)->health > 0) {
 				$damage += $comD->assault($fD, $comA, $fA);
 			}
 			if (++$hit >= $hits) {
@@ -641,7 +641,7 @@ class Combat extends CombatModel
 							$id = $combatant->getId($f);
 							Lemuria::Log()->debug('Fighter ' . $id . ' is dead.');
 							BattleLog::getInstance()->add(new FighterIsDeadMessage($id));
-							unset($combatant->fighters[$f]);
+							$combatant->hasDied($f);
 						}
 					}
 				}
@@ -667,7 +667,7 @@ class Combat extends CombatModel
 						$unit->setIsGuarding(false)->setIsHiding(false);
 						// Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' was wiped out.');
 					} else {
-						$combatant->fighters = array_values($combatant->fighters);
+						//$combatant->fighters = array_values($combatant->fighters);
 						// Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' has ' . $deceased . ' losses.');
 					}
 				}

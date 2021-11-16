@@ -137,8 +137,12 @@
 		"party": ["Partei", "Parteien"],
 		"stand": ["steht", "stehen"],
 		"weapon": {
+			"Battleaxe": ["Streitaxt", "Streitäxten"],
+			"Bow": ["Bogen", "Bögen"],
+			"Catapult": ["Katapult", "Katapulten"],
 			"Spear": ["Speer", "Speeren"],
-			"Sword": ["Schwert", "Schwertern"]
+			"Sword": ["Schwert", "Schwertern"],
+			"Warhammer": ["Kriegshammer", "Kriegshämmern"]
 		},
 		"will": ["wird", "werden"]
 	},

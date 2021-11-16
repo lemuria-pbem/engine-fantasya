@@ -79,30 +79,30 @@ class Attack
 		$weapon   = $this->combatant->Weapon();
 		$interval = $weapon->Interval();
 		if ($this->round++ % $interval > 0) {
-			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA) . ' is not ready yet.');
+			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' is not ready yet.');
 			return null;
 		}
 		if ($fA < $this->combatant->distracted) {
-			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA) . ' is distracted.');
+			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' is distracted.');
 			return null;
 		}
 
 		$skill    = $this->combatant->WeaponSkill()->Skill()->Level();
 		$armor    = $this->combatant->Armor();
-		$hasBonus = $this->combatant->fighters[$fA]->potion instanceof BerserkBlood;
+		$hasBonus = $this->combatant->fighter($fA)->potion instanceof BerserkBlood;
 		$shield   = $defender->Shield();
 		$block    = $fD < $defender->distracted ? 0 : $defender->WeaponSkill()->Skill()->Level();
 
 		if ($this->isSuccessful($skill, $block, $armor, $shield, $hasBonus)) {
-			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA) . ' hits enemy ' . $defender->getId($fD) . '.');
+			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' hits enemy ' . $defender->getId($fD, true) . '.');
 			$race = $defender->Unit()->Race();
 			/** @noinspection PhpPossiblePolymorphicInvocationInspection */
 			$block = $race instanceof Monster ? $race->Block() : 0;
 			$armor = $defender->Armor();
 			return $this->calculateDamage($weapon, $skill, $block, $armor, $shield);
 		} else {
-			// Lemuria::Log()->debug('Enemy ' . $defender->getId($fD) . ' blocks attack from ' . $this->combatant->getId($fA) . '.');
-			BattleLog::getInstance()->add(new AssaultBlockMessage($this->combatant->getId($fA), $defender->getId($fD)));
+			// Lemuria::Log()->debug('Enemy ' . $defender->getId($fD, true) . ' blocks attack from ' . $this->combatant->getId($fA, true) . '.');
+			BattleLog::getInstance()->add(new AssaultBlockMessage($this->combatant->getId($fA, true), $defender->getId($fD)));
 			return null;
 		}
 	}
