@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use JetBrains\PhpStorm\Pure;
+
 use function Lemuria\getClass;
 use function Lemuria\mbUcFirst;
 use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
@@ -30,6 +31,7 @@ use Lemuria\Engine\Fantasya\Command\Entertain;
 use Lemuria\Engine\Fantasya\Command\Explore;
 use Lemuria\Engine\Fantasya\Command\Fight;
 use Lemuria\Engine\Fantasya\Command\Follow;
+use Lemuria\Engine\Fantasya\Command\Gather;
 use Lemuria\Engine\Fantasya\Command\Handover;
 use Lemuria\Engine\Fantasya\Command\Handover\Grant;
 use Lemuria\Engine\Fantasya\Command\Help;
@@ -275,6 +277,8 @@ class CommandFactory
 		'RESERVIERUNG' => 'RESERVIEREN',
 		'ROUTE'        => true,
 		'RUNDE'        => true,
+		'SAMMELN'      => true,
+		'SAMMLE'       => 'SAMMELN',
 		'SORTIEREN'    => true,
 		'SORTIERUNG'   => 'SORTIEREN',
 		'SPIONAGE'     => 'SPIONIEREN',
@@ -600,6 +604,7 @@ class CommandFactory
 				'REKRUTIEREN'  => Recruit::class,
 				'RESERVIEREN'  => Reserve::class,
 				'ROUTE'        => Route::class,
+				'SAMMELN'      => Gather::class,
 				'SORTIEREN'    => Sort::class,
 				'SPIONIEREN'   => Spy::class,
 				'STEHLEN'      => Steal::class,

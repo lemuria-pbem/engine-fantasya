@@ -331,6 +331,8 @@
 		"FollowNoMoveMessage": "Die Einheit $id folgt der Einheit $leader, welche sich jedoch nicht vom Fleck bewegt hat.",
 		"FounderEffectMessage": "Das Schiff $id ist zu schwer und wird Schaden nehmen, wenn die überschüssige Ladung nicht über Bord geworfen wird.",
 		"FounderMessage": "Das Schiff $id sinkt mit Mann und Maus in der Region $region.",
+		"GatherMessage": "Die Einheit $id wird Beute sammeln.",
+		"GatherNotMessage": "Die Einheit $id wird keine Beute sammeln.",
 		"GiveFailedMessage": "Die Einheit $id kann nichts an die Einheit $recipient übergeben, die Annahme wird verweigert.",
 		"GiveMessage": "Die Einheit $id übergibt $gift an die Einheit $recipient.",
 		"GiveNoInventoryMessage": "Die Einheit $id hat {kein:$gift} zum übergeben.",
