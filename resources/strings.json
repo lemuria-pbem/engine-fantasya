@@ -178,6 +178,18 @@
 		"Plain": "Ebene",
 		"Swamp": "Sumpf"
 	},
+	"loot": {
+		"group_0": "nichts",
+		"group_1": "alles",
+		"group_2": "Ressourcen",
+		"group_4": "Luxuswaren",
+		"group_8": "Reittiere und Fahrzeuge",
+		"group_16": "Waffen",
+		"group_32": "Rüstungen",
+		"group_64": "Kräuter",
+		"group_128": "Tränke",
+		"group_256": "Trophäen"
+	},
 	"message": {
 		"AllocationTakeMessage": "Die Einheit $id nimmt sich $item aus dem Materialpool.",
 		"AcquaintanceMessage": "Wir haben zum ersten Mal ein Mitglied der Partei $party getroffen.",
@@ -396,6 +408,12 @@
 		"LiquidationGiftMessage": "Das Eigentum der leeren Einheit $unit wurde an die anderen Parteien in der Region vererbt.",
 		"LiquidationLostMessage": "Das Eigentum der leeren Einheit $unit ist mangels Erben in der Region verloren gegangen.",
 		"LiquidationMessage": "Die leere Einheit $unit wurde aufgelöst.",
+		"LootAddGroupMessage": "Wir werden alle $group als Beute sammeln.",
+		"LootAllMessage": "Wir werden alles sammeln, was wir erbeuten können.",
+		"LootCommodityMessage": "Wir werden alle $commodity als Beute sammeln.",
+		"LootCommodityNotMessage": "Wir werden keine $commodity als Beute sammeln.",
+		"LootNothingMessage": "Wir werden keinerlei Beute sammeln.",
+		"LootRemoveGroupMessage": "Wir werden keine $group als Beute sammeln.",
 		"LoseAllMessage": "Die Einheit $id wirft ihren gesamten Vorrat an $commodity weg.",
 		"LoseEmptyMessage": "Die Einheit $id ist schon aufgelöst.",
 		"LoseEverythingMessage": "Die Einheit $id wurde vollständig aufgelöst.",

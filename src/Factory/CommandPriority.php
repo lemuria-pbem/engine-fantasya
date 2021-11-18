@@ -28,7 +28,7 @@ final class CommandPriority
 		'Describe'         => 9,
 		'Disguise'         => 11,
 		'Gather'           => 12,
-		// BEUTE => 13,
+		'Loot'             => 13,
 		'Unguard'          => 15,
 		'Fight'            => 17,
 		'BattleSpell'      => 18,

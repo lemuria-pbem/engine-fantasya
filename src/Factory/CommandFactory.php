@@ -36,6 +36,7 @@ use Lemuria\Engine\Fantasya\Command\Handover;
 use Lemuria\Engine\Fantasya\Command\Handover\Grant;
 use Lemuria\Engine\Fantasya\Command\Help;
 use Lemuria\Engine\Fantasya\Command\Learn;
+use Lemuria\Engine\Fantasya\Command\Loot;
 use Lemuria\Engine\Fantasya\Command\Name;
 use Lemuria\Engine\Fantasya\Command\Next;
 use Lemuria\Engine\Fantasya\Command\NullCommand;
@@ -229,6 +230,7 @@ class CommandFactory
 		'BESTEUERN'    => 'TREIBEN',
 		'BESTEUERUNG'  => 'TREIBEN',
 		'BETRETEN'     => true,
+		'BEUTE'        => true,
 		'BEWACHEN'     => true,
 		'BEWACHUNG'    => 'BEWACHEN',
 		'BOTSCHAFT'    => true,
@@ -578,6 +580,7 @@ class CommandFactory
 				'BESCHREIBUNG' => Describe::class,
 				'BESTEIGEN'    => Board::class,
 				'BETRETEN'     => Trespass::class,
+				'BEUTE'        => Loot::class,
 				'BEWACHEN'     => Sentinel::class,
 				'BOTSCHAFT'    => Announcement::class,
 				'EINHEIT'      => Unit::class,
