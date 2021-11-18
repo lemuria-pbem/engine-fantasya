@@ -225,7 +225,10 @@ final class Construction extends AbstractProduct
 	}
 
 	private function leaveCurrentConstructionFor(Building $building): ?ConstructionModel {
-		$construction    = $this->unit->Construction();
+		$construction = $this->unit->Construction();
+		if (!$construction) {
+			return null;
+		}
 		$currentBuilding = $construction?->Building();
 		if ($currentBuilding === $building) {
 			return $construction;

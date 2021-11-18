@@ -39,8 +39,6 @@ class Guard implements Act
 		} else {
 			if (randChance(self::GUARD)) {
 				$this->isGuarding = true;
-				$this->unit->setIsGuarding(true);
-				$this->message(GuardMessage::class, $this->unit);
 			}
 		}
 		return $this;

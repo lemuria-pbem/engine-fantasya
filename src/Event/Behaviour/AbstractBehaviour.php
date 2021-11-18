@@ -19,6 +19,8 @@ abstract class AbstractBehaviour implements Behaviour
 {
 	use MessageTrait;
 
+	protected ?Guard $guard = null;
+
 	protected ?Act $act = null;
 
 	public function __construct(protected Unit $unit) {
@@ -37,8 +39,8 @@ abstract class AbstractBehaviour implements Behaviour
 	}
 
 	public function finish(): Behaviour {
-		if ($this->act instanceof Guard) {
-			if ($this->act->IsGuarding()) {
+		if ($this->guard instanceof Guard) {
+			if ($this->guard->IsGuarding()) {
 				$this->unit->setIsGuarding(true);
 				$this->message(GuardMessage::class, $this->unit);
 			}
@@ -48,7 +50,7 @@ abstract class AbstractBehaviour implements Behaviour
 
 	protected function guard(): AbstractBehaviour {
 		$guard = new Guard($this);
-		$this->act = $guard->act();
+		$this->guard = $guard->act();
 		return $this;
 	}
 
@@ -91,7 +93,7 @@ abstract class AbstractBehaviour implements Behaviour
 
 	protected function roamOrGuard(): AbstractBehaviour {
 		if ($this->unit->Size() > 0) {
-			if (!($this->act instanceof Guard) || !$this->act->IsGuarding()) {
+			if (!($this->guard instanceof Guard) || !$this->guard->IsGuarding()) {
 				$roam = new Roam($this);
 				$roam->act();
 			}
