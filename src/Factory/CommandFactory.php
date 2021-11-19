@@ -31,11 +31,12 @@ use Lemuria\Engine\Fantasya\Command\Entertain;
 use Lemuria\Engine\Fantasya\Command\Explore;
 use Lemuria\Engine\Fantasya\Command\Fight;
 use Lemuria\Engine\Fantasya\Command\Follow;
+use Lemuria\Engine\Fantasya\Command\Gather;
 use Lemuria\Engine\Fantasya\Command\Handover;
 use Lemuria\Engine\Fantasya\Command\Handover\Grant;
 use Lemuria\Engine\Fantasya\Command\Help;
 use Lemuria\Engine\Fantasya\Command\Learn;
-use Lemuria\Engine\Fantasya\Command\Leave;
+use Lemuria\Engine\Fantasya\Command\Loot;
 use Lemuria\Engine\Fantasya\Command\Name;
 use Lemuria\Engine\Fantasya\Command\Next;
 use Lemuria\Engine\Fantasya\Command\NullCommand;
@@ -56,6 +57,7 @@ use Lemuria\Engine\Fantasya\Command\Travel;
 use Lemuria\Engine\Fantasya\Command\Trespass;
 use Lemuria\Engine\Fantasya\Command\Trespass\Board;
 use Lemuria\Engine\Fantasya\Command\Unit;
+use Lemuria\Engine\Fantasya\Command\Vacate;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
@@ -228,6 +230,7 @@ class CommandFactory
 		'BESTEUERN'    => 'TREIBEN',
 		'BESTEUERUNG'  => 'TREIBEN',
 		'BETRETEN'     => true,
+		'BEUTE'        => true,
 		'BEWACHEN'     => true,
 		'BEWACHUNG'    => 'BEWACHEN',
 		'BOTSCHAFT'    => true,
@@ -276,6 +279,8 @@ class CommandFactory
 		'RESERVIERUNG' => 'RESERVIEREN',
 		'ROUTE'        => true,
 		'RUNDE'        => true,
+		'SAMMELN'      => true,
+		'SAMMLE'       => 'SAMMELN',
 		'SORTIEREN'    => true,
 		'SORTIERUNG'   => 'SORTIEREN',
 		'SPIONAGE'     => 'SPIONIEREN',
@@ -575,6 +580,7 @@ class CommandFactory
 				'BESCHREIBUNG' => Describe::class,
 				'BESTEIGEN'    => Board::class,
 				'BETRETEN'     => Trespass::class,
+				'BEUTE'        => Loot::class,
 				'BEWACHEN'     => Sentinel::class,
 				'BOTSCHAFT'    => Announcement::class,
 				'EINHEIT'      => Unit::class,
@@ -601,6 +607,7 @@ class CommandFactory
 				'REKRUTIEREN'  => Recruit::class,
 				'RESERVIEREN'  => Reserve::class,
 				'ROUTE'        => Route::class,
+				'SAMMELN'      => Gather::class,
 				'SORTIEREN'    => Sort::class,
 				'SPIONIEREN'   => Spy::class,
 				'STEHLEN'      => Steal::class,
@@ -609,7 +616,7 @@ class CommandFactory
 				'UNTERHALTEN'  => Entertain::class,
 				'URSPRUNG'     => Origin::class,
 				'VERKAUFEN'    => Sell::class,
-				'VERLASSEN'    => Leave::class,
+				'VERLASSEN'    => Vacate::class,
 				'VERLIEREN'    => Lose::class,
 				'VORLAGE'      => DefaultCommand::class,
 				'ZAUBERN'      => Cast::class,

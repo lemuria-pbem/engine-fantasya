@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command\Trespass;
 
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\FreeSpaceTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterDeniedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterForbiddenMessage;
@@ -24,6 +25,8 @@ use Lemuria\Model\Fantasya\Relation;
  */
 final class Enter extends UnitCommand
 {
+	use FreeSpaceTrait;
+
 	private const FORBIDDEN = [Signpost::class];
 
 	protected function run(): void {
@@ -49,7 +52,7 @@ final class Enter extends UnitCommand
 			return;
 		}
 
-		if ($newConstruction->getFreeSpace() < $this->unit->Size()) {
+		if ($this->isTooSmall($newConstruction, $this->unit)) {
 			$this->message(EnterTooLargeMessage::class)->e($newConstruction);
 			return;
 		}

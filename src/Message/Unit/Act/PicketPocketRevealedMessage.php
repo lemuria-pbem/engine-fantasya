@@ -8,20 +8,20 @@ use Lemuria\Engine\Message;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 
-class RoamMessage extends AbstractUnitMessage
+class PicketPocketRevealedMessage extends AbstractUnitMessage
 {
-	protected string $level = Message::SUCCESS;
+	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::MOVEMENT;
+	protected int $section = Section::PRODUCTION;
 
-	protected Id $region;
+	protected Id $enemy;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' roams to region ' . $this->region . '.';
+		return 'Unit ' . $this->id . ' tried to pick some silver from ' . $this->enemy . ' but was discovered.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->region = $message->get();
+		$this->enemy = $message->get();
 	}
 }

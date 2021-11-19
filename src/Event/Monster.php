@@ -32,9 +32,10 @@ final class Monster extends AbstractEvent
 					if ($unit->Size() > 0) {
 						$race = $unit->Race();
 						if ($race instanceof MonsterModel) {
-							$behaviour = self::getBehaviour($race);
-							if ($behaviour?->setUnit($unit)->prepare()) {
-								$this->state->addMonster($behaviour);
+							$behaviourClass = self::getBehaviour($race);
+							if ($behaviourClass) {
+								$behaviour = new $behaviourClass($unit);
+								$this->state->addMonster($behaviour->prepare());
 								$count++;
 							}
 						}
@@ -45,12 +46,12 @@ final class Monster extends AbstractEvent
 		Lemuria::Log()->debug('Behaviours for ' . $count . ' monster units have been added.');
 	}
 
-	private static function getBehaviour(MonsterModel $race): ?Behaviour {
+	private static function getBehaviour(MonsterModel $race): ?string {
 		$class = getClass($race);
 		if (!array_key_exists($class, self::$behaviours)) {
 			$behaviour = self::NAMESPACE . '\\' . $class;
 			if (class_exists($behaviour)) {
-				self::$behaviours[$class] = new $behaviour();
+				self::$behaviours[$class] = $behaviour;
 			} else {
 				self::$behaviours[$class] = null;
 				Lemuria::Log()->debug('Monster ' . $class . ' has no defined behaviour yet.');

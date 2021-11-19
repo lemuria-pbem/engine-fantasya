@@ -128,7 +128,7 @@ final class Calculus
 		$ride      += $carriage ? $this->transport($horse, $carriage->Count() * 2) : $this->transport($horse);
 		$fly        = $this->transport($griffin) + $this->transport($pegasus);
 		$rideFly    = $ride + $fly;
-		$walk       = $carriage ? $rideFly : $payload + $rideFly;
+		$walk       = $payload + $rideFly;
 		$riding     = $size * $this->knowledge(Riding::class)->Level();
 		$boostSize  = $this->hasApplied(SevenLeagueTea::class)?->Count() * SevenLeagueTea::PERSONS;
 		$speedBoost = ($boostSize >= $size ? 2 : 1) * $race->Speed();
@@ -139,11 +139,12 @@ final class Calculus
 			$animals     = [$horse, $camel, $elephant, $griffin, $pegasus];
 			$talentDrive = $this->talent($animals, $size, true, $cars);
 			$horseCount  = $horse?->Count();
-			if ($riding >= $talentDrive && $horseCount >= 2 * $cars) {
+			if ($riding >= $talentDrive && $horseCount >= 2 * $cars && $weight <= $rideFly) {
 				return new Capacity($walk, $rideFly, Capacity::DRIVE, $weight, $speed, $talentDrive, $speedBoost);
 			}
 			$talentWalk = $this->talent($animals, $size, false, $cars);
 			if ($riding >= $talentWalk) {
+				$weight -= $size * $race->Weight();
 				return new Capacity($walk, $rideFly, Capacity::WALK, $weight, 1, $talentWalk, $speedBoost);
 			}
 			if ($race instanceof Troll) {

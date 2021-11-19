@@ -150,8 +150,8 @@ class Army
 			}
 			Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' uses ' . $potion . ' effect for ' . $fighters . ' fighter.');
 			while ($remaining > 0 && $i < $n) {
-				$combatant->fighters[$i]->health  += $bonus;
-				$combatant->fighters[$i++]->potion = $potion->Potion();
+				$combatant->fighter($i)->health  += $bonus;
+				$combatant->fighter($i++)->potion = $potion->Potion();
 				$remaining--;
 			}
 		}

@@ -2,16 +2,7 @@
 	"name": "lemuria-pbem/engine-fantasya",
 	"description": "This library contains a Fantasya-like game engine and rules.",
 	"type": "library",
-	"keywords": [
-		"engine",
-		"eressea",
-		"fantasya",
-		"game",
-		"lemuria",
-		"pbem"
-	],
-	"version": "0.8.0",
-	"time": "2021-11-10",
+	"keywords": ["engine", "eressea", "fantasya", "game", "lemuria", "pbem"],
 	"license": "GPL-3.0",
 	"authors": [
 		{
@@ -19,6 +10,8 @@
 			"email": "lemuria@online.de"
 		}
 	],
+	"version": "0.8.1",
+	"time": "2021-11-18",
 
 	"require": {
 		"php": "~8.0",

@@ -21,6 +21,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Heirs;
 use Lemuria\Model\Fantasya\Intelligence;
+use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
@@ -265,10 +266,23 @@ class Battle
 	protected function giveLootToHeirs(Heirs $heirs, Resources $loot): void {
 		foreach ($loot as $quantity /* @var Quantity $quantity */) {
 			$unit = $heirs->random();
-			if ($unit->Party()->Type() === Party::PLAYER) {
+			$type = $unit->Party()->Type();
+			if ($type === Party::PLAYER) {
 				$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
-				// Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
+				Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
 				BattleLog::getInstance()->add(new TakeLootMessage($unit, $quantity));
+			} elseif ($type === Party::MONSTER) {
+				$race = $unit->Race();
+				if ($race instanceof Monster) {
+					$commodity = $quantity->Commodity();
+					if (isset($race->Loot()[$commodity])) {
+						$unit->Inventory()->add(new Quantity($commodity, $quantity->Count()));
+						Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
+						BattleLog::getInstance()->add(new TakeLootMessage($unit, $quantity));
+					} else {
+						Lemuria::Log()->debug($unit . ' scorns loot ' . $quantity);
+					}
+				}
 			}
 		}
 	}

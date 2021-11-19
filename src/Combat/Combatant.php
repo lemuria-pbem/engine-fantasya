@@ -59,6 +59,8 @@ class Combatant
 
 	private Attack $attack;
 
+	private array $fighterIndex;
+
 	private array $refugees = [];
 
 	public function __construct(private Army $army, private Unit $unit) {
@@ -107,6 +109,10 @@ class Combatant
 		return count($this->fighters);
 	}
 
+	public function fighter(int $index): Fighter {
+		return $this->fighters[$this->fighterIndex[$index]];
+	}
+
 	public function canFlee(): float {
 		$chance = $this->attack->getFlightChance();
 		return randChance($chance) ? $chance : -$chance;
@@ -139,32 +145,33 @@ class Combatant
 		$this->fighters     = array_fill(0, $n, null);
 		for ($i = 0; $i < $n; $i++) {
 			$this->fighters[$i] = new Fighter($calculus->hitpoints());
+			$this->fighterIndex = array_keys($this->fighters);
 		}
 		$this->initWeaponSkill();
 		$this->initShieldAndArmor();
 		return $this;
 	}
 
-	public function getId(int $fighter): string {
-		return $this->id . '-' . ++$fighter;
+	public function getId(int $fighter, bool $map = false): string {
+		return $this->id . '-' . ($map ? $this->fighterIndex[$fighter] + 1 : ++$fighter);
 	}
 
 	/**
 	 * Receive an attack from an assaulting attacker and return the damage done to the defending fighter.
 	 */
 	public function assault(int $fighter, Combatant $attacker, int $assaulter): int {
-		$health = $this->fighters[$fighter]->health;
+		$health = $this->fighter($fighter)->health;
 		$damage = $attacker->attack->perform($assaulter, $this, $fighter);
 		if ($damage > 0) {
 			if ($health > $damage) {
-				$this->fighters[$fighter]->health -= $damage;
+				$this->fighter($fighter)->health -= $damage;
 			} else {
-				$this->fighters[$fighter]->health = 0;
+				$this->fighter($fighter)->health = 0;
 			}
-			Lemuria::Log()->debug('Fighter ' . $attacker->getId($assaulter) . ' deals ' . $damage . ' damage to enemy ' . $this->getId($fighter) . '.');
+			Lemuria::Log()->debug('Fighter ' . $attacker->getId($assaulter, true) . ' deals ' . $damage . ' damage to enemy ' . $this->getId($fighter, true) . '.');
 		}
 		if (is_int($damage)) {
-			BattleLog::getInstance()->add(new AssaultHitMessage($attacker->getId($assaulter), $this->getId($fighter), $damage));
+			BattleLog::getInstance()->add(new AssaultHitMessage($attacker->getId($assaulter, true), $this->getId($fighter, true), $damage));
 			return $damage;
 		}
 		return 0;
@@ -178,6 +185,13 @@ class Combatant
 			$this->fighters = $this->refugees;
 			$this->refugees = [];
 		}
+		$this->fighterIndex = array_keys($this->fighters);
+		return $this;
+	}
+
+	public function hasDied(int $index): Combatant {
+		unset($this->fighters[$index]);
+		$this->fighterIndex = array_keys($this->fighters);
 		return $this;
 	}
 
@@ -202,6 +216,8 @@ class Combatant
 
 		$newCombatant->distribution = $newDistribution;
 		$newCombatant->fighters     = array_splice($this->fighters, -$size, $size);
+		$newCombatant->fighterIndex = array_keys($newCombatant->fighters);
+		$this->fighterIndex         = array_keys($this->fighters);
 		$newCombatant->initWeaponSkill();
 		$newCombatant->initShieldAndArmor();
 
