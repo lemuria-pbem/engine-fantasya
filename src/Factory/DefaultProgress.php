@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Event;
 use Lemuria\Engine\Fantasya\Event\Acquaintance;
+use Lemuria\Engine\Fantasya\Event\Administrator;
 use Lemuria\Engine\Fantasya\Event\Aftercare;
 use Lemuria\Engine\Fantasya\Event\Conduct;
 use Lemuria\Engine\Fantasya\Event\Decease;
@@ -32,7 +33,7 @@ class DefaultProgress implements Progress
 {
 	public const EVENTS = [
 		// before
-		Visit::class, Monster::class, Timer::class,
+		Administrator::class, Visit::class, Monster::class, Timer::class,
 		// middle
 		Conduct::class, Upkeep::class, Subsistence::class, Drift::class,
 		// after

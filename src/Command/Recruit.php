@@ -102,7 +102,7 @@ final class Recruit extends AllocationCommand
 		}
 
 		$this->demand = $size;
-		$free = $this->getFreeSpace();
+		$free         = $this->getFreeSpace();
 		if ($free < $size) {
 			$size = $free;
 		}
@@ -114,9 +114,7 @@ final class Recruit extends AllocationCommand
 	private function getFreeSpace(): int {
 		$construction = $this->unit->Construction();
 		if ($construction) {
-			$space = $construction->Size();
-			$used  = $construction->Inhabitants()->Size();
-			return max(0, $space - $used);
+			return $construction->getFreeSpace();
 		}
 		return PHP_INT_MAX;
 	}
