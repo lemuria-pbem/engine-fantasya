@@ -4,6 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.8
 
+- Einheiten verlassen Gebäude bei Überfüllung
 - Monsterangriffe auf Spieler
 
 ## Neue Funktionen
