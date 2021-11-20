@@ -463,6 +463,7 @@
 		"OriginMessage": "Der neue Kartenursprung liegt nun in der Region $name [$region].",
 		"OriginNotVisitedMessage": "Der Kartenursprung kann nicht auf die Region $region gesetzt werden - wir haben sie noch nicht besucht.",
 		"OriginUntoldMessage": "Der Kartenursprung kann nicht auf die Partei $party gesetzt werden - wir wissen nichts über sie.",
+		"OvercrowdedMessage": "Dein Gebäude $construction in der Region $region ist überbevölkert. Bitte sorge dafür, dass überzählige Personen es verlassen.",
 		"PartyExceptionMessage": "Fehler in den Befehlen: $exception.",
 		"PartyInRegionsMessage": "Die Partei $id hat Einheiten in {$regions:Region}.",
 		"PartyMessage": "Runde für Partei $id begonnen.",

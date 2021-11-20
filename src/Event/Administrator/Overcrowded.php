@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Event\Administrator;
 
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
+use Lemuria\Engine\Fantasya\Message\Party\Administrator\OvercrowdedMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
@@ -25,6 +26,10 @@ final class Overcrowded extends AbstractEvent
 			}
 			$space = $construction->Size() - $construction->Inhabitants()->Size();
 			if ($space < 0) {
+				$party  = $construction->Inhabitants()->Owner()->Party();
+				$name   = (string)$construction;
+				$region = (string)$construction->Region();
+				$this->message(OvercrowdedMessage::class, $party)->p($name)->p($region, OvercrowdedMessage::REGION);
 				Lemuria::Log()->critical('Construction ' . $construction . ' in ' . $construction->Region() . ' is overcrowded with ' . -$space . ' persons.');
 			}
 		}
