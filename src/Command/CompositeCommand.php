@@ -8,7 +8,7 @@ use Lemuria\Exception\LemuriaException;
 /**
  * Base class for composite commands that delegate to a number of commands.
  */
-class CompositeCommand extends AbstractCommand
+class CompositeCommand extends UnitCommand
 {
 	protected array $commands;
 

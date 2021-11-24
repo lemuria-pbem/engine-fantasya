@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Behaviour;
 
+use Lemuria\Engine\Fantasya\Effect\RoamEffect;
 use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\Act\Attack;
 use Lemuria\Engine\Fantasya\Event\Act\Guard;
@@ -13,6 +14,8 @@ use Lemuria\Engine\Fantasya\Event\Act\Watch;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardMessage;
+use Lemuria\Engine\Fantasya\State;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Unit;
 
 abstract class AbstractBehaviour implements Behaviour
@@ -84,15 +87,18 @@ abstract class AbstractBehaviour implements Behaviour
 	}
 
 	protected function attack(): AbstractBehaviour {
-		if ($this->act instanceof Seek && $this->act->Enemy()) {
-			$attack = new Attack($this);
-			$attack->setEnemy($this->act->Enemy())->act();
+		if ($this->act instanceof Seek) {
+			$enemy = $this->act->Enemy();
+			if (!$enemy->isEmpty()) {
+				$attack = new Attack($this);
+				$attack->setEnemy($enemy)->act();
+			}
 		}
 		return $this;
 	}
 
 	protected function roamOrGuard(): AbstractBehaviour {
-		if ($this->unit->Size() > 0) {
+		if (!$this->hasRoamEffect()) {
 			if (!($this->guard instanceof Guard) || !$this->guard->IsGuarding()) {
 				$roam = new Roam($this);
 				$roam->act();
@@ -102,28 +108,44 @@ abstract class AbstractBehaviour implements Behaviour
 	}
 
 	protected function roamOrAttack(): AbstractBehaviour {
-		if ($this->unit->Size() > 0) {
-			if ($this->act instanceof Seek && $this->act->Enemy()) {
-				$attack = new Attack($this);
-				$attack->setEnemy($this->act->Enemy())->act();
-			} else {
-				$roam = new Roam($this);
-				$roam->act();
+		if (!$this->hasRoamEffect()) {
+			if ($this->act instanceof Seek) {
+				$enemy = $this->act->Enemy();
+				if (!$enemy->isEmpty()) {
+					$attack = new Attack($this);
+					$attack->setEnemy($enemy)->act();
+					return $this;
+				}
 			}
 		}
+
+		$roam = new Roam($this);
+		$roam->act();
 		return $this;
 	}
 
 	protected function roamOrPickPocket(): AbstractBehaviour {
-		if ($this->unit->Size() > 0) {
-			if ($this->act instanceof Seek && $this->act->Enemy()) {
-				$attack = new PickPocket($this);
-				$attack->setEnemy($this->act->Enemy())->act();
-			} else {
-				$roam = new Roam($this);
-				$roam->act();
+		if (!$this->hasRoamEffect()) {
+			if ($this->act instanceof Seek) {
+				$enemy = $this->act->Enemy();
+				if (!$enemy->isEmpty()) {
+					$attack = new PickPocket($this);
+					$attack->setEnemy($enemy)->act();
+					return $this;
+				}
 			}
 		}
+
+		$roam = new Roam($this);
+		$roam->act();
 		return $this;
+	}
+
+	protected function hasRoamEffect(): bool {
+		if ($this->unit->Size() > 0) {
+			$effect = new RoamEffect(State::getInstance());
+			return Lemuria::Score()->find($effect->setUnit($this->unit)) instanceof RoamEffect;
+		}
+		return false;
 	}
 }

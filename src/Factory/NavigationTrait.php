@@ -139,5 +139,4 @@ trait NavigationTrait
 			Lemuria::Score()->add($effect);
 		}
 	}
-
 }

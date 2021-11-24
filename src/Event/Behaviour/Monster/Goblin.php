@@ -8,6 +8,9 @@ use Lemuria\Engine\Fantasya\Event\Behaviour\AbstractBehaviour;
 class Goblin extends AbstractBehaviour
 {
 	public function prepare(): Behaviour {
+		if ($this->hasRoamEffect()) {
+			return $this;
+		}
 		return $this->seek();
 	}
 

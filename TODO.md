@@ -63,11 +63,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
-- Befehle in der Vorlage wiederholen (@BEFEHL in Fantasya)
-  - VORLAGE * führt jede Runde aus
-  - VORLAGE 1 entspricht VORLAGE
-  - VORLAGE 2 entspricht VORLAGE VORLAGE usw.
-  - VORLAGE n/m ermöglicht Intervallausführung
 - besondere Gebäude/Orte wie Ruinen oder Höhlen
 - Umweltereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE

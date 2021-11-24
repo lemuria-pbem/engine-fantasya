@@ -21,7 +21,8 @@ final class CommandPriority
 		// 0 forbidden
 		'EFFECT_BEFORE'    => 1,
 		'EVENT_BEFORE'     => 2,
-		'DefaultCommand'   => 4,
+		'DefaultCommand'   => 3,
+		'Copy'             => 4,
 		'Origin'           => 6,
 		'Banner'           => 7,
 		'Name'             => 8,

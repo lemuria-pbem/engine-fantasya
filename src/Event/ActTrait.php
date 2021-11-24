@@ -7,6 +7,8 @@ use JetBrains\PhpStorm\Pure;
 use function Lemuria\getClass;
 use function Lemuria\randDistribution23;
 use function Lemuria\random;
+use Lemuria\Engine\Fantasya\Effect\RoamEffect;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Monster;
@@ -84,5 +86,12 @@ trait ActTrait
 		$this->unit->Region()->Residents()->remove($this->unit);
 		$region->Residents()->add($this->unit);
 		$this->unit->Party()->Chronicle()->add($region);
+	}
+
+	protected function createRoamEffect(): void {
+		$effect = new RoamEffect(State::getInstance());
+		if (!Lemuria::Score()->find($effect->setUnit($this->unit))) {
+			Lemuria::Score()->add($effect);
+		}
 	}
 }

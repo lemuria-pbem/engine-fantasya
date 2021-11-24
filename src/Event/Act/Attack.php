@@ -6,7 +6,7 @@ use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Fantasya\People;
 
 /**
  * A monster attacks an enemy unit.
@@ -16,18 +16,18 @@ class Attack implements Act
 	use ActTrait;
 	use MessageTrait;
 
-	protected Unit $enemy;
+	protected People $enemy;
 
 	public function act(): Attack {
-		if ($this->enemy->Size() > 0) {
+		if (!$this->enemy->isEmpty()) {
 			//TODO
 			Lemuria::Log()->debug('Monster attacks are not implemented yet.');
 		}
 		return $this;
 	}
 
-	public function setEnemy(Unit $unit): Attack {
-		$this->enemy = $unit;
+	public function setEnemy(People $enemy): Attack {
+		$this->enemy = $enemy;
 		return $this;
 	}
 }

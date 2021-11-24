@@ -4,6 +4,11 @@
 
 ^(\/\/)|(komme|kommen|komment|kommenta|kommentar).*$
 ^;.*$
+^@ +\* +[a-z].+$
+^@ +[0-9]+ +[a-z].+$
+^@ +[0-9]+/+[0-9]+ +[a-z].+$
+^=[0-9]+ +\+[0-9]+ +[a-z].+$
+^\+[0-9]+ +=[0-9]+ +[a-z].+$
 
 ^(locale) +[a-zA-Z0-9]+$
 ^(region) +.+$
@@ -110,8 +115,14 @@
 
 ^(verli|verlie|verlier|verliere|verlieren) +.*$
 
-^(vo|vor|vorl|vorla|vorlag|vorlage) +.+$
-^(d|de|def|defa|defau|defaul|default) +.+$
+^(vo|vor|vorl|vorla|vorlag|vorlage) +[a-z].+$
+^(vo|vor|vorl|vorla|vorlag|vorlage) +\* +[a-z].+$
+^(vo|vor|vorl|vorla|vorlag|vorlage) +[0-9]+ +[a-z].+$
+^(vo|vor|vorl|vorla|vorlag|vorlage) +[0-9]+/+[0-9]+ +[a-z].+$
+^(d|de|def|defa|defau|defaul|default) +[a-z].+$
+^(d|de|def|defa|defau|defaul|default) +\* +[a-z].+$
+^(d|de|def|defa|defau|defaul|default) +[0-9]+ +[a-z].+$
+^(d|de|def|defa|defau|defaul|default) +[0-9]+/+[0-9]+ +[a-z].+$
 
 ^(zerstö|zerstör|zerstöre|zerstören) +(burg|gebäude|gebaeude|schiff)$
 ^(zerstoe|zerstoer|zerstoere|zerstoeren) +(burg|gebäude|gebaeude|schiff)$

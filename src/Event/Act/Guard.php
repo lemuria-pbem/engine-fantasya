@@ -6,7 +6,6 @@ use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
-use Lemuria\Engine\Fantasya\Message\Unit\GuardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnguardMessage;
 
 /**

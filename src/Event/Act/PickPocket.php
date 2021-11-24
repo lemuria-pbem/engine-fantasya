@@ -7,11 +7,13 @@ use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
 use Lemuria\Engine\Fantasya\Event\Support;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
-use Lemuria\Engine\Fantasya\Message\Unit\Act\PicketPocketMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\Act\PicketPocketOnlyMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\Act\PicketPocketRevealedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketNothingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketRevealedMessage;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -24,23 +26,31 @@ class PickPocket implements Act
 	use BuilderTrait;
 	use MessageTrait;
 
+	protected const TRIES = 3;
+
 	protected const PICK = 10;
 
 	protected const MAXIMUM = 0.1;
 
-	protected Unit $enemy;
+	protected People $enemy;
 
 	public function act(): PickPocket {
-		if ($this->enemy->Size() > 0) {
-			$calculus = new Calculus($this->enemy);
+		$tries      = (int)ceil($this->unit->Size() / self::TRIES);
+		$isRevealed = false;
+		while (!$this->enemy->isEmpty() && $tries-- > 0) {
+			/** @var Unit $enemy */
+			$enemy = $this->enemy->random();
+			$this->enemy->remove($enemy);
+			$calculus = new Calculus($enemy);
 			if ($calculus->canDiscover($this->unit)) {
-				$this->message(PicketPocketRevealedMessage::class, $this->unit)->e($this->enemy);
+				$isRevealed = true;
+				$this->message(PickPocketRevealedMessage::class, $this->unit)->e($enemy);
 			} else {
 				$silver    = self::createCommodity(Silver::class);
 				$wantPick  = $this->unit->Size() * self::PICK;
-				$inventory = $this->enemy->Inventory();
+				$inventory = $enemy->Inventory();
 				$pocket    = $inventory[$silver]->Count();
-				$support   = $this->enemy->Size() * Support::SILVER;
+				$support   = $enemy->Size() * Support::SILVER;
 				$excess    = max(0, $pocket - $support);
 				$maxPick   = (int)floor(self::MAXIMUM * $excess);
 				$pick      = min($wantPick, $maxPick);
@@ -49,18 +59,24 @@ class PickPocket implements Act
 					$quantity = new Quantity($silver, $pick);
 					$this->unit->Inventory()->add($quantity);
 					if ($pick < $wantPick) {
-						$this->message(PicketPocketOnlyMessage::class, $this->unit)->e($this->enemy)->i($quantity);
+						$this->message(PickPocketOnlyMessage::class, $this->unit)->e($enemy)->i($quantity);
 					} else {
-						$this->message(PicketPocketMessage::class, $this->unit)->e($this->enemy)->i($quantity);
+						$this->message(PickPocketMessage::class, $this->unit)->e($enemy)->i($quantity);
 					}
+				} else {
+					$this->message(PickPocketNothingMessage::class, $this->unit)->e($enemy);
 				}
 			}
+		}
+
+		if ($isRevealed) {
+			$this->createRoamEffect();
 		}
 		return $this;
 	}
 
-	public function setEnemy(Unit $unit): PickPocket {
-		$this->enemy = $unit;
+	public function setEnemy(People $enemy): PickPocket {
+		$this->enemy = $enemy;
 		return $this;
 	}
 }

@@ -229,7 +229,7 @@ final class Construction extends AbstractProduct
 		if (!$construction) {
 			return null;
 		}
-		$currentBuilding = $construction?->Building();
+		$currentBuilding = $construction->Building();
 		if ($currentBuilding === $building) {
 			return $construction;
 		}

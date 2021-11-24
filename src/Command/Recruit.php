@@ -12,8 +12,8 @@ use Lemuria\Engine\Fantasya\Message\Unit\RecruitKnowledgeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitLessMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitPaymentMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RecruitReducedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitTooExpensiveMessage;
-use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Silver;
@@ -37,10 +37,22 @@ final class Recruit extends AllocationCommand
 	use BuilderTrait;
 	use CollectTrait;
 
+	private int $demand;
+
 	private int $size;
 
 	protected function run(): void {
+		$tooMuch = $this->size - $this->getFreeSpace();
+		if ($tooMuch > 0) {
+			$this->size -= $tooMuch;
+			$this->resources->remove(new Quantity(self::createCommodity(Peasant::class), $tooMuch));
+		}
+
+		if ($this->size < $this->demand) {
+			$this->message(RecruitReducedMessage::class)->p($this->size);
+		}
 		parent::run();
+
 		$guardParties = $this->checkBeforeAllocation();
 		if (empty($guardParties)) {
 			$quantity = $this->getResource(Peasant::class);
@@ -85,24 +97,26 @@ final class Recruit extends AllocationCommand
 	 */
 	protected function createDemand(): void {
 		$size = (int)$this->phrase->getParameter();
-		if (!$size) {
+		if ($size <= 0) {
 			throw new InvalidCommandException('Invalid size "' . $size . '".');
 		}
 
-		$construction = $this->unit->Construction();
-		if ($construction) {
-			$space = $construction->Size();
-			$used  = $construction->Inhabitants()->count();
-			$free  = max(0, $space - $used);
-			if ($free < $size) {
-				$size = $free;
-				Lemuria::Log()->debug('Number of recruits reduced to ' . $free . '.');
-			}
+		$this->demand = $size;
+		$free         = $this->getFreeSpace();
+		if ($free < $size) {
+			$size = $free;
 		}
-
 		$this->size = $size;
 		$peasant    = self::createCommodity(Peasant::class);
 		$this->resources->add(new Quantity($peasant, $size));
+	}
+
+	private function getFreeSpace(): int {
+		$construction = $this->unit->Construction();
+		if ($construction) {
+			return $construction->getFreeSpace();
+		}
+		return PHP_INT_MAX;
 	}
 
 	/**
