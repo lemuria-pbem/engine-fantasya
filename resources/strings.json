@@ -469,10 +469,16 @@
 		"PartyMessage": "Runde für Partei $id begonnen.",
 		"PartyVisitMessage": "Die Partei $id besucht {$regions:Region}.",
 		"PeasantJoyNoneMessage": "Es gibt {kein:$peasant} in der Region, um Bauernglück anzuwenden.",
+
 		"PicketPocketMessage": "Die Einheit $id hat $silver aus den Taschen der Einheit $enemy entwendet.",
 		"PicketPocketNothingMessage": "Die Einheit $id hat kein Silber in den Taschen der Einheit $enemy gefunden.",
 		"PicketPocketOnlyMessage": "Die Einheit $id konnte nur $silver aus den Taschen der Einheit $enemy entwenden.",
 		"PicketPocketRevealedMessage": "Die Einheit $id hat versucht, die Einheit $enemy zu bestehlen, und wurde dabei erwischt.",
+
+		"PickPocketMessage": "Die Einheit $id hat $silver aus den Taschen der Einheit $enemy entwendet.",
+		"PickPocketNothingMessage": "Die Einheit $id hat kein Silber in den Taschen der Einheit $enemy gefunden.",
+		"PickPocketOnlyMessage": "Die Einheit $id konnte nur $silver aus den Taschen der Einheit $enemy entwenden.",
+		"PickPocketRevealedMessage": "Die Einheit $id hat versucht, die Einheit $enemy zu bestehlen, und wurde dabei erwischt.",
 		"PopulationFeedMessage": "In der Region $id {verbraucht:$peasants} $silver.",
 		"PopulationGrowthMessage": "In der Region $id {wird:$peasants} geboren.",
 		"PopulationHungerMessage": "In der Region $id herrscht eine Hungersnot, {$peasants:verhungert}.",

@@ -7,10 +7,10 @@ use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
 use Lemuria\Engine\Fantasya\Event\Support;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
-use Lemuria\Engine\Fantasya\Message\Unit\Act\PicketPocketMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\Act\PicketPocketNothingMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\Act\PicketPocketOnlyMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\Act\PicketPocketRevealedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketNothingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketRevealedMessage;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\People;
@@ -44,7 +44,7 @@ class PickPocket implements Act
 			$calculus = new Calculus($enemy);
 			if ($calculus->canDiscover($this->unit)) {
 				$isRevealed = true;
-				$this->message(PicketPocketRevealedMessage::class, $this->unit)->e($enemy);
+				$this->message(PickPocketRevealedMessage::class, $this->unit)->e($enemy);
 			} else {
 				$silver    = self::createCommodity(Silver::class);
 				$wantPick  = $this->unit->Size() * self::PICK;
@@ -59,12 +59,12 @@ class PickPocket implements Act
 					$quantity = new Quantity($silver, $pick);
 					$this->unit->Inventory()->add($quantity);
 					if ($pick < $wantPick) {
-						$this->message(PicketPocketOnlyMessage::class, $this->unit)->e($enemy)->i($quantity);
+						$this->message(PickPocketOnlyMessage::class, $this->unit)->e($enemy)->i($quantity);
 					} else {
-						$this->message(PicketPocketMessage::class, $this->unit)->e($enemy)->i($quantity);
+						$this->message(PickPocketMessage::class, $this->unit)->e($enemy)->i($quantity);
 					}
 				} else {
-					$this->message(PicketPocketNothingMessage::class, $this->unit)->e($enemy);
+					$this->message(PickPocketNothingMessage::class, $this->unit)->e($enemy);
 				}
 			}
 		}
