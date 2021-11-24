@@ -20,7 +20,6 @@ use Lemuria\Engine\Fantasya\Command\Cast\AbstractCast;
 use Lemuria\Engine\Fantasya\Command\Comment;
 use Lemuria\Engine\Fantasya\Command\Contact;
 use Lemuria\Engine\Fantasya\Command\Create;
-use Lemuria\Engine\Fantasya\Command\DefaultCommand;
 use Lemuria\Engine\Fantasya\Command\Describe;
 use Lemuria\Engine\Fantasya\Command\Destroy;
 use Lemuria\Engine\Fantasya\Command\Destroy\Dismiss;
@@ -53,6 +52,7 @@ use Lemuria\Engine\Fantasya\Command\Spy;
 use Lemuria\Engine\Fantasya\Command\Steal;
 use Lemuria\Engine\Fantasya\Command\Tax;
 use Lemuria\Engine\Fantasya\Command\Teach;
+use Lemuria\Engine\Fantasya\Command\Template;
 use Lemuria\Engine\Fantasya\Command\Travel;
 use Lemuria\Engine\Fantasya\Command\Trespass;
 use Lemuria\Engine\Fantasya\Command\Trespass\Board;
@@ -215,6 +215,7 @@ class CommandFactory
 	 */
 	protected array $verbs = [
 		'//'           => 'KOMMENTAR',
+		'@'            => 'VORLAGE',
 		'ANGREIFEN'    => 'ATTACKIEREN',
 		'ANGRIFF'      => 'ATTACKIEREN',
 		'ATTACKE'      => 'ATTACKIEREN',
@@ -618,7 +619,7 @@ class CommandFactory
 				'VERKAUFEN'    => Sell::class,
 				'VERLASSEN'    => Vacate::class,
 				'VERLIEREN'    => Lose::class,
-				'VORLAGE'      => DefaultCommand::class,
+				'VORLAGE'      => Template::class,
 				'ZAUBERN'      => Cast::class,
 				'ZERSTÖREN'    => Destroy::class,
 

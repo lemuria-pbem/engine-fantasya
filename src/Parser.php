@@ -29,7 +29,8 @@ class Parser
 
 	public function parse(Move $commands): Parser {
 		foreach ($commands as $command) {
-			$phrase = new Phrase($command);
+			$command = $this->replaceDefaultCommand(trim($command));
+			$phrase  = new Phrase($command);
 			if ($phrase->getVerb()) {
 				$this->phrases[] = $phrase;
 			}
@@ -86,5 +87,29 @@ class Parser
 			throw new CommandParserException('Not in skipping mode; cannot reset.');
 		}
 		return $this;
+	}
+
+	/**
+	 * Default commands can have various forms:
+	 *
+	 * - @COMMAND is a short form of @ COMMAND
+	 * - +n COMMAND (n > 0) is a short form of @ n COMMAND
+	 * - =n COMMAND (n > 0) is a short form of @ n COMMAND
+	 * - +m =n COMMAND (m, n > 0) is a short form of @ m/n COMMAND
+	 * - =m +n COMMAND (m, n > 0) is a short form of @ m/n COMMAND
+	 */
+	protected function replaceDefaultCommand(string $command): string {
+		if (strlen($command) >= 2) {
+			if ($command[0] === '@' && $command[1] !== ' ') {
+				return '@ ' . substr($command, 1);
+			}
+			if (preg_match('/^[+=]([0-9]+) +[+=]([0-9]+) +([^ ]+.*)$/', $command, $matches) === 1) {
+				return '@ ' . $matches[1] . '/' . $matches[2] . ' ' . $matches[3];
+			}
+			if (preg_match('/^[+=]([0-9]+) +([^ ]+.*)$/', $command, $matches) === 1) {
+				return '@ ' . $matches[1] . ' ' . $matches[2];
+			}
+		}
+		return $command;
 	}
 }
