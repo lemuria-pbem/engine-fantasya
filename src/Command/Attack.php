@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Message\Region\AttackBattleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackAllyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMonsterMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFightingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFoundMessage;
@@ -16,6 +17,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\AttackOwnUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackSelfMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat;
+use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -91,7 +93,12 @@ final class Attack extends UnitCommand
 			foreach ($this->units as $unit) {
 				$campaign->addAttack($this->unit, $unit);
 				$this->message(AttackMessage::class)->e($unit);
-				$this->message(AttackFromMessage::class, $unit)->e($this->unit->Party());
+				$party = $this->unit->Party();
+				if ($party->Type() === Party::PLAYER) {
+					$this->message(AttackFromMessage::class, $unit)->e($this->unit->Party());
+				} else {
+					$this->message(AttackFromMonsterMessage::class, $unit);
+				}
 			}
 			parent::commitCommand($command);
 		}

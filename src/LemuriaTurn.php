@@ -135,6 +135,7 @@ class LemuriaTurn implements Turn
 			throw new LemuriaException('Cannot inject action into this running evaluation.');
 		}
 		$this->enqueue($action);
+		Lemuria::Log()->debug('New action injected: ' . $action, ['command' => $action]);
 	}
 
 	/**

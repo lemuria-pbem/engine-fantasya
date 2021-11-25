@@ -8,10 +8,6 @@ use Lemuria\Engine\Fantasya\Event\Behaviour\AbstractBehaviour;
 class Skeleton extends AbstractBehaviour
 {
 	public function prepare(): Behaviour {
-		return $this->watch()->seek();
-	}
-
-	public function conduct(): Behaviour {
-		return $this->attack();
+		return $this->watch()->seek()->attackOnWatch();
 	}
 }
