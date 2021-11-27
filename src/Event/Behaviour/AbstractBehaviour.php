@@ -22,7 +22,7 @@ abstract class AbstractBehaviour implements Behaviour
 {
 	use MessageTrait;
 
-	protected ?Guard $guard = null;
+	protected ?Act $guard = null;
 
 	protected ?Act $act = null;
 
@@ -59,7 +59,7 @@ abstract class AbstractBehaviour implements Behaviour
 
 	protected function watch(): AbstractBehaviour {
 		$watch = new Watch($this);
-		$this->act = $watch->act();
+		$this->guard = $watch->act();
 		return $this;
 	}
 
@@ -138,6 +138,13 @@ abstract class AbstractBehaviour implements Behaviour
 
 		$roam = new Roam($this);
 		$roam->act();
+		return $this;
+	}
+
+	protected function attackOnWatch(): AbstractBehaviour {
+		if ($this->guard instanceof Watch && $this->guard->IsGuarding()) {
+			return $this->attack();
+		}
 		return $this;
 	}
 

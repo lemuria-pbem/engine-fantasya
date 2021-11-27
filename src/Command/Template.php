@@ -36,21 +36,18 @@ final class Template extends DelegatedCommand
 
 			$round = (int)$param;
 			if ($round > 0 && (string)$round === $param) {
-				if ($round > 1) {
-					$command = $verb . ' ' . ($round > 2 ? --$round : '') . ' ' . $phrase;
-					return new Copy(new Phrase($command), $this->context);
-				}
-				return $this->context->Factory()->create(new Phrase($phrase));
+				$command = $verb . ' ' . ($round > 2 ? --$round : '') . ' ' . $phrase;
+				return new Copy(new Phrase($command), $this->context);
 			}
 
 			if (preg_match('#^([0-9]+)/([0-9]+)$#', $param, $matches) === 1) {
 				$round    = (int)$matches[1];
 				$interval = (int)$matches[2];
-				if ($round > 1) {
+				if ($round > 0) {
 					$command = $verb . ' ' . --$round . '/' . $interval . ' ' . $phrase;
 					return new Copy(new Phrase($command), $this->context);
 				}
-				$copy    = $verb . ' ' . $interval . '/' . $interval . ' ' . $phrase;
+				$copy    = $verb . ' ' . ($interval - 1) . '/' . $interval . ' ' . $phrase;
 				$command = new CompositeCommand($this->phrase, $this->context);
 				return $command->setCommands([
 					new Copy(new Phrase($copy), $this->context),

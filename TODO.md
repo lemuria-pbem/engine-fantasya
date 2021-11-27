@@ -4,7 +4,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.8
 
-- Monsterangriffe auf Spieler
+- Overcrowded nicht melden, wenn Gebäude im Bau ist
+- Kobolde ziehen weiter, wenn Einkommen zu gering ist
 
 ## Neue Funktionen
 

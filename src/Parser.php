@@ -93,21 +93,46 @@ class Parser
 	 * Default commands can have various forms:
 	 *
 	 * - @COMMAND is a short form of @ COMMAND
-	 * - +n COMMAND (n > 0) is a short form of @ n COMMAND
-	 * - =n COMMAND (n > 0) is a short form of @ n COMMAND
-	 * - +m =n COMMAND (m, n > 0) is a short form of @ m/n COMMAND
-	 * - =m +n COMMAND (m, n > 0) is a short form of @ m/n COMMAND
+	 * - +m COMMAND (m > 0) is a short form of @ m COMMAND
+	 * - =n COMMAND (n > 0) is a short form of @ n-1/n+1 COMMAND
+	 * - +m =n COMMAND (m, n > 0) is a short form of @ m/n+1 COMMAND
+	 * - =n +m COMMAND (m, n > 0) is a short form of @ m/n+1 COMMAND
 	 */
 	protected function replaceDefaultCommand(string $command): string {
 		if (strlen($command) >= 2) {
 			if ($command[0] === '@' && $command[1] !== ' ') {
-				return '@ ' . substr($command, 1);
+				return '@ * ' . substr($command, 1);
 			}
-			if (preg_match('/^[+=]([0-9]+) +[+=]([0-9]+) +([^ ]+.*)$/', $command, $matches) === 1) {
-				return '@ ' . $matches[1] . '/' . $matches[2] . ' ' . $matches[3];
+
+			if (preg_match('/^[+]([0-9]+) +[=]([0-9]+) +([^ ]+.*)$/', $command, $matches) === 1) {
+				$m = (int)$matches[1];
+				$n = (int)$matches[2];
+				if ($n === 0) {
+					$n = 1;
+				}
+				return '@ ' . $m . '/' . ++$n . ' ' . $matches[3];
 			}
-			if (preg_match('/^[+=]([0-9]+) +([^ ]+.*)$/', $command, $matches) === 1) {
+
+			if (preg_match('/^[=]([0-9]+) +[+]([0-9]+) +([^ ]+.*)$/', $command, $matches) === 1) {
+				$m = (int)$matches[2];
+				$n = (int)$matches[1];
+				if ($n === 0) {
+					$n = 1;
+				}
+				return '@ ' . $m . '/' . ++$n . ' ' . $matches[3];
+			}
+
+			if (preg_match('/^[+]([0-9]+) +([^ ]+.*)$/', $command, $matches) === 1) {
 				return '@ ' . $matches[1] . ' ' . $matches[2];
+			}
+
+			if (preg_match('/^[=]([0-9]+) +([^ ]+.*)$/', $command, $matches) === 1) {
+				$n = (int)$matches[1];
+				if ($n === 0) {
+					$n = 1;
+				}
+				$m = $n++ - 1;
+				return '@ ' . $m . '/' . $n . ' ' . $matches[2];
 			}
 		}
 		return $command;

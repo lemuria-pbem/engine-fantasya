@@ -83,8 +83,9 @@ class LemuriaTurn implements Turn
 		while ($parser->hasMore()) {
 			$phrase = $parser->next();
 			try {
-				$command = $factory->create($phrase)->getDelegate();
-				Lemuria::Log()->debug('New command: ' . $command, ['command' => $command]);
+				$originalCommand = $factory->create($phrase);
+				$command         = $originalCommand->getDelegate();
+				Lemuria::Log()->debug('New command: ' . $originalCommand, ['command' => $command]);
 			} catch (UnknownCommandException|UnknownItemException $e) {
 				Lemuria::Log()->error($e->getMessage(), ['exception' => $e]);
 				$this->addExceptionMessage($e, $context);
@@ -135,6 +136,7 @@ class LemuriaTurn implements Turn
 			throw new LemuriaException('Cannot inject action into this running evaluation.');
 		}
 		$this->enqueue($action);
+		Lemuria::Log()->debug('New action injected: ' . $action, ['command' => $action]);
 	}
 
 	/**
@@ -241,7 +243,7 @@ class LemuriaTurn implements Turn
 	protected function enqueue(Action $action): void {
 		if ($action instanceof CompositeCommand) {
 			foreach ($action->getCommands() as $command) {
-				$this->addAction($command);
+				$this->addAction($command->getDelegate());
 			}
 		} else {
 			$this->addAction($action);

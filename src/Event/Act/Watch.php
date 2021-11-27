@@ -15,8 +15,15 @@ class Watch implements Act
 	use ActTrait;
 	use MessageTrait;
 
+	protected bool $isGuarding;
+
+	public function IsGuarding(): bool {
+		return $this->isGuarding;
+	}
+
 	public function act(): Watch {
-		if (!$this->unit->IsGuarding()) {
+		$this->isGuarding = $this->unit->IsGuarding();
+		if (!$this->isGuarding) {
 			$this->unit->setIsGuarding(true);
 			$this->message(GuardMessage::class, $this->unit);
 		}

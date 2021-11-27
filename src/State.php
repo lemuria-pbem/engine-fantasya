@@ -140,6 +140,14 @@ final class State
 	}
 
 	/**
+	 * Check if a unit's activity protocol exists.
+	 */
+	public function hasProtocol(Unit $unit): bool {
+		$id = $unit->Id()->Id();
+		return isset($this->protocol[$id]);
+	}
+
+	/**
 	 * Get a unit's activity protocol.
 	 */
 	public function getProtocol(Unit $unit): ActivityProtocol {

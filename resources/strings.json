@@ -220,6 +220,7 @@
 		"AttackAllyMessage": "Die Einheit $id kann die alliierte Einheit $unit nicht angreifen.",
 		"AttackBattleMessage": "In der Region $id findet ein Kampf statt: $attacker greifen $defender an.",
 		"AttackFromMessage": "Die Einheit $id wird von Einheiten der Partei $party angegriffen.",
+		"AttackFromMonsterMessage": "Die Einheit $id wird von Monstern angegriffen.",
 		"AttackMessage": "Die Einheit $id greift die Einheit $unit an.",
 		"AttackNotFightingMessage": "Die Einheit $id wird in keinem Angriff kämpfen.",
 		"AttackNotFoundMessage": "Die Einheit $id kann die Einheit $unit nicht finden, um sie anzugreifen.",
@@ -469,12 +470,6 @@
 		"PartyMessage": "Runde für Partei $id begonnen.",
 		"PartyVisitMessage": "Die Partei $id besucht {$regions:Region}.",
 		"PeasantJoyNoneMessage": "Es gibt {kein:$peasant} in der Region, um Bauernglück anzuwenden.",
-
-		"PicketPocketMessage": "Die Einheit $id hat $silver aus den Taschen der Einheit $enemy entwendet.",
-		"PicketPocketNothingMessage": "Die Einheit $id hat kein Silber in den Taschen der Einheit $enemy gefunden.",
-		"PicketPocketOnlyMessage": "Die Einheit $id konnte nur $silver aus den Taschen der Einheit $enemy entwenden.",
-		"PicketPocketRevealedMessage": "Die Einheit $id hat versucht, die Einheit $enemy zu bestehlen, und wurde dabei erwischt.",
-
 		"PickPocketMessage": "Die Einheit $id hat $silver aus den Taschen der Einheit $enemy entwendet.",
 		"PickPocketNothingMessage": "Die Einheit $id hat kein Silber in den Taschen der Einheit $enemy gefunden.",
 		"PickPocketOnlyMessage": "Die Einheit $id konnte nur $silver aus den Taschen der Einheit $enemy entwenden.",
@@ -1038,6 +1033,7 @@
 		"Trireme": "Trireme"
 	},
 	"spell": {
+		"AstralChaos": "Astrales Chaos",
 		"AuraTransfer": "Auratransfer",
 		"Fireball": "Feuerball",
 		"Quacksalver": "Wunderdoktor",

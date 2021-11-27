@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
 use function Lemuria\mbUcFirst;
+use function Lemuria\undupChar;
 use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
 use Lemuria\Engine\Fantasya\Command\Announcement;
@@ -164,6 +165,7 @@ use Lemuria\Model\Fantasya\Ship\Galleon;
 use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Ship\Trireme;
 use Lemuria\Model\Fantasya\Spell;
+use Lemuria\Model\Fantasya\Spell\AstralChaos;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
@@ -454,11 +456,12 @@ class CommandFactory
 	 * @var array(string=>string)
 	 */
 	protected array $spells = [
-		'Auratransfer' => AuraTransfer::class,
-		'Feuerball'    => Fireball::class,
-		'Friedenslied' => SongOfPeace::class,
-		'Schockwelle'  => ShockWave::class,
-		'Wunderdoktor' => Quacksalver::class
+		'Astrales Chaos' => AstralChaos::class,
+		'Auratransfer'   => AuraTransfer::class,
+		'Feuerball'      => Fireball::class,
+		'Friedenslied'   => SongOfPeace::class,
+		'Schockwelle'    => ShockWave::class,
+		'Wunderdoktor'   => Quacksalver::class
 	];
 
 	/**
@@ -810,7 +813,7 @@ class CommandFactory
 	 * Parse a singleton.
 	 */
 	#[Pure] protected function getCandidate(string $singleton, array $map): ?string {
-		$singleton  = mbUcFirst(mb_strtolower($singleton));
+		$singleton  = mbUcFirst(mb_strtolower(undupChar(' ', $singleton)));
 		$candidates = [];
 		foreach ($map as $candidate => $singletonClass) {
 			if (str_starts_with($candidate, $singleton)) {
