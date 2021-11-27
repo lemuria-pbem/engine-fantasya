@@ -47,6 +47,9 @@
 
 ^(h|he|hel|helf|helfe|helfen|hi|hil|hilf|hilfe) +[a-z0-9]{1,6} +[a-z]+( +(region|nicht|region +nicht|nicht +region))?$
 
+^(kam|kamp|kampf|kampfz|kampfza|kampfzau|kampfzaub|kampfzaube|kampfzauber) +(astrales chaos|feuerball|friedenslied|schockwelle)( +(([0-9]+)|aus|nicht))?$
+^(kam|kamp|kampf|kampfz|kampfza|kampfzau|kampfzaub|kampfzaube|kampfzauber) +(aus|kein|keine|keiner|keinen|nicht)$
+
 ^(kau|kauf|kaufe|kaufen)( +[0-9]+)? +(balsam|balsame|gewürz|gewürze|gewuerz|gewuerze|juwel|juwelen|myrrhe|myrrhen|öl|öle|oel|oele|pelz|pelze|seide|seiden|weihrauch)$
 
 ^(kä|käm|kämp|kämpf|kämpfe|kämpfen|kae|kaem|kaemp|kaempf|kaempfe|kaempfen|ka|kam|kamp|kampf) +(aggressiv|defensiv|fliehe|fliehen|flucht|hinten|nicht|vorn|vorne)?$
@@ -123,6 +126,8 @@
 ^(d|de|def|defa|defau|defaul|default) +\* +[a-z].+$
 ^(d|de|def|defa|defau|defaul|default) +[0-9]+ +[a-z].+$
 ^(d|de|def|defa|defau|defaul|default) +[0-9]+/+[0-9]+ +[a-z].+$
+
+^(za|zau|zaub|zaube|zauber|zaubere|zaubern) +(auratransfer|wunderdoktor)( +[0-9]+)?$
 
 ^(zerstö|zerstör|zerstöre|zerstören) +(burg|gebäude|gebaeude|schiff)$
 ^(zerstoe|zerstoer|zerstoere|zerstoeren) +(burg|gebäude|gebaeude|schiff)$
