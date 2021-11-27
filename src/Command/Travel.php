@@ -42,11 +42,10 @@ use Lemuria\Model\Fantasya\Unit;
 class Travel extends UnitCommand implements Activity
 {
 	use DefaultActivityTrait;
-
-	protected const ACTIVITY = 'Travel';
-
 	use NavigationTrait;
 	use TravelTrait;
+
+	protected const ACTIVITY = 'Travel';
 
 	protected DirectionList $directions;
 

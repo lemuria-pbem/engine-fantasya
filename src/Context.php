@@ -39,11 +39,6 @@ final class Context implements Reassignment
 	private array $calculus = [];
 
 	/**
-	 * @var array(int=>ActivityProtocol)
-	 */
-	private array $protocol = [];
-
-	/**
 	 * @var array(int=>ResourcePool)
 	 */
 	private array $resourcePool = [];
@@ -135,13 +130,11 @@ final class Context implements Reassignment
 	 * Get a unit's activity protocol.
 	 */
 	public function getProtocol(Unit $unit): ActivityProtocol {
-		$id = $unit->Id()->Id();
-		if (!isset($this->protocol[$id])) {
-			$protocol            = new ActivityProtocol($unit, $this);
-			$this->protocol[$id] = $protocol;
+		if (!$this->state->hasProtocol($unit)) {
+			$protocol = new ActivityProtocol($unit, $this);
 			$this->state->setProtocol($protocol);
 		}
-		return $this->protocol[$id];
+		return $this->state->getProtocol($unit);
 	}
 
 	/**
