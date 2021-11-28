@@ -28,7 +28,7 @@ trait ActTrait
 		return $race instanceof Monster ? $race : null;
 	}
 
-	protected function getPossibleRegions(): array {
+	protected function getPossibleRegions(bool $addCurrent = true): array {
 		$regions = [];
 
 		$environment = $this->getMonster()?->Environment();
@@ -39,7 +39,6 @@ trait ActTrait
 		foreach ($environment as $landscape) {
 			$regions[getClass($landscape)] = [];
 		}
-
 		$region = $this->unit->Region();
 		foreach (Lemuria::World()->getNeighbours($region)->getAll() as $neighbour /* @var Region $neighbour */) {
 			$landscape = getClass($neighbour->Landscape());
@@ -47,9 +46,12 @@ trait ActTrait
 				$regions[$landscape][] = $neighbour;
 			}
 		}
-		$landscape = getClass($region->Landscape());
-		if (isset($regions[$landscape])) {
-			$regions[$landscape][] = $region;
+
+		if ($addCurrent) {
+			$landscape = getClass($region->Landscape());
+			if (isset($regions[$landscape])) {
+				$regions[$landscape][] = $region;
+			}
 		}
 
 		foreach (array_keys($regions) as $landscape) {

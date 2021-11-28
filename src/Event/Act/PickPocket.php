@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
 use Lemuria\Engine\Fantasya\Event\Support;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketLeaveMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketOnlyMessage;
@@ -28,6 +29,8 @@ class PickPocket implements Act
 
 	protected const TRIES = 3;
 
+	protected const NEED = 1;
+
 	protected const PICK = 10;
 
 	protected const MAXIMUM = 0.1;
@@ -36,8 +39,11 @@ class PickPocket implements Act
 
 	public function act(): PickPocket {
 		$tries      = (int)ceil($this->unit->Size() / self::TRIES);
+		$triesLeft  = $tries;
 		$isRevealed = false;
-		while (!$this->enemy->isEmpty() && $tries-- > 0) {
+		$allPicks   = 0;
+
+		while (!$this->enemy->isEmpty() && $triesLeft-- > 0) {
 			/** @var Unit $enemy */
 			$enemy = $this->enemy->random();
 			$this->enemy->remove($enemy);
@@ -55,6 +61,7 @@ class PickPocket implements Act
 				$maxPick   = (int)floor(self::MAXIMUM * $excess);
 				$pick      = min($wantPick, $maxPick);
 				if ($pick > 0) {
+					$allPicks += $pick;
 					$inventory->remove(new Quantity($silver, $pick));
 					$quantity = new Quantity($silver, $pick);
 					$this->unit->Inventory()->add($quantity);
@@ -69,7 +76,8 @@ class PickPocket implements Act
 			}
 		}
 
-		if ($isRevealed) {
+		if ($isRevealed || $allPicks < $tries * self::NEED) {
+			$this->message(PickPocketLeaveMessage::class, $this->unit);
 			$this->createRoamEffect();
 		}
 		return $this;

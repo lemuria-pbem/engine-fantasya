@@ -15,6 +15,6 @@ class Goblin extends AbstractBehaviour
 	}
 
 	public function conduct(): Behaviour {
-		return $this->roamOrPickPocket();
+		return $this->pickPocketOrRoam();
 	}
 }

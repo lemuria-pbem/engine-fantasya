@@ -124,8 +124,9 @@ abstract class AbstractBehaviour implements Behaviour
 		return $this;
 	}
 
-	protected function roamOrPickPocket(): AbstractBehaviour {
-		if (!$this->hasRoamEffect()) {
+	protected function pickPocketOrRoam(): AbstractBehaviour {
+		$forceRoam = $this->hasRoamEffect();
+		if (!$forceRoam) {
 			if ($this->act instanceof Seek) {
 				$enemy = $this->act->Enemy();
 				if (!$enemy->isEmpty()) {
@@ -137,7 +138,7 @@ abstract class AbstractBehaviour implements Behaviour
 		}
 
 		$roam = new Roam($this);
-		$roam->act();
+		$roam->setLeave($forceRoam)->act();
 		return $this;
 	}
 

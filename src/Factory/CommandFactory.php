@@ -1,8 +1,7 @@
 <?php
+/** @noinspection PhpMultipleClassDeclarationsInspection */
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
-
-use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
 use function Lemuria\mbUcFirst;
@@ -812,7 +811,7 @@ class CommandFactory
 	/**
 	 * Parse a singleton.
 	 */
-	#[Pure] protected function getCandidate(string $singleton, array $map): ?string {
+	protected function getCandidate(string $singleton, array $map): ?string {
 		$singleton  = mbUcFirst(mb_strtolower(undupChar(' ', $singleton)));
 		$candidates = [];
 		foreach ($map as $candidate => $singletonClass) {

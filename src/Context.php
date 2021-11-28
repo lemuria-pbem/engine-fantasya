@@ -110,7 +110,6 @@ final class Context implements Reassignment
 			$id = $identifiable->Id()->Id();
 			unset($this->calculus[$id]);
 			$this->state->unsetProtocol($identifiable->Id());
-			unset($this->protocol[$id]);
 			unset($this->resourcePool[self::resourcePoolId($identifiable)]);
 		}
 	}

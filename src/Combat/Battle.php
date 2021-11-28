@@ -205,15 +205,13 @@ class Battle
 	protected function embattleForCombat(Context $context): Combat {
 		$combat = new Combat($context);
 		foreach ($this->attackers as $unit) {
-			$army                    = $combat->addAttacker($unit);
-			$id                      = $army->Id();
-			$this->attackArmies[$id] = $army;
+			$combat->addAttacker($unit);
 		}
 		foreach ($this->defenders as $unit) {
-			$army                    = $combat->addDefender($unit);
-			$id                      = $army->Id();
-			$this->defendArmies[$id] = $army;
+			$combat->addDefender($unit);
 		}
+		$this->attackArmies = $combat->getAttackers();
+		$this->defendArmies = $combat->getDefenders();
 		return $combat->embattle();
 	}
 

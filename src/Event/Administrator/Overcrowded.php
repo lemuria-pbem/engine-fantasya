@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Construction;
+use Lemuria\Model\Fantasya\Talent\Constructing;
 
 /**
  * This event searches for overcrowded constructions.
@@ -26,12 +27,27 @@ final class Overcrowded extends AbstractEvent
 			}
 			$space = $construction->Size() - $construction->Inhabitants()->Size();
 			if ($space < 0) {
-				$party  = $construction->Inhabitants()->Owner()->Party();
-				$name   = (string)$construction;
-				$region = (string)$construction->Region();
-				$this->message(OvercrowdedMessage::class, $party)->p($name)->p($region, OvercrowdedMessage::REGION);
-				Lemuria::Log()->critical('Construction ' . $construction . ' in ' . $construction->Region() . ' is overcrowded with ' . -$space . ' persons.');
+				if (!$this->isInConstruction($construction)) {
+					$party  = $construction->Inhabitants()->Owner()->Party();
+					$name   = (string)$construction;
+					$region = (string)$construction->Region();
+					$this->message(OvercrowdedMessage::class, $party)->p($name)->p($region, OvercrowdedMessage::REGION);
+					Lemuria::Log()->critical('Construction ' . $construction . ' in ' . $construction->Region() . ' is overcrowded with ' . -$space . ' persons.');
+				} else {
+					Lemuria::Log()->critical($construction . ' (under construction) in ' . $construction->Region() . ' is overcrowded with ' . -$space . ' persons.');
+				}
 			}
 		}
+	}
+
+	private function isInConstruction(Construction $construction): bool {
+		$inhabitants = $construction->Inhabitants();
+		if ($inhabitants->count() === 1) {
+			$knowledge = $inhabitants->Owner()->Knowledge();
+			if (isset($knowledge[Constructing::class])) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
