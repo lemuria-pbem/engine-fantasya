@@ -128,23 +128,61 @@ class Combat extends CombatModel
 	}
 
 	public function addAttacker(Unit $unit): Army {
-		$army = $this->getArmy($unit);
-		foreach ($army->add($unit)->Combatants() as $combatant) {
-			$this->attacker[$combatant->BattleRow()][] = $combatant;
-		}
-		$this->isAttacker[$army->Party()->Id()->Id()] = true;
-		$this->attackParticipants[] = new Participant(new Entity($unit), $army->Combatants());
+		$army                  = $this->getArmy($unit)->add($unit);
+		$id                    = $army->Party()->Id()->Id();
+		$this->isAttacker[$id] = true;
 		return $army;
 	}
 
 	public function addDefender(Unit $unit): Army {
-		$army = $this->getArmy($unit);
-		foreach ($army->add($unit)->Combatants() as $combatant) {
-			$this->defender[$combatant->BattleRow()][] = $combatant;
-		}
-		$this->isAttacker[$army->Party()->Id()->Id()] = false;
-		$this->defendParticipants[] = new Participant(new Entity($unit), $army->Combatants());
+		$army                  = $this->getArmy($unit)->add($unit);
+		$id                    = $army->Party()->Id()->Id();
+		$this->isAttacker[$id] = false;
 		return $army;
+	}
+
+	/**
+	 * @return array(int=>Army)
+	 */
+	public function getAttackers(): array {
+		$armies = [];
+		foreach ($this->isAttacker as $id => $isAttacker) {
+			if ($isAttacker) {
+				/** @var Army $army */
+				$army = $this->armies[$id];
+				foreach ($army->Units() as $unit /* @var Unit $unit */) {
+					$combatants = $army->getCombatants($unit);
+					foreach ($combatants as $combatant) {
+						$this->attacker[$combatant->BattleRow()][] = $combatant;
+					}
+					$this->attackParticipants[] = new Participant(new Entity($unit), $army->getCombatants($unit));
+				}
+				$armies[$army->Id()] = $army;
+			}
+		}
+		return $armies;
+	}
+
+	/**
+	 * @return array(int=>Army)
+	 */
+	public function getDefenders(): array {
+		$armies = [];
+		foreach ($this->isAttacker as $id => $isAttacker) {
+			if (!$isAttacker) {
+				/** @var Army $army */
+				$army = $this->armies[$id];
+				foreach ($army->Units() as $unit /* @var Unit $unit */) {
+					$combatants = $army->getCombatants($unit);
+					foreach ($combatants as $combatant) {
+						$this->defender[$combatant->BattleRow()][] = $combatant;
+					}
+					$this->defendParticipants[] = new Participant(new Entity($unit), $army->getCombatants($unit));
+				}
+				$armies[$army->Id()] = $army;
+			}
+		}
+		return $armies;
 	}
 
 	public function embattle(): Combat {

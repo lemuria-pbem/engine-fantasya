@@ -80,6 +80,19 @@ class Army
 		return $this->trophies;
 	}
 
+	/**
+	 * @return Combatant[]
+	 */
+	#[Pure] public function getCombatants(Unit $unit): array {
+		$combatants = [];
+		foreach ($this->combatants as $combatant) {
+			if ($combatant->Unit() === $unit) {
+				$combatants[] = $combatant;
+			}
+		}
+		return $combatants;
+	}
+
 	public function add(Unit $unit): Army {
 		if ($unit->Party()->Id() !== $this->party->Id()) {
 			throw new LemuriaException('Only units from the same party can build an army.');

@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
+use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat;
@@ -130,7 +131,8 @@ class Campaign
 	 * @return array(int=>true)
 	 */
 	private function createDefenderBattles(): array {
-		$defenders = [];
+		$defenders     = [];
+		$attackersLeft = array_fill_keys(array_keys($this->attackers), true);
 		foreach ($this->defenders as $defId => $attackers) {
 			$party  = $this->party($defId);
 			$battle = $this->battle($party);
@@ -140,13 +142,22 @@ class Campaign
 			$this->status[$id] = Army::DEFENDER;
 			$defenders[$id]    = true;
 			Lemuria::Log()->debug($unit . ' is attacked in battle of defender ' . $party . '.');
+
 			foreach ($attackers as $attId) {
+				if (!isset($this->attackers[$attId])) {
+					throw new LemuriaException('Attacker ' . $attId . ' not found.');
+				}
 				$unit = $this->armies[$attId];
-				$battle->addAttacker($unit);
-				$party                  = $this->party($attId);
-				$partyId                = $party->Id()->Id();
-				$this->status[$partyId] = Army::ATTACKER;
-				Lemuria::Log()->debug($unit . ' attacks in battle of attacker ' . $party . '.');
+				if (isset($attackersLeft[$attId])) {
+					$battle->addAttacker($unit);
+					$party                  = $this->party($attId);
+					$partyId                = $party->Id()->Id();
+					$this->status[$partyId] = Army::ATTACKER;
+					unset($attackersLeft[$attId]);
+					Lemuria::Log()->debug($unit . ' attacks in battle of attacker ' . $party . '.');
+				} else {
+					Lemuria::Log()->debug($unit . ' is already attacking in battle of attacker ' . $party . '.');
+				}
 			}
 		}
 		return array_keys($defenders);
