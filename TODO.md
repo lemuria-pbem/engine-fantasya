@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.8
 
-- Overcrowded nicht melden, wenn Gebäude im Bau ist
 
 ## Neue Funktionen
 
