@@ -625,6 +625,9 @@ class Combat extends CombatModel
 		return $damage;
 	}
 
+	/**
+	 * @noinspection PhpStatementHasEmptyBodyInspection
+	 */
 	protected function removeTheDead(array &$combatantRows): void {
 		foreach ($combatantRows as &$combatants) {
 			foreach ($combatants as $c => &$combatant /* @var Combatant $combatant */) {

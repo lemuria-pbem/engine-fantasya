@@ -19,9 +19,11 @@ class Roam implements Act
 	use ActTrait;
 	use MessageTrait;
 
+	protected bool $leave = false;
+
 	public function act(): Roam {
 		$region  = $this->unit->Region();
-		$regions = $this->getPossibleRegions();
+		$regions = $this->getPossibleRegions(!$this->leave);
 		if (empty($regions)) {
 			$this->noPossibleRegion($region);
 		} else {
@@ -34,6 +36,11 @@ class Roam implements Act
 				$this->message(RoamMessage::class, $this->unit)->e($region);
 			}
 		}
+		return $this;
+	}
+
+	public function setLeave(bool $leave): Roam {
+		$this->leave = $leave;
 		return $this;
 	}
 

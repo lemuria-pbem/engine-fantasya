@@ -142,7 +142,7 @@ final class State
 	/**
 	 * Check if a unit's activity protocol exists.
 	 */
-	public function hasProtocol(Unit $unit): bool {
+	#[Pure] public function hasProtocol(Unit $unit): bool {
 		$id = $unit->Id()->Id();
 		return isset($this->protocol[$id]);
 	}

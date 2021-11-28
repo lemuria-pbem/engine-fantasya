@@ -3,17 +3,10 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit\Act;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\AbstractUnitMessage;
-use Lemuria\Engine\Message;
-use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 
-class PickPocketNothingMessage extends AbstractUnitMessage
+class PickPocketNothingMessage extends PickPocketLeaveMessage
 {
-	protected string $level = Message::FAILURE;
-
-	protected int $section = Section::PRODUCTION;
-
 	protected Id $enemy;
 
 	protected function create(): string {
