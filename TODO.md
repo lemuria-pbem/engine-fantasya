@@ -2,18 +2,18 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Fehler/Verbesserungen in 0.8
-
-
-## Neue Funktionen
-
-### Version 0.9
+## Fehler/Verbesserungen in 0.9
 
 - besondere Gegenstände:
   - Greifeneier
+    - Greife legen Eier
+    - Greife migrieren nicht, wenn Eier vorhanden sind
+    - Einheiten MACHEN Greifeneier
+    - Angriff bei fehlgeschlagenem Versuch, Eier als Beute
+    - Greife schlüpfen aus Eiern
   - Kriegsbeute
-  - Wagenwracks
-- erbeutete Waffen/Rüstungen reparieren
+    - Waffen, Schilde, Rüstungen nehmen Schaden
+    - Wagenwracks
 - BELAGERN
 - weitere Gebäude:
   - Hafen
@@ -22,6 +22,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Steuerturm
 - weitere Zauber:
   - Tagtraum (7) (unterbricht Bewachung, verringert Produktivität)
+
+## Neue Funktionen
 
 ### Version 0.10
 

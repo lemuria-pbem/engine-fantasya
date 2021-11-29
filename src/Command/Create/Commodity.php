@@ -22,6 +22,7 @@ use Lemuria\Model\Fantasya\Quantity;
  */
 final class Commodity extends AbstractProduct
 {
+	/** @noinspection DuplicatedCode */
 	protected function run(): void {
 		$artifact         = $this->getArtifact();
 		$talent           = $artifact->getCraft()->Talent();

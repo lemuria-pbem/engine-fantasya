@@ -10,15 +10,15 @@
 			"email": "lemuria@online.de"
 		}
 	],
-	"version": "0.8.3",
-	"time": "2021-11-28",
+	"version": "0.9.0",
+	"time": "2021-11-29",
 
 	"require": {
 		"php": "~8.0",
 		"ext-json": "*",
 		"ext-mbstring": "*",
 		"lemuria-pbem/lemuria": "dev-dev",
-		"lemuria-pbem/model-fantasya": "dev-dev",
+		"lemuria-pbem/model-fantasya": "dev-feature/siege",
 		"monolog/monolog": "~2.3"
 	},
 	"require-dev": {

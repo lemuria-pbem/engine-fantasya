@@ -10,6 +10,7 @@ use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Fantasya\Artifact as ArtifactInterface;
 use Lemuria\Model\Fantasya\RawMaterial as RawMaterialInterface;
+use Lemuria\Model\Fantasya\Repairable;
 
 /**
  * Implementation of command MACHEN <amount> <Resource> (create resource).
@@ -32,6 +33,9 @@ final class Resource extends DelegatedCommand
 
 	protected function createDelegate(): Command {
 		$resource = $this->job->getObject();
+		if ($resource instanceof Repairable) {
+			return new Repair($this->phrase, $this->context, $this->job);
+		}
 		if ($resource instanceof ArtifactInterface) {
 			return new Artifact($this->phrase, $this->context, $this->job);
 		}
