@@ -11,9 +11,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
     - Einheiten MACHEN Greifeneier
     - Angriff bei fehlgeschlagenem Versuch, Eier als Beute
     - Greife schlüpfen aus Eiern
-  - Kriegsbeute
-    - Waffen, Schilde, Rüstungen nehmen Schaden
-    - Wagenwracks
 - BELAGERN
 - weitere Gebäude:
   - Hafen

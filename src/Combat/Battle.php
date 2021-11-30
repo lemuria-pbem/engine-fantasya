@@ -28,10 +28,17 @@ use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Tactics;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Fantasya\WearResources;
 
 class Battle
 {
 	protected const EXHAUSTION_ROUNDS = 10;
+
+	protected const WEAR = 0.5;
+
+	protected const WEAR_ROUNDS = 50;
+
+	protected const WEAR_DIVISOR = self::WEAR_ROUNDS ** 2 / self::WEAR;
 
 	/**
 	 * @var Unit[]
@@ -216,8 +223,9 @@ class Battle
 	}
 
 	protected function takeLoot(Combat $combat): Battle {
-		$attackerLoot = $this->collectLoot($this->attackArmies);
-		$defenderLoot = $this->collectLoot($this->defendArmies);
+		$rounds       = $combat->getRounds();
+		$attackerLoot = $this->collectLoot($this->attackArmies, $rounds);
+		$defenderLoot = $this->collectLoot($this->defendArmies, $rounds);
 		if ($combat->hasAttackers()) {
 			if ($combat->hasDefenders()) {
 				Lemuria::Log()->debug('Battle ended in a draw due to exhaustion (' . self::EXHAUSTION_ROUNDS . ' rounds without damage).');
@@ -253,8 +261,10 @@ class Battle
 		return $this;
 	}
 
-	protected function collectLoot(array $armies): Resources {
-		$loot = new Resources();
+	protected function collectLoot(array $armies, int $rounds): Resources {
+		$loot = new WearResources();
+		$wear = min(self::WEAR, $rounds ** 2 / self::WEAR_DIVISOR);
+		$loot->setWear($wear);
 		foreach ($armies as $army /* @var Army $army */) {
 			$loot->fill($army->Loss());
 		}

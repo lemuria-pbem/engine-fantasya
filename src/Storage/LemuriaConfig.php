@@ -94,7 +94,7 @@ class LemuriaConfig implements \ArrayAccess, Config
 		return $this->config[$offset];
 	}
 
-	public function offsetSet(mixed $offset, mixed $value) {
+	public function offsetSet(mixed $offset, mixed $value): void {
 		if (!$this->offsetExists($offset)) {
 			throw new LemuriaException("Invalid config setting '" . $offset . "'.");
 		}

@@ -272,6 +272,10 @@ class Combat extends CombatModel
 		}
 	}
 
+	public function getRounds(): int {
+		return $this->round;
+	}
+
 	protected function getArmy(Unit $unit): Army {
 		$party = $unit->Party();
 		$id    = $party->Id()->Id();
