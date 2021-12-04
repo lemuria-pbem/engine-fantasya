@@ -33,7 +33,7 @@ class UnitDiedMessage extends AbstractMessage
 
 	#[ArrayShape(['id' => 'int', 'name' => 'string'])]
 	#[Pure]	protected function getParameters(): array {
-		return ['id' => $this->unit->id, 'name'  => $this->unit->name];
+		return ['id' => $this->unit->id->Id(), 'name'  => $this->unit->name];
 	}
 
 	protected function validateSerializedData(array &$data): void {
