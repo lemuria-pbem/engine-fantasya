@@ -674,6 +674,24 @@
 			"das": "zum"
 		}
 	},
+	"quantity": {
+		"herb": ["einige", "viele", "eine riesige Menge"],
+		"potion": ["einige", "viele", "eine riesige Menge"],
+		"Balsam": ["etwas", "viel", "eine riesige Menge"],
+		"Carnassial": ["einige", "viele", "eine riesige Menge"],
+		"Fur": ["einige", "viele", "eine riesige Menge"],
+		"Gem": ["einige", "viele", "eine riesige Menge"],
+		"GoblinEar": ["einige", "viele", "eine riesige Menge"],
+		"Gold": ["etwas", "viel", "eine riesige Menge"],
+		"GriffinFeather": ["einige", "viele", "eine riesige Menge"],
+		"Myrrh": ["etwas", "viel", "eine riesige Menge"],
+		"Oil": ["einige", "viele", "eine riesige Menge"],
+		"Olibanum": ["etwas", "viel", "eine riesige Menge"],
+		"Silk": ["etwas", "viel", "eine riesige Menge"],
+		"Silver": ["etwas", "viel", "eine riesige Menge"],
+		"Skull": ["einige", "viele", "eine riesige Menge"],
+		"Spice": ["einige", "viele", "eine riesige Menge"]
+	},
 	"race": {
 		"Aquan": ["Aquaner", "Aquaner"],
 		"Bear": ["Bär", "Bären"],
