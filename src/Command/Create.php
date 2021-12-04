@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use function Lemuria\isInt;
 use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Command\Create\Griffinegg;
 use Lemuria\Engine\Fantasya\Command\Create\RawMaterial\Herb;
 use Lemuria\Engine\Fantasya\Command\Create\Resource;
 use Lemuria\Engine\Fantasya\Command\Create\Road;
@@ -14,6 +15,7 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
 use Lemuria\Engine\Fantasya\Factory\Model\Herb as HerbModel;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
+use Lemuria\Model\Fantasya\Commodity\Griffinegg as GriffineggModel;
 use Lemuria\Model\Fantasya\Herb as HerbInterface;
 
 /**
@@ -26,6 +28,8 @@ use Lemuria\Model\Fantasya\Herb as HerbInterface;
  * - MACHEN <amount> <Resource>
  * - MACHEN Kraut|Kraeuter|Kräuter
  * - MACHEN <amount> Kraut|Kraeuter|Kräuter
+ * - MACHEN Greifenei|Greifeneier
+ * - MACHEN <amount> Greifenei|Greifeneier
  * - MACHEN Temp
  * - MACHEN Temp <id>
  * - MACHEN Straße|Strasse <direction> [<amount>]
@@ -66,7 +70,12 @@ final class Create extends DelegatedCommand
 		// MACHEN Kräuter
 		$lower = strtolower($what);
 		if ($lower === 'kraut' || $lower === 'kraeuter' || $lower === 'kräuter') {
-			return new Herb($this->phrase, $this->context, new Job(new HerbModel(), $number));
+			$herb = self::createCommodity(HerbModel::class);
+			return new Herb($this->phrase, $this->context, new Job($herb, $number));
+		}
+		if ($lower === 'greifenei' || $lower === 'greifeneier') {
+			$egg = self::createCommodity(GriffineggModel::class);
+			return new Griffinegg($this->phrase, $this->context, new Job($egg, $number));
 		}
 
 		try {

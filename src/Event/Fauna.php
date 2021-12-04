@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Factory\Model\Season;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
@@ -63,7 +64,7 @@ final class Fauna extends AbstractEvent
 
 	private const HUNGER = 0.1;
 
-	private const EGG_PROBABILITY = 25;
+	private const EGG_PROBABILITY = 0.25;
 
 	private Workplaces $workplaces;
 
@@ -103,7 +104,7 @@ final class Fauna extends AbstractEvent
 							if ($animal === Griffin::class) {
 								$egg = self::createCommodity(Griffinegg::class);
 								if ($resources[$egg]->Count() < $count + $growth) {
-									if (rand(0, 100) < self::EGG_PROBABILITY) {
+									if (randChance(self::EGG_PROBABILITY)) {
 										$quantity = new Quantity($egg, 1);
 										$resources->add($quantity);
 										$this->message(FaunaGriffineggMessage::class, $region)->i($quantity);
