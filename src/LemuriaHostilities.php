@@ -90,6 +90,16 @@ class LemuriaHostilities implements Hostilities
 	}
 
 	/**
+	 * Delete all battles as preparation for a new turn.
+	 */
+	public function clear(): Hostilities {
+		$this->logs        = [];
+		$this->party       = [];
+		$this->regionParty = [];
+		return $this;
+	}
+
+	/**
 	 * Load battles.
 	 */
 	public function load(): Hostilities {

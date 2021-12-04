@@ -175,6 +175,7 @@ class LemuriaTurn implements Turn
 	 * Evaluate the whole turn.
 	 */
 	public function evaluate(): Turn {
+		Lemuria::Hostilities()->clear();
 		Lemuria::Orders()->clear();
 		Lemuria::Log()->debug('Executing queued actions.', ['queues' => count($this->queue)]);
 		foreach (array_keys($this->queue) as $priority) {
