@@ -35,6 +35,11 @@ final class Attack extends UnitCommand
 	 */
 	private array $units = [];
 
+	public function from(Unit $unit): Attack {
+		$this->unit = $unit;
+		return $this;
+	}
+
 	protected function initialize(): void {
 		parent::initialize();
 		if ($this->unit->BattleRow() <= Combat::BYSTANDER) {

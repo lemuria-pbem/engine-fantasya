@@ -5,26 +5,32 @@ namespace Lemuria\Engine\Fantasya\Effect;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Unit;
 
 final class GriffinAttack extends AbstractRegionEffect
 {
-	private int $peasants = 0;
+	private ?Unit $griffins = null;
 
 	public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
 	}
 
-	public function Peasants(): int {
-		return $this->peasants;
+	public function Griffins(): ?Unit {
+		return $this->griffins;
 	}
 
-	public function setPeasants(int $peasants): GriffinAttack {
-		$this->peasants = $peasants;
+	public function setGriffins(Unit $griffins): GriffinAttack {
+		$this->griffins = $griffins;
 		return $this;
 	}
 
 	protected function run(): void {
-		//TODO delete griffin units
+		if ($this->griffins) {
+			$this->griffins->Region()->Residents()->remove($this->griffins);
+			$this->griffins->Party()->People()->remove($this->griffins);
+			Lemuria::Catalog()->reassign($this->griffins);
+			Lemuria::Catalog()->remove($this->griffins);
+		}
 		Lemuria::Score()->remove($this);
 	}
 }

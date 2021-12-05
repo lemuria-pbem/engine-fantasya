@@ -29,7 +29,7 @@ final class Spawn extends AbstractEvent
 
 	public const SIZE = 'size';
 
-	private const PARTY_ID = [Party::NPC => 'n', Party::MONSTER => 'm'];
+	public const PARTY_ID = [Party::NPC => 'n', Party::MONSTER => 'm'];
 
 	private Create $create;
 

@@ -46,6 +46,7 @@ final class CommandPriority
 		'Give'             => 40,
 		'Dismiss'          => 41,
 		'Lose'             => 42,
+		'Griffinegg'       => 44,
 		'Attack'           => 45,
 		'Recruit'          => 48,
 		'EFFECT_MIDDLE'    => 50,

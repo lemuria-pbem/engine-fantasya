@@ -4,11 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
-- besondere Gegenstände:
-  - Greifeneier
-    - Einheiten MACHEN Greifeneier
-    - Angriff bei fehlgeschlagenem Versuch, Eier als Beute
-    - Greife schlüpfen aus Eiern
 - BELAGERN
 - weitere Gebäude:
   - Hafen
