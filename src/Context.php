@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Combat\Besieger;
 use Lemuria\Engine\Fantasya\Combat\Campaign;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Factory\CommandFactory;
@@ -12,6 +13,7 @@ use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
@@ -42,6 +44,11 @@ final class Context implements Reassignment
 	 * @var array(int=>ResourcePool)
 	 */
 	private array $resourcePool = [];
+
+	/**
+	 * @var array(int=>Besieger)
+	 */
+	private array $sieges = [];
 
 	#[Pure] public function __construct(private State $state) {
 		$this->parser  = new Parser($this);
@@ -245,6 +252,14 @@ final class Context implements Reassignment
 			$this->resourcePool = [];
 			Lemuria::Log()->debug('Clearing ' . $n . ' resource pools.');
 		}
+	}
+
+	public function getSiege(Construction $construction): Besieger {
+		$id = $construction->Id()->Id();
+		if (!isset($this->sieges)) {
+			$this->sieges[$id] = new Besieger($construction);
+		}
+		return $this->sieges[$id];
 	}
 
 	private static function resourcePoolId(Unit $unit): string {

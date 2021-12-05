@@ -5,6 +5,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Fehler/Verbesserungen in 0.9
 
 - BELAGERN
+  - Effekt verhindert BETRETEN, VERLASSEN, UNTERHALTEN, TREIBEN, Handel
 - weitere Gebäude:
   - Hafen
   - Leuchtturm
