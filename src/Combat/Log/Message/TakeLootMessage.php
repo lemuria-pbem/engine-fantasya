@@ -39,7 +39,7 @@ class TakeLootMessage extends AbstractMessage
 
 	#[ArrayShape(['id' => 'int', 'name' => 'string', 'commodity' => 'string', 'count' => 'int'])]
 	#[Pure]	protected function getParameters(): array {
-		return ['id'        => $this->unit->id,                    'name'  => $this->unit->name,
+		return ['id'        => $this->unit->id->Id(),              'name'  => $this->unit->name,
 			    'commodity' => getClass($this->loot->Commodity()), 'count' => $this->loot->Count()];
 	}
 

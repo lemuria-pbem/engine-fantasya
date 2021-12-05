@@ -9,7 +9,7 @@ use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Everything;
 use Lemuria\Engine\Fantasya\Message\Unit\DismissAllMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DismissEverythingMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\DIsmissMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DismissMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DismissNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DismissNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DismissOnlyMessage;
