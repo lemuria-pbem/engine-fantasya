@@ -109,7 +109,7 @@ final class Vessel extends AbstractProduct
 	 */
 	protected function calculateProduction(Requirement $craft): int {
 		$production = parent::calculateProduction($craft);
-		return $production <= $this->remaining ? $production : $this->remaining;
+		return min($production, $this->remaining);
 	}
 
 	private function replacePlaceholderJob(): void {

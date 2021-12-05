@@ -312,9 +312,8 @@ final class Calculus
 		$distributed = 0;
 		while (!empty($amount)) {
 			$distribution = new Distribution();
-			reset($amount);
-			$first     = key($amount);
-			$remaining = $first - $distributed;
+			$first        = key($amount);
+			$remaining    = $first - $distributed;
 			foreach ($amount as $count => $commodities) {
 				$remaining   = $count - $distributed;
 				$distributed = $remaining;

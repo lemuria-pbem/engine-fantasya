@@ -199,7 +199,7 @@ final class Smash extends UnitCommand implements Activity
 		$level      = $this->calculus()->knowledge($craft->Talent())->Level();
 		$capability = $level > 1 ? $this->unit->Size() * $level : $this->unit->Size();
 		$capability = $this->reduceByWorkload($capability);
-		$damage     = $capability < $size ? $capability : $size;
+		$damage     = min($capability, $size);
 		foreach ($material as $quantity /* @var Quantity $quantity */) {
 			$regain = new Quantity($quantity->Commodity(), $damage * $quantity->Count());
 			$this->unit->Inventory()->add($regain);

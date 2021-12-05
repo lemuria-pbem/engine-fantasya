@@ -84,8 +84,9 @@ final class Teach extends UnitCommand implements Activity
 					$unit = $this->nextId($i);
 					if ($unit) {
 						if ($this->checkUnit($unit)) {
+							/** @noinspection PhpConditionAlreadyCheckedInspection */
 							$this->size += $this->teach($unit, true);
-							$ids[]       = $unit->Id();
+							$ids[]      = $unit->Id();
 						}
 					} else {
 						break;

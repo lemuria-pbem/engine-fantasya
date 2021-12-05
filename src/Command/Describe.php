@@ -156,6 +156,6 @@ final class Describe extends UnitCommand
 	}
 
 	private function trimDescription(string $description): string {
-		return trim($description, "\"'`'^°§$%&/()={[]}\\+*~#<>|,-;:_ ");
+		return trim($description, "\"'`^°§$%&/()={[]}\\+*~#<>|,-;:_ ");
 	}
 }

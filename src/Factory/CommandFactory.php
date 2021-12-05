@@ -1,5 +1,4 @@
 <?php
-/** @noinspection PhpMultipleClassDeclarationsInspection */
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
@@ -791,7 +790,6 @@ class CommandFactory
 			}
 		}
 		if (count($candidates) === 1) {
-			reset($candidates);
 			return key($candidates);
 		}
 		throw new UnknownCommandException($verb);

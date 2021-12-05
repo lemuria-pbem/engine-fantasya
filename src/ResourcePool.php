@@ -74,7 +74,7 @@ class ResourcePool
 			if ($nextAvailable <= 0) {
 				continue;
 			}
-			$nextAddition = $demand < $nextAvailable ? $demand : $nextAvailable;
+			$nextAddition = min($demand, $nextAvailable);
 			$demand      -= $nextAddition;
 			$nextQuantity = new Quantity($commodity, $nextAddition);
 			$addition->add($nextQuantity);

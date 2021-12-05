@@ -40,6 +40,7 @@ class LemuriaInstructions extends StringList
 		}
 	}
 
+	/** @noinspection PhpSwitchStatementWitSingleBranchInspection */
 	public function replace(string $oldId, ?string $newId): void {
 		$newId = $newId ? ' ' . $newId : '';
 		$n     = count($this->commands);
