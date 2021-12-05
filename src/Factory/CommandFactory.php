@@ -46,6 +46,7 @@ use Lemuria\Engine\Fantasya\Command\Reserve;
 use Lemuria\Engine\Fantasya\Command\Route;
 use Lemuria\Engine\Fantasya\Command\Sell;
 use Lemuria\Engine\Fantasya\Command\Sentinel;
+use Lemuria\Engine\Fantasya\Command\Siege;
 use Lemuria\Engine\Fantasya\Command\Sort;
 use Lemuria\Engine\Fantasya\Command\Spy;
 use Lemuria\Engine\Fantasya\Command\Steal;
@@ -222,6 +223,9 @@ class CommandFactory
 		'ATTACKIEREN'  => true,
 		'BANNER'       => true,
 		'BEKLAUEN'     => 'STEHLEN',
+		'BELAGERE'     => 'BELAGERN',
+		'BELAGERN'     => true,
+		'BELAGERUNG'   => 'BELAGERN',
 		'BENENNEN'     => 'NAME',
 		'BENUTZEN'     => true,
 		'BESCHREIBEN'  => 'BESCHREIBUNG',
@@ -578,6 +582,7 @@ class CommandFactory
 			$command = match ($verb) {
 				'ATTACKIEREN'  => Attack::class,
 				'BANNER'       => Banner::class,
+				'BELAGERN'     => Siege::class,
 				'BENUTZEN'     => Apply::class,
 				'BESCHREIBUNG' => Describe::class,
 				'BESTEIGEN'    => Board::class,

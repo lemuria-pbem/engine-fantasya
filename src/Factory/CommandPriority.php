@@ -51,7 +51,7 @@ final class CommandPriority
 		'Recruit'          => 48,
 		'EFFECT_MIDDLE'    => 50,
 		'EVENT_MIDDLE'     => 51,
-		// BELAGERN => 53,
+		'Siege'            => 53,
 		'Cast'             => 55,
 		'Explore'          => 56,
 		'Smash'            => 58,
