@@ -69,8 +69,7 @@ final class Create extends DelegatedCommand
 		// MACHEN Kräuter
 		$lower = strtolower($what);
 		if ($lower === 'kraut' || $lower === 'kraeuter' || $lower === 'kräuter') {
-			$herb = self::createCommodity(HerbModel::class);
-			return new Herb($this->phrase, $this->context, new Job($herb, $number));
+			return new Herb($this->phrase, $this->context, new Job(new HerbModel(), $number));
 		}
 		if ($lower === 'greifenei' || $lower === 'greifeneier') {
 			$egg = self::createCommodity(GriffineggModel::class);
