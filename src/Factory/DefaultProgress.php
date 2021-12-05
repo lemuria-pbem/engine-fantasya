@@ -22,6 +22,7 @@ use Lemuria\Engine\Fantasya\Event\Obtainment;
 use Lemuria\Engine\Fantasya\Event\Population;
 use Lemuria\Engine\Fantasya\Event\Recreate;
 use Lemuria\Engine\Fantasya\Event\Regrow;
+use Lemuria\Engine\Fantasya\Event\ResetSiege;
 use Lemuria\Engine\Fantasya\Event\Subsistence;
 use Lemuria\Engine\Fantasya\Event\Support;
 use Lemuria\Engine\Fantasya\Event\Timer;
@@ -36,7 +37,7 @@ class DefaultProgress implements Progress
 		// before
 		Administrator::class, Visit::class, Monster::class, Timer::class,
 		// middle
-		Conduct::class, Upkeep::class, Subsistence::class, Drift::class,
+		ResetSiege::class, Conduct::class, Upkeep::class, Subsistence::class, Drift::class,
 		// after
 		Finish::class, MarketUpdate::class, Founder::class, Support::class,
 		Population::class, Fauna::class, Griffinegg::class, Growth::class, Regrow::class,

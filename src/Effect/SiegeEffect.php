@@ -18,7 +18,7 @@ final class SiegeEffect extends AbstractConstructionEffect
 {
 	private int $perception = 0;
 
-	private bool $isActive = false;
+	private bool $isActive = true;
 
 	public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
@@ -42,6 +42,12 @@ final class SiegeEffect extends AbstractConstructionEffect
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
 		$this->perception = $data['perception'];
+		return $this;
+	}
+
+	public function reset(): SiegeEffect {
+		$this->isActive   = false;
+		$this->perception = 0;
 		return $this;
 	}
 
