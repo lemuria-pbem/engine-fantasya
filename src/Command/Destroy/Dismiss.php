@@ -7,12 +7,14 @@ use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Everything;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\DismissAllMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DismissEverythingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DismissMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DismissNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DismissNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DismissOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DismissSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseAllMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseNothingMessage;
@@ -45,6 +47,7 @@ use Lemuria\Model\Fantasya\Quantity;
 final class Dismiss extends UnitCommand
 {
 	use GiftTrait;
+	use SiegeTrait;
 
 	protected function run(): void {
 		$p = 1;
@@ -58,7 +61,9 @@ final class Dismiss extends UnitCommand
 		$commodity = $this->phrase->getLine($p);
 
 		$this->parseObject($count, $commodity);
-		if ($this->commodity instanceof Everything) {
+		if ($this->isSieged($this->unit->Construction())) {
+			$this->message(DismissSiegeMessage::class);
+		} else if ($this->commodity instanceof Everything) {
 			$this->dismissEverything();
 		} elseif ($this->commodity instanceof Peasant) {
 			$this->dismissPeasants();

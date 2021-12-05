@@ -9,6 +9,6 @@ class LeaveNotMessage extends AbstractUnitMessage
 	protected string $level = Message::FAILURE;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . 'is not inside anything it could leave.';
+		return 'Unit ' . $this->id . ' is not inside anything it could leave.';
 	}
 }

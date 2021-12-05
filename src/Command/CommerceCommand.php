@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Phrase;
@@ -26,9 +27,10 @@ use Lemuria\Model\Fantasya\Talent\Trading;
  */
 abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 {
-	private const ACTIVITY = 'Trade';
-
 	use DefaultActivityTrait;
+	use SiegeTrait;
+
+	private const ACTIVITY = 'Trade';
 
 	protected Resources $goods;
 

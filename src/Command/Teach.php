@@ -10,11 +10,13 @@ use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachBonusMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachExceptionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachSelfMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TeachSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachStudentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachUnableMessage;
 use Lemuria\Engine\Fantasya\Phrase;
@@ -32,6 +34,7 @@ final class Teach extends UnitCommand implements Activity
 {
 	use CamouflageTrait;
 	use ModifiedActivityTrait;
+	use SiegeTrait;
 
 	private const MAX_STUDENTS = 10;
 
@@ -121,6 +124,10 @@ final class Teach extends UnitCommand implements Activity
 	private function checkUnit(Unit $unit): bool {
 		if ($unit->Region() !== $this->unit->Region()) {
 			$this->message(TeachRegionMessage::class)->e($unit);
+			return false;
+		}
+		if ($this->isStoppedBySiege($this->unit, $unit)) {
+			$this->message(TeachSiegeMessage::class)->e($unit);
 			return false;
 		}
 		if ($unit->Party() === $this->unit->Party()) {

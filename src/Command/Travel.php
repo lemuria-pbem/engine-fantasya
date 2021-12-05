@@ -14,6 +14,7 @@ use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\NavigationTrait;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\TravelTrait;
 use Lemuria\Engine\Fantasya\Message\Party\TravelGuardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RoutePauseMessage;
@@ -24,6 +25,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TravelNoNavigationMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNoRidingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNotCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelRoadMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelSpeedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelRegionMessage;
@@ -43,6 +45,7 @@ class Travel extends UnitCommand implements Activity
 {
 	use DefaultActivityTrait;
 	use NavigationTrait;
+	use SiegeTrait;
 	use TravelTrait;
 
 	protected const ACTIVITY = 'Travel';
@@ -99,6 +102,10 @@ class Travel extends UnitCommand implements Activity
 	protected function run(): void {
 		if ($this->directions->count() <= 0) {
 			throw new UnknownCommandException();
+		}
+		if (!$this->canEnterOrLeave($this->unit)) {
+			$this->message(TravelSiegeMessage::class);
+			return;
 		}
 
 		$movement = $this->capacity->Movement();

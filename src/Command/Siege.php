@@ -13,6 +13,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\SiegeNotFoundMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SiegeNotGuardingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SiegeNotOurMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SiegeNotOurselvesMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\SiegeUnguardMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
 use Lemuria\Lemuria;
@@ -97,10 +98,16 @@ final class Siege extends UnitCommand
 		if ($besiegers->count()) {
 			$effect = $this->createEffect();
 		}
+		foreach ($this->construction->Inhabitants() as $unit /* @var Unit $unit */) {
+			if ($unit->IsGuarding()) {
+				$unit->setIsGuarding(false);
+				$this->message(SiegeUnguardMessage::class, $unit);
+			}
+		}
 		foreach ($besiegers as $unit /* @var Unit $unit */) {
 			/** @noinspection PhpUndefinedVariableInspection */
 			$effect->renew($unit);
-			$this->message(SiegeMessage::class)->e($this->construction);
+			$this->message(SiegeMessage::class, $unit)->e($this->construction);
 			$this->useCatapults($unit);
 		}
 		if ($this->construction->Size() <= 0) {
@@ -125,7 +132,7 @@ final class Siege extends UnitCommand
 				$size = max(0, $size - $damage);
 				$this->construction->setSize($size);
 			}
-			$this->message(SiegeDamageMessage::class)->e($this->construction)->p($damage);
+			$this->message(SiegeDamageMessage::class, $unit)->e($this->construction)->p($damage);
 		}
 	}
 

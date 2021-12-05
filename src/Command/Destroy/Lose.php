@@ -6,8 +6,10 @@ use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Everything;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseEmptyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseEverythingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LoseSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseToNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseToUnitMessage;
@@ -39,6 +41,7 @@ use Lemuria\Model\Fantasya\Quantity;
 final class Lose extends UnitCommand
 {
 	use GiftTrait;
+	use SiegeTrait;
 
 	protected function run(): void {
 		$p = 1;
@@ -52,7 +55,10 @@ final class Lose extends UnitCommand
 		$commodity = $this->phrase->getLine($p);
 
 		$this->parseObject($count, $commodity);
-		if ($this->commodity instanceof Everything) {
+
+		if ($this->isSieged($this->unit->Construction())) {
+			$this->message(LoseSiegeMessage::class);
+		} elseif ($this->commodity instanceof Everything) {
 			$this->loseEverything();
 		} elseif ($this->commodity instanceof Peasant) {
 			$this->dismissPeasants();

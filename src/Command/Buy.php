@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\BuyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BuyNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BuyOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CommerceNotPossibleMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\CommerceSiegeMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Quantity;
@@ -30,6 +31,10 @@ final class Buy extends CommerceCommand
 		parent::execute();
 		if (!$this->isTradePossible()) {
 			$this->message(CommerceNotPossibleMessage::class)->e($this->unit->Region());
+			return $this;
+		}
+		if ($this->isSieged($this->unit->Construction())) {
+			$this->message(CommerceSiegeMessage::class);
 			return $this;
 		}
 

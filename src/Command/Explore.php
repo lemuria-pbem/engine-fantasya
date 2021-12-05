@@ -7,9 +7,11 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\OneActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\ExploreExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ExploreMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ExploreNothingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ExploreSiegeMessage;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Herbage;
 use Lemuria\Model\Fantasya\Talent\Herballore;
@@ -26,6 +28,7 @@ final class Explore extends UnitCommand implements Activity
 {
 	use BuilderTrait;
 	use OneActivityTrait;
+	use SiegeTrait;
 
 	private const LEVEL = 3;
 
@@ -51,15 +54,19 @@ final class Explore extends UnitCommand implements Activity
 			return;
 		}
 
-		$region  = $this->unit->Region();
-		$herbage = $region->Herbage();
-		$this->unit->Party()->HerbalBook()->record($region, $herbage);
-		if ($herbage && !$this->context->getTurnOptions()->IsSimulation()) {
-			$herb       = $herbage->Herb();
-			$occurrence = $this->occurrence($herbage);
-			$this->message(ExploreMessage::class)->e($region)->s($herb)->p($occurrence);
+		if ($this->canEnterOrLeave($this->unit)) {
+			$region  = $this->unit->Region();
+			$herbage = $region->Herbage();
+			$this->unit->Party()->HerbalBook()->record($region, $herbage);
+			if ($herbage && !$this->context->getTurnOptions()->IsSimulation()) {
+				$herb       = $herbage->Herb();
+				$occurrence = $this->occurrence($herbage);
+				$this->message(ExploreMessage::class)->e($region)->s($herb)->p($occurrence);
+			} else {
+				$this->message(ExploreNothingMessage::class)->e($region);
+			}
 		} else {
-			$this->message(ExploreNothingMessage::class)->e($region);
+			$this->message(ExploreSiegeMessage::class);
 		}
 	}
 

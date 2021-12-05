@@ -10,12 +10,14 @@ use Lemuria\Engine\Fantasya\Message\Region\AttackBattleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackAllyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMonsterMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackInCastleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFightingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFoundMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackOwnUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackSelfMessage;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Combat;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Relation;
@@ -133,6 +135,10 @@ final class Attack extends UnitCommand
 		if ($party->Diplomacy()->has(Relation::COMBAT, $unit)) {
 			$this->message(AttackAllyMessage::class)->e($unit);
 			return false;
+		}
+		$construction = $unit->Construction();
+		if ($construction instanceof Castle && $construction !== $this->unit->Construction()) {
+			$this->message(AttackInCastleMessage::class)->e($unit);
 		}
 		return true;
 	}

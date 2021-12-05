@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\BuyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CommerceNotPossibleMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\CommerceSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellOnlyMessage;
@@ -31,6 +32,10 @@ final class Sell extends CommerceCommand
 		parent::execute();
 		if (!$this->isTradePossible()) {
 			$this->message(CommerceNotPossibleMessage::class)->e($this->unit->Region());
+			return $this;
+		}
+		if ($this->isSieged($this->unit->Construction())) {
+			$this->message(CommerceSiegeMessage::class);
 			return $this;
 		}
 

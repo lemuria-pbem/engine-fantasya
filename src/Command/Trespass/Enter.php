@@ -5,13 +5,16 @@ namespace Lemuria\Engine\Fantasya\Command\Trespass;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\FreeSpaceTrait;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterDeniedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterForbiddenMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterNotFoundMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EnterSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterTooLargeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LeaveSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Building\Signpost;
@@ -26,6 +29,7 @@ use Lemuria\Model\Fantasya\Relation;
 final class Enter extends UnitCommand
 {
 	use FreeSpaceTrait;
+	use SiegeTrait;
 
 	private const FORBIDDEN = [Signpost::class];
 
@@ -52,6 +56,10 @@ final class Enter extends UnitCommand
 			return;
 		}
 
+		if (!$this->initSiege($newConstruction)->canEnterOrLeave($this->unit)) {
+			$this->message(EnterSiegeMessage::class)->e($newConstruction);
+			return;
+		}
 		if ($this->isTooSmall($newConstruction, $this->unit)) {
 			$this->message(EnterTooLargeMessage::class)->e($newConstruction);
 			return;
@@ -62,8 +70,13 @@ final class Enter extends UnitCommand
 		}
 
 		if ($construction) {
-			$construction->Inhabitants()->remove($this->unit);
-			$this->message(LeaveConstructionDebugMessage::class)->e($construction);
+			if ($this->initSiege($construction)->canEnterOrLeave($this->unit)) {
+				$construction->Inhabitants()->remove($this->unit);
+				$this->message(LeaveConstructionDebugMessage::class)->e($construction);
+			} else {
+				$this->message(LeaveSiegeMessage::class);
+				return;
+			}
 		} else {
 			$vessel = $this->unit->Vessel();
 			if ($vessel) {

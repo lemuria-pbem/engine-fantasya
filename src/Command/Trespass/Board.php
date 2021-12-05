@@ -4,9 +4,11 @@ namespace Lemuria\Engine\Fantasya\Command\Trespass;
 
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardDeniedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LeaveSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardNotFoundMessage;
@@ -21,6 +23,8 @@ use Lemuria\Model\Fantasya\Vessel;
  */
 final class Board extends UnitCommand
 {
+	use SiegeTrait;
+
 	protected function run(): void {
 		if ($this->phrase->count() < 1) {
 			throw new InvalidCommandException($this);
@@ -49,8 +53,13 @@ final class Board extends UnitCommand
 		} else {
 			$construction = $this->unit->Construction();
 			if ($construction) {
-				$construction->Inhabitants()->remove($this->unit);
-				$this->message(LeaveConstructionDebugMessage::class)->e($construction);
+				if ($this->initSiege($construction)->canEnterOrLeave($this->unit)) {
+					$construction->Inhabitants()->remove($this->unit);
+					$this->message(LeaveConstructionDebugMessage::class)->e($construction);
+				} else {
+					$this->message(LeaveSiegeMessage::class);
+					return;
+				}
 			}
 		}
 		$newVessel->Passengers()->add($this->unit);

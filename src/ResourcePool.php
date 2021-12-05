@@ -3,6 +3,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Intelligence;
@@ -20,6 +21,8 @@ use Lemuria\Model\Fantasya\Unit;
  */
 class ResourcePool
 {
+	use SiegeTrait;
+
 	protected Party $party;
 
 	protected Region $region;
@@ -52,6 +55,7 @@ class ResourcePool
 		if (!$this->units->has($id)) {
 			throw new LemuriaException('Unit ' . $unit . ' is not a pool member.');
 		}
+
 		$commodity = $quantity->Commodity();
 		$demand    = $quantity->Count();
 		if ($demand <= 0) {
@@ -64,6 +68,10 @@ class ResourcePool
 			if ($next === $unit) {
 				continue;
 			}
+			if ($this->isStoppedBySiege($unit, $next)) {
+				continue;
+			}
+
 			$nextId           = $next->Id();
 			$nextInventory    = $next->Inventory();
 			$nextReservations = $this->reservations[$nextId->Id()]; /* @var Resources $nextReservations */
@@ -132,6 +140,10 @@ class ResourcePool
 			if ($next === $unit) {
 				continue;
 			}
+			if ($this->isStoppedBySiege($unit, $next)) {
+				continue;
+			}
+
 			$nextId           = $next->Id();
 			$nextInventory    = $next->Inventory();
 			$nextReservations = $this->reservations[$nextId->Id()]; /* @var Resources $nextReservations */
@@ -184,6 +196,10 @@ class ResourcePool
 			if ($next === $unit) {
 				continue;
 			}
+			if ($this->isStoppedBySiege($unit, $next)) {
+				continue;
+			}
+
 			$nextId           = $next->Id();
 			$nextInventory    = $next->Inventory();
 			$nextReservations = $this->reservations[$nextId->Id()]; /* @var Resources $nextReservations */

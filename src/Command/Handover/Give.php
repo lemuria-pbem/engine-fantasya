@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Everything;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveNoInventoryMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveFailedMessage;
@@ -22,6 +23,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\GivePersonsToOwnMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveReceivedFromForeignMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveReceivedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveRejectedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GiveSiegeMessage;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
@@ -42,6 +44,7 @@ final class Give extends UnitCommand
 {
 	use CamouflageTrait;
 	use GiftTrait;
+	use SiegeTrait;
 
 	protected function run(): void {
 		$i               = 1;
@@ -57,6 +60,10 @@ final class Give extends UnitCommand
 		}
 
 		$this->parseObject($count, $commodity);
+		if ($this->isStoppedBySiege($this->unit, $this->recipient)) {
+			$this->message(GiveSiegeMessage::class)->e($this->recipient);
+			return;
+		}
 		if ($this->commodity instanceof Peasant) {
 			$this->givePersons($this->amount === PHP_INT_MAX ? $this->unit->Size() : $this->amount);
 			return;

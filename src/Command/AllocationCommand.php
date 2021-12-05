@@ -6,7 +6,9 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Consumer;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\AllocationSiegeMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party;
@@ -18,6 +20,7 @@ use Lemuria\Model\Fantasya\Resources;
  */
 abstract class AllocationCommand extends UnitCommand implements Consumer
 {
+	use SiegeTrait;
 	use WorkloadTrait;
 
 	private const QUOTA = 1.0;
@@ -79,6 +82,11 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	protected function initialize(): void {
 		parent::initialize();
 		$allocation = $this->context->getAllocation($this->unit->Region());
+		if ($this->isSieged($this->unit->Construction())) {
+			$this->message(AllocationSiegeMessage::class);
+			return;
+		}
+
 		$this->initWorkload();
 		$this->createDemand();
 		if (count($this->resources)) {
