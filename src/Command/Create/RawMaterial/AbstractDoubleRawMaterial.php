@@ -47,7 +47,7 @@ abstract class AbstractDoubleRawMaterial extends BasicRawMaterial
 		if ($this->calculus()->isInMaintainedConstruction()) {
 			if ($this->hasLodging) {
 				$talent          = $this->getRequiredTalent();
-				$this->knowledge = $this->calculus()->knowledge($talent->Talent());
+				$this->knowledge = $this->getProductivity($talent);
 				$size            = $this->unit->Size();
 				$production      = (int)floor($this->potionBoost($size) * $size * $this->knowledge->Level() / $talent->Level());
 			} else {

@@ -196,7 +196,7 @@ final class Smash extends UnitCommand implements Activity
 	}
 
 	private function destroy(Requirement $craft, Resources $material, int $size): int {
-		$level      = $this->calculus()->knowledge($craft->Talent())->Level();
+		$level      = $this->getProductivity($craft)->Level();
 		$capability = $level > 1 ? $this->unit->Size() * $level : $this->unit->Size();
 		$capability = $this->reduceByWorkload($capability);
 		$damage     = min($capability, $size);

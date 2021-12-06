@@ -9,8 +9,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Leuchtturm
   - Magierturm
   - Steuerturm
-- weitere Zauber:
-  - Tagtraum (7) (unterbricht Bewachung, verringert Produktivität)
 
 ## Neue Funktionen
 

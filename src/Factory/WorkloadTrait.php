@@ -2,11 +2,20 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
+use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Effect\Daydream;
+use Lemuria\Engine\Fantasya\Message\Unit\Cast\DaydreamProductivityMessage;
+use Lemuria\Engine\Fantasya\State;
+use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity\Potion\DrinkOfCreation;
+use Lemuria\Model\Fantasya\Talent;
+use Lemuria\Model\Fantasya\Unit;
 
 trait WorkloadTrait
 {
 	use ContextTrait;
+	use MessageTrait;
 
 	protected int $fullProduction;
 
@@ -33,5 +42,25 @@ trait WorkloadTrait
 		$effect     = $this->context->getCalculus($this->unit)->hasApplied(DrinkOfCreation::class);
 		$potionSize = $effect?->Count() * DrinkOfCreation::PERSONS;
 		return min(2.0, 1.0 + $potionSize / $unitSize);
+	}
+
+	protected function getProductivity(Ability|Talent|string $talent, ?Calculus $calculus = null): Ability {
+		if ($talent instanceof Ability) {
+			$talent = $talent->Talent();
+		}
+		if (!$calculus) {
+			$calculus = $this->calculus();
+		}
+		$unit      = $calculus->Unit();
+		$knowledge = $calculus->knowledge($talent);
+		$level     = $knowledge->Level();
+		$effect    = new Daydream(State::getInstance());
+		$effect    = Lemuria::Score()->find($effect->setUnit($unit));
+		if ($effect instanceof Daydream) {
+			$level = max(1, $level - $effect->Level());
+			$this->message(DaydreamProductivityMessage::class, $unit);
+			return new Ability($knowledge->Talent(), Ability::getExperience($level));
+		}
+		return $knowledge;
 	}
 }

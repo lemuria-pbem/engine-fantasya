@@ -81,7 +81,7 @@ final class Entertain extends AllocationCommand implements Activity
 		if ($this->phrase->count() > 0) {
 			$this->demand = (int)$this->phrase->getParameter();
 		}
-		$level = $this->calculus()->knowledge(Entertaining::class)->Level();
+		$level = $this->getProductivity(Entertaining::class)->Level();
 		if ($level > 0) {
 			$this->fee = $this->unit->Size() * $level * self::FEE;
 			$this->fee = $this->reduceByWorkload($this->fee);

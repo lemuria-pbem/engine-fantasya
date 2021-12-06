@@ -87,9 +87,8 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 	 */
 	protected function calculateProduction(Requirement $craft): int {
 		$production = 0;
-		$talent     = $craft->Talent();
 		$cost       = $craft->Level();
-		$level      = $this->calculus()->knowledge($talent::class)->Level();
+		$level      = $this->getProductivity($craft)->Level();
 		if ($this->consumption > 0.0 && $level >= $cost) {
 			$size       = $this->unit->Size();
 			$production = (int)floor($this->potionBoost($size) * $size * $level / $cost);

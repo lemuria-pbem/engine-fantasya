@@ -83,7 +83,7 @@ final class Tax extends AllocationCommand implements Activity
 		if ($this->phrase->count() > 0) {
 			$this->demand = (int)$this->phrase->getParameter();
 		}
-		$this->level = $this->calculus()->knowledge(Taxcollecting::class)->Level();
+		$this->level = $this->getProductivity(Taxcollecting::class)->Level();
 		if ($this->level > 0) {
 			$this->collectors = $this->getNumberOfTaxCollectors();
 			if ($this->collectors > 0) {

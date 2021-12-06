@@ -183,9 +183,8 @@ final class Construction extends AbstractProduct
 	private function calculateCastleProduction(int $size, int $pointsUsed = 0): int {
 		$castle = AbstractCastle::forSize($size);
 		$craft  = $castle->getCraft();
-		$talent = $craft->Talent();
 		$cost   = $craft->Level();
-		$level  = $this->calculus()->knowledge($talent::class)->Level();
+		$level  = $this->getProductivity($craft)->Level();
 		if ($level < $cost) {
 			return 0;
 		}

@@ -89,7 +89,7 @@ class BasicRawMaterial extends AllocationCommand implements Activity
 	 */
 	protected function createDemand(): void {
 		$requirement      = $this->getRequiredTalent();
-		$this->knowledge  = $this->calculus()->knowledge($requirement->Talent());
+		$this->knowledge  = $this->getProductivity($requirement);
 		$size             = $this->unit->Size();
 		$production       = (int)floor($this->potionBoost($size) * $size * $this->knowledge->Level() / $requirement->Level());
 		$this->production = $this->reduceByWorkload($production);
