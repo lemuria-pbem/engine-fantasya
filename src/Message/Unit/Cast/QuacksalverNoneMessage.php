@@ -2,10 +2,9 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit\Cast;
 
-use Lemuria\Engine\Fantasya\Message\Unit\AbstractUnitMessage;
 use Lemuria\Engine\Message;
 
-class QuacksalverNoneMessage extends AbstractUnitMessage
+class QuacksalverNoneMessage extends AbstractCastMessage
 {
 	protected string $level = Message::FAILURE;
 

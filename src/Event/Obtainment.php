@@ -13,6 +13,7 @@ use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Spell\AstralChaos;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
+use Lemuria\Model\Fantasya\Spell\Daydream;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
@@ -34,7 +35,8 @@ final class Obtainment extends AbstractEvent
 		3 => Fireball::class,
 		4 => AuraTransfer::class,
 		5 => ShockWave::class,
-		6 => AstralChaos::class
+		6 => AstralChaos::class,
+		7 => Daydream::class
 	];
 
 	private Talent $magic;
