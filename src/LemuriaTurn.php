@@ -118,8 +118,7 @@ class LemuriaTurn implements Turn
 					}
 				}
 			} else {
-				$this->enqueue($command);
-				if ($command instanceof Activity) {
+				if ($this->enqueue($command)) {
 					$units->add($context->Unit());
 				}
 			}
@@ -241,14 +240,18 @@ class LemuriaTurn implements Turn
 		return $versionFinder->get();
 	}
 
-	protected function enqueue(Action $action): void {
+	protected function enqueue(Action $action): bool {
 		if ($action instanceof CompositeCommand) {
+			$isActivity = false;
 			foreach ($action->getCommands() as $command) {
-				$this->addAction($command->getDelegate());
+				$command = $command->getDelegate();
+				$this->addAction($command);
+				$isActivity = $isActivity || $command instanceof Activity;
 			}
-		} else {
-			$this->addAction($action);
+			return $isActivity;
 		}
+		$this->addAction($action);
+		return $action instanceof Activity;
 	}
 
 	protected function addEvent(Event $event): Turn {
