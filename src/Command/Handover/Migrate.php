@@ -43,7 +43,7 @@ final class Migrate extends UnitCommand
 			$this->message(MigrateNotFoundMessage::class)->e($this->recipient);
 			return;
 		}
-		if (!$this->checkVisibility($this->calculus(), $this->recipient)) {
+		if (!$this->checkVisibility($this->unit, $this->recipient)) {
 			$this->message(MigrateNotFoundMessage::class)->e($this->recipient);
 			return;
 		}

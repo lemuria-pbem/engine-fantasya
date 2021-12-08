@@ -2,7 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
-use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Census;
+use Lemuria\Engine\Fantasya\Outlook;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -11,16 +12,17 @@ trait CamouflageTrait
 	use ContextTrait;
 
 	/**
-	 * Check recipients' acceptance for foreign parties.
+	 * Check target unit's visibility.
 	 */
-	private function checkVisibility(Calculus $calculus, Unit $target): bool {
-		$unit  = $calculus->Unit();
+	private function checkVisibility(Unit $unit, Unit $target): bool {
 		$party = $unit->Party();
 		$other = $target->Party();
 		if ($other === $party) {
 			return true;
 		}
-		if ($calculus->canDiscover($target)) {
+		$outlook     = new Outlook(new Census($party));
+		$apparitions = $outlook->Apparitions($target->Region());
+		if ($apparitions->has($target->Id())) {
 			return true;
 		}
 		return !$this->context->getTurnOptions()->IsSimulation() && $other->Diplomacy()->has(Relation::PERCEPTION, $unit);

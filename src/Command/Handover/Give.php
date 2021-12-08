@@ -62,8 +62,9 @@ final class Give extends UnitCommand
 			return;
 		}
 
+		$isVisible = $this->checkVisibility($this->unit, $this->recipient);
 		if (!$this->checkPermission()) {
-			if ($this->checkVisibility($this->calculus(), $this->recipient)) {
+			if ($isVisible) {
 				$this->message(GiveFailedMessage::class)->e($this->recipient);
 				$gift = new Quantity($this->commodity, $this->amount);
 				$this->message(GiveRejectedMessage::class, $this->recipient)->e($this->unit)->i($gift);
@@ -72,7 +73,7 @@ final class Give extends UnitCommand
 			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
 		}
 
-		if (!$this->checkVisibility($this->calculus(), $this->recipient)) {
+		if (!$isVisible) {
 			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
 			return;
 		}
