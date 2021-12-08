@@ -24,6 +24,6 @@ trait ModifiedActivityTrait
 	 * Get the new default command.
 	 */
 	public function getNewDefault(): ?UnitCommand {
-		return $this->newDefault;
+		return $this->preventDefault ? null : $this->newDefault;
 	}
 }

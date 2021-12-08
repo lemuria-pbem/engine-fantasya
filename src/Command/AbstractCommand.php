@@ -49,6 +49,20 @@ abstract class AbstractCommand implements Command
 	}
 
 	/**
+	 * Get the command ID.
+	 */
+	#[Pure] public function getId(): int {
+		return $this->id;
+	}
+
+	/**
+	 * Get the delegate to execute.
+	 */
+	public function getDelegate(): Command {
+		return $this;
+	}
+
+	/**
 	 * Prepare the execution of the command.
 	 *
 	 * @throws CommandException
@@ -67,20 +81,6 @@ abstract class AbstractCommand implements Command
 	public function execute(): Action {
 		Lemuria::Log()->debug('Executing command ' . $this->phrase . '.', ['command' => $this]);
 		$this->executeAction();
-		return $this;
-	}
-
-	/**
-	 * Get the command ID.
-	 */
-	#[Pure] public function getId(): int {
-		return $this->id;
-	}
-
-	/**
-	 * Get the delegate to execute.
-	 */
-	public function getDelegate(): Command {
 		return $this;
 	}
 

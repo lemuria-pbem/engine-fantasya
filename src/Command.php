@@ -11,15 +11,11 @@ interface Command extends Action
 {
 	/**
 	 * Get the command ID.
-	 *
-	 * @return int
 	 */
 	#[Pure] public function getId(): int;
 
 	/**
 	 * Get the delegate to execute.
-	 *
-	 * @return Command
 	 */
 	public function getDelegate(): Command;
 }
