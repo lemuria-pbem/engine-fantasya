@@ -319,7 +319,7 @@ final class Calculus
 				$remaining   = $count - $distributed;
 				$distributed = $remaining;
 				foreach ($commodities as $commodity/* @var Commodity $commodity */) {
-					$distribution->add(new Quantity($commodity, $remaining));
+					$distribution->add(new Quantity($commodity));
 				}
 			}
 			$distribution->setSize($remaining);
@@ -329,15 +329,12 @@ final class Calculus
 		}
 
 		foreach ($excess as $quantity /* @var Quantity $quantity */) {
-			$count     = $quantity->Count();
-			$bonus     = (int)floor($count / $maxSize);
-			$remaining = $count % $maxSize;
-			foreach ($distributions as $distribution /* @var Distribution $distribution */) {
-				$amount = $bonus + ($remaining-- > 0 ? 1 : 0);
-				if ($amount <= 0) {
-					break;
+			$count = $quantity->Count();
+			$bonus = (int)floor($count / $maxSize);
+			if ($bonus > 0) {
+				foreach ($distributions as $distribution /* @var Distribution $distribution */) {
+					$distribution->add(new Quantity($quantity->Commodity(), $bonus));
 				}
-				$distribution->add(new Quantity($quantity->Commodity(), $amount));
 			}
 		}
 
