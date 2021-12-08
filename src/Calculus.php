@@ -255,23 +255,33 @@ final class Calculus
 	 * @return WeaponSkill[]
 	 */
 	public function weaponSkill(): array {
-		$fistfight = $this->knowledge(Fistfight::class);
-		$stoning   = $this->knowledge(Stoning::class);
-		$skills    = [new WeaponSkill($fistfight), new WeaponSkill($stoning)];
-		$order     = [0, 0];
-
+		$skills  = [];
+		$order   = [];
+		$melee   = 0;
+		$distant = 0;
 		foreach ($this->unit->Knowledge() as $ability /* @var Ability $ability */) {
 			$talent = $ability->Talent();
 			if (WeaponSkill::isSkill($talent)) {
 				$skill       = $this->knowledge($talent);
 				$experience  = $skill->Experience();
 				if ($experience > 0) {
-					$skills[] = new WeaponSkill($skill);
-					$order[]  = $experience;
+					$weaponSkill = new WeaponSkill($skill);
+					$skills[]    = $weaponSkill;
+					$order[]     = $experience;
+					if ($weaponSkill->isMelee() && $experience > $melee) {
+						$melee = $experience;
+					}
+					if ($weaponSkill->isDistant() && $experience > $distant) {
+						$distant = $experience;
+					}
 				}
 			}
 		}
 
+		$skills[] = new WeaponSkill(new Ability(self::createTalent(Fistfight::class), $melee));
+		$order[]  = 0;
+		$skills[] = new WeaponSkill(new Ability(self::createTalent(Stoning::class), $distant));
+		$order[]  = 0;
 		arsort($order);
 		$weaponSkills = [];
 		foreach (array_keys($order) as $i) {

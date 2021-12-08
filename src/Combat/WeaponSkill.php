@@ -56,6 +56,7 @@ class WeaponSkill
 	private static Talent $stoning;
 
 	public static function isSkill(Talent $talent): bool {
+		self::initTalents();
 		return match ($talent) {
 			self::$bladefighting, self::$spearfighting,	self::$archery, self::$crossbowing, self::$catapulting => true,
 			default => false
@@ -63,7 +64,7 @@ class WeaponSkill
 	}
 
 	public function __construct(private Ability $skill) {
-		$this->initTalents();
+		self::initTalents();
 	}
 
 	#[Pure] public function Skill(): Ability {
@@ -111,7 +112,7 @@ class WeaponSkill
 	/**
 	 * Init static talents.
 	 */
-	protected function initTalents() {
+	protected static function initTalents() {
 		if (!self::$archery) {
 			self::$archery       = self::createTalent(Archery::class);
 			self::$bladefighting = self::createTalent(Bladefighting::class);
