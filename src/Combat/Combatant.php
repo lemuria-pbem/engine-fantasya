@@ -34,6 +34,11 @@ class Combatant
 	 */
 	public array $fighters;
 
+	/**
+	 * @var Fighter[]
+	 */
+	public array $refugees = [];
+
 	public int $distracted = 0;
 
 	public bool $hasCast = false;
@@ -59,9 +64,10 @@ class Combatant
 
 	private Attack $attack;
 
+	/**
+	 * @var int[]
+	 */
 	private array $fighterIndex;
-
-	private array $refugees = [];
 
 	public function __construct(private Army $army, private Unit $unit) {
 		$this->initId();

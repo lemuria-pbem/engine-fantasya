@@ -133,7 +133,7 @@ final class Teach extends UnitCommand implements Activity
 		if ($unit->Party() === $this->unit->Party()) {
 			return true;
 		}
-		if (!$this->checkVisibility($this->calculus(), $unit)) {
+		if (!$this->checkVisibility($this->unit, $unit)) {
 			$this->message(TeachRegionMessage::class)->e($unit);
 			return false;
 		}

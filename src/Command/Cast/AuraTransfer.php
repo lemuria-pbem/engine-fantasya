@@ -41,16 +41,16 @@ final class AuraTransfer extends AbstractCast
 
 		$this->recipient = $this->cast->Target();
 		$context         = $this->cast->Context();
-		$calculus        = $context->getCalculus($unit);
+		$isVisible       = $this->checkVisibility($unit, $this->recipient);
 		if (!$this->checkPermission()) {
-			if ($this->checkVisibility($calculus, $this->recipient)) {
+			if ($isVisible) {
 				$this->message(AuraTransferFailedMessage::class, $unit)->e($this->recipient);
 				$this->message(AuraTransferRejectedMessage::class, $this->recipient)->e($unit);
 				return;
 			}
 			$this->message(AuraTransferNotFound::class, $unit)->e($this->recipient);
 		}
-		if (!$this->checkVisibility($calculus, $this->recipient)) {
+		if (!$isVisible) {
 			$this->message(AuraTransferNotFound::class, $unit)->e($this->recipient);
 			return;
 		}

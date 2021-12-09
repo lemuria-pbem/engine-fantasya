@@ -330,6 +330,9 @@ class Battle
 			foreach ($combatant->fighters as $fighter) {
 				$hitpoints[$id] += $fighter->health;
 			}
+			foreach ($combatant->refugees as $fighter) {
+				$hitpoints[$id] += $fighter->health;
+			}
 		}
 
 		foreach ($units as $id => $unit) {

@@ -46,7 +46,7 @@ final class Contact extends UnitCommand
 				return;
 			}
 			$party = $unit ? $census->getParty($unit) : null;
-			if ($unit && $party !== $we && $unit->Region() === $region && $this->checkVisibility($this->calculus(), $unit)) {
+			if ($unit && $party !== $we && $unit->Region() === $region && $this->checkVisibility($this->unit, $unit)) {
 				$diplomacy->contact($unit);
 				$diplomacy->knows($party);
 				$this->createEffect($party, $unit);
