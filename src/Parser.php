@@ -24,9 +24,6 @@ class Parser
 
 	private int $skipLevel = 0;
 
-	public function __construct(protected Context $context) {
-	}
-
 	public function parse(Move $commands): Parser {
 		foreach ($commands as $command) {
 			$command = $this->replaceDefaultCommand(trim($command));
@@ -92,9 +89,9 @@ class Parser
 	/**
 	 * Default commands can have various forms:
 	 *
-	 * - @COMMAND is a short form of @ COMMAND
+	 * - @COMMAND is a short form of @ * COMMAND
 	 * - +m COMMAND (m > 0) is a short form of @ m COMMAND
-	 * - =n COMMAND (n > 0) is a short form of @ n-1/n+1 COMMAND
+	 * - =n COMMAND (n > 0) is a short form of @ 0/n+1 COMMAND
 	 * - +m =n COMMAND (m, n > 0) is a short form of @ m/n+1 COMMAND
 	 * - =n +m COMMAND (m, n > 0) is a short form of @ m/n+1 COMMAND
 	 */
@@ -123,7 +120,8 @@ class Parser
 			}
 
 			if (preg_match('/^[+]([0-9]+) +([^ ]+.*)$/', $command, $matches) === 1) {
-				return '@ ' . $matches[1] . ' ' . $matches[2];
+				$n = (int)$matches[1];
+				return '@ ' . ($n >=2 ? $n . ' ' : '') . $matches[2];
 			}
 
 			if (preg_match('/^[=]([0-9]+) +([^ ]+.*)$/', $command, $matches) === 1) {
@@ -131,8 +129,7 @@ class Parser
 				if ($n === 0) {
 					$n = 1;
 				}
-				$m = $n++ - 1;
-				return '@ ' . $m . '/' . $n . ' ' . $matches[2];
+				return '@ 0/' . ++$n . ' ' . $matches[2];
 			}
 		}
 		return $command;

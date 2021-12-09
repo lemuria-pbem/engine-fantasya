@@ -6,7 +6,6 @@ use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
-use Lemuria\Model\Fantasya\Party;
 
 class TeachPartyMessage extends AbstractUnitMessage
 {
@@ -26,7 +25,7 @@ class TeachPartyMessage extends AbstractUnitMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->party = $message->get(Party::class);
-		$this->unit = $message->get(self::UNIT);
+		$this->party = $message->get();
+		$this->unit  = $message->get(self::UNIT);
 	}
 }

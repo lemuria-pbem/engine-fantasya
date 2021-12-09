@@ -5,11 +5,14 @@ namespace Lemuria\Engine\Fantasya\Factory;
 use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
+use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 
 trait DefaultActivityTrait
 {
 	private bool $isDefault = false;
+
+	private bool $preventDefault = false;
 
 	/**
 	 * Get the activity class.
@@ -29,7 +32,7 @@ trait DefaultActivityTrait
 	 * Get the new default command.
 	 */
 	public function getNewDefault(): ?UnitCommand {
-		return $this;
+		return $this->preventDefault ? null : $this;
 	}
 
 	/**
@@ -37,5 +40,13 @@ trait DefaultActivityTrait
 	 */
 	public function setIsDefault(bool $isDefault = true): void {
 		$this->isDefault = $isDefault;
+	}
+
+	/**
+	 * Prevent that this command is used as new default.
+	 */
+	public function preventDefault(): Activity {
+		$this->preventDefault = true;
+		return $this;
 	}
 }

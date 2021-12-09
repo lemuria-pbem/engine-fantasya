@@ -26,18 +26,9 @@ class Distribution extends Resources
 
 		$lose = new Resources();
 		if ($this->size > 0) {
-			$rate        = $size / $this->size;
 			$this->size -= $size;
 			foreach ($this as $quantity /* @var Quantity $quantity */) {
-				$count = $quantity->Count();
-				$lost  = (int)floor($rate * $count);
-				if ($lost > 0) {
-					$commodity = $quantity->Commodity();
-					$lose->add(new Quantity($commodity, $lost));
-				}
-			}
-			foreach ($lose as $quantity /* @var Quantity $quantity */) {
-				$this->remove($quantity);
+				$lose->add(new Quantity($quantity->Commodity(), $size * $quantity->Count()));
 			}
 		}
 		return $lose;

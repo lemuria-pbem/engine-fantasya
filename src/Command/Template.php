@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command\Template\Copy;
 use Lemuria\Engine\Fantasya\Command\Template\DefaultCommand;
@@ -30,7 +31,7 @@ final class Template extends DelegatedCommand
 				$command = new CompositeCommand($this->phrase, $this->context);
 				return $command->setCommands([
 					new Copy($this->phrase, $this->context),
-					$this->context->Factory()->create(new Phrase($phrase))
+					$this->createOrder($phrase)
 				]);
 			}
 
@@ -51,11 +52,20 @@ final class Template extends DelegatedCommand
 				$command = new CompositeCommand($this->phrase, $this->context);
 				return $command->setCommands([
 					new Copy(new Phrase($copy), $this->context),
-					$this->context->Factory()->create(new Phrase($phrase))
+					$this->createOrder($phrase)
 				]);
 			}
 		}
 
 		return new DefaultCommand($this->phrase, $this->context);
+	}
+
+	private function createOrder(string $phrase): Command {
+		$order    = $this->context->Factory()->create(new Phrase($phrase));
+		$delegate = $order->getDelegate();
+		if ($delegate instanceof Activity) {
+			$delegate->preventDefault();
+		}
+		return $order;
 	}
 }

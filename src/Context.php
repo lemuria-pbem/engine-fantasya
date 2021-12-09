@@ -44,7 +44,7 @@ final class Context implements Reassignment
 	private array $resourcePool = [];
 
 	#[Pure] public function __construct(private State $state) {
-		$this->parser  = new Parser($this);
+		$this->parser  = new Parser();
 		$this->factory = new CommandFactory($this);
 		$this->mapper  = new UnitMapper();
 	}

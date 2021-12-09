@@ -28,4 +28,9 @@ interface Activity
 	 * Set the default status.
 	 */
 	public function setIsDefault(bool $isDefault = true): void;
+
+	/**
+	 * Prevent that this command is used as new default.
+	 */
+	public function preventDefault(): Activity;
 }

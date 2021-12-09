@@ -14,7 +14,10 @@ trait OneActivityTrait
 		return microtime();
 	}
 
+	/**
+	 * @todo Check if this can be removed.
+	 */
 	public function getNewDefault(): ?UnitCommand {
-		return $this;
+		return $this->preventDefault ? null : $this;
 	}
 }

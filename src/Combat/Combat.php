@@ -657,7 +657,10 @@ class Combat extends CombatModel
 				$fA++;
 				$hit = 0;
 			}
-			$nextD = (int)floor(++$nextA * $rate);
+			$fDStep = $nextD;
+			$nextD  = (int)floor(++$nextA * $rate);
+			$fDStep = $nextD - $fDStep;
+			$fD    += $fDStep;
 		}
 
 		return $damage;
@@ -705,7 +708,6 @@ class Combat extends CombatModel
 					if ($combatant->Size() <= 0) {
 						unset($combatants[$c]);
 						$combatants = array_values($combatants);
-						$unit->setIsGuarding(false)->setIsHiding(false);
 						// Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' was wiped out.');
 					} else {
 						//$combatant->fighters = array_values($combatant->fighters);

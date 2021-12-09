@@ -121,7 +121,7 @@ final class Attack extends UnitCommand
 			$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
 			return false;
 		}
-		if (!$this->checkVisibility($this->calculus(), $unit)) {
+		if (!$this->checkVisibility($this->unit, $unit)) {
 			$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
 			return false;
 		}
