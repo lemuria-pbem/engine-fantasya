@@ -4,6 +4,11 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
+- BELAGERN ggf. aufheben, wenn Angriff erfolgt ist
+- KOMMANDO ta klappt nicht [oro]
+- MACHEN Pferd soll Default MACHEN Elefant ersetzen
+- Monster dürfen keine leere Einheit bestehlen
+- Befehlschecker für BOTSCHAFT soll Sonderzeichen akzeptieren
 - weitere Gebäude:
   - Hafen
   - Leuchtturm
@@ -47,7 +52,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - weitere Zauber:
   - Ring der Unsichtbarkeit (10) (erschafft einen Ring)
   - Luftschiff (11) (Einheit mit Wagen/Schiff reist durch die Luft)
-  - Erwecke Ents (12) (Ents bewachen den Wald, kämpfen im Kampf)
+  - Erwecke Baumhirten (12) (Baumhirten bewachen den Wald, kämpfen im Kampf)
 
 ## Ideen
 

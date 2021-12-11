@@ -10,7 +10,6 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity\Potion\DrinkOfCreation;
 use Lemuria\Model\Fantasya\Talent;
-use Lemuria\Model\Fantasya\Unit;
 
 trait WorkloadTrait
 {

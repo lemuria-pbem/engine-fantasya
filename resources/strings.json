@@ -563,7 +563,7 @@
 		"SiegeDamageMessage": "Die Einheit $id zerstört {$damage:Größenpunkt} am Gebäude $construction durch Katapultbeschuss.",
 		"SiegeDestroyMessage": "Das Gebäude $construction wurde durch die Belagerung vollständig dem Erdboden gleichgemacht.",
 		"SiegeLeaveMessage": "Die Einheit $id verlässt das Gebäude für eine Belagerung.",
-		"SiegeMessage": "Die Einheit $id belagert das Gebäude $sonstruction.",
+		"SiegeMessage": "Die Einheit $id belagert das Gebäude $construction.",
 		"SiegeNotFightingMessage": "Die Einheit $id wird an keiner Belagerung teilnehmen.",
 		"SiegeNotFoundMessage": "Die Einheit $id kann das Gebäude $construction nicht finden.",
 		"SiegeNotGuardingMessage": "Die Einheit $id muss vor einer Belagerung die Region bewachen.",
