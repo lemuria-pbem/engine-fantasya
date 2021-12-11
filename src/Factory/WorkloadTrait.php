@@ -14,7 +14,6 @@ use Lemuria\Model\Fantasya\Talent;
 trait WorkloadTrait
 {
 	use ContextTrait;
-	use MessageTrait;
 
 	protected int $fullProduction;
 

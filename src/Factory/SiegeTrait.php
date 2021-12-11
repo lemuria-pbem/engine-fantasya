@@ -16,9 +16,8 @@ trait SiegeTrait
 
 	protected function initSiege(?Construction $construction = null): self {
 		if ($construction) {
-			$this->siege = new SiegeEffect(State::getInstance());
-			$this->siege->setConstruction($construction);
-			$effect = Lemuria::Score()->find($this->siege);
+			$siege  = new SiegeEffect(State::getInstance());
+			$effect = Lemuria::Score()->find($siege->setConstruction($construction));
 			if ($effect instanceof SiegeEffect) {
 				$this->siege = $effect;
 			}
@@ -45,7 +44,7 @@ trait SiegeTrait
 	}
 
 	protected function isStoppedBySiege(Unit $we, Unit $other): bool {
-		$ownConstruction = $we->Construction();
+		$ownConstruction   = $we->Construction();
 		$otherConstruction = $other->Construction();
 		if ($ownConstruction === $otherConstruction) {
 			return false;
@@ -53,12 +52,12 @@ trait SiegeTrait
 
 		if ($ownConstruction && !$otherConstruction) {
 			$this->initSiege($ownConstruction);
-			return $this->canEnterOrLeave($we) || $this->canEnterOrLeave($other);
+			return !($this->canEnterOrLeave($we) || $this->canEnterOrLeave($other));
 		}
 
 		if (!$ownConstruction && $otherConstruction) {
 			$this->initSiege($otherConstruction);
-			return $this->canEnterOrLeave($we) || $this->canEnterOrLeave($other);
+			return !($this->canEnterOrLeave($we) || $this->canEnterOrLeave($other));
 		}
 
 		$this->initSiege($ownConstruction);
@@ -67,6 +66,6 @@ trait SiegeTrait
 		$this->initSiege($otherConstruction);
 		$weCanEnter    = $this->canEnterOrLeave($we);
 		$otherCanLeave = $this->canEnterOrLeave($other);
-		return $weCanLeave && $weCanEnter || $otherCanLeave && $otherCanEnter || $weCanLeave && $otherCanLeave;
+		return !($weCanLeave && $weCanEnter || $otherCanLeave && $otherCanEnter || $weCanLeave && $otherCanLeave);
 	}
 }

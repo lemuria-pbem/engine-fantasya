@@ -41,7 +41,7 @@ class Seek implements Act
 			if ($unit->Construction() || $unit->Vessel()) {
 				continue;
 			}
-			if ($calculus->canDiscover($unit)) {
+			if ($unit->Size() > 0 && $calculus->canDiscover($unit)) {
 				$this->enemy->add($unit);
 			}
 		}

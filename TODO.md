@@ -4,16 +4,13 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
-- BELAGERN ggf. aufheben, wenn Angriff erfolgt ist
-- KOMMANDO ta klappt nicht [oro]
-- MACHEN Pferd soll Default MACHEN Elefant ersetzen
-- Monster dürfen keine leere Einheit bestehlen
-- Befehlschecker für BOTSCHAFT soll Sonderzeichen akzeptieren
 - weitere Gebäude:
   - Hafen
   - Leuchtturm
   - Magierturm
   - Steuerturm
+- ActivityProtocol und Befehlsvorlage überarbeiten und vereinfachen
+- BELAGERN ggf. aufheben, wenn Angriff erfolgt ist
 
 ## Neue Funktionen
 

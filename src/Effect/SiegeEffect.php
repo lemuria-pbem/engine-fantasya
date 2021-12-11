@@ -25,7 +25,7 @@ final class SiegeEffect extends AbstractConstructionEffect
 	}
 
 	public function IsActive(): bool {
-		return $this->IsActive();
+		return $this->isActive;
 	}
 
 	public function Perception(): int {
