@@ -4,13 +4,23 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
+- Erkennung von Gegenstandsnamen aus mehreren Worten
+- Bewacher dürfen nicht KÄMPFEN Nicht oder KÄMPFEN Fliehen setzen
+- Kampfeinheiten beenden Bewachung, wenn alle geflohen sind
 - weitere Gebäude:
   - Hafen
+    - Schiffe können überall anlegen
+    - Wache im Hafen verhindert, dass fremde Schiffe anlegen
+    - Hafengröße muss mindestens Schiffsklasse entsprechen
+    - Hafenmeister erhebt Zoll auf Luxuswaren
   - Leuchtturm
+    - erhöht Sichtweite
+    - verhindert, dass Schiffe im Sturm abtreiben
   - Magierturm
-  - Steuerturm
+    - verdoppelt Aura-Regeneration
+    - verringert Aurabedarf
+    - Größe muss mindestens Summe des Magietalents der Bewohner entsprechen
 - ActivityProtocol und Befehlsvorlage überarbeiten und vereinfachen
-- BELAGERN ggf. aufheben, wenn Angriff erfolgt ist
 
 ## Neue Funktionen
 
@@ -27,6 +37,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Alchemistenküche
   - Kamelzucht
   - Pferdezucht
+  - Kanal
 - weitere Zauber:
   - Beschleunigung (8) (mehrfache Angriffe)
   - Erdbeben (9) (zerstört Gebäude)
@@ -57,8 +68,9 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Umweltereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE
 - Seekampf/Piraterie
-- SABOTIERE (Spion versenkt Schiff)
+- SABOTIEREN (Spion versenkt Schiff)
 - VERSENKEN (Schiff vor Entern bewahren)
+- EROBERN (fremden Hafen einnehmen)
 - Monsterrasse bestimmt maximalen Übermacht-Faktor
 - Textreport im Markdown-Format
 - Einstellen der erwünschten Reportformate
@@ -78,3 +90,4 @@ werden, und Handel kann analog über Handelsrouten organisiert werden.
 
 - ALTERNATIVE für LERNEN ohne Lehrer
 - FORST, HERDE für automatisches Baumfällen und Dressieren
+- STEUERN auf Märkten legt einen Steuersatz fest
