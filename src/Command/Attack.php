@@ -14,8 +14,11 @@ use Lemuria\Engine\Fantasya\Message\Unit\AttackInCastleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFightingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFoundMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackOnVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackOwnUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackSelfMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Combat;
@@ -136,9 +139,28 @@ final class Attack extends UnitCommand
 			$this->message(AttackAllyMessage::class)->e($unit);
 			return false;
 		}
-		$construction = $unit->Construction();
-		if ($construction instanceof Castle && $construction !== $this->unit->Construction()) {
+
+		$construction    = $unit->Construction();
+		$ourConstruction = $this->unit->Construction();
+		if ($construction instanceof Castle && $construction !== $ourConstruction) {
 			$this->message(AttackInCastleMessage::class)->e($unit);
+			return false;
+		}
+		$vessel    = $unit->Vessel();
+		$ourVessel = $this->unit->Vessel();
+		if ($vessel && $vessel !== $ourVessel) {
+			$this->message(AttackOnVesselMessage::class)->e($unit);
+			return false;
+		}
+
+		if (!$construction && !$vessel) {
+			if ($ourConstruction) {
+				$ourConstruction->Inhabitants()->remove($this->unit);
+				$this->message(LeaveConstructionMessage::class)->e($ourConstruction);
+			} elseif ($ourVessel) {
+				$ourVessel->Passengers()->remove($this->unit);
+				$this->message(LeaveVesselMessage::class)->e($ourVessel);
+			}
 		}
 		return true;
 	}
