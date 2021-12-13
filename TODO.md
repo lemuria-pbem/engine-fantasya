@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
-- Bewacher dürfen nicht KÄMPFEN Nicht oder KÄMPFEN Fliehen setzen
 - Kampfeinheiten beenden Bewachung, wenn alle geflohen sind
 - weitere Gebäude:
   - Hafen

@@ -393,6 +393,7 @@
 		"GriffineggStealOnlyMessage": "Die Einheit $id konnte nur $eggs stehlen.",
 		"GrowthMessage": "In der Region $id {wächst:$trees} $tree.",
 		"GuardAlreadyMessage": "Die Einheit $id bewacht bereits die Region.",
+		"GuardBattleRowMessage": "Die Einheit $id kämpft nicht und kann deshalb nicht bewachen.",
 		"GuardMessage": "Die Einheit $id bewacht nun die Region.",
 		"GuardSiegeMessage": "Die Einheit $id ist in einem belagerten Gebäude und kann nicht bewachen.",
 		"GuardWithoutWeaponMessage": "Die Einheit $id kann die Region nicht ohne Waffen bewachen.",

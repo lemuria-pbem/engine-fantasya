@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardMessage;
+use Lemuria\Model\Fantasya\Combat;
 
 /**
  * A watching monster will always guard a region.
@@ -23,7 +24,7 @@ class Watch implements Act
 
 	public function act(): Watch {
 		$this->isGuarding = $this->unit->IsGuarding();
-		if (!$this->isGuarding) {
+		if (!$this->isGuarding && $this->unit->BattleRow() >= Combat::DEFENSIVE) {
 			$this->unit->setIsGuarding(true);
 			$this->message(GuardMessage::class, $this->unit);
 		}

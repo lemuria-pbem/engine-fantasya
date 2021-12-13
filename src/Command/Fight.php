@@ -45,6 +45,10 @@ final class Fight extends UnitCommand
 				break;
 			case 'nicht' :
 				$this->unit->setBattleRow(Combat::BYSTANDER);
+				if ($this->unit->IsGuarding()) {
+					$this->unit->setIsGuarding(false);
+					$this->message(FightUnguardMessage::class);
+				}
 				break;
 			case 'vorn' :
 			case 'vorne' :

@@ -5,9 +5,11 @@ namespace Lemuria\Engine\Fantasya\Command\Sentinel;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardAlreadyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GuardBattleRowMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardWithoutWeaponMessage;
+use Lemuria\Model\Fantasya\Combat;
 
 /**
  * Implementation of command BEWACHEN.
@@ -23,6 +25,10 @@ final class Guard extends UnitCommand
 	protected function run(): void {
 		if ($this->unit->IsGuarding()) {
 			$this->message(GuardAlreadyMessage::class);
+			return;
+		}
+		if ($this->unit->BattleRow() <= Combat::BYSTANDER) {
+			$this->message(GuardBattleRowMessage::class);
 			return;
 		}
 		foreach ($this->calculus()->weaponSkill() as $skill) {
