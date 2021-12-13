@@ -10,9 +10,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\GrantNoConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantNotInsideMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantTakeoverMessage;
-use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * A unit who is owner of a construction or vessel grants another unit inside the command over it.
