@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
-- Kampfeinheiten beenden Bewachung, wenn alle geflohen sind
 - weitere Gebäude:
   - Hafen
     - Schiffe können überall anlegen

@@ -233,6 +233,7 @@
 		"AttackOnVesselMessage": "Die Einheit $id kann die Einheit $unit auf dem Schiff nicht angreifen.",
 		"AttackOwnUnitMessage": "Die Einheit $id weigert sich, die Einheit $unit der eigenen Partei anzugreifen.",
 		"AttackSelfMessage": "Die Einheit $id wird nicht gegen sich selbst kämpfen.",
+		"AttackUnguardMessage": "Die Einheit $id ist geflohen und bewacht nicht länger die Region.",
 		"AuraTransferFailedMessage": "Die Einheit $id kann keine Aurapunkte an die Einheit $unit übertragen, die Annahme wird verweigert.",
 		"AuraTransferImpossibleMessage": "Die Einheit $id hat keine Aurapunkte für einen Transfer übrig.",
 		"AuraTransferMessage": "Die Einheit $id verbraucht {$cost:Aurapunkt} für einen Transfer von {$aura:Aurapunkt} an die Einheit $unit.",

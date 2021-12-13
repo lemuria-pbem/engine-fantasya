@@ -15,7 +15,9 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\TakeLootMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\TakeTrophiesMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\UnitDiedMessage;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\DisguisedParty;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackUnguardMessage;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Gathering;
@@ -32,6 +34,8 @@ use Lemuria\Model\Fantasya\WearResources;
 
 class Battle
 {
+	use MessageTrait;
+
 	protected const EXHAUSTION_ROUNDS = 10;
 
 	protected const WEAR = 0.5;
@@ -319,15 +323,18 @@ class Battle
 
 	protected function treatUnitsOfArmy(Army $army): void {
 		$units     = [];
+		$standing  = [];
 		$hitpoints = [];
 		foreach ($army->Combatants() as $combatant) {
 			$unit = $combatant->Unit();
 			$id   = $unit->Id()->Id();
 			if (!isset($units[$id])) {
 				$units[$id]     = $unit;
+				$standing[$id]  = 0;
 				$hitpoints[$id] = 0;
 			}
 			foreach ($combatant->fighters as $fighter) {
+				$standing[$id]++;
 				$hitpoints[$id] += $fighter->health;
 			}
 			foreach ($combatant->refugees as $fighter) {
@@ -338,10 +345,14 @@ class Battle
 		foreach ($units as $id => $unit) {
 			$size = $unit->Size();
 			if ($size <= 0) {
-				$unit->setHealth(0.0);
+				$unit->setIsGuarding(false)->setHealth(0.0);
 				Lemuria::Log()->debug('Unit ' . $unit . ' of army ' . $army->Id() . ' is destroyed.');
 				BattleLog::getInstance()->add(new UnitDiedMessage($unit));
 			} else {
+				if ($standing[$id] <= 0 && $unit->IsGuarding()) {
+					$unit->setIsGuarding(false);
+					$this->message(AttackUnguardMessage::class, $unit);
+				}
 				$calculus     = new Calculus($unit);
 				$maxHitpoints = $calculus->hitpoints();
 				$health       = min(1.0, $hitpoints[$id] / ($size * $maxHitpoints));
