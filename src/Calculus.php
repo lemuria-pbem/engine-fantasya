@@ -15,7 +15,6 @@ use Lemuria\Item;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Building;
-use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
@@ -33,7 +32,6 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Race\Troll;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
-use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
@@ -296,55 +294,66 @@ final class Calculus
 	public function inventoryDistribution(): array {
 		$maxSize   = $this->unit->Size();
 		$inventory = $this->unit->Inventory();
-		if ($inventory->isEmpty()) {
+		if ($maxSize <= 1 || $inventory->isEmpty()) {
 			$distribution = new Distribution();
+			foreach ($inventory as $quantity /* @var Quantity $quantity */) {
+				$distribution->add(new Quantity($quantity->Commodity(), $quantity->Count()));
+			}
 			return [$distribution->setSize($maxSize)];
 		}
 
-		$distributions = [];
-		$amount        = [];
-		$excess        = new Resources();
+		$amount = [];
 		foreach ($inventory as $quantity /* @var Quantity $quantity */) {
-			$commodity = $quantity->Commodity();
-			$count     = $quantity->Count();
-			$surplus   = $count - $maxSize;
-			if ($surplus > 0) {
-				$excess->add(new Quantity($commodity, $surplus));
-				$count = $maxSize;
-			}
+			$count = $quantity->Count();
 			if (!isset($amount[$count])) {
 				$amount[$count] = [];
 			}
-			$amount[$count][] = $commodity;
+			$amount[$count][] = new Quantity($quantity->Commodity(), $count);
 		}
 		ksort($amount);
 
-		$distributed = 0;
-		while (!empty($amount)) {
+		$distributions = [];
+		while ($maxSize > 0 && !empty($amount)) {
+			reset($amount);
+			$size         = key($amount);
+			$take         = $size > $maxSize ? (int)floor($size / $maxSize) : 1;
+			$rest         = $size - $take * $maxSize;
 			$distribution = new Distribution();
-			$first        = key($amount);
-			$remaining    = $first - $distributed;
-			foreach ($amount as $count => $commodities) {
-				$remaining   = $count - $distributed;
-				$distributed = $remaining;
-				foreach ($commodities as $commodity/* @var Commodity $commodity */) {
-					$distribution->add(new Quantity($commodity));
+			$newAmount    = $rest > 0 ? [$rest => []] : [];
+			foreach (current($amount) as $quantity /* @var Quantity $quantity */) {
+				$commodity = $quantity->Commodity();
+				if ($rest > 0) {
+					$newAmount[$rest][] = new Quantity($commodity, $rest);
+				}
+				$distribution->add(new Quantity($commodity, $take));
+			}
+			unset($amount[$size]);
+			if ($rest > 0) {
+				$size = $maxSize;
+			}
+
+			foreach ($amount as $next => $quantities) {
+				$take = $next > $maxSize ? (int)floor($next / $maxSize) : 1;
+				$rest = $next - $take * $size;
+				if ($rest > 0 && !isset($newAmount[$rest])) {
+					$newAmount[$rest] = [];
+				}
+				foreach ($quantities as $quantity /* @var Quantity $quantity */) {
+					$commodity = $quantity->Commodity();
+					if ($rest > 0) {
+						$newAmount[$rest][] = new Quantity($commodity, $rest);
+					}
+					$distribution->add(new Quantity($commodity, $take));
 				}
 			}
-			$distribution->setSize($remaining);
-			$distributions[] = $distribution;
-			$distributed    += $remaining;
-			unset($amount[$first]);
+			$distributions[] = $distribution->setSize($size);
+			$maxSize        -= $size;
+			$amount          = $newAmount;
 		}
 
-		foreach ($excess as $quantity /* @var Quantity $quantity */) {
-			$count = $quantity->Count();
-			$bonus = (int)floor($count / $maxSize);
-			if ($bonus > 0) {
-				foreach ($distributions as $distribution /* @var Distribution $distribution */) {
-					$distribution->add(new Quantity($quantity->Commodity(), $bonus));
-				}
-			}
+		if ($maxSize > 0) {
+			$distribution    = new Distribution();
+			$distributions[] = $distribution->setSize($maxSize);
 		}
 
 		return $distributions;

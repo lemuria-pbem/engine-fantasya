@@ -165,14 +165,16 @@ class Campaign
 
 	private function addDefenderOtherUnits(array $defenders): void {
 		foreach ($defenders as $partyId) {
-			$party  = Party::get(new Id($partyId));
-			$battle = $this->battle($party);
-			foreach ($this->intelligence->getUnits($party) as $unit /* @var Unit $unit */) {
-				if ($unit->BattleRow() >= Combat::DEFENSIVE) {
-					$id = $unit->Id()->Id();
-					if (!isset($this->defenders[$id])) {
-						$battle->addDefender($unit);
-						Lemuria::Log()->debug($unit . ' gets drawn into battle as defender.');
+			$party = Party::get(new Id($partyId));
+			if ($party->Type() === Party::PLAYER) {
+				$battle = $this->battle($party);
+				foreach ($this->intelligence->getUnits($party) as $unit/* @var Unit $unit */) {
+					if ($unit->BattleRow() >= Combat::DEFENSIVE) {
+						$id = $unit->Id()->Id();
+						if (!isset($this->defenders[$id])) {
+							$battle->addDefender($unit);
+							Lemuria::Log()->debug($unit . ' gets drawn into battle as defender.');
+						}
 					}
 				}
 			}
