@@ -2,9 +2,13 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
+use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
+use Lemuria\Engine\Fantasya\Factory\Model\Ports;
 use Lemuria\Engine\Fantasya\Message\Region\TravelVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EnterPortDutyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EnterPortSmuggleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardCancelMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
@@ -13,14 +17,19 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Landscape\Forest;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Landscape\Plain;
+use Lemuria\Model\Fantasya\Luxury;
+use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Race\Aquan;
 use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Ship\Boat;
 use Lemuria\Model\Fantasya\Ship\Dragonship;
 use Lemuria\Model\Fantasya\Ship\Longboat;
-use Lemuria\Model\Fantasya\Vessel;
+use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Navigation;
+use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Fantasya\Vessel;
 use Lemuria\Model\Neighbours;
 
 trait NavigationTrait
@@ -74,11 +83,20 @@ trait NavigationTrait
 	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
 	private function canSailTo(Region $region): bool {
-		$landscape = $region->Landscape();
-		$ship      = $this->vessel->Ship();
+		$ship = $this->vessel->Ship();
 		if ($ship instanceof Boat) {
 			return true;
 		}
+		$ports = new Ports($this->vessel, $region);
+		$port  = $ports->Port();
+		if ($port) {
+			$this->vessel->setPort($port);
+			return true;
+		}
+		if ($ports->IsDenied()) {
+			return false;
+		}
+		$landscape = $region->Landscape();
 		if ($landscape instanceof Plain || $landscape instanceof Forest || $landscape instanceof Ocean) {
 			return true;
 		}
@@ -113,6 +131,7 @@ trait NavigationTrait
 
 		if ($destination->Landscape() instanceof Ocean) {
 			$this->vessel->setAnchor(Vessel::IN_DOCK);
+			$this->vessel->setPort(null);
 		} else {
 			$neighbours = Lemuria::World()->getNeighbours($destination);
 			$this->vessel->setAnchor($neighbours->getDirection($region));
@@ -131,6 +150,50 @@ trait NavigationTrait
 		}
 
 		$this->message(TravelVesselMessage::class, $region)->p((string)$this->vessel);
+		if ($this->vessel->Port()) {
+			$this->payDutyToHarbourMaster();
+		}
+	}
+
+	private function payDutyToHarbourMaster(): void {
+		$master = $this->vessel->Port()->Inhabitants()->Owner();
+		if ($master) {
+			$party           = $master->Party();
+			$diplomacy       = $party->Diplomacy();
+			$masterInventory = $master->Inventory();
+			$calculus        = new Calculus($master);
+			$perception      = $calculus->knowledge(Perception::class)->Level();
+			foreach ($this->vessel->Passengers() as $unit /* @var Unit $unit */) {
+				$duty      = [];
+				$inventory = $unit->Inventory();
+				foreach ($inventory as $quantity /* @var Quantity $quantity */) {
+					$commodity = $quantity->Commodity();
+					if ($commodity instanceof Luxury) {
+						$count = (int)round(Ports::DUTY * $quantity->Count());
+						if ($count > 0) {
+							$duty[] = new Quantity($commodity, $count);
+						}
+					}
+				}
+				if (!empty($duty)) {
+					$passengerParty = $unit->Party();
+					if ($passengerParty !== $party && !$diplomacy->has(Relation::TRADE, $unit)) {
+						$calculus   = new Calculus($unit);
+						$camouflage = $calculus->knowledge(Camouflage::class)->Level();
+						if ($camouflage > $perception) {
+							$this->message(EnterPortSmuggleMessage::class, $unit);
+						} else {
+							foreach ($duty as $quantity) {
+								$inventory->remove($quantity);
+								$quantity = new Quantity($quantity->Commodity(), $quantity->Count());
+								$masterInventory->add($quantity);
+								$this->message(EnterPortDutyMessage::class, $unit)->i($quantity);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private function createNavigationEffect(Unit $unit): void {

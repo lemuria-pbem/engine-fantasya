@@ -4,12 +4,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
+- Schiffbau nur in Ebenen/Wäldern, Häfen oder Werften möglich
 - weitere Gebäude:
-  - Hafen
-    - Schiffe können überall anlegen
-    - Wache im Hafen verhindert, dass fremde Schiffe anlegen
-    - Hafengröße muss mindestens Schiffsklasse entsprechen
-    - Hafenmeister erhebt Zoll auf Luxuswaren
   - Leuchtturm
     - erhöht Sichtweite
     - verhindert, dass Schiffe im Sturm abtreiben
