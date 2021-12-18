@@ -4,6 +4,7 @@
 
 ^(\/\/)|(komme|kommen|komment|kommenta|kommentar).*$
 ^;.*$
+^@ +[a-z].+$
 ^@ +\* +[a-z].+$
 ^@ +[0-9]+ +[a-z].+$
 ^@ +[0-9]+/+[0-9]+ +[a-z].+$

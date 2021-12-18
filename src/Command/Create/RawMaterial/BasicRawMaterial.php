@@ -104,12 +104,22 @@ class BasicRawMaterial extends AllocationCommand implements Activity
 					$quantity = new Quantity($this->getCommodity(), $this->production);
 					$this->message(RawMaterialCannotMessage::class)->i($quantity);
 				}
+				$this->addToWorkload($this->production);
+				$this->resources->add($quantity);
 			} else {
-				$quantity = new Quantity($this->getCommodity(), $this->production);
-				$this->message(RawMaterialCanMessage::class)->i($quantity);
+				$commodity        = $this->getCommodity();
+				$resources        = $this->unit->Region()->Resources();
+				$available        = $resources[$commodity]->Count();
+				$this->production = min($this->production, $available);
+				if ($this->production > 0) {
+					$quantity = new Quantity($this->getCommodity(), $this->production);
+					$this->addToWorkload($this->production);
+					$this->resources->add($quantity);
+					$this->message(RawMaterialCanMessage::class)->i($quantity);
+				} else {
+					$this->message(RawMaterialNoDemandMessage::class)->s($this->getCommodity());
+				}
 			}
-			$this->addToWorkload($this->production);
-			$this->resources->add($quantity);
 		} else {
 			$this->message(RawMaterialNoDemandMessage::class)->s($this->getCommodity());
 		}

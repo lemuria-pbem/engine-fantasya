@@ -4,6 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
+- Monsterregeneration
 - Schiffbau nur in Ebenen/Wäldern, Häfen oder Werften möglich
 - weitere Gebäude:
   - Leuchtturm
