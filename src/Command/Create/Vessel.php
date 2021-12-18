@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
 use Lemuria\Engine\Fantasya\Factory\Model\AnyShip;
+use Lemuria\Engine\Fantasya\Factory\Model\Dockyards;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselAlreadyFinishedMessage;
@@ -12,11 +13,13 @@ use Lemuria\Engine\Fantasya\Message\Unit\VesselExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselResourcesMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\VesselSpaceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselUnableMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\VesselFinishedMessage;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
+use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Requirement;
 use Lemuria\Model\Fantasya\Ship;
@@ -36,6 +39,8 @@ final class Vessel extends AbstractProduct
 {
 	private int $remaining;
 
+	private ?Construction $port = null;
+
 	protected function initialize(): void {
 		$this->replacePlaceholderJob();
 		parent::initialize();
@@ -44,6 +49,11 @@ final class Vessel extends AbstractProduct
 	protected function run(): void {
 		$ship   = $this->getShip();
 		$vessel = $this->leaveCurrentVesselFor($ship);
+		if (!$vessel && !$this->canBuildVesselHere($ship)) {
+			$this->message(VesselSpaceMessage::class)->s($ship);
+			return;
+		}
+
 		if ($vessel?->Completion() < 1.0) {
 			$size             = $vessel?->getUsedWood() ?? 0;
 			$wood             = $ship->Wood();
@@ -74,7 +84,7 @@ final class Vessel extends AbstractProduct
 					$vessel->setName('Schiff ' . $id)->setId($id);
 					$vessel->Passengers()->add($this->unit);
 					$this->unit->Region()->Fleet()->add($vessel);
-					$vessel->setShip($ship)->setCompletion($yield / $wood);
+					$vessel->setShip($ship)->setPort($this->port)->setCompletion($yield / $wood);
 					if ($this->job->hasCount() && $demand > $production && $demand < PHP_INT_MAX) {
 						$this->message(VesselOnlyMessage::class)->e($vessel)->p($yield);
 					} else {
@@ -139,5 +149,14 @@ final class Vessel extends AbstractProduct
 			return $resource;
 		}
 		throw new LemuriaException('Expected a ship resource.');
+	}
+
+	private function canBuildVesselHere(Ship $ship): bool {
+		$dockyards = new Dockyards($ship, $this->unit);
+		if ($dockyards->CanBuildHere()) {
+			return true;
+		}
+		$this->port = $dockyards->Port();
+		return (bool)$this->port;
 	}
 }

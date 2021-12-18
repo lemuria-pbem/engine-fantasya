@@ -12,19 +12,14 @@ use Lemuria\Engine\Fantasya\Message\Unit\EnterPortSmuggleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardCancelMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Building\Quay;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Landscape\Forest;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
-use Lemuria\Model\Fantasya\Landscape\Plain;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Race\Aquan;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Ship\Boat;
-use Lemuria\Model\Fantasya\Ship\Dragonship;
-use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Navigation;
 use Lemuria\Model\Fantasya\Talent\Perception;
@@ -79,9 +74,6 @@ trait NavigationTrait
 		return $coastlines;
 	}
 
-	/**
-	 * @noinspection PhpConditionAlreadyCheckedInspection
-	 */
 	private function canSailTo(Region $region): bool {
 		$ship = $this->vessel->Ship();
 		if ($ship instanceof Boat) {
@@ -96,16 +88,7 @@ trait NavigationTrait
 		if ($ports->IsDenied()) {
 			return false;
 		}
-		$landscape = $region->Landscape();
-		if ($landscape instanceof Plain || $landscape instanceof Forest || $landscape instanceof Ocean) {
-			return true;
-		}
-		if ($ship instanceof Longboat || $ship instanceof Dragonship) {
-			$calculus = $this->context->getCalculus($this->vessel->Passengers()->Owner());
-			$quay     = self::createBuilding(Quay::class);
-			return $calculus->canEnter($region, $quay);
-		}
-		return false;
+		return $ports->CanLand();
 	}
 
 	private function isNavigatedByAquans(): bool {
