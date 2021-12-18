@@ -10,6 +10,7 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Building\Tavern;
+use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -24,17 +25,23 @@ final class Recreate extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Catalog::UNITS) as $unit /* @var Unit $unit */) {
-			if ($unit->Party()->Type() !== Party::PLAYER) {
-				continue;
-			}
-
-			if (!$this->hasHunger($unit)) {
-				if ($unit->Health() < 1.0) {
-					$this->recreateHealth($unit);
-				}
-				if ($unit->Aura()) {
-					$this->recreateAura($unit);
-				}
+			$type = $unit->Party()->Type();
+			switch ($type) {
+				case Party::PLAYER :
+					if (!$this->hasHunger($unit)) {
+						if ($unit->Health() < 1.0) {
+							$this->recreateHealth($unit);
+						}
+						if ($unit->Aura()) {
+							$this->recreateAura($unit);
+						}
+					}
+					break;
+				case Party::MONSTER :
+					$this->recreateMonster($unit);
+					break;
+				default :
+					Lemuria::Log()->debug('Unit ' . $unit . ' of party type ' . $type . ' has no recreation yet.');
 			}
 		}
 	}
@@ -67,6 +74,25 @@ final class Recreate extends AbstractEvent
 			$aura->setAura($current + $regain);
 			Lemuria::Log()->debug('Unit ' . $unit . ' regenerates ' . $regain . ' aura.');
 			$this->message(RecreateAuraMessage::class, $unit)->p($regain);
+		}
+	}
+
+	private function recreateMonster(Unit $unit): void {
+		$health = $unit->Health();
+		if ($health < 1.0) {
+			/** @var Monster $monster */
+			$monster    = $unit->Race();
+			$recreation = $monster->Recreation();
+			if ($recreation > 0.0) {
+				$hitpoints  = $monster->Hitpoints();
+				$health     = (int)floor($health * $hitpoints);
+				$difference = $hitpoints - $health;
+				$heal       = min($difference, (int)floor($recreation * $hitpoints));
+				$healed     = ($health + $heal) / $hitpoints;
+				$unit->setHealth($healed);
+				Lemuria::Log()->debug('Unit ' . $unit . ' regenerates ' . $heal . ' hitpoints.');
+				$this->message(RecreateHealthMessage::class, $unit)->p($heal);
+			}
 		}
 	}
 }
