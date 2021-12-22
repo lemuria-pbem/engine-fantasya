@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Effect\Hunger;
+use Lemuria\Engine\Fantasya\Factory\MagicTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\RecreateAuraMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecreateHealthMessage;
 use Lemuria\Engine\Fantasya\State;
@@ -19,6 +20,8 @@ use Lemuria\Model\Fantasya\Unit;
  */
 final class Recreate extends AbstractEvent
 {
+	use MagicTrait;
+
 	public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
 	}
@@ -69,8 +72,9 @@ final class Recreate extends AbstractEvent
 		$current    = $aura->Aura();
 		$maximum    = $aura->Maximum();
 		$difference = $maximum - $current;
+		$boost      = $this->isInActiveMagespire($unit) ? 2.0 : 1.0;
 		if ($difference > 0) {
-			$regain = min($difference, max(1, (int)floor($unit->Race()->Refill() * $maximum)));
+			$regain = min($difference, max(1, (int)floor($unit->Race()->Refill() * $boost * $maximum)));
 			$aura->setAura($current + $regain);
 			Lemuria::Log()->debug('Unit ' . $unit . ' regenerates ' . $regain . ' aura.');
 			$this->message(RecreateAuraMessage::class, $unit)->p($regain);

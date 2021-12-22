@@ -12,7 +12,9 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Spell;
+use Lemuria\Model\Fantasya\Spell\AstralChaos;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
+use Lemuria\Model\Fantasya\Spell\Daydream;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
@@ -33,7 +35,9 @@ class SpellParser
 	public const LEVEL_AND_TARGET = 2;
 
 	protected const SYNTAX = [
+		AstralChaos::class  => self::LEVEL,
 		AuraTransfer::class => self::LEVEL_AND_TARGET,
+		Daydream::class     => self::LEVEL_AND_TARGET,
 		Fireball::class     => self::LEVEL,
 		Quacksalver::class  => self::LEVEL,
 		ShockWave::class    => self::LEVEL,
@@ -41,20 +45,13 @@ class SpellParser
 	];
 
 	protected const SPELLS = [
+		'Astrales'     => ['Chaos' => AstralChaos::class],
 		'Auratransfer' => AuraTransfer::class,
 		'Feuerball'    => Fireball::class,
 		'Friedenslied' => SongOfPeace::class,
 		'Schockwelle'  => ShockWave::class,
+		'Tagtraum'     => Daydream::class,
 		'Wunderdoktor' => Quacksalver::class
-		/*
-		'Zauber' => [
-			'mit' => [
-				'mehreren' => [
-					'Worten' => self::LEVEL
-				]
-			]
-		]
-		*/
 	];
 
 	protected string $spell;

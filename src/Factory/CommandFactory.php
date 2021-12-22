@@ -187,6 +187,7 @@ use Lemuria\Model\Fantasya\Ship\Trireme;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Spell\AstralChaos;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
+use Lemuria\Model\Fantasya\Spell\Daydream;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
@@ -525,6 +526,7 @@ class CommandFactory
 		'Feuerball'      => Fireball::class,
 		'Friedenslied'   => SongOfPeace::class,
 		'Schockwelle'    => ShockWave::class,
+		'Tagtraum'       => Daydream::class,
 		'Wunderdoktor'   => Quacksalver::class
 	];
 

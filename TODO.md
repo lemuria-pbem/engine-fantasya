@@ -5,10 +5,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Fehler/Verbesserungen in 0.9
 
 - Leuchtturm erhöht Sichtweite in diagonalen Richtungen
-- Magierturm
-  - verdoppelt Aura-Regeneration
-  - verringert Aurabedarf
-  - Größe muss mindestens Summe Magietalent der Bewohner entsprechen
 - ActivityProtocol und Befehlsvorlage überarbeiten und vereinfachen
 
 ## Neue Funktionen

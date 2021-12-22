@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Spell;
 
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellFailedMessage;
+use Lemuria\Engine\Fantasya\Factory\MagicTrait;
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
@@ -20,6 +21,7 @@ use Lemuria\Model\Fantasya\Unit;
 abstract class AbstractBattleSpell
 {
 	use BuilderTrait;
+	use MagicTrait;
 
 	protected array $caster;
 
@@ -77,9 +79,17 @@ abstract class AbstractBattleSpell
 	}
 
 	protected function consume(Unit $unit, int $grade): void {
-		$aura      = $unit->Aura();
-		$available = $aura->Aura();
-		$aura->setAura($available - $grade * $this->grade->Spell()->Aura());
+		$aura        = $unit->Aura();
+		$available   = $aura->Aura();
+		$consumption = $this->grade->Spell()->Aura();
+		if ($this->isInActiveMagespire($unit)) {
+			if ($grade > 1) {
+				$grade = $this->reduceGrade($grade);
+			} else {
+				$consumption = $this->reduceConsumption($consumption);
+			}
+		}
+		$aura->setAura($available - $grade * $consumption);
 	}
 
 	protected function getCombatEffect(Spell $spell): ?CombatEffect {
