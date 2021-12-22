@@ -4,14 +4,11 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
-- weitere Gebäude:
-  - Leuchtturm
-    - erhöht Sichtweite
-    - verhindert, dass Schiffe im Sturm abtreiben
-  - Magierturm
-    - verdoppelt Aura-Regeneration
-    - verringert Aurabedarf
-    - Größe muss mindestens Summe Magietalent der Bewohner entsprechen
+- Leuchtturm erhöht Sichtweite in diagonalen Richtungen
+- Magierturm
+  - verdoppelt Aura-Regeneration
+  - verringert Aurabedarf
+  - Größe muss mindestens Summe Magietalent der Bewohner entsprechen
 - ActivityProtocol und Befehlsvorlage überarbeiten und vereinfachen
 
 ## Neue Funktionen
