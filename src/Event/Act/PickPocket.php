@@ -47,6 +47,10 @@ class PickPocket implements Act
 			/** @var Unit $enemy */
 			$enemy = $this->enemy->random();
 			$this->enemy->remove($enemy);
+			if ($enemy->Construction()) {
+				continue;
+			}
+
 			$calculus = new Calculus($enemy);
 			if ($calculus->canDiscover($this->unit)) {
 				$isRevealed = true;

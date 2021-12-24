@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create\RawMaterial;
 
+use Lemuria\Engine\Fantasya\Availability;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Message\Unit\HerbUnknownMessage;
@@ -52,6 +53,11 @@ final class Herb extends BasicRawMaterial
 			return $resource;
 		}
 		throw new LemuriaException($resource . ' is not a herb.');
+	}
+
+	protected function getAvailability(): int {
+		$availability = new Availability($this->unit->Region());
+		return $availability->getResource($this->getCommodity())->Count();
 	}
 
 	protected function runForEmptyDemand(Talent $talent, Commodity $resource): void {

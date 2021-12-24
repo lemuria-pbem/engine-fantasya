@@ -107,9 +107,7 @@ class BasicRawMaterial extends AllocationCommand implements Activity
 				$this->addToWorkload($this->production);
 				$this->resources->add($quantity);
 			} else {
-				$commodity        = $this->getCommodity();
-				$resources        = $this->unit->Region()->Resources();
-				$available        = $resources[$commodity]->Count();
+				$available        = $this->getAvailability();
 				$this->production = min($this->production, $available);
 				if ($this->production > 0) {
 					$quantity = new Quantity($this->getCommodity(), $this->production);
@@ -132,9 +130,13 @@ class BasicRawMaterial extends AllocationCommand implements Activity
 		}
 		throw new LemuriaException($resource . ' is not a commodity.');
 	}
-	/**
-	 * Determine the required talent.
-	 */
+
+	protected function getAvailability(): int {
+		$commodity = $this->getCommodity();
+		$resources = $this->unit->Region()->Resources();
+		return $resources[$commodity]->Count();
+	}
+
 	protected function getRequiredTalent(): Requirement {
 		$resource = $this->job->getObject();
 		if ($resource instanceof RawMaterialInterface) {
