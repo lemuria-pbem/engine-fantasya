@@ -18,9 +18,11 @@ final class TravelAtlas extends Atlas
 
 	public const NEIGHBOUR = 2;
 
-	public const TRAVELLED = 3;
+	public const LIGHTHOUSE = 3;
 
-	public const WITH_UNIT = 4;
+	public const TRAVELLED = 4;
+
+	public const WITH_UNIT = 5;
 
 	private array $visibility = [];
 
