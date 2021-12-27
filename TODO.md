@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
-- Leuchtturm erhöht Sichtweite in diagonalen Richtungen
 - ActivityProtocol und Befehlsvorlage überarbeiten und vereinfachen
 
 ## Neue Funktionen

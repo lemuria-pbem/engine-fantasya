@@ -96,7 +96,9 @@ final class Outlook
 					if ($neighbour->Landscape() instanceof Ocean) {
 						$isOcean = true; // Filter out directions that have no ocean as target.
 					}
-					$visible->add($neighbour);
+					if ($world->getDistance($region, $neighbour) === $distance) {
+						$visible->add($neighbour);
+					}
 				}
 				if (!$isOcean) {
 					unset($directions[$direction]);
