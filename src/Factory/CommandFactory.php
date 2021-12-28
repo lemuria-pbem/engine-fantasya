@@ -879,6 +879,7 @@ class CommandFactory
 	 * Parse a singleton.
 	 */
 	protected function getCandidate(string $singleton, array $map): ?string {
+		$singleton  = str_replace(['-', '_', '~'], ' ', $singleton);
 		$singleton  = mbUcFirst(mb_strtolower(undupChar(' ', $singleton)));
 		$candidates = [];
 		foreach ($map as $candidate => $singletonClass) {
