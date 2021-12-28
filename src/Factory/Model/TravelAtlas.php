@@ -40,11 +40,15 @@ final class TravelAtlas extends Atlas
 			$this->add($region);
 			$this->visibility[$id] = self::WITH_UNIT;
 
-			foreach ($outlook->Panorama($region) as $neighbour /* @var Region $neighbour */) {
-				$id = $neighbour->Id()->Id();
+			$panorama = $outlook->Panorama($region);
+			foreach ($panorama as $neighbour /* @var Region $neighbour */) {
+				$id         = $neighbour->Id()->Id();
+				$visibility = $panorama->getVisibility($neighbour);
 				if (!isset($this->visibility[$id])) {
 					$this->add($neighbour);
-					$this->visibility[$id] = self::NEIGHBOUR;
+					$this->visibility[$id] = $visibility;
+				} elseif ($this->visibility[$id] < $visibility) {
+					$this->visibility[$id] = $visibility;
 				}
 			}
 		}
@@ -55,7 +59,7 @@ final class TravelAtlas extends Atlas
 				if (!isset($this->visibility[$id])) {
 					$this->add($region);
 					$this->visibility[$id] = self::TRAVELLED;
-				} elseif ($this->visibility[$id] === self::NEIGHBOUR) {
+				} elseif ($this->visibility[$id] < self::TRAVELLED) {
 					$this->visibility[$id] = self::TRAVELLED;
 				}
 			}
@@ -67,5 +71,10 @@ final class TravelAtlas extends Atlas
 
 	#[Pure] public function getVisibility(Region $region): int {
 		return $this->visibility[$region->Id()->Id()] ?? self::UNKNOWN;
+	}
+
+	public function setVisibility(Region $region, int $visibility): TravelAtlas {
+		$this->visibility[$region->Id()->Id()] = $visibility;
+		return $this;
 	}
 }
