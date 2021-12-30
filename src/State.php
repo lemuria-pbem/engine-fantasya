@@ -10,23 +10,17 @@ use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
+use Lemuria\Identifiable;
+use Lemuria\Lemuria;
+use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Reassignment;
 
-final class State
+final class State implements Reassignment
 {
 	private static ?self $instance = null;
-
-	public static function getInstance(LemuriaTurn $turn = null): State {
-		if (!self::$instance) {
-			self::$instance = new self();
-		}
-		if ($turn) {
-			self::$instance->turn = $turn;
-		}
-		return self::$instance;
-	}
 
 	public bool $isTravelling = false;
 
@@ -80,6 +74,66 @@ final class State
 	 * @var Behaviour[]
 	 */
 	private array $monsters = [];
+
+	public static function getInstance(LemuriaTurn $turn = null): State {
+		if (!self::$instance) {
+			self::$instance = new self();
+			Lemuria::Catalog()->addReassignment(self::$instance);
+		}
+		if ($turn) {
+			self::$instance->turn = $turn;
+		}
+		return self::$instance;
+	}
+
+	public function reassign(Id $oldId, Identifiable $identifiable): void {
+		$old = $oldId->Id();
+		$new = $identifiable->Id()->Id();
+		switch ($identifiable->Catalog()) {
+			case Catalog::UNITS :
+				$this->protocol[$new] = $this->protocol[$old];
+				unset($this->protocol[$old]);
+				if (isset($this->travelRoute[$old])) {
+					$this->travelRoute[$new] = $this->travelRoute[$old];
+					unset($this->travelRoute[$old]);
+				}
+				if (isset($this->workload[$old])) {
+					$this->workload[$new] = $this->workload[$old];
+					unset($this->workload[$old]);
+				}
+				break;
+			case Catalog::LOCATIONS :
+				$this->allocation[$new] = $this->allocation[$old];
+				unset($this->allocation[$old]);
+				$this->availability[$new] = $this->availability[$old];
+				unset($this->availability[$new]);
+				$this->campaigns[$new] = $this->campaigns[$old];
+				unset($this->campaigns[$old]);
+				$this->commerce[$new] = $this->commerce[$old];
+				unset($this->commerce[$old]);
+				$this->intelligence[$new] = $this->intelligence[$old];
+				unset($this->intelligence[$old]);
+				break;
+		}
+	}
+
+	public function remove(Identifiable $identifiable): void {
+		$old = $identifiable->Id()->Id();
+		switch ($identifiable->Catalog()) {
+			case Catalog::UNITS :
+				unset($this->protocol[$old]);
+				unset($this->travelRoute[$old]);
+				unset($this->workload[$old]);
+				break;
+			case Catalog::LOCATIONS :
+				unset($this->allocation[$old]);
+				unset($this->availability[$old]);
+				unset($this->campaigns[$old]);
+				unset($this->commerce[$old]);
+				unset($this->intelligence[$old]);
+				break;
+		}
+	}
 
 	public function getTurnOptions(): TurnOptions {
 		if (!$this->turnOptions) {

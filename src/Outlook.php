@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Engine\Fantasya\Effect\ContactEffect;
+use Lemuria\Engine\Fantasya\Factory\Model\TravelAtlas;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Lighthouse;
 use Lemuria\Model\Fantasya\Construction;
@@ -70,10 +71,16 @@ final class Outlook
 	/**
 	 * Get regions that are visible from a region.
 	 */
-	public function Panorama(Region $region): Atlas {
-		$visible = new Atlas();
+	public function Panorama(Region $region): TravelAtlas {
+		$visible = new TravelAtlas($this->census->Party());
 		$world   = Lemuria::World();
 		$range   = $this->getVisibilityRange($region);
+		if ($range > 0) {
+			$hasLighthouse = true;
+		} else {
+			$range = 1;
+			$hasLighthouse = false;
+		}
 
 		// Add direct neighbours and collect directions.
 		$directions = [];
@@ -81,6 +88,11 @@ final class Outlook
 		foreach ($neighbours as $direction => $neighbour /* @var Region $neighbour */) {
 			if ($neighbour->Landscape() instanceof Ocean) {
 				$directions[] = $direction;
+				if ($hasLighthouse) {
+					$visible->setVisibility($neighbour, TravelAtlas::LIGHTHOUSE);
+				}
+			} else {
+				$visible->setVisibility($neighbour, TravelAtlas::NEIGHBOUR);
 			}
 			$visible->add($neighbour);
 		}
@@ -96,7 +108,10 @@ final class Outlook
 					if ($neighbour->Landscape() instanceof Ocean) {
 						$isOcean = true; // Filter out directions that have no ocean as target.
 					}
-					$visible->add($neighbour);
+					if ($world->getDistance($region, $neighbour) === $distance) {
+						$visible->add($neighbour);
+						$visible->setVisibility($neighbour, TravelAtlas::LIGHTHOUSE);
+					}
 				}
 				if (!$isOcean) {
 					unset($directions[$direction]);
@@ -113,7 +128,7 @@ final class Outlook
 	 * The normal distance is one and can be greater if a unit is in a lighthouse.
 	 */
 	protected function getVisibilityRange(Region $region): int {
-		$range = 1;
+		$range = 0;
 		$party = $this->Census()->Party();
 		foreach ($region->Estate() as $construction /* @var Construction $construction */) {
 			if ($construction->Building() instanceof Lighthouse) {

@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
-- Leuchtturm erhöht Sichtweite in diagonalen Richtungen
 - ActivityProtocol und Befehlsvorlage überarbeiten und vereinfachen
 
 ## Neue Funktionen
@@ -49,6 +48,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
+- Gegenstandsklassen für verkürzte Übergaben (Kräuter, Luxuswaren, Rüstungen, Schilde, Tiere, Trophäen, Tränke, Waffen)
 - besondere Gebäude/Orte wie Ruinen oder Höhlen
 - Umweltereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE
