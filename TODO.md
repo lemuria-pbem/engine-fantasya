@@ -48,6 +48,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
+- Gegenstandsklassen für verkürzte Übergaben (Kräuter, Luxuswaren, Rüstungen, Schilde, Tiere, Trophäen, Tränke, Waffen)
 - besondere Gebäude/Orte wie Ruinen oder Höhlen
 - Umweltereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE
