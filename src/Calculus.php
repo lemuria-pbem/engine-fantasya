@@ -178,7 +178,10 @@ final class Calculus
 			}
 		}
 		$weight -= $size * $race->Weight();
-		return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speedBoost);
+		$speed   = $this->speed([$horse, $camel, $elephant]);
+		$animals = [$horse, $camel, $elephant, $griffin, $pegasus];
+		$talent  = $this->talent($animals, $size);
+		return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speed, $talent, $speedBoost);
 	}
 
 	/**
