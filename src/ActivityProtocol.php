@@ -74,26 +74,6 @@ final class ActivityProtocol
 	}
 
 	/**
-	 * Replace default orders that have changed after command execution.
-	 *
-	 * - Teach
-	 */
-	public function replaceDefault(UnitCommand $search, ?UnitCommand $replace = null): void {
-		$instructions = Lemuria::Orders()->getDefault($this->unit->Id());
-		$phrase       = (string)$search->Phrase();
-		foreach ($instructions as $i => $default) {
-			if ($default === $phrase) {
-				if ($replace) {
-					$instructions[$i] = (string)$replace->Phrase();
-				} else {
-					unset($instructions[$i]);
-				}
-				break;
-			}
-		}
-	}
-
-	/**
 	 * Check if an activity is allowed.
 	 *
 	 * Multiple activities of the same kind (e.g. multiple buy or sell commands) are allowed, but execution of a second
