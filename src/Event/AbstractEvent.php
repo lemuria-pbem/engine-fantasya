@@ -54,6 +54,6 @@ abstract class AbstractEvent implements Event
 	}
 
 	protected function initActivityProtocol(Unit $unit): void {
-		$this->state->setProtocol(new ActivityProtocol($unit, new Context($this->state)));
+		$this->state->setProtocol(new ActivityProtocol($unit));
 	}
 }

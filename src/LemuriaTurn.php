@@ -299,7 +299,7 @@ class LemuriaTurn implements Turn
 		Lemuria::Catalog()->addReassignment($context);
 		$context->setParty($party);
 		foreach ($party->People() as $unit /* @var Unit $unit */) {
-			$command = $context->setUnit($unit)->getProtocol($unit)->getDefaultCommand();
+			$command = $this->getDefaultActivity($unit, $context->setUnit($unit));
 			if ($command) {
 				$this->enqueue($command);
 				Lemuria::Log()->debug('Enqueue default command.', ['unit' => $unit->Id(), 'command' => $command]);
@@ -315,7 +315,7 @@ class LemuriaTurn implements Turn
 			$unit    = Unit::get($id);
 			$context = new Context($this->state);
 			Lemuria::Catalog()->addReassignment($context);
-			$command = $context->setParty($unit->Party())->setUnit($unit)->getProtocol($unit)->getDefaultCommand();
+			$command = $this->getDefaultActivity($unit, $context->setParty($unit->Party())->setUnit($unit));
 			if ($command) {
 				$this->enqueue($command);
 				Lemuria::Log()->debug('Enqueue default command.', ['command' => $command]);
@@ -375,5 +375,16 @@ class LemuriaTurn implements Turn
 	private function addAction(Action $action): void {
 		$priority                 = $this->priority->getPriority($action);
 		$this->queue[$priority][] = $action;
+	}
+
+	private function getDefaultActivity(Unit $unit, Context $context): ?Command {
+		foreach (Lemuria::Orders()->getDefault($unit->Id()) as $order) {
+			$command = $context->Factory()->create(new Phrase($order));
+			if ($command instanceof Activity) {
+				$command->setIsDefault();
+				return $command;
+			}
+		}
+		return null;
 	}
 }

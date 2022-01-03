@@ -137,7 +137,7 @@ final class Context implements Reassignment
 	 */
 	public function getProtocol(Unit $unit): ActivityProtocol {
 		if (!$this->state->hasProtocol($unit)) {
-			$protocol = new ActivityProtocol($unit, $this);
+			$protocol = new ActivityProtocol($unit);
 			$this->state->setProtocol($protocol);
 		}
 		return $this->state->getProtocol($unit);
