@@ -8,7 +8,6 @@ use Lemuria\Engine\Fantasya\Combat\Campaign;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\Workload;
-use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
@@ -194,20 +193,12 @@ final class State implements Reassignment
 	}
 
 	/**
-	 * Check if a unit's activity protocol exists.
-	 */
-	#[Pure] public function hasProtocol(Unit $unit): bool {
-		$id = $unit->Id()->Id();
-		return isset($this->protocol[$id]);
-	}
-
-	/**
 	 * Get a unit's activity protocol.
 	 */
 	public function getProtocol(Unit $unit): ActivityProtocol {
 		$id = $unit->Id()->Id();
 		if (!isset($this->protocol[$id])) {
-			throw new LemuriaException();
+			$this->protocol[$id] = new ActivityProtocol($unit);
 		}
 		return $this->protocol[$id];
 	}
@@ -258,14 +249,6 @@ final class State implements Reassignment
 
 	public function setTurnOptions(TurnOptions $options): void {
 		$this->turnOptions = $options;
-	}
-
-	public function setProtocol(ActivityProtocol $protocol): void {
-		$this->protocol[$protocol->Unit()->Id()->Id()] = $protocol;
-	}
-
-	public function unsetProtocol(Id $oldId): void {
-		unset($this->protocol[$oldId->Id()]);
 	}
 
 	public function setTravelRoute(Unit $unit, DirectionList $travelRoute): void {

@@ -99,7 +99,6 @@ final class BrokenCarriage extends AbstractEvent
 		$unit->setName(self::NAME)->setDescription(self::DESCRIPTION);
 		Party::get(new Id(self::NPC))->People()->add($unit);
 		$this->region->Residents()->add($unit);
-		$this->initActivityProtocol($unit);
 		return $unit;
 	}
 }

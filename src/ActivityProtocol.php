@@ -18,16 +18,10 @@ final class ActivityProtocol
 
 	/**
 	 * Create new activity protocol for a unit.
-	 *
-	 * - AbstractEvent (workaround)
-	 * - Context
 	 */
 	public function __construct(private Unit $unit) {
 	}
 
-	/**
-	 * - State
-	 */
 	public function Unit(): Unit {
 		return $this->unit;
 	}

@@ -103,12 +103,6 @@ final class Context implements Reassignment
 				$this->calculus[$new] = $this->calculus[$old];
 				unset($this->calculus[$old]);
 			}
-			if (isset($this->protocol[$old])) {
-				$this->protocol[$new] = $this->protocol[$old];
-				unset($this->protocol[$old]);
-				$this->state->unsetProtocol($oldId);
-				$this->state->setProtocol($this->protocol[$new]);
-			}
 		}
 	}
 
@@ -116,7 +110,6 @@ final class Context implements Reassignment
 		if ($identifiable instanceof Unit) {
 			$id = $identifiable->Id()->Id();
 			unset($this->calculus[$id]);
-			$this->state->unsetProtocol($identifiable->Id());
 			unset($this->resourcePool[self::resourcePoolId($identifiable)]);
 		}
 	}
@@ -136,10 +129,6 @@ final class Context implements Reassignment
 	 * Get a unit's activity protocol.
 	 */
 	public function getProtocol(Unit $unit): ActivityProtocol {
-		if (!$this->state->hasProtocol($unit)) {
-			$protocol = new ActivityProtocol($unit);
-			$this->state->setProtocol($protocol);
-		}
 		return $this->state->getProtocol($unit);
 	}
 
