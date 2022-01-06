@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Unit;
@@ -18,20 +16,10 @@ final class ActivityProtocol
 	 */
 	private array $activity = [];
 
-	private ?Activity $defaultCommand = null;
-
 	/**
 	 * Create new activity protocol for a unit.
 	 */
-	public function __construct(private Unit $unit, Context $context) {
-		foreach (Lemuria::Orders()->getDefault($unit->Id()) as $order) {
-			$command = $context->Factory()->create(new Phrase($order));
-			if ($command instanceof Activity) {
-				$command->setIsDefault();
-				$this->defaultCommand = $command;
-				break;
-			}
-		}
+	public function __construct(private Unit $unit) {
 	}
 
 	public function Unit(): Unit {
@@ -40,20 +28,18 @@ final class ActivityProtocol
 
 	/**
 	 * Check if unit has an activity already.
+	 *
+	 * - Layabout
+	 * - commitCommand() in Teach / Travel
 	 */
 	public function hasActivity(?Activity $command = null): bool {
 		return $command ? !$this->isAllowed($command) : !empty($this->activity);
 	}
 
 	/**
-	 * Get the default command from the previous turn.
-	 */
-	#[Pure] public function getDefaultCommand(): ?Command {
-		return $this->defaultCommand;
-	}
-
-	/**
 	 * Add a command to the protocol.
+	 *
+	 * - UnitTrait / commitCommand()
 	 */
 	public function commit(UnitCommand $command): bool {
 		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
@@ -72,6 +58,11 @@ final class ActivityProtocol
 
 	/**
 	 * Add a command to the default orders.
+	 *
+	 * - Comment
+	 * - Copy
+	 * - DefaultCommand
+	 * - Travel
 	 */
 	public function addDefault(UnitCommand $command): void {
 		$this->addDefaultCommand($command);
@@ -79,24 +70,6 @@ final class ActivityProtocol
 			$activity                  = $command->Activity();
 			$value                     = isset($this->activity[$activity]) && $this->activity[$activity];
 			$this->activity[$activity] = $value;
-		}
-	}
-
-	/**
-	 * Replace default orders that have changed after command execution.
-	 */
-	public function replaceDefault(UnitCommand $search, ?UnitCommand $replace = null): void {
-		$instructions = Lemuria::Orders()->getDefault($this->unit->Id());
-		$phrase       = (string)$search->Phrase();
-		foreach ($instructions as $i => $default) {
-			if ($default === $phrase) {
-				if ($replace) {
-					$instructions[$i] = (string)$replace->Phrase();
-				} else {
-					unset($instructions[$i]);
-				}
-				break;
-			}
 		}
 	}
 

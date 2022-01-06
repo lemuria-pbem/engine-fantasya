@@ -62,14 +62,13 @@ final class Teach extends UnitCommand implements Activity
 			foreach ($this->students as $student /* @var Learn $student */) {
 				$ids[] = $student->Unit()->Id();
 			}
-			$protocol   = $this->context->getProtocol($this->unit);
 			$oldDefault = $this->newDefault;
 			if (empty($ids)) {
-				$protocol->replaceDefault($oldDefault);
+				$this->replaceDefault($oldDefault);
 			} else {
 				$this->createNewDefault($ids);
 				if ($this->newDefault !== $oldDefault) {
-					$protocol->replaceDefault($oldDefault, $this->newDefault);
+					$this->replaceDefault($oldDefault, $this->newDefault);
 				}
 			}
 		}

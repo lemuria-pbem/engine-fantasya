@@ -57,8 +57,6 @@ final class Spawn extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach ($this->create->act()->getUnits() as $unit) {
-			$this->initActivityProtocol($unit);
-		}
+		$this->create->act();
 	}
 }

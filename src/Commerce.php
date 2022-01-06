@@ -39,7 +39,7 @@ final class Commerce
 	/**
 	 * @var array(string=>array)
 	 */
-	private array $goods;
+	private array $goods = [];
 
 	/**
 	 * @var array(int=>array)
@@ -99,6 +99,7 @@ final class Commerce
 				foreach (array_keys($this->goods) as $class) {
 					$this->trade($class);
 				}
+				$this->finish($round);
 				$this->round = $round;
 			}
 		}
@@ -131,9 +132,8 @@ final class Commerce
 	 * Analyze the demand.
 	 */
 	private function analyze(int $round): void {
-		$this->goods = [];
 		foreach ($this->rounds[$round] as $id) {
-			/* @var Merchant $merchant */
+			/** @var Merchant $merchant */
 			$merchant = $this->merchants[$id];
 			foreach ($merchant->getGoods() as $class => $quantity /* @var Quantity $quantity */) {
 				$luxury = $quantity->Commodity();
@@ -242,5 +242,16 @@ final class Commerce
 			$ids = array_values($ids);
 		}
 		return $random;
+	}
+
+	/**
+	 * Call merchants' finish method.
+	 */
+	private function finish(int $round): void {
+		foreach ($this->rounds[$round] as $id) {
+			/** @var Merchant $merchant */
+			$merchant = $this->merchants[$id];
+			$merchant->finish();
+		}
 	}
 }

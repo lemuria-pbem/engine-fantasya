@@ -85,9 +85,9 @@
 
 ^@?(rek|rekr|rekru|rekrut|rekruti|rekrutie|rekrutier|rekrutiere|rekrutieren|rekrute|rekruten) +[0-9]+$
 
-^@?(res|rese|reser|reserv|reservi|reserve|reservie|reservier|reserviere|reservieren|reservieru|reservierun|reservierung) +[0-9]+ +[a-zäöüß]+$
-^@?(res|rese|reser|reserv|reservi|reserve|reservie|reservier|reserviere|reservieren|reservieru|reservierun|reservierung) +[a-zäöüß]+$
-^@?(res|rese|reser|reserv|reservi|reserve|reservie|reservier|reserviere|reservieren|reservieru|reservierun|reservierung) +alles( +[a-zäöüß]+)?$
+^@?(res|rese|reser|reserv|reservi|reserve|reservie|reservier|reserviere|reservieren|reservieru|reservierun|reservierung) +[0-9]+ +[a-z äöüß]+$
+^@?(res|rese|reser|reserv|reservi|reserve|reservie|reservier|reserviere|reservieren|reservieru|reservierun|reservierung) +[a-z äöüß]+$
+^@?(res|rese|reser|reserv|reservi|reserve|reservie|reservier|reserviere|reservieren|reservieru|reservierun|reservierung) +alles( +[a-z äöüß]+)?$
 
 ^@?(ro|rou|rout|route)( +(e|ne|no|nw|o|so|sw|w|east|nordosten|nordwesten|northeast|northwest|osten|suedosten|suedwesten|southeast|southwest|westen|west|pause))+$
 
@@ -128,7 +128,7 @@
 ^(d|de|def|defa|defau|defaul|default) +[0-9]+ +[a-z].+$
 ^(d|de|def|defa|defau|defaul|default) +[0-9]+/+[0-9]+ +[a-z].+$
 
-^@?(za|zau|zaub|zaube|zauber|zaubere|zaubern) +(auratransfer|wunderdoktor)( +[0-9]+)?$
+^@?(za|zau|zaub|zaube|zauber|zaubere|zaubern) +(auratransfer|tagtraum|wunderdoktor)( +[0-9]+)?$
 
 ^@?(zerstö|zerstör|zerstöre|zerstören) +(burg|gebäude|gebaeude|schiff)$
 ^@?(zerstoe|zerstoer|zerstoere|zerstoeren) +(burg|gebäude|gebaeude|schiff)$

@@ -7,6 +7,7 @@ use JetBrains\PhpStorm\Pure;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Lemuria;
 
 trait DefaultActivityTrait
 {
@@ -48,5 +49,23 @@ trait DefaultActivityTrait
 	public function preventDefault(): Activity {
 		$this->preventDefault = true;
 		return $this;
+	}
+
+	/**
+	 * Replace default orders that have changed after command execution.
+	 */
+	protected function replaceDefault(UnitCommand $search, ?UnitCommand $replace = null): void {
+		$instructions = Lemuria::Orders()->getDefault($this->unit->Id());
+		$phrase       = (string)$search->Phrase();
+		foreach ($instructions as $i => $default) {
+			if ($default === $phrase) {
+				if ($replace) {
+					$instructions[$i] = (string)$replace->Phrase();
+				} else {
+					unset($instructions[$i]);
+				}
+				break;
+			}
+		}
 	}
 }

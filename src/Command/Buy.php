@@ -35,17 +35,6 @@ final class Buy extends CommerceCommand
 		}
 		if ($this->isSieged($this->unit->Construction())) {
 			$this->message(CommerceSiegeMessage::class);
-			return $this;
-		}
-
-		if ($this->demand > 0) {
-			if ($this->count < $this->demand && $this->demand < PHP_INT_MAX) {
-				$this->message(BuyOnlyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
-			} else {
-				$this->message(BuyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
-			}
-		} else {
-			$this->message(BuyNoneMessage::class)->s($this->goods()->Commodity());
 		}
 		return $this;
 	}
@@ -73,6 +62,22 @@ final class Buy extends CommerceCommand
 		$payment = new Quantity($this->silver, $cost);
 		Lemuria::Log()->debug('Merchant ' . $this . ' expects buy cost of ' . $payment . '.');
 		$this->context->getResourcePool($this->unit)->reserve($this->unit, $payment);
+		return $this;
+	}
+
+	/**
+	 * Finish trade, create messages.
+	 */
+	public function finish(): Merchant {
+		if ($this->demand > 0) {
+			if ($this->count < $this->demand && $this->demand < PHP_INT_MAX) {
+				$this->message(BuyOnlyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
+			} else {
+				$this->message(BuyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
+			}
+		} else {
+			$this->message(BuyNoneMessage::class)->s($this->goods()->Commodity());
+		}
 		return $this;
 	}
 
