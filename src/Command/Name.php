@@ -33,6 +33,11 @@ use Lemuria\Model\Fantasya\Construction;
  */
 final class Name extends UnitCommand
 {
+	public static function trimName(string $name): string {
+		$name = ltrim($name, "\"'`^°!$%&/()=?{[]}\\+~#<>|,.-;:_ ");
+		return rtrim($name, "\"'`^°§$&/(={[]}\\~#<>|,-;:_ ");
+	}
+
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n <= 0) {
@@ -40,10 +45,10 @@ final class Name extends UnitCommand
 		}
 		if ($n === 1) {
 			$type = 'Einheit';
-			$name = $this->trimName($this->phrase->getLine());
+			$name = self::trimName($this->phrase->getLine());
 		} else {
 			$type = $this->phrase->getParameter();
-			$name = $this->trimName($this->phrase->getLine(2));
+			$name = self::trimName($this->phrase->getLine(2));
 		}
 
 		switch (strtolower($type)) {
@@ -69,7 +74,7 @@ final class Name extends UnitCommand
 				$this->setContinentName($name);
 				break;
 			default :
-				$this->renameUnit($this->trimName($this->phrase->getLine()));
+				$this->renameUnit(self::trimName($this->phrase->getLine()));
 		}
 	}
 
@@ -153,10 +158,5 @@ final class Name extends UnitCommand
 		} else {
 			$this->message(NameNoContinentMessage::class);
 		}
-	}
-
-	private function trimName(string $name): string {
-		$name = ltrim($name, "\"'`^°!$%&/()=?{[]}\\+~#<>|,.-;:_ ");
-		return rtrim($name, "\"'`^°§$&/(={[]}\\~#<>|,-;:_ ");
 	}
 }
