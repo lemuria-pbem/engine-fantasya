@@ -6,7 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
-use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
+use Lemuria\Engine\Fantasya\Factory\ContactTrait;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Everything;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
@@ -42,7 +42,7 @@ use Lemuria\Model\Fantasya\Quantity;
  */
 final class Give extends UnitCommand
 {
-	use CamouflageTrait;
+	use ContactTrait;
 	use GiftTrait;
 	use SiegeTrait;
 

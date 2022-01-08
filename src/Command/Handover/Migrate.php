@@ -5,7 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command\Handover;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
-use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
+use Lemuria\Engine\Fantasya\Factory\ContactTrait;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateFailedMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateFromMessage;
@@ -26,7 +26,7 @@ use Lemuria\Model\Fantasya\Race\Human;
 final class Migrate extends UnitCommand
 {
 	use BuilderTrait;
-	use CamouflageTrait;
+	use ContactTrait;
 	use GiftTrait;
 
 	protected function run(): void {

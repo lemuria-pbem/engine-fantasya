@@ -40,7 +40,7 @@ final class TravelAtlas extends Atlas
 			$this->add($region);
 			$this->visibility[$id] = self::WITH_UNIT;
 
-			$panorama = $outlook->Panorama($region);
+			$panorama = $outlook->getPanorama($region);
 			foreach ($panorama as $neighbour /* @var Region $neighbour */) {
 				$id         = $neighbour->Id()->Id();
 				$visibility = $panorama->getVisibility($neighbour);
