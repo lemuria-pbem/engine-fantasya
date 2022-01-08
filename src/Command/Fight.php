@@ -54,6 +54,9 @@ final class Fight extends UnitCommand
 			case 'vorne' :
 				$this->unit->setBattleRow(Combat::FRONT);
 				break;
+			case 'vorsichtig' :
+				$this->unit->setBattleRow(Combat::CAREFUL);
+				break;
 			default :
 				throw new InvalidCommandException($this, 'Invalid position "' . $position . '".');
 		}
