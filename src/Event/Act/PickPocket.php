@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
 use Lemuria\Engine\Fantasya\Event\Support;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketCaughtMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketLeaveMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\PickPocketNothingMessage;
@@ -55,6 +56,7 @@ class PickPocket implements Act
 			if ($calculus->canDiscover($this->unit)) {
 				$isRevealed = true;
 				$this->message(PickPocketRevealedMessage::class, $this->unit)->e($enemy);
+				$this->message(PickPocketCaughtMessage::class, $enemy)->p((string)$this->unit);
 			} else {
 				$silver    = self::createCommodity(Silver::class);
 				$wantPick  = $this->unit->Size() * self::PICK;
