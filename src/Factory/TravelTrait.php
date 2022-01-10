@@ -139,7 +139,11 @@ trait TravelTrait
 	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
 	protected function unitIsStoppedByGuards(Region $region): array {
-		$guards       = [];
+		$guards = [];
+		if ($this->context->getTurnOptions()->IsSimulation()) {
+			return $guards;
+		}
+
 		$isOnVessel   = (bool)$this->unit->Vessel();
 		$intelligence = $this->context->getIntelligence($region);
 		$camouflage   = $this->calculus()->knowledge(Camouflage::class)->Level();
@@ -148,9 +152,7 @@ trait TravelTrait
 			if ($guardParty !== $this->unit->Party()) {
 				$guardOnVessel = (bool)$guard->Vessel();
 				if ($guardOnVessel === $isOnVessel) {
-					if ($this->context->getTurnOptions()->IsSimulation()) {
-						$guards[$guardParty->Id()->Id()] = $guardParty;
-					} elseif (!$guardParty->Diplomacy()->has(Relation::GUARD, $this->unit)) {
+					if (!$guardParty->Diplomacy()->has(Relation::GUARD, $this->unit)) {
 						if ($region instanceof Ocean) {
 							$guards[$guardParty->Id()->Id()] = $guardParty;
 						}
