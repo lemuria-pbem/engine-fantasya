@@ -452,7 +452,7 @@ final class Calculus
 				$speed = min($speed, $transport->Speed());
 			}
 		}
-		return $speed < PHP_INT_MAX ? $speed : 0;
+		return $speed < PHP_INT_MAX ? $speed : $this->unit->Race()->Speed();
 	}
 
 	/**

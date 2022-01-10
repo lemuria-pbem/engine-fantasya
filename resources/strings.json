@@ -507,6 +507,7 @@
 		"PartyMessage": "Runde für Partei $id begonnen.",
 		"PartyVisitMessage": "Die Partei $id besucht {$regions:Region}.",
 		"PeasantJoyNoneMessage": "Es gibt {kein:$peasant} in der Region, um Bauernglück anzuwenden.",
+		"PickPocketCaughtMessage": "Wir haben die Einheit $thief beim Taschendiebstahl erwischt.",
 		"PickPocketLeaveMessage": "Die Einheit $id wird in der nächsten Woche weiterziehen.",
 		"PickPocketMessage": "Die Einheit $id hat $silver aus den Taschen der Einheit $enemy entwendet.",
 		"PickPocketNothingMessage": "Die Einheit $id hat kein Silber in den Taschen der Einheit $enemy gefunden.",

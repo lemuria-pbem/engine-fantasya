@@ -1,13 +1,13 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Fantasya\Command\Create\RawMaterial;
+namespace Lemuria\Engine\Fantasya\Command\Create;
 
 use Lemuria\Engine\Fantasya\Availability;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\Model\Herb as HerbModel;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Message\Unit\HerbUnknownMessage;
 use Lemuria\Engine\Fantasya\Phrase;
-use Lemuria\Engine\Fantasya\Factory\Model\Herb as HerbModel;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity;
@@ -23,7 +23,7 @@ use Lemuria\Model\Fantasya\Talent\Herballore;
  * - MACHEN Kraut|Kraeuter|Kräuter
  * - MACHEN <amount> Kraut|Kraeuter|Kräuter
  */
-final class Herb extends BasicRawMaterial
+final class Herb extends RawMaterial
 {
 	private ?Herbage $herbage;
 

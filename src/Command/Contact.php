@@ -8,7 +8,7 @@ use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Effect\ContactEffect;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
-use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
+use Lemuria\Engine\Fantasya\Factory\ContactTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\ContactMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ContactNotFoundMessage;
 use Lemuria\Engine\Fantasya\State;
@@ -24,7 +24,7 @@ use Lemuria\Model\Fantasya\Unit;
  */
 final class Contact extends UnitCommand
 {
-	use CamouflageTrait;
+	use ContactTrait;
 
 	protected function run(): void {
 		$n = $this->phrase->count();

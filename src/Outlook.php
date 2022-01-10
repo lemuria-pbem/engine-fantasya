@@ -32,9 +32,25 @@ final class Outlook
 	}
 
 	/**
-	 * Find units in a region that are not camouflaged.
+	 * @deprecated Use getApparitions() instead.
 	 */
 	public function Apparitions(Region $region): People {
+		return $this->getApparitions($region);
+	}
+
+	/**
+	 * @deprecated Use getPanorama() instead.
+	 */
+	public function Panorama(Region $region): TravelAtlas {
+		return $this->getPanorama($region);
+	}
+
+	/**
+	 * Find units in a region that are not camouflaged.
+	 *
+	 * @noinspection DuplicatedCode
+	 */
+	public function getApparitions(Region $region): People {
 		$perception = self::createTalent(Perception::class);
 		$level      = PHP_INT_MIN;
 		foreach ($this->census->getPeople($region) as $unit /* @var Unit $unit */) {
@@ -69,9 +85,52 @@ final class Outlook
 	}
 
 	/**
+	 * Find units in a region that are available for contacting.
+	 *
+	 * @noinspection DuplicatedCode
+	 */
+	public function getContacts(Region $region): People {
+		$perception = self::createTalent(Perception::class);
+		$level      = PHP_INT_MIN;
+		foreach ($this->census->getPeople($region) as $unit /* @var Unit $unit */) {
+			$calculus = new Calculus($unit);
+			$level    = max($level, $calculus->knowledge($perception)->Level());
+		}
+
+		$units      = new People();
+		$party      = $this->census->Party();
+		$camouflage = self::createTalent(Camouflage::class);
+		foreach ($region->Residents() as $unit /* @var Unit $unit */) {
+			if ($unit->Construction()) {
+				$units->add($unit);
+			} elseif ($unit->Vessel()) {
+				$units->add($unit);
+			} else {
+				if ($unit->Party() === $party || !$unit->IsHiding() || $unit->IsGuarding()) {
+					$units->add($unit);
+				} elseif ($unit->Party()->Diplomacy()->has(Relation::PERCEPTION, $this->census->Party())) {
+					$units->add($unit);
+				} else {
+					$effect = new ContactEffect(State::getInstance());
+					$effect = Lemuria::Score()->find($effect->setParty($party));
+					if ($effect instanceof ContactEffect && $effect->From()->has($unit->Id())) {
+						$units->add($unit);
+					} else {
+						$calculus = new Calculus($unit);
+						if ($calculus->knowledge($camouflage)->Level() <= $level) {
+							$units->add($unit);
+						}
+					}
+				}
+			}
+		}
+		return $units;
+	}
+
+	/**
 	 * Get regions that are visible from a region.
 	 */
-	public function Panorama(Region $region): TravelAtlas {
+	public function getPanorama(Region $region): TravelAtlas {
 		$visible = new TravelAtlas($this->census->Party());
 		$world   = Lemuria::World();
 		$range   = $this->getVisibilityRange($region);

@@ -33,6 +33,10 @@ use Lemuria\Model\Fantasya\Construction;
  */
 final class Describe extends UnitCommand
 {
+	public static function trimDescription(string $description): string {
+		return trim($description, "\"'`^°§$%&/()={[]}\\+*~#<>|,-;:_ ");
+	}
+
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n <= 0) {
@@ -43,7 +47,7 @@ final class Describe extends UnitCommand
 			$description = $this->phrase->getParameter();
 		} else {
 			$type        = $this->phrase->getParameter();
-			$description = $this->trimDescription($this->phrase->getLine(2));
+			$description = self::trimDescription($this->phrase->getLine(2));
 		}
 
 		switch (strtolower($type)) {
@@ -69,7 +73,7 @@ final class Describe extends UnitCommand
 				$this->setContinentDescription($description);
 				break;
 			default :
-				$this->describeUnit($this->trimDescription($this->phrase->getLine()));
+				$this->describeUnit(self::trimDescription($this->phrase->getLine()));
 		}
 	}
 
@@ -153,9 +157,5 @@ final class Describe extends UnitCommand
 		} else {
 			$this->message(DescribeNoContinentMessage::class);
 		}
-	}
-
-	private function trimDescription(string $description): string {
-		return trim($description, "\"'`^°§$%&/()={[]}\\+*~#<>|,-;:_ ");
 	}
 }

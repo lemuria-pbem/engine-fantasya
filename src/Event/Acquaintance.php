@@ -80,7 +80,7 @@ final class Acquaintance extends AbstractEvent
 						$this->addToNetwork($ids, $unit, $census);
 					}
 				}
-				foreach ($outlook->Apparitions($region) as $unit /* @var Unit $unit*/) {
+				foreach ($outlook->getApparitions($region) as $unit /* @var Unit $unit*/) {
 					$this->addToNetwork($ids, $unit, $census);
 				}
 			}

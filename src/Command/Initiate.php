@@ -149,7 +149,8 @@ final class Initiate implements Command
 
 		$party  = new Party($this->newcomer);
 		$party->setId(Lemuria::Catalog()->nextId(Catalog::PARTIES));
-		$party->setName($this->newcomer->Name())->setDescription($this->newcomer->Description());
+		$party->setName($this->cleanName($this->newcomer->Name()));
+		$party->setDescription($this->cleanDescription($this->newcomer->Description()));
 		$party->setRace($race)->setOrigin($origin);
 
 		$unit = new Unit();
@@ -174,6 +175,18 @@ final class Initiate implements Command
 		$origin->Residents()->add($unit);
 		$party->Chronicle()->add($origin);
 		$this->message(WelcomeMessage::class, $party)->p($party->Name());
+	}
+
+	private function cleanName(string $name): string {
+		$name = str_replace(["\e", "\f", "\r", "\v"], '', $name);
+		$name = str_replace(["\t", "\n"], ' ', $name);
+		return Name::trimName($name);
+	}
+
+	private function cleanDescription(string $description): string {
+		$description = str_replace(["\e", "\f", "\r", "\v"], '', $description);
+		$description = str_replace(["\t", "\n"], ' ', $description);
+		return Describe::trimDescription($description);
 	}
 
 	private function pickRace(): Race {

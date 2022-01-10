@@ -94,10 +94,12 @@ trait PortsTrait
 				$this->friendly[] = $port;
 			} else {
 				$isGuarded = false;
-				foreach ($port->Inhabitants() as $unit /* @var Unit $unit */) {
-					if ($unit->IsGuarding()) {
-						$isGuarded = true;
-						break;
+				if (!State::getInstance()->getTurnOptions()->IsSimulation()) {
+					foreach ($port->Inhabitants() as $unit /* @var Unit $unit */) {
+						if ($unit->IsGuarding()) {
+							$isGuarded = true;
+							break;
+						}
 					}
 				}
 				if ($isGuarded) {

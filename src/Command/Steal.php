@@ -63,7 +63,7 @@ final class Steal extends UnitCommand implements Activity
 			return;
 		}
 		$outlook = new Outlook(new Census($party));
-		if (!$this->isSimulation && $outlook->Apparitions($region)->has($this->unit->Id())) {
+		if (!$this->isSimulation && $outlook->getApparitions($region)->has($this->unit->Id())) {
 			$this->message(StealDiscoveredMessage::class)->e($unit);
 			$this->message(StealRevealedMessage::class, $party)->e($region)->e($this->unit, StealRevealedMessage::UNIT);
 			return;

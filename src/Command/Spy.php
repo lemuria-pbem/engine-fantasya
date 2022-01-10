@@ -74,7 +74,7 @@ final class Spy extends UnitCommand implements Activity
 			return;
 		}
 		$outlook = new Outlook(new Census($party));
-		if (!$this->isSimulation && $outlook->Apparitions($region)->has($this->unit->Id())) {
+		if (!$this->isSimulation && $outlook->getApparitions($region)->has($this->unit->Id())) {
 			$this->message(SpyDiscoveredMessage::class)->e($unit);
 			$this->message(SpyRevealedMessage::class, $party)->e($region)->e($this->unit, SpyRevealedMessage::UNIT);
 			return;
