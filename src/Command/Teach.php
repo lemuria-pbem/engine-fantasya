@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
 
-use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
@@ -20,6 +19,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TeachSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachStudentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachUnableMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -192,11 +192,16 @@ final class Teach extends UnitCommand implements Activity
 	}
 
 	private function canTeach(Learn $student): bool {
-		$talent         = getClass($student->getTalent());
-		$calculus       = $this->context->getCalculus($student->Unit());
-		$studentAbility = $calculus->knowledge($talent);
-		$teacherAbility = $this->calculus()->knowledge($talent);
-		return $teacherAbility->Level() > $studentAbility->Level();
+		$talent         = $student->getTalent();
+		$studentAbility = $student->unit->Knowledge()[$talent];
+		$teacherAbility = $this->unit->Knowledge()[$talent];
+		if ($teacherAbility instanceof Ability) {
+			if ($studentAbility instanceof Ability) {
+				return $teacherAbility->Level() > $studentAbility->Level();
+			}
+			return true;
+		}
+		return false;
 	}
 
 	/**
