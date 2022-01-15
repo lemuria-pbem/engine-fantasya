@@ -6,8 +6,8 @@ use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command\AllocationCommand;
 use Lemuria\Engine\Fantasya\Context;
-use Lemuria\Engine\Fantasya\Effect\WorkerLodging;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\LodgingTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Message\Unit\MineUnmaintainedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\MineUnusableMessage;
@@ -25,9 +25,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialWantsMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SawmillUnmaintainedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SawmillUnusableMessage;
 use Lemuria\Engine\Fantasya\Phrase;
-use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Building\Mine;
 use Lemuria\Model\Fantasya\Building\Quarry;
@@ -36,7 +34,6 @@ use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Iron;
 use Lemuria\Model\Fantasya\Commodity\Stone;
 use Lemuria\Model\Fantasya\Commodity\Wood;
-use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\RawMaterial as RawMaterialInterface;
@@ -55,6 +52,7 @@ use Lemuria\Model\Fantasya\Talent;
 class RawMaterial extends AllocationCommand implements Activity
 {
 	use DefaultActivityTrait;
+	use LodgingTrait;
 
 	protected Ability $knowledge;
 
@@ -73,7 +71,7 @@ class RawMaterial extends AllocationCommand implements Activity
 	protected function initialize(): void {
 		$this->checkForDoubleProductionFacility();
 		if ($this->isInDoublingFacility) {
-			$this->checkForFriendlyLodge();
+			$this->hasLodging = $this->bookLodging();
 		}
 		parent::initialize();
 	}
@@ -116,14 +114,14 @@ class RawMaterial extends AllocationCommand implements Activity
 	protected function createDemand(): void {
 		if ($this->hasLodging) {
 			if ($this->calculus()->isInMaintainedConstruction()) {
-				$this->createDoubleDemand();
+				$this->createMultipleDemand(2);
 				return;
 			}
-			$this->addUnusableMessage();
-		} elseif ($this->isInDoublingFacility) {
 			$this->addUnmaintainedMessage();
+		} elseif ($this->isInDoublingFacility) {
+			$this->addUnusableMessage();
 		}
-		$this->createSingleDemand();
+		$this->createMultipleDemand();
 	}
 
 	protected function getCommodity(): Commodity {
@@ -173,49 +171,7 @@ class RawMaterial extends AllocationCommand implements Activity
 		}
 	}
 
-	private function checkForFriendlyLodge(): void {
-		$needed     = $this->unit->Size();
-		$party      = $this->unit->Party();
-		$diplomacy  = $party->Diplomacy();
-		$dependency = $this->unit->Construction()->Building()->Dependency();
-		foreach ($this->unit->Region()->Estate() as $construction /* @var Construction $construction */) {
-			if ($construction->Building() === $dependency) {
-				$inhabitants = $construction->Inhabitants();
-				$owner       = $inhabitants->Owner();
-				if ($owner->Party() === $party || $diplomacy->has(Relation::ENTER, $owner)) {
-					if ($this->context->getCalculus($owner)->isInMaintainedConstruction()) {
-						$lodging    = $this->getLodging($construction);
-						$freePlaces = $construction->Size() - $inhabitants->count() - $lodging->Booking();
-						if ($freePlaces >= 0) {
-							$bookPlaces = min($freePlaces, $needed);
-							$lodging->book($bookPlaces);
-							$needed -= $bookPlaces;
-							if ($needed <= 0) {
-								$this->hasLodging = true;
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	private function getLodging(Construction $construction): WorkerLodging {
-		$effect = new WorkerLodging(State::getInstance());
-		/** @var WorkerLodging $lodging */
-		$lodging = Lemuria::Score()->find($effect->setConstruction($construction));
-		if ($lodging) {
-			return $lodging;
-		}
-		Lemuria::Score()->add($effect);
-		return $effect;
-	}
-
-	/**
-	 * @noinspection DuplicatedCode
-	 */
-	private function createSingleDemand(): void {
+	private function createMultipleDemand(int $factor = 1): void {
 		$talent           = $this->getRequiredTalent();
 		$this->knowledge  = $this->getProductivity($talent);
 		$size             = $this->unit->Size();
@@ -239,48 +195,15 @@ class RawMaterial extends AllocationCommand implements Activity
 				$available        = $this->getAvailability();
 				$this->production = min($this->production, $available);
 				if ($this->production > 0) {
-					$quantity = new Quantity($this->getCommodity(), $this->production);
+					$quantity = new Quantity($this->getCommodity(), (int)ceil($this->production / $factor));
 					$this->addToWorkload($this->production);
 					$this->resources->add($quantity);
+					$quantity = new Quantity($this->getCommodity(), $this->production);
 					$this->message(RawMaterialCanMessage::class)->i($quantity);
 				} else {
 					$this->message(RawMaterialNoDemandMessage::class)->s($this->getCommodity());
 				}
 			}
-		} else {
-			$this->message(RawMaterialNoDemandMessage::class)->s($this->getCommodity());
-		}
-	}
-
-	/**
-	 * @noinspection DuplicatedCode
-	 */
-	private function createDoubleDemand(): void {
-		$talent          = $this->getRequiredTalent();
-		$this->knowledge = $this->getProductivity($talent);
-		$size            = $this->unit->Size();
-		$production      = (int)floor($this->potionBoost($size) * 2 * $size * $this->knowledge->Level() / $talent->Level());
-		$this->production = $this->reduceByWorkload($production);
-
-		if ($this->production > 0) {
-			if (count($this->phrase) === 2) {
-				$this->demand = (int)$this->phrase->getParameter();
-				if ($this->demand <= $this->production) {
-					$this->production = (int)$this->demand;
-					$quantity = new Quantity($this->getCommodity(), $this->production);
-					$this->message(RawMaterialWantsMessage::class)->i($quantity);
-				} else {
-					$quantity = new Quantity($this->getCommodity(), $this->production);
-					$this->message(RawMaterialCannotMessage::class)->i($quantity);
-				}
-			} else {
-				$quantity = new Quantity($this->getCommodity(), $this->production);
-				$this->message(RawMaterialCanMessage::class)->i($quantity);
-			}
-			$this->addToWorkload($this->production);
-
-			$material = new Quantity($this->getCommodity(), (int)ceil($quantity->Count() / 2));
-			$this->resources->add($material);
 		} else {
 			$this->message(RawMaterialNoDemandMessage::class)->s($this->getCommodity());
 		}
