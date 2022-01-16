@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguiseDoesNotKnowMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguiseKnownPartyMessage;
@@ -75,5 +77,9 @@ final class Disguise extends UnitCommand
 		} else {
 			throw new InvalidCommandException($this);
 		}
+	}
+
+	#[Pure] protected function checkSize(): bool {
+		return true;
 	}
 }

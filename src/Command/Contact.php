@@ -57,10 +57,6 @@ final class Contact extends UnitCommand
 		}
 	}
 
-	#[Pure] protected function checkSize(): bool {
-		return true;
-	}
-
 	private function createEffect(Party $party, Unit $from): void {
 		$effect = new ContactEffect(State::getInstance());
 		$effect->setParty($party);

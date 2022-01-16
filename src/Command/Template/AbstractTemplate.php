@@ -9,6 +9,10 @@ use Lemuria\Engine\Fantasya\Phrase;
 
 abstract class AbstractTemplate extends UnitCommand
 {
+	#[Pure] protected function checkSize(): bool {
+		return true;
+	}
+
 	#[Pure] protected function cleanLine(Phrase $phrase, int $from = 1): string {
 		return trim($phrase->getLine($from), "'\"");
 	}

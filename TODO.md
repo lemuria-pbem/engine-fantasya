@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
-- neuen Einheiten BETRETEN ermöglichen
 
 ## Neue Funktionen
 

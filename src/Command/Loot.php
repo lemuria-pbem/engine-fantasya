@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Party\LootAddGroupMessage;
 use Lemuria\Engine\Fantasya\Message\Party\LootAllMessage;
@@ -85,5 +87,9 @@ final class Loot extends UnitCommand
 				}
 			}
 		}
+	}
+
+	#[Pure] protected function checkSize(): bool {
+		return true;
 	}
 }
