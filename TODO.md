@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
-- VORLAGE *N und VORLAGE N* als endliche Wiederholung
 - neuen Einheiten BETRETEN ermöglichen
 
 ## Neue Funktionen

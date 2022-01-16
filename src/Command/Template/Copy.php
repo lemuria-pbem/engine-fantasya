@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Template;
 
-use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Message\Unit\DefaultMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 
@@ -11,9 +10,11 @@ use Lemuria\Engine\Fantasya\Phrase;
  *
  * VORLAGE <n> <command>
  * VORLAGE * <command>
+ * VORLAGE *<n> <command>
  * VORLAGE <n>/<m> <command>
  * @ <n> <command>
  * @ * <command>
+ * @ *<n> <command>
  * @ <n>/<m> <command>
  */
 final class Copy extends AbstractTemplate
@@ -25,11 +26,11 @@ final class Copy extends AbstractTemplate
 	}
 
 	private function cleanPhrase(): Phrase {
-		$default   = $this->cleanLine($this->phrase, 3);
-		$default   = $this->replaceTempUnits($default);
-		$copy    = $this->phrase->getVerb();
-		$repeat  = $this->phrase->getParameter();
-		$command = $this->phrase->getParameter(2);
+		$default  = $this->cleanLine($this->phrase, 3);
+		$default  = $this->replaceTempUnits($default);
+		$copy     = $this->phrase->getVerb();
+		$repeat   = $this->phrase->getParameter();
+		$command  = $this->phrase->getParameter(2);
 		return new Phrase($copy . ' ' . $repeat . ' ' . $command . ' ' . $default);
 	}
 }
