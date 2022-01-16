@@ -5,7 +5,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Fehler/Verbesserungen in 0.9
 
 - VORLAGE *N und VORLAGE N* als endliche Wiederholung
-- GEBEN Personen vor BETRETEN ausführen
 - neuen Einheiten BETRETEN ermöglichen
 
 ## Neue Funktionen
