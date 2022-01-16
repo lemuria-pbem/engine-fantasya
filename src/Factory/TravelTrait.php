@@ -164,6 +164,47 @@ trait TravelTrait
 				}
 			}
 		}
+		return array_values($guards);
+	}
+
+	/**
+	 * If unit is allowed to pass region, check if next region of the journey is guarded by same party.
+	 * If it is guarded, check if unit is also allowed to pass or has GUARD relation.
+	 *
+	 * @return Party[]
+	 */
+	protected function unitIsAllowedToPass(Region $region, array $guards): array {
+		$n = count($guards);
+		for ($i = 0; $i < $n; $i++) {
+			/** @var Party $party */
+			$party     = $guards[$i];
+			$diplomacy = $party->Diplomacy();
+			if ($diplomacy->has(Relation::PASS, $this->unit)) {
+				if ($this->directions->hasMore()) {
+					$direction = $this->directions->peek();
+					$neighbour = Lemuria::World()->getNeighbours($region)[$direction] ?? null;
+					if ($neighbour) {
+						$nextGuards = $this->context->getIntelligence($neighbour)->getGuards();
+						if ($nextGuards->isEmpty()) {
+							unset($guards[$i]);
+						} else {
+							foreach ($nextGuards as $guard/* @var Unit $guard */) {
+								if ($guard->Party() === $party) {
+									if ($diplomacy->has(Relation::GUARD, $this->unit, $neighbour) || $diplomacy->has(Relation::PASS, $this->unit, $neighbour)) {
+										unset($guards[$i]);
+										break;
+									}
+								}
+							}
+						}
+					} else {
+						unset($guards[$i]);
+					}
+				} else {
+					unset($guards[$i]);
+				}
+			}
+		}
 		return $guards;
 	}
 

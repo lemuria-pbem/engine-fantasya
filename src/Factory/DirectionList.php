@@ -35,6 +35,13 @@ class DirectionList implements \Countable
 		return $this->index < $this->count;
 	}
 
+	public function peek(): string {
+		if ($this->hasMore()) {
+			return $this->directions[$this->index];
+		}
+		throw new LemuriaException('No more directions.');
+	}
+
 	public function next(): string {
 		if ($this->hasMore()) {
 			$direction = $this->directions[$this->index++];

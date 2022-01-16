@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
-- neues Allianzrecht: Durchreise
 - VORLAGE BEFEHL Temp... auflösen
 - VORLAGE *N und VORLAGE N* als endliche Wiederholung
 - GEBEN Personen vor BETRETEN ausführen
@@ -31,6 +30,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.11
 
+- automatische Datenmigration für neue Versionen
 - Statistische Daten erstellen
   - Regionsentwicklung im Report anzeigen
   - Veränderungen im Inventar anzeigen
@@ -53,6 +53,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 - Gegenstandsklassen für verkürzte Übergaben (Kräuter, Luxuswaren, Rüstungen, Schilde, Tiere, Trophäen, Tränke, Waffen)
 - besondere Gebäude/Orte wie Ruinen oder Höhlen
+- Weltumseglung ermöglichen
 - Umweltereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE
 - Seekampf/Piraterie
