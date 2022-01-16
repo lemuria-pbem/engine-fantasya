@@ -101,6 +101,7 @@ class Travel extends UnitCommand implements Activity
 		$this->initDirections();
 	}
 
+	/** @noinspection PhpConditionAlreadyCheckedInspection */
 	protected function run(): void {
 		if ($this->directions->count() <= 0) {
 			throw new UnknownCommandException();

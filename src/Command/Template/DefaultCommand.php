@@ -19,10 +19,11 @@ use Lemuria\Engine\Fantasya\State;
  * - VORLAGE '<command>'
  * - VORLAGE "<command>"
  */
-final class DefaultCommand extends UnitCommand
+final class DefaultCommand extends AbstractTemplate
 {
 	protected function run(): void {
-		$default = trim($this->phrase->getLine(), "'\"");
+		$default = $this->cleanLine($this->phrase);
+		$default = $this->replaceTempUnits($default, 1);
 		try {
 			$context = new Context(new State());
 			$context->setParty($this->unit->Party())->setUnit($this->unit);
