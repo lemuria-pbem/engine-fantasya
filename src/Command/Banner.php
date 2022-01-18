@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Message\Party\BannerMessage;
 
 /**
@@ -15,5 +17,9 @@ final class Banner extends UnitCommand
 		$party = $this->unit->Party();
 		$party->setBanner($this->phrase->getLine());
 		$this->message(BannerMessage::class, $party);
+	}
+
+	#[Pure] protected function checkSize(): bool {
+		return true;
 	}
 }

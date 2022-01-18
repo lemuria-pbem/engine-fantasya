@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Effect\ContactEffect;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
@@ -55,10 +53,6 @@ final class Contact extends UnitCommand
 				$this->message(ContactNotFoundMessage::class)->p($id);
 			}
 		}
-	}
-
-	#[Pure] protected function checkSize(): bool {
-		return true;
 	}
 
 	private function createEffect(Party $party, Unit $from): void {

@@ -16,6 +16,7 @@ use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\NavigationTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\TravelTrait;
+use Lemuria\Engine\Fantasya\Message\Party\TravelAllowedMessage;
 use Lemuria\Engine\Fantasya\Message\Party\TravelGuardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RoutePauseMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardedMessage;
@@ -24,6 +25,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TravelNoCrewMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNoNavigationMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNoRidingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNotCaptainMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelPassMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelRoadMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelSpeedMessage;
@@ -99,6 +101,7 @@ class Travel extends UnitCommand implements Activity
 		$this->initDirections();
 	}
 
+	/** @noinspection PhpConditionAlreadyCheckedInspection */
 	protected function run(): void {
 		if ($this->directions->count() <= 0) {
 			throw new UnknownCommandException();
@@ -178,11 +181,19 @@ class Travel extends UnitCommand implements Activity
 					$this->workload->add();
 					$guards = $this->unitIsStoppedByGuards($region);
 					if ($guards) {
-						$this->workload->add($regions);
-						$regions = 0;
-						$this->message(TravelGuardedMessage::class)->e($region);
-						foreach ($guards as $party) {
-							$this->message(TravelGuardMessage::class, $party)->e($region)->e($this->unit, TravelGuardMessage::UNIT);
+						$notPassGuards = $this->unitIsAllowedToPass($region, $guards);
+						if ($notPassGuards) {
+							$this->workload->add($regions);
+							$regions = 0;
+							$this->message(TravelGuardedMessage::class)->e($region);
+							foreach ($guards as $party) {
+								$this->message(TravelGuardMessage::class, $party)->e($region)->e($this->unit, TravelGuardMessage::UNIT);
+							}
+						} elseif ($this->directions->hasMore()) {
+							$this->message(TravelPassMessage::class)->e($region);
+							foreach ($guards as $party) {
+								$this->message(TravelAllowedMessage::class, $party)->e($region)->e($this->unit, TravelGuardMessage::UNIT);
+							}
 						}
 					}
 				}

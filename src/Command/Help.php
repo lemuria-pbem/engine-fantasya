@@ -29,6 +29,7 @@ use Lemuria\Model\Fantasya\Relation;
  * - HELFEN 0|<Party> Alles [Nicht|Region] [Region|Nicht]
  * - HELFEN 0|<Party> Betrete|Betreten [Nicht|Region] [Region|Nicht]
  * - HELFEN 0|<Party> Bewache|Bewachen [Nicht|Region] [Region|Nicht]
+ * - HELFEN 0|<Party> Durchreise|Durchreisen|Reise|Reisen [Nicht|Region] [Region|Nicht]
  * - HELFEN 0|<Party> Gib|Geben [Nicht|Region] [Region|Nicht]
  * - HELFEN 0|<Party> Handel|Handeln [Nicht|Region] [Region|Nicht]
  * - HELFEN 0|<Party> Kampf|Kämpfe|Kämpfen [Nicht|Region] [Region|Nicht]
@@ -104,6 +105,7 @@ final class Help extends UnitCommand
 			'alles'                                             => Relation::ALL,
 			'betrete', 'betreten'                               => Relation::ENTER,
 			'bewache', 'bewachen'                               => Relation::GUARD,
+			'durchreise', 'durchreisen', 'reise', 'reisen'      => Relation::PASS,
 			'gib', 'geben'                                      => Relation::GIVE,
 			'handel', 'handeln'                                 => Relation::TRADE,
 			'kampf', 'kämpfe', 'kämpfen'                        => Relation::COMBAT,

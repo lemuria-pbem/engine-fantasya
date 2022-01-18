@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\FightMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FightUnguardMessage;
@@ -61,5 +63,9 @@ final class Fight extends UnitCommand
 				throw new InvalidCommandException($this, 'Invalid position "' . $position . '".');
 		}
 		$this->message(FightMessage::class)->p($this->unit->BattleRow());
+	}
+
+	#[Pure] protected function checkSize(): bool {
+		return true;
 	}
 }

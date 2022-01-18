@@ -5,7 +5,7 @@
 ^(\/\/)|(komme|kommen|komment|kommenta|kommentar).*$
 ^;.*$
 ^@ +[a-z].+$
-^@ +\* +[a-z].+$
+^@ +(\*[0-9]*|[0-9]*\*) +[a-z].+$
 ^@ +[0-9]+ +[a-z].+$
 ^@ +[0-9]+/+[0-9]+ +[a-z].+$
 ^=[0-9]+( +\+[0-9]+)? +[a-z].+$
@@ -120,11 +120,11 @@
 ^@?(verli|verlie|verlier|verliere|verlieren) +.*$
 
 ^(vo|vor|vorl|vorla|vorlag|vorlage) +[a-z].+$
-^(vo|vor|vorl|vorla|vorlag|vorlage) +\* +[a-z].+$
+^(vo|vor|vorl|vorla|vorlag|vorlage) +(\*[0-9]*|[0-9]*\*) +[a-z].+$
 ^(vo|vor|vorl|vorla|vorlag|vorlage) +[0-9]+ +[a-z].+$
 ^(vo|vor|vorl|vorla|vorlag|vorlage) +[0-9]+/+[0-9]+ +[a-z].+$
 ^(d|de|def|defa|defau|defaul|default) +[a-z].+$
-^(d|de|def|defa|defau|defaul|default) +\* +[a-z].+$
+^(d|de|def|defa|defau|defaul|default) +(\*[0-9]*|[0-9]*\*) +[a-z].+$
 ^(d|de|def|defa|defau|defaul|default) +[0-9]+ +[a-z].+$
 ^(d|de|def|defa|defau|defaul|default) +[0-9]+/+[0-9]+ +[a-z].+$
 

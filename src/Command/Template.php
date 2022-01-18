@@ -24,13 +24,35 @@ final class Template extends DelegatedCommand
 		$n = $this->phrase->count();
 		if ($n >= 2) {
 			$verb   = $this->phrase->getVerb();
-			$phrase = $this->phrase->getLine(2);
 			$param  = $this->phrase->getParameter();
+			$phrase = $this->phrase->getLine(2);
 
-			if ($param === '*' || $param === '0') {
+			if (preg_match('/^(0*\*|\*0*)$/', $param) === 1) {
+				$copy    = $verb . ' * ' . $phrase;
 				$command = new CompositeCommand($this->phrase, $this->context);
 				return $command->setCommands([
-					new Copy($this->phrase, $this->context),
+					new Copy(new Phrase($copy), $this->context),
+					$this->createOrder($phrase)
+				]);
+			}
+
+			if (preg_match('/^([0-9]+)\*$/', $param, $matches) === 1 || preg_match('/^\*([0-9]+)$/', $param, $matches) === 1) {
+				$limit = (int)$matches[1];
+				if ($limit >= 2) {
+					$copy    = $verb . ' *' . --$limit . ' ' . $phrase;
+					$command = new CompositeCommand($this->phrase, $this->context);
+					return $command->setCommands([
+						new Copy(new Phrase($copy), $this->context),
+						$this->createOrder($phrase)
+					]);
+				}
+				if ($limit > 0) {
+					return $this->createOrder($phrase);
+				}
+				$copy    = $verb . ' * ' . $phrase;
+				$command = new CompositeCommand($this->phrase, $this->context);
+				return $command->setCommands([
+					new Copy(new Phrase($copy), $this->context),
 					$this->createOrder($phrase)
 				]);
 			}

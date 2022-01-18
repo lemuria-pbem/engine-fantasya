@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Effect\PotionEffect;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
+use Lemuria\Engine\Fantasya\Factory\LodgingTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Item;
@@ -25,6 +26,7 @@ use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Potion\GoliathWater;
 use Lemuria\Model\Fantasya\Commodity\Potion\SevenLeagueTea;
 use Lemuria\Model\Fantasya\Construction;
+use Lemuria\Model\Fantasya\DoubleAbility;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Modification;
 use Lemuria\Model\Fantasya\Potion;
@@ -48,6 +50,7 @@ use Lemuria\Model\Fantasya\Unit;
 final class Calculus
 {
 	use BuilderTrait;
+	use LodgingTrait;
 
 	private ?Learn $student = null;
 
@@ -220,7 +223,14 @@ final class Calculus
 				if ($this->isInMaintainedConstruction()) {
 					$modification = $this->unit->Construction()->Building()->BuildingEffect()->getEffect($talent);
 					if ($modification instanceof Modification) {
-						$ability = $modification->getModified($ability);
+						if ($modification instanceof DoubleAbility) {
+							$lodging = $this->getLodging();
+							if (!$lodging || $lodging->hasSpace($this->unit)) {
+								$ability = $modification->getModified($ability);
+							}
+						} else {
+							$ability = $modification->getModified($ability);
+						}
 					}
 				}
 				return $ability;

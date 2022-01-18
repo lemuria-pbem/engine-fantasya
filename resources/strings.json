@@ -159,13 +159,14 @@
 			"agreement_8": "Ressourcen",
 			"agreement_16": "Betreten",
 			"agreement_32": "Geben",
-			"agreement_64": "Bewachen",
-			"agreement_128": "Tarnung",
-			"agreement_256": "Parteitarnung",
-			"agreement_512": "Silber",
-			"agreement_1024": "Nahrung",
-			"agreement_2048": "Kampf",
-			"agreement_4095": "Alles"
+			"agreement_64": "Durchreise",
+			"agreement_128": "Bewachen",
+			"agreement_256": "Tarnung",
+			"agreement_512": "Parteitarnung",
+			"agreement_1024": "Silber",
+			"agreement_2048": "Nahrung",
+			"agreement_4096": "Kampf",
+			"agreement_8191": "Alles"
 		}
 	},
 	"health": {
@@ -662,6 +663,7 @@
 		"TeachUnableMessage": "Die Einheit $id kann die Einheit $student nicht mehr lehren.",
 		"TempMessage": "Neue Einheit $id erzeugt.",
 		"TheWildHuntMessage": "In einer stürmischen Nacht werden unsere Wachen in $region vom Lärm eines rumpelnden Wagens, dem Stampfen vieler Hufe und gellenden Schreien aufgeschreckt. Mit wahnsinnigem Tempo rauscht die furchtsame Erscheinung vorbei, während die Wachen unfähig sind etwas zu tun. Plötzlich überkommt sie eine große Müdigkeit und sie fallen kurz darauf in einen tiefen Schlaf. Am nächsten Morgen finden sie eine Kiste, die einige Phiolen und andere Dinge enthält.",
+		"TravelAllowedMessage": "Unsere Wachen haben die Einheit $unit in der Region $region durchreisen lassen.",
 		"TravelAnchorMessage": "Das Schiff $id ankert im $anchor und kann nicht nach $direction auslaufen.",
 		"TravelGuardCancelMessage": "Die Bewachung der Region wurde durch die Abreise aufgehoben.",
 		"TravelGuardedMessage": "Die Einheit $id wurde in der Region $region von den Wachen gestoppt.",
@@ -676,6 +678,7 @@
 		"TravelNoRidingMessage": "Die Einheit $id hat nicht genügend Erfahrung in Reiten, um zu reisen.",
 		"TravelNotCaptainMessage": "Die Einheit $id muss der Kapitän des Schiffes $vessel sein, um es zu steuern.",
 		"TravelOverLandMessage": "Das Schiff $id kann sich nicht über Land nach $direction bewegen.",
+		"TravelPassMessage": "Die Wachen in der Region $region haben die Einheit $id durchreisen lassen.",
 		"TravelRegionMessage": "Die Einheit $id bewegt sich in die Region $region.",
 		"TravelRoadMessage": "Die Einheit $id ist über eine Straße gereist und kann sich eine Region weiter bewegen.",
 		"TravelShipTooHeavyMessage": "Das Schiff $id ist zu schwer, um sich zu bewegen.",

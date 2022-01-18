@@ -2,24 +2,49 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\People;
+use Lemuria\Model\Fantasya\Unit;
 
 final class WorkerLodging extends AbstractConstructionEffect
 {
-	private int $booking = 0;
+	private People $bookings;
+
+	/**
+	 * @var array(int=>bool)
+	 */
+	private array $hasSpace = [];
 
 	public function __construct(State $state) {
 		parent::__construct($state, Action::AFTER);
+		$this->bookings = new People();
 	}
 
-	public function Booking(): int {
-		return $this->booking;
+	public function Space(): int {
+		return max(0, $this->Construction()->getFreeSpace() - $this->bookings->Size());
 	}
 
-	public function book(int $places): WorkerLodging {
-		$this->booking += $places;
+	#[Pure] public function hasBooked(Unit $unit): bool {
+		return $this->bookings->has($unit->Id());
+	}
+
+	#[Pure] public function hasSpace(Unit $unit): bool {
+		$id = $unit->Id()->Id();
+		if (array_key_exists($id, $this->hasSpace)) {
+			return $this->hasSpace[$id];
+		}
+		return false;
+	}
+
+	public function book(Unit $unit): WorkerLodging {
+		$id                  = $unit->Id()->Id();
+		$free                = $this->Construction()->getFreeSpace();
+		$this->hasSpace[$id] = $free >= $unit->Size();
+		$this->bookings->add($unit);
 		return $this;
 	}
 

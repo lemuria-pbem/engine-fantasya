@@ -13,6 +13,7 @@ use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Fantasya\Intelligence;
+use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
@@ -28,6 +29,11 @@ final class State implements Reassignment
 	private ?TurnOptions $turnOptions = null;
 
 	private ?Casts $casts = null;
+
+	/**
+	 * @var array(int=>UnitMapper)
+	 */
+	private array $unitMapper = [];
 
 	/**
 	 * @var array(int=>Availability)
@@ -113,6 +119,12 @@ final class State implements Reassignment
 				$this->intelligence[$new] = $this->intelligence[$old];
 				unset($this->intelligence[$old]);
 				break;
+			case Catalog::PARTIES :
+				if (isset($this->unitMapper[$old])) {
+					$this->unitMapper[$new] = $this->unitMapper[$old];
+					unset($this->unitMapper[$old]);
+				}
+				break;
 		}
 	}
 
@@ -131,6 +143,8 @@ final class State implements Reassignment
 				unset($this->commerce[$old]);
 				unset($this->intelligence[$old]);
 				break;
+			case Catalog::PARTIES :
+				unset($this->unitMapper[$old]);
 		}
 	}
 
@@ -146,6 +160,17 @@ final class State implements Reassignment
 			$this->casts = new Casts();
 		}
 		return $this->casts;
+	}
+
+	/**
+	 * Get a party's unit mapper.
+	 */
+	public function getUnitMapper(Party $party): UnitMapper {
+		$id = $party->Id()->Id();
+		if (!isset($this->unitMapper[$id])) {
+			$this->unitMapper[$id] = new UnitMapper();
+		}
+		return $this->unitMapper[$id];
 	}
 
 	/**

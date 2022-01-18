@@ -29,8 +29,6 @@ final class Context implements Reassignment
 
 	private CommandFactory $factory;
 
-	private UnitMapper $mapper;
-
 	private ?Party $party = null;
 
 	private ?Unit $unit = null;
@@ -53,7 +51,6 @@ final class Context implements Reassignment
 	#[Pure] public function __construct(private State $state) {
 		$this->parser  = new Parser();
 		$this->factory = new CommandFactory($this);
-		$this->mapper  = new UnitMapper();
 	}
 
 	/**
@@ -91,8 +88,8 @@ final class Context implements Reassignment
 		return $this->parser;
 	}
 
-	#[Pure] public function UnitMapper(): UnitMapper {
-		return $this->mapper;
+	public function UnitMapper(): UnitMapper {
+		return $this->state->getUnitMapper($this->Party());
 	}
 
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
