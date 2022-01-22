@@ -57,7 +57,7 @@
 
 ^@?(komma|komman|kommand|kommando)( +[a-z0-9]{1,6})?$
 
-^@?(kon|kont|konta|kontak|kontakt|kontakti|kontaktie|kontaktier|kontaktiere|kontaktieren) +[a-z0-9]{1,6}$
+^@?(kon|kont|konta|kontak|kontakt|kontakti|kontaktie|kontaktier|kontaktiere|kontaktieren)( +[a-z0-9]{1,6})+$
 
 ^@?(leh|lehr|lehre|lehren|lehrer)( +[a-z0-9]{1,6})+$
 

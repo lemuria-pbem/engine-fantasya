@@ -181,7 +181,7 @@ final class Calculus
 			}
 		}
 		$weight -= $size * $race->Weight();
-		$speed   = $this->speed([$horse, $camel, $elephant]);
+		$speed   = $this->speed([$horse, $camel, $elephant], $race->Speed());
 		$animals = [$horse, $camel, $elephant, $griffin, $pegasus];
 		$talent  = $this->talent($animals, $size);
 		return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speed, $talent, $speedBoost);
@@ -454,8 +454,7 @@ final class Calculus
 		return $total;
 	}
 
-	#[Pure] private function speed(array $transports): int {
-		$speed = PHP_INT_MAX;
+	#[Pure] private function speed(array $transports, int $speed = PHP_INT_MAX): int {
 		foreach ($transports as $item /* @var Item $item */) {
 			$transport = $item?->getObject();
 			if ($transport instanceof Transport) {

@@ -225,16 +225,11 @@ final class Construction extends AbstractProduct
 
 	private function leaveCurrentConstructionFor(Building $building): ?ConstructionModel {
 		$construction = $this->unit->Construction();
-		if (!$construction) {
-			return null;
+		if ($construction && $construction->Building() !== $building) {
+			$construction->Inhabitants()->remove($this->unit);
+			$this->message(LeaveConstructionMessage::class)->e($construction);
 		}
-		$currentBuilding = $construction->Building();
-		if ($currentBuilding === $building) {
-			return $construction;
-		}
-		$construction->Inhabitants()->remove($this->unit);
-		$this->message(LeaveConstructionMessage::class)->e($construction);
-		return null;
+		return $construction;
 	}
 
 	private function initializeMarket(ConstructionModel $construction): void {
