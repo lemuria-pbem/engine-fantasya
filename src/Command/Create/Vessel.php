@@ -133,14 +133,12 @@ final class Vessel extends AbstractProduct
 	}
 
 	private function leaveCurrentVesselFor(Ship $ship): ?VesselModel {
-		$vessel      = $this->unit->Vessel();
-		$currentShip = $vessel?->Ship();
-		if ($currentShip === $ship) {
-			return $vessel;
+		$vessel = $this->unit->Vessel();
+		if ($vessel && $vessel->Ship() !== $ship) {
+			$vessel->Passengers()->remove($this->unit);
+			$this->message(LeaveVesselMessage::class)->e($vessel);
 		}
-		$vessel->Passengers()->remove($this->unit);
-		$this->message(LeaveVesselMessage::class)->e($vessel);
-		return null;
+		return $vessel;
 	}
 
 	private function getShip(): Ship {
