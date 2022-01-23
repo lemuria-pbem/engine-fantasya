@@ -39,7 +39,8 @@ class PickPocket implements Act
 	protected People $enemy;
 
 	public function act(): PickPocket {
-		$tries      = (int)ceil($this->unit->Size() / self::TRIES);
+		$size       = $this->unit->Size();
+		$tries      = (int)ceil($size / self::TRIES);
 		$triesLeft  = $tries;
 		$isRevealed = false;
 		$allPicks   = 0;
@@ -82,7 +83,7 @@ class PickPocket implements Act
 			}
 		}
 
-		if ($isRevealed || $allPicks < $tries * self::NEED) {
+		if ($isRevealed || $allPicks < $size * self::NEED) {
 			$this->message(PickPocketLeaveMessage::class, $this->unit);
 			$this->createRoamEffect();
 		}
