@@ -2,14 +2,14 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Fehler/Verbesserungen in 0.9
-
-
-## Neue Funktionen
-
-### Version 0.10
+## Fehler/Verbesserungen in 0.10
 
 - Migration zu PHP 8.1
+  - enums
+  - never
+  - new () als initialer Wert
+  - readonly
+  - final const
 - ERSCHAFFEN einzigartiger Gegenstände (Unicum)
   - Unicum hat bestimmte Aktionen (GEBEN, LESEN, SCHREIBEN, BENUTZEN)
   - Aktion hat Lebensdauer (Zeit oder Anzahl)
@@ -24,6 +24,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - weitere Zauber:
   - Beschleunigung (8) (mehrfache Angriffe)
   - Erdbeben (9) (zerstört Gebäude)
+
+## Neue Funktionen
 
 ### Version 0.11
 
