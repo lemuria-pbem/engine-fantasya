@@ -9,7 +9,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ### Version 0.10
 
-- Migration to PHP 8.1
+- Migration zu PHP 8.1
 - ERSCHAFFEN einzigartiger Gegenstände (Unicum)
   - Unicum hat bestimmte Aktionen (GEBEN, LESEN, SCHREIBEN, BENUTZEN)
   - Aktion hat Lebensdauer (Zeit oder Anzahl)
@@ -48,7 +48,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
-- Vorgabeeinstellungen für neue Einheiten (Kampfstatus, Sammeln)
+- Vorgabeeinstellungen für neue Einheiten (Kampfstatus, Sammeln, Tarnen)
 - Gegenstandsklassen für verkürzte Übergaben (Kräuter, Luxuswaren, Rüstungen, Schilde, Tiere, Trophäen, Tränke, Waffen)
 - besondere Gebäude/Orte wie Ruinen oder Höhlen
 - Weltumseglung ermöglichen
