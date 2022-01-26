@@ -16,6 +16,7 @@ use Lemuria\Engine\Fantasya\Message\Vessel\TravelAnchorMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelLandMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelOverLandMessage;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Party;
@@ -25,7 +26,7 @@ use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
-use Lemuria\Model\World;
+use Lemuria\Model\World\Direction;
 
 trait TravelTrait
 {
@@ -53,8 +54,8 @@ trait TravelTrait
 
 		if ($this->capacity->Movement() === Capacity::SHIP) {
 			$anchor = $this->vessel->Anchor();
-			if ($anchor !== Vessel::IN_DOCK) {
-				if ($direction !== $anchor) {
+			if ($anchor !== Direction::NONE) {
+				if ($direction !== $anchor->value) {
 					$this->message(TravelAnchorMessage::class, $this->vessel)->p($direction)->p($anchor, TravelAnchorMessage::ANCHOR);
 					return null;
 				}
@@ -208,20 +209,21 @@ trait TravelTrait
 		return $guards;
 	}
 
-	protected function getOppositeDirection(string $direction): string {
+	protected function getOppositeDirection(Direction $direction): Direction {
 		return match ($direction) {
-			World::NORTH => World::SOUTH,
-			World::NORTHEAST => World::SOUTHWEST,
-			World::EAST => World::WEST,
-			World::SOUTHEAST => World::NORTHWEST,
-			World::SOUTH => World::NORTH,
-			World::SOUTHWEST => World::NORTHEAST,
-			World::WEST => World::EAST,
-			World::NORTHWEST => World::SOUTHEAST
+			Direction::NORTH     => Direction::SOUTH,
+			Direction::NORTHEAST => Direction::SOUTHWEST,
+			Direction::EAST      => Direction::WEST,
+			Direction::SOUTHEAST => Direction::NORTHWEST,
+			Direction::SOUTH     => Direction::NORTH,
+			Direction::SOUTHWEST => Direction::NORTHEAST,
+			Direction::WEST      => Direction::EAST,
+			Direction::NORTHWEST => Direction::SOUTHEAST,
+			default              => throw new LemuriaException('Cannot determine opposite direction.')
 		};
 	}
 
-	protected function overRoad(Region $from, string $direction, Region $to): bool {
+	protected function overRoad(Region $from, Direction $direction, Region $to): bool {
 		if ($from->hasRoad($direction)) {
 			$direction = $this->getOppositeDirection($direction);
 			if ($to->hasRoad($direction)) {

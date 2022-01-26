@@ -2,12 +2,13 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Action;
+use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Factory\Model\Season;
 use Lemuria\Engine\Fantasya\Message\Region\RegrowMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Herb;
 use Lemuria\Model\Fantasya\Commodity\Herb\Bubblemorel;
 use Lemuria\Model\Fantasya\Commodity\Herb\Bugleweed;
@@ -41,7 +42,6 @@ use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Landscape\Plain;
 use Lemuria\Model\Fantasya\Landscape\Swamp;
 use Lemuria\Model\Fantasya\Region;
-use function Lemuria\getClass;
 
 /**
  * Herbs grow in the spring and summer and reduce in winter.
@@ -101,7 +101,7 @@ final class Regrow extends AbstractEvent
 	private float $rate;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::AFTER);
+		parent::__construct($state, Priority::AFTER);
 	}
 
 	protected function initialize(): void {
@@ -117,7 +117,7 @@ final class Regrow extends AbstractEvent
 	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
 			$landscape = $region->Landscape();
 			if ($landscape instanceof Ocean) {
 				continue;

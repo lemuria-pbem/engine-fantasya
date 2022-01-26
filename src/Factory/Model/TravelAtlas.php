@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Outlook;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\World\Atlas;
+use Lemuria\Model\World\SortMode;
 
 final class TravelAtlas extends Atlas
 {
@@ -65,7 +66,7 @@ final class TravelAtlas extends Atlas
 			}
 		}
 
-		$this->sort(Atlas::NORTH_TO_SOUTH);
+		$this->sort(SortMode::NORTH_TO_SOUTH);
 		return $this;
 	}
 

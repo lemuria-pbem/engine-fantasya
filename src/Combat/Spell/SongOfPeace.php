@@ -8,7 +8,7 @@ use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\SongOfPeaceCombatantMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\SongOfPeaceFighterMessage;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Combat;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Talent\Magic;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -22,10 +22,10 @@ class SongOfPeace extends AbstractBattleSpell
 			$calculus    = new Calculus($unit);
 			$level       = $calculus->knowledge(Magic::class)->Level();
 			$gradePoints = $grade * self::POINTS * $level;
-			$gradePoints = $this->castOnCombatants($this->victim[Combat::FRONT], $gradePoints);
-			$gradePoints = $this->castOnCombatants($this->victim[Combat::BACK], $gradePoints);
-			$gradePoints = $this->castOnCombatants($this->victim[Combat::BYSTANDER], $gradePoints);
-			$this->castOnCombatants($this->victim[Combat::REFUGEE], $gradePoints);
+			$gradePoints = $this->castOnCombatants($this->victim[BattleRow::FRONT->value], $gradePoints);
+			$gradePoints = $this->castOnCombatants($this->victim[BattleRow::BACK->value], $gradePoints);
+			$gradePoints = $this->castOnCombatants($this->victim[BattleRow::BYSTANDER->value], $gradePoints);
+			$this->castOnCombatants($this->victim[BattleRow::REFUGEE->value], $gradePoints);
 		}
 		return $grade;
 	}

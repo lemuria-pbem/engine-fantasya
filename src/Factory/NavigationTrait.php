@@ -26,6 +26,7 @@ use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
 use Lemuria\Model\Neighbours;
+use Lemuria\Model\World\Direction;
 
 trait NavigationTrait
 {
@@ -113,7 +114,7 @@ trait NavigationTrait
 		$destination->Fleet()->add($this->vessel);
 
 		if ($destination->Landscape() instanceof Ocean) {
-			$this->vessel->setAnchor(Vessel::IN_DOCK);
+			$this->vessel->setAnchor(Direction::NONE);
 			$this->vessel->setPort(null);
 		} else {
 			$neighbours = Lemuria::World()->getNeighbours($destination);

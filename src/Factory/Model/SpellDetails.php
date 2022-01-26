@@ -8,6 +8,7 @@ use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Factory\SpellParser;
 use Lemuria\Model\Dictionary;
 use Lemuria\Model\Fantasya\BattleSpell;
+use Lemuria\Model\Fantasya\Combat\Phase;
 use Lemuria\Model\Fantasya\Exception\JsonException;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Storage\JsonProvider;
@@ -73,8 +74,8 @@ class SpellDetails
 	public function CombatPhase(): string {
 		if ($this->spell instanceof BattleSpell) {
 			return match ($this->spell->Phase()) {
-				BattleSpell::PREPARATION => 'Vorbereitung',
-				BattleSpell::COMBAT      => 'Angriff'
+				Phase::PREPARATION => 'Vorbereitung',
+				Phase::COMBAT      => 'Angriff'
 			};
 		}
 		return '';

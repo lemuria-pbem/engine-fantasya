@@ -11,7 +11,7 @@ abstract class AbstractPreventMessage extends AbstractPartyMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	protected int $section = Section::ECONOMY;
+	protected Section $section = Section::ECONOMY;
 
 	protected Id $unit;
 

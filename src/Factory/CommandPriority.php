@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Effect;
 use Lemuria\Engine\Fantasya\Event;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Exception\LemuriaException;
 
 /**
@@ -120,29 +121,17 @@ final class CommandPriority
 			}
 		}
 
-		$priority = $action->Priority();
+		$priority = match ($action->Priority()) {
+			Priority::BEFORE => self::B_ACTION,
+			Priority::MIDDLE => self::M_ACTION,
+			Priority::AFTER  => self::A_ACTION
+		};
 
-		if ($action instanceof Event) {
-			if ($priority <= Action::BEFORE) {
-				return self::B_ACTION;
-			}
-			if ($priority >= Action::AFTER) {
-				return self::A_ACTION;
-			}
-			return self::M_ACTION;
-		}
-
-		if ($action instanceof Effect) {
-			if ($priority <= Action::BEFORE) {
-				return self::B_ACTION - 1;
-			}
-			if ($priority >= Action::AFTER) {
-				return self::A_ACTION - 1;
-			}
-			return self::M_ACTION - 1;
-		}
-
-		throw new LemuriaException('Unsupported action: ' . getClass($action));
+		return match (true) {
+			$action instanceof Effect => --$priority,
+			$action instanceof Event  => $priority,
+			default                   => throw new LemuriaException('Unsupported action: ' . getClass($action))
+		};
 	}
 
 	/**

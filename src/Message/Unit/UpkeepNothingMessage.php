@@ -11,7 +11,7 @@ class UpkeepNothingMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::ECONOMY;
+	protected Section $section = Section::ECONOMY;
 
 	protected Id $construction;
 

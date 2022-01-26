@@ -15,7 +15,7 @@ use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Model\World\Atlas;
+use Lemuria\Model\World\SortMode;
 
 /**
  * Helper methods for report generation.
@@ -178,7 +178,7 @@ final class Outlook
 			}
 		}
 
-		return $visible->sort(Atlas::NORTH_TO_SOUTH);
+		return $visible->sort(SortMode::NORTH_TO_SOUTH);
 	}
 
 	/**

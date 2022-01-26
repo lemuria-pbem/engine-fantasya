@@ -15,10 +15,10 @@ use Lemuria\Engine\Fantasya\Message\Unit\NumberUnitUsedMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\NumberCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\NumberVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\NumberVesselUsedMessage;
-use Lemuria\Model\Catalog;
 use Lemuria\Exception\IdException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
+use Lemuria\Model\Domain;
 
 /**
  * The Number command is used to set the ID of a unit, its party, or a construction or vessel it controls.
@@ -69,7 +69,7 @@ final class Number extends UnitCommand
 	}
 
 	private function setUnitId(Id $id): void {
-		if (Lemuria::Catalog()->has($id, Catalog::UNITS)) {
+		if (Lemuria::Catalog()->has($id, Domain::UNIT)) {
 			$this->message(NumberUnitUsedMessage::class)->p($id->Id());
 			return;
 		}
@@ -85,7 +85,7 @@ final class Number extends UnitCommand
 			$this->message(NumberNotInConstructionMessage::class);
 			return;
 		}
-		if (Lemuria::Catalog()->has($id, Catalog::CONSTRUCTIONS)) {
+		if (Lemuria::Catalog()->has($id, Domain::CONSTRUCTION)) {
 			$this->message(NumberConstructionUsedMessage::class, $construction)->p($id->Id());
 			return;
 		}
@@ -107,7 +107,7 @@ final class Number extends UnitCommand
 			$this->message(NumberNotInVesselMessage::class);
 			return;
 		}
-		if (Lemuria::Catalog()->has($id, Catalog::VESSELS)) {
+		if (Lemuria::Catalog()->has($id, Domain::VESSEL)) {
 			$this->message(NumberVesselUsedMessage::class, $vessel)->p($id->Id());
 			return;
 		}
@@ -125,7 +125,7 @@ final class Number extends UnitCommand
 
 	private function setPartyId(Id $id): void {
 		$party = $this->unit->Party();
-		if (Lemuria::Catalog()->has($id, Catalog::PARTIES)) {
+		if (Lemuria::Catalog()->has($id, Domain::PARTY)) {
 			$this->message(NumberPartyUsedMessage::class, $party)->p($id->Id());
 			return;
 		}

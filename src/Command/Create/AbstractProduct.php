@@ -38,7 +38,7 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 	use DefaultActivityTrait;
 	use WorkloadTrait;
 
-	protected const CONSUMPTION = [
+	protected final const CONSUMPTION = [
 		Armory::class         => [Saddlery::class   => self::CONSUMPTION_RATE],
 		Bowmaking::class      => [Blacksmith::class => self::CONSUMPTION_RATE],
 		Carriagemaking::class => [Workshop::class   => self::CONSUMPTION_RATE],

@@ -9,7 +9,7 @@ class TeachSelfMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::STUDY;
+	protected Section $section = Section::STUDY;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot teach itself.';

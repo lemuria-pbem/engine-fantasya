@@ -7,7 +7,7 @@ use Lemuria\Engine\Orders;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Reassignment;
 use Lemuria\SerializableTrait;
 use Lemuria\StringList;
@@ -107,7 +107,7 @@ class LemuriaOrders implements Orders, Reassignment
 	}
 
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
-		if ($identifiable->Catalog() === Catalog::UNITS) {
+		if ($identifiable->Catalog() === Domain::UNIT) {
 			$this->replace($oldId->Id(), $identifiable->Id()->Id(), $this->current);
 			$this->replace($oldId->Id(), $identifiable->Id()->Id(), $this->default);
 			$this->replaceInDefaults($oldId, $identifiable->Id());
@@ -115,7 +115,7 @@ class LemuriaOrders implements Orders, Reassignment
 	}
 
 	public function remove(Identifiable $identifiable): void {
-		if ($identifiable->Catalog() === Catalog::UNITS) {
+		if ($identifiable->Catalog() === Domain::UNIT) {
 			$id = $identifiable->Id()->Id();
 			unset($this->current[$id]);
 			unset($this->default[$id]);

@@ -9,7 +9,7 @@ class AttackFromMonsterMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::EVENT;
 
-	protected int $section = Section::BATTLE;
+	protected Section $section = Section::BATTLE;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is attacked by monsters.';

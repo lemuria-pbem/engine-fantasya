@@ -22,7 +22,7 @@ abstract class AbstractMessage implements MessageType
 
 	protected string $level = Message::DEBUG;
 
-	protected int $section = Section::EVENT;
+	protected Section $section = Section::EVENT;
 
 	protected Id $id;
 
@@ -31,7 +31,7 @@ abstract class AbstractMessage implements MessageType
 		return $this->level;
 	}
 
-	public function Section(): int {
+	public function Section(): Section {
 		return $this->section;
 	}
 

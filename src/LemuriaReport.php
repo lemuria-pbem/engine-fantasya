@@ -11,7 +11,7 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Exception\DuplicateIdException;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
@@ -71,12 +71,12 @@ class LemuriaReport implements Reassignment, Report
 
 		$namespace = $entity->Catalog();
 		$id        = $entity->Id()->Id();
-		if (isset($this->report[$namespace][$id])) {
-			foreach ($this->report[$namespace][$id] as $i) {
+		if (isset($this->report[$namespace->value][$id])) {
+			foreach ($this->report[$namespace->value][$id] as $i) {
 				$messages[$i] = $this->message[$i];
 			}
 		}
-		if ($namespace === Catalog::PARTIES && isset($this->removed[$id])) {
+		if ($namespace === Domain::PARTY && isset($this->removed[$id])) {
 			foreach ($this->removed[$id] as $i) {
 				$messages[$i] = $this->message[$i];
 			}
@@ -147,13 +147,13 @@ class LemuriaReport implements Reassignment, Report
 		}
 		$entity = $message->Entity()->Id();
 
-		$this->report[$namespace][$entity][] = $id;
+		$this->report[$namespace->value][$entity][] = $id;
 		$this->message[$id] = $message;
 		return $this;
 	}
 
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
-		$namespace = $identifiable->Catalog();
+		$namespace = $identifiable->Catalog()->value;
 		$newId     = $identifiable->Id();
 		$id        = $oldId->Id();
 		if (isset($this->report[$namespace][$id])) {
@@ -175,7 +175,7 @@ class LemuriaReport implements Reassignment, Report
 
 	public function remove(Identifiable $identifiable): void {
 		if ($identifiable instanceof Unit) {
-			$namespace = $identifiable->Catalog();
+			$namespace = $identifiable->Catalog()->value;
 			$id        = $identifiable->Id()->Id();
 			if (isset($this->report[$namespace][$id])) {
 				$party = $identifiable->Party()->Id()->Id();
@@ -211,9 +211,9 @@ class LemuriaReport implements Reassignment, Report
 	 *
 	 * @throws LemuriaException
 	 */
-	private function checkNamespace(int $namespace): void {
-		if (!isset($this->report[$namespace])) {
-			$bug = 'Namespace ' . $namespace . ' is not a valid report namespace.';
+	private function checkNamespace(Domain $namespace): void {
+		if (!isset($this->report[$namespace->value])) {
+			$bug = 'Namespace ' . $namespace->value . ' is not a valid report namespace.';
 			throw new LemuriaException($bug, new \InvalidArgumentException());
 		}
 	}

@@ -37,6 +37,7 @@ use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Navigation;
 use Lemuria\Model\Fantasya\Talent\Riding;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\World\Direction;
 
 /**
  * Implementation of command REISEN.
@@ -159,16 +160,17 @@ class Travel extends UnitCommand implements Activity
 		$this->message(TravelSpeedMessage::class)->p($regions)->p($weight, TravelSpeedMessage::WEIGHT);
 		try {
 			while ($regions > 0 && $this->directions->hasMore()) {
-				$direction = $this->directions->next();
-				if ($direction === DirectionList::ROUTE_STOP) {
+				$next = $this->directions->next();
+				if ($next === DirectionList::ROUTE_STOP) {
 					break;
 				}
 
-				$region = $this->canMoveTo($direction);
+				$region = $this->canMoveTo($next);
 				if ($region) {
-					$overRoad = $this->overRoad($this->unit->Region(), $direction, $region);
+					$direction = Direction::from($next);
+					$overRoad  = $this->overRoad($this->unit->Region(), $direction, $region);
 					$this->moveTo($region);
-					$this->addToTravelRoute($direction);
+					$this->addToTravelRoute($next);
 					$this->message(TravelRegionMessage::class)->e($region);
 					$route[] = $region;
 

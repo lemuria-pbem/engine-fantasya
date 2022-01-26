@@ -11,6 +11,7 @@ use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\ActionTrait;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Exception\UnserializeEntityException;
@@ -29,7 +30,7 @@ abstract class AbstractEffect implements Effect
 
 	private Id $id;
 
-	public function __construct(protected State $state, int $priority) {
+	public function __construct(protected State $state, Priority $priority) {
 		$this->setPriority($priority);
 		$this->context = new Context($state);
 	}
@@ -50,7 +51,7 @@ abstract class AbstractEffect implements Effect
 	/**
 	 * Get action as string.
 	 */
-	public function __toString(): string {
+	#[Pure] public function __toString(): string {
 		return 'Effect[' . $this->getPriority() . '] ' . getClass($this);
 	}
 

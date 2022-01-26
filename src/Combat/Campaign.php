@@ -5,9 +5,10 @@ namespace Lemuria\Engine\Fantasya\Combat;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Combat;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Unit;
@@ -166,10 +167,10 @@ class Campaign
 	private function addDefenderOtherUnits(array $defenders): void {
 		foreach ($defenders as $partyId) {
 			$party = Party::get(new Id($partyId));
-			if ($party->Type() === Party::PLAYER) {
+			if ($party->Type() === Type::PLAYER) {
 				$battle = $this->battle($party);
 				foreach ($this->intelligence->getUnits($party) as $unit/* @var Unit $unit */) {
-					if ($unit->BattleRow() >= Combat::DEFENSIVE) {
+					if ($unit->BattleRow() >= BattleRow::DEFENSIVE->value) {
 						$id = $unit->Id()->Id();
 						if (!isset($this->defenders[$id])) {
 							$battle->addDefender($unit);
@@ -191,7 +192,7 @@ class Campaign
 						if ($ally->Diplomacy()->has(Relation::COMBAT, $party)) {
 							$battle = $this->battle($party);
 							foreach ($this->intelligence->getUnits($ally) as $unit /* @var Unit $unit */) {
-								if ($unit->BattleRow() >= Combat::DEFENSIVE) {
+								if ($unit->BattleRow() >= BattleRow::DEFENSIVE->value) {
 									$battle->addDefender($unit);
 									Lemuria::Log()->debug($unit . ' gets drawn into battle as ally.');
 								}

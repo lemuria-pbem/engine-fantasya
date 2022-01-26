@@ -28,7 +28,7 @@ use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\People;
@@ -43,7 +43,7 @@ class LemuriaTurn implements Turn
 {
 	use BuilderTrait;
 
-	protected CommandPriority $priority;
+	protected readonly CommandPriority $priority;
 
 	/**
 	 * @var array(int=>array)
@@ -158,14 +158,14 @@ class LemuriaTurn implements Turn
 	 */
 	public function substitute(Identifiable $entity): Turn {
 		switch ($entity->Catalog()) {
-			case Catalog::PARTIES :
+			case Domain::PARTY :
 				$this->substituteParty($entity->Id());
 				break;
-			case Catalog::UNITS :
+			case Domain::UNIT :
 				$this->substituteUnit($entity->Id());
 				break;
 			default :
-				throw new LemuriaException('Cannot substitute entity of catalog ' . $entity->Catalog() . '.');
+				throw new LemuriaException('Cannot substitute entity of catalog ' . $entity->Catalog()->value . '.');
 		}
 		return $this;
 	}

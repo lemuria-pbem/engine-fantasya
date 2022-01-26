@@ -7,7 +7,6 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultBlockMessage;
 use Lemuria\Engine\Fantasya\Command\Apply\BerserkBlood as BerserkBloodEffect;
-use Lemuria\Model\Fantasya\Combat;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Potion\BerserkBlood;
 use Lemuria\Model\Fantasya\Commodity\Protection\Armor;
@@ -34,24 +33,19 @@ class Attack
 	];
 
 	protected const ATTACK_MALUS = [
-		Armor::class => 2,
+		Armor::class        => 2,
 		LeatherArmor::class => 0,
-		Mail::class  => 1
+		Mail::class         => 1
 	];
 
-	protected const FLIGHT = [
-		Combat::REFUGEE    => 1.0,
-		Combat::BYSTANDER  => 0.9, Combat::DEFENSIVE => 0.9, Combat::CAREFUL => 0.9,
-		Combat::BACK       => 0.2, Combat::FRONT     => 0.2,
-		Combat::AGGRESSIVE => 0.0
-	];
+	protected const FLIGHT = [1.0, 0.9, 0.9, 0.9, 0.2, 0.2, 0.0];
 
 	protected int $round = 0;
 
 	private float $flight;
 
 	#[Pure] public function __construct(private Combatant $combatant) {
-		$this->flight = self::FLIGHT[$combatant->Unit()->BattleRow()];
+		$this->flight = self::FLIGHT[$combatant->Unit()->BattleRow()->value];
 	}
 
 	public function Flight(): float {

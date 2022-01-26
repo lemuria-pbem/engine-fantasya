@@ -19,7 +19,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\AbstractCastle;
 use Lemuria\Model\Fantasya\Building\Castle;
@@ -85,7 +85,7 @@ final class Construction extends AbstractProduct
 					$this->message(ConstructionBuildMessage::class)->e($construction)->p($yield);
 				}
 			} else {
-				$id           = Lemuria::Catalog()->nextId(Catalog::CONSTRUCTIONS);
+				$id           = Lemuria::Catalog()->nextId(Domain::CONSTRUCTION);
 				$construction = new ConstructionModel();
 				$construction->setName('Gebäude ' . $id)->setId($id);
 				$construction->Inhabitants()->add($this->unit);

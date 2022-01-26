@@ -2,10 +2,10 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Game;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Message\Party\FindWalletMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Commodity\Silver;
@@ -30,7 +30,7 @@ final class FindWallet extends AbstractEvent
 	private Quantity $silver;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::BEFORE);
+		parent::__construct($state, Priority::BEFORE);
 	}
 
 	public function setOptions(array $options): FindWallet {

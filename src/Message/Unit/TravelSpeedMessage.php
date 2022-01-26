@@ -9,7 +9,7 @@ class TravelSpeedMessage extends AbstractUnitMessage
 {
 	public const WEIGHT = 'weight';
 
-	protected int $section = Section::MOVEMENT;
+	protected Section $section = Section::MOVEMENT;
 
 	protected int $speed;
 

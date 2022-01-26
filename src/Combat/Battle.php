@@ -25,6 +25,7 @@ use Lemuria\Model\Fantasya\Heirs;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
@@ -279,11 +280,11 @@ class Battle
 		foreach ($loot as $quantity /* @var Quantity $quantity */) {
 			$unit = $heirs->random();
 			$type = $unit->Party()->Type();
-			if ($type === Party::PLAYER) {
+			if ($type === Type::PLAYER) {
 				$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
 				Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
 				BattleLog::getInstance()->add(new TakeLootMessage($unit, $quantity));
-			} elseif ($type === Party::MONSTER) {
+			} elseif ($type === Type::MONSTER) {
 				$race = $unit->Race();
 				if ($race instanceof Monster) {
 					$commodity = $quantity->Commodity();
@@ -303,7 +304,7 @@ class Battle
 		foreach ($armies as $army /* @var Army $army */) {
 			foreach ($army->Trophies() as $quantity /* @var Quantity $quantity */) {
 				$unit = $heirs->random();
-				if ($unit->Party()->Type() === Party::PLAYER) {
+				if ($unit->Party()->Type() === Type::PLAYER) {
 					$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
 					// Lemuria::Log()->debug($unit . ' takes trophies: ' . $quantity);
 					BattleLog::getInstance()->add(new TakeTrophiesMessage($unit, $quantity));

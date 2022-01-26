@@ -11,7 +11,7 @@ class TeachBonusMessage extends AbstractUnitMessage
 
 	public const BONUS = 'b';
 
-	protected int $section = Section::STUDY;
+	protected Section $section = Section::STUDY;
 
 	protected int $students;
 

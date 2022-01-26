@@ -23,9 +23,9 @@ class ResourcePool
 {
 	use SiegeTrait;
 
-	protected Party $party;
+	protected readonly Party $party;
 
-	protected Region $region;
+	protected readonly Region $region;
 
 	protected People $units;
 

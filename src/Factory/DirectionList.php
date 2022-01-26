@@ -7,7 +7,7 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Model\World;
+use Lemuria\Model\World\Direction;
 
 class DirectionList implements \Countable
 {
@@ -99,10 +99,10 @@ class DirectionList implements \Countable
 	private function routeDirection(int $i): string {
 		$direction = $this->directions[$i];
 		return match ($direction) {
-			World::NORTHEAST => 'NO',
-			World::EAST      => 'O',
-			World::SOUTHEAST => 'SO',
-			default          => $direction
+			Direction::NORTHEAST->value => 'NO',
+			Direction::EAST->value      => 'O',
+			Direction::SOUTHEAST->value => 'SO',
+			default                     => $direction
 		};
 	}
 }

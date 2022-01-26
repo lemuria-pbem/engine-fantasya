@@ -8,7 +8,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - enums
   - never
   - new () als initialer Wert
-  - readonly
+  - readonly properties
   - final const
 - ERSCHAFFEN einzigartiger Gegenstände (Unicum)
   - Unicum hat bestimmte Aktionen (GEBEN, LESEN, SCHREIBEN, BENUTZEN)

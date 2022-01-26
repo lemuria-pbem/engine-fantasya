@@ -2,12 +2,15 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use JetBrains\PhpStorm\Pure;
+
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Event;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\ActionTrait;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 
@@ -17,7 +20,7 @@ abstract class AbstractEvent implements Event
 
 	protected Context $context;
 
-	public function __construct(protected State $state, int $priority) {
+	public function __construct(protected State $state, Priority $priority) {
 		$this->setPriority($priority);
 		$this->context = new Context($state);
 	}
@@ -25,7 +28,7 @@ abstract class AbstractEvent implements Event
 	/**
 	 * Get action as string.
 	 */
-	public function __toString(): string {
+	#[Pure] public function __toString(): string {
 		return 'Event[' . $this->getPriority() . '] ' . getClass($this);
 	}
 

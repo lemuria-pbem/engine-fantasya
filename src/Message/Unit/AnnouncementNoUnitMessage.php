@@ -11,7 +11,7 @@ class AnnouncementNoUnitMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::MAIL;
+	protected Section $section = Section::MAIL;
 
 	protected Id $target;
 

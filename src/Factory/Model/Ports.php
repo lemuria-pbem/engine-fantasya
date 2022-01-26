@@ -19,7 +19,7 @@ class Ports
 	use MessageTrait;
 	use PortsTrait;
 
-	public const DUTY = 0.1;
+	public final const DUTY = 0.1;
 
 	public function __construct(protected Vessel $vessel, Region $region) {
 		$this->init($vessel->Passengers()->Owner(), $region);

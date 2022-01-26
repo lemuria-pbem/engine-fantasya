@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Section;
 
 class LearnTeachersMessage extends AbstractUnitMessage
 {
-	protected int $section = Section::STUDY;
+	protected Section $section = Section::STUDY;
 
 	protected int $teachers;
 

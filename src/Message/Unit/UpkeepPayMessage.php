@@ -9,7 +9,7 @@ use Lemuria\Item;
 
 class UpkeepPayMessage extends AbstractUnitMessage
 {
-	protected int $section = Section::ECONOMY;
+	protected Section $section = Section::ECONOMY;
 
 	protected Id $construction;
 

@@ -223,7 +223,7 @@ use Lemuria\Model\Fantasya\Talent\Taxcollecting;
 use Lemuria\Model\Fantasya\Talent\Trading;
 use Lemuria\Model\Fantasya\Talent\Weaponry;
 use Lemuria\Model\Fantasya\Talent\Woodchopping;
-use Lemuria\Model\World;
+use Lemuria\Model\World\Direction;
 use Lemuria\Singleton;
 
 /**
@@ -598,32 +598,32 @@ class CommandFactory
 	];
 
 	protected array $directions = [
-		World::EAST      => World::EAST,
-		World::NORTH     => World::NORTH,
-		World::NORTHEAST => World::NORTHEAST,
-		World::NORTHWEST => World::NORTHWEST,
-		World::SOUTH     => World::SOUTH,
-		World::SOUTHEAST => World::SOUTHEAST,
-		World::SOUTHWEST => World::SOUTHWEST,
-		World::WEST      => World::WEST,
-		'East'           => World::EAST,
-		'NO'             => World::NORTHEAST,
-		'Norden'         => World::NORTH,
-		'Nordosten'      => World::NORTHEAST,
-		'Nordwesten'     => World::NORTHWEST,
-		'North'          => World::NORTH,
-		'Northeast'      => World::NORTHEAST,
-		'Northwest'      => World::NORTHWEST,
-		'O'              => World::EAST,
-		'Osten'          => World::EAST,
-		'SO'             => World::SOUTHEAST,
-		'South'          => World::SOUTH,
-		'Southeast'      => World::SOUTHEAST,
-		'Southwest'      => World::SOUTHWEST,
-		'Süden'          => World::SOUTH,
-		'Südosten'       => World::SOUTHEAST,
-		'Südwesten'      => World::SOUTHWEST,
-		'Westen'         => World::WEST
+		'E'          => Direction::EAST,
+		'N'          => Direction::NORTH,
+		'NE'         => Direction::NORTHEAST,
+		'NW'         => Direction::NORTHWEST,
+		'S'          => Direction::SOUTH,
+		'SE'         => Direction::SOUTHEAST,
+		'SW'         => Direction::SOUTHWEST,
+		'W'          => Direction::WEST,
+		'East'       => Direction::EAST,
+		'NO'         => Direction::NORTHEAST,
+		'Norden'     => Direction::NORTH,
+		'Nordosten'  => Direction::NORTHEAST,
+		'Nordwesten' => Direction::NORTHWEST,
+		'North'      => Direction::NORTH,
+		'Northeast'  => Direction::NORTHEAST,
+		'Northwest'  => Direction::NORTHWEST,
+		'O'          => Direction::EAST,
+		'Osten'      => Direction::EAST,
+		'SO'         => Direction::SOUTHEAST,
+		'South'      => Direction::SOUTH,
+		'Southeast'  => Direction::SOUTHEAST,
+		'Southwest'  => Direction::SOUTHWEST,
+		'Süden'      => Direction::SOUTH,
+		'Südosten'   => Direction::SOUTHEAST,
+		'Südwesten'  => Direction::SOUTHWEST,
+		'Westen'     => Direction::WEST
 	];
 
 	protected const APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Apply\\';

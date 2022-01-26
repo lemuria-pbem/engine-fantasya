@@ -2,14 +2,14 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Effect\ExcessCargo;
 use Lemuria\Engine\Fantasya\Message\Vessel\FounderEffectMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\FounderMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Unit;
@@ -26,11 +26,11 @@ use Lemuria\Model\Fantasya\Vessel;
 final class Founder extends AbstractEvent
 {
 	public function __construct(State $state) {
-		parent::__construct($state, Action::AFTER);
+		parent::__construct($state, Priority::AFTER);
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Catalog::VESSELS) as $vessel /* @var Vessel $vessel */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::VESSEL) as $vessel /* @var Vessel $vessel */) {
 			$excessCargo = Lemuria::Score()->find($this->effect($vessel));
 			if ($vessel->Region()->Landscape() instanceof Ocean) {
 				$completion = $vessel->Completion();

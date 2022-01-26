@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Combat\Log\Participant;
 use Lemuria\Serializable;
 

@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Message\Party\AcquaintanceMessage;
@@ -10,13 +9,15 @@ use Lemuria\Engine\Fantasya\Message\Party\AcquaintanceTellMessage;
 use Lemuria\Engine\Fantasya\Message\Party\AcquaintanceTellDisguiseMessage;
 use Lemuria\Engine\Fantasya\Message\Party\AcquaintanceToldMessage;
 use Lemuria\Engine\Fantasya\Outlook;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent;
@@ -40,14 +41,14 @@ final class Acquaintance extends AbstractEvent
 	private Talent $perception;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::AFTER);
+		parent::__construct($state, Priority::AFTER);
 		$this->camouflage = self::createTalent(Camouflage::class);
 		$this->perception = self::createTalent(Perception::class);
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Catalog::PARTIES) as $party /* @var Party $party */) {
-			if ($party->Type() !== Party::PLAYER) {
+		foreach (Lemuria::Catalog()->getAll(Domain::PARTY) as $party /* @var Party $party */) {
+			if ($party->Type() !== Type::PLAYER) {
 				continue;
 			}
 
@@ -137,8 +138,8 @@ final class Acquaintance extends AbstractEvent
 			return; // Disguised units from same parties know the truth.
 		}
 		foreach ($ids as $id => $camouflage) {
-			$foreign                    = $census->getParty($unit);
-			if ($foreign?->Type() === Party::PLAYER) {
+			$foreign = $census->getParty($unit);
+			if ($foreign?->Type() === Type::PLAYER) {
 				$fid                        = $foreign ? $foreign->Id()->Id() : 0;
 				$this->network[$id][$fid][] = [$census, $unit, $camouflage];
 			}

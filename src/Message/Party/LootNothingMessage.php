@@ -9,7 +9,7 @@ class LootNothingMessage extends AbstractPartyMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	protected int $section = Section::ECONOMY;
+	protected Section $section = Section::ECONOMY;
 
 	protected function create(): string {
 		return 'We will not pick any loot.';

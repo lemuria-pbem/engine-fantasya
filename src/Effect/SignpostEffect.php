@@ -6,8 +6,8 @@ use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\randChance;
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Message\Region\SignpostDecayMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
@@ -20,7 +20,7 @@ final class SignpostEffect extends AbstractConstructionEffect
 	private int $age = 0;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::AFTER);
+		parent::__construct($state, Priority::AFTER);
 	}
 
 	public function Age(): int {

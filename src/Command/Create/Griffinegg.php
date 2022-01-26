@@ -19,13 +19,13 @@ use Lemuria\Engine\Fantasya\Message\Unit\GriffineggStealMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GriffineggStealOnlyMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Id;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg as GriffineggModel;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Race;
 use Lemuria\Model\Fantasya\Region;
@@ -115,12 +115,12 @@ final class Griffinegg extends AllocationCommand implements Activity
 			$unit = $effect->Griffins();
 		} else {
 			$unit = new Unit();
-			$unit->setId(Lemuria::Catalog()->nextId(Catalog::UNITS));
+			$unit->setId(Lemuria::Catalog()->nextId(Domain::UNIT));
 			$unit->setName($griffins->Count() > 1 ? 'Greife' : 'Greif');
 			/** @var Race $griffin */
 			$griffin = $griffins->Commodity();
 			$effect->setGriffins($unit->setRace($griffin));
-			$party = Party::get(Id::fromId(Spawn::PARTY_ID[Party::MONSTER]));
+			$party = Party::get(Spawn::getPartyId(Type::MONSTER));
 			$party->People()->add($unit);
 			$region->Residents()->add($unit);
 			$unit->Inventory()->add(new Quantity($this->griffinegg, $eggs));

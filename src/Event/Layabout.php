@@ -2,12 +2,13 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Message\Unit\LayaboutMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -16,13 +17,13 @@ use Lemuria\Model\Fantasya\Unit;
 final class Layabout extends AbstractEvent
 {
 	public function __construct(State $state) {
-		parent::__construct($state, Action::AFTER);
+		parent::__construct($state, Priority::AFTER);
 	}
 
 	protected function run(): void {
 		$count = 0;
-		foreach (Lemuria::Catalog()->getAll(Catalog::PARTIES) as $party /* @var Party $party */) {
-			if ($party->Type() === Party::PLAYER) {
+		foreach (Lemuria::Catalog()->getAll(Domain::PARTY) as $party /* @var Party $party */) {
+			if ($party->Type() === Type::PLAYER) {
 				foreach ($party->People() as $unit /* @var Unit $unit */) {
 					if (!$this->state->getProtocol($unit)->hasActivity()) {
 						$this->message(LayaboutMessage::class, $unit);

@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Exception\ActionException;
 
 /**
@@ -11,18 +9,12 @@ use Lemuria\Engine\Fantasya\Exception\ActionException;
  */
 interface Action extends \Stringable
 {
-	public const BEFORE = -1;
-
-	public const MIDDLE = 0;
-
-	public const AFTER = 1;
-
 	/**
 	 * Get action as string.
 	 */
 	public function __toString(): string;
 
-	#[Pure] public function Priority(): int;
+	public function Priority(): Priority;
 
 	/**
 	 * Check if the action has been prepared and is ready to execute.

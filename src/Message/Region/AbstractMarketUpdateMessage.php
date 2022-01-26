@@ -11,7 +11,7 @@ abstract class AbstractMarketUpdateMessage extends AbstractRegionMessage
 {
 	protected string $level = Message::EVENT;
 
-	protected int $section = Section::ECONOMY;
+	protected Section $section = Section::ECONOMY;
 
 	protected Singleton $luxury;
 

@@ -5,7 +5,9 @@ namespace Lemuria\Engine\Fantasya\Message;
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Message\Section;
 use Lemuria\Engine\Report;
+use Lemuria\Model\Domain;
 use Lemuria\Singleton;
 
 interface MessageType extends Singleton
@@ -14,9 +16,9 @@ interface MessageType extends Singleton
 
 	#[ExpectedValues(valuesFromClass: Report::class)]
 	#[Pure]
-	public function Report(): int;
+	public function Report(): Domain;
 
-	public function Section(): int;
+	public function Section(): Section;
 
 	public function render(LemuriaMessage $message): string;
 }

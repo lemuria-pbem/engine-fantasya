@@ -4,7 +4,7 @@ namespace Lemuria\Engine\Fantasya\Effect;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\People;
@@ -20,7 +20,7 @@ final class WorkerLodging extends AbstractConstructionEffect
 	private array $hasSpace = [];
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::AFTER);
+		parent::__construct($state, Priority::AFTER);
 		$this->bookings = new People();
 	}
 

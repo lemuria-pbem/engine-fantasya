@@ -10,7 +10,7 @@ class FightMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	protected int $section = Section::BATTLE;
+	protected Section $section = Section::BATTLE;
 
 	protected int $position;
 

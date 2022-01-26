@@ -9,7 +9,7 @@ class UnmaintainedMessage extends AbstractConstructionMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::ECONOMY;
+	protected Section $section = Section::ECONOMY;
 
 	protected function create(): string {
 		return 'Construction ' . $this->id . ' cannot be used as it was not maintained.';
