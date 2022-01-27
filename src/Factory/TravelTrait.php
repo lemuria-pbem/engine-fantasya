@@ -54,7 +54,7 @@ trait TravelTrait
 
 		if ($this->capacity->Movement() === Capacity::SHIP) {
 			$anchor = $this->vessel->Anchor();
-			if ($anchor !== Direction::NONE) {
+			if ($anchor !== Direction::IN_DOCK) {
 				if ($direction !== $anchor) {
 					$this->message(TravelAnchorMessage::class, $this->vessel)->p($direction)->p($anchor, TravelAnchorMessage::ANCHOR);
 					return null;

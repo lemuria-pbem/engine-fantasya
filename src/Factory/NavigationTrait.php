@@ -114,7 +114,7 @@ trait NavigationTrait
 		$destination->Fleet()->add($this->vessel);
 
 		if ($destination->Landscape() instanceof Ocean) {
-			$this->vessel->setAnchor(Direction::NONE);
+			$this->vessel->setAnchor(Direction::IN_DOCK);
 			$this->vessel->setPort(null);
 		} else {
 			$neighbours = Lemuria::World()->getNeighbours($destination);

@@ -161,7 +161,7 @@ class Travel extends UnitCommand implements Activity
 		try {
 			while ($regions > 0 && $this->directions->hasMore()) {
 				$next = $this->directions->next();
-				if ($next === Direction::NONE) {
+				if ($next === Direction::ROUTE_STOP) {
 					break;
 				}
 

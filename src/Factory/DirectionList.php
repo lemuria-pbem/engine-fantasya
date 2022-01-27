@@ -11,9 +11,15 @@ use Lemuria\Model\World\Direction;
 
 class DirectionList implements \Countable
 {
+	private const NORTH_EAST = 'NO';
+
+	private const EAST = 'O';
+
+	private const SOUTH_EAST = 'SO';
+
 	private const ROUTE_STOP = 'Pause';
 
-	private CommandFactory $factory;
+	private readonly CommandFactory $factory;
 
 	private array $directions = [];
 
@@ -64,7 +70,7 @@ class DirectionList implements \Countable
 
 	public function add(string $direction): DirectionList {
 		if ($this->isRotating && $this->factory->isRouteStop($direction)) {
-			$this->directions[] = Direction::NONE;
+			$this->directions[] = Direction::ROUTE_STOP;
 		} else {
 			$this->directions[] = $this->factory->direction($direction);
 		}
@@ -100,10 +106,11 @@ class DirectionList implements \Countable
 		/** @var Direction $direction */
 		$direction = $this->directions[$i];
 		return match ($direction) {
-			Direction::NORTHEAST => 'NO',
-			Direction::EAST      => 'O',
-			Direction::SOUTHEAST => 'SO',
-			default              => $direction->value
+			Direction::NORTHEAST  => self::NORTH_EAST,
+			Direction::EAST       => self::EAST,
+			Direction::SOUTHEAST  => self::SOUTH_EAST,
+			Direction::ROUTE_STOP => self::ROUTE_STOP,
+			default               => $direction->value
 		};
 	}
 }
