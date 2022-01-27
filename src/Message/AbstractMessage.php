@@ -91,7 +91,11 @@ abstract class AbstractMessage implements MessageType
 	}
 
 	protected function getTranslation(string $name): string {
-		return (string)$this->$name;
+		$translation = $this->$name;
+		if ($translation instanceof \BackedEnum) {
+			$translation = $translation->value;
+		}
+		return (string)$translation;
 	}
 
 	protected function building(string $property, string $name): ?string {

@@ -161,16 +161,15 @@ class Travel extends UnitCommand implements Activity
 		try {
 			while ($regions > 0 && $this->directions->hasMore()) {
 				$next = $this->directions->next();
-				if ($next === DirectionList::ROUTE_STOP) {
+				if ($next === Direction::NONE) {
 					break;
 				}
 
 				$region = $this->canMoveTo($next);
 				if ($region) {
-					$direction = Direction::from($next);
-					$overRoad  = $this->overRoad($this->unit->Region(), $direction, $region);
+					$overRoad  = $this->overRoad($this->unit->Region(), $next, $region);
 					$this->moveTo($region);
-					$this->addToTravelRoute($next);
+					$this->addToTravelRoute($next->value);
 					$this->message(TravelRegionMessage::class)->e($region);
 					$route[] = $region;
 

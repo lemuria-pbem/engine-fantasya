@@ -6,5 +6,5 @@ use Lemuria\Engine\Fantasya\Context;
 
 trait ContextTrait
 {
-	protected readonly Context $context;
+	protected Context $context;
 }

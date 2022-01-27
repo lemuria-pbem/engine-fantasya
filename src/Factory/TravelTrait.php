@@ -42,7 +42,7 @@ trait TravelTrait
 
 	private bool $hasTravelled = false;
 
-	protected function canMoveTo(string $direction): ?Region {
+	protected function canMoveTo(Direction $direction): ?Region {
 		$region = $this->unit->Region();
 		/** @var Region $neighbour */
 		$neighbour = Lemuria::World()->getNeighbours($region)[$direction] ?? null;
@@ -55,13 +55,13 @@ trait TravelTrait
 		if ($this->capacity->Movement() === Capacity::SHIP) {
 			$anchor = $this->vessel->Anchor();
 			if ($anchor !== Direction::NONE) {
-				if ($direction !== $anchor->value) {
+				if ($direction !== $anchor) {
 					$this->message(TravelAnchorMessage::class, $this->vessel)->p($direction)->p($anchor, TravelAnchorMessage::ANCHOR);
 					return null;
 				}
 			}
 			if ($landscape instanceof Ocean) {
-				$this->message(TravelNeighbourMessage::class)->p($direction)->s($landscape)->e($neighbour);
+				$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
 				return $neighbour;
 			}
 			if ($region->Landscape() instanceof Ocean) {
@@ -69,7 +69,7 @@ trait TravelTrait
 					$this->message(TravelLandMessage::class, $this->vessel)->p($direction)->s($landscape)->e($neighbour);
 					return null;
 				}
-				$this->message(TravelNeighbourMessage::class)->p($direction)->s($landscape)->e($neighbour);
+				$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
 				return $neighbour;
 			}
 			$this->message(TravelOverLandMessage::class, $this->vessel)->p($direction);
@@ -77,7 +77,7 @@ trait TravelTrait
 		}
 
 		if ($this->capacity->Movement() === Capacity::FLY) {
-			$this->message(TravelNeighbourMessage::class)->p($direction)->s($landscape)->e($neighbour);
+			$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
 			return $neighbour;
 		}
 
@@ -85,7 +85,7 @@ trait TravelTrait
 			$this->message(TravelIntoOceanMessage::class)->p($direction);
 			return null;
 		}
-		$this->message(TravelNeighbourMessage::class)->p($direction)->s($landscape)->e($neighbour);
+		$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
 		return $neighbour;
 	}
 

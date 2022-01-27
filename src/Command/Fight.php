@@ -62,7 +62,7 @@ final class Fight extends UnitCommand
 			default :
 				throw new InvalidCommandException($this, 'Invalid position "' . $position . '".');
 		}
-		$this->message(FightMessage::class)->p($this->unit->BattleRow());
+		$this->message(FightMessage::class)->p($this->unit->BattleRow()->value);
 	}
 
 	#[Pure] protected function checkSize(): bool {

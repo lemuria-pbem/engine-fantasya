@@ -11,7 +11,7 @@ use Lemuria\Model\World\Direction;
 
 class DirectionList implements \Countable
 {
-	public const ROUTE_STOP = 'Pause';
+	private const ROUTE_STOP = 'Pause';
 
 	private CommandFactory $factory;
 
@@ -42,7 +42,7 @@ class DirectionList implements \Countable
 		throw new LemuriaException('No more directions.');
 	}
 
-	public function next(): string {
+	public function next(): Direction {
 		if ($this->hasMore()) {
 			$direction = $this->directions[$this->index++];
 			/** @noinspection PhpConditionAlreadyCheckedInspection */
@@ -64,7 +64,7 @@ class DirectionList implements \Countable
 
 	public function add(string $direction): DirectionList {
 		if ($this->isRotating && $this->factory->isRouteStop($direction)) {
-			$this->directions[] = self::ROUTE_STOP;
+			$this->directions[] = Direction::NONE;
 		} else {
 			$this->directions[] = $this->factory->direction($direction);
 		}
@@ -97,12 +97,13 @@ class DirectionList implements \Countable
 	}
 
 	private function routeDirection(int $i): string {
+		/** @var Direction $direction */
 		$direction = $this->directions[$i];
 		return match ($direction) {
-			Direction::NORTHEAST->value => 'NO',
-			Direction::EAST->value      => 'O',
-			Direction::SOUTHEAST->value => 'SO',
-			default                     => $direction
+			Direction::NORTHEAST => 'NO',
+			Direction::EAST      => 'O',
+			Direction::SOUTHEAST => 'SO',
+			default              => $direction->value
 		};
 	}
 }

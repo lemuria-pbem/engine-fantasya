@@ -122,12 +122,8 @@ class LemuriaReport implements Reassignment, Report
 		$this->removed = [];
 		$this->nextId  = 1;
 
-		$reflection = new \ReflectionClass(Report::class);
-		foreach ($reflection->getConstants() as $namespace) {
-			if (!is_int($namespace)) {
-				throw new LemuriaException('Expected integer report namespace.');
-			}
-			$this->report[$namespace] = [];
+		foreach (Domain::cases() as $namespace) {
+			$this->report[$namespace->value] = [];
 		}
 
 		return $this;

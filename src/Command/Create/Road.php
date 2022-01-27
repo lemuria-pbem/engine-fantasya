@@ -81,7 +81,7 @@ final class Road extends UnitCommand implements Activity
 		$stones     = (int)round($completion * $roadStones);
 		$remaining  = $roadStones - $stones;
 		if ($remaining <= 0) {
-			$this->message(RoadAlreadyCompletedMessage::class)->e($region)->p($direction);
+			$this->message(RoadAlreadyCompletedMessage::class)->e($region)->p($direction->value);
 			return;
 		}
 		$amount = min($amount, $remaining);
@@ -99,16 +99,16 @@ final class Road extends UnitCommand implements Activity
 			if ($stones < $roadStones) {
 				$roads[$direction] = $stones / $roadStones;
 				if ($built < $this->maximum) {
-					$this->message(RoadOnlyMessage::class)->e($region)->p($direction)->i($reserve);
+					$this->message(RoadOnlyMessage::class)->e($region)->p($direction->value)->i($reserve);
 				} else {
-					$this->message(RoadMessage::class)->e($region)->p($direction)->i($reserve);
+					$this->message(RoadMessage::class)->e($region)->p($direction->value)->i($reserve);
 				}
 			} else {
 				$roads[$direction] = 1.0;
-				$this->message(RoadCompletedMessage::class)->e($region)->p($direction)->i($reserve);
+				$this->message(RoadCompletedMessage::class)->e($region)->p($direction->value)->i($reserve);
 			}
 		} else {
-			$this->message(RoadNoResourcesMessage::class)->e($region)->p($direction);
+			$this->message(RoadNoResourcesMessage::class)->e($region)->p($direction->value);
 		}
 	}
 }

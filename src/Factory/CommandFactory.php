@@ -780,7 +780,7 @@ class CommandFactory
 	 * @return string
 	 * @throws UnknownCommandException
 	 */
-	public function direction(string $direction): string {
+	public function direction(string $direction): Direction {
 		if (strlen($direction) <= 2) {
 			$direction = strtoupper($direction);
 			$candidate = $this->directions[$direction] ?? null;
