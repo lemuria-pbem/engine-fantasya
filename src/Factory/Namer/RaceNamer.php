@@ -10,7 +10,7 @@ use Lemuria\Model\Fantasya\Unit;
 
 class RaceNamer implements Namer
 {
-	protected Dictionary $dictionary;
+	protected readonly Dictionary $dictionary;
 
 	public function __construct() {
 		$this->dictionary = new Dictionary();

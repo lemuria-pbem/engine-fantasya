@@ -15,7 +15,7 @@ class Dockyards
 	use MessageTrait;
 	use PortsTrait;
 
-	public function __construct(protected Ship $ship, Unit $unit) {
+	public function __construct(protected readonly Ship $ship, Unit $unit) {
 		$this->init($unit, $unit->Region());
 	}
 

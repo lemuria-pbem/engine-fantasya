@@ -24,7 +24,7 @@ class MarketBuilder
 
 	protected final const LUXURIES = [Balsam::class, Fur::class, Gem::class, Myrrh::class, Oil::class, Olibanum::class, Silk::class, Spice::class];
 
-	public function __construct(private Intelligence $intelligence) {
+	public function __construct(private readonly Intelligence $intelligence) {
 	}
 
 	public function initPrices(): void {

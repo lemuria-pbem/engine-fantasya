@@ -23,9 +23,9 @@ class Availability
 
 	protected const HERBS_PER_REGION = 100;
 
-	protected Resources $available;
+	protected readonly Resources $available;
 
-	#[Pure] public function __construct(protected Region $region) {
+	#[Pure] public function __construct(protected readonly Region $region) {
 		$this->available = new Resources();
 	}
 

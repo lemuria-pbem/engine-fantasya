@@ -36,7 +36,7 @@ class LemuriaNewcomer implements Newcomer, Serializable
 
 	private ?Id $origin = null;
 
-	private Resources $inventory;
+	private readonly Resources $inventory;
 
 	public function __construct() {
 		$this->uuid      = Uuid::uuid4()->toString();

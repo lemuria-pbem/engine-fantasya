@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Engine\Fantasya\Effect\ContactEffect;
 use Lemuria\Engine\Fantasya\Factory\Model\TravelAtlas;
+use Lemuria\Engine\Fantasya\Factory\Model\Visibility;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Lighthouse;
 use Lemuria\Model\Fantasya\Construction;
@@ -24,7 +25,7 @@ final class Outlook
 {
 	use BuilderTrait;
 
-	public function __construct(private Census $census) {
+	public function __construct(private readonly Census $census) {
 	}
 
 	public function Census(): Census {
@@ -148,10 +149,10 @@ final class Outlook
 			if ($neighbour->Landscape() instanceof Ocean) {
 				$directions[] = $direction;
 				if ($hasLighthouse) {
-					$visible->setVisibility($neighbour, TravelAtlas::LIGHTHOUSE);
+					$visible->setVisibility($neighbour, Visibility::LIGHTHOUSE);
 				}
 			} else {
-				$visible->setVisibility($neighbour, TravelAtlas::NEIGHBOUR);
+				$visible->setVisibility($neighbour, Visibility::NEIGHBOUR);
 			}
 			$visible->add($neighbour);
 		}
@@ -169,7 +170,7 @@ final class Outlook
 					}
 					if ($world->getDistance($region, $neighbour) === $distance) {
 						$visible->add($neighbour);
-						$visible->setVisibility($neighbour, TravelAtlas::LIGHTHOUSE);
+						$visible->setVisibility($neighbour, Visibility::LIGHTHOUSE);
 					}
 				}
 				if (!$isOcean) {

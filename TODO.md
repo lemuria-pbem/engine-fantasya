@@ -4,12 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.10
 
-- Migration zu PHP 8.1
-  - enums
-  - never
-  - new () als initialer Wert
-  - readonly properties
-  - final const
 - ERSCHAFFEN einzigartiger Gegenstände (Unicum)
   - Unicum hat bestimmte Aktionen (GEBEN, LESEN, SCHREIBEN, BENUTZEN)
   - Aktion hat Lebensdauer (Zeit oder Anzahl)

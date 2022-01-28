@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Calculus;
-use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
 use Lemuria\Engine\Fantasya\Factory\Model\Ports;
 use Lemuria\Engine\Fantasya\Message\Region\TravelVesselMessage;
@@ -31,8 +30,7 @@ use Lemuria\Model\World\Direction;
 trait NavigationTrait
 {
 	use BuilderTrait;
-
-	protected Context $context;
+	use ContextTrait;
 
 	private ?Vessel $vessel = null;
 

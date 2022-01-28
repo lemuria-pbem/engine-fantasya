@@ -24,7 +24,7 @@ final class Commerce
 {
 	use BuilderTrait;
 
-	private CommandPriority $priority;
+	private readonly CommandPriority $priority;
 
 	/**
 	 * @var array(int=>Merchant)
@@ -48,11 +48,11 @@ final class Commerce
 
 	private int $round = 0;
 
-	private Commodity $silver;
+	private readonly Commodity $silver;
 
 	private int $regionSilver;
 
-	public function __construct(private Region $region) {
+	public function __construct(private readonly Region $region) {
 		Lemuria::Log()->debug('New commerce helper for region ' . $region->Id() . '.', ['commerce' => $this]);
 		$this->priority = CommandPriority::getInstance();
 		$this->silver   = self::createCommodity(Silver::class);

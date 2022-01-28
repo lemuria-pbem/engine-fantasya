@@ -626,13 +626,13 @@ class CommandFactory
 		'Westen'     => Direction::WEST
 	];
 
-	protected const APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Apply\\';
+	protected final const APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Apply\\';
 
-	protected const BATTLE_SPELL_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Combat\\Spell';
+	protected final const BATTLE_SPELL_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Combat\\Spell';
 
-	protected const CAST_NAMESPACE =  'Lemuria\\Engine\\Fantasya\\Command\\Cast\\';
+	protected final const CAST_NAMESPACE =  'Lemuria\\Engine\\Fantasya\\Command\\Cast\\';
 
-	public function __construct(protected Context $context) {
+	public function __construct(protected readonly Context $context) {
 	}
 
 	/**

@@ -55,14 +55,14 @@ class LemuriaConfig implements \ArrayAccess, Config
 
 	private bool $hasChanged = false;
 
-	private JsonProvider $file;
+	private readonly JsonProvider $file;
 
 	private ?array $config;
 
 	/**
 	 * @throws JsonException
 	 */
-	public function __construct(private string $storagePath) {
+	public function __construct(private readonly string $storagePath) {
 		$this->initDefaults();
 		$this->file = new JsonProvider($storagePath);
 		if ($this->file->exists(self::CONFIG_FILE)) {

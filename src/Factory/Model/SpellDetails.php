@@ -18,22 +18,22 @@ class SpellDetails
 {
 	use SerializableTrait;
 
-	protected const DESCRIPTION = 'description';
+	protected final const DESCRIPTION = 'description';
 
-	protected const COMPONENTS = 'components';
+	protected final const COMPONENTS = 'components';
 
 	protected static ?JsonProvider $provider = null;
 
 	protected static ?Dictionary $dictionary = null;
 
-	protected string $file;
+	protected readonly string $file;
 
 	protected array $json;
 
 	/**
 	 * @throws JsonException
 	 */
-	public function __construct(protected Spell $spell) {
+	public function __construct(protected readonly Spell $spell) {
 		if (!self::$provider) {
 			self::$provider = new JsonProvider(__DIR__ . '/../../../resources/spell');
 		}

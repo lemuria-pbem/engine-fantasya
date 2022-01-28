@@ -16,7 +16,7 @@ class LemuriaScore implements Score
 {
 	use SerializableTrait;
 
-	private EffectFactory $factory;
+	private readonly EffectFactory $factory;
 
 	/**
 	 * @var array(int=>array)
@@ -47,7 +47,7 @@ class LemuriaScore implements Score
 			}
 			$this->effects[$namespace] = [];
 		}
-		$this->factory = new EffectFactory(State::getInstance());
+		$this->factory = new EffectFactory();
 	}
 
 	public function current(): ?Effect {

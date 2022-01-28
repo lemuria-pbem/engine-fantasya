@@ -13,7 +13,7 @@ trait UnitTrait
 {
 	use ContextTrait;
 
-	protected Unit $unit;
+	protected readonly Unit $unit;
 
 	protected function commitCommand(UnitCommand $command): void {
 		$protocol = $this->context->getProtocol($this->unit);

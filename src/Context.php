@@ -25,9 +25,9 @@ use Lemuria\Model\Reassignment;
  */
 final class Context implements Reassignment
 {
-	private Parser $parser;
+	private readonly Parser $parser;
 
-	private CommandFactory $factory;
+	private readonly CommandFactory $factory;
 
 	private ?Party $party = null;
 
@@ -48,7 +48,7 @@ final class Context implements Reassignment
 	 */
 	private array $sieges = [];
 
-	#[Pure] public function __construct(private State $state) {
+	#[Pure] public function __construct(private readonly State $state) {
 		$this->parser  = new Parser();
 		$this->factory = new CommandFactory($this);
 	}
@@ -204,7 +204,7 @@ final class Context implements Reassignment
 	/**
 	 * Get the casts queue.
 	 */
-	public function getCasts(): Casts {
+	#[Pure] public function getCasts(): Casts {
 		return $this->state->getCasts();
 	}
 

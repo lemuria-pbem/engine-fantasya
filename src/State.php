@@ -24,11 +24,11 @@ final class State implements Reassignment
 
 	public bool $isTravelling = false;
 
-	private LemuriaTurn $turn;
+	private readonly LemuriaTurn $turn;
 
 	private ?TurnOptions $turnOptions = null;
 
-	private ?Casts $casts = null;
+	private readonly Casts $casts;
 
 	/**
 	 * @var array(int=>UnitMapper)
@@ -89,6 +89,10 @@ final class State implements Reassignment
 			self::$instance->turn = $turn;
 		}
 		return self::$instance;
+	}
+
+	#[Pure] public function __construct() {
+		$this->casts = new Casts();
 	}
 
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
@@ -158,9 +162,6 @@ final class State implements Reassignment
 	}
 
 	public function getCasts(): Casts {
-		if (!$this->casts) {
-			$this->casts = new Casts();
-		}
 		return $this->casts;
 	}
 

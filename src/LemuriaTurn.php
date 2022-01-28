@@ -52,7 +52,7 @@ class LemuriaTurn implements Turn
 
 	protected int $currentPriority = 0;
 
-	private State $state;
+	private readonly State $state;
 
 	/**
 	 * Initialize turn.

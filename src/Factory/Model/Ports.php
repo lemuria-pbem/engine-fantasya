@@ -21,7 +21,7 @@ class Ports
 
 	public final const DUTY = 0.1;
 
-	public function __construct(protected Vessel $vessel, Region $region) {
+	public function __construct(protected readonly Vessel $vessel, Region $region) {
 		$this->init($vessel->Passengers()->Owner(), $region);
 	}
 

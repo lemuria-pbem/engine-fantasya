@@ -27,7 +27,7 @@ class ResourcePool
 
 	protected readonly Region $region;
 
-	protected People $units;
+	protected readonly People $units;
 
 	/**
 	 * @var array(int=>Resources)

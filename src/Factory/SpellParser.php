@@ -54,9 +54,9 @@ class SpellParser
 		'Wunderdoktor' => Quacksalver::class
 	];
 
-	protected string $spell;
+	protected readonly string $spell;
 
-	protected int $level;
+	protected readonly int $level;
 
 	protected ?Id $target = null;
 

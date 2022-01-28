@@ -19,7 +19,7 @@ final class ActivityProtocol
 	/**
 	 * Create new activity protocol for a unit.
 	 */
-	public function __construct(private Unit $unit) {
+	public function __construct(private readonly Unit $unit) {
 	}
 
 	public function Unit(): Unit {
