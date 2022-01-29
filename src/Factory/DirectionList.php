@@ -41,7 +41,7 @@ class DirectionList implements \Countable
 		return $this->index < $this->count;
 	}
 
-	public function peek(): string {
+	public function peek(): Direction {
 		if ($this->hasMore()) {
 			return $this->directions[$this->index];
 		}
