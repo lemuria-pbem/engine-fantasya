@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Model\Fantasya\Party;
@@ -55,5 +57,12 @@ trait UnitTrait
 		}
 
 		return $guardParties;
+	}
+
+	/**
+	 * This method makes conditional debugging easier.
+	 */
+	#[Pure] protected function halt(mixed $id): bool {
+		return is_int($id) ? $this->unit->Id()->Id() === $id : (string)$this->unit->Id() === (string)$id;
 	}
 }
