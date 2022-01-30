@@ -150,6 +150,10 @@
 		},
 		"will": ["wird", "werden"]
 	},
+	"composition": {
+		"Scroll": ["Schriftrolle", "Schriftrollen"],
+		"Spellbook": ["Zauberbuch", "Zauberbücher"]
+	},
 	"diplomacy": {
 		"relation": {
 			"agreement_0": "Nichts",

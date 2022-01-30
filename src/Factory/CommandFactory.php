@@ -8,7 +8,6 @@ use function Lemuria\undupChar;
 use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
 use Lemuria\Engine\Fantasya\Command\Announcement;
-use Lemuria\Engine\Fantasya\Command\Apply;
 use Lemuria\Engine\Fantasya\Command\Apply\AbstractApply;
 use Lemuria\Engine\Fantasya\Command\Attack;
 use Lemuria\Engine\Fantasya\Command\Banner;
@@ -19,6 +18,7 @@ use Lemuria\Engine\Fantasya\Command\Cast\AbstractCast;
 use Lemuria\Engine\Fantasya\Command\Comment;
 use Lemuria\Engine\Fantasya\Command\Contact;
 use Lemuria\Engine\Fantasya\Command\Create;
+use Lemuria\Engine\Fantasya\Command\Create\Unicum;
 use Lemuria\Engine\Fantasya\Command\Describe;
 use Lemuria\Engine\Fantasya\Command\Destroy;
 use Lemuria\Engine\Fantasya\Command\Destroy\Dismiss;
@@ -41,6 +41,7 @@ use Lemuria\Engine\Fantasya\Command\NullCommand;
 use Lemuria\Engine\Fantasya\Command\Number;
 use Lemuria\Engine\Fantasya\Command\Origin;
 use Lemuria\Engine\Fantasya\Command\Party;
+use Lemuria\Engine\Fantasya\Command\Read;
 use Lemuria\Engine\Fantasya\Command\Recruit;
 use Lemuria\Engine\Fantasya\Command\Reserve;
 use Lemuria\Engine\Fantasya\Command\Route;
@@ -57,7 +58,10 @@ use Lemuria\Engine\Fantasya\Command\Travel;
 use Lemuria\Engine\Fantasya\Command\Trespass;
 use Lemuria\Engine\Fantasya\Command\Trespass\Board;
 use Lemuria\Engine\Fantasya\Command\Unit;
+use Lemuria\Engine\Fantasya\Command\Use\Apply;
+use Lemuria\Engine\Fantasya\Command\UseCommand;
 use Lemuria\Engine\Fantasya\Command\Vacate;
+use Lemuria\Engine\Fantasya\Command\Write;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
@@ -174,6 +178,9 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Commodity\Wood;
+use Lemuria\Model\Fantasya\Composition;
+use Lemuria\Model\Fantasya\Composition\Scroll;
+use Lemuria\Model\Fantasya\Composition\Spellbook;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\RawMaterial;
@@ -269,11 +276,12 @@ class CommandFactory
 		'ENTLASSEN'    => true,
 		'ERESSEA'      => 'PARTEI',
 		'ERFORSCHEN'   => 'FORSCHEN',
+		'ERSCHAFFEN'   => true,
 		'FANTASYA'     => 'PARTEI',
 		'FOLGEN'       => true,
 		'FORSCHEN'     => true,
-		'GIB'          => true,
-		'GEBEN'        => 'GIB',
+		'GIB'          => 'GEBEN',
+		'GEBEN'        => true,
 		'HELFEN'       => true,
 		'HILFE'        => 'HELFEN',
 		'ID'           => 'NUMMER',
@@ -289,6 +297,8 @@ class CommandFactory
 		'LEHRER'       => 'LEHREN',
 		'LEMURIA'      => 'PARTEI',
 		'LERNEN'       => true,
+		'LESEN'        => true,
+		'LIES'         => 'LESEN',
 		'LOCALE'       => true,
 		'MACHEN'       => true,
 		'NACH'         => 'REISEN',
@@ -308,6 +318,7 @@ class CommandFactory
 		'RUNDE'        => true,
 		'SAMMELN'      => true,
 		'SAMMLE'       => 'SAMMELN',
+		'SCHREIBEN'    => true,
 		'SORTIEREN'    => true,
 		'SORTIERUNG'   => 'SORTIEREN',
 		'SPIONAGE'     => 'SPIONIEREN',
@@ -520,6 +531,14 @@ class CommandFactory
 	/**
 	 * @var array(string=>string)
 	 */
+	protected array $compositions = [
+		'Schriftrolle' => Scroll::class,
+		'Zauberbuch'   => Spellbook::class,
+	];
+
+	/**
+	 * @var array(string=>string)
+	 */
 	protected array $spells = [
 		'Astrales chaos' => AstralChaos::class,
 		'Auratransfer'   => AuraTransfer::class,
@@ -647,7 +666,7 @@ class CommandFactory
 				'ATTACKIEREN'  => Attack::class,
 				'BANNER'       => Banner::class,
 				'BELAGERN'     => Siege::class,
-				'BENUTZEN'     => Apply::class,
+				'BENUTZEN'     => UseCommand::class,
 				'BESCHREIBUNG' => Describe::class,
 				'BESTEIGEN'    => Board::class,
 				'BETRETEN'     => Trespass::class,
@@ -657,9 +676,10 @@ class CommandFactory
 				'EINHEIT'      => Unit::class,
 				'ENDE'         => End::class,
 				'ENTLASSEN'    => Dismiss::class,
+				'ERSCHAFFEN'   => Unicum::class,
 				'FOLGEN'       => Follow::class,
 				'FORSCHEN'     => Explore::class,
-				'GIB'          => Handover::class,
+				'GEBEN'        => Handover::class,
 				'HELFEN'       => Help::class,
 				'KAMPFZAUBER'  => BattleSpell::class,
 				'KAUFEN'       => Buy::class,
@@ -669,6 +689,7 @@ class CommandFactory
 				'KONTAKTIEREN' => Contact::class,
 				'LEHREN'       => Teach::class,
 				'LERNEN'       => Learn::class,
+				'LESEN'        => Read::class,
 				'MACHEN'       => Create::class,
 				'NAME'         => Name::class,
 				'NÄCHSTER'     => Next::class,
@@ -679,6 +700,7 @@ class CommandFactory
 				'RESERVIEREN'  => Reserve::class,
 				'ROUTE'        => Route::class,
 				'SAMMELN'      => Gather::class,
+				'SCHREIBEN'    => Write::class,
 				'SORTIEREN'    => Sort::class,
 				'SPIONIEREN'   => Spy::class,
 				'STEHLEN'      => Steal::class,
@@ -754,6 +776,16 @@ class CommandFactory
 	public function commodity(string $commodity): Commodity {
 		$commodityClass = $this->identifySingleton($commodity, $this->commodities);
 		return self::createCommodity($commodityClass);
+	}
+
+	/**
+	 * Create a Composition.
+	 *
+	 * @throws UnknownCommandException
+	 */
+	public function composition(string $composition): Composition {
+		$compositionClass = $this->identifySingleton($composition, $this->compositions);
+		return self::createComposition($compositionClass);
 	}
 
 	/**

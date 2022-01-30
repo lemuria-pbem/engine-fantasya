@@ -1,8 +1,9 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Fantasya\Command;
+namespace Lemuria\Engine\Fantasya\Command\Use;
 
 use function Lemuria\isInt;
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\ApplyAlreadyMessage;
