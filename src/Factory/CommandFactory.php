@@ -39,6 +39,7 @@ use Lemuria\Engine\Fantasya\Command\Name;
 use Lemuria\Engine\Fantasya\Command\Next;
 use Lemuria\Engine\Fantasya\Command\NullCommand;
 use Lemuria\Engine\Fantasya\Command\Number;
+use Lemuria\Engine\Fantasya\Command\Operate\AbstractOperate;
 use Lemuria\Engine\Fantasya\Command\Origin;
 use Lemuria\Engine\Fantasya\Command\Party;
 use Lemuria\Engine\Fantasya\Command\Read;
@@ -59,6 +60,7 @@ use Lemuria\Engine\Fantasya\Command\Trespass;
 use Lemuria\Engine\Fantasya\Command\Trespass\Board;
 use Lemuria\Engine\Fantasya\Command\Unit;
 use Lemuria\Engine\Fantasya\Command\Use\Apply;
+use Lemuria\Engine\Fantasya\Command\Use\Operate;
 use Lemuria\Engine\Fantasya\Command\UseCommand;
 use Lemuria\Engine\Fantasya\Command\Vacate;
 use Lemuria\Engine\Fantasya\Command\Write;
@@ -230,6 +232,7 @@ use Lemuria\Model\Fantasya\Talent\Taxcollecting;
 use Lemuria\Model\Fantasya\Talent\Trading;
 use Lemuria\Model\Fantasya\Talent\Weaponry;
 use Lemuria\Model\Fantasya\Talent\Woodchopping;
+use Lemuria\Model\Fantasya\Unicum as UnicumModel;
 use Lemuria\Model\World\Direction;
 use Lemuria\Singleton;
 
@@ -649,7 +652,9 @@ class CommandFactory
 
 	protected final const BATTLE_SPELL_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Combat\\Spell';
 
-	protected final const CAST_NAMESPACE =  'Lemuria\\Engine\\Fantasya\\Command\\Cast\\';
+	protected final const CAST_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Cast\\';
+
+	protected final const OPERATE_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Operate\\';
 
 	public function __construct(protected readonly Context $context) {
 	}
@@ -658,6 +663,8 @@ class CommandFactory
 	 * Create a Command.
 	 *
 	 * @throws UnknownCommandException
+	 *
+	 * @noinspection PhpMultipleClassDeclarationsInspection
 	 */
 	public function create(Phrase $phrase): AbstractCommand {
 		$verb = $this->identifyVerb($phrase->getVerb());
@@ -721,6 +728,10 @@ class CommandFactory
 		} catch (\UnhandledMatchError) {
 			throw new UnknownCommandException($phrase);
 		}
+	}
+
+	public function isComposition(string $composition): bool {
+		return is_string($this->getCandidate($composition, $this->compositions));
 	}
 
 	public function person(): Commodity {
@@ -870,6 +881,15 @@ class CommandFactory
 			return new $class($grade);
 		}
 		throw new LemuriaException('Casting battle spell ' . $spell . ' is not implemented.');
+	}
+
+	public function operateUnicum(UnicumModel $unicum, Operate $operate): AbstractOperate {
+		$composition = getClass($unicum->Composition());
+		$class       = self::OPERATE_NAMESPACE . $composition;
+		if (class_exists($class)) {
+			return new $class($operate);
+		}
+		throw new LemuriaException('Operating composition ' . $composition . ' is not implemented.');
 	}
 
 	/**

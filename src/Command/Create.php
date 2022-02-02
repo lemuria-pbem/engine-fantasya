@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Command\Create\Herb;
 use Lemuria\Engine\Fantasya\Command\Create\Resource;
 use Lemuria\Engine\Fantasya\Command\Create\Road;
 use Lemuria\Engine\Fantasya\Command\Create\Temp;
+use Lemuria\Engine\Fantasya\Command\Create\Unicum;
 use Lemuria\Engine\Fantasya\Command\Create\Unknown;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
@@ -32,6 +33,7 @@ use Lemuria\Model\Fantasya\Herb as HerbInterface;
  * - MACHEN Temp
  * - MACHEN Temp <id>
  * - MACHEN Straße|Strasse <direction> [<amount>]
+ * - MACHEN <Unicum> [<ID>]
  */
 final class Create extends DelegatedCommand
 {
@@ -74,6 +76,11 @@ final class Create extends DelegatedCommand
 		if ($lower === 'greifenei' || $lower === 'greifeneier') {
 			$egg = self::createCommodity(GriffineggModel::class);
 			return new Griffinegg($this->phrase, $this->context, new Job($egg, $number));
+		}
+
+		// MACHEN <Unicum> [<ID>]
+		if ($this->context->Factory()->isComposition($what)) {
+			return new Unicum($this->phrase, $this->context);
 		}
 
 		try {

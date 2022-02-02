@@ -92,6 +92,10 @@ final class Context implements Reassignment
 		return $this->state->getUnitMapper($this->Party());
 	}
 
+	public function UnicumMapper(): UnicumMapper {
+		return $this->state->getUnicumMapper($this->Party());
+	}
+
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
 		if ($identifiable instanceof Unit) {
 			$old = $oldId->Id();

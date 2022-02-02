@@ -36,6 +36,11 @@ final class State implements Reassignment
 	private array $unitMapper = [];
 
 	/**
+	 * @var array(int=>UnicumMapper)
+	 */
+	private array $unicumMapper = [];
+
+	/**
 	 * @var array(int=>Availability)
 	 */
 	private array $availability = [];
@@ -174,6 +179,17 @@ final class State implements Reassignment
 			$this->unitMapper[$id] = new UnitMapper();
 		}
 		return $this->unitMapper[$id];
+	}
+
+	/**
+	 * Get a party's unicum mapper.
+	 */
+	public function getUnicumMapper(Party $party): UnicumMapper {
+		$id = $party->Id()->Id();
+		if (!isset($this->unicumMapper[$id])) {
+			$this->unicumMapper[$id] = new UnicumMapper();
+		}
+		return $this->unicumMapper[$id];
 	}
 
 	/**

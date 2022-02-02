@@ -4,15 +4,16 @@ namespace Lemuria\Engine\Fantasya\Command\Operate;
 
 final class Spellbook extends AbstractOperate
 {
-	protected function apply(): void {
+	public function apply(): void {
 		//TODO Unicum
 	}
 
-	protected function read(): void {
-
+	public function give(): void {
 	}
 
-	protected function write(): void {
+	public function read(): void {
+	}
 
+	public function write(): void {
 	}
 }
