@@ -40,6 +40,7 @@ use Lemuria\Engine\Fantasya\Command\Next;
 use Lemuria\Engine\Fantasya\Command\NullCommand;
 use Lemuria\Engine\Fantasya\Command\Number;
 use Lemuria\Engine\Fantasya\Command\Operate\AbstractOperate;
+use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Command\Origin;
 use Lemuria\Engine\Fantasya\Command\Party;
 use Lemuria\Engine\Fantasya\Command\Read;
@@ -60,7 +61,6 @@ use Lemuria\Engine\Fantasya\Command\Trespass;
 use Lemuria\Engine\Fantasya\Command\Trespass\Board;
 use Lemuria\Engine\Fantasya\Command\Unit;
 use Lemuria\Engine\Fantasya\Command\Use\Apply;
-use Lemuria\Engine\Fantasya\Command\Use\Operate;
 use Lemuria\Engine\Fantasya\Command\UseCommand;
 use Lemuria\Engine\Fantasya\Command\Vacate;
 use Lemuria\Engine\Fantasya\Command\Write;
@@ -883,11 +883,11 @@ class CommandFactory
 		throw new LemuriaException('Casting battle spell ' . $spell . ' is not implemented.');
 	}
 
-	public function operateUnicum(UnicumModel $unicum, Operate $operate): AbstractOperate {
+	public function operateUnicum(UnicumModel $unicum, Operator $operator): AbstractOperate {
 		$composition = getClass($unicum->Composition());
 		$class       = self::OPERATE_NAMESPACE . $composition;
 		if (class_exists($class)) {
-			return new $class($operate);
+			return new $class($operator);
 		}
 		throw new LemuriaException('Operating composition ' . $composition . ' is not implemented.');
 	}

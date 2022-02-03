@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Apply;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Command\Use\Apply;
 
 abstract class AbstractApply
@@ -15,7 +13,10 @@ abstract class AbstractApply
 		return true;
 	}
 
-	#[Pure] public function apply(): int {
+	/**
+	 * @noinspection PhpPureAttributeCanBeAddedInspection
+	 */
+	public function apply(): int {
 		return $this->apply->Count();
 	}
 }

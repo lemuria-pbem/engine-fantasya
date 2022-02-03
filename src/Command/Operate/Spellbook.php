@@ -8,9 +8,6 @@ final class Spellbook extends AbstractOperate
 		//TODO Unicum
 	}
 
-	public function give(): void {
-	}
-
 	public function read(): void {
 	}
 

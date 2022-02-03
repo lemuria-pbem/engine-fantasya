@@ -8,9 +8,6 @@ final class Scroll extends AbstractOperate
 		//TODO Unicum
 	}
 
-	public function give(): void {
-	}
-
 	public function read(): void {
 	}
 

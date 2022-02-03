@@ -257,6 +257,7 @@
 		"BattleSpellRemoveMessage": "Die Einheit $id wird den Kampfzauber $spell nicht mehr einsetzen.",
 		"BattleSpellUnknownMessage": "Der Einheit $id ist kein Kampfzauber mit dem Namen $spell bekannt.",
 		"BerserkBloodMessage": "Die Einheit $id bekommt einen Blutrausch.",
+		"BestowRejectedMessage": "Die Einheit $recipient hat versucht, einen Gegenstand an die Einheit $id zu übergeben, doch wir haben abgelehnt.",
 		"BoardAlreadyMessage": "Die Einheit $id ist bereits an Bord des Schiffes $vessel.",
 		"BoardDeniedMessage": "Die Einheit $id kann das Schiff $vessel nicht ohne die Erlaubnis des Kapitäns betreten.",
 		"BoardMessage": "Die Einheit $id geht an Bord des Schiffes $vessel.",
