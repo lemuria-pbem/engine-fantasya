@@ -88,7 +88,7 @@ final class Initiate implements Command
 		Elf::class      => [Perception::class => 12, Camouflage::class => 8, Archery::class => 5],
 		Halfling::class => [Entertaining::class => 12, Carriagemaking::class => 8, Spearfighting::class => 5],
 		Human::class    => [Riding::class => 12, Trading::class => 8, Crossbowing::class => 5],
-		Orc::class      => [Woodchopping::class => 12, Taxcollecting::class => 8, Bladefighting::class => 5],
+		Orc::class      => [Woodchopping::class => 12, Taxcollecting::class => 8, Bladefighting::class => 5, Spearfighting::class => 5],
 		Troll::class    => [Quarrying::class => 12, Stamina::class => 8, Bladefighting::class => 5]
 	];
 
