@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\GrantMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantNoConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantNotInsideMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GrantNotOnBoardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantTakeoverMessage;
 
 /**
@@ -17,7 +18,9 @@ use Lemuria\Engine\Fantasya\Message\Unit\GrantTakeoverMessage;
  * - GIB <Unit> Kommando
  * - KOMMANDO <Unit>
  * - KOMMANDO
- */
+ *
+ * @noinspection DuplicatedCode
+*/
 final class Grant extends UnitCommand
 {
 	protected function run(): void {
@@ -36,9 +39,7 @@ final class Grant extends UnitCommand
 			$owner       = $inhabitants->Owner();
 			if ($unit === $owner) {
 				$this->message(GrantAlreadyMessage::class);
-				return;
-			}
-			if ($owner->Id()->Id() === $this->unit->Id()->Id()) {
+			} elseif ($owner->Id()->Id() === $this->unit->Id()->Id()) {
 				if ($inhabitants->has($id)) {
 					$inhabitants->setOwner($unit);
 					$this->message(GrantMessage::class)->e($unit);
@@ -49,9 +50,30 @@ final class Grant extends UnitCommand
 			} else {
 				$this->message(GrantNothingMessage::class);
 			}
-		} else {
-			$this->message(GrantFromOutsideMessage::class);
+			return;
 		}
+
+		$vessel = $this->unit->Vessel();
+		if ($vessel) {
+			$passengers = $vessel->Passengers();
+			$captain    = $passengers->Owner();
+			if ($unit === $captain) {
+				$this->message(GrantAlreadyMessage::class);
+			} elseif ($captain->Id()->Id() === $this->unit->Id()->Id()) {
+				if ($passengers->has($id)) {
+					$passengers->setOwner($unit);
+					$this->message(GrantMessage::class)->e($unit);
+					$this->message(GrantTakeoverMessage::class, $unit)->e($this->unit);
+				} else {
+					$this->message(GrantNotOnBoardMessage::class)->p($id->Id());
+				}
+			} else {
+				$this->message(GrantNothingMessage::class);
+			}
+			return;
+		}
+
+		$this->message(GrantFromOutsideMessage::class);
 	}
 
 	protected function takeOver(): void {
@@ -61,17 +83,32 @@ final class Grant extends UnitCommand
 			$owner       = $inhabitants->Owner();
 			if ($this->unit === $owner) {
 				$this->message(GrantAlreadyMessage::class);
-				return;
-			}
-			if ($owner->Party() === $this->unit->Party()) {
+			} elseif ($owner->Party() === $this->unit->Party()) {
 				$inhabitants->setOwner($this->unit);
 				$this->message(GrantMessage::class, $owner)->e($this->unit);
 				$this->message(GrantTakeoverMessage::class)->e($owner);
 			} else {
 				$this->message(GrantNothingMessage::class);
 			}
-		} else {
-			$this->message(GrantNoConstructionMessage::class);
+			return;
 		}
+
+		$vessel = $this->unit->Vessel();
+		if ($vessel) {
+			$passengers = $vessel->Passengers();
+			$captain    = $passengers->Owner();
+			if ($this->unit === $captain) {
+				$this->message(GrantAlreadyMessage::class);
+			} elseif ($captain->Party() === $this->unit->Party()) {
+				$passengers->setOwner($this->unit);
+				$this->message(GrantMessage::class, $captain)->e($this->unit);
+				$this->message(GrantTakeoverMessage::class)->e($captain);
+			} else {
+				$this->message(GrantNothingMessage::class);
+			}
+			return;
+		}
+
+		$this->message(GrantNoConstructionMessage::class);
 	}
 }

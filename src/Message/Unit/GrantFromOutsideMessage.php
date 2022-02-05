@@ -9,6 +9,6 @@ class GrantFromOutsideMessage extends AbstractUnitMessage
 	protected string $level = Message::FAILURE;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' cannot grant command, it is not inside anything. ';
+		return 'Unit ' . $this->id . ' has no command it could grant.';
 	}
 }
