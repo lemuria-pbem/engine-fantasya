@@ -44,8 +44,11 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
+- VORLAGE-Variante für Rotation von Befehlen
 - Vorgabeeinstellungen für neue Einheiten (Kampfstatus, Sammeln, Tarnen)
 - Gegenstandsklassen für verkürzte Übergaben (Kräuter, Luxuswaren, Rüstungen, Schilde, Tiere, Trophäen, Tränke, Waffen)
+- neue Gebäude, die Arbeitsplätze verdoppeln
+  - Wüste: Oase
 - besondere Gebäude/Orte wie Ruinen oder Höhlen
 - Weltumseglung ermöglichen
 - Umweltereignisse

@@ -59,7 +59,11 @@ final class Template extends DelegatedCommand
 
 			$round = (int)$param;
 			if ($round > 0 && (string)$round === $param) {
-				$command = $verb . ' ' . ($round > 2 ? --$round : '') . ' ' . $phrase;
+				if ($round > 1) {
+					$command = $verb . ' ' . ($round > 2 ? --$round : '') . ' ' . $phrase;
+				} else {
+					$command = $phrase;
+				}
 				return new Copy(new Phrase($command), $this->context);
 			}
 

@@ -95,7 +95,7 @@ final class ActivityProtocol
 			return true;
 		}
 		$key = $activity->Activity();
-		return isset($this->activity[$key]);
+		return array_key_exists($key, $this->activity);
 	}
 
 	private function addDefaultCommand(UnitCommand $command): void {

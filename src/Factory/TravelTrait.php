@@ -189,13 +189,17 @@ trait TravelTrait
 						if ($nextGuards->isEmpty()) {
 							unset($guards[$i]);
 						} else {
+							$allowToPass = true;
 							foreach ($nextGuards as $guard/* @var Unit $guard */) {
 								if ($guard->Party() === $party) {
-									if ($diplomacy->has(Relation::GUARD, $this->unit, $neighbour) || $diplomacy->has(Relation::PASS, $this->unit, $neighbour)) {
-										unset($guards[$i]);
+									if (!$diplomacy->has(Relation::GUARD, $this->unit, $neighbour) && !$diplomacy->has(Relation::PASS, $this->unit, $neighbour)) {
+										$allowToPass = false;
 										break;
 									}
 								}
+							}
+							if ($allowToPass) {
+								unset($guards[$i]);
 							}
 						}
 					} else {
