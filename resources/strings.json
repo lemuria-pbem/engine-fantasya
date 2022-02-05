@@ -1233,6 +1233,16 @@
 		"SW": "Südwesten",
 		"W": "Westen",
 		"NW": "Nordwesten",
-		"null": "der Rand der Welt"
+		"null": "der Rand der Welt",
+		"short": {
+			"N": "N",
+			"NE": "NO",
+			"E": "O",
+			"SE": "SO",
+			"S": "S",
+			"SW": "SW",
+			"W": "W",
+			"NW": "NW"
+		}
 	}
 }

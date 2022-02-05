@@ -18,4 +18,8 @@ class TravelAnchorMessage extends TravelOverLandMessage
 		parent::getData($message);
 		$this->anchor = $message->getParameter(self::ANCHOR);
 	}
+
+	protected function getTranslation(string $name): string {
+		return $this->direction($name, self::ANCHOR) ?? parent::getTranslation($name);
+	}
 }

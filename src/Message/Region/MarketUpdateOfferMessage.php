@@ -4,7 +4,7 @@ namespace Lemuria\Engine\Fantasya\Message\Region;
 
 class MarketUpdateOfferMessage extends AbstractMarketUpdateMessage
 {
-	protected function direction(): string {
+	protected function change(): string {
 		return 'raised';
 	}
 }

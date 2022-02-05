@@ -16,4 +16,8 @@ class TravelOverLandMessage extends TravelShipTooHeavyMessage
 		parent::getData($message);
 		$this->direction = $message->getParameter();
 	}
+
+	protected function getTranslation(string $name): string {
+		return $this->direction($name, 'direction') ?? parent::getTranslation($name);
+	}
 }
