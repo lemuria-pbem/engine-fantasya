@@ -257,6 +257,8 @@
 		"BattleSpellRemoveMessage": "Die Einheit $id wird den Kampfzauber $spell nicht mehr einsetzen.",
 		"BattleSpellUnknownMessage": "Der Einheit $id ist kein Kampfzauber mit dem Namen $spell bekannt.",
 		"BerserkBloodMessage": "Die Einheit $id bekommt einen Blutrausch.",
+		"BestowMessage": "Die Einheit $id überreicht der Einheit $unit {das:$composition} $unicum.",
+		"BestowReceivedMessage": "Die Einheit $id erhält {das:$composition} $unicum von der Einheit $unit.",
 		"BestowRejectedMessage": "Die Einheit $recipient hat versucht, einen Gegenstand an die Einheit $id zu übergeben, doch wir haben abgelehnt.",
 		"BoardAlreadyMessage": "Die Einheit $id ist bereits an Bord des Schiffes $vessel.",
 		"BoardDeniedMessage": "Die Einheit $id kann das Schiff $vessel nicht ohne die Erlaubnis des Kapitäns betreten.",
@@ -545,6 +547,8 @@
 		"RawMaterialOutputMessage": "Die Einheit $id produziert $output mit $talent.",
 		"RawMaterialResourcesMessage": "Die Einheit $id kann {kein:$material} finden.",
 		"RawMaterialWantsMessage": "Die Einheit $id möchte $quantity produzieren.",
+		"ReadNoCompositionMessage": "Die Einheit $id hat {kein:$composition} mit der Nummer $unicum.",
+		"ReadNoUnicumMessage": "Die Einheit $id hat keinen Gegenstand mit der Nummer $unicum.",
 		"RecreateAuraMessage": "Die Einheit $id regeneriert {$points:Aurapunkt}.",
 		"RecreateHealthMessage": "Die Einheit $id regeneriert {$points:Trefferpunkt}.",
 		"RecruitGuardedMessage": "Die Einheit $id kann nicht rekrutieren, die Region wird bewacht.",
@@ -728,7 +732,9 @@
 		"WoundshutDamageMessage": "Die Einheit $id hat $damage Schadenspunkte.",
 		"WoundshutFullMessage": "Die Einheit $id heilt alle ihre Wunden.",
 		"WoundshutMessage": "Die Einheit $id heilt ihre Wunden.",
-		"WoundshutNoneMessage": "Die Einheit $id benötigt keine $woundshut."
+		"WoundshutNoneMessage": "Die Einheit $id benötigt keine $woundshut.",
+		"WriteNoCompositionMessage": "Die Einheit $id hat {kein:$composition} mit der Nummer $unicum.",
+		"WriteNoUnicumMessage": "Die Einheit $id hat keinen Gegenstand mit der Nummer $unicum."
 	},
 	"observable": {
 		"Camel": ["Kamel", "Kamelen"],
@@ -864,6 +870,10 @@
 			"Woundshut": "alle verfügbaren"
 		},
 		"Aurapunkt": ["Aurapunkt", "Aurapunkte"],
+		"das": {
+			"Scroll": "die",
+			"Spellbook": "das"
+		},
 		"der": {
 			"Desert": "der",
 			"Forest": "dem",

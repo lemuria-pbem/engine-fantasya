@@ -334,6 +334,7 @@ class CommandFactory
 		'TREIBEN'      => true,
 		'UNTERHALTEN'  => true,
 		'UNTERHALTUNG' => 'UNTERHALTEN',
+		'UNTERSUCHEN'  => 'LESEN',
 		'URSPRUNG'     => true,
 		'ÜBERGEBEN'    => 'GIB',
 		'UEBERGEBEN'   => 'GIB',

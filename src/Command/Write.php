@@ -2,25 +2,31 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\UnicumTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\WriteNoCompositionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\WriteNoUnicumMessage;
+use Lemuria\Model\Fantasya\Practice;
 
 /**
- * The Name command is used to set the name of a unit or the construction, region or vessel it controls.
+ * This command is used to write to an Unicum.
  *
- * - NAME Partei <Name>
- * - NAME [Einheit] <Name>
- * - NAME Burg|Gebäude <Name>
- * - NAME Region <Name>
- * - NAME Schiff <Name>
- * - NAME Kontinent|Insel <Name>
+ * - SCHREIBEN <Unicum> ...
+ * - SCHREIBEN <composition> <Unicum> ...
  */
 final class Write extends UnitCommand
 {
+	use UnicumTrait;
+
 	protected function run(): void {
-		//TODO Unicum
-		$n = $this->phrase->count();
-		if ($n <= 0) {
-			throw new InvalidCommandException($this, 'No name given.');
+		$id = $this->parseUnicum();
+		if (!$this->unicum) {
+			$this->message(WriteNoUnicumMessage::class)->p($id);
+			return;
 		}
+		if ($this->unicum->Composition() !== $this->composition) {
+			$this->message(WriteNoCompositionMessage::class)->s($this->composition)->p($id);
+			return;
+		}
+		$this->getOperate(Practice::WRITE)->write($this->phrase->getLine(3));
 	}
 }

@@ -8,9 +8,7 @@ final class Spellbook extends AbstractOperate
 		//TODO Unicum
 	}
 
-	public function read(): void {
-	}
+	public function write(string $text): void {
 
-	public function write(): void {
 	}
 }

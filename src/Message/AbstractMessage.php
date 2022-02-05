@@ -106,6 +106,10 @@ abstract class AbstractMessage implements MessageType
 		return $this->getTranslatedName($property, $name, 'resource', $index);
 	}
 
+	protected function composition(string $property, string $name, int $index = 0): ?string {
+		return $this->getTranslatedName($property, $name, 'composition', $index);
+	}
+
 	protected function item(string $property, string $name): ?string {
 		if ($property === $name) {
 			$commodity = getClass($this->$name->Commodity());

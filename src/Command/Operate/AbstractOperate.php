@@ -5,6 +5,8 @@ namespace Lemuria\Engine\Fantasya\Command\Operate;
 use Lemuria\Engine\Fantasya\Command\Exception\UnsupportedOperateException;
 use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\BestowMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\BestowReceivedMessage;
 use Lemuria\Model\Fantasya\Practice;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -13,7 +15,6 @@ abstract class AbstractOperate
 	use MessageTrait;
 
 	public function __construct(protected Operator $operator) {
-		//TODO Unicum
 	}
 
 	public function apply(): void {
@@ -25,17 +26,19 @@ abstract class AbstractOperate
 	}
 
 	public function read(): void {
-		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::READ);
+
 	}
 
-	public function write(): void {
+	public function write(string $text): void {
 		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::WRITE);
 	}
 
 	protected function transferTo(Unit $recipient): void {
 		$unicum = $this->operator->Unicum();
-		$this->operator->Unit()->Treasure()->remove($unicum);
+		$unit   = $this->operator->Unit();
+		$unit->Treasure()->remove($unicum);
 		$recipient->Treasure()->add($unicum);
-		//TODO
+		$this->message(BestowMessage::class, $unit)->s($unicum->Composition())->e($recipient)->e($unicum, BestowMessage::UNICUM);
+		$this->message(BestowReceivedMessage::class, $recipient)->s($unicum->Composition())->e($unit)->e($unicum, BestowMessage::UNICUM);
 	}
 }

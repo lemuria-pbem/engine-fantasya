@@ -1,60 +1,60 @@
 <?php
-declare(strict_types = 1);
+declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Command\Operate\AbstractOperate;
-use Lemuria\Engine\Fantasya\Message\Unit\OperateNoCompositionMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\OperateNoUnicumMessage;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\OperatePracticeMessage;
 use Lemuria\Id;
+use Lemuria\Model\Fantasya\Composition;
 use Lemuria\Model\Fantasya\Practice;
 use Lemuria\Model\Fantasya\Unicum;
 
 trait UnicumTrait
 {
-	protected readonly Unicum $unicum;
+	protected ?Unicum $unicum;
+
+	protected Composition $composition;
 
 	public function Unicum(): Unicum {
 		return $this->unicum;
 	}
 
-	protected function parseBestow(): ?AbstractOperate {
-		return $this->parseAbstractOperate(Practice::GIVE, 1);
-	}
-
-	protected function parseOperate(Practice $practice): ?AbstractOperate {
-		return $this->parseAbstractOperate($practice);
-	}
-
-	private function parseAbstractOperate(Practice $practice, int $offset = 0): ?AbstractOperate {
-		$unicum   = null;
-		$treasure = $this->unit->Treasure();
-		if ($this->phrase->count() === 1 + $offset) {
-			$id = Id::fromId($this->phrase->getParameter(1 + $offset));
-			if ($treasure->has($id)) {
-				/** @var Unicum $unicum */
-				$unicum = $treasure[$id];
-			}
+	private function parseUnicum(): string {
+		$n = $this->phrase->count();
+		if ($n === 1) {
+			$id                = $this->phrase->getParameter();
+			$this->unicum      = $this->getUnicum($id);
+			$this->composition = $this->unicum->Composition();
+		} elseif ($n === 2) {
+			$this->composition = $this->context->Factory()->composition($this->phrase->getParameter());
+			$id                = $this->phrase->getParameter(2);
+			$this->unicum      = $this->getUnicum($id);
 		} else {
-			$composition = $this->context->Factory()->composition($this->phrase->getParameter(1 + $offset));
-			$id          = Id::fromId($this->phrase->getParameter(2 + $offset));
-			if ($treasure->has($id)) {
-				/** @var Unicum $unicum */
-				$unicum = $this->unit->Treasure()[$id];
-				if ($composition !== $unicum->Composition()) {
-					$this->message(OperateNoCompositionMessage::class)->s($composition)->p((string)$id);
-					return null;
-				}
-			}
+			throw new InvalidCommandException($this);
 		}
+		return $id;
+	}
 
-		if ($unicum) {
-			$operate     = $this->context->Factory()->operateUnicum($unicum, $this);
-			$composition = $unicum->Composition();
-			$this->message(OperatePracticeMessage::class)->p((string)$id)->s($composition)->p($practice, OperatePracticeMessage::PRACTICE);
-			return $operate;
+	/**
+	 * @noinspection PhpUnnecessaryLocalVariableInspection
+	 */
+	private function getUnicum(string $id): ?Unicum {
+		$id       = Id::fromId($id);
+		$treasure = $this->unit->Treasure();
+		if ($treasure->has($id)) {
+			/** @var Unicum $unicum */
+			$unicum = $this->unit->Treasure()[$id];
+			return $unicum;
 		}
-		$this->message(OperateNoUnicumMessage::class)->p((string)$id);
 		return null;
+	}
+
+	private function getOperate(Practice $practice): AbstractOperate {
+		$operate     = $this->context->Factory()->operateUnicum($this->unicum, $this);
+		$id          = (string)$this->unicum->Id();
+		$composition = $this->unicum->Composition();
+		$this->message(OperatePracticeMessage::class)->p($id)->s($composition)->p($practice, OperatePracticeMessage::PRACTICE);
+		return $operate;
 	}
 }

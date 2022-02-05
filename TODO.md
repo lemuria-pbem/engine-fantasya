@@ -5,7 +5,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Fehler/Verbesserungen in 0.10
 
 - ERSCHAFFEN einzigartiger Gegenstände (Unicum)
-  - Unicum hat bestimmte Aktionen (GEBEN, LESEN, SCHREIBEN, BENUTZEN)
+  - Unicum hat bestimmte Aktionen (GEBEN, LESEN, UNTERSUCHEN, SCHREIBEN, BENUTZEN)
   - Aktion hat Lebensdauer (Zeit oder Anzahl)
   - Schriftrollen mit unbekannten Zaubern erwerben, um diese zu erlernen
   - Zauberbuch schreiben, weitergeben, lesen

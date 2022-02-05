@@ -5,7 +5,7 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Singleton;
 
-class OperateNoCompositionMessage extends OperateNoUnicumMessage
+class ReadNoCompositionMessage extends ReadNoUnicumMessage
 {
 	protected Singleton $composition;
 

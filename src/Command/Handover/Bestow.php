@@ -7,7 +7,7 @@ use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\ContactTrait;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
-use Lemuria\Engine\Fantasya\Factory\UnicumTrait;
+use Lemuria\Engine\Fantasya\Factory\OperateTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\BestowRejectedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveFailedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveNotFoundMessage;
@@ -24,7 +24,7 @@ final class Bestow extends UnitCommand implements Operator
 {
 	use ContactTrait;
 	use GiftTrait;
-	use UnicumTrait;
+	use OperateTrait;
 
 	protected function run(): void {
 		$i         = 1;

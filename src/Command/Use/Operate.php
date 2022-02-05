@@ -4,7 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command\Use;
 
 use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
-use Lemuria\Engine\Fantasya\Factory\UnicumTrait;
+use Lemuria\Engine\Fantasya\Factory\OperateTrait;
 use Lemuria\Model\Fantasya\Practice;
 
 /**
@@ -15,7 +15,7 @@ use Lemuria\Model\Fantasya\Practice;
  */
 final class Operate extends UnitCommand implements Operator
 {
-	use UnicumTrait;
+	use OperateTrait;
 
 	protected function run(): void {
 		$this->parseOperate(Practice::APPLY)?->apply();
