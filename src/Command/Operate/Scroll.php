@@ -9,5 +9,6 @@ final class Scroll extends AbstractOperate
 	}
 
 	public function write(string $text): void {
+
 	}
 }

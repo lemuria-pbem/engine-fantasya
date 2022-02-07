@@ -99,7 +99,7 @@ final class Unicum extends UnitCommand implements Activity
 		$unicum->setId($id);
 		$unicum->setName($this->dictionary->get('composition.' . getClass($this->composition)) . ' ' . $id);
 		$unicum->setComposition($this->composition);
-		$this->unit->Treasure()->add($unicum);
+		$this->unit->Treasury()->add($unicum);
 		$this->addToWorkload(1);
 		$this->message(UnicumCreateMessage::class)->e($unicum)->s($this->composition);
 	}

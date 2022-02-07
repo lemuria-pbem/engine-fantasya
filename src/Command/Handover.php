@@ -89,13 +89,13 @@ final class Handover extends DelegatedCommand
 			if ($n > 2) {
 				if ($this->context->Factory()->isComposition($this->phrase->getParameter(2))) {
 					$id = Id::fromId($this->phrase->getParameter(3));
-					if ($this->unit->Treasure()->has($id)) {
+					if ($this->unit->Treasury()->has($id)) {
 						return new Bestow($this->phrase, $this->context);
 					}
 				}
 			} elseif ($n === 2) {
 				$id = Id::fromId($this->phrase->getParameter(2));
-				if ($this->unit->Treasure()->has($id)) {
+				if ($this->unit->Treasury()->has($id)) {
 					return new Bestow($this->phrase, $this->context);
 				}
 			}

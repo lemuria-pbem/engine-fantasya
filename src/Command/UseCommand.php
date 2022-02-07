@@ -36,7 +36,7 @@ final class UseCommand extends DelegatedCommand
 		if ($n === 1) {
 			try {
 				$id = Id::fromId($param);
-				if ($this->unit->Treasure()->has($id)) {
+				if ($this->unit->Treasury()->has($id)) {
 					return new Operate($this->phrase, $this->context);
 				}
 			} catch (IdException) {

@@ -8,6 +8,9 @@ use Lemuria\Engine\Fantasya\Message\Construction\NumberOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\NumberConstructionUsedMessage;
 use Lemuria\Engine\Fantasya\Message\Party\NumberPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Party\NumberPartyUsedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NumberNoUnicumMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NumberUnicumMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NumberUnicumUsedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NumberUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NumberNotInConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NumberNotInVesselMessage;
@@ -19,14 +22,17 @@ use Lemuria\Exception\IdException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
+use Lemuria\Model\Fantasya\Unicum;
 
 /**
- * The Number command is used to set the ID of a unit, its party, or a construction or vessel it controls.
+ * The Number command is used to set the ID of a unit, its party, a construction or vessel it controls, or an unicum it
+ * possesses.
  *
  * - NUMMER [Einheit] <ID>
  * - NUMMER Partei <ID>
  * - NUMMER Burg|Gebäude <ID>
  * - NUMMER Schiff <ID>
+ * - NUMMER Gegenstand <old ID> <new ID>
  */
 final class Number extends UnitCommand
 {
@@ -62,6 +68,12 @@ final class Number extends UnitCommand
 				break;
 			case 'partei' :
 				$this->setPartyId($newId);
+				break;
+			case 'gegenstand' :
+				if ($n < 3) {
+					throw new InvalidCommandException($this, 'No new ID given');
+				}
+				$this->setUnicumId($newId);
 				break;
 			default :
 				throw new InvalidCommandException($this, 'Invalid type "' . $type . '".');
@@ -133,5 +145,23 @@ final class Number extends UnitCommand
 		$oldId = $party->Id();
 		Lemuria::Catalog()->reassign($party->setId($id), $oldId);
 		$this->message(NumberPartyMessage::class, $party)->p($oldId->Id());
+	}
+
+	private function setUnicumId(Id $oldId): void {
+		$treasury = $this->unit->Treasury();
+		if (!$treasury->has($oldId)) {
+			$this->message(NumberNoUnicumMessage::class)->p($oldId->Id());
+			return;
+		}
+		$newId = Id::fromId($this->phrase->getParameter(3));
+		if (Lemuria::Catalog()->has($newId, Domain::UNICUM)) {
+			$this->message(NumberUnicumUsedMessage::class)->p($newId->Id());
+			return;
+		}
+		/** @var Unicum $unicum */
+		$unicum      = $treasury[$oldId->Id()];
+		$composition = $unicum->Composition();
+		Lemuria::Catalog()->reassign($unicum->replaceId($newId), $oldId);
+		$this->message(NumberUnicumMessage::class)->s($composition)->p($oldId->Id())->p($newId->Id(), NumberUnicumUsedMessage::NEW_ID);
 	}
 }

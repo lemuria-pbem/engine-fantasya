@@ -28,7 +28,7 @@ trait OperateTrait
 
 	private function parseAbstractOperate(Practice $practice, int $offset = 0): ?AbstractOperate {
 		$unicum   = null;
-		$treasure = $this->unit->Treasure();
+		$treasure = $this->unit->Treasury();
 		if ($this->phrase->count() === 1 + $offset) {
 			$id = Id::fromId($this->phrase->getParameter(1 + $offset));
 			if ($treasure->has($id)) {
@@ -40,7 +40,7 @@ trait OperateTrait
 			$id          = Id::fromId($this->phrase->getParameter(2 + $offset));
 			if ($treasure->has($id)) {
 				/** @var Unicum $unicum */
-				$unicum = $this->unit->Treasure()[$id];
+				$unicum = $this->unit->Treasury()[$id];
 				if ($composition !== $unicum->Composition()) {
 					$this->message(OperateNoCompositionMessage::class)->s($composition)->p((string)$id);
 					return null;

@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Factory\UnicumTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\WriteNoCompositionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\WriteNoUnicumMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\WriteUnsupportedMessage;
 use Lemuria\Model\Fantasya\Practice;
 
 /**
@@ -23,10 +24,15 @@ final class Write extends UnitCommand
 			$this->message(WriteNoUnicumMessage::class)->p($id);
 			return;
 		}
-		if ($this->unicum->Composition() !== $this->composition) {
+		$composition = $this->unicum->Composition();
+		if ($composition !== $this->composition) {
 			$this->message(WriteNoCompositionMessage::class)->s($this->composition)->p($id);
 			return;
 		}
-		$this->getOperate(Practice::WRITE)->write($this->phrase->getLine(3));
+		if ($composition->supports(Practice::WRITE)) {
+			$this->getOperate(Practice::WRITE)->write($this->phrase->getLine(3));
+		} else {
+			$this->message(WriteUnsupportedMessage::class)->e($this->unicum)->s($this->unicum->Composition());
+		}
 	}
 }

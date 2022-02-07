@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Factory\UnicumTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\ReadNoCompositionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ReadNoUnicumMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ReadUnsupportedMessage;
 use Lemuria\Model\Fantasya\Practice;
 
 /**
@@ -25,11 +26,15 @@ final class Read extends UnitCommand implements Operator
 			$this->message(ReadNoUnicumMessage::class)->p($id);
 			return;
 		}
-		if ($this->unicum->Composition() !== $this->composition) {
+		$composition = $this->unicum->Composition();
+		if ($composition !== $this->composition) {
 			$this->message(ReadNoCompositionMessage::class)->s($this->composition)->p($id);
 			return;
 		}
-
-		$this->getOperate(Practice::READ)->read();
+		if ($composition->supports(Practice::READ)) {
+			$this->getOperate(Practice::READ)->read();
+		} else {
+			$this->message(ReadUnsupportedMessage::class)->e($this->unicum)->s($this->unicum->Composition());
+		}
 	}
 }

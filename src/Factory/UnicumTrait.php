@@ -41,10 +41,10 @@ trait UnicumTrait
 	 */
 	private function getUnicum(string $id): ?Unicum {
 		$id       = Id::fromId($id);
-		$treasure = $this->unit->Treasure();
+		$treasure = $this->unit->Treasury();
 		if ($treasure->has($id)) {
 			/** @var Unicum $unicum */
-			$unicum = $this->unit->Treasure()[$id];
+			$unicum = $this->unit->Treasury()[$id];
 			return $unicum;
 		}
 		return null;

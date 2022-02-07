@@ -22,7 +22,8 @@ use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Construction;
 
 /**
- * The Name command is used to set the name of a unit or the construction, region or vessel it controls.
+ * The Name command is used to set the name of a unit, an unicum it possesses or the construction, region or vessel it
+ * controls.
  *
  * - NAME Partei <Name>
  * - NAME [Einheit] <Name>
@@ -30,6 +31,7 @@ use Lemuria\Model\Fantasya\Construction;
  * - NAME Region <Name>
  * - NAME Schiff <Name>
  * - NAME Kontinent|Insel <Name>
+ * - NAME Gegenstand <ID> <Name>
  */
 final class Name extends UnitCommand
 {

@@ -22,14 +22,16 @@ use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Construction;
 
 /**
- * The Describe command is used to set the description of a unit or the construction, region or vessel it controls.
+ * The Describe command is used to set the description of a unit, an unicum it possesses or the construction, region or
+ * vessel it controls.
  *
  * - BESCHREIBUNG Partei <Beschreibung>
  * - BESCHREIBUNG [Einheit] <Beschreibung>
  * - BESCHREIBUNG Burg|Gebäude <Beschreibung>
  * - BESCHREIBUNG Region <Beschreibung>
  * - BESCHREIBUNG Schiff <Beschreibung>
- * - BESCHREIBUNG Kontinent|Insel <Name>
+ * - BESCHREIBUNG Kontinent|Insel <Beschreibung>
+ * - BESCHREIBUNG Gegenstand <ID> <Beschreibung>
  */
 final class Describe extends UnitCommand
 {
