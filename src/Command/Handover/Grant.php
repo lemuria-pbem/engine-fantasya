@@ -76,6 +76,9 @@ final class Grant extends UnitCommand
 		$this->message(GrantFromOutsideMessage::class);
 	}
 
+	/**
+	 * @noinspection DuplicatedCode
+	 */
 	protected function takeOver(): void {
 		$construction = $this->unit->Construction();
 		if ($construction) {
