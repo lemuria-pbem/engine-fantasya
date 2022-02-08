@@ -18,6 +18,7 @@ use Lemuria\Engine\Fantasya\Message\Vessel\TravelOverLandMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
@@ -136,11 +137,10 @@ trait TravelTrait
 	}
 
 	/**
-	 * @return Party[]
 	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
-	protected function unitIsStoppedByGuards(Region $region): array {
-		$guards = [];
+	protected function unitIsStoppedByGuards(Region $region): Gathering {
+		$guards = new Gathering();
 		if ($this->context->getTurnOptions()->IsSimulation()) {
 			return $guards;
 		}
@@ -155,30 +155,28 @@ trait TravelTrait
 				if ($guardOnVessel === $isOnVessel) {
 					if (!$guardParty->Diplomacy()->has(Relation::GUARD, $this->unit)) {
 						if ($region instanceof Ocean) {
-							$guards[$guardParty->Id()->Id()] = $guardParty;
-						}
-						$perception = $this->context->getCalculus($guard)->knowledge(Perception::class)->Level();
-						if ($perception >= $camouflage) {
-							$guards[$guardParty->Id()->Id()] = $guardParty;
+							$guards->add($guardParty);
+						} else {
+							$perception = $this->context->getCalculus($guard)->knowledge(Perception::class)->Level();
+							if ($perception >= $camouflage) {
+								$guards->add($guardParty);
+							}
 						}
 					}
 				}
 			}
 		}
-		return array_values($guards);
+		return $guards;
 	}
 
 	/**
 	 * If unit is allowed to pass region, check if next region of the journey is guarded by same party.
 	 * If it is guarded, check if unit is also allowed to pass or has GUARD relation.
-	 *
-	 * @return Party[]
 	 */
-	protected function unitIsAllowedToPass(Region $region, array $guards): array {
-		$n = count($guards);
-		for ($i = 0; $i < $n; $i++) {
-			/** @var Party $party */
-			$party     = $guards[$i];
+	protected function unitIsAllowedToPass(Region $region, Gathering $guards): Gathering {
+		$remaining = new Gathering();
+		foreach ($guards as $party /* @var Party $party */) {
+			$remaining->add($party);
 			$diplomacy = $party->Diplomacy();
 			if ($diplomacy->has(Relation::PASS, $this->unit)) {
 				if ($this->directions->hasMore()) {
@@ -187,7 +185,7 @@ trait TravelTrait
 					if ($neighbour) {
 						$nextGuards = $this->context->getIntelligence($neighbour)->getGuards();
 						if ($nextGuards->isEmpty()) {
-							unset($guards[$i]);
+							$remaining->remove($party);
 						} else {
 							$allowToPass = true;
 							foreach ($nextGuards as $guard/* @var Unit $guard */) {
@@ -199,18 +197,18 @@ trait TravelTrait
 								}
 							}
 							if ($allowToPass) {
-								unset($guards[$i]);
+								$remaining->remove($party);
 							}
 						}
 					} else {
-						unset($guards[$i]);
+						$remaining->remove($party);
 					}
 				} else {
-					unset($guards[$i]);
+					$remaining->remove($party);
 				}
 			}
 		}
-		return $guards;
+		return $remaining;
 	}
 
 	protected function getOppositeDirection(Direction $direction): Direction {
