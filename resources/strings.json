@@ -594,6 +594,8 @@
 		"RoutePauseMessage": "Die Einheit $id pausiert in dieser Woche auf der Route.",
 		"SawmillUnmaintainedMessage": "Die Einheit $id kann kein Holz in einem stillgelegten Sägewerk produzieren.",
 		"SawmillUnusableMessage": "Die Einheit $id kann kein Holz im Sägewerk produzieren, es fehlen Unterkünfte in einer Holzfällerhütte.",
+		"ScrollWriteNothingMessage": "Die Einheit $id kann nichts auf die bereits beschriebene $composition $unicum schreiben.",
+		"ScrollWriteMessage": "Die Einheit $id beschreibt {die:$compositum} $uicum mit dem Zauberspruch $spell.",
 		"SeekMessage": "Die Einheit $id hat in der Region $region feindliche Einheiten gefunden.",
 		"SellMessage": "Die Einheit $id verkauft den Bauern $goods für $payment.",
 		"SellNoneMessage": "Die Einheit $id kann den Bauern keine $goods verkaufen.",

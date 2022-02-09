@@ -888,7 +888,7 @@ class CommandFactory
 		$composition = getClass($unicum->Composition());
 		$class       = self::OPERATE_NAMESPACE . $composition;
 		if (class_exists($class)) {
-			return new $class($operator);
+			return new $class($this->context, $operator);
 		}
 		throw new LemuriaException('Operating composition ' . $composition . ' is not implemented.');
 	}

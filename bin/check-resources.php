@@ -34,6 +34,7 @@ $errors += checkDirectory('Unit', $messages);
 $errors += checkDirectory('Unit/Act', $messages);
 $errors += checkDirectory('Unit/Apply', $messages);
 $errors += checkDirectory('Unit/Cast', $messages);
+$errors += checkDirectory('Unit/Operate', $messages);
 $errors += checkDirectory('Vessel', $messages);
 
 if (empty($messages)) {

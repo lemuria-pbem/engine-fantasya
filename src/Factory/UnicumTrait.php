@@ -16,6 +16,12 @@ trait UnicumTrait
 
 	protected Composition $composition;
 
+	private readonly int $argumentIndex;
+
+	public function ArgumentIndex(): int {
+		return $this->argumentIndex;
+	}
+
 	public function Unicum(): Unicum {
 		return $this->unicum;
 	}
@@ -23,13 +29,15 @@ trait UnicumTrait
 	private function parseUnicum(): string {
 		$n = $this->phrase->count();
 		if ($n === 1) {
-			$id                = $this->phrase->getParameter();
-			$this->unicum      = $this->getUnicum($id);
-			$this->composition = $this->unicum->Composition();
+			$id                  = $this->phrase->getParameter();
+			$this->unicum        = $this->getUnicum($id);
+			$this->composition   = $this->unicum->Composition();
+			$this->argumentIndex = 2;
 		} elseif ($n === 2) {
-			$this->composition = $this->context->Factory()->composition($this->phrase->getParameter());
-			$id                = $this->phrase->getParameter(2);
-			$this->unicum      = $this->getUnicum($id);
+			$this->composition   = $this->context->Factory()->composition($this->phrase->getParameter());
+			$id                  = $this->phrase->getParameter(2);
+			$this->unicum        = $this->getUnicum($id);
+			$this->argumentIndex = 3;
 		} else {
 			throw new InvalidCommandException($this);
 		}

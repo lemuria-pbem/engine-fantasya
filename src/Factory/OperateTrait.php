@@ -14,6 +14,12 @@ trait OperateTrait
 {
 	protected readonly Unicum $unicum;
 
+	private readonly int $argumentIndex;
+
+	public function ArgumentIndex(): int {
+		return $this->argumentIndex;
+	}
+
 	public function Unicum(): Unicum {
 		return $this->unicum;
 	}
@@ -35,6 +41,7 @@ trait OperateTrait
 				/** @var Unicum $unicum */
 				$unicum = $treasure[$id];
 			}
+			$this->argumentIndex = $offset + 2;
 		} else {
 			$composition = $this->context->Factory()->composition($this->phrase->getParameter(1 + $offset));
 			$id          = Id::fromId($this->phrase->getParameter(2 + $offset));
@@ -46,6 +53,7 @@ trait OperateTrait
 					return null;
 				}
 			}
+			$this->argumentIndex = $offset + 3;
 		}
 
 		if ($unicum) {

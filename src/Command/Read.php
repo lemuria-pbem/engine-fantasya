@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\UnicumTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\ReadNoCompositionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ReadNoUnicumMessage;
@@ -16,8 +18,9 @@ use Lemuria\Model\Fantasya\Practice;
  * - UNTERSUCHEN <Unicum>
  * - UNTERSUCHEN <composition> <Unicum>
  */
-final class Read extends UnitCommand implements Operator
+final class Read extends UnitCommand implements Activity, Operator
 {
+	use DefaultActivityTrait;
 	use UnicumTrait;
 
 	protected function run(): void {

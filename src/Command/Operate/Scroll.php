@@ -2,13 +2,50 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Operate;
 
+use Lemuria\Engine\Fantasya\Factory\LearnSpellTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\Operate\ScrollWriteMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Operate\ScrollWriteNothingMessage;
+use Lemuria\Model\Fantasya\Composition\Scroll as ScrollModel;
+
 final class Scroll extends AbstractOperate
 {
+	use LearnSpellTrait;
+
 	public function apply(): void {
-		//TODO Unicum
+		$spell = $this->getScroll()->Spell();
+		if ($spell) {
+			$this->learn($spell);
+		} else {
+			//TODO no spell
+		}
 	}
 
-	public function write(string $text): void {
+	public function write(): void {
+		$unit   = $this->operator->Unit();
+		$unicum = $this->operator->Unicum();
+		$scroll = $this->getScroll();
+		if ($scroll->Spell()) {
+			$this->message(ScrollWriteNothingMessage::class, $unit)->e($unicum)->s($scroll);
+			return;
+		}
 
+		$name        = $this->operator->Phrase()->getLine($this->operator->ArgumentIndex());
+		$spell       = $this->context->Factory()->spell($name);
+		$knownSpells = $unit->Party()->SpellBook();
+		if (isset($knownSpells[$spell])) {
+			$scroll->setSpell($spell);
+			$this->message(ScrollWriteMessage::class, $unit)->e($unicum)->s($scroll)->s($spell, ScrollWriteMessage::SPELL);
+		} else {
+			//TODO unknown
+		}
+	}
+
+	/**
+	 * @noinspection PhpUnnecessaryLocalVariableInspection
+	 */
+	private function getScroll(): ScrollModel {
+		/** @var ScrollModel $scroll */
+		$scroll = $this->operator->Unicum()->Composition();
+		return $scroll;
 	}
 }

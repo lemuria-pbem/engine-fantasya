@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command\Operate;
 
 use Lemuria\Engine\Fantasya\Command\Exception\UnsupportedOperateException;
 use Lemuria\Engine\Fantasya\Command\Operator;
+use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\UnicumRead;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Party\ReadMessage;
@@ -18,7 +19,7 @@ abstract class AbstractOperate
 {
 	use MessageTrait;
 
-	public function __construct(protected Operator $operator) {
+	public function __construct(protected Context $context, protected Operator $operator) {
 	}
 
 	public function apply(): void {
@@ -39,7 +40,7 @@ abstract class AbstractOperate
 		$this->addReadEffect();
 	}
 
-	public function write(string $text): void {
+	public function write(): void {
 		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::WRITE);
 	}
 

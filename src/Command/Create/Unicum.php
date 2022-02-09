@@ -2,8 +2,11 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
+use JetBrains\PhpStorm\Pure;
+
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
@@ -45,6 +48,10 @@ final class Unicum extends UnitCommand implements Activity
 		parent::__construct($phrase, $context);
 		$this->initWorkload();
 		$this->dictionary = new Dictionary();
+	}
+
+	#[Pure] public function Activity(): string {
+		return Operator::ACTIVITY;
 	}
 
 	public function getUnicumId(): string {
