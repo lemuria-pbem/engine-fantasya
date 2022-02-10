@@ -4,15 +4,23 @@ namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Message\Unit\Operate\LearnSpellAlreadyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Operate\LearnSpellImpossibleMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Operate\LearnSpellMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Operate\LearnSpellUnableMessage;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Talent\Magic;
 
 trait LearnSpellTrait
 {
+	use MessageTrait;
 	use WorkloadTrait;
 
 	protected int $knowledge;
 
+	/**
+	 * @noinspection PhpMultipleClassDeclarationsInspection
+	 */
 	public function __construct(Context $context, Operator $operator) {
 		parent::__construct($context, $operator);
 		$this->knowledge = $this->context->getCalculus($operator->Unit())->knowledge(Magic::class)->Level();
@@ -24,19 +32,19 @@ trait LearnSpellTrait
 		$unit      = $this->operator->Unit();
 		$spellBook = $unit->Party()->SpellBook();
 		if ($spellBook[$spell]) {
-			//TODO already
+			$this->message(LearnSpellAlreadyMessage::class, $unit)->s($spell);
 			return;
 		}
 		$level = $spell->Difficulty();
 		if ($level > $this->knowledge) {
-			//TODO too high
+			$this->message(LearnSpellImpossibleMessage::class, $unit)->s($spell);
 			return;
 		}
 		if ($this->reduceByWorkload($level) < $level) {
-			//TODO cannot learn
+			$this->message(LearnSpellUnableMessage::class, $unit)->s($spell);
 			return;
 		}
-		//TODO learn
-		return;
+		$spellBook->add($spell);
+		$this->message(LearnSpellMessage::class, $unit)->s($spell);
 	}
 }

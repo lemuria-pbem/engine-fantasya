@@ -3,10 +3,12 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Command\Operate\AbstractOperate;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\OperateNoCompositionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\OperateNoUnicumMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\OperatePracticeMessage;
 use Lemuria\Id;
+use Lemuria\Model\Fantasya\Composition;
 use Lemuria\Model\Fantasya\Practice;
 use Lemuria\Model\Fantasya\Unicum;
 
@@ -24,6 +26,29 @@ trait OperateTrait
 		return $this->unicum;
 	}
 
+	protected function parseComposition(): Composition {
+		$treasury = $this->unit->Treasury();
+		if ($this->phrase->count() === 1) {
+			$id = Id::fromId($this->phrase->getParameter());
+			if ($treasury->has($id)) {
+				/** @var Unicum $unicum */
+				$unicum = $treasury[$id];
+				return $unicum->Composition();
+			}
+		} else {
+			$composition = $this->context->Factory()->composition($this->phrase->getParameter());
+			$id          = Id::fromId($this->phrase->getParameter(2));
+			if ($treasury->has($id)) {
+				/** @var Unicum $unicum */
+				$unicum = $treasury[$id];
+				if ($composition === $unicum->Composition()) {
+					return $composition;
+				}
+			}
+		}
+		throw new InvalidCommandException($this, 'Composition could not be determined.');
+	}
+
 	protected function parseBestow(): ?AbstractOperate {
 		return $this->parseAbstractOperate(Practice::GIVE, 1);
 	}
@@ -34,20 +59,20 @@ trait OperateTrait
 
 	private function parseAbstractOperate(Practice $practice, int $offset = 0): ?AbstractOperate {
 		$unicum   = null;
-		$treasure = $this->unit->Treasury();
+		$treasury = $this->unit->Treasury();
 		if ($this->phrase->count() === 1 + $offset) {
 			$id = Id::fromId($this->phrase->getParameter(1 + $offset));
-			if ($treasure->has($id)) {
+			if ($treasury->has($id)) {
 				/** @var Unicum $unicum */
-				$unicum = $treasure[$id];
+				$unicum = $treasury[$id];
 			}
 			$this->argumentIndex = $offset + 2;
 		} else {
 			$composition = $this->context->Factory()->composition($this->phrase->getParameter(1 + $offset));
 			$id          = Id::fromId($this->phrase->getParameter(2 + $offset));
-			if ($treasure->has($id)) {
+			if ($treasury->has($id)) {
 				/** @var Unicum $unicum */
-				$unicum = $this->unit->Treasury()[$id];
+				$unicum = $treasury[$id];
 				if ($composition !== $unicum->Composition()) {
 					$this->message(OperateNoCompositionMessage::class)->s($composition)->p((string)$id);
 					return null;

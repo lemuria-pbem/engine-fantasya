@@ -7,7 +7,7 @@ use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 use Lemuria\Singleton;
 
-class ScrollWriteMessage extends ScrollWriteNothingMessage
+class SpellbookWriteMessage extends ScrollWriteNothingMessage
 {
 	public final const SPELL = 'spell';
 

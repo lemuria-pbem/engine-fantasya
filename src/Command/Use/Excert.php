@@ -2,10 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Use;
 
-use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
-use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\OperateTrait;
 use Lemuria\Model\Fantasya\Practice;
 
@@ -15,9 +13,8 @@ use Lemuria\Model\Fantasya\Practice;
  * - BENUTZEN <Unicum>
  * - BENUTZEN <composition> <Unicum>
  */
-final class Operate extends UnitCommand implements Activity, Operator
+final class Excert extends UnitCommand implements Operator
 {
-	use DefaultActivityTrait;
 	use OperateTrait;
 
 	protected function run(): void {

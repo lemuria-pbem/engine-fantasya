@@ -3,8 +3,10 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Operate;
 
 use Lemuria\Engine\Fantasya\Factory\LearnSpellTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\Operate\ScrollEmptyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\ScrollWriteMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\ScrollWriteNothingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Operate\ScrollWriteUnknownMessage;
 use Lemuria\Model\Fantasya\Composition\Scroll as ScrollModel;
 
 final class Scroll extends AbstractOperate
@@ -16,7 +18,10 @@ final class Scroll extends AbstractOperate
 		if ($spell) {
 			$this->learn($spell);
 		} else {
-			//TODO no spell
+			$unit        = $this->operator->Unit();
+			$unicum      = $this->operator->Unicum();
+			$composition = $unicum->Composition();
+			$this->message(ScrollEmptyMessage::class, $unit)->s($composition)->e($unicum);
 		}
 	}
 
@@ -36,7 +41,7 @@ final class Scroll extends AbstractOperate
 			$scroll->setSpell($spell);
 			$this->message(ScrollWriteMessage::class, $unit)->e($unicum)->s($scroll)->s($spell, ScrollWriteMessage::SPELL);
 		} else {
-			//TODO unknown
+			$this->message(ScrollWriteUnknownMessage::class, $unit)->e($unicum)->s($scroll)->s($spell, ScrollWriteMessage::SPELL);
 		}
 	}
 

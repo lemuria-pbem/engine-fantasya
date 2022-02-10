@@ -4,10 +4,14 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command\Use\Apply;
+use Lemuria\Engine\Fantasya\Command\Use\Excert;
 use Lemuria\Engine\Fantasya\Command\Use\Operate;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\OperateTrait;
 use Lemuria\Exception\IdException;
 use Lemuria\Id;
+use Lemuria\Model\Fantasya\Composition\Scroll;
+use Lemuria\Model\Fantasya\Composition\Spellbook;
 
 /**
  * Implementation of command BENUTZEN.
@@ -23,6 +27,10 @@ use Lemuria\Id;
  */
 final class UseCommand extends DelegatedCommand
 {
+	private const ACTIVITY_COMPOSITE = [Scroll::class => true, Spellbook::class => true];
+
+	use OperateTrait;
+
 	/**
 	 * Create the delegate.
 	 */
@@ -37,7 +45,7 @@ final class UseCommand extends DelegatedCommand
 			try {
 				$id = Id::fromId($param);
 				if ($this->unit->Treasury()->has($id)) {
-					return new Operate($this->phrase, $this->context);
+					return $this->createOperateCommand();
 				}
 			} catch (IdException) {
 			}
@@ -48,6 +56,12 @@ final class UseCommand extends DelegatedCommand
 		if ((string)$amount === $param) {
 			return new Apply($this->phrase, $this->context);
 		}
-		return new Operate($this->phrase, $this->context);
+		return $this->createOperateCommand();
+	}
+
+	private function createOperateCommand(): UnitCommand {
+		$composition = $this->parseComposition()::class;
+		$isActivity  = isset(self::ACTIVITY_COMPOSITE[$composition]);
+		return $isActivity ? new Operate($this->phrase, $this->context) : new Excert($this->phrase, $this->context);
 	}
 }
