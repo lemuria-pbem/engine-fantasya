@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command\Create;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyShip;
 use Lemuria\Engine\Fantasya\Factory\Model\Dockyards;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
+use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselAlreadyFinishedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselBuildMessage;
@@ -37,12 +38,15 @@ use Lemuria\Model\Fantasya\Vessel as VesselModel;
  */
 final class Vessel extends AbstractProduct
 {
+	use ModifiedActivityTrait;
+
 	private int $remaining;
 
 	private ?Construction $port = null;
 
 	protected function initialize(): void {
 		$this->replacePlaceholderJob();
+		$this->newDefault = $this;
 		parent::initialize();
 	}
 
@@ -92,6 +96,7 @@ final class Vessel extends AbstractProduct
 					}
 				}
 				if ($vessel->Completion() === 1.0) {
+					$this->replaceDefault($this->newDefault);
 					$this->message(VesselFinishedMessage::class, $vessel);
 				}
 			} else {
@@ -110,6 +115,7 @@ final class Vessel extends AbstractProduct
 				}
 			}
 		} else {
+			$this->replaceDefault($this->newDefault);
 			$this->message(VesselAlreadyFinishedMessage::class)->e($vessel);
 		}
 	}

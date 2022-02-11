@@ -394,6 +394,7 @@
 		"GrantNoConstructionMessage": "Die Einheit ist in keinem Gebäude, das sie übernehmen könnte.",
 		"GrantNothingMessage": "Die Einheit $id kann kein Kommando übergeben, das sie nicht inne hat.",
 		"GrantNotInsideMessage": "Die Einheit $id kann das Kommando nicht an die Einheit $target übergeben, diese ist außerhalb.",
+		"GrantNotOnBoardMessage": "Die Einheit $id kann das Kommando nicht an die Einheit $target übergeben, diese ist nicht an Bord.",
 		"GrantTakeoverMessage": "Die Einheit $id hat das Kommando von der Einheit $target übernommen.",
 		"GriffineggAttackedMessage": "Die Einheit $id wird von Greifen angegriffen bei dem Versuch, deren Eier zu stehlen.",
 		"GriffineggChanceMessage": "Die Einheit $id hat eine Chance von $chance, $eggs zu stehlen.",
@@ -664,9 +665,11 @@
 		"TempMessage": "Neue Einheit $id erzeugt.",
 		"TheWildHuntMessage": "In einer stürmischen Nacht werden unsere Wachen in $region vom Lärm eines rumpelnden Wagens, dem Stampfen vieler Hufe und gellenden Schreien aufgeschreckt. Mit wahnsinnigem Tempo rauscht die furchtsame Erscheinung vorbei, während die Wachen unfähig sind etwas zu tun. Plötzlich überkommt sie eine große Müdigkeit und sie fallen kurz darauf in einen tiefen Schlaf. Am nächsten Morgen finden sie eine Kiste, die einige Phiolen und andere Dinge enthält.",
 		"TravelAllowedMessage": "Unsere Wachen haben die Einheit $unit in der Region $region durchreisen lassen.",
+		"TravelAllowedRegionMessage": "Die Wachen der Partei $party haben die Einheit $unit durchreisen lassen.",
 		"TravelAnchorMessage": "Das Schiff $id ankert im $anchor und kann nicht nach $direction auslaufen.",
 		"TravelGuardCancelMessage": "Die Bewachung der Region wurde durch die Abreise aufgehoben.",
-		"TravelGuardedMessage": "Die Einheit $id wurde in der Region $region von den Wachen gestoppt.",
+		"TravelGuardedMessage": "Die Einheit $id wurde in der Region $region von den Wachen der Partei $guard gestoppt.",
+		"TravelGuardedRegionMessage": "Die Einheit $unit wurde von den Wachen der Partei $party gestoppt.",
 		"TravelGuardMessage": "Unsere Wachen haben die Einheit $unit in der Region $region aufgehalten.",
 		"TravelIntoChaosMessage": "Die Einheit $id kann sich nicht nach $direction ins Chaos bewegen.",
 		"TravelIntoOceanMessage": "Die Einheit $id kann sich nicht nach $direction in den Ozean bewegen.",
@@ -1232,6 +1235,16 @@
 		"SW": "Südwesten",
 		"W": "Westen",
 		"NW": "Nordwesten",
-		"null": "der Rand der Welt"
+		"null": "der Rand der Welt",
+		"short": {
+			"N": "N",
+			"NE": "NO",
+			"E": "O",
+			"SE": "SO",
+			"S": "S",
+			"SW": "SW",
+			"W": "W",
+			"NW": "NW"
+		}
 	}
 }

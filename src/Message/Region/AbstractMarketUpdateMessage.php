@@ -18,7 +18,7 @@ abstract class AbstractMarketUpdateMessage extends AbstractRegionMessage
 	protected int $price;
 
 	protected function create(): string {
-		return 'Commerce in region ' . $this->id . ' has ' . $this->direction() . ' the price for ' . $this->luxury . ' to ' . $this->price . '.';
+		return 'Commerce in region ' . $this->id . ' has ' . $this->change() . ' the price for ' . $this->luxury . ' to ' . $this->price . '.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
@@ -31,5 +31,5 @@ abstract class AbstractMarketUpdateMessage extends AbstractRegionMessage
 		return $this->commodity($name, 'luxury') ?? parent::getTranslation($name);
 	}
 
-	abstract protected function direction(): string;
+	abstract protected function change(): string;
 }

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Action;
-use Lemuria\Engine\Fantasya\Event\Game\TheWildHunt;
+use Lemuria\Engine\Fantasya\Event\Game\FindWallet;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 
@@ -14,12 +14,8 @@ use Lemuria\Lemuria;
 final class Timer extends DelegatedEvent
 {
 	private const SCHEDULE = [
-		41 => [
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 4]],
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 5]],
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 15409]],
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 1054]],
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 1050517]]
+		48 => [
+			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 220, FindWallet::SILVER => 4000]]
 		]
 	];
 

@@ -1,31 +1,31 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Fantasya\Message\Party;
+namespace Lemuria\Engine\Fantasya\Message\Region;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 
-class TravelGuardMessage extends AbstractPartyMessage
+class TravelGuardedRegionMessage extends AbstractRegionMessage
 {
-	public const UNIT = 'unit';
+	public const PARTY = 'party';
 
 	protected string $level = Message::EVENT;
 
 	protected int $section = Section::MOVEMENT;
 
-	protected Id $region;
-
 	protected Id $unit;
 
+	protected Id $party;
+
 	protected function create(): string {
-		return 'Our guards have stopped unit ' . $this->unit . ' in region ' . $this->region . '.';
+		return 'Unit ' . $this->unit . ' was stopped by the guards of party ' . $this->party . '.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->region = $message->get();
-		$this->unit   = $message->get(self::UNIT);
+		$this->unit  = $message->get();
+		$this->party = $message->get(self::PARTY);
 	}
 }

@@ -4,6 +4,9 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
+- Magellan-Report: BATTLE einbauen
+- Magellan-Report: ZAUBER mit KOMPONENTEN einbauen
+- Magellan-Report: TRANK mit ZUTATEN einbauen
 
 ## Neue Funktionen
 
@@ -11,7 +14,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 - Migration zu PHP 8.1
 - ERSCHAFFEN einzigartiger Gegenstände (Unicum)
-  - Unicum hat bestimmte Aktionen (GEBEN, LESEN, SCHREIBEN, BENUTZEN)
+  - Unicum hat bestimmte Aktionen (GEBEN, LESEN, UNTERSUCHEN, SCHREIBEN, BENUTZEN)
   - Aktion hat Lebensdauer (Zeit oder Anzahl)
   - Schriftrollen mit unbekannten Zaubern erwerben, um diese zu erlernen
   - Zauberbuch schreiben, weitergeben, lesen
@@ -48,8 +51,11 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
+- VORLAGE-Variante für Rotation von Befehlen
 - Vorgabeeinstellungen für neue Einheiten (Kampfstatus, Sammeln, Tarnen)
 - Gegenstandsklassen für verkürzte Übergaben (Kräuter, Luxuswaren, Rüstungen, Schilde, Tiere, Trophäen, Tränke, Waffen)
+- neue Gebäude, die Arbeitsplätze verdoppeln
+  - Wüste: Oase
 - besondere Gebäude/Orte wie Ruinen oder Höhlen
 - Weltumseglung ermöglichen
 - Umweltereignisse
