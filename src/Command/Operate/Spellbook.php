@@ -3,6 +3,8 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Operate;
 
 use Lemuria\Engine\Fantasya\Factory\LearnSpellTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\Operate\SpellbookNoSpellMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Operate\SpellbookReadEmptyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\SpellbookWriteAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\SpellbookWriteMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\SpellbookWriteUnknownMessage;
@@ -13,9 +15,17 @@ final class Spellbook extends AbstractOperate
 	use LearnSpellTrait;
 
 	public function apply(): void {
-		$name  = $this->operator->Phrase()->getLine($this->operator->ArgumentIndex());
-		$spell = $this->context->Factory()->spell($name);
-		$this->learn($spell);
+		$name      = $this->operator->Phrase()->getLine($this->operator->ArgumentIndex());
+		$spell     = $this->context->Factory()->spell($name);
+		$spellbook = $this->getSpellbook();
+		$spells    = $spellbook->Spells();
+		if (isset($spells[$spell])) {
+			$this->learn($spell);
+		} else {
+			$unit   = $this->operator->Unit();
+			$unicum = $this->operator->Unicum();
+			$this->message(SpellbookNoSpellMessage::class, $unit)->s($spellbook)->e($unicum)->s($spell, SpellbookWriteMessage::SPELL);
+		}
 	}
 
 	public function write(): void {
@@ -39,6 +49,14 @@ final class Spellbook extends AbstractOperate
 		}
 	}
 
+	protected function addReadEffect(): void {
+		$spellbook = $this->getSpellbook();
+		if ($spellbook->Spells()->isEmpty()) {
+			$this->message(SpellbookReadEmptyMessage::class, $this->operator->Unit())->e($this->operator->Unicum())->s($spellbook);
+		} else {
+			parent::addReadEffect();
+		}
+	}
 
 	/**
 	 * @noinspection PhpUnnecessaryLocalVariableInspection
