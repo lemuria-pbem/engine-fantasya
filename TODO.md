@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.10
 
-- Leerzeilen im Textreport
 
 ## Neue Funktionen
 
