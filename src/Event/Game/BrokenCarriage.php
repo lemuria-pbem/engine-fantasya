@@ -2,16 +2,16 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Game;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Effect\BrokenCarriageEffect;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Message\Region\BrokenCarriageDiesMessage;
 use Lemuria\Engine\Fantasya\Message\Region\BrokenCarriageMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -48,7 +48,7 @@ final class BrokenCarriage extends AbstractEvent
 	private Region $region;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::BEFORE);
+		parent::__construct($state, Priority::BEFORE);
 	}
 
 	public function setOptions(array $options): BrokenCarriage {
@@ -94,7 +94,7 @@ final class BrokenCarriage extends AbstractEvent
 	private function createOrc(): Unit {
 		$unit = new Unit();
 		$race = self::createRace(Orc::class);
-		$unit->setId(Lemuria::Catalog()->nextId(Catalog::UNITS));
+		$unit->setId(Lemuria::Catalog()->nextId(Domain::UNIT));
 		$unit->setSize(1)->setRace($race)->setHealth(self::HEALTH)->setDisguise();
 		$unit->setName(self::NAME)->setDescription(self::DESCRIPTION);
 		Party::get(new Id(self::NPC))->People()->add($unit);

@@ -2,17 +2,17 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Effect\Hunger;
 use Lemuria\Engine\Fantasya\Factory\MagicTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\RecreateAuraMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecreateHealthMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building\Tavern;
 use Lemuria\Model\Fantasya\Monster;
-use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -23,14 +23,14 @@ final class Recreate extends AbstractEvent
 	use MagicTrait;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::AFTER);
+		parent::__construct($state, Priority::AFTER);
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Catalog::UNITS) as $unit /* @var Unit $unit */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::UNIT) as $unit /* @var Unit $unit */) {
 			$type = $unit->Party()->Type();
 			switch ($type) {
-				case Party::PLAYER :
+				case Type::PLAYER :
 					if (!$this->hasHunger($unit)) {
 						if ($unit->Health() < 1.0) {
 							$this->recreateHealth($unit);
@@ -40,7 +40,7 @@ final class Recreate extends AbstractEvent
 						}
 					}
 					break;
-				case Party::MONSTER :
+				case Type::MONSTER :
 					$this->recreateMonster($unit);
 					break;
 				default :

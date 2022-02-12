@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 
 /**
@@ -11,7 +12,7 @@ abstract class DelegatedEvent extends AbstractEvent
 {
 	protected array $delegates = [];
 
-	public function __construct(State $state, int $priority) {
+	public function __construct(State $state, Priority $priority) {
 		parent::__construct($state, $priority);
 		$this->createDelegates();
 	}

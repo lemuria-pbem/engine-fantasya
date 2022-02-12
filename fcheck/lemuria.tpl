@@ -19,6 +19,7 @@
 ^@?(ba|ban|bann|banne|banner) +.*$
 
 ^@?(benu|benut|benutz|benutze|benutzen)( +[0-9]+)? +(bauernlieb|berserkerblut|elixier der macht|gehirnschmalz|goliathwasser|heiltrank|pferdeglück|pferdeglueck|schaffenstrunk|siebenmeilentee|trank der wahrheit|wasser des lebens|wundsalbe)$
+^@?(benu|benut|benutz|benutze|benutzen)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^@?(beschreibu|beschreibun|beschreibung|beschreibe|beschreiben|te|tex|text)( +(einheit|region|gebaeude|gebäude|burg|schiff|partei))? .+$
 
@@ -44,7 +45,9 @@
 ^@?(erf|erfor|erfors|erforsc|erforsch|erforsche|erforschen|for|fors|forsc|forsch|forsche|forschen) +(kraut|kräuter|kraeuter)$
 
 ^@?(gi|gib|ge|geb|gebe|geben) +[a-z0-9]{1,6}( +.*)?$
+^@?(gi|gib|ge|geb|gebe|geben) +[a-z0-9]{1,6}( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 ^@?(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6}( +.*)?$
+^@?(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6}( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^@?(h|he|hel|helf|helfe|helfen|hi|hil|hilf|hilfe) +[a-z0-9]{1,6} +[a-z]+( +(region|nicht|region +nicht|nicht +region))?$
 
@@ -63,12 +66,15 @@
 
 ^@?(ler|lern|lerne|lernen) +(alchemie|armbrustschießen|armbrustschiessen|ausdauer|bergbau|bogenbau|bogenschießen|bogenschiessen|burgenbau|handel|handeln|hiebwaffen|holzfaellen|holzfällen|katapultbedienung|katapultschießen|katapultschiessen|kräuterkunde|kraeuterkunde|magie|navigation|navigieren|pferdedressur|reiten|ruestungsbau|rüstungsbau|schiffbau|segeln|speerkämpfen|speerkaempfen|speerkampf|spionage|spionieren|stangenwaffen|steinbau|steuereintreiben|steuereintreibung|strassenbau|straßenbau|taktik|tarnen|tarnung|unterhalten|unterhaltung|waffenbauen|waffenbau|wagenbau|wahrnehmen|wahrnehmung)$
 
+^@?(les|lese|lesen|li|lie|lies)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+
 ^@?(m|ma|mac|mach|mache|machen) +(temp) +[a-z0-9]{1,6}$
 ^@?(m|ma|mac|mach|mache|machen) +[a-zäöüß]+$
 ^@?(m|ma|mac|mach|mache|machen) +[0-9]+ +[a-zäöüß]+$
 ^@?(m|ma|mac|mach|mache|machen) +(schiff|boot|drachenschiff|galeone|karavelle|langboot|trireme)( +[0-9]+)?$
 ^@?(m|ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|bergwerk|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|leuchtturm|leuchttürme|minen|mine|monument|monumente|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steingrube|steuerturm|taverne|werkstatt)( +[0-9]+)$
 ^@?(m|ma|mac|mach|mache|machen) +straße +(no|o|so|sw|w|nw)$
+^@?(m|ma|mac|mach|mache|machen) +(schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
 
 ^@?(nam|name|bene|benen|benenn|benenne|benennen)( +(einheit|region|gebäude|gebaeude|burg|schiff|partei))? +.+$
 
@@ -90,6 +96,8 @@
 ^@?(res|rese|reser|reserv|reservi|reserve|reservie|reservier|reserviere|reservieren|reservieru|reservierun|reservierung) +alles( +[a-z äöüß]+)?$
 
 ^@?(ro|rou|rout|route)( +(e|ne|no|nw|o|so|sw|w|east|nordosten|nordwesten|northeast|northwest|osten|suedosten|suedwesten|southeast|southwest|westen|west|pause))+$
+
+^@?(sc|sch|schr|schre|schrei|schreib|schreibe|schreiben)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6} +[a-zäöüß]+( [a-zäöüß]+)*$
 
 ^@?(s|so|sor|sort|sorti|sortie|sortier|sortiere|sortieren|sortieru|sortierun|sortierung) +(anfang|erste|erster|zuerst|ende|letzte|letzter|zuletzt)$
 ^@?(s|so|sor|sort|sorti|sortie|sortier|sortiere|sortieren|sortieru|sortierun|sortierung) +(vor|hinter|nach|austausch|austauschen|auswechseln|mit|tausch|tausche|tauschen|wechsel|wechseln)( +temp)? +[a-z0-9]{1,6}$

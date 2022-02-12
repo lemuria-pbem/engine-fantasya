@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class TravelRegionMessage extends AbstractUnitMessage
 {
-	protected int $section = Section::MOVEMENT;
+	protected Section $section = Section::MOVEMENT;
 
 	protected Id $region;
 

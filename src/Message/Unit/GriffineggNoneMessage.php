@@ -9,7 +9,7 @@ class GriffineggNoneMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::PRODUCTION;
+	protected Section $section = Section::PRODUCTION;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has not found any griffin eggs.';

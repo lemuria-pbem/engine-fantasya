@@ -17,7 +17,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\SiegeUnguardMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Combat;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -39,7 +39,7 @@ final class Siege extends UnitCommand
 
 	protected function initialize(): void {
 		parent::initialize();
-		if ($this->unit->BattleRow() <= Combat::BYSTANDER) {
+		if ($this->unit->BattleRow() <= BattleRow::BYSTANDER) {
 			$this->message(SiegeNotFightingMessage::class);
 			return;
 		}

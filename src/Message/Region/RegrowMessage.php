@@ -8,7 +8,7 @@ use Lemuria\Singleton;
 
 class RegrowMessage extends AbstractRegionMessage
 {
-	protected int $section = Section::ECONOMY;
+	protected Section $section = Section::ECONOMY;
 
 	protected Singleton $herb;
 

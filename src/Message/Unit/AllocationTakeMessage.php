@@ -9,7 +9,7 @@ use Lemuria\Model\Fantasya\Quantity;
 
 class AllocationTakeMessage extends AbstractUnitMessage
 {
-	protected int $section = Section::PRODUCTION;
+	protected Section $section = Section::PRODUCTION;
 
 	protected Quantity $item;
 

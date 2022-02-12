@@ -10,7 +10,7 @@ abstract class AbstractNoDemandMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::DEBUG;
 
-	protected int $section = Section::PRODUCTION;
+	protected Section $section = Section::PRODUCTION;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot ' . $this->createActivity() . ', no demand.';

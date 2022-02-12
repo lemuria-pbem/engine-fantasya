@@ -20,7 +20,7 @@ class Parser
 
 	private int $index = 0;
 
-	private int $count;
+	private readonly int $count;
 
 	private int $skipLevel = 0;
 

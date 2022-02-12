@@ -9,7 +9,7 @@ use Lemuria\Engine\Fantasya\Combat\BattleLog;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\FireballHitMessage;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Combat;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Protection\Armor;
 use Lemuria\Model\Fantasya\Commodity\Protection\Ironshield;
 use Lemuria\Model\Fantasya\Commodity\Protection\Mail;
@@ -34,10 +34,10 @@ class Fireball extends AbstractBattleSpell
 			$calculus = new Calculus($unit);
 			$level    = $calculus->knowledge(Magic::class)->Level();
 			$victims  = self::VICTIMS + (int)round(sqrt($level)) - 1;
-			$victims  = $this->castOnCombatants($this->victim[Combat::FRONT], $damage, $victims);
-			$victims  = $this->castOnCombatants($this->victim[Combat::BACK], $damage, $victims);
-			$victims  = $this->castOnCombatants($this->victim[Combat::BYSTANDER], $damage, $victims);
-			$this->castOnCombatants($this->victim[Combat::REFUGEE], $damage, $victims);
+			$victims  = $this->castOnCombatants($this->victim[BattleRow::FRONT->value], $damage, $victims);
+			$victims  = $this->castOnCombatants($this->victim[BattleRow::BACK->value], $damage, $victims);
+			$victims  = $this->castOnCombatants($this->victim[BattleRow::BYSTANDER->value], $damage, $victims);
+			$this->castOnCombatants($this->victim[BattleRow::REFUGEE->value], $damage, $victims);
 		}
 		return $damage;
 	}

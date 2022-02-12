@@ -9,7 +9,7 @@ class GriffineggChanceMessage extends GriffineggOnlyMessage
 {
 	public const CHANCE = 'chance';
 
-	protected int $section = Section::PRODUCTION;
+	protected Section $section = Section::PRODUCTION;
 
 	protected float $chance;
 

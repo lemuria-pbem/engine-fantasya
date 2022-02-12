@@ -14,7 +14,7 @@ class TaxDemandMessage extends AbstractUnitMessage
 
 	protected string $level = Message::DEBUG;
 
-	protected int $section = Section::PRODUCTION;
+	protected Section $section = Section::PRODUCTION;
 
 	protected int $collectors;
 

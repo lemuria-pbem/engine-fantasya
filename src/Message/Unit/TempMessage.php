@@ -9,7 +9,7 @@ class TempMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	protected int $section = Section::PRODUCTION;
+	protected Section $section = Section::PRODUCTION;
 
 	protected function create(): string {
 		return 'New unit ' . $this->id . ' created.';

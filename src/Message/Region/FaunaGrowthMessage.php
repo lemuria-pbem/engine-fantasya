@@ -8,7 +8,7 @@ use Lemuria\Item;
 
 class FaunaGrowthMessage extends AbstractRegionMessage
 {
-	protected int $section = Section::ECONOMY;
+	protected Section $section = Section::ECONOMY;
 
 	protected Item $animals;
 

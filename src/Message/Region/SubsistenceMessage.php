@@ -10,7 +10,7 @@ class SubsistenceMessage extends AbstractRegionMessage
 {
 	public const SILVER = 'silver';
 
-	protected int $section = Section::ECONOMY;
+	protected Section $section = Section::ECONOMY;
 
 	protected Item $peasants;
 

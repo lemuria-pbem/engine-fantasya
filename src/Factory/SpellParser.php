@@ -27,14 +27,14 @@ class SpellParser
 	/**
 	 * Spell has optional level.
 	 */
-	public const LEVEL = 1;
+	public final const LEVEL = 1;
 
 	/**
 	 * Spell has optional level and mandatory target unit ID.
 	 */
-	public const LEVEL_AND_TARGET = 2;
+	public final const LEVEL_AND_TARGET = 2;
 
-	protected const SYNTAX = [
+	protected final const SYNTAX = [
 		AstralChaos::class  => self::LEVEL,
 		AuraTransfer::class => self::LEVEL_AND_TARGET,
 		Daydream::class     => self::LEVEL_AND_TARGET,
@@ -44,7 +44,7 @@ class SpellParser
 		SongOfPeace::class  => self::LEVEL
 	];
 
-	protected const SPELLS = [
+	protected final const SPELLS = [
 		'Astrales'     => ['Chaos' => AstralChaos::class],
 		'Auratransfer' => AuraTransfer::class,
 		'Feuerball'    => Fireball::class,
@@ -54,9 +54,9 @@ class SpellParser
 		'Wunderdoktor' => Quacksalver::class
 	];
 
-	protected string $spell;
+	protected readonly string $spell;
 
-	protected int $level;
+	protected readonly int $level;
 
 	protected ?Id $target = null;
 

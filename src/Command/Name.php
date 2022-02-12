@@ -13,16 +13,20 @@ use Lemuria\Engine\Fantasya\Message\Party\NamePartyMessage;
 use Lemuria\Engine\Fantasya\Message\Region\NameCastleMessage;
 use Lemuria\Engine\Fantasya\Message\Region\NameRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameNoContinentMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NameNoUnicumMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NameUnicumMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameNotInConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameNotInVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\NameCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\NameVesselMessage;
+use Lemuria\Id;
 use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Construction;
 
 /**
- * The Name command is used to set the name of a unit or the construction, region or vessel it controls.
+ * The Name command is used to set the name of a unit, an unicum it possesses or the construction, region or vessel it
+ * controls.
  *
  * - NAME Partei <Name>
  * - NAME [Einheit] <Name>
@@ -30,6 +34,7 @@ use Lemuria\Model\Fantasya\Construction;
  * - NAME Region <Name>
  * - NAME Schiff <Name>
  * - NAME Kontinent|Insel <Name>
+ * - NAME Gegenstand <ID> <Name>
  */
 final class Name extends UnitCommand
 {
@@ -72,6 +77,12 @@ final class Name extends UnitCommand
 			case 'kontinent' :
 			case 'insel' :
 				$this->setContinentName($name);
+				break;
+			case 'gegenstand' :
+				if ($n < 3) {
+					throw new InvalidCommandException('No name given.');
+				}
+				$this->renameUnicum($name, $this->phrase->getParameter(3));
 				break;
 			default :
 				$this->renameUnit(self::trimName($this->phrase->getLine()));
@@ -142,6 +153,18 @@ final class Name extends UnitCommand
 			return;
 		}
 		$this->message(NameNotInVesselMessage::class);
+	}
+
+	private function renameUnicum(string $id, string $name): void {
+		$treasury = $this->unit->Treasury();
+		$id       = Id::fromId($id);
+		if ($treasury->has($id)) {
+			$unicum = $treasury[$id];
+			$unicum->setName($name);
+			$this->message(NameUnicumMessage::class)->e($unicum)->p($name);
+		} else {
+			$this->message(NameNoUnicumMessage::class)->p((string)$id);
+		}
 	}
 
 	private function setContinentName(string $name): void {

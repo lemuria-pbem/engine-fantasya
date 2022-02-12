@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Calculus;
-use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
 use Lemuria\Engine\Fantasya\Factory\Model\Ports;
 use Lemuria\Engine\Fantasya\Message\Region\TravelVesselMessage;
@@ -26,12 +25,12 @@ use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
 use Lemuria\Model\Neighbours;
+use Lemuria\Model\World\Direction;
 
 trait NavigationTrait
 {
 	use BuilderTrait;
-
-	protected Context $context;
+	use ContextTrait;
 
 	private ?Vessel $vessel = null;
 
@@ -113,7 +112,7 @@ trait NavigationTrait
 		$destination->Fleet()->add($this->vessel);
 
 		if ($destination->Landscape() instanceof Ocean) {
-			$this->vessel->setAnchor(Vessel::IN_DOCK);
+			$this->vessel->setAnchor(Direction::IN_DOCK);
 			$this->vessel->setPort(null);
 		} else {
 			$neighbours = Lemuria::World()->getNeighbours($destination);

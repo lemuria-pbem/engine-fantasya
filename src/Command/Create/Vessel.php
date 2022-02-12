@@ -19,7 +19,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\VesselUnableMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\VesselFinishedMessage;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Requirement;
@@ -83,7 +83,7 @@ final class Vessel extends AbstractProduct
 						$this->message(VesselBuildMessage::class)->e($vessel)->p($yield);
 					}
 				} else {
-					$id     = Lemuria::Catalog()->nextId(Catalog::VESSELS);
+					$id     = Lemuria::Catalog()->nextId(Domain::VESSEL);
 					$vessel = new VesselModel();
 					$vessel->setName('Schiff ' . $id)->setId($id);
 					$vessel->Passengers()->add($this->unit);

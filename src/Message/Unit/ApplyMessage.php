@@ -11,7 +11,7 @@ class ApplyMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	protected int $section = Section::MAGIC;
+	protected Section $section = Section::MAGIC;
 
 	protected Item $potion;
 

@@ -12,9 +12,11 @@ class EffectFactory
 {
 	use SerializableTrait;
 
-	private string $namespace;
+	private readonly State $state;
 
-	public function __construct(private State $state) {
+	private readonly string $namespace;
+
+	public function __construct() {
 		$this->state     = State::getInstance();
 		$this->namespace = substr(AbstractEffect::class, 0, strrpos(AbstractEffect::class, '\\') + 1);
 	}

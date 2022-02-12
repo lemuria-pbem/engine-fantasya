@@ -2,13 +2,13 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Factory\WorkplacesTrait;
 use Lemuria\Engine\Fantasya\Message\Region\SubsistenceMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Silver;
@@ -33,14 +33,14 @@ final class Subsistence extends AbstractEvent
 	private Commodity $silver;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::MIDDLE);
+		parent::__construct($state, Priority::MIDDLE);
 		$this->workplaces = new Workplaces();
 		$this->peasant    = self::createCommodity(Peasant::class);
 		$this->silver     = self::createCommodity(Silver::class);
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
 			$resources = $region->Resources();
 			$peasants  = $resources[$this->peasant]->Count();
 			if ($peasants > 0) {

@@ -8,6 +8,7 @@ use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Factory\SpellParser;
 use Lemuria\Model\Dictionary;
 use Lemuria\Model\Fantasya\BattleSpell;
+use Lemuria\Model\Fantasya\Combat\Phase;
 use Lemuria\Model\Fantasya\Exception\JsonException;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Storage\JsonProvider;
@@ -17,22 +18,22 @@ class SpellDetails
 {
 	use SerializableTrait;
 
-	protected const DESCRIPTION = 'description';
+	protected final const DESCRIPTION = 'description';
 
-	protected const COMPONENTS = 'components';
+	protected final const COMPONENTS = 'components';
 
 	protected static ?JsonProvider $provider = null;
 
 	protected static ?Dictionary $dictionary = null;
 
-	protected string $file;
+	protected readonly string $file;
 
 	protected array $json;
 
 	/**
 	 * @throws JsonException
 	 */
-	public function __construct(protected Spell $spell) {
+	public function __construct(protected readonly Spell $spell) {
 		if (!self::$provider) {
 			self::$provider = new JsonProvider(__DIR__ . '/../../../resources/spell');
 		}
@@ -73,8 +74,8 @@ class SpellDetails
 	public function CombatPhase(): string {
 		if ($this->spell instanceof BattleSpell) {
 			return match ($this->spell->Phase()) {
-				BattleSpell::PREPARATION => 'Vorbereitung',
-				BattleSpell::COMBAT      => 'Angriff'
+				Phase::PREPARATION => 'Vorbereitung',
+				Phase::COMBAT      => 'Angriff'
 			};
 		}
 		return '';

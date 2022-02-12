@@ -22,7 +22,7 @@ abstract class AbstractMessage implements MessageType
 
 	protected string $level = Message::DEBUG;
 
-	protected int $section = Section::EVENT;
+	protected Section $section = Section::EVENT;
 
 	protected Id $id;
 
@@ -31,7 +31,7 @@ abstract class AbstractMessage implements MessageType
 		return $this->level;
 	}
 
-	public function Section(): int {
+	public function Section(): Section {
 		return $this->section;
 	}
 
@@ -91,7 +91,11 @@ abstract class AbstractMessage implements MessageType
 	}
 
 	protected function getTranslation(string $name): string {
-		return (string)$this->$name;
+		$translation = $this->$name;
+		if ($translation instanceof \BackedEnum) {
+			$translation = $translation->value;
+		}
+		return (string)$translation;
 	}
 
 	protected function building(string $property, string $name): ?string {
@@ -100,6 +104,10 @@ abstract class AbstractMessage implements MessageType
 
 	protected function commodity(string $property, string $name, int $index = 0): ?string {
 		return $this->getTranslatedName($property, $name, 'resource', $index);
+	}
+
+	protected function composition(string $property, string $name, int $index = 0): ?string {
+		return $this->getTranslatedName($property, $name, 'composition', $index);
 	}
 
 	protected function item(string $property, string $name): ?string {

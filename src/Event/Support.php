@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Effect\Hunger;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\SupportCharityMessage;
@@ -11,15 +10,17 @@ use Lemuria\Engine\Fantasya\Message\Unit\SupportHungerMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SupportNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SupportPayMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SupportPayOnlyMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
@@ -41,7 +42,7 @@ final class Support extends AbstractEvent
 	private People $hungryUnits;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::AFTER);
+		parent::__construct($state, Priority::AFTER);
 		$this->silver      = self::createCommodity(Silver::class);
 		$this->hungryUnits = new People();
 	}
@@ -75,10 +76,10 @@ final class Support extends AbstractEvent
 
 	private function pay(): void {
 		$hungry = new People();
-		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
 			$intelligence = $this->context->getIntelligence($region);
 			foreach ($intelligence->getParties() as $party /* @var Party $party */) {
-				if ($party->Type() !== Party::PLAYER) {
+				if ($party->Type() !== Type::PLAYER) {
 					continue;
 				}
 

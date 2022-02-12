@@ -16,7 +16,7 @@ class WoundshutNoneMessage extends AbstractUnitMessage
 
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::MAGIC;
+	protected Section $section = Section::MAGIC;
 
 	protected Singleton $woundshut;
 

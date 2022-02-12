@@ -22,11 +22,11 @@ use Lemuria\Model\Fantasya\Resources;
  */
 final class Allocation
 {
-	public const POOL_COMMODITIES = [Silver::class => true, Camel::class, Elephant::class, Horse::class];
-
 	use BuilderTrait;
 
-	private CommandPriority $priority;
+	public const POOL_COMMODITIES = [Silver::class => true, Camel::class, Elephant::class, Horse::class];
+
+	private readonly CommandPriority $priority;
 
 	/**
 	 * @var array(int=>Consumer)
@@ -60,7 +60,7 @@ final class Allocation
 
 	private int $round = 0;
 
-	public function __construct(private Availability $availability) {
+	public function __construct(private readonly Availability $availability) {
 		Lemuria::Log()->debug('New allocation helper for region ' . $this->Region()->Id() . '.', ['allocation' => $this]);
 		$this->priority = CommandPriority::getInstance();
 	}

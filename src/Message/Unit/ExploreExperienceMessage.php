@@ -9,7 +9,7 @@ class ExploreExperienceMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::PRODUCTION;
+	protected Section $section = Section::PRODUCTION;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has not enough experience in herbal lore to explore the region.';

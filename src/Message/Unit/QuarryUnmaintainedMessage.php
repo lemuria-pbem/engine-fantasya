@@ -9,7 +9,7 @@ class QuarryUnmaintainedMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::PRODUCTION;
+	protected Section $section = Section::PRODUCTION;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot produce stone in an unmaintained quarry.';

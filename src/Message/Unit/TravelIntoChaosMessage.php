@@ -10,7 +10,7 @@ class TravelIntoChaosMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::MOVEMENT;
+	protected Section $section = Section::MOVEMENT;
 
 	protected string $direction;
 

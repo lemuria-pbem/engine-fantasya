@@ -11,7 +11,7 @@ use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
@@ -24,16 +24,21 @@ final class State implements Reassignment
 
 	public bool $isTravelling = false;
 
-	private LemuriaTurn $turn;
+	private readonly LemuriaTurn $turn;
 
 	private ?TurnOptions $turnOptions = null;
 
-	private ?Casts $casts = null;
+	private readonly Casts $casts;
 
 	/**
 	 * @var array(int=>UnitMapper)
 	 */
 	private array $unitMapper = [];
+
+	/**
+	 * @var array(int=>UnicumMapper)
+	 */
+	private array $unicumMapper = [];
 
 	/**
 	 * @var array(int=>Availability)
@@ -91,11 +96,15 @@ final class State implements Reassignment
 		return self::$instance;
 	}
 
+	#[Pure] public function __construct() {
+		$this->casts = new Casts();
+	}
+
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
 		$old = $oldId->Id();
 		$new = $identifiable->Id()->Id();
 		switch ($identifiable->Catalog()) {
-			case Catalog::UNITS :
+			case Domain::UNIT :
 				$this->protocol[$new] = $this->protocol[$old];
 				unset($this->protocol[$old]);
 				if (isset($this->travelRoute[$old])) {
@@ -107,7 +116,7 @@ final class State implements Reassignment
 					unset($this->workload[$old]);
 				}
 				break;
-			case Catalog::LOCATIONS :
+			case Domain::LOCATION :
 				$this->allocation[$new] = $this->allocation[$old];
 				unset($this->allocation[$old]);
 				$this->availability[$new] = $this->availability[$old];
@@ -119,32 +128,34 @@ final class State implements Reassignment
 				$this->intelligence[$new] = $this->intelligence[$old];
 				unset($this->intelligence[$old]);
 				break;
-			case Catalog::PARTIES :
+			case Domain::PARTY :
 				if (isset($this->unitMapper[$old])) {
 					$this->unitMapper[$new] = $this->unitMapper[$old];
 					unset($this->unitMapper[$old]);
 				}
 				break;
+			default :
 		}
 	}
 
 	public function remove(Identifiable $identifiable): void {
 		$old = $identifiable->Id()->Id();
 		switch ($identifiable->Catalog()) {
-			case Catalog::UNITS :
+			case Domain::UNIT :
 				unset($this->protocol[$old]);
 				unset($this->travelRoute[$old]);
 				unset($this->workload[$old]);
 				break;
-			case Catalog::LOCATIONS :
+			case Domain::LOCATION :
 				unset($this->allocation[$old]);
 				unset($this->availability[$old]);
 				unset($this->campaigns[$old]);
 				unset($this->commerce[$old]);
 				unset($this->intelligence[$old]);
 				break;
-			case Catalog::PARTIES :
+			case Domain::PARTY :
 				unset($this->unitMapper[$old]);
+			default :
 		}
 	}
 
@@ -156,9 +167,6 @@ final class State implements Reassignment
 	}
 
 	public function getCasts(): Casts {
-		if (!$this->casts) {
-			$this->casts = new Casts();
-		}
 		return $this->casts;
 	}
 
@@ -171,6 +179,17 @@ final class State implements Reassignment
 			$this->unitMapper[$id] = new UnitMapper();
 		}
 		return $this->unitMapper[$id];
+	}
+
+	/**
+	 * Get a party's unicum mapper.
+	 */
+	public function getUnicumMapper(Party $party): UnicumMapper {
+		$id = $party->Id()->Id();
+		if (!isset($this->unicumMapper[$id])) {
+			$this->unicumMapper[$id] = new UnicumMapper();
+		}
+		return $this->unicumMapper[$id];
 	}
 
 	/**

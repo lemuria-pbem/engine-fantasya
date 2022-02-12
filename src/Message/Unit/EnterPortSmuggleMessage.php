@@ -9,7 +9,7 @@ class EnterPortSmuggleMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	protected int $section = Section::ECONOMY;
+	protected Section $section = Section::ECONOMY;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' successfully smuggles luxuries from the vessel.';

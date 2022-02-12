@@ -8,7 +8,6 @@ use function Lemuria\undupChar;
 use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
 use Lemuria\Engine\Fantasya\Command\Announcement;
-use Lemuria\Engine\Fantasya\Command\Apply;
 use Lemuria\Engine\Fantasya\Command\Apply\AbstractApply;
 use Lemuria\Engine\Fantasya\Command\Attack;
 use Lemuria\Engine\Fantasya\Command\Banner;
@@ -19,6 +18,7 @@ use Lemuria\Engine\Fantasya\Command\Cast\AbstractCast;
 use Lemuria\Engine\Fantasya\Command\Comment;
 use Lemuria\Engine\Fantasya\Command\Contact;
 use Lemuria\Engine\Fantasya\Command\Create;
+use Lemuria\Engine\Fantasya\Command\Create\Unicum;
 use Lemuria\Engine\Fantasya\Command\Describe;
 use Lemuria\Engine\Fantasya\Command\Destroy;
 use Lemuria\Engine\Fantasya\Command\Destroy\Dismiss;
@@ -39,8 +39,11 @@ use Lemuria\Engine\Fantasya\Command\Name;
 use Lemuria\Engine\Fantasya\Command\Next;
 use Lemuria\Engine\Fantasya\Command\NullCommand;
 use Lemuria\Engine\Fantasya\Command\Number;
+use Lemuria\Engine\Fantasya\Command\Operate\AbstractOperate;
+use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Command\Origin;
 use Lemuria\Engine\Fantasya\Command\Party;
+use Lemuria\Engine\Fantasya\Command\Read;
 use Lemuria\Engine\Fantasya\Command\Recruit;
 use Lemuria\Engine\Fantasya\Command\Reserve;
 use Lemuria\Engine\Fantasya\Command\Route;
@@ -57,7 +60,10 @@ use Lemuria\Engine\Fantasya\Command\Travel;
 use Lemuria\Engine\Fantasya\Command\Trespass;
 use Lemuria\Engine\Fantasya\Command\Trespass\Board;
 use Lemuria\Engine\Fantasya\Command\Unit;
+use Lemuria\Engine\Fantasya\Command\Use\Apply;
+use Lemuria\Engine\Fantasya\Command\UseCommand;
 use Lemuria\Engine\Fantasya\Command\Vacate;
+use Lemuria\Engine\Fantasya\Command\Write;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
@@ -174,6 +180,9 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Commodity\Wood;
+use Lemuria\Model\Fantasya\Composition;
+use Lemuria\Model\Fantasya\Composition\Scroll;
+use Lemuria\Model\Fantasya\Composition\Spellbook;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\RawMaterial;
@@ -223,7 +232,8 @@ use Lemuria\Model\Fantasya\Talent\Taxcollecting;
 use Lemuria\Model\Fantasya\Talent\Trading;
 use Lemuria\Model\Fantasya\Talent\Weaponry;
 use Lemuria\Model\Fantasya\Talent\Woodchopping;
-use Lemuria\Model\World;
+use Lemuria\Model\Fantasya\Unicum as UnicumModel;
+use Lemuria\Model\World\Direction;
 use Lemuria\Singleton;
 
 /**
@@ -269,11 +279,12 @@ class CommandFactory
 		'ENTLASSEN'    => true,
 		'ERESSEA'      => 'PARTEI',
 		'ERFORSCHEN'   => 'FORSCHEN',
+		'ERSCHAFFEN'   => true,
 		'FANTASYA'     => 'PARTEI',
 		'FOLGEN'       => true,
 		'FORSCHEN'     => true,
-		'GIB'          => true,
-		'GEBEN'        => 'GIB',
+		'GIB'          => 'GEBEN',
+		'GEBEN'        => true,
 		'HELFEN'       => true,
 		'HILFE'        => 'HELFEN',
 		'ID'           => 'NUMMER',
@@ -289,6 +300,8 @@ class CommandFactory
 		'LEHRER'       => 'LEHREN',
 		'LEMURIA'      => 'PARTEI',
 		'LERNEN'       => true,
+		'LESEN'        => true,
+		'LIES'         => 'LESEN',
 		'LOCALE'       => true,
 		'MACHEN'       => true,
 		'NACH'         => 'REISEN',
@@ -308,6 +321,7 @@ class CommandFactory
 		'RUNDE'        => true,
 		'SAMMELN'      => true,
 		'SAMMLE'       => 'SAMMELN',
+		'SCHREIBEN'    => true,
 		'SORTIEREN'    => true,
 		'SORTIERUNG'   => 'SORTIEREN',
 		'SPIONAGE'     => 'SPIONIEREN',
@@ -320,6 +334,7 @@ class CommandFactory
 		'TREIBEN'      => true,
 		'UNTERHALTEN'  => true,
 		'UNTERHALTUNG' => 'UNTERHALTEN',
+		'UNTERSUCHEN'  => 'LESEN',
 		'URSPRUNG'     => true,
 		'ÜBERGEBEN'    => 'GIB',
 		'UEBERGEBEN'   => 'GIB',
@@ -520,6 +535,14 @@ class CommandFactory
 	/**
 	 * @var array(string=>string)
 	 */
+	protected array $compositions = [
+		'Schriftrolle' => Scroll::class,
+		'Zauberbuch'   => Spellbook::class,
+	];
+
+	/**
+	 * @var array(string=>string)
+	 */
 	protected array $spells = [
 		'Astrales chaos' => AstralChaos::class,
 		'Auratransfer'   => AuraTransfer::class,
@@ -598,47 +621,51 @@ class CommandFactory
 	];
 
 	protected array $directions = [
-		World::EAST      => World::EAST,
-		World::NORTH     => World::NORTH,
-		World::NORTHEAST => World::NORTHEAST,
-		World::NORTHWEST => World::NORTHWEST,
-		World::SOUTH     => World::SOUTH,
-		World::SOUTHEAST => World::SOUTHEAST,
-		World::SOUTHWEST => World::SOUTHWEST,
-		World::WEST      => World::WEST,
-		'East'           => World::EAST,
-		'NO'             => World::NORTHEAST,
-		'Norden'         => World::NORTH,
-		'Nordosten'      => World::NORTHEAST,
-		'Nordwesten'     => World::NORTHWEST,
-		'North'          => World::NORTH,
-		'Northeast'      => World::NORTHEAST,
-		'Northwest'      => World::NORTHWEST,
-		'O'              => World::EAST,
-		'Osten'          => World::EAST,
-		'SO'             => World::SOUTHEAST,
-		'South'          => World::SOUTH,
-		'Southeast'      => World::SOUTHEAST,
-		'Southwest'      => World::SOUTHWEST,
-		'Süden'          => World::SOUTH,
-		'Südosten'       => World::SOUTHEAST,
-		'Südwesten'      => World::SOUTHWEST,
-		'Westen'         => World::WEST
+		'E'          => Direction::EAST,
+		'N'          => Direction::NORTH,
+		'NE'         => Direction::NORTHEAST,
+		'NW'         => Direction::NORTHWEST,
+		'S'          => Direction::SOUTH,
+		'SE'         => Direction::SOUTHEAST,
+		'SW'         => Direction::SOUTHWEST,
+		'W'          => Direction::WEST,
+		'East'       => Direction::EAST,
+		'NO'         => Direction::NORTHEAST,
+		'Norden'     => Direction::NORTH,
+		'Nordosten'  => Direction::NORTHEAST,
+		'Nordwesten' => Direction::NORTHWEST,
+		'North'      => Direction::NORTH,
+		'Northeast'  => Direction::NORTHEAST,
+		'Northwest'  => Direction::NORTHWEST,
+		'O'          => Direction::EAST,
+		'Osten'      => Direction::EAST,
+		'SO'         => Direction::SOUTHEAST,
+		'South'      => Direction::SOUTH,
+		'Southeast'  => Direction::SOUTHEAST,
+		'Southwest'  => Direction::SOUTHWEST,
+		'Süden'      => Direction::SOUTH,
+		'Südosten'   => Direction::SOUTHEAST,
+		'Südwesten'  => Direction::SOUTHWEST,
+		'Westen'     => Direction::WEST
 	];
 
-	protected const APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Apply\\';
+	protected final const APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Apply\\';
 
-	protected const BATTLE_SPELL_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Combat\\Spell';
+	protected final const BATTLE_SPELL_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Combat\\Spell';
 
-	protected const CAST_NAMESPACE =  'Lemuria\\Engine\\Fantasya\\Command\\Cast\\';
+	protected final const CAST_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Cast\\';
 
-	public function __construct(protected Context $context) {
+	protected final const OPERATE_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Operate\\';
+
+	public function __construct(protected readonly Context $context) {
 	}
 
 	/**
 	 * Create a Command.
 	 *
 	 * @throws UnknownCommandException
+	 *
+	 * @noinspection PhpMultipleClassDeclarationsInspection
 	 */
 	public function create(Phrase $phrase): AbstractCommand {
 		$verb = $this->identifyVerb($phrase->getVerb());
@@ -647,7 +674,7 @@ class CommandFactory
 				'ATTACKIEREN'  => Attack::class,
 				'BANNER'       => Banner::class,
 				'BELAGERN'     => Siege::class,
-				'BENUTZEN'     => Apply::class,
+				'BENUTZEN'     => UseCommand::class,
 				'BESCHREIBUNG' => Describe::class,
 				'BESTEIGEN'    => Board::class,
 				'BETRETEN'     => Trespass::class,
@@ -657,9 +684,10 @@ class CommandFactory
 				'EINHEIT'      => Unit::class,
 				'ENDE'         => End::class,
 				'ENTLASSEN'    => Dismiss::class,
+				'ERSCHAFFEN'   => Unicum::class,
 				'FOLGEN'       => Follow::class,
 				'FORSCHEN'     => Explore::class,
-				'GIB'          => Handover::class,
+				'GEBEN'        => Handover::class,
 				'HELFEN'       => Help::class,
 				'KAMPFZAUBER'  => BattleSpell::class,
 				'KAUFEN'       => Buy::class,
@@ -669,6 +697,7 @@ class CommandFactory
 				'KONTAKTIEREN' => Contact::class,
 				'LEHREN'       => Teach::class,
 				'LERNEN'       => Learn::class,
+				'LESEN'        => Read::class,
 				'MACHEN'       => Create::class,
 				'NAME'         => Name::class,
 				'NÄCHSTER'     => Next::class,
@@ -679,6 +708,7 @@ class CommandFactory
 				'RESERVIEREN'  => Reserve::class,
 				'ROUTE'        => Route::class,
 				'SAMMELN'      => Gather::class,
+				'SCHREIBEN'    => Write::class,
 				'SORTIEREN'    => Sort::class,
 				'SPIONIEREN'   => Spy::class,
 				'STEHLEN'      => Steal::class,
@@ -699,6 +729,10 @@ class CommandFactory
 		} catch (\UnhandledMatchError) {
 			throw new UnknownCommandException($phrase);
 		}
+	}
+
+	public function isComposition(string $composition): bool {
+		return is_string($this->getCandidate($composition, $this->compositions));
 	}
 
 	public function person(): Commodity {
@@ -757,6 +791,16 @@ class CommandFactory
 	}
 
 	/**
+	 * Create a Composition.
+	 *
+	 * @throws UnknownCommandException
+	 */
+	public function composition(string $composition): Composition {
+		$compositionClass = $this->identifySingleton($composition, $this->compositions);
+		return self::createComposition($compositionClass);
+	}
+
+	/**
 	 * Create a Spell.
 	 *
 	 * @throws UnknownCommandException
@@ -780,7 +824,7 @@ class CommandFactory
 	 * @return string
 	 * @throws UnknownCommandException
 	 */
-	public function direction(string $direction): string {
+	public function direction(string $direction): Direction {
 		if (strlen($direction) <= 2) {
 			$direction = strtoupper($direction);
 			$candidate = $this->directions[$direction] ?? null;
@@ -838,6 +882,15 @@ class CommandFactory
 			return new $class($grade);
 		}
 		throw new LemuriaException('Casting battle spell ' . $spell . ' is not implemented.');
+	}
+
+	public function operateUnicum(UnicumModel $unicum, Operator $operator): AbstractOperate {
+		$composition = getClass($unicum->Composition());
+		$class       = self::OPERATE_NAMESPACE . $composition;
+		if (class_exists($class)) {
+			return new $class($this->context, $operator);
+		}
+		throw new LemuriaException('Operating composition ' . $composition . ' is not implemented.');
 	}
 
 	/**

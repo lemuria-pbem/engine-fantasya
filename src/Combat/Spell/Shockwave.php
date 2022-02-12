@@ -7,7 +7,7 @@ use Lemuria\Engine\Fantasya\Combat\BattleLog;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\ShockwaveHitMessage;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Combat;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Talent\Magic;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -21,8 +21,8 @@ class Shockwave extends AbstractBattleSpell
 			$calculus = new Calculus($unit);
 			$level    = $calculus->knowledge(Magic::class)->Level();
 			$victims  = $grade * self::VICTIMS * sqrt($level);
-			$victims  = $this->castOnCombatants($this->victim[Combat::FRONT], $victims);
-			$this->castOnCombatants($this->victim[Combat::BACK], $victims);
+			$victims  = $this->castOnCombatants($this->victim[BattleRow::FRONT->value], $victims);
+			$this->castOnCombatants($this->victim[BattleRow::BACK->value], $victims);
 		}
 		return $grade;
 	}

@@ -12,7 +12,7 @@ use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Message\Party\WelcomeMessage;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity\Iron;
 use Lemuria\Model\Fantasya\Commodity\Protection\Armor;
@@ -64,8 +64,8 @@ use Lemuria\Model\Fantasya\Talent\Taxcollecting;
 use Lemuria\Model\Fantasya\Talent\Trading;
 use Lemuria\Model\Fantasya\Talent\Woodchopping;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Model\Fantasya\World\FantasyaAtlas;
 use Lemuria\Model\Fantasya\World\LocationPicker;
+use Lemuria\Model\World\SortMode;
 
 /**
  * Introduce a Newcomer as a new Party.
@@ -148,13 +148,13 @@ final class Initiate implements Command
 		$origin = $this->pickOrigin($race);
 
 		$party  = new Party($this->newcomer);
-		$party->setId(Lemuria::Catalog()->nextId(Catalog::PARTIES));
+		$party->setId(Lemuria::Catalog()->nextId(Domain::PARTY));
 		$party->setName($this->cleanName($this->newcomer->Name()));
 		$party->setDescription($this->cleanDescription($this->newcomer->Description()));
 		$party->setRace($race)->setOrigin($origin);
 
 		$unit = new Unit();
-		$id   = Lemuria::Catalog()->nextId(Catalog::UNITS);
+		$id   = Lemuria::Catalog()->nextId(Domain::UNIT);
 		$unit->setId($id);
 		$unit->setSize(1)->setName('Einheit ' . $id)->setDescription('')->setRace($race);
 		if ($this->newcomer->Inventory()->count()) {
@@ -229,7 +229,7 @@ final class Initiate implements Command
 			if ($locations->count()) {
 				/** @var Region $region */
 				/** @noinspection PhpUnnecessaryLocalVariableInspection */
-				$region = $locations->Atlas()->sort(FantasyaAtlas::BY_RESIDENTS)->current();
+				$region = $locations->Atlas()->sort(SortMode::BY_RESIDENTS)->current();
 				return $region;
 			}
 			$locations->reset();

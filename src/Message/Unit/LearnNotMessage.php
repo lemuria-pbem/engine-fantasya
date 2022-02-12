@@ -11,7 +11,7 @@ class LearnNotMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::STUDY;
+	protected Section $section = Section::STUDY;
 
 	protected Singleton $talent;
 

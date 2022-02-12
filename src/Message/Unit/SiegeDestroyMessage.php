@@ -12,7 +12,7 @@ class SiegeDestroyMessage extends AbstractRegionMessage
 {
 	protected string $level = Message::EVENT;
 
-	protected int $section = Section::BATTLE;
+	protected Section $section = Section::BATTLE;
 
 	protected Id $construction;
 

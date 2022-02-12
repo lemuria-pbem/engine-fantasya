@@ -13,7 +13,7 @@ class TravelGuardedRegionMessage extends AbstractRegionMessage
 
 	protected string $level = Message::EVENT;
 
-	protected int $section = Section::MOVEMENT;
+	protected Section $section = Section::MOVEMENT;
 
 	protected Id $unit;
 

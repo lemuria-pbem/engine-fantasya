@@ -10,5 +10,5 @@ abstract class AbstractCastMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::EVENT;
 
-	protected int $section = Section::MAGIC;
+	protected Section $section = Section::MAGIC;
 }

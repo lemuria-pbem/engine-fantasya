@@ -10,7 +10,7 @@ class WoundshutMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	protected int $section = Section::MAGIC;
+	protected Section $section = Section::MAGIC;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is healing its wounds.';

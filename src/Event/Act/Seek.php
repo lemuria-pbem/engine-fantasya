@@ -8,7 +8,7 @@ use Lemuria\Engine\Fantasya\Event\ActTrait;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\SeekMessage;
-use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -35,7 +35,7 @@ class Seek implements Act
 		$calculus = new Calculus($this->unit);
 		$region   = $this->unit->Region();
 		foreach ($region->Residents() as $unit /* @var Unit $unit */) {
-			if ($unit->Party()->Type() !== Party::PLAYER) {
+			if ($unit->Party()->Type() !== Type::PLAYER) {
 				continue;
 			}
 			if ($unit->Construction() || $unit->Vessel()) {

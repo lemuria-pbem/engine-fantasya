@@ -10,7 +10,7 @@ class WaterOfLifeNoWoodMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::MAGIC;
+	protected Section $section = Section::MAGIC;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has no wood to grow saplings with Water of Life.';

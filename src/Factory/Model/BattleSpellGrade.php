@@ -12,7 +12,7 @@ class BattleSpellGrade
 {
 	protected float $reliability = 1.0;
 
-	public function __construct(protected SpellGrade $spellGrade, protected Combat $combat) {
+	public function __construct(protected readonly SpellGrade $spellGrade, protected readonly Combat $combat) {
 	}
 
 	#[Pure] public function Spell(): BattleSpell {

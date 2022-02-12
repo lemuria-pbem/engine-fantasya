@@ -5,12 +5,12 @@ namespace Lemuria\Engine\Fantasya\Event;
 use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Message\Region\MarketUpdateDemandMessage;
 use Lemuria\Engine\Fantasya\Message\Region\MarketUpdateOfferMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Offer;
@@ -27,7 +27,7 @@ final class MarketUpdate extends AbstractEvent
 	private array $commerce = [];
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::AFTER);
+		parent::__construct($state, Priority::AFTER);
 	}
 
 	protected function initialize(): void {
@@ -59,7 +59,7 @@ final class MarketUpdate extends AbstractEvent
 
 	protected function run(): void {
 		Lemuria::Log()->debug('Moving prices in all regions with a market.');
-		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
 			if ($this->hasMarket($region)) {
 				$luxuries = $region->Luxuries();
 				if ($luxuries) {

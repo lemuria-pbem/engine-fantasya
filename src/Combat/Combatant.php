@@ -9,7 +9,7 @@ use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Armature;
-use Lemuria\Model\Fantasya\Combat as CombatModel;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Protection;
@@ -50,7 +50,7 @@ class Combatant
 
 	private string $id;
 
-	private int $battleRow;
+	private BattleRow $battleRow;
 
 	private ?Distribution $distribution = null;
 
@@ -71,7 +71,7 @@ class Combatant
 
 	public function __construct(private Army $army, private Unit $unit) {
 		$this->initId();
-		$this->battleRow = Combat::getBattleRow($this->unit);
+		$this->battleRow = $this->unit->BattleRow();
 		$this->attack    = new Attack($this);
 	}
 
@@ -87,7 +87,7 @@ class Combatant
 		return $this->unit;
 	}
 
-	public function BattleRow(): int {
+	public function BattleRow(): BattleRow {
 		return $this->battleRow;
 	}
 
@@ -138,7 +138,7 @@ class Combatant
 		return false;
 	}
 
-	public function setBattleRow(int $battleRow): Combatant {
+	public function setBattleRow(BattleRow $battleRow): Combatant {
 		$this->battleRow = $battleRow;
 		$this->initWeaponSkill();
 		return $this;
@@ -218,7 +218,7 @@ class Combatant
 		$newDistribution->setSize($size);
 
 		$newCombatant = new Combatant($this->army, $this->unit);
-		$newCombatant->setBattleRow(CombatModel::FRONT);
+		$newCombatant->setBattleRow(BattleRow::FRONT);
 
 		$newCombatant->distribution = $newDistribution;
 		$newCombatant->fighters     = array_splice($this->fighters, -$size, $size);
@@ -239,7 +239,7 @@ class Combatant
 
 	protected function getWeaponSkill(): WeaponSkill {
 		$calculus = new Calculus($this->unit);
-		$isMelee  = $this->battleRow !== CombatModel::BACK;
+		$isMelee  = $this->battleRow !== BattleRow::BACK;
 		foreach ($calculus->weaponSkill() as $weaponSkill) {
 			if ($isMelee && $weaponSkill->isMelee() && $this->hasOneWeaponOf($weaponSkill)) {
 				return $weaponSkill;

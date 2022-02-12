@@ -2,20 +2,11 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Fehler/Verbesserungen in 0.9
+## Fehler/Verbesserungen in 0.10
 
 - Leerzeilen im Textreport
 
 ## Neue Funktionen
-
-### Version 0.10
-
-- Migration zu PHP 8.1
-- ERSCHAFFEN einzigartiger Gegenstände (Unicum)
-  - Unicum hat bestimmte Aktionen (GEBEN, LESEN, UNTERSUCHEN, SCHREIBEN, BENUTZEN)
-  - Aktion hat Lebensdauer (Zeit oder Anzahl)
-  - Schriftrollen mit unbekannten Zaubern erwerben, um diese zu erlernen
-  - Zauberbuch schreiben, weitergeben, lesen
 
 ### Version 0.11
 
@@ -35,7 +26,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - weitere Zauber:
   - Beschleunigung (8) (mehrfache Angriffe)
   - Erdbeben (9) (zerstört Gebäude)
-
+  
 ### Version 0.12
 
 - Statistische Daten erstellen

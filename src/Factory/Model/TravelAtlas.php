@@ -9,24 +9,16 @@ use Lemuria\Engine\Fantasya\Outlook;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\World\Atlas;
+use Lemuria\Model\World\SortMode;
 
 final class TravelAtlas extends Atlas
 {
-	public const UNKNOWN = 0;
-
-	public const HISTORIC = 1;
-
-	public const NEIGHBOUR = 2;
-
-	public const LIGHTHOUSE = 3;
-
-	public const TRAVELLED = 4;
-
-	public const WITH_UNIT = 5;
-
+	/**
+	 * @var array(int=>Visibility)
+	 */
 	private array $visibility = [];
 
-	#[Pure] public function __construct(private Party $party) {
+	#[Pure] public function __construct(private readonly Party $party) {
 		parent::__construct();
 	}
 
@@ -38,7 +30,7 @@ final class TravelAtlas extends Atlas
 		$outlook = new Outlook($census);
 		foreach ($census->getAtlas() as $id => $region /* @var Region $region */) {
 			$this->add($region);
-			$this->visibility[$id] = self::WITH_UNIT;
+			$this->visibility[$id] = Visibility::WITH_UNIT;
 
 			$panorama = $outlook->getPanorama($region);
 			foreach ($panorama as $neighbour /* @var Region $neighbour */) {
@@ -58,22 +50,22 @@ final class TravelAtlas extends Atlas
 			if ($chronicle->getVisit($region)->Round() === $round) {
 				if (!isset($this->visibility[$id])) {
 					$this->add($region);
-					$this->visibility[$id] = self::TRAVELLED;
-				} elseif ($this->visibility[$id] < self::TRAVELLED) {
-					$this->visibility[$id] = self::TRAVELLED;
+					$this->visibility[$id] = Visibility::TRAVELLED;
+				} elseif ($this->visibility[$id] < Visibility::TRAVELLED) {
+					$this->visibility[$id] = Visibility::TRAVELLED;
 				}
 			}
 		}
 
-		$this->sort(Atlas::NORTH_TO_SOUTH);
+		$this->sort(SortMode::NORTH_TO_SOUTH);
 		return $this;
 	}
 
-	#[Pure] public function getVisibility(Region $region): int {
-		return $this->visibility[$region->Id()->Id()] ?? self::UNKNOWN;
+	#[Pure] public function getVisibility(Region $region): Visibility {
+		return $this->visibility[$region->Id()->Id()] ?? Visibility::UNKNOWN;
 	}
 
-	public function setVisibility(Region $region, int $visibility): TravelAtlas {
+	public function setVisibility(Region $region, Visibility $visibility): TravelAtlas {
 		$this->visibility[$region->Id()->Id()] = $visibility;
 		return $this;
 	}

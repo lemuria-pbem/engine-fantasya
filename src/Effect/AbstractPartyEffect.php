@@ -5,8 +5,8 @@ namespace Lemuria\Engine\Fantasya\Effect;
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Score;
 use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Party;
 
 abstract class AbstractPartyEffect extends AbstractEffect
@@ -15,8 +15,8 @@ abstract class AbstractPartyEffect extends AbstractEffect
 
 	#[ExpectedValues(valuesFromClass: Catalog::class)]
 	#[Pure]
-	public function Catalog(): int {
-		return Score::PARTY;
+	public function Catalog(): Domain {
+		return Domain::PARTY;
 	}
 
 	public function Party(): Party {

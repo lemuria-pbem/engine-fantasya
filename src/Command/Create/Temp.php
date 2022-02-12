@@ -17,7 +17,7 @@ use Lemuria\Entity;
 use Lemuria\Exception\IdException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -120,9 +120,9 @@ final class Temp extends UnitCommand implements Immediate
 			}
 		}
 
-		if ($id && !Lemuria::Catalog()->has($id, Catalog::UNITS)) {
+		if ($id && !Lemuria::Catalog()->has($id, Domain::UNIT)) {
 			return $id;
 		}
-		return Lemuria::Catalog()->nextId(Catalog::UNITS);
+		return Lemuria::Catalog()->nextId(Domain::UNIT);
 	}
 }

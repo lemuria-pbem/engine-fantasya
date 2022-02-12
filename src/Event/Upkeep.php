@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Message\Construction\UnmaintainedMessage;
@@ -12,9 +11,10 @@ use Lemuria\Engine\Fantasya\Message\Unit\UpkeepDonateMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UpkeepNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UpkeepPayMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UpkeepPayOnlyMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Construction;
@@ -41,7 +41,7 @@ final class Upkeep extends AbstractEvent
 	private Estate $unmaintained;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::MIDDLE);
+		parent::__construct($state, Priority::MIDDLE);
 		$this->silver       = self::createCommodity(Silver::class);
 		$this->unmaintained = new Estate();
 	}
@@ -70,7 +70,7 @@ final class Upkeep extends AbstractEvent
 
 	private function pay(): void {
 		$unmaintained = new Estate();
-		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
 			$unmaintained->clear();
 			/** @var Construction $construction */
 			foreach ($region->Estate() as $construction) {

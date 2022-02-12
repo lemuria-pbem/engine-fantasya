@@ -9,7 +9,7 @@ class ApplyAlreadyMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::MAGIC;
+	protected Section $section = Section::MAGIC;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot apply another potion.';

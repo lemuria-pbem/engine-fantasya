@@ -7,9 +7,9 @@ use Lemuria\Engine\Fantasya\Factory\Namer;
 use Lemuria\Engine\Fantasya\Factory\Namer\RaceNamer;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Ability;
-use Lemuria\Model\Fantasya\Combat;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Monster\Goblin;
 use Lemuria\Model\Fantasya\Commodity\Monster\Skeleton;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
@@ -34,10 +34,10 @@ class Create implements Act
 	];
 
 	protected const BATTLE_ROW = [
-		''              => Combat::FRONT,
-		Goblin::class   => Combat::CAREFUL,
-		Skeleton::class => Combat::AGGRESSIVE,
-		Zombie::class   => Combat::AGGRESSIVE
+		''              => BattleRow::FRONT,
+		Goblin::class   => BattleRow::CAREFUL,
+		Skeleton::class => BattleRow::AGGRESSIVE,
+		Zombie::class   => BattleRow::AGGRESSIVE
 	];
 
 	protected const IS_HIDING = [
@@ -64,7 +64,7 @@ class Create implements Act
 	public function act(): Create {
 		foreach ($this->gangs as $gang) {
 			$unit = new Unit();
-			$unit->setId(Lemuria::Catalog()->nextId(Catalog::UNITS));
+			$unit->setId(Lemuria::Catalog()->nextId(Domain::UNIT));
 			$unit->setRace($gang->Race())->setSize($gang->Count());
 			$this->party->People()->add($unit);
 			$this->region->Residents()->add($unit);

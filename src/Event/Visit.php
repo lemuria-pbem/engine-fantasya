@@ -2,26 +2,26 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Message\Party\PartyInRegionsMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Census;
 use Lemuria\Model\Fantasya\Region;
 
 /**
- *
+ * Record all regions that a party has visited in the turn.
  */
 final class Visit extends AbstractEvent
 {
 	public function __construct(State $state) {
-		parent::__construct($state, Action::BEFORE);
+		parent::__construct($state, Priority::BEFORE);
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Catalog::PARTIES) as $party /* @var Party $party */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::PARTY) as $party /* @var Party $party */) {
 			Lemuria::Log()->debug('Running Visit for Party ' . $party->Id() . '.', ['party' => $party]);
 			$census = new Census($party);
 			$atlas  = $census->getAtlas();

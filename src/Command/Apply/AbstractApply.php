@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Apply;
 
-use Lemuria\Engine\Fantasya\Command\Apply;
+use Lemuria\Engine\Fantasya\Command\Use\Apply;
 
 abstract class AbstractApply
 {
@@ -13,7 +13,9 @@ abstract class AbstractApply
 		return true;
 	}
 
-	/** @noinspection PhpPureAttributeCanBeAddedInspection */
+	/**
+	 * @noinspection PhpPureAttributeCanBeAddedInspection
+	 */
 	public function apply(): int {
 		return $this->apply->Count();
 	}

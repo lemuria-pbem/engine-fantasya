@@ -7,7 +7,7 @@ use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\UnguardMessage;
-use Lemuria\Model\Fantasya\Combat;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 
 /**
  * A monster will guard the region with a 50% chance.
@@ -37,7 +37,7 @@ class Guard implements Act
 				$this->message(UnguardMessage::class, $this->unit);
 			}
 		} else {
-			if ($this->unit->BattleRow() >= Combat::DEFENSIVE && randChance(self::GUARD)) {
+			if ($this->unit->BattleRow() >= BattleRow::DEFENSIVE && randChance(self::GUARD)) {
 				$this->isGuarding = true;
 			}
 		}

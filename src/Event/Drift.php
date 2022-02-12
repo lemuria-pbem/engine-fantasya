@@ -3,13 +3,13 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Factory\NavigationTrait;
 use Lemuria\Engine\Fantasya\Message\Vessel\DriftDamageMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\DriftMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Region;
@@ -36,7 +36,7 @@ final class Drift extends AbstractEvent
 	private Talent $navigation;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::MIDDLE);
+		parent::__construct($state, Priority::MIDDLE);
 		$this->navigation = self::createTalent(Navigation::class);
 	}
 
@@ -46,7 +46,7 @@ final class Drift extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Catalog::VESSELS) as $vessel /* @var Vessel $vessel */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::VESSEL) as $vessel /* @var Vessel $vessel */) {
 			$this->vessel = $vessel;
 			$region       = $vessel->Region();
 			if ($region->Landscape() instanceof Ocean) {

@@ -11,7 +11,7 @@ class AttackFromMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::EVENT;
 
-	protected int $section = Section::BATTLE;
+	protected Section $section = Section::BATTLE;
 
 	protected Id $party;
 
