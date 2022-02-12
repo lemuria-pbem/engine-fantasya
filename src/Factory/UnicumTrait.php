@@ -14,7 +14,7 @@ trait UnicumTrait
 {
 	protected ?Unicum $unicum;
 
-	protected Composition $composition;
+	protected ?Composition $composition;
 
 	private readonly int $argumentIndex;
 
@@ -31,7 +31,7 @@ trait UnicumTrait
 		if ($n === 1) {
 			$id                  = $this->phrase->getParameter();
 			$this->unicum        = $this->getUnicum($id);
-			$this->composition   = $this->unicum->Composition();
+			$this->composition   = $this->unicum?->Composition();
 			$this->argumentIndex = 2;
 		} elseif ($n === 2) {
 			$this->composition   = $this->context->Factory()->composition($this->phrase->getParameter());
@@ -49,10 +49,10 @@ trait UnicumTrait
 	 */
 	private function getUnicum(string $id): ?Unicum {
 		$id       = Id::fromId($id);
-		$treasure = $this->unit->Treasury();
-		if ($treasure->has($id)) {
+		$treasury = $this->unit->Treasury();
+		if ($treasury->has($id)) {
 			/** @var Unicum $unicum */
-			$unicum = $this->unit->Treasury()[$id];
+			$unicum = $treasury[$id];
 			return $unicum;
 		}
 		return null;
@@ -62,7 +62,7 @@ trait UnicumTrait
 		$operate     = $this->context->Factory()->operateUnicum($this->unicum, $this);
 		$id          = (string)$this->unicum->Id();
 		$composition = $this->unicum->Composition();
-		$this->message(OperatePracticeMessage::class)->p($id)->s($composition)->p($practice, OperatePracticeMessage::PRACTICE);
+		$this->message(OperatePracticeMessage::class)->p($id)->s($composition)->p($practice->name, OperatePracticeMessage::PRACTICE);
 		return $operate;
 	}
 }

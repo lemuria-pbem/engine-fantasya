@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Command\Operate;
 
 use Lemuria\Engine\Fantasya\Factory\LearnSpellTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\SpellbookNoSpellMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\Operate\SpellbookReadEmptyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\SpellbookWriteAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\SpellbookWriteMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\SpellbookWriteUnknownMessage;
@@ -46,15 +45,6 @@ final class Spellbook extends AbstractOperate
 			$this->message(SpellbookWriteMessage::class, $unit)->s($spellbook)->e($unicum)->s($spell, SpellbookWriteMessage::SPELL);
 		} else {
 			$this->message(SpellbookWriteUnknownMessage::class, $unit)->s($spellbook)->e($unicum)->s($spell, SpellbookWriteMessage::SPELL);
-		}
-	}
-
-	protected function addReadEffect(): void {
-		$spellbook = $this->getSpellbook();
-		if ($spellbook->Spells()->isEmpty()) {
-			$this->message(SpellbookReadEmptyMessage::class, $this->operator->Unit())->e($this->operator->Unicum())->s($spellbook);
-		} else {
-			parent::addReadEffect();
 		}
 	}
 

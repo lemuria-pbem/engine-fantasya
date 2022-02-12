@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Command\Operate;
 
 use Lemuria\Engine\Fantasya\Factory\LearnSpellTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\ScrollEmptyMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\Operate\ScrollReadEmptyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\ScrollWriteMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\ScrollWriteNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\ScrollWriteUnknownMessage;
@@ -43,15 +42,6 @@ final class Scroll extends AbstractOperate
 			$this->message(ScrollWriteMessage::class, $unit)->e($unicum)->s($scroll)->s($spell, ScrollWriteMessage::SPELL);
 		} else {
 			$this->message(ScrollWriteUnknownMessage::class, $unit)->e($unicum)->s($scroll)->s($spell, ScrollWriteMessage::SPELL);
-		}
-	}
-
-	protected function addReadEffect(): void {
-		$scroll = $this->getScroll();
-		if ($scroll->Spell()) {
-			parent::addReadEffect();
-		} else {
-			$this->message(ScrollReadEmptyMessage::class, $this->operator->Unit())->e($this->operator->Unicum())->s($scroll);
 		}
 	}
 

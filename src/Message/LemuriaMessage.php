@@ -281,6 +281,9 @@ class LemuriaMessage implements Message
 	 * Set a parameter.
 	 */
 	public function p(mixed $value, ?string $name = null): LemuriaMessage {
+		if ($value instanceof \UnitEnum) {
+			throw new LemuriaException('Parameter is an enum in ' . $this->MessageClass() . ' message ' . $this->Id() . '.');
+		}
 		if (!$name) {
 			$name = self::PARAMETER;
 		}

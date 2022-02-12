@@ -84,7 +84,7 @@ trait OperateTrait
 		if ($unicum) {
 			$operate     = $this->context->Factory()->operateUnicum($unicum, $this);
 			$composition = $unicum->Composition();
-			$this->message(OperatePracticeMessage::class)->p((string)$id)->s($composition)->p($practice, OperatePracticeMessage::PRACTICE);
+			$this->message(OperatePracticeMessage::class)->p((string)$id)->s($composition)->p($practice->name, OperatePracticeMessage::PRACTICE);
 			return $operate;
 		}
 		$this->message(OperateNoUnicumMessage::class)->p((string)$id);

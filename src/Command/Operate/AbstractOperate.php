@@ -19,7 +19,10 @@ abstract class AbstractOperate
 {
 	use MessageTrait;
 
+	protected Unit $unit;
+
 	public function __construct(protected Context $context, protected Operator $operator) {
+		$this->unit = $operator->Unit();
 	}
 
 	public function apply(): void {

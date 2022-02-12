@@ -18,6 +18,8 @@ trait LearnSpellTrait
 
 	protected int $knowledge;
 
+	protected int $production;
+
 	/**
 	 * @noinspection PhpMultipleClassDeclarationsInspection
 	 */
@@ -25,7 +27,7 @@ trait LearnSpellTrait
 		parent::__construct($context, $operator);
 		$this->knowledge = $this->context->getCalculus($operator->Unit())->knowledge(Magic::class)->Level();
 		$this->initWorkload();
-		$this->addToWorkload($this->knowledge);
+		$this->production = $this->reduceByWorkload($this->knowledge);
 	}
 
 	protected function learn(Spell $spell): void {
@@ -40,11 +42,12 @@ trait LearnSpellTrait
 			$this->message(LearnSpellImpossibleMessage::class, $unit)->s($spell);
 			return;
 		}
-		if ($this->reduceByWorkload($level) < $level) {
+		if ($this->production < $level) {
 			$this->message(LearnSpellUnableMessage::class, $unit)->s($spell);
 			return;
 		}
 		$spellBook->add($spell);
+		$this->addToWorkload($level);
 		$this->message(LearnSpellMessage::class, $unit)->s($spell);
 	}
 }
