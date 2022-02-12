@@ -4,9 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.9
 
-- Magellan-Report: BATTLE einbauen
-- Magellan-Report: ZAUBER mit KOMPONENTEN einbauen
-- Magellan-Report: TRANK mit ZUTATEN einbauen
+- Leerzeilen im Textreport
 
 ## Neue Funktionen
 
@@ -18,6 +16,16 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Aktion hat Lebensdauer (Zeit oder Anzahl)
   - Schriftrollen mit unbekannten Zaubern erwerben, um diese zu erlernen
   - Zauberbuch schreiben, weitergeben, lesen
+
+### Version 0.11
+
+- Befehlsvorlage für lange Befehle verbessern
+- automatische Datenmigration für neue Versionen
+- VORLAGE-Variante für Rotation von Befehlen
+- Vorgabeeinstellungen für neue Einheiten (Kampfstatus, Sammeln, Tarnen)
+- Magellan-Report: BATTLE einbauen
+- Magellan-Report: ZAUBER mit KOMPONENTEN einbauen
+- Magellan-Report: TRANK mit ZUTATEN einbauen
 - weitere Gebäude:
   - Akropolis
   - Alchemistenküche
@@ -28,9 +36,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Beschleunigung (8) (mehrfache Angriffe)
   - Erdbeben (9) (zerstört Gebäude)
 
-### Version 0.11
+### Version 0.12
 
-- automatische Datenmigration für neue Versionen
 - Statistische Daten erstellen
   - Regionsentwicklung im Report anzeigen
   - Veränderungen im Inventar anzeigen
@@ -51,8 +58,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
-- VORLAGE-Variante für Rotation von Befehlen
-- Vorgabeeinstellungen für neue Einheiten (Kampfstatus, Sammeln, Tarnen)
 - Gegenstandsklassen für verkürzte Übergaben (Kräuter, Luxuswaren, Rüstungen, Schilde, Tiere, Trophäen, Tränke, Waffen)
 - neue Gebäude, die Arbeitsplätze verdoppeln
   - Wüste: Oase
