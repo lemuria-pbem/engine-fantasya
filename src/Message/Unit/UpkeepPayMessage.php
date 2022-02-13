@@ -3,12 +3,15 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 use Lemuria\Item;
 
 class UpkeepPayMessage extends AbstractUnitMessage
 {
+	protected string $level = Message::SUCCESS;
+
 	protected Section $section = Section::ECONOMY;
 
 	protected Id $construction;

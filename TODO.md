@@ -4,6 +4,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.10
 
+- MACHEN Gebäude x (von außerhalb) implementieren
+- ZERSTÖREN Gebäude x (von außerhalb) implementieren
 
 ## Neue Funktionen
 
