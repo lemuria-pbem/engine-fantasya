@@ -32,16 +32,36 @@ trait UnicumTrait
 			$id                  = $this->phrase->getParameter();
 			$this->unicum        = $this->getUnicum($id);
 			$this->composition   = $this->unicum?->Composition();
-			$this->argumentIndex = 2;
+			//$this->argumentIndex = 2;
 		} elseif ($n === 2) {
 			$this->composition   = $this->context->Factory()->composition($this->phrase->getParameter());
 			$id                  = $this->phrase->getParameter(2);
 			$this->unicum        = $this->getUnicum($id);
-			$this->argumentIndex = 3;
+			//$this->argumentIndex = 3;
 		} else {
 			throw new InvalidCommandException($this);
 		}
 		return $id;
+	}
+
+	private function parseUnicumWithArguments(): void {
+		$id     = $this->phrase->getParameter();
+		$unicum = $this->getUnicum($id);
+		if ($unicum) {
+			$this->unicum        = $unicum;
+			$this->composition   = $unicum->Composition();
+			$this->argumentIndex = 2;
+		} else {
+			$id     = $this->phrase->getParameter(2);
+			$unicum = $this->getUnicum($id);
+			if ($unicum) {
+				$this->unicum        = $unicum;
+				$this->composition   = $unicum->Composition();
+				$this->argumentIndex = 3;
+			} else {
+				throw new InvalidCommandException($this);
+			}
+		}
 	}
 
 	/**

@@ -25,6 +25,6 @@ class UnicumNoMaterialMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->item($name, 'composition') ?? parent::getTranslation($name);
+		return $this->composition($name, 'composition') ?? parent::getTranslation($name);
 	}
 }

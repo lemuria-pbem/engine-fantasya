@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Effect\UnicumRead;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
@@ -18,6 +19,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\UnicumMaterialMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnicumNoMaterialMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnicumNoneMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\IdException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
@@ -106,8 +108,9 @@ final class Unicum extends UnitCommand implements Activity
 		$unicum->setId($id);
 		$unicum->setName($this->dictionary->get('composition.' . getClass($this->composition)) . ' ' . $id);
 		$unicum->setComposition($this->composition);
-		$this->unit->Treasury()->add($unicum);
 		$this->addToWorkload(1);
+		$this->unit->Treasury()->add($unicum);
+		$this->addReadEffect()->Treasury()->add($unicum);
 		$this->message(UnicumCreateMessage::class)->e($unicum)->s($this->composition);
 	}
 
@@ -121,5 +124,15 @@ final class Unicum extends UnitCommand implements Activity
 			$this->context->UnicumMapper()->map((string)$this->id, $id);
 		}
 		return $id;
+	}
+
+	private function addReadEffect(): UnicumRead {
+		$effect   = new UnicumRead(State::getInstance());
+		$existing = Lemuria::Score()->find($effect->setParty($this->unit->Party()));
+		if ($existing instanceof UnicumRead) {
+			return $existing;
+		}
+		Lemuria::Score()->add($effect);
+		return $effect;
 	}
 }

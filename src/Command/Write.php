@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\UnicumTrait;
@@ -27,14 +28,14 @@ final class Write extends UnitCommand implements Activity, Operator
 	}
 
 	protected function run(): void {
-		$id = $this->parseUnicum();
+		$this->parseUnicumWithArguments();
 		if (!$this->unicum) {
-			$this->message(WriteNoUnicumMessage::class)->p($id);
+			$this->message(WriteNoUnicumMessage::class);
 			return;
 		}
 		$composition = $this->unicum->Composition();
 		if ($composition !== $this->composition) {
-			$this->message(WriteNoCompositionMessage::class)->s($this->composition)->p($id);
+			$this->message(WriteNoCompositionMessage::class)->s($this->composition)->p((string)$this->unicum->Id());
 			return;
 		}
 		if ($composition->supports(Practice::WRITE)) {
