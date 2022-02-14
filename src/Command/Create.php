@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use function Lemuria\isInt;
 use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Command\Create\Construction;
 use Lemuria\Engine\Fantasya\Command\Create\Griffinegg;
 use Lemuria\Engine\Fantasya\Command\Create\Herb;
 use Lemuria\Engine\Fantasya\Command\Create\Resource;
@@ -13,6 +14,7 @@ use Lemuria\Engine\Fantasya\Command\Create\Unicum;
 use Lemuria\Engine\Fantasya\Command\Create\Unknown;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
+use Lemuria\Engine\Fantasya\Factory\Model\AnyBuilding;
 use Lemuria\Engine\Fantasya\Factory\Model\Herb as HerbModel;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg as GriffineggModel;
@@ -23,6 +25,7 @@ use Lemuria\Model\Fantasya\Herb as HerbInterface;
  *
  * The command determines the create sub command and delegates to it.
  *
+ * - MACHEN Gebäude <ID> (from outside)
  * - MACHEN <Resource>
  * - MACHEN <Resource> <size>
  * - MACHEN <amount> <Resource>
@@ -38,7 +41,8 @@ use Lemuria\Model\Fantasya\Herb as HerbInterface;
 final class Create extends DelegatedCommand
 {
 	protected function createDelegate(): Command {
-		if (count($this->phrase) > 3) {
+		$n = count($this->phrase);
+		if ($n > 3) {
 			throw new InvalidCommandException($this);
 		}
 
@@ -51,6 +55,10 @@ final class Create extends DelegatedCommand
 		// MACHEN Straße
 		if ($lower === 'straße' || $lower === 'strasse') {
 			return new Road($this->phrase, $this->context);
+		}
+		// MACHEN Gebäude <ID>
+		if ($n === 2 && ($lower === 'gebäude' || $lower === 'gebaeude')) {
+			return new Construction($this->phrase, $this->context, new Job(new AnyBuilding()));
 		}
 
 		// MACHEN <amount> <Ressource>
