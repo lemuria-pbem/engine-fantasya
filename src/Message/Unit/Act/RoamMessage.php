@@ -12,7 +12,7 @@ class RoamMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	protected int $section = Section::MOVEMENT;
+	protected Section $section = Section::MOVEMENT;
 
 	protected Id $region;
 

@@ -10,7 +10,7 @@ class LearnMagicMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	protected int $section = Section::STUDY;
+	protected Section $section = Section::STUDY;
 
 	protected int $aura;
 

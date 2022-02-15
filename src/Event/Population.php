@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Event;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Effect\Unemployment;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Factory\WorkplacesTrait;
@@ -13,9 +12,10 @@ use Lemuria\Engine\Fantasya\Message\Region\PopulationGrowthMessage;
 use Lemuria\Engine\Fantasya\Message\Region\PopulationHungerMessage;
 use Lemuria\Engine\Fantasya\Message\Region\PopulationMigrantsMessage;
 use Lemuria\Engine\Fantasya\Message\Region\PopulationNewMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Potion\PeasantJoy;
@@ -23,6 +23,7 @@ use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Neighbours;
+
 /**
  * The peasant population grows or shrinks at the end of each turn.
  *
@@ -49,14 +50,14 @@ final class Population extends AbstractEvent
 	private Commodity $silver;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::AFTER);
+		parent::__construct($state, Priority::AFTER);
 		$this->workplaces = new Workplaces();
 		$this->peasant    = self::createCommodity(Peasant::class);
 		$this->silver     = self::createCommodity(Silver::class);
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
 			$resources = $region->Resources();
 			$peasants  = $resources[$this->peasant]->Count();
 			if ($peasants <= 0) {

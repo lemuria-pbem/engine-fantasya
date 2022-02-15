@@ -59,7 +59,7 @@ final class Calculus
 	 */
 	private array $teachers = [];
 
-	public function __construct(private Unit $unit) {
+	public function __construct(private readonly Unit $unit) {
 	}
 
 	public function Unit(): Unit {

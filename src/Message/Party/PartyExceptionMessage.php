@@ -10,7 +10,7 @@ class PartyExceptionMessage extends AbstractPartyMessage
 {
 	protected string $level = Message::ERROR;
 
-	protected int $section = Section::ERROR;
+	protected Section $section = Section::ERROR;
 
 	protected string $exception;
 

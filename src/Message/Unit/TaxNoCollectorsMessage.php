@@ -9,7 +9,7 @@ class TaxNoCollectorsMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::DEBUG;
 
-	protected int $section = Section::PRODUCTION;
+	protected Section $section = Section::PRODUCTION;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has no tax collectors that could enforce tax payment.';

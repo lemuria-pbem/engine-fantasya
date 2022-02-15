@@ -27,6 +27,7 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Stone;
+use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Requirement;
@@ -49,17 +50,20 @@ final class Smash extends UnitCommand implements Activity
 	use ModifiedActivityTrait;
 	use WorkloadTrait;
 
+	private ?Construction $fromOutside;
+
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		$this->initWorkload();
 		$this->newDefault = $this;
 	}
 
-	protected function run(): void {
-		if ($this->phrase->count() !== 2) {
-			throw new UnknownCommandException($this);
-		}
+	protected function initialize(): void {
+		parent::initialize();
+		$this->fromOutside = $this->prepareSmashFromOutside();
+	}
 
+	protected function run(): void {
 		$param = $this->phrase->getParameter(2);
 		switch (strtolower($this->phrase->getParameter())) {
 			case 'burg' :
@@ -79,7 +83,27 @@ final class Smash extends UnitCommand implements Activity
 		}
 	}
 
+	private function prepareSmashFromOutside(): ?Construction {
+		if ($this->phrase->count() !== 2) {
+			throw new UnknownCommandException($this);
+		}
+
+		$id     = Id::fromId($this->phrase->getParameter(2));
+		$estate = $this->unit->Region()->Estate();
+		if ($estate->has($id)) {
+			/** @var Construction $construction */
+			$construction = $estate[$id];
+			if ($construction->Inhabitants()->isEmpty()) {
+				return $construction;
+			}
+		}
+		return null;
+	}
+
 	private function destroyConstruction(Id $id): void {
+		// Support smashing an empty construction from outside.
+		$this->fromOutside?->Inhabitants()->add($this->unit);
+
 		$construction = $this->unit->Construction();
 		if (!$construction || $construction->Id()->Id() !== $id->Id()) {
 			$this->message(SmashNotInConstructionMessage::class);

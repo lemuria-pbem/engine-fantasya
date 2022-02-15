@@ -9,7 +9,7 @@ class TravelTooHeavyMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::MOVEMENT;
+	protected Section $section = Section::MOVEMENT;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is too heavy to move.';

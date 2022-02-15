@@ -18,15 +18,15 @@ class Supply implements \Countable
 
 	private int $count = 0;
 
-	private int $peasants;
+	private readonly int $peasants;
 
-	private float $step;
+	private readonly float $step;
 
 	private int $max = 0;
 
 	private bool $isOffer = false;
 
-	public function __construct(private Region $region) {
+	public function __construct(private readonly Region $region) {
 		$resources      = $region->Resources();
 		$this->peasants = $resources[Peasant::class]->Count();
 		$this->step     = $this->peasants / 100.0;

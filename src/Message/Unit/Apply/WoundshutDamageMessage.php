@@ -8,7 +8,7 @@ use Lemuria\Engine\Message\Section;
 
 class WoundshutDamageMessage extends AbstractUnitMessage
 {
-	protected int $section = Section::MAGIC;
+	protected Section $section = Section::MAGIC;
 
 	protected int $damage;
 

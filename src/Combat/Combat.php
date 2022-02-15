@@ -39,7 +39,7 @@ use Lemuria\Engine\Fantasya\Combat\Log\Participant;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Combat as CombatModel;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Potion\HealingPotion;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Native;
 use Lemuria\Model\Fantasya\Monster;
@@ -47,7 +47,7 @@ use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
 
-class Combat extends CombatModel
+class Combat
 {
 	public const ROW_NAME = [self::REFUGEE => 'refugees', self::BYSTANDER => 'bystanders', self::BACK => 'back',
 							 self::FRONT   => 'front'];
@@ -55,6 +55,14 @@ class Combat extends CombatModel
 	protected const BATTLE_ROWS = [self::REFUGEE, self::BYSTANDER, self::BACK, self::FRONT];
 
 	protected const OVERRUN = 3.0;
+
+	private const FRONT = 5;
+
+	private const BACK = 3;
+
+	private const BYSTANDER = 1;
+
+	private const REFUGEE = 0;
 
 	protected int $round = 0;
 
@@ -90,12 +98,12 @@ class Combat extends CombatModel
 
 	protected Effects $effects;
 
-	#[Pure] public static function getBattleRow(Unit $unit): int {
+	#[Pure] public static function getBattleRow(Unit $unit): BattleRow {
 		$battleRow = $unit->BattleRow();
 		return match ($battleRow) {
-			self::DEFENSIVE                 => self::BACK,
-			self::CAREFUL, self::AGGRESSIVE => self::FRONT,
-			default                         => $battleRow
+			BattleRow::DEFENSIVE                      => BattleRow::BACK,
+			BattleRow::CAREFUL, BattleRow::AGGRESSIVE => BattleRow::FRONT,
+			default                                   => $battleRow
 		};
 	}
 
@@ -153,7 +161,7 @@ class Combat extends CombatModel
 				foreach ($army->Units() as $unit /* @var Unit $unit */) {
 					$combatants = $army->getCombatants($unit);
 					foreach ($combatants as $combatant) {
-						$this->attacker[$combatant->BattleRow()][] = $combatant;
+						$this->attacker[$combatant->BattleRow()->value][] = $combatant;
 					}
 					$this->attackParticipants[] = new Participant(new Entity($unit), $army->getCombatants($unit));
 				}
@@ -175,7 +183,7 @@ class Combat extends CombatModel
 				foreach ($army->Units() as $unit /* @var Unit $unit */) {
 					$combatants = $army->getCombatants($unit);
 					foreach ($combatants as $combatant) {
-						$this->defender[$combatant->BattleRow()][] = $combatant;
+						$this->defender[$combatant->BattleRow()->value][] = $combatant;
 					}
 					$this->defendParticipants[] = new Participant(new Entity($unit), $army->getCombatants($unit));
 				}
@@ -436,7 +444,7 @@ class Combat extends CombatModel
 			$unit      = $combatant->Unit();
 			$size      = $combatant->Size();
 			if ($size <= $additional) {
-				$side[self::FRONT][] = $combatant->setBattleRow(self::FRONT);
+				$side[self::FRONT][] = $combatant->setBattleRow(BattleRow::FRONT);
 				unset($side[$battleRow][$i]);
 				$additional -= $size;
 				$who         = $isAttacker ? 'Attacker' : 'Defender';

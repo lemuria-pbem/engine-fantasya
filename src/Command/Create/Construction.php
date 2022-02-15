@@ -2,7 +2,9 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
+use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\SignpostEffect;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\MarketBuilder;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyBuilding;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyCastle;
@@ -16,10 +18,12 @@ use Lemuria\Engine\Fantasya\Message\Unit\ConstructionOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionResourcesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionUnableMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
+use Lemuria\Id;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\AbstractCastle;
 use Lemuria\Model\Fantasya\Building\Castle;
@@ -44,6 +48,13 @@ final class Construction extends AbstractProduct
 	private int $size;
 
 	private bool $hasMarket = false;
+
+	private ?ConstructionModel $fromOutside;
+
+	public function __construct(Phrase $phrase, Context $context, Job $job) {
+		parent::__construct($phrase, $context, $job);
+		$this->fromOutside = $this->prepareBuildingFromOutside();
+	}
 
 	protected function initialize(): void {
 		$this->replacePlaceholderJob();
@@ -85,7 +96,7 @@ final class Construction extends AbstractProduct
 					$this->message(ConstructionBuildMessage::class)->e($construction)->p($yield);
 				}
 			} else {
-				$id           = Lemuria::Catalog()->nextId(Catalog::CONSTRUCTIONS);
+				$id           = Lemuria::Catalog()->nextId(Domain::CONSTRUCTION);
 				$construction = new ConstructionModel();
 				$construction->setName('Gebäude ' . $id)->setId($id);
 				$construction->Inhabitants()->add($this->unit);
@@ -163,6 +174,27 @@ final class Construction extends AbstractProduct
 		return parent::calculateProduction($craft);
 	}
 
+	/**
+	 * @noinspection PhpUnnecessaryLocalVariableInspection
+	 */
+	private function prepareBuildingFromOutside(): ?ConstructionModel {
+		$building = $this->job->getObject();
+		if ($building instanceof AnyBuilding) {
+			$knowledge = $this->unit->Knowledge();
+			$ability   = $knowledge[$building->getCraft()->Talent()];
+			if ($ability->Count() > 0 && $this->phrase->count() === 2) {
+				$id     = Id::fromId($this->phrase->getParameter(2));
+				$estate = $this->unit->Region()->Estate();
+				if ($estate->has($id)) {
+					/** @var ConstructionModel $construction */
+					$construction = $estate[$id];
+					return $construction;
+				}
+			}
+		}
+		return null;
+	}
+
 	private function replacePlaceholderJob(): void {
 		$building = $this->job->getObject();
 		if ($building instanceof AnyCastle) {
@@ -176,7 +208,16 @@ final class Construction extends AbstractProduct
 			$building = $this->unit->Construction()?->Building();
 			if ($building) {
 				$this->job = new Job($building, $this->job->Count());
+				return;
 			}
+			if ($this->fromOutside) {
+				if (!$this->unit->Construction() && $this->fromOutside->Inhabitants()->isEmpty()) {
+					$this->job = new Job($this->fromOutside->Building(), $this->job->Count());
+					$this->fromOutside->Inhabitants()->add($this->unit);
+					return;
+				}
+			}
+			throw new InvalidCommandException($this);
 		}
 	}
 

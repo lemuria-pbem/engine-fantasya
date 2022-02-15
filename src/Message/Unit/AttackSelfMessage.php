@@ -9,7 +9,7 @@ class AttackSelfMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::BATTLE;
+	protected Section $section = Section::BATTLE;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' will not fight itself.';

@@ -2,10 +2,10 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Game;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Message\Party\TheWildHuntMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Commodity\Herb\Peyote;
@@ -40,7 +40,7 @@ final class TheWildHunt extends AbstractEvent
 	private Unit $unit;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::BEFORE);
+		parent::__construct($state, Priority::BEFORE);
 	}
 
 	public function setOptions(array $options): TheWildHunt {

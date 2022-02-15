@@ -17,7 +17,7 @@ class LemuriaGame extends JsonGame
 
 	private const STRINGS_FILE = 'strings.json';
 
-	public function __construct(protected LemuriaConfig $config) {
+	public function __construct(protected readonly LemuriaConfig $config) {
 		parent::__construct();
 	}
 

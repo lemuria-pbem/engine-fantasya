@@ -9,7 +9,7 @@ class VesselFinishedMessage extends AbstractVesselMessage
 {
 	protected string $level = Message::SUCCESS;
 
-	protected int $section = Section::PRODUCTION;
+	protected Section $section = Section::PRODUCTION;
 
 	protected function create(): string {
 		return 'Vessel ' . $this->id . ' has been finished.';

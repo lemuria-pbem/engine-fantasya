@@ -11,7 +11,7 @@ class EnterPortFullMessage extends AbstractVesselMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::MOVEMENT;
+	protected Section $section = Section::MOVEMENT;
 
 	protected Id $port;
 

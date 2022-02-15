@@ -1,0 +1,9 @@
+{
+	"description": [
+		"Eine Schriftrolle ist die kleine Variante des Zauberbuches. Ein Magier kann sie ein Mal mit einem Zauberspruch beschreiben.",
+		"Ein anderer Magier, der den aufgezeichneten Zauberspruch noch nicht kennt, aber ausreichend gelehrt in Magie ist, kann diesen durch Benutzung der Schriftrolle lernen.",
+		"Dieses Lernen ist ein langer Befehl. Ein ausreichend erfahrener Magier kann mehrere Schriftrollen auf einmal studieren und lernen."
+	],
+	"apply": "",
+	"write": "Zauberspruch"
+}

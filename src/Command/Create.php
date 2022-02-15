@@ -2,26 +2,30 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use function Lemuria\isInt;
 use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Command\Create\Construction;
 use Lemuria\Engine\Fantasya\Command\Create\Griffinegg;
 use Lemuria\Engine\Fantasya\Command\Create\Herb;
 use Lemuria\Engine\Fantasya\Command\Create\Resource;
 use Lemuria\Engine\Fantasya\Command\Create\Road;
 use Lemuria\Engine\Fantasya\Command\Create\Temp;
+use Lemuria\Engine\Fantasya\Command\Create\Unicum;
 use Lemuria\Engine\Fantasya\Command\Create\Unknown;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
+use Lemuria\Engine\Fantasya\Factory\Model\AnyBuilding;
 use Lemuria\Engine\Fantasya\Factory\Model\Herb as HerbModel;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg as GriffineggModel;
 use Lemuria\Model\Fantasya\Herb as HerbInterface;
-use function Lemuria\isInt;
 
 /**
  * Implementation of command MACHEN.
  *
  * The command determines the create sub command and delegates to it.
  *
+ * - MACHEN Gebäude <ID> (from outside)
  * - MACHEN <Resource>
  * - MACHEN <Resource> <size>
  * - MACHEN <amount> <Resource>
@@ -32,11 +36,13 @@ use function Lemuria\isInt;
  * - MACHEN Temp
  * - MACHEN Temp <id>
  * - MACHEN Straße|Strasse <direction> [<amount>]
+ * - MACHEN <Unicum> [<ID>]
  */
 final class Create extends DelegatedCommand
 {
 	protected function createDelegate(): Command {
-		if (count($this->phrase) > 3) {
+		$n = count($this->phrase);
+		if ($n > 3) {
 			throw new InvalidCommandException($this);
 		}
 
@@ -49,6 +55,10 @@ final class Create extends DelegatedCommand
 		// MACHEN Straße
 		if ($lower === 'straße' || $lower === 'strasse') {
 			return new Road($this->phrase, $this->context);
+		}
+		// MACHEN Gebäude <ID>
+		if ($n === 2 && ($lower === 'gebäude' || $lower === 'gebaeude')) {
+			return new Construction($this->phrase, $this->context, new Job(new AnyBuilding()));
 		}
 
 		// MACHEN <amount> <Ressource>
@@ -74,6 +84,11 @@ final class Create extends DelegatedCommand
 		if ($lower === 'greifenei' || $lower === 'greifeneier') {
 			$egg = self::createCommodity(GriffineggModel::class);
 			return new Griffinegg($this->phrase, $this->context, new Job($egg, $number));
+		}
+
+		// MACHEN <Unicum> [<ID>]
+		if ($this->context->Factory()->isComposition($what)) {
+			return new Unicum($this->phrase, $this->context);
 		}
 
 		try {

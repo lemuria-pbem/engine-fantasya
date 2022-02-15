@@ -2,12 +2,12 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Administrator;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Message\Party\Administrator\OvercrowdedMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Talent\Constructing;
 
@@ -17,11 +17,11 @@ use Lemuria\Model\Fantasya\Talent\Constructing;
 final class Overcrowded extends AbstractEvent
 {
 	public function __construct(State $state) {
-		parent::__construct($state, Action::AFTER);
+		parent::__construct($state, Priority::AFTER);
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Catalog::CONSTRUCTIONS) as $construction /* @var Construction $construction */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::CONSTRUCTION) as $construction /* @var Construction $construction */) {
 			if ($construction->getFreeSpace() > 0) {
 				continue;
 			}

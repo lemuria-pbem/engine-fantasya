@@ -2,11 +2,11 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Game;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Message\Party\PotionGiftMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -31,7 +31,7 @@ final class PotionGift extends AbstractEvent
 	private Potion $potion;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::BEFORE);
+		parent::__construct($state, Priority::BEFORE);
 	}
 
 	public function setOptions(array $options): PotionGift {

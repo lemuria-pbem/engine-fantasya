@@ -7,7 +7,7 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\FightMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FightUnguardMessage;
-use Lemuria\Model\Fantasya\Combat;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 
 /**
  * This command is used to set the unit's behaviour in combat.
@@ -28,25 +28,25 @@ final class Fight extends UnitCommand
 
 		switch ($position) {
 			case 'aggressiv' :
-				$this->unit->setBattleRow(Combat::AGGRESSIVE);
+				$this->unit->setBattleRow(BattleRow::AGGRESSIVE);
 				break;
 			case 'defensiv' :
-				$this->unit->setBattleRow(Combat::DEFENSIVE);
+				$this->unit->setBattleRow(BattleRow::DEFENSIVE);
 				break;
 			case 'fliehe' :
 			case 'fliehen' :
 			case 'flucht' :
-				$this->unit->setBattleRow(Combat::REFUGEE);
+				$this->unit->setBattleRow(BattleRow::REFUGEE);
 				if ($this->unit->IsGuarding()) {
 					$this->unit->setIsGuarding(false);
 					$this->message(FightUnguardMessage::class);
 				}
 				break;
 			case 'hinten' :
-				$this->unit->setBattleRow(Combat::BACK);
+				$this->unit->setBattleRow(BattleRow::BACK);
 				break;
 			case 'nicht' :
-				$this->unit->setBattleRow(Combat::BYSTANDER);
+				$this->unit->setBattleRow(BattleRow::BYSTANDER);
 				if ($this->unit->IsGuarding()) {
 					$this->unit->setIsGuarding(false);
 					$this->message(FightUnguardMessage::class);
@@ -54,15 +54,15 @@ final class Fight extends UnitCommand
 				break;
 			case 'vorn' :
 			case 'vorne' :
-				$this->unit->setBattleRow(Combat::FRONT);
+				$this->unit->setBattleRow(BattleRow::FRONT);
 				break;
 			case 'vorsichtig' :
-				$this->unit->setBattleRow(Combat::CAREFUL);
+				$this->unit->setBattleRow(BattleRow::CAREFUL);
 				break;
 			default :
 				throw new InvalidCommandException($this, 'Invalid position "' . $position . '".');
 		}
-		$this->message(FightMessage::class)->p($this->unit->BattleRow());
+		$this->message(FightMessage::class)->p($this->unit->BattleRow()->value);
 	}
 
 	#[Pure] protected function checkSize(): bool {

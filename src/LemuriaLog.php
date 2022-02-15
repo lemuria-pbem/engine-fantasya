@@ -17,7 +17,7 @@ class LemuriaLog implements Log
 
 	protected ?int $fileLevel = null;
 
-	public function __construct(protected string $logPath, protected bool $addErrorHandler = true) {
+	public function __construct(protected readonly string $logPath, protected readonly bool $addErrorHandler = true) {
 	}
 
 	public function getLogger(): LoggerInterface {

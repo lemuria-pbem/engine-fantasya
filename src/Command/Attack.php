@@ -21,8 +21,8 @@ use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Castle;
-use Lemuria\Model\Fantasya\Combat;
-use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -47,7 +47,7 @@ final class Attack extends UnitCommand
 
 	protected function initialize(): void {
 		parent::initialize();
-		if ($this->unit->BattleRow() <= Combat::BYSTANDER) {
+		if ($this->unit->BattleRow() <= BattleRow::BYSTANDER) {
 			$this->message(AttackNotFightingMessage::class);
 			return;
 		}
@@ -104,7 +104,7 @@ final class Attack extends UnitCommand
 				$campaign->addAttack($this->unit, $unit);
 				$this->message(AttackMessage::class)->e($unit);
 				$party = $this->unit->Party();
-				if ($party->Type() === Party::PLAYER) {
+				if ($party->Type() === Type::PLAYER) {
 					$this->message(AttackFromMessage::class, $unit)->e($this->unit->Party());
 				} else {
 					$this->message(AttackFromMonsterMessage::class, $unit);

@@ -13,23 +13,28 @@ use Lemuria\Engine\Fantasya\Message\Party\DescribePartyMessage;
 use Lemuria\Engine\Fantasya\Message\Region\DescribeCastleMessage;
 use Lemuria\Engine\Fantasya\Message\Region\DescribeRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DescribeNoContinentMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DescribeNoUnicumMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DescribeUnicumMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DescribeUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DescribeNotInConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DescribeNotInVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\DescribeCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\DescribeVesselMessage;
+use Lemuria\Id;
 use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Construction;
 
 /**
- * The Describe command is used to set the description of a unit or the construction, region or vessel it controls.
+ * The Describe command is used to set the description of a unit, an unicum it possesses or the construction, region or
+ * vessel it controls.
  *
  * - BESCHREIBUNG Partei <Beschreibung>
  * - BESCHREIBUNG [Einheit] <Beschreibung>
  * - BESCHREIBUNG Burg|Gebäude <Beschreibung>
  * - BESCHREIBUNG Region <Beschreibung>
  * - BESCHREIBUNG Schiff <Beschreibung>
- * - BESCHREIBUNG Kontinent|Insel <Name>
+ * - BESCHREIBUNG Kontinent|Insel <Beschreibung>
+ * - BESCHREIBUNG Gegenstand <ID> <Beschreibung>
  */
 final class Describe extends UnitCommand
 {
@@ -71,6 +76,12 @@ final class Describe extends UnitCommand
 			case 'kontinent' :
 			case 'insel' :
 				$this->setContinentDescription($description);
+				break;
+			case 'gegenstand' :
+				if ($n < 3) {
+					throw new InvalidCommandException('No description given.');
+				}
+				$this->describeUnicum($description, $this->phrase->getParameter(3));
 				break;
 			default :
 				$this->describeUnit(self::trimDescription($this->phrase->getLine()));
@@ -141,6 +152,18 @@ final class Describe extends UnitCommand
 			return;
 		}
 		$this->message(DescribeNotInVesselMessage::class);
+	}
+
+	private function describeUnicum(string $id, string $description): void {
+		$treasury = $this->unit->Treasury();
+		$id       = Id::fromId($id);
+		if ($treasury->has($id)) {
+			$unicum = $treasury[$id];
+			$unicum->setDescription($description);
+			$this->message(DescribeUnicumMessage::class)->e($unicum);
+		} else {
+			$this->message(DescribeNoUnicumMessage::class)->p((string)$id);
+		}
 	}
 
 	private function setContinentDescription(string $description): void {

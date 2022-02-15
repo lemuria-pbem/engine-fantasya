@@ -2,14 +2,14 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use Lemuria\Engine\Fantasya\Action;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 
 final class TravelEffect extends AbstractUnitEffect
 {
 	public function __construct(State $state) {
-		parent::__construct($state, Action::BEFORE);
+		parent::__construct($state, Priority::BEFORE);
 	}
 
 	protected function run(): void {

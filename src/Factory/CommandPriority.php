@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Effect;
 use Lemuria\Engine\Fantasya\Event;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Exception\LemuriaException;
 
 /**
@@ -34,15 +35,18 @@ final class CommandPriority
 		'Fight'            => 17,
 		'BattleSpell'      => 18,
 		'Help'             => 20,
-		'Contact'          => 22,
-		'Announcement'     => 24,
+		'Contact'          => 21,
+		'Announcement'     => 23,
+		'Read'             => 25,
 		'Apply'            => 26,
-		'Give'             => 28,
-		'Abandon'          => 30,
-		'Enter'            => 31,
-		'Board'            => 32,
-		'Grant'            => 33,
-		'Leave'            => 35,
+		'Excert'           => 27,
+		'Bestow'           => 29,
+		'Give'             => 30,
+		'Abandon'          => 32,
+		'Enter'            => 33,
+		'Board'            => 34,
+		'Grant'            => 35,
+		'Leave'            => 36,
 		'Reserve'          => 38,
 		'Dismiss'          => 40,
 		'Lose'             => 41,
@@ -52,10 +56,11 @@ final class CommandPriority
 		'Cast'             => 49,
 		'EFFECT_MIDDLE'    => 50,
 		'EVENT_MIDDLE'     => 51,
-		'Siege'            => 53,
-		'Smash'            => 55,
-		'Teach'            => 57,
-		'Learn'            => 58,
+		'Siege'            => 52,
+		'Smash'            => 54,
+		'Teach'            => 56,
+		'Learn'            => 57,
+		'Operate'          => 58,
 		'Spy'              => 60,
 		'Sell'             => 62,
 		'Buy'              => 63,
@@ -65,19 +70,21 @@ final class CommandPriority
 		'Commodity'        => 70,
 		'Herb'             => 72,
 		'RawMaterial'      => 73,
-		'Unknown'          => 76,
-		'Tax'              => 79,
-        'Entertain'        => 80,
-		'Steal'            => 82,
-		'Travel'           => 84,
-		'Route'            => 85,
-		'Follow'           => 86,
-		'Explore'          => 88,
-		'Guard'            => 89,
-		'Sort'             => 91,
-		'Number'           => 93,
-		'Comment'          => 94,
-		'Migrate'          => 96,
+		'Unknown'          => 75,
+		'Tax'              => 77,
+        'Entertain'        => 79,
+		'Steal'            => 81,
+		'Unicum'           => 83,
+		'Write'            => 84,
+		'Travel'           => 86,
+		'Route'            => 87,
+		'Follow'           => 88,
+		'Explore'          => 90,
+		'Guard'            => 92,
+		'Sort'             => 94,
+		'Number'           => 95,
+		'Comment'          => 96,
+		'Migrate'          => 97,
 		'EFFECT_AFTER'     => 98,
 		'EVENT_AFTER'      => 99,
 		'Initiate'         => 100
@@ -120,29 +127,17 @@ final class CommandPriority
 			}
 		}
 
-		$priority = $action->Priority();
+		$priority = match ($action->Priority()) {
+			Priority::BEFORE => self::B_ACTION,
+			Priority::MIDDLE => self::M_ACTION,
+			Priority::AFTER  => self::A_ACTION
+		};
 
-		if ($action instanceof Event) {
-			if ($priority <= Action::BEFORE) {
-				return self::B_ACTION;
-			}
-			if ($priority >= Action::AFTER) {
-				return self::A_ACTION;
-			}
-			return self::M_ACTION;
-		}
-
-		if ($action instanceof Effect) {
-			if ($priority <= Action::BEFORE) {
-				return self::B_ACTION - 1;
-			}
-			if ($priority >= Action::AFTER) {
-				return self::A_ACTION - 1;
-			}
-			return self::M_ACTION - 1;
-		}
-
-		throw new LemuriaException('Unsupported action: ' . getClass($action));
+		return match (true) {
+			$action instanceof Effect => --$priority,
+			$action instanceof Event  => $priority,
+			default                   => throw new LemuriaException('Unsupported action: ' . getClass($action))
+		};
 	}
 
 	/**

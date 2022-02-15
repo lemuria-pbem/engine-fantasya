@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Model\Domain;
 use function Lemuria\getClass;
 use Lemuria\Singleton;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait as EngineBuilderTrait;
@@ -14,6 +15,7 @@ use Lemuria\Engine\Fantasya\Message\Exception\ItemNotSetException;
 use Lemuria\Engine\Fantasya\Message\Exception\ParameterNotSetException;
 use Lemuria\Engine\Fantasya\Message\Exception\SingletonNotSetException;
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Section;
 use Lemuria\Entity;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
@@ -58,7 +60,7 @@ class LemuriaMessage implements Message
 		return $this->id;
 	}
 
-	#[Pure] public function Report(): int {
+	#[Pure] public function Report(): Domain {
 		return $this->type->Report();
 	}
 
@@ -76,7 +78,7 @@ class LemuriaMessage implements Message
 		return $this->newAssignee ?? $this->assignee;
 	}
 
-	public function Section(): int {
+	public function Section(): Section {
 		return $this->type->Section();
 	}
 
@@ -279,6 +281,9 @@ class LemuriaMessage implements Message
 	 * Set a parameter.
 	 */
 	public function p(mixed $value, ?string $name = null): LemuriaMessage {
+		if ($value instanceof \UnitEnum) {
+			throw new LemuriaException('Parameter is an enum in ' . $this->MessageClass() . ' message ' . $this->Id() . '.');
+		}
 		if (!$name) {
 			$name = self::PARAMETER;
 		}

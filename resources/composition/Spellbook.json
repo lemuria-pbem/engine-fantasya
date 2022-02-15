@@ -1,0 +1,9 @@
+{
+	"description": [
+		"Mittels eines Zauberbuches zeichnet ein Magier die ihm bekannten Zaubersprüche auf und kann sie auf diese Weise an einen anderen Magiekundigen weitergeben.",
+		"Ein Zauberbuch kann mehrfach beschrieben werden und beliebig viele Zauber aufnehmen. Welche Zauber das Buch enthält, kann man mit dem Befehl LESEN feststellen.",
+		"Um einen Zauber zu lernen, wird der Befehl BENUTZEN mit Angabe des Zaubers gegeben. Dies ist ein langer Befehl, der mehrfach gegeben werden kann, abhängig vom Magietalent des Magiers."
+	],
+	"apply": "Zauberspruch",
+	"write": "Zauberspruch"
+}

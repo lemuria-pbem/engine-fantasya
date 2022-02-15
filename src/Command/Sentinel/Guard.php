@@ -9,7 +9,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\GuardBattleRowMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardWithoutWeaponMessage;
-use Lemuria\Model\Fantasya\Combat;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 
 /**
  * Implementation of command BEWACHEN.
@@ -27,7 +27,7 @@ final class Guard extends UnitCommand
 			$this->message(GuardAlreadyMessage::class);
 			return;
 		}
-		if ($this->unit->BattleRow() <= Combat::BYSTANDER) {
+		if ($this->unit->BattleRow() <= BattleRow::BYSTANDER) {
 			$this->message(GuardBattleRowMessage::class);
 			return;
 		}

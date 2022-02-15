@@ -5,48 +5,55 @@ namespace Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command\Destroy\Dismiss;
 use Lemuria\Engine\Fantasya\Command\Destroy\Lose;
+use Lemuria\Engine\Fantasya\Command\Handover\Bestow;
 use Lemuria\Engine\Fantasya\Command\Handover\Give;
 use Lemuria\Engine\Fantasya\Command\Handover\Grant;
 use Lemuria\Engine\Fantasya\Command\Handover\Migrate;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Exception\IdException;
+use Lemuria\Id;
 
 /**
- * Implementation of command GIB.
+ * Implementation of command GEBEN.
  *
  * The command determines the sub command and delegates to it.
  *
  * Give:
- * - GIB <Unit>
- * - GIB <Unit> Alles
- * - GIB <Unit> <commodity>
- * - GIB <Unit> Person|Personen
- * - GIB <Unit> Alles <commodity>
- * - GIB <Unit> <amount> <commodity>
- * - GIB <Unit> <amount> Person|Personen
- *
+ * - GEBEN <Unit>
+ * - GEBEN <Unit> Alles
+ * - GEBEN <Unit> <commodity>
+ * - GEBEN <Unit> Person|Personen
+ * - GEBEN <Unit> Alles <commodity>
+ * - GEBEN <Unit> <amount> <commodity>
+ * - GEBEN <Unit> <amount> Person|Personen
+
  * Grant:
- * - GIB <Unit> Kommando
+ * - GEBEN <Unit> Kommando
  *
  * Migrate:
- * - GIB <Unit> Einheit
+ * - GEBEN <Unit> Einheit
  *
  * Dismiss (Alias: ENTLASSEN)
- * - GIB Bauern
- * - GIB Bauern Alles|Einheit
- * - GIB Bauern <commodity>
- * - GIB Bauern Person|Personen
- * - GIB Bauern Alles <commodity>
- * - GIB Bauern <amount> <commodity>
- * - GIB Bauern <amount> Person|Personen
+ * - GEBEN Bauern
+ * - GEBEN Bauern Alles|Einheit
+ * - GEBEN Bauern <commodity>
+ * - GEBEN Bauern Person|Personen
+ * - GEBEN Bauern Alles <commodity>
+ * - GEBEN Bauern <amount> <commodity>
+ * - GEBEN Bauern <amount> Person|Personen
  *
  * Lose (Alias: VERLIEREN)
- * - GIB 0
- * - GIB 0 Alles
- * - GIB 0 <commodity>
- * - GIB 0 Person|Personen
- * - GIB 0 Alles <commodity>
- * - GIB 0 <amount> <commodity>
- * - GIB 0 <amount> Person|Personen
+ * - GEBEN 0
+ * - GEBEN 0 Alles
+ * - GEBEN 0 <commodity>
+ * - GEBEN 0 Person|Personen
+ * - GEBEN 0 Alles <commodity>
+ * - GEBEN 0 <amount> <commodity>
+ * - GEBEN 0 <amount> Person|Personen
+ *
+ * Bestow (Unicum)
+ * - GEBEN <Unit> <Unicum>
+ * - GEBEN <Unit> <composition> <Unicum>
  */
 final class Handover extends DelegatedCommand
 {
@@ -72,8 +79,29 @@ final class Handover extends DelegatedCommand
 		$command = match (strtolower($this->phrase->getParameter())) {
 			'bauern' => Dismiss::class,
 			'0'      => Lose::class,
-			default  => Give::class
+			default  => null
 		};
-		return new $command($this->phrase, $this->context);
+		if ($command) {
+			return new $command($this->phrase, $this->context);
+		}
+
+		try {
+			if ($n > 2) {
+				if ($this->context->Factory()->isComposition($this->phrase->getParameter(2))) {
+					$id = Id::fromId($this->phrase->getParameter(3));
+					if ($this->unit->Treasury()->has($id)) {
+						return new Bestow($this->phrase, $this->context);
+					}
+				}
+			} elseif ($n === 2) {
+				$id = Id::fromId($this->phrase->getParameter(2));
+				if ($this->unit->Treasury()->has($id)) {
+					return new Bestow($this->phrase, $this->context);
+				}
+			}
+		} catch (IdException) {
+		}
+
+		return new Give($this->phrase, $this->context);
 	}
 }

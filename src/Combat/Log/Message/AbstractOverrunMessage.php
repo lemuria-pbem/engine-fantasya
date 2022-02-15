@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Serializable;
 
 abstract class AbstractOverrunMessage extends AbstractMessage

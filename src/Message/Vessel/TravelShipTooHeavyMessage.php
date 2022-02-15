@@ -9,7 +9,7 @@ class TravelShipTooHeavyMessage extends AbstractVesselMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::MOVEMENT;
+	protected Section $section = Section::MOVEMENT;
 
 	protected function create(): string {
 		return 'Vessel ' . $this->id . ' is too heavy to move.';

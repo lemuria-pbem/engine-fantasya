@@ -2,14 +2,14 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Spell;
 
-use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellFailedMessage;
-use Lemuria\Engine\Fantasya\Factory\MagicTrait;
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
 use Lemuria\Engine\Fantasya\Combat\CombatEffect;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellCastMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellFailedMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellNoAuraMessage;
+use Lemuria\Engine\Fantasya\Factory\MagicTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\BattleSpell;

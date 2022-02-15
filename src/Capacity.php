@@ -19,9 +19,9 @@ class Capacity
 
 	public const FLY = 'fly';
 
-	private array $talent;
+	private readonly array $talent;
 
-	private int $walkSpeed;
+	private readonly int $walkSpeed;
 
 	#[Pure] public static function forVessel(Vessel $vessel): self {
 		$ship   = $vessel->Ship();
@@ -44,8 +44,10 @@ class Capacity
 	 * @param array|int $talent
 	 * @param int $walkSpeed
 	 */
-	#[Pure] public function __construct(private int $walk, private int $ride, private string $movement,
-		                                private int $weight, private int $speed, mixed $talent = 0, int $walkSpeed = 0) {
+	#[Pure] public function __construct(private readonly int $walk, private readonly int $ride,
+		                                private readonly string $movement,
+		                                private readonly int $weight, readonly private int $speed,
+		                                mixed $talent = 0, int $walkSpeed = 0) {
 		if (is_array($talent)) {
 			$this->talent = $talent;
 		} else {

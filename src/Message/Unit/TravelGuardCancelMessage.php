@@ -9,7 +9,7 @@ class TravelGuardCancelMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::MOVEMENT;
+	protected Section $section = Section::MOVEMENT;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has cancelled guarding the region.';

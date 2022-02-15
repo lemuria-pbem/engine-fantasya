@@ -2,13 +2,13 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Factory\Model\Season;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Message\Region\GrowthMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Catalog;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -35,7 +35,7 @@ final class Growth extends AbstractEvent
 	private Commodity $tree;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Action::AFTER);
+		parent::__construct($state, Priority::AFTER);
 		$this->tree = self::createCommodity(Wood::class);
 	}
 
@@ -48,7 +48,7 @@ final class Growth extends AbstractEvent
 			Lemuria::Log()->debug('We have no tree growth season.');
 		}
 
-		foreach (Lemuria::Catalog()->getAll(Catalog::LOCATIONS) as $region/* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region/* @var Region $region */) {
 			$landscape = $region->Landscape();
 			$resources = $region->Resources();
 			$trees     = $resources[$this->tree]->Count();

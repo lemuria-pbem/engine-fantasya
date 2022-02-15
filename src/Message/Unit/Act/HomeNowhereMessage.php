@@ -10,7 +10,7 @@ class HomeNowhereMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::FAILURE;
 
-	protected int $section = Section::MOVEMENT;
+	protected Section $section = Section::MOVEMENT;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is desperate because it will never make a home.';

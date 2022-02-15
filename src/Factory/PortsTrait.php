@@ -52,11 +52,11 @@ trait PortsTrait
 	 */
 	protected array $foreign = [];
 
-	protected Unit $unit;
+	protected readonly Unit $unit;
 
-	protected Party $party;
+	protected readonly Party $party;
 
-	protected Region $region;
+	protected readonly Region $region;
 
 	/**
 	 * @var array(int=>int)

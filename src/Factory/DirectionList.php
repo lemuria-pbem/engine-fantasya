@@ -7,13 +7,19 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Model\World;
+use Lemuria\Model\World\Direction;
 
 class DirectionList implements \Countable
 {
-	public const ROUTE_STOP = 'Pause';
+	private const NORTH_EAST = 'NO';
 
-	private CommandFactory $factory;
+	private const EAST = 'O';
+
+	private const SOUTH_EAST = 'SO';
+
+	private const ROUTE_STOP = 'Pause';
+
+	private readonly CommandFactory $factory;
 
 	private array $directions = [];
 
@@ -35,14 +41,14 @@ class DirectionList implements \Countable
 		return $this->index < $this->count;
 	}
 
-	public function peek(): string {
+	public function peek(): Direction {
 		if ($this->hasMore()) {
 			return $this->directions[$this->index];
 		}
 		throw new LemuriaException('No more directions.');
 	}
 
-	public function next(): string {
+	public function next(): Direction {
 		if ($this->hasMore()) {
 			$direction = $this->directions[$this->index++];
 			/** @noinspection PhpConditionAlreadyCheckedInspection */
@@ -64,7 +70,7 @@ class DirectionList implements \Countable
 
 	public function add(string $direction): DirectionList {
 		if ($this->isRotating && $this->factory->isRouteStop($direction)) {
-			$this->directions[] = self::ROUTE_STOP;
+			$this->directions[] = Direction::ROUTE_STOP;
 		} else {
 			$this->directions[] = $this->factory->direction($direction);
 		}
@@ -97,12 +103,14 @@ class DirectionList implements \Countable
 	}
 
 	private function routeDirection(int $i): string {
+		/** @var Direction $direction */
 		$direction = $this->directions[$i];
 		return match ($direction) {
-			World::NORTHEAST => 'NO',
-			World::EAST      => 'O',
-			World::SOUTHEAST => 'SO',
-			default          => $direction
+			Direction::NORTHEAST  => self::NORTH_EAST,
+			Direction::EAST       => self::EAST,
+			Direction::SOUTHEAST  => self::SOUTH_EAST,
+			Direction::ROUTE_STOP => self::ROUTE_STOP,
+			default               => $direction->value
 		};
 	}
 }

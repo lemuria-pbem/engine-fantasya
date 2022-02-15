@@ -23,7 +23,7 @@ class CombatantNoWeaponMessage extends AbstractMessage
 		if ($combatant) {
 			$this->combatant = $combatant->Id();
 			$this->count     = $combatant->Size();
-			$this->battleRow = $combatant->BattleRow();
+			$this->battleRow = $combatant->BattleRow()->value;
 		}
 	}
 

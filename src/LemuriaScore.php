@@ -16,7 +16,7 @@ class LemuriaScore implements Score
 {
 	use SerializableTrait;
 
-	private EffectFactory $factory;
+	private readonly EffectFactory $factory;
 
 	/**
 	 * @var array(int=>array)
@@ -47,7 +47,7 @@ class LemuriaScore implements Score
 			}
 			$this->effects[$namespace] = [];
 		}
-		$this->factory = new EffectFactory(State::getInstance());
+		$this->factory = new EffectFactory();
 	}
 
 	public function current(): ?Effect {
@@ -88,7 +88,7 @@ class LemuriaScore implements Score
 	 */
 	public function find(Identifiable $effect): ?Effect {
 		if ($effect instanceof Effect) {
-			$namespace = $effect->Catalog();
+			$namespace = $effect->Catalog()->value;
 			$id        = $effect->Id()->Id();
 			$class     = getClass($effect);
 			return $this->effects[$namespace][$id][$class] ?? null;
@@ -100,7 +100,7 @@ class LemuriaScore implements Score
 	 * @return Identifiable[]
 	 */
 	#[Pure] public function findAll(Identifiable $entity): array {
-		$namespace = $entity->Catalog();
+		$namespace = $entity->Catalog()->value;
 		$id        = $entity->Id()->Id();
 		return $this->effects[$namespace][$id] ?? [];
 	}
@@ -109,7 +109,7 @@ class LemuriaScore implements Score
 	 * Add an Effect to persistence.
 	 */
 	public function add(Identifiable $effect): Score {
-		$namespace = $effect->Catalog();
+		$namespace = $effect->Catalog()->value;
 		$id        = $effect->Id()->Id();
 		$class     = getClass($effect);
 		$this->effects[$namespace][$id][$class] = $effect;
@@ -123,7 +123,7 @@ class LemuriaScore implements Score
 	 * Remove an Effect from persistence.
 	 */
 	public function remove(Identifiable $effect): Score {
-		$namespace = $effect->Catalog();
+		$namespace = $effect->Catalog()->value;
 		$id        = $effect->Id()->Id();
 		$class     = getClass($effect);
 		unset($this->effects[$namespace][$id][$class]);

@@ -12,7 +12,7 @@ class AnnouncementConstructionMessage extends AbstractConstructionMessage
 
 	protected string $level = Message::EVENT;
 
-	protected int $section = Section::MAIL;
+	protected Section $section = Section::MAIL;
 
 	protected string $sender;
 
