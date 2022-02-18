@@ -2,12 +2,7 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Fehler/Verbesserungen in 0.10
-
-
-## Neue Funktionen
-
-### Version 0.11
+## Fehler/Verbesserungen in 0.11
 
 - Befehlsvorlage für lange Befehle verbessern
 - automatische Datenmigration für neue Versionen
@@ -25,7 +20,9 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - weitere Zauber:
   - Beschleunigung (8) (mehrfache Angriffe)
   - Erdbeben (9) (zerstört Gebäude)
-  
+
+## Neue Funktionen
+
 ### Version 0.12
 
 - Statistische Daten erstellen
