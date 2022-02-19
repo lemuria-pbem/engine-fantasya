@@ -179,7 +179,7 @@ final class Construction extends AbstractProduct
 	 */
 	private function prepareBuildingFromOutside(): ?ConstructionModel {
 		$building = $this->job->getObject();
-		if ($building instanceof AnyBuilding) {
+		if ($building::class === AnyBuilding::class) {
 			$knowledge = $this->unit->Knowledge();
 			$ability   = $knowledge[$building->getCraft()->Talent()];
 			if ($ability->Count() > 0 && $this->phrase->count() === 2) {
@@ -199,7 +199,7 @@ final class Construction extends AbstractProduct
 		$building = $this->job->getObject();
 		if ($building instanceof AnyCastle) {
 			$building = $this->unit->Construction()?->Building();
-			if ($building instanceof Castle) {
+			if ($building) {
 				$this->job = new Job($building, $this->job->Count());
 			} else {
 				$this->job = new Job(self::createBuilding(Site::class), $this->job->Count());
