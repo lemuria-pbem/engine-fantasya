@@ -277,6 +277,7 @@
 		"CastNoMagicianMessage": "Die Einheit $id ist kein Magier und kann nicht zaubern.",
 		"CastOnlyMessage": "Die Einheit $id kann $spell nur bis zur Stufe $maximum zaubern.",
 		"CommentMessage": "Kommentar für Einheit $id: $comment",
+		"CommerceGuardedMessage": "Die Wachen der Partei $party haben den Handel in der Region $region verhindert.",
 		"CommerceNotPossibleMessage": "Die Einheit $id kann in der Region $region keinen Handel treiben - es gibt hier keine Burg mit einem Markt.",
 		"CommerceSiegeMessage": "Die Einheit $id kann wegen einer Belagerung keinen Handel treiben.",
 		"CommodityCreateMessage": "Die Einheit $id produziert $output mit $talent.",
