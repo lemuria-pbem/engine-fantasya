@@ -56,7 +56,7 @@
 
 ^@?(kau|kauf|kaufe|kaufen)( +[0-9]+)? +(balsam|balsame|gewürz|gewürze|gewuerz|gewuerze|juwel|juwelen|myrrhe|myrrhen|öl|öle|oel|oele|pelz|pelze|seide|seiden|weihrauch)$
 
-^@?(kä|käm|kämp|kämpf|kämpfe|kämpfen|kae|kaem|kaemp|kaempf|kaempfe|kaempfen|ka|kam|kamp|kampf) +(aggressiv|defensiv|fliehe|fliehen|flucht|hinten|nicht|vorn|vorne)?$
+^@?(kä|käm|kämp|kämpf|kämpfe|kämpfen|kae|kaem|kaemp|kaempf|kaempfe|kaempfen|ka|kam|kamp|kampf) +(aggressiv|defensiv|fliehe|fliehen|flucht|hinten|nicht|vorn|vorne|vorsichtig)?$
 
 ^@?(komma|komman|kommand|kommando)( +[a-z0-9]{1,6})?$
 
@@ -72,7 +72,7 @@
 ^@?(m|ma|mac|mach|mache|machen) +[a-zäöüß]+$
 ^@?(m|ma|mac|mach|mache|machen) +[0-9]+ +[a-zäöüß]+$
 ^@?(m|ma|mac|mach|mache|machen) +(schiff|boot|drachenschiff|galeone|karavelle|langboot|trireme)( +[0-9]+)?$
-^@?(m|ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|bergwerk|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|leuchtturm|leuchttürme|minen|mine|monument|monumente|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steingrube|steuerturm|taverne|werkstatt)( +[0-9]+)$
+^@?(m|ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|bergwerk|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|leuchtturm|leuchttürme|minen|mine|monument|monumente|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steingrube|steuerturm|taverne|werkstatt)(( +[0-9]+)|( +[a-z0-9]{1,6}))?$
 ^@?(m|ma|mac|mach|mache|machen) +straße +(no|o|so|sw|w|nw)$
 ^@?(m|ma|mac|mach|mache|machen) +(schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
 
@@ -138,5 +138,5 @@
 
 ^@?(za|zau|zaub|zaube|zauber|zaubere|zaubern) +(auratransfer|tagtraum|wunderdoktor)( +[0-9]+)?$
 
-^@?(zerstö|zerstör|zerstöre|zerstören) +(burg|gebäude|gebaeude|schiff)$
-^@?(zerstoe|zerstoer|zerstoere|zerstoeren) +(burg|gebäude|gebaeude|schiff)$
+^@?(zerstö|zerstör|zerstöre|zerstören) +(burg|gebäude|gebaeude|schiff)( +[a-z0-9]{1,6})?$
+^@?(zerstoe|zerstoer|zerstoere|zerstoeren) +(burg|gebäude|gebaeude|schiff)( +[a-z0-9]{1,6})?$
