@@ -230,9 +230,8 @@ class Combatant
 		return $newCombatant;
 	}
 
-	/** @noinspection PhpConditionAlreadyCheckedInspection */
 	protected function initWeaponSkill(): void {
-		if (is_int($this->battleRow) && $this->distribution) {
+		if ($this->distribution) {
 			$this->weaponSkill = $this->getWeaponSkill();
 		}
 	}
