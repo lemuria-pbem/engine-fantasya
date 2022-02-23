@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use Lemuria\Engine\Fantasya\Command\UnitCommand;
-
 /**
  * Activities are commands that keep a unit busy the whole round, so it cannot do more than one activity per round.
  */
@@ -20,9 +18,11 @@ interface Activity
 	public function IsDefault(): bool;
 
 	/**
-	 * Get the new default command.
+	 * Get the new default commands.
+	 *
+	 * @return Command[]
 	 */
-	public function getNewDefault(): ?UnitCommand;
+	public function getNewDefaults(): array;
 
 	/**
 	 * Set the default status.
@@ -30,7 +30,12 @@ interface Activity
 	public function setIsDefault(bool $isDefault = true): void;
 
 	/**
-	 * Prevent that this command is used as new default.
+	 * Prevent that this activity is used as new default.
 	 */
 	public function preventDefault(): Activity;
+
+	/**
+	 * Check if this activity allows execution of another activity.
+	 */
+	public function allows(Activity $activity): bool;
 }

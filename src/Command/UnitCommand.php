@@ -4,9 +4,11 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\UnitTrait;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Phrase;
@@ -33,6 +35,19 @@ abstract class UnitCommand extends AbstractCommand
 			return false;
 		}
 		return parent::isPrepared();
+	}
+
+	/**
+	 * Execute the command.
+	 *
+	 * @throws CommandException
+	 */
+	public function execute(): Action {
+		parent::execute();
+		if ($this instanceof Activity) {
+			$this->context->getProtocol($this->unit)->addNewDefaults($this);
+		}
+		return $this;
 	}
 
 	/**

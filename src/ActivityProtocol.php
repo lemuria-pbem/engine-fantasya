@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Factory\DefaultResolver;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -12,9 +13,14 @@ use Lemuria\Model\Fantasya\Unit;
 final class ActivityProtocol
 {
 	/**
-	 * @var array(string=>bool)
+	 * @var Activity[]
 	 */
-	private array $activity = [];
+	private array $activities = [];
+
+	/**
+	 * @var Command[]
+	 */
+	private array $defaults = [];
 
 	/**
 	 * Create new activity protocol for a unit.
@@ -33,7 +39,7 @@ final class ActivityProtocol
 	 * - commitCommand() in Teach / Travel
 	 */
 	public function hasActivity(?Activity $command = null): bool {
-		return $command ? !$this->isAllowed($command) : !empty($this->activity);
+		return $command ? !$this->isAllowed($command) : !empty($this->activities);
 	}
 
 	/**
@@ -42,17 +48,16 @@ final class ActivityProtocol
 	 * - UnitTrait / commitCommand()
 	 */
 	public function commit(UnitCommand $command): bool {
-		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
 		if ($command instanceof Activity) {
-			$default = $command->getNewDefault();
-			if ($default && $this->isAllowedAsDefault($default)) {
-				$this->addDefaultCommand($default);
+			if ($this->isAllowed($command)) {
+				Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
+				$this->activities[]                                = $command;
+				return true;
 			}
-			if (!$this->isAllowed($command)) {
-				return false;
-			}
-			$this->activity[$command->Activity()] = true;
+			return false;
 		}
+
+		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
 		return true;
 	}
 
@@ -65,11 +70,26 @@ final class ActivityProtocol
 	 * - Travel
 	 */
 	public function addDefault(UnitCommand $command): void {
-		$this->addDefaultCommand($command);
-		if ($command instanceof Activity) {
-			$activity                  = $command->Activity();
-			$value                     = isset($this->activity[$activity]) && $this->activity[$activity];
-			$this->activity[$activity] = $value;
+		$this->defaults[] = $command;
+	}
+
+	/**
+	 * Add the new default of an Activity.
+	 */
+	public function addNewDefaults(Activity $activity): void {
+		foreach ($activity->getNewDefaults() as $default) {
+			$this->defaults[] = $default;
+		}
+	}
+
+	/**
+	 * Determine which new defaults are persisted.
+	 */
+	public function persistNewDefaults(): void {
+		$defaults = Lemuria::Orders()->getDefault($this->unit->Id());
+		$resolver = new DefaultResolver($this->defaults);
+		foreach ($resolver->resolve() as $command) {
+			$defaults[] = $command;
 		}
 	}
 
@@ -80,26 +100,11 @@ final class ActivityProtocol
 	 * activity of a different kind than the first activity is forbidden.
 	 */
 	private function isAllowed(Activity $activity): bool {
-		if (empty($this->activity)) {
-			return true;
+		foreach ($this->activities as $oldActivity) {
+			if (!$oldActivity->allows($activity)) {
+				return false;
+			}
 		}
-		$key = $activity->Activity();
-		if (array_key_exists($key, $this->activity)) {
-			return true;
-		}
-		return array_sum($this->activity) === 0;
-	}
-
-	private function isAllowedAsDefault(Activity $activity): bool {
-		if (empty($this->activity)) {
-			return true;
-		}
-		$key = $activity->Activity();
-		return array_key_exists($key, $this->activity);
-	}
-
-	private function addDefaultCommand(UnitCommand $command): void {
-		$defaults   = Lemuria::Orders()->getDefault($this->unit->Id());
-		$defaults[] = $command;
+		return true;
 	}
 }
