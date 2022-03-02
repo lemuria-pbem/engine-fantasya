@@ -18,7 +18,9 @@ trait CollectTrait
 			$taking       = new Quantity($commodity, $amount - $reserve);
 			$resourcePool = $this->context->getResourcePool($unit);
 			$taking       = $resourcePool->take($unit, $taking);
-			$this->message(AllocationTakeMessage::class, $unit)->i($taking);
+			if ($taking->Count() > 0) {
+				$this->message(AllocationTakeMessage::class, $unit)->i($taking);
+			}
 		}
 		$reserve = $inventory->offsetExists($commodity) ? $inventory->offsetGet($commodity)->Count() : 0;
 		return new Quantity($commodity, $reserve);
