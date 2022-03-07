@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Lemuria;
 
@@ -30,10 +31,12 @@ trait DefaultActivityTrait
 	}
 
 	/**
-	 * Get the new default command.
+	 * Get the new default commands.
+	 *
+	 * @return Command[]
 	 */
-	public function getNewDefault(): ?UnitCommand {
-		return $this->preventDefault ? null : $this;
+	public function getNewDefaults(): array {
+		return $this->preventDefault ? [] : [$this];
 	}
 
 	/**
@@ -49,6 +52,13 @@ trait DefaultActivityTrait
 	public function preventDefault(): Activity {
 		$this->preventDefault = true;
 		return $this;
+	}
+
+	/**
+	 * Check if this activity allows execution of another activity.
+	 */
+	public function allows(Activity $activity): bool {
+		return true;
 	}
 
 	/**
