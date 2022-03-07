@@ -11,6 +11,7 @@ use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Merchant;
+use Lemuria\Engine\Fantasya\Message\Unit\CommerceGuardedMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Site;
@@ -95,6 +96,10 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 			$this->lastCheck = $this->getCheckBeforeCommerce();
 			if (!empty($this->lastCheck)) {
 				$this->goods->clear();
+				$region = $this->unit->Region();
+				foreach ($this->lastCheck as $party) {
+					$this->message(CommerceGuardedMessage::class)->e($region)->e($party, CommerceGuardedMessage::PARTY);
+				}
 			}
 		}
 		return $this->lastCheck;

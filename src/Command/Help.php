@@ -153,6 +153,8 @@ final class Help extends UnitCommand
 
 		if ($isNot) {
 			$relation->remove($agreement);
+		} elseif ($agreement === Relation::NONE) {
+			$diplomacy->remove($relation);
 		} else {
 			$relation->add($agreement);
 		}

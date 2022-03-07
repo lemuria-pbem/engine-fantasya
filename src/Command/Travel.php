@@ -22,6 +22,7 @@ use Lemuria\Engine\Fantasya\Message\Region\TravelAllowedRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Region\TravelGuardedRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RoutePauseMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoMonsterMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNoCrewMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNoNavigationMessage;
@@ -39,6 +40,7 @@ use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Navigation;
 use Lemuria\Model\Fantasya\Talent\Riding;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\World\Direction;
 
@@ -191,8 +193,12 @@ class Travel extends UnitCommand implements Activity
 							// Guard message to the guards and the stopped unit.
 							foreach ($notPassGuards as $party /* @var Party $party */) {
 								$this->message(TravelGuardMessage::class, $party)->e($region)->e($this->unit, TravelGuardMessage::UNIT);
-								$this->message(TravelGuardedMessage::class)->e($region)->e($party, TravelGuardedMessage::GUARD);
-								$this->message(TravelGuardedRegionMessage::class, $region)->e($this->unit)->e($party, TravelGuardedRegionMessage::PARTY);
+								if ($party->Type() === Type::MONSTER) {
+									$this->message(TravelIntoMonsterMessage::class)->e($region);
+								} else {
+									$this->message(TravelGuardedMessage::class)->e($region)->e($party, TravelGuardedMessage::GUARD);
+									$this->message(TravelGuardedRegionMessage::class, $region)->e($this->unit)->e($party, TravelGuardedRegionMessage::PARTY);
+								}
 							}
 						}
 						if ($this->directions->hasMore()) {

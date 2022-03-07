@@ -182,7 +182,7 @@ class RawMaterial extends AllocationCommand implements Activity
 			if (count($this->phrase) === 2) {
 				$this->demand = (int)$this->phrase->getParameter();
 				if ($this->demand <= $this->production) {
-					$this->production = (int)$this->demand;
+					$this->production = (int)ceil($this->demand / $factor);
 					$quantity = new Quantity($this->getCommodity(), $this->production);
 					$this->message(RawMaterialWantsMessage::class)->i($quantity);
 				} else {
