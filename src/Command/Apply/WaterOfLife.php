@@ -2,7 +2,11 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Apply;
 
+use JetBrains\PhpStorm\Pure;
+
+use Lemuria\Engine\Fantasya\Command\Use\Apply;
 use Lemuria\Engine\Fantasya\Factory\ActionTrait;
+use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\Apply\WaterOfLifeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Apply\WaterOfLifeNoWoodMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Apply\WaterOfLifeOnlyMessage;
@@ -15,12 +19,18 @@ final class WaterOfLife extends AbstractUnitApply
 {
 	use ActionTrait;
 	use BuilderTrait;
+	use CollectTrait;
+
+	#[Pure] public function __construct(Apply $apply) {
+		parent::__construct($apply);
+		$this->context = $apply->Context();
+	}
 
 	public function apply(): int {
 		$unit     = $this->apply->Unit();
 		$amount   = $this->apply->Count();
 		$wood     = self::createCommodity(Wood::class);
-		$quantity = $this->apply->Context()->getResourcePool($unit)->reserve($unit, new Quantity($wood, $amount));
+		$quantity = $this->collectQuantity($unit, $wood, $amount);
 		$count    = $quantity->Count();
 		if ($count < $amount) {
 			if ($count > 0) {
