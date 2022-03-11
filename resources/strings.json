@@ -706,7 +706,7 @@
 		"TravelGuardedRegionMessage": "Die Einheit $unit wurde von den Wachen der Partei $party gestoppt.",
 		"TravelGuardMessage": "Unsere Wachen haben die Einheit $unit in der Region $region aufgehalten.",
 		"TravelIntoChaosMessage": "Die Einheit $id kann sich nicht nach $direction ins Chaos bewegen.",
-		"TravelIntoMonsterMessage": "Die Einheit $id ist in der Region $region in einen Hinterhalt geraten.",
+		"TravelIntoMonsterMessage": "Die Einheit $id ist in der Region $region in einen Hinterhalt von Monstern geraten und wurde aufgehalten.",
 		"TravelIntoOceanMessage": "Die Einheit $id kann sich nicht nach $direction in den Ozean bewegen.",
 		"TravelLandMessage": "Das Schiff $id kann sich nicht nach $direction bewegen und in {der:$landscape} $region anlanden.",
 		"TravelMessage": "Die Einheit $id $move $route.",

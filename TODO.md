@@ -53,6 +53,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Wüste: Oase
 - besondere Gebäude/Orte wie Ruinen oder Höhlen
 - Weltumseglung ermöglichen
+- Ereignis "Juwelen gefunden" beim Bergbau in Gebirgen/Gletschern ohne Luxuswaren
 - Umweltereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE
 - Seekampf/Piraterie

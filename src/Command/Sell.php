@@ -81,7 +81,7 @@ final class Sell extends CommerceCommand
 	protected function getDemand(): Quantity {
 		$demand = parent::getDemand();
 		if ($demand->Count() > 0) {
-			$demand = $this->context->getResourcePool($this->unit)->reserve($this->unit, $demand);
+			$demand = $this->collectQuantity($this->unit, $demand->Commodity(), $demand->Count());
 		}
 		return $demand;
 	}

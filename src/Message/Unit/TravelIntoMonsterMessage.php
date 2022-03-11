@@ -9,6 +9,6 @@ class TravelIntoMonsterMessage extends TravelRegionMessage
 	protected string $level = Message::FAILURE;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' was ambushed in region ' . $this->region . ' by monsters.';
+		return 'Unit ' . $this->id . ' was ambushed in region ' . $this->region . ' by monsters and stopped.';
 	}
 }
