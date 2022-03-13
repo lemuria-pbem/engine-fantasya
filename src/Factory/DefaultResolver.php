@@ -20,10 +20,14 @@ class DefaultResolver
 		$first = 0;
 		$n     = count($this->defaults);
 		while ($first < $n) {
+			if (!isset($this->defaults[$first])) {
+				$first++;
+				continue;
+			}
 			$command = $this->defaults[$first];
 			$second  = 0;
 			while ($second < $n) {
-				if ($second === $first) {
+				if ($second === $first || !isset($this->defaults[$second])) {
 					$second++;
 					continue;
 				}

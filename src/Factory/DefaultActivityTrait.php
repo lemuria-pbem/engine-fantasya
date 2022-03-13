@@ -14,15 +14,6 @@ trait DefaultActivityTrait
 {
 	private bool $isDefault = false;
 
-	private bool $preventDefault = false;
-
-	/**
-	 * Get the activity class.
-	 */
-	#[Pure] public function Activity(): string {
-		return getClass($this);
-	}
-
 	/**
 	 * Check if this activity is the unit's default activity.
 	 */
@@ -47,18 +38,10 @@ trait DefaultActivityTrait
 	}
 
 	/**
-	 * Prevent that this command is used as new default.
+	 * Allow execution of other activities of the same class.
 	 */
-	public function preventDefault(): Activity {
-		$this->preventDefault = true;
-		return $this;
-	}
-
-	/**
-	 * Check if this activity allows execution of another activity.
-	 */
-	public function allows(Activity $activity): bool {
-		return true;
+	#[Pure] public function allows(Activity $activity): bool {
+		return getClass($activity) === getClass($this);
 	}
 
 	/**

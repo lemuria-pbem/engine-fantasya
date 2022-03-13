@@ -4,12 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.11
 
-- Befehlsvorlage für lange Befehle verbessern
-  - Befehl-Commit nur für Ausführbarkeit
-  - Nach Ausführung neuen Default in Protokoll speichern
-  - ActivityProtocol verwaltet Defaults
-  - Default enthält Logik für Entscheidung, welche Defaults ersetzt werden
-  - Erst nach Turn werden Defaults gespeichert
 - VORLAGE-Variante für Rotation von Befehlen
 - Vorgabeeinstellungen für neue Einheiten (Kampfstatus, Sammeln, Tarnen)
 - Magellan-Report: BATTLE einbauen

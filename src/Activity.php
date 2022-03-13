@@ -8,21 +8,9 @@ namespace Lemuria\Engine\Fantasya;
 interface Activity
 {
 	/**
-	 * Get the activity class.
-	 */
-	public function Activity(): string;
-
-	/**
 	 * Check if this activity is the unit's default activity.
 	 */
 	public function IsDefault(): bool;
-
-	/**
-	 * Get the new default commands.
-	 *
-	 * @return Command[]
-	 */
-	public function getNewDefaults(): array;
 
 	/**
 	 * Set the default status.
@@ -30,9 +18,11 @@ interface Activity
 	public function setIsDefault(bool $isDefault = true): void;
 
 	/**
-	 * Prevent that this activity is used as new default.
+	 * Get the new default commands.
+	 *
+	 * @return Command[]
 	 */
-	public function preventDefault(): Activity;
+	public function getNewDefaults(): array;
 
 	/**
 	 * Check if this activity allows execution of another activity.

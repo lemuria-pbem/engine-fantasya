@@ -6,14 +6,16 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Activity;
 
-trait OneActivityTrait
+trait CommerceActivityTrait
 {
 	use DefaultActivityTrait;
 
+	private bool $isCommerceActivity = true;
+
 	/**
-	 * Do not allow any other activity.
+	 * Allow execution of commerce activities.
 	 */
 	#[Pure] public function allows(Activity $activity): bool {
-		return false;
+		return isset($this->isCommerceActivity);
 	}
 }

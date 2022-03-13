@@ -34,9 +34,6 @@ final class ActivityProtocol
 
 	/**
 	 * Check if unit has an activity already.
-	 *
-	 * - Layabout
-	 * - commitCommand() in Teach / Travel
 	 */
 	public function hasActivity(?Activity $command = null): bool {
 		return $command ? !$this->isAllowed($command) : !empty($this->activities);
@@ -44,8 +41,6 @@ final class ActivityProtocol
 
 	/**
 	 * Add a command to the protocol.
-	 *
-	 * - UnitTrait / commitCommand()
 	 */
 	public function commit(UnitCommand $command): bool {
 		if ($command instanceof Activity) {
@@ -63,14 +58,16 @@ final class ActivityProtocol
 
 	/**
 	 * Add a command to the default orders.
-	 *
-	 * - Comment
-	 * - Copy
-	 * - DefaultCommand
-	 * - Travel
 	 */
 	public function addDefault(UnitCommand $command): void {
 		$this->defaults[] = $command;
+	}
+
+	/**
+	 * Insert a command as the first default order.
+	 */
+	public function insertDefault(UnitCommand $command): void {
+		$this->defaults = [$command] + $this->defaults;
 	}
 
 	/**
@@ -95,9 +92,6 @@ final class ActivityProtocol
 
 	/**
 	 * Check if an activity is allowed.
-	 *
-	 * Multiple activities of the same kind (e.g. multiple buy or sell commands) are allowed, but execution of a second
-	 * activity of a different kind than the first activity is forbidden.
 	 */
 	private function isAllowed(Activity $activity): bool {
 		foreach ($this->activities as $oldActivity) {

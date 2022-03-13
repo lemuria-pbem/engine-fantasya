@@ -3,7 +3,6 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
@@ -56,8 +55,6 @@ class Travel extends UnitCommand implements Activity
 	use SiegeTrait;
 	use TravelTrait;
 
-	protected const ACTIVITY = 'Travel';
-
 	protected DirectionList $directions;
 
 	protected Talent $riding;
@@ -83,10 +80,6 @@ class Travel extends UnitCommand implements Activity
 		return $this;
 	}
 
-	#[Pure] public function Activity(): string {
-		return self::ACTIVITY;
-	}
-
 	public function getNewDefault(): ?UnitCommand {
 		if ($this->directions->hasMore()) {
 			$travel = $this->phrase->getVerb() . ' ' . implode(' ', $this->directions->route());
@@ -96,6 +89,13 @@ class Travel extends UnitCommand implements Activity
 			return $command;
 		}
 		return null;
+	}
+
+	/**
+	 * Allow execution of other activities of the same class.
+	 */
+	#[Pure] public function allows(Activity $activity): bool {
+		return $activity instanceof Travel;
 	}
 
 	protected function initialize(): void {

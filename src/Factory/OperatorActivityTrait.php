@@ -6,14 +6,16 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Activity;
 
-trait OneActivityTrait
+trait OperatorActivityTrait
 {
 	use DefaultActivityTrait;
 
+	private bool $isOperatorActivity = true;
+
 	/**
-	 * Do not allow any other activity.
+	 * Allow execution of unicum creation and writing activities.
 	 */
 	#[Pure] public function allows(Activity $activity): bool {
-		return false;
+		return isset($this->isOperatorActivity);
 	}
 }

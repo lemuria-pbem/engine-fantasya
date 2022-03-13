@@ -33,7 +33,7 @@ final class DefaultCommand extends AbstractTemplate
 			return;
 		}
 		if ($command instanceof UnitCommand) {
-			$this->context->getProtocol($this->unit)->addDefault($command);
+			$this->context->getProtocol($this->unit)->insertDefault($command);
 			$this->message(DefaultMessage::class)->p($default);
 		} else {
 			$this->message(DefaultInvalidMessage::class)->p($default);
