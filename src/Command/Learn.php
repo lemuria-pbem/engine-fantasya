@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\OneActivityTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnMagicMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnNotMessage;
@@ -20,7 +21,6 @@ use Lemuria\Model\Fantasya\Aura;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Magic;
 
@@ -34,6 +34,7 @@ use Lemuria\Model\Fantasya\Talent\Magic;
 final class Learn extends UnitCommand implements Activity
 {
 	use BuilderTrait;
+	use CollectTrait;
 	use OneActivityTrait;
 
 	private Talent $talent;
@@ -73,8 +74,7 @@ final class Learn extends UnitCommand implements Activity
 		}
 
 		if ($this->expense > 0) {
-			$pool    = $this->context->getResourcePool($this->unit);
-			$expense = $pool->reserve($this->unit, new Quantity($this->silver, $this->expense));
+			$expense = $this->collectQuantity($this->unit, $this->silver, $this->expense);
 			$silver  = $expense->Count();
 			if ($silver <= 0) {
 				$this->message(LearnNotMessage::class)->s($this->talent);

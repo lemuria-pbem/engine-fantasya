@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\UnicumRead;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\OperatorActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\UnicumCreateMessage;
@@ -34,6 +35,7 @@ use Lemuria\Model\Fantasya\Unicum as UnicumModel;
  */
 final class Unicum extends UnitCommand implements Activity
 {
+	use CollectTrait;
 	use OperatorActivityTrait;
 	use WorkloadTrait;
 
@@ -81,9 +83,8 @@ final class Unicum extends UnitCommand implements Activity
 
 		$material = $this->composition->getMaterial();
 		if (!$material->isEmpty()) {
-			$resourcePool = $this->context->getResourcePool($this->unit);
 			foreach ($material as $quantity/* @var Quantity $quantity */) {
-				$reserved = $resourcePool->reserve($this->unit, $quantity);
+				$reserved = $this->collectQuantity($this->unit, $quantity->Commodity(), $quantity->Count());
 				if ($reserved->Count() < $quantity->Count()) {
 					$this->message(UnicumNoMaterialMessage::class)->s($this->composition);
 					return;

@@ -41,7 +41,7 @@ final class Buy extends CommerceCommand
 
 	public function trade(Luxury $good, int $price): bool {
 		if ($this->count < $this->amount) {
-			$payment = $this->getPayment($price);
+			$payment = $this->collectQuantity($this->unit, $this->silver, $price);
 			if ($payment->Count() === $price) {
 				$inventory = $this->unit->Inventory();
 				$this->traded->add(new Quantity($good, 1));
@@ -79,15 +79,5 @@ final class Buy extends CommerceCommand
 			$this->message(BuyNoneMessage::class)->s($this->goods()->Commodity());
 		}
 		return $this;
-	}
-
-	private function getPayment(int $price): Quantity {
-		$payment   = new Quantity($this->silver, $price);
-		$inventory = $this->unit->Inventory();
-		$reserve   = $inventory[$this->silver];
-		if ($reserve->Count() >= $price) {
-			return $payment;
-		}
-		return $this->context->getResourcePool($this->unit)->reserve($this->unit, $payment);
 	}
 }

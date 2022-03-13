@@ -13,7 +13,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardNotFoundMessage;
 use Lemuria\Id;
-use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Vessel;
 
 /**
@@ -42,7 +41,7 @@ final class Board extends UnitCommand
 		}
 
 		$newVessel = Vessel::get($id);
-		if (!$this->checkPermission($newVessel)) {
+		if (!$this->hasPermission($newVessel->Passengers())) {
 			$this->message(BoardDeniedMessage::class)->e($newVessel);
 			return;
 		}
@@ -64,18 +63,5 @@ final class Board extends UnitCommand
 		}
 		$newVessel->Passengers()->add($this->unit);
 		$this->message(BoardMessage::class)->e($newVessel);
-	}
-
-	private function checkPermission(Vessel $vessel): bool {
-		$captain = $vessel->Passengers()->Owner();
-		if ($captain) {
-			$captainParty = $captain->Party();
-			if ($captainParty !== $this->unit->Party()) {
-				if ($this->context->getTurnOptions()->IsSimulation() || !$captainParty->Diplomacy()->has(Relation::ENTER, $this->unit)) {
-					return false;
-				}
-			}
-		}
-		return true;
 	}
 }

@@ -7,6 +7,7 @@ use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\CommerceActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\Workload;
@@ -28,6 +29,7 @@ use Lemuria\Model\Fantasya\Talent\Trading;
  */
 abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 {
+	use CollectTrait;
 	use CommerceActivityTrait;
 	use SiegeTrait;
 

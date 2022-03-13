@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\RoadAlreadyCompletedMessage;
@@ -18,7 +19,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\RoadOnlyMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Stone;
-use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Roads;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Roadmaking;
@@ -30,6 +30,7 @@ use Lemuria\Model\Fantasya\Talent\Roadmaking;
  */
 final class Road extends UnitCommand implements Activity
 {
+	use CollectTrait;
 	use ModifiedActivityTrait;
 	use WorkloadTrait;
 
@@ -88,7 +89,7 @@ final class Road extends UnitCommand implements Activity
 		}
 		$amount = min($amount, $remaining);
 
-		$reserve = $this->context->getResourcePool($this->unit)->reserve($this->unit, new Quantity($this->stone, $amount));
+		$reserve = $this->collectQuantity($this->unit, $this->stone, $amount);
 		$built   = $reserve->Count();
 		if ($built > 0) {
 			if (!$roads) {

@@ -21,7 +21,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Construction;
-use Lemuria\Model\Fantasya\Relation;
 
 /**
  * A unit enters a construction using the Enter command.
@@ -66,7 +65,7 @@ final class Enter extends UnitCommand
 			$this->message(EnterTooLargeMessage::class)->e($newConstruction);
 			return;
 		}
-		if (!$this->checkPermission($newConstruction)) {
+		if (!$this->hasPermission($newConstruction->Inhabitants())) {
 			$this->message(EnterDeniedMessage::class)->e($newConstruction);
 			return;
 		}
@@ -91,19 +90,6 @@ final class Enter extends UnitCommand
 	}
 
 	#[Pure] protected function checkSize(): bool {
-		return true;
-	}
-
-	private function checkPermission(Construction $construction): bool {
-		$owner = $construction->Inhabitants()->Owner();
-		if ($owner) {
-			$ownerParty = $owner->Party();
-			if ($ownerParty !== $this->unit->Party()) {
-				if ($this->context->getTurnOptions()->IsSimulation() || !$ownerParty->Diplomacy()->has(Relation::ENTER, $this->unit)) {
-					return false;
-				}
-			}
-		}
 		return true;
 	}
 }

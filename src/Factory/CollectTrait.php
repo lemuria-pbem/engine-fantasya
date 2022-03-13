@@ -23,6 +23,7 @@ trait CollectTrait
 			}
 		}
 		$reserve = $inventory->offsetExists($commodity) ? $inventory->offsetGet($commodity)->Count() : 0;
-		return new Quantity($commodity, $reserve);
+		$collect = min($amount, $reserve);
+		return new Quantity($commodity, $collect);
 	}
 }

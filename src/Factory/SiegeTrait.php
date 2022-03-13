@@ -7,6 +7,8 @@ use Lemuria\Engine\Fantasya\Effect\SiegeEffect;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Construction;
+use Lemuria\Model\Fantasya\Inhabitants;
+use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -67,5 +69,24 @@ trait SiegeTrait
 		$weCanEnter    = $this->canEnterOrLeave($we);
 		$otherCanLeave = $this->canEnterOrLeave($other);
 		return !($weCanLeave && $weCanEnter || $otherCanLeave && $otherCanEnter || $weCanLeave && $otherCanLeave);
+	}
+
+	protected function hasPermission(Inhabitants $inhabitants): bool {
+		$owner = $inhabitants->Owner();
+		if ($owner) {
+			$party      = $this->unit->Party();
+			$ownerParty = $owner->Party();
+			if ($ownerParty !== $party) {
+				foreach ($inhabitants as $unit /* @var Unit $unit */) {
+					if ($unit->Party() === $party) {
+						return true;
+					}
+				}
+				if ($this->context->getTurnOptions()->IsSimulation() || !$ownerParty->Diplomacy()->has(Relation::ENTER, $this->unit)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }
