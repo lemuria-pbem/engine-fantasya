@@ -31,13 +31,14 @@ class UnitDiedMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['id' => 'int', 'name' => 'string'])]
+	#[ArrayShape(['unit' => 'int', 'name' => 'string'])]
 	#[Pure]	protected function getParameters(): array {
-		return ['id' => $this->unit->id->Id(), 'name'  => $this->unit->name];
+		return ['unit' => $this->unit->id->Id(), 'name'  => $this->unit->name];
 	}
 
 	protected function validateSerializedData(array &$data): void {
-		$this->validate($data, 'id', 'int');
+		parent::validateSerializedData($data);
+		$this->validate($data, 'unit', 'int');
 		$this->validate($data, 'name', 'string');
 	}
 }

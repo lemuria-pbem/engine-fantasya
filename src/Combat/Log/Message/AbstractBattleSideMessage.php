@@ -43,6 +43,7 @@ abstract class AbstractBattleSideMessage extends AbstractMessage
 	}
 
 	protected function validateSerializedData(array &$data): void {
+		parent::validateSerializedData($data);
 		$this->validate($data, 'participants', 'array');
 	}
 

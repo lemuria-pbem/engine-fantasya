@@ -38,9 +38,9 @@ class BattleSpellNoAuraMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['id' => 'int', 'name' => 'string', 'spell' => 'string'])]
+	#[ArrayShape(['unit' => 'int', 'name' => 'string', 'spell' => 'string'])]
 	#[Pure] protected function getParameters(): array {
-		return ['id'    => $this->unit->id->Id(), 'name' => $this->unit->name, 'spell' => $this->spell];
+		return ['unit' => $this->unit->id->Id(), 'name' => $this->unit->name, 'spell' => $this->spell];
 	}
 
 	protected function translate(string $template): string {
@@ -50,7 +50,8 @@ class BattleSpellNoAuraMessage extends AbstractMessage
 	}
 
 	protected function validateSerializedData(array &$data): void {
-		$this->validate($data, 'id', 'int');
+		parent::validateSerializedData($data);
+		$this->validate($data, 'unit', 'int');
 		$this->validate($data, 'name', 'string');
 		$this->validate($data, 'spell', 'string');
 	}
