@@ -43,6 +43,7 @@ use Lemuria\Engine\Fantasya\Command\Operate\AbstractOperate;
 use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Command\Origin;
 use Lemuria\Engine\Fantasya\Command\Party;
+use Lemuria\Engine\Fantasya\Command\Presetting;
 use Lemuria\Engine\Fantasya\Command\Read;
 use Lemuria\Engine\Fantasya\Command\Recruit;
 use Lemuria\Engine\Fantasya\Command\Reserve;
@@ -341,6 +342,7 @@ class CommandFactory
 		'VERKAUFEN'    => true,
 		'VERLASSEN'    => true,
 		'VERLIEREN'    => true,
+		'VORGABE'      => true,
 		'VORLAGE'      => true,
 		'ZAUBERE'      => 'ZAUBERN',
 		'ZAUBERN'      => true,
@@ -719,6 +721,7 @@ class CommandFactory
 				'VERKAUFEN'    => Sell::class,
 				'VERLASSEN'    => Vacate::class,
 				'VERLIEREN'    => Lose::class,
+				'VORGABE'      => Presetting::class,
 				'VORLAGE'      => Template::class,
 				'ZAUBERN'      => Cast::class,
 				'ZERSTÖREN'    => Destroy::class,

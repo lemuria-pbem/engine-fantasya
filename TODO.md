@@ -4,8 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.11
 
-- VORLAGE-Variante für Rotation von Befehlen
-- Vorgabeeinstellungen für neue Einheiten (Kampfstatus, Sammeln, Tarnen)
 - Magellan-Report: BATTLE einbauen
 - Magellan-Report: ZAUBER mit KOMPONENTEN einbauen
 - Magellan-Report: TRANK mit ZUTATEN einbauen
@@ -52,6 +50,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Umweltereignisse
 - Taktik ermöglicht Strategien im Kampf, STRATEGIE
 - Seekampf/Piraterie
+- VORLAGE-Variante für Rotation von Befehlen
 - SABOTIEREN (Spion versenkt Schiff)
 - VERSENKEN (Schiff vor Entern bewahren)
 - EROBERN (fremden Hafen einnehmen)
