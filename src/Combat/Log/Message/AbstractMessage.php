@@ -43,7 +43,7 @@ abstract class AbstractMessage implements Message
 
 	#[ArrayShape(['id' => 'int', 'type' => 'string'])]
 	public function serialize(): array {
-		$data = ['id' => $this->id->Id(), 'type' => getClass($this)];
+		$data = ['id' => $this->Id()->Id(), 'type' => getClass($this)];
 		foreach ($this->getParameters() as $key => $value) {
 			$data[$key] = $value;
 		}

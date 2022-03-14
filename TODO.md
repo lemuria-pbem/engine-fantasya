@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.11
 
-- Magellan-Report: BATTLE einbauen
 - Magellan-Report: ZAUBER mit KOMPONENTEN einbauen
 - Magellan-Report: TRANK mit ZUTATEN einbauen
 - weitere Gebäude:
