@@ -426,11 +426,13 @@ final class Calculus
 		$diplomacy  = $party->Diplomacy();
 		foreach ($region->Estate() as $construction /* @var Construction $construction */) {
 			if ($construction->Building() === $building) {
-				$inhabitants = $construction->Inhabitants();
-				$owner       = $inhabitants->Owner();
-				if ($owner->Party() === $party || $diplomacy->has(Relation::ENTER, $owner)) {
-					$calculus = new self($owner);
-					return $calculus->isInMaintainedConstruction();
+				if ($construction->Size() >= $building->UsefulSize()) {
+					$inhabitants = $construction->Inhabitants();
+					$owner       = $inhabitants->Owner();
+					if ($owner->Party() === $party || $diplomacy->has(Relation::ENTER, $owner)) {
+						$calculus = new self($owner);
+						return $calculus->isInMaintainedConstruction();
+					}
 				}
 			}
 		}
