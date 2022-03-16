@@ -81,9 +81,11 @@ use Lemuria\Model\Fantasya\Building\Acropolis;
 use Lemuria\Model\Fantasya\Building\AlchemyKitchen;
 use Lemuria\Model\Fantasya\Building\Blacksmith;
 use Lemuria\Model\Fantasya\Building\Cabin;
+use Lemuria\Model\Fantasya\Building\CamelBreeding;
 use Lemuria\Model\Fantasya\Building\Citadel;
 use Lemuria\Model\Fantasya\Building\Dockyard;
 use Lemuria\Model\Fantasya\Building\Fort;
+use Lemuria\Model\Fantasya\Building\HorseBreeding;
 use Lemuria\Model\Fantasya\Building\Lighthouse;
 use Lemuria\Model\Fantasya\Building\Magespire;
 use Lemuria\Model\Fantasya\Building\Mine;
@@ -368,10 +370,12 @@ class CommandFactory
 		'Hafen'             => Port::class,
 		'Holzfällerhütte'   => Cabin::class,
 		'Holzfaellerhuette' => Cabin::class,
+		'Kamelzucht'        => CamelBreeding::class,
 		'Leuchtturm'        => Lighthouse::class,
 		'Magierturm'        => Magespire::class,
 		'Mine'              => Pit::class,
 		'Palast'            => Palace::class,
+		'Pferdezucht'       => HorseBreeding::class,
 		'Sägewerk'          => Sawmill::class,
 		'Saegewerk'         => Sawmill::class,
 		'Sattlerei'         => Saddlery::class,
