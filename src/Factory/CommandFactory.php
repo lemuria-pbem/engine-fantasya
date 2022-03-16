@@ -78,6 +78,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Artifact;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\Acropolis;
+use Lemuria\Model\Fantasya\Building\AlchemyKitchen;
 use Lemuria\Model\Fantasya\Building\Blacksmith;
 use Lemuria\Model\Fantasya\Building\Cabin;
 use Lemuria\Model\Fantasya\Building\Citadel;
@@ -356,6 +357,7 @@ class CommandFactory
 	 */
 	protected array $buildings = [
 		'Akropolis'         => Acropolis::class,
+		'Alchemistenküche'  => AlchemyKitchen::class,
 		'Baustelle'         => Site::class,
 		'Befestigung'       => Fort::class,
 		'Bergwerk'          => Mine::class,
