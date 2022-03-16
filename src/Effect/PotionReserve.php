@@ -17,7 +17,7 @@ use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Serializable;
 use Lemuria\SingletonSet;
 
-final class PotionInfluence extends AbstractRegionEffect
+final class PotionReserve extends AbstractConstructionEffect
 {
 	use BuilderTrait;
 
@@ -84,7 +84,7 @@ final class PotionInfluence extends AbstractRegionEffect
 		return $this->potions[getClass($potion)] ?? 0;
 	}
 
-	public function addPotion(Quantity $quantity, int $weeks): PotionInfluence {
+	public function addPotion(Quantity $quantity, int $weeks): PotionReserve {
 		/** @var Potion $potion */
 		$potion = $quantity->Commodity();
 		$class  = getClass($potion);

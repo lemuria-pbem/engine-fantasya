@@ -6,14 +6,21 @@ use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\Apply\HorseBlissNoneMessage;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Potion\HorseBliss as Potion;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Unit;
 
-final class HorseBliss extends AbstractRegionApply
+final class HorseBlissBreed extends AbstractConstructionApply
 {
+	use BuilderTrait;
 	use MessageTrait;
 
 	protected function calculateAmount(): int {
-		$resources = $this->apply->Unit()->Region()->Resources();
-		$horses    = $resources[Horse::class]->Count();
+		$horses = 0;
+		$horse  = self::createCommodity(Horse::class);
+		foreach ($this->apply->Unit()->Construction()->Inhabitants() as $unit /* @var Unit $unit */) {
+			$inventory = $unit->Inventory();
+			$horses += $inventory[$horse]->Count();
+		}
 		$available = $this->apply->Count();
 		$amount    = (int)ceil($horses / Potion::HORSES);
 		if ($amount <= 0) {

@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
 use Lemuria\Engine\Fantasya\Command\Announcement;
 use Lemuria\Engine\Fantasya\Command\Apply\AbstractApply;
+use Lemuria\Engine\Fantasya\Command\Apply\HorseBlissBreed;
 use Lemuria\Engine\Fantasya\Command\Attack;
 use Lemuria\Engine\Fantasya\Command\Banner;
 use Lemuria\Engine\Fantasya\Command\BattleSpell;
@@ -238,6 +239,7 @@ use Lemuria\Model\Fantasya\Talent\Trading;
 use Lemuria\Model\Fantasya\Talent\Weaponry;
 use Lemuria\Model\Fantasya\Talent\Woodchopping;
 use Lemuria\Model\Fantasya\Unicum as UnicumModel;
+use Lemuria\Model\Fantasya\Unit as UnitModel;
 use Lemuria\Model\World\Direction;
 use Lemuria\Singleton;
 
@@ -667,6 +669,10 @@ class CommandFactory
 
 	protected final const OPERATE_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Operate\\';
 
+	protected final const APPLY_BREED = [
+		HorseBliss::class => [HorseBreeding::class => HorseBlissBreed::class]
+	];
+
 	public function __construct(protected readonly Context $context) {
 	}
 
@@ -869,7 +875,7 @@ class CommandFactory
 	}
 
 	public function applyPotion(Potion $potion, Apply $apply): AbstractApply {
-		$potion = getClass($potion);
+		$potion = $this->getApplyPotion($potion, $apply->Unit());
 		$class  = self::APPLY_NAMESPACE . $potion;
 		if (class_exists($class)) {
 			return new $class($apply);
@@ -955,5 +961,16 @@ class CommandFactory
 			}
 		}
 		return count($candidates) === 1 ? $candidates[0] : null;
+	}
+
+	protected function getApplyPotion(Potion $potion, UnitModel $unit): string {
+		$breed = self::APPLY_BREED[$potion::class] ?? null;
+		if ($breed) {
+			$building = self::createBuilding(key($breed));
+			if ($unit->Construction()?->Building() === $building) {
+				return getClass(current($breed));
+			}
+		}
+		return getClass($potion);
 	}
 }

@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Command\Create\Commodity;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Effect\PotionReserve;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Construction\BreedingAtLeastMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\BreedingFullMessage;
@@ -14,8 +15,10 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building\AbstractBreeding;
+use Lemuria\Model\Fantasya\Commodity\Potion\HorseBliss;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\RawMaterial;
 use Lemuria\Model\Fantasya\Talent;
@@ -31,6 +34,8 @@ final class Breeding extends AbstractEvent
 	use WorkloadTrait;
 
 	private const RATE = 0.1;
+
+	private const BOOST_FACTOR = 4;
 
 	private Talent $horsetaming;
 
@@ -92,13 +97,23 @@ final class Breeding extends AbstractEvent
 	}
 
 	private function getBoost(Construction $construction): int {
-		//TODO Check for HorseBliss effect in construction.
+		$effect = new PotionReserve($this->state);
+		$effect->setConstruction($construction);
+		$existing = Lemuria::Score()->find($effect);
+		if ($existing instanceof PotionReserve) {
+			/** @var Potion $potion */
+			$potion = self::createCommodity(HorseBliss::class);
+			return $existing->getCount($potion) * HorseBliss::HORSES;
+		}
 		return 0;
 	}
 
 	private function calculateGrowth(int $production, int $boost, int $stock, int $maxBreed): int {
-		$maxBorn = (int)floor($stock / 2);
-		$growth  = $production + $boost;
+		$boostRate   = self::RATE * ($boost > 0 ? self::BOOST_FACTOR : 1);
+		$boostBorn   = (int)floor($boostRate * min($boost, $stock) / 2);
+		$regularBorn = (int)floor(self::RATE * max(0, $stock - $boost) / 2);
+		$maxBorn     = $regularBorn + $boostBorn;
+		$growth      = $production + $boost;
 		return max(1, min($maxBorn, $growth, $maxBreed));
 	}
 }

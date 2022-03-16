@@ -5,8 +5,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Fehler/Verbesserungen in 0.11
 
 - weitere Gebäude:
-  - Kamelzucht
-  - Pferdezucht
   - Kanal
 - weitere Zauber:
   - Beschleunigung (8) (mehrfache Angriffe)
