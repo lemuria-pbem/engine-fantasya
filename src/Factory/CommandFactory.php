@@ -77,6 +77,7 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Artifact;
 use Lemuria\Model\Fantasya\Building;
+use Lemuria\Model\Fantasya\Building\Acropolis;
 use Lemuria\Model\Fantasya\Building\Blacksmith;
 use Lemuria\Model\Fantasya\Building\Cabin;
 use Lemuria\Model\Fantasya\Building\Citadel;
@@ -354,6 +355,7 @@ class CommandFactory
 	 * @var array(string=>string)
 	 */
 	protected array $buildings = [
+		'Akropolis'         => Acropolis::class,
 		'Baustelle'         => Site::class,
 		'Befestigung'       => Fort::class,
 		'Bergwerk'          => Mine::class,

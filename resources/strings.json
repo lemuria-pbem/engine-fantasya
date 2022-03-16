@@ -26,6 +26,7 @@
 		["kämpft aggressiv", "kämpfen aggressiv"]
 	],
 	"building": {
+		"Acropolis": "Akropolis",
 		"Blacksmith": "Schmiede",
 		"Cabin": "Holzfällerhütte",
 		"Citadel": "Zitadelle",
@@ -924,6 +925,7 @@
 			"Swamp": "dem"
 		},
 		"ein": {
+			"Acropolis": "eine",
 			"Armor": "einen",
 			"Battleaxe": "eine",
 			"BerserkBlood": "ein",
@@ -1015,6 +1017,7 @@
 		},
 		"ist": ["ist", "sind"],
 		"kein": {
+			"Acropolis": "keine",
 			"Armor": "keinen",
 			"Balsam": "kein",
 			"Battleaxe": "keine",
