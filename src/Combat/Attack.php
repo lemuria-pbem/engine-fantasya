@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Combat;
 
 use JetBrains\PhpStorm\Pure;
 
+use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultBlockMessage;
 use Lemuria\Engine\Fantasya\Command\Apply\BerserkBlood as BerserkBloodEffect;
@@ -70,8 +71,22 @@ class Attack
 	}
 
 	public function perform(int $fA, Combatant $defender, int $fD): ?int {
-		$weapon   = $this->combatant->Weapon();
-		$interval = $weapon->Interval();
+		$attacker    = $this->combatant->fighter($fA);
+		$attacks     = 1;
+		$weapon      = $this->combatant->Weapon();
+		$weaponSkill = $this->combatant->WeaponSkill();
+		$interval    = $weapon->Interval();
+		if ($attacker->quickening > 0) {
+			$interval = min(1, (int)ceil($interval / 2)); // Reduce interval for quickened fighters by half.
+			if (!$weaponSkill->isSiege()) {
+				$attacks = 2; // Allow two attacks for quickened fighters that have a normal weapon.
+			}
+			$keepChance = $attacker->quickening / ($this->round + 1);
+			if (!randChance($keepChance)) {
+				$attacker->quickening = 0; // Stop Quickening after minimum duration with increasing chance.
+			}
+		}
+
 		if ($this->round++ % $interval > 0) {
 			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' is not ready yet.');
 			return null;
@@ -81,24 +96,28 @@ class Attack
 			return null;
 		}
 
-		$skill    = $this->combatant->WeaponSkill()->Skill()->Level();
+		$skill    = $weaponSkill->Skill()->Level();
 		$armor    = $this->combatant->Armor();
-		$hasBonus = $this->combatant->fighter($fA)->potion instanceof BerserkBlood;
+		$hasBonus = $attacker->potion instanceof BerserkBlood;
 		$shield   = $defender->Shield();
 		$block    = $fD < $defender->distracted ? 0 : $defender->WeaponSkill()->Skill()->Level();
 
-		if ($this->isSuccessful($skill, $block, $armor, $shield, $hasBonus)) {
-			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' hits enemy ' . $defender->getId($fD, true) . '.');
-			$race = $defender->Unit()->Race();
-			/** @noinspection PhpPossiblePolymorphicInvocationInspection */
-			$block = $race instanceof Monster ? $race->Block() : 0;
-			$armor = $defender->Armor();
-			return $this->calculateDamage($weapon, $skill, $block, $armor, $shield);
-		} else {
+		$damage = null;
+		for ($i = 0; $i < $attacks; $i++) {
+			if ($this->isSuccessful($skill, $block, $armor, $shield, $hasBonus)) {
+				// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' hits enemy ' . $defender->getId($fD, true) . '.');
+				$race = $defender->Unit()->Race();
+				/** @noinspection PhpPossiblePolymorphicInvocationInspection */
+				$block   = $race instanceof Monster ? $race->Block() : 0;
+				$armor   = $defender->Armor();
+				$damage += $this->calculateDamage($weapon, $skill, $block, $armor, $shield);
+			}
+		}
+		if ($damage === null) {
 			// Lemuria::Log()->debug('Enemy ' . $defender->getId($fD, true) . ' blocks attack from ' . $this->combatant->getId($fA, true) . '.');
 			BattleLog::getInstance()->add(new AssaultBlockMessage($this->combatant->getId($fA, true), $defender->getId($fD)));
-			return null;
 		}
+		return $damage;
 	}
 
 	protected function isSuccessful(int $skill, int $block, ?Protection $armor, ?Protection $shield, bool $hasAttackBonus): bool {
