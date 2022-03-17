@@ -204,8 +204,10 @@ use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Spell\AstralChaos;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
 use Lemuria\Model\Fantasya\Spell\Daydream;
+use Lemuria\Model\Fantasya\Spell\Earthquake;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
+use Lemuria\Model\Fantasya\Spell\Quickening;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Talent;
@@ -560,6 +562,8 @@ class CommandFactory
 	protected array $spells = [
 		'Astrales chaos' => AstralChaos::class,
 		'Auratransfer'   => AuraTransfer::class,
+		'Beschleunigung' => Quickening::class,
+		'Erdbeben'       => Earthquake::class,
 		'Feuerball'      => Fireball::class,
 		'Friedenslied'   => SongOfPeace::class,
 		'Schockwelle'    => ShockWave::class,

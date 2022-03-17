@@ -6,7 +6,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 - weitere Zauber:
   - Beschleunigung (8) (mehrfache Angriffe)
-  - Erdbeben (9) (zerstört Gebäude)
 
 ## Neue Funktionen
 
