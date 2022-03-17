@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Message\Construction\LeaveNewOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNoOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Region\TravelUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelCanalMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardCancelMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoChaosMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoOceanMessage;
@@ -18,6 +19,9 @@ use Lemuria\Engine\Fantasya\Message\Vessel\TravelOverLandMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Building\Canal;
+use Lemuria\Model\Fantasya\Construction;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Party;
@@ -31,6 +35,7 @@ use Lemuria\Model\World\Direction;
 
 trait TravelTrait
 {
+	use BuilderTrait;
 	use ContextTrait;
 
 	private ?Vessel $vessel = null;
@@ -57,6 +62,10 @@ trait TravelTrait
 			$anchor = $this->vessel->Anchor();
 			if ($anchor !== Direction::IN_DOCK) {
 				if ($direction !== $anchor) {
+					if ($this->canUseCanal($neighbour)) {
+						$this->message(TravelCanalMessage::class)->e($region);
+						return $neighbour;
+					}
 					$this->message(TravelAnchorMessage::class, $this->vessel)->p($direction)->p($anchor, TravelAnchorMessage::ANCHOR);
 					return null;
 				}
@@ -66,11 +75,15 @@ trait TravelTrait
 				return $neighbour;
 			}
 			if ($region->Landscape() instanceof Ocean) {
-				if (!$this->canSailTo($region)) {
+				if (!$this->canSailTo($neighbour)) {
 					$this->message(TravelLandMessage::class, $this->vessel)->p($direction)->s($landscape)->e($neighbour);
 					return null;
 				}
 				$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
+				return $neighbour;
+			}
+			if ($this->canUseCanal($neighbour)) {
+				$this->message(TravelCanalMessage::class)->e($region);
 				return $neighbour;
 			}
 			$this->message(TravelOverLandMessage::class, $this->vessel)->p($direction);
@@ -234,6 +247,23 @@ trait TravelTrait
 			}
 		}
 		$this->roadsLeft -= 2;
+		return false;
+	}
+
+	protected function canUseCanal(Region $neighbour): bool {
+		$party    = $this->unit->Party();
+		$building = self::createBuilding(Canal::class);
+		foreach ($this->unit->Region()->Estate() as $construction /* @var Construction $construction */) {
+			if ($construction->Building() === $building) {
+				$owner = $construction->Inhabitants()->Owner()?->Party();
+				if ($owner && $owner !== $party && !$owner->Diplomacy()->has(Relation::PASS, $this->unit)) {
+					continue;
+				}
+				if ($neighbour->Landscape() instanceof Ocean) {
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 

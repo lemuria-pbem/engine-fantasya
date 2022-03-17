@@ -4,8 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.11
 
-- weitere Gebäude:
-  - Kanal
 - weitere Zauber:
   - Beschleunigung (8) (mehrfache Angriffe)
   - Erdbeben (9) (zerstört Gebäude)
@@ -40,6 +38,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Sumpf: Elefantengehege
   - Wald: Jagdhaus
   - Wüste: Oase
+- Flüsse als natürliche Kanäle modellieren
+  - Schleuse als Zollgebäude
 - besondere Gebäude/Orte wie Ruinen oder Höhlen
 - Weltumseglung ermöglichen
 - Ereignis "Juwelen gefunden" beim Bergbau in Gebirgen/Gletschern ohne Luxuswaren
@@ -56,6 +56,11 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Talentübersicht pro Region
 - Übersetzungen auf MessageFormat umstellen
 - Luxuswarenangebot neu definieren, wenn der erste Bauer eine Region besiedelt
+- Besteuerung bei Nutzung fremder Infrastruktur
+  - Hafenbenutzungsgebühr an den Hafenmeister
+  - Kanalbenutzungsgebühr an den Besitzer
+  - Handelssteuer an den Besitzer der größten Burg
+  - Maut für Wagengespanne an den Besitzer der größten Burg
 
 ### Weiterentwicklung des Spielkonzepts
 

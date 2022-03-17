@@ -83,6 +83,7 @@ use Lemuria\Model\Fantasya\Building\AlchemyKitchen;
 use Lemuria\Model\Fantasya\Building\Blacksmith;
 use Lemuria\Model\Fantasya\Building\Cabin;
 use Lemuria\Model\Fantasya\Building\CamelBreeding;
+use Lemuria\Model\Fantasya\Building\Canal;
 use Lemuria\Model\Fantasya\Building\Citadel;
 use Lemuria\Model\Fantasya\Building\Dockyard;
 use Lemuria\Model\Fantasya\Building\Fort;
@@ -373,6 +374,7 @@ class CommandFactory
 		'Holzfällerhütte'   => Cabin::class,
 		'Holzfaellerhuette' => Cabin::class,
 		'Kamelzucht'        => CamelBreeding::class,
+		'Kanal'             => Canal::class,
 		'Leuchtturm'        => Lighthouse::class,
 		'Magierturm'        => Magespire::class,
 		'Mine'              => Pit::class,
