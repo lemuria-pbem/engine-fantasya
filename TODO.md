@@ -23,9 +23,24 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Monument
   - Steinkreis
 - weitere Zauber:
-  - Ring der Unsichtbarkeit (10) (erschafft einen Ring)
-  - Luftschiff (11) (Einheit mit Wagen/Schiff reist durch die Luft)
-  - Erwecke Baumhirten (12) (Baumhirten bewachen den Wald, kämpfen im Kampf)
+  - Lautloser Schatten (1) (erhöht Tarnung, kein Aufhalten)
+  - Adlerauge (1) (erhöht Wahrnehmung)
+  - Monster aufhetzen (2)
+  - Aufruhr verursachen (2) (Bauern arbeiten nicht, Rekruten = 0)
+  - Fernsicht (3) (Region zeigen)
+  - Erwecke Baumhirten (3) (Baumhirten bewachen den Wald, kämpfen im Kampf)
+  - Sturmböe (4) (Kampfzauber)
+  - Blick des Greifen (4) (Kartografieren)
+  - Astraler Weg (5) (Magier teleportiert sich)
+  - Günstige Winde (5) (erhöht Reichweite)
+  - Rosthauch (6)
+  - Elementarwesen (6) (Kampfzauber)
+  - Teleportation (7) (anderer Einheiten) zum Magier
+  - Geisterkämpfer (7) (Kampfzauber, erschafft Doppelgänger)
+  - Steinhaut (8)
+  - Ring der Unsichtbarkeit (8) (erschafft einen Ring)
+  - Luftschiff (9) (Einheit mit Wagen/Schiff reist durch die Luft)
+  - Blick des Basilisken (9) (Kampfzauber)
 
 ## Ideen
 
