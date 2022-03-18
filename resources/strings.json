@@ -607,6 +607,7 @@
 		"ReserveMessage": "Die Einheit $id reserviert $reserve aus dem Materialpool.",
 		"ReserveNothingMessage": "Die Einheit $id kann {kein:$commodity} aus dem Materialpool reservieren.",
 		"ReserveOnlyMessage": "Die Einheit $id kann nur $reserve aus dem Materialpool reservieren.",
+		"RetirementMessage": "Du hast heute Deine letzte Einheit verloren und beendest damit das Spiel. Lebe wohl!",
 		"RoadAlreadyCompletedMessage": "Die Straße nach $direction in der Region $region ist schon fertiggestellt.",
 		"RoadCompletedMessage": "Die Einheit $id stellt in der Region $region die Straße nach $direction mit $stones fertig.",
 		"RoadExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um eine Straße in der Region $region zu bauen.",
