@@ -4,6 +4,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.11
 
+- ENTLASSEN/VERLIEREN Unicum prüfen
+- VERNICHTEN Unicum - versucht Unikat zu verbrennen oder zu zerstören, könnte fehlschlagen oder in einer Katastrophe enden
 
 ## Neue Funktionen
 
@@ -52,7 +54,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Wüste: Oase
 - Flüsse als natürliche Kanäle modellieren
   - Schleuse als Zollgebäude
-- besondere Gebäude/Orte wie Ruinen oder Höhlen
+- besondere Gebäude/Orte wie Ruinen, Höhlen oder Geschäfte
+  - BESUCHEN zum Handel mit NPC-Ladenbesitzer
 - Weltumseglung ermöglichen
 - Ereignis "Juwelen gefunden" beim Bergbau in Gebirgen/Gletschern ohne Luxuswaren
 - Umweltereignisse
