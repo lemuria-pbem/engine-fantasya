@@ -2,10 +2,12 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Destroy;
 
+use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Everything;
+use Lemuria\Engine\Fantasya\Factory\OperateTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseEmptyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseEverythingMessage;
@@ -13,8 +15,12 @@ use Lemuria\Engine\Fantasya\Message\Unit\LoseSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseToNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseToUnitMessage;
+use Lemuria\Exception\IdException;
+use Lemuria\Id;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Practice;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Unicum;
 
 /**
  * Implementation of command VERLIEREN.
@@ -29,6 +35,7 @@ use Lemuria\Model\Fantasya\Quantity;
  * - VERLIEREN Alles <commodity>
  * - VERLIEREN <amount> <commodity>
  * - VERLIEREN <amount> Person|Personen
+ * - VERLIEREN <composition> <Unicum>
  *
  * - GIB 0
  * - GIB 0 Alles
@@ -37,10 +44,12 @@ use Lemuria\Model\Fantasya\Quantity;
  * - GIB 0 Alles <commodity>
  * - GIB 0 <amount> <commodity>
  * - GIB 0 <amount> Person|Personen
+ * - GIB 0 <composition> <Unicum>
  */
-final class Lose extends UnitCommand
+final class Lose extends UnitCommand implements Operator
 {
 	use GiftTrait;
+	use OperateTrait;
 	use SiegeTrait;
 
 	protected function run(): void {
@@ -53,6 +62,13 @@ final class Lose extends UnitCommand
 			$count = $this->phrase->getParameter($p++);
 		}
 		$commodity = $this->phrase->getLine($p);
+
+		$unicum = $this->parseUnicum($count, $commodity);
+		if ($unicum) {
+			$this->unicum = $unicum;
+			$this->createOperate($unicum, Practice::LOSE, $this)->lose();
+			return;
+		}
 
 		$this->parseObject($count, $commodity);
 
@@ -105,5 +121,40 @@ final class Lose extends UnitCommand
 		} else {
 			$this->message(LoseMessage::class)->i($quantity);
 		}
+	}
+
+	protected function parseUnicum(string $first, string $second): ?Unicum {
+		$unicum = null;
+		try {
+			$treasury = $this->unit->Treasury();
+			$factory  = $this->context->Factory();
+			if ($first) {
+				if ($second) {
+					if ($factory->isComposition($first)) {
+						$composition = $factory->composition($first);
+						$id          = Id::fromId($second);
+						if ($treasury->has($id)) {
+							/** @var Unicum $unicum */
+							$unicum = $treasury[$id];
+							if ($unicum->Composition() !== $composition) {
+								$unicum = null;
+							}
+						}
+					}
+				} else {
+					$id = Id::fromId($first);
+					if ($treasury->has($id)) {
+						/** @var Unicum $unicum */
+						$unicum = $treasury[$id];
+					}
+				}
+			}
+		} catch (IdException) {
+		}
+		return $unicum;
+	}
+
+	protected function loseUnicum(Unicum $unicum): void {
+
 	}
 }
