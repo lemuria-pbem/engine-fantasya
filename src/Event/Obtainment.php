@@ -15,8 +15,10 @@ use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Spell\AstralChaos;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
 use Lemuria\Model\Fantasya\Spell\Daydream;
+use Lemuria\Engine\Fantasya\Command\Cast\Earthquake;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
+use Lemuria\Model\Fantasya\Spell\Quickening;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Talent;
@@ -37,7 +39,9 @@ final class Obtainment extends AbstractEvent
 		4 => AuraTransfer::class,
 		5 => ShockWave::class,
 		6 => AstralChaos::class,
-		7 => Daydream::class
+		7 => Daydream::class,
+		8 => Quickening::class,
+		9 => Earthquake::class
 	];
 
 	private Talent $magic;

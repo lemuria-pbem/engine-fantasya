@@ -6,7 +6,6 @@ use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Model\Domain;
 use function Lemuria\getClass;
 use Lemuria\Singleton;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait as EngineBuilderTrait;
@@ -21,6 +20,7 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Item;
 use Lemuria\Lemuria;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait as ModelBuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Serializable;

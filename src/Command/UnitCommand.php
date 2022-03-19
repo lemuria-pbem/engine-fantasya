@@ -4,9 +4,12 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\UnitTrait;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Phrase;
@@ -20,12 +23,22 @@ abstract class UnitCommand extends AbstractCommand
 {
 	use UnitTrait;
 
+	protected bool $preventDefault = false;
+
 	/**
 	 * Create a new command for given Phrase.
 	 */
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		$this->unit = $context->Unit();
+	}
+
+	#[Pure] public function Phrase(): Phrase {
+		return $this->phrase;
+	}
+
+	#[Pure] public function Unit(): Unit {
+		return $this->unit;
 	}
 
 	public function isPrepared(): bool {
@@ -36,18 +49,31 @@ abstract class UnitCommand extends AbstractCommand
 	}
 
 	/**
+	 * Execute the command.
+	 *
+	 * @throws CommandException
+	 */
+	public function execute(): Action {
+		parent::execute();
+		if ($this instanceof Activity) {
+			$this->context->getProtocol($this->unit)->addNewDefaults($this);
+		}
+		return $this;
+	}
+
+	/**
 	 * Get command as string.
 	 */
 	#[Pure] public function __toString(): string {
 		return '[' . $this->unit->Id() . '] ' . parent::__toString();
 	}
 
-	#[Pure] public function Phrase(): Phrase {
-		return $this->phrase;
-	}
-
-	#[Pure] public function Unit(): Unit {
-		return $this->unit;
+	/**
+	 * Prevent that this command is used as new default.
+	 */
+	public function preventDefault(): Command {
+		$this->preventDefault = true;
+		return $this;
 	}
 
 	/**

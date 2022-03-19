@@ -28,7 +28,7 @@ abstract class AbstractReinforcementWeaponMessage extends AbstractReinforcementM
 		return $this;
 	}
 
-	#[ArrayShape(['id' => 'int', 'name' => 'string', 'combatant' => 'null|string', 'count' => 'int', 'battleRow' => 'int', 'weapon' => 'string'])]
+	#[ArrayShape(['unit' => 'int', 'name' => 'string', 'combatant' => 'null|string', 'count' => 'int', 'battleRow' => 'int', 'weapon' => 'string'])]
 	#[Pure] protected function getParameters(): array {
 		$parameters           = parent::getParameters();
 		$parameters['weapon'] = $this->weapon;

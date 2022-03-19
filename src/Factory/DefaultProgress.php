@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Event;
 use Lemuria\Engine\Fantasya\Event\Acquaintance;
 use Lemuria\Engine\Fantasya\Event\Administrator;
 use Lemuria\Engine\Fantasya\Event\Aftercare;
+use Lemuria\Engine\Fantasya\Event\Breeding;
 use Lemuria\Engine\Fantasya\Event\Conduct;
 use Lemuria\Engine\Fantasya\Event\Decease;
 use Lemuria\Engine\Fantasya\Event\Drift;
@@ -23,6 +24,7 @@ use Lemuria\Engine\Fantasya\Event\Population;
 use Lemuria\Engine\Fantasya\Event\Recreate;
 use Lemuria\Engine\Fantasya\Event\Regrow;
 use Lemuria\Engine\Fantasya\Event\ResetSiege;
+use Lemuria\Engine\Fantasya\Event\Retirement;
 use Lemuria\Engine\Fantasya\Event\Subsistence;
 use Lemuria\Engine\Fantasya\Event\Support;
 use Lemuria\Engine\Fantasya\Event\Timer;
@@ -37,12 +39,12 @@ class DefaultProgress implements Progress
 		// before
 		Administrator::class, Visit::class, Monster::class, Timer::class,
 		// middle
-		ResetSiege::class, Conduct::class, Upkeep::class, Subsistence::class, Drift::class,
+		ResetSiege::class, Conduct::class, Upkeep::class, Subsistence::class, Drift::class, Breeding::class,
 		// after
 		Finish::class, MarketUpdate::class, Founder::class, Support::class,
 		Population::class, Fauna::class, Griffinegg::class, Growth::class, Regrow::class,
 		Decease::class, Liquidation::class,
-		Obtainment::class, Acquaintance::class, Recreate::class, Layabout::class, Aftercare::class
+		Obtainment::class, Acquaintance::class, Recreate::class, Layabout::class, Retirement::class, Aftercare::class
 	];
 
 	private array $events = [];

@@ -18,7 +18,7 @@ class HorseBlissNoneMessage extends AbstractUnitMessage
 	protected Singleton $animal;
 
 	protected function create(): string {
-		return 'There are no ' . $this->animal . 's in the region to apply Horse Bliss.';
+		return 'There are no ' . $this->animal . 's here to apply Horse Bliss.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {

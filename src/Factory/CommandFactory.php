@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
 use Lemuria\Engine\Fantasya\Command\Announcement;
 use Lemuria\Engine\Fantasya\Command\Apply\AbstractApply;
+use Lemuria\Engine\Fantasya\Command\Apply\HorseBlissBreed;
 use Lemuria\Engine\Fantasya\Command\Attack;
 use Lemuria\Engine\Fantasya\Command\Banner;
 use Lemuria\Engine\Fantasya\Command\BattleSpell;
@@ -43,6 +44,7 @@ use Lemuria\Engine\Fantasya\Command\Operate\AbstractOperate;
 use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Command\Origin;
 use Lemuria\Engine\Fantasya\Command\Party;
+use Lemuria\Engine\Fantasya\Command\Presetting;
 use Lemuria\Engine\Fantasya\Command\Read;
 use Lemuria\Engine\Fantasya\Command\Recruit;
 use Lemuria\Engine\Fantasya\Command\Reserve;
@@ -76,11 +78,16 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Artifact;
 use Lemuria\Model\Fantasya\Building;
+use Lemuria\Model\Fantasya\Building\Acropolis;
+use Lemuria\Model\Fantasya\Building\AlchemyKitchen;
 use Lemuria\Model\Fantasya\Building\Blacksmith;
 use Lemuria\Model\Fantasya\Building\Cabin;
+use Lemuria\Model\Fantasya\Building\CamelBreeding;
+use Lemuria\Model\Fantasya\Building\Canal;
 use Lemuria\Model\Fantasya\Building\Citadel;
 use Lemuria\Model\Fantasya\Building\Dockyard;
 use Lemuria\Model\Fantasya\Building\Fort;
+use Lemuria\Model\Fantasya\Building\HorseBreeding;
 use Lemuria\Model\Fantasya\Building\Lighthouse;
 use Lemuria\Model\Fantasya\Building\Magespire;
 use Lemuria\Model\Fantasya\Building\Mine;
@@ -197,8 +204,10 @@ use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Spell\AstralChaos;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
 use Lemuria\Model\Fantasya\Spell\Daydream;
+use Lemuria\Model\Fantasya\Spell\Earthquake;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
+use Lemuria\Model\Fantasya\Spell\Quickening;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Talent;
@@ -233,6 +242,7 @@ use Lemuria\Model\Fantasya\Talent\Trading;
 use Lemuria\Model\Fantasya\Talent\Weaponry;
 use Lemuria\Model\Fantasya\Talent\Woodchopping;
 use Lemuria\Model\Fantasya\Unicum as UnicumModel;
+use Lemuria\Model\Fantasya\Unit as UnitModel;
 use Lemuria\Model\World\Direction;
 use Lemuria\Singleton;
 
@@ -341,6 +351,7 @@ class CommandFactory
 		'VERKAUFEN'    => true,
 		'VERLASSEN'    => true,
 		'VERLIEREN'    => true,
+		'VORGABE'      => true,
 		'VORLAGE'      => true,
 		'ZAUBERE'      => 'ZAUBERN',
 		'ZAUBERN'      => true,
@@ -352,6 +363,8 @@ class CommandFactory
 	 * @var array(string=>string)
 	 */
 	protected array $buildings = [
+		'Akropolis'         => Acropolis::class,
+		'Alchemistenküche'  => AlchemyKitchen::class,
 		'Baustelle'         => Site::class,
 		'Befestigung'       => Fort::class,
 		'Bergwerk'          => Mine::class,
@@ -362,10 +375,13 @@ class CommandFactory
 		'Hafen'             => Port::class,
 		'Holzfällerhütte'   => Cabin::class,
 		'Holzfaellerhuette' => Cabin::class,
+		'Kamelzucht'        => CamelBreeding::class,
+		'Kanal'             => Canal::class,
 		'Leuchtturm'        => Lighthouse::class,
 		'Magierturm'        => Magespire::class,
 		'Mine'              => Pit::class,
 		'Palast'            => Palace::class,
+		'Pferdezucht'       => HorseBreeding::class,
 		'Sägewerk'          => Sawmill::class,
 		'Saegewerk'         => Sawmill::class,
 		'Sattlerei'         => Saddlery::class,
@@ -546,6 +562,8 @@ class CommandFactory
 	protected array $spells = [
 		'Astrales chaos' => AstralChaos::class,
 		'Auratransfer'   => AuraTransfer::class,
+		'Beschleunigung' => Quickening::class,
+		'Erdbeben'       => Earthquake::class,
 		'Feuerball'      => Fireball::class,
 		'Friedenslied'   => SongOfPeace::class,
 		'Schockwelle'    => ShockWave::class,
@@ -657,6 +675,10 @@ class CommandFactory
 
 	protected final const OPERATE_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Operate\\';
 
+	protected final const APPLY_BREED = [
+		HorseBliss::class => [HorseBreeding::class => HorseBlissBreed::class]
+	];
+
 	public function __construct(protected readonly Context $context) {
 	}
 
@@ -719,6 +741,7 @@ class CommandFactory
 				'VERKAUFEN'    => Sell::class,
 				'VERLASSEN'    => Vacate::class,
 				'VERLIEREN'    => Lose::class,
+				'VORGABE'      => Presetting::class,
 				'VORLAGE'      => Template::class,
 				'ZAUBERN'      => Cast::class,
 				'ZERSTÖREN'    => Destroy::class,
@@ -858,7 +881,7 @@ class CommandFactory
 	}
 
 	public function applyPotion(Potion $potion, Apply $apply): AbstractApply {
-		$potion = getClass($potion);
+		$potion = $this->getApplyPotion($potion, $apply->Unit());
 		$class  = self::APPLY_NAMESPACE . $potion;
 		if (class_exists($class)) {
 			return new $class($apply);
@@ -944,5 +967,16 @@ class CommandFactory
 			}
 		}
 		return count($candidates) === 1 ? $candidates[0] : null;
+	}
+
+	protected function getApplyPotion(Potion $potion, UnitModel $unit): string {
+		$breed = self::APPLY_BREED[$potion::class] ?? null;
+		if ($breed) {
+			$building = self::createBuilding(key($breed));
+			if ($unit->Construction()?->Building() === $building) {
+				return getClass(current($breed));
+			}
+		}
+		return getClass($potion);
 	}
 }

@@ -7,7 +7,7 @@ use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
-use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\RoadAlreadyCompletedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RoadCompletedMessage;
@@ -31,7 +31,7 @@ use Lemuria\Model\Fantasya\Talent\Roadmaking;
 final class Road extends UnitCommand implements Activity
 {
 	use CollectTrait;
-	use ModifiedActivityTrait;
+	use DefaultActivityTrait;
 	use WorkloadTrait;
 
 	private Talent $roadmaking;
@@ -47,7 +47,6 @@ final class Road extends UnitCommand implements Activity
 		$level            = $this->getProductivity($this->roadmaking)->Level();
 		$size             = $this->unit->Size();
 		$this->maximum    = (int)floor($this->potionBoost($size) * $size * $level);
-		$this->newDefault = $this;
 		$this->initWorkload($this->maximum);
 	}
 
@@ -83,7 +82,7 @@ final class Road extends UnitCommand implements Activity
 		$stones     = (int)round($completion * $roadStones);
 		$remaining  = $roadStones - $stones;
 		if ($remaining <= 0) {
-			$this->replaceDefault($this->newDefault);
+			$this->preventDefault();
 			$this->message(RoadAlreadyCompletedMessage::class)->e($region)->p($direction->value);
 			return;
 		}
@@ -108,7 +107,7 @@ final class Road extends UnitCommand implements Activity
 				}
 			} else {
 				$roads[$direction] = 1.0;
-				$this->replaceDefault($this->newDefault);
+				$this->preventDefault();
 				$this->message(RoadCompletedMessage::class)->e($region)->p($direction->value)->i($reserve);
 			}
 		} else {

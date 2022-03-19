@@ -8,6 +8,8 @@ class Fighter
 {
 	public ?Potion $potion = null;
 
+	public int $quickening = 0;
+
 	private bool $hasBeenHealed = false;
 
 	public function __construct(public int $health) {

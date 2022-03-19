@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Priority;
-use Lemuria\Model\Domain;
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Factory\Model\Season;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
@@ -13,8 +11,10 @@ use Lemuria\Engine\Fantasya\Message\Region\FaunaGrowthMessage;
 use Lemuria\Engine\Fantasya\Message\Region\FaunaHungerMessage;
 use Lemuria\Engine\Fantasya\Message\Region\FaunaMigrantsMessage;
 use Lemuria\Engine\Fantasya\Message\Region\FaunaNewMessage;
+use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Elephant;

@@ -4,20 +4,16 @@ namespace Lemuria\Engine\Fantasya\Factory;
 
 use JetBrains\PhpStorm\Pure;
 
-use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Activity;
 
 trait OneActivityTrait
 {
 	use DefaultActivityTrait;
 
-	#[Pure] public function Activity(): string {
-		return microtime();
-	}
-
 	/**
-	 * @todo Check if this can be removed.
+	 * Do not allow any other activity.
 	 */
-	public function getNewDefault(): ?UnitCommand {
-		return $this->preventDefault ? null : $this;
+	#[Pure] public function allows(Activity $activity): bool {
+		return false;
 	}
 }

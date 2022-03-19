@@ -10,6 +10,7 @@ use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Party\ReadMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BestowMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BestowReceivedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LoseUnicumMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Practice;
@@ -32,8 +33,28 @@ abstract class AbstractOperate
 	public function give(Unit $recipient): void {
 		if ($this->operator->Unicum()->Composition()->supports(Practice::GIVE)) {
 			$this->transferTo($recipient);
+			return;
 		}
 		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::GIVE);
+	}
+
+	public function lose(): void {
+		$unicum      = $this->operator->Unicum();
+		$composition = $unicum->Composition();
+		if ($composition->supports(Practice::LOSE)) {
+			$location = $this->unit->Construction();
+			if (!$location) {
+				$location = $this->unit->Vessel();
+			}
+			if (!$location) {
+				$location = $this->unit->Region();
+			}
+			$this->unit->Treasury()->remove($unicum);
+			$location->Treasury()->add($unicum);
+			$this->message(LoseUnicumMessage::class, $this->unit)->s($composition)->e($unicum);
+			return;
+		}
+		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::LOSE);
 	}
 
 	public function read(): void {
