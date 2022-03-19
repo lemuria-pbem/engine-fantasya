@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use Lemuria\Engine\Fantasya\Command\Comment;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Factory\DefaultResolver;
 use Lemuria\Lemuria;
@@ -21,6 +22,16 @@ final class ActivityProtocol
 	 * @var Command[]
 	 */
 	private array $defaults = [];
+
+	/**
+	 * @var Activity[]
+	 */
+	private array $defaultActivities = [];
+
+	/**
+	 * @var Comment[]
+	 */
+	private array $comments = [];
 
 	/**
 	 * Create new activity protocol for a unit.
@@ -60,14 +71,13 @@ final class ActivityProtocol
 	 * Add a command to the default orders.
 	 */
 	public function addDefault(UnitCommand $command): void {
-		$this->defaults[] = $command;
-	}
-
-	/**
-	 * Insert a command as the first default order.
-	 */
-	public function insertDefault(UnitCommand $command): void {
-		$this->defaults = [$command] + $this->defaults;
+		if ($command instanceof Comment) {
+			$this->comments[] = $command;
+		} elseif ($command instanceof Activity) {
+			$this->defaultActivities[] = $command;
+		} else {
+			$this->defaults[] = $command;
+		}
 	}
 
 	/**
@@ -75,8 +85,15 @@ final class ActivityProtocol
 	 */
 	public function addNewDefaults(Activity $activity): void {
 		foreach ($activity->getNewDefaults() as $default) {
-			$this->defaults[] = $default;
+			$this->defaultActivities[] = $default;
 		}
+	}
+
+	/**
+	 * Add the new default of an Activity.
+	 */
+	public function replaceDefaults(Activity $activity): void {
+		$this->defaultActivities = $activity->getNewDefaults();
 	}
 
 	/**
@@ -84,7 +101,9 @@ final class ActivityProtocol
 	 */
 	public function persistNewDefaults(): void {
 		$defaults = Lemuria::Orders()->getDefault($this->unit->Id());
-		$resolver = new DefaultResolver($this->defaults);
+		$resolves = [];
+		array_push($resolves, ...$this->defaults, ...$this->defaultActivities, ...$this->comments);
+		$resolver = new DefaultResolver($resolves);
 		foreach ($resolver->resolve() as $command) {
 			$defaults[] = $command;
 		}

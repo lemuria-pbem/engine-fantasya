@@ -46,7 +46,6 @@ final class Vessel extends AbstractProduct
 
 	protected function initialize(): void {
 		$this->replacePlaceholderJob();
-		$this->newDefault = $this;
 		parent::initialize();
 	}
 
@@ -96,8 +95,8 @@ final class Vessel extends AbstractProduct
 					}
 				}
 				if ($vessel->Completion() === 1.0) {
-					$this->replaceDefault($this->newDefault);
 					$this->message(VesselFinishedMessage::class, $vessel);
+					$this->preventDefault();
 				}
 			} else {
 				if ($this->capability > 0) {
@@ -115,7 +114,7 @@ final class Vessel extends AbstractProduct
 				}
 			}
 		} else {
-			$this->replaceDefault($this->newDefault);
+			$this->preventDefault();
 			$this->message(VesselAlreadyFinishedMessage::class)->e($vessel);
 		}
 	}

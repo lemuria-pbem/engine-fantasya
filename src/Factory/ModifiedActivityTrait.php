@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
+use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 
 trait ModifiedActivityTrait
@@ -11,9 +12,12 @@ trait ModifiedActivityTrait
 	private ?UnitCommand $newDefault = null;
 
 	/**
-	 * Get the new default command.
+	 * @return Command[]
 	 */
-	public function getNewDefault(): ?UnitCommand {
-		return $this->preventDefault ? null : $this->newDefault;
+	public function getNewDefaults(): array {
+		if ($this->preventDefault) {
+			return [];
+		}
+		return $this->newDefault ? [$this->newDefault] : [];
 	}
 }
