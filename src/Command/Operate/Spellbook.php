@@ -11,6 +11,7 @@ use Lemuria\Model\Fantasya\Composition\Spellbook as SpellbookModel;
 
 final class Spellbook extends AbstractOperate
 {
+	use BurnTrait;
 	use LearnSpellTrait;
 
 	public function apply(): void {

@@ -702,6 +702,10 @@
 		"SupportNothingMessage": "Die Einheit $id kann ihren Unterhalt nicht zahlen.",
 		"SupportPayMessage": "Die Einheit $id gibt $support für den Unterhalt aus.",
 		"SupportPayOnlyMessage": "Die Einheit $id kann nur $support für den Unterhalt ausgeben.",
+		"TakeMessage": "Die Einheit $unit hat {das:$composition} $unicum in Besitz genommen.",
+		"TakeNoCompositionMessage": "Die Einheit $id kann {kein:$composition} mit der Nummer $unicum finden.",
+		"TakeNoUnicumMessage": "Die Einheit $id kann keinen Gegenstand mit der Nummer $unicum finden.",
+		"TakeUnsupportedMessage": "Die Einheit $id kann {das:$composition} $unicum nicht in Besitz nehmen.",
 		"TaxDemandMessage": "Die Einheit $id hat $collectors Steuereintreiber mit einem Bedarf von $rate Silber.",
 		"TaxGuardedMessage": "Die Einheit $id kann keine Steuern eintreiben, die Region wird bewacht.",
 		"TaxNoCollectorsMessage": "Die Einheit $id hat keine Steuereintreiber, die eine Besteuerung erzwingen könnten.",
@@ -753,6 +757,7 @@
 		"UnguardMessage": "Die Einheit $id bewacht nicht länger die Region.",
 		"UnguardNotGuardingMessage": "Die Einheit $id bewacht die Region nicht.",
 		"UnicumCreateMessage": "Die Einheit $id erschafft {ein:$composition} mit der Nummer $unicum.",
+		"UnicumDestroyBurnMessage": "Die Einheit $unit zündet {das:$composition} $unicum an und verbrennt {es:$composition} zu Asche.",
 		"UnicumMaterialMessage": "Die Einheit $id benutzt $material, um {ein:$composition} zu erschaffen.",
 		"UnicumNoMaterialMessage": "Die Einheit $id hat nicht genügend Ressourcen, um {ein:$composition} zu erschaffen.",
 		"UnicumNoneMessage": "Die Einheit $id kann {kein:$composition} mehr erschaffen.",
@@ -1031,6 +1036,10 @@
 			"Woodshield": "ein",
 			"Workshop": "eine",
 			"Woundshut": "eine"
+		},
+		"es": {
+			"Scroll": "sie",
+			"Spellbook": "es"
 		},
 		"ist": ["ist", "sind"],
 		"kein": {

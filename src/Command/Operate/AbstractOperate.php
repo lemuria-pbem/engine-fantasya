@@ -11,7 +11,9 @@ use Lemuria\Engine\Fantasya\Message\Party\ReadMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BestowMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BestowReceivedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseUnicumMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TakeMessage;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Practice;
 use Lemuria\Model\Fantasya\Unit;
@@ -28,6 +30,24 @@ abstract class AbstractOperate
 
 	public function apply(): void {
 		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::APPLY);
+	}
+
+	public function take(): void {
+		$unicum      = $this->operator->Unicum();
+		$composition = $unicum->Composition();
+		if ($composition->supports(Practice::TAKE)) {
+			$collector = $unicum->Collector();
+			if ($collector instanceof Unit) {
+				throw new LemuriaException('Unexpected Unit collector in take().');
+			}
+
+			$collector->Treasury()->remove($unicum);
+			$this->operator->Unit()->Treasury()->add($unicum);
+			$this->message(TakeMessage::class)->s($composition)->e($unicum);
+			return;
+		}
+
+		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::TAKE);
 	}
 
 	public function give(Unit $recipient): void {
@@ -57,6 +77,17 @@ abstract class AbstractOperate
 		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::LOSE);
 	}
 
+	public function destroy(): void {
+		$unicum      = $this->operator->Unicum();
+		$composition = $unicum->Composition();
+		if ($composition->supports(Practice::DESTROY)) {
+			$this->unit->Treasury()->remove($unicum);
+			$this->destroyMessage();
+			return;
+		}
+		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::DESTROY);
+	}
+
 	public function read(): void {
 		if (!$this->operator->Unicum()->Composition()->supports(Practice::READ)) {
 			throw new UnsupportedOperateException($this->operator->Unicum(), Practice::READ);
@@ -67,6 +98,8 @@ abstract class AbstractOperate
 	public function write(): void {
 		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::WRITE);
 	}
+
+	abstract protected function destroyMessage(): void;
 
 	protected function transferTo(Unit $recipient): void {
 		$unicum = $this->operator->Unicum();

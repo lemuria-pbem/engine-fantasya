@@ -11,6 +11,7 @@ use Lemuria\Model\Fantasya\Composition\Scroll as ScrollModel;
 
 final class Scroll extends AbstractOperate
 {
+	use BurnTrait;
 	use LearnSpellTrait;
 
 	public function apply(): void {

@@ -5,8 +5,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Fehler/Verbesserungen in 0.11
 
 - Regionen, Gebäude und Schiffe haben verlorene Gegenstände mit Verfallszeit
-  - NEHMEN Unicum - versucht Unikat in Besitz zu nehmen
-- VERNICHTEN Unicum - versucht Unikat zu verbrennen oder zu zerstören, könnte fehlschlagen oder in einer Katastrophe enden
 
 ## Neue Funktionen
 
