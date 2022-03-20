@@ -43,6 +43,7 @@ abstract class AbstractOperate
 
 			$collector->Treasury()->remove($unicum);
 			$this->operator->Unit()->Treasury()->add($unicum);
+			$this->addReadEffect()->Treasury()->add($unicum);
 			$this->message(TakeMessage::class)->s($composition)->e($unicum);
 			return;
 		}
@@ -89,10 +90,14 @@ abstract class AbstractOperate
 	}
 
 	public function read(): void {
-		if (!$this->operator->Unicum()->Composition()->supports(Practice::READ)) {
-			throw new UnsupportedOperateException($this->operator->Unicum(), Practice::READ);
+		$unicum = $this->operator->Unicum();
+		if (!$unicum->Composition()->supports(Practice::READ)) {
+			throw new UnsupportedOperateException($unicum, Practice::READ);
 		}
-		$this->addReadEffect();
+
+		$party = $this->unit->Party();
+		$this->addReadEffect()->Treasury()->add($unicum);
+		$this->message(ReadMessage::class, $party)->e($this->unit)->s($unicum->Composition())->e($unicum, ReadMessage::UNICUM);
 	}
 
 	public function write(): void {
@@ -110,21 +115,13 @@ abstract class AbstractOperate
 		$this->message(BestowReceivedMessage::class, $recipient)->s($unicum->Composition())->e($unit)->e($unicum, BestowMessage::UNICUM);
 	}
 
-	protected function addReadEffect(): void {
-		$unit     = $this->operator->Unit();
+	private function addReadEffect(): UnicumRead {
 		$effect   = new UnicumRead(State::getInstance());
-		$existing = Lemuria::Score()->find($effect->setParty($unit->Party()));
-		if ($existing) {
-			$effect = $existing;
-		} else {
-			Lemuria::Score()->add($effect);
+		$existing = Lemuria::Score()->find($effect->setParty($this->unit->Party()));
+		if ($existing instanceof UnicumRead) {
+			return $existing;
 		}
-
-		$treasury = $effect->Treasury();
-		$unicum   = $this->operator->Unicum();
-		if (!$treasury->has($unicum->Id())) {
-			$treasury->add($unicum);
-		}
-		$this->message(ReadMessage::class, $unit->Party())->e($unit)->s($unicum->Composition())->e($unicum, ReadMessage::UNICUM);
+		Lemuria::Score()->add($effect);
+		return $effect;
 	}
 }
