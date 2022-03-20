@@ -759,6 +759,7 @@
 		"UnitExceptionMessage": "Fehler im Befehl $action: $exception.",
 		"UnitMessage": "Wechsel zur Einheit $id.",
 		"UnmaintainedMessage": "Das Gebäude $id kann nicht genutzt werden, weil der Unterhalt nicht bezahlt wurde.",
+		"UnmaintainedOvercrowdedMessage": "Das Gebäude $id ist überfüllt und kann nicht genutzt werden.",
 		"UpkeepAbandonedMessage": "Das Gebäude $id ist verlassen; niemand hat den Unterhalt bezahlt.",
 		"UpkeepCharityMessage": "Die Einheit $id erhält $upkeep Almosen von der Einheit $unit für den Unterhalt des Gebäudes $construction.",
 		"UpkeepDonateMessage": "Die Einheit $id spendet $upkeep Almosen für den Unterhalt des Gebäudes $construction an die Einheit $unit.",
