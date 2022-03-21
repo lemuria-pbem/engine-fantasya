@@ -24,6 +24,7 @@ use Lemuria\Engine\Fantasya\Command\Describe;
 use Lemuria\Engine\Fantasya\Command\Destroy;
 use Lemuria\Engine\Fantasya\Command\Destroy\Dismiss;
 use Lemuria\Engine\Fantasya\Command\Destroy\Lose;
+use Lemuria\Engine\Fantasya\Command\Devastate;
 use Lemuria\Engine\Fantasya\Command\Disguise;
 use Lemuria\Engine\Fantasya\Command\End;
 use Lemuria\Engine\Fantasya\Command\Entertain;
@@ -55,6 +56,7 @@ use Lemuria\Engine\Fantasya\Command\Siege;
 use Lemuria\Engine\Fantasya\Command\Sort;
 use Lemuria\Engine\Fantasya\Command\Spy;
 use Lemuria\Engine\Fantasya\Command\Steal;
+use Lemuria\Engine\Fantasya\Command\Take;
 use Lemuria\Engine\Fantasya\Command\Tax;
 use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Command\Template;
@@ -318,6 +320,8 @@ class CommandFactory
 		'NAME'         => true,
 		'NÄCHSTER'     => true,
 		'NAECHSTER'    => 'NÄCHSTER',
+		'NEHMEN'       => true,
+		'NIMM'         => 'NEHMEN',
 		'NUMMER'       => true,
 		'PARTEI'       => true,
 		'REGION'       => true,
@@ -351,6 +355,7 @@ class CommandFactory
 		'VERKAUFEN'    => true,
 		'VERLASSEN'    => true,
 		'VERLIEREN'    => true,
+		'VERNICHTEN'   => true,
 		'VORGABE'      => true,
 		'VORLAGE'      => true,
 		'ZAUBERE'      => 'ZAUBERN',
@@ -723,6 +728,7 @@ class CommandFactory
 				'MACHEN'       => Create::class,
 				'NAME'         => Name::class,
 				'NÄCHSTER'     => Next::class,
+				'NEHMEN'       => Take::class,
 				'NUMMER'       => Number::class,
 				'PARTEI'       => Party::class,
 				'REISEN'       => Travel::class,
@@ -741,6 +747,7 @@ class CommandFactory
 				'VERKAUFEN'    => Sell::class,
 				'VERLASSEN'    => Vacate::class,
 				'VERLIEREN'    => Lose::class,
+				'VERNICHTEN'   => Devastate::class,
 				'VORGABE'      => Presetting::class,
 				'VORLAGE'      => Template::class,
 				'ZAUBERN'      => Cast::class,
