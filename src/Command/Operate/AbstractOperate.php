@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command\Operate;
 use Lemuria\Engine\Fantasya\Command\Exception\UnsupportedOperateException;
 use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Effect\UnicumDisintegrate;
 use Lemuria\Engine\Fantasya\Effect\UnicumRead;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Party\ReadMessage;
@@ -16,6 +17,7 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Practice;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
 
 abstract class AbstractOperate
@@ -44,6 +46,7 @@ abstract class AbstractOperate
 			$collector->Treasury()->remove($unicum);
 			$this->operator->Unit()->Treasury()->add($unicum);
 			$this->addReadEffect()->Treasury()->add($unicum);
+			$this->removeDisintegrateEffect();
 			$this->message(TakeMessage::class)->s($composition)->e($unicum);
 			return;
 		}
@@ -73,6 +76,7 @@ abstract class AbstractOperate
 			$this->unit->Treasury()->remove($unicum);
 			$location->Treasury()->add($unicum);
 			$this->message(LoseUnicumMessage::class, $this->unit)->s($composition)->e($unicum);
+			$this->addLooseEffect();
 			return;
 		}
 		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::LOSE);
@@ -83,6 +87,7 @@ abstract class AbstractOperate
 		$composition = $unicum->Composition();
 		if ($composition->supports(Practice::DESTROY)) {
 			$this->unit->Treasury()->remove($unicum);
+			Lemuria::Catalog()->remove($unicum);
 			$this->destroyMessage();
 			return;
 		}
@@ -106,6 +111,20 @@ abstract class AbstractOperate
 
 	abstract protected function destroyMessage(): void;
 
+	protected function addLooseEffect(): void {
+		$unicum = $this->operator->Unicum();
+		Lemuria::Log()->debug('Lost ' . $unicum->Composition() . ' ' . $unicum->Id() . ' will not disintegrate.');
+	}
+
+	protected function addDisintegrateEffectForRegion(int $rounds): void {
+		$unicum    = $this->operator->Unicum();
+		$collector = $unicum->Collector();
+		if ($collector instanceof Region) {
+			$this->addDisintegrateEffect()->setRounds($rounds);
+			Lemuria::Log()->debug('Lost ' . $unicum->Composition() . ' ' . $unicum->Id() . ' in ' . $collector . ' will disintegrate in ' . $rounds . ' rounds.');
+		}
+	}
+
 	protected function transferTo(Unit $recipient): void {
 		$unicum = $this->operator->Unicum();
 		$unit   = $this->operator->Unit();
@@ -123,5 +142,20 @@ abstract class AbstractOperate
 		}
 		Lemuria::Score()->add($effect);
 		return $effect;
+	}
+
+	private function addDisintegrateEffect(): UnicumDisintegrate {
+		$effect = new UnicumDisintegrate(State::getInstance());
+		$existing = Lemuria::Score()->find($effect->setUnicum($this->operator->Unicum()));
+		if ($existing instanceof UnicumDisintegrate) {
+			return $existing;
+		}
+		Lemuria::Score()->add($effect);
+		return $effect;
+	}
+
+	private function removeDisintegrateEffect(): void {
+		$effect = new UnicumDisintegrate(State::getInstance());
+		Lemuria::Score()->remove($effect->setUnicum($this->operator->Unicum()));
 	}
 }

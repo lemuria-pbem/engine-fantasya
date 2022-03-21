@@ -11,6 +11,8 @@ use Lemuria\Model\Fantasya\Composition\Scroll as ScrollModel;
 
 final class Scroll extends AbstractOperate
 {
+	private const DISINTEGRATE = 3;
+
 	use BurnTrait;
 	use LearnSpellTrait;
 
@@ -44,6 +46,10 @@ final class Scroll extends AbstractOperate
 		} else {
 			$this->message(ScrollWriteUnknownMessage::class, $unit)->e($unicum)->s($scroll)->s($spell, ScrollWriteMessage::SPELL);
 		}
+	}
+
+	protected function addLooseEffect(): void {
+		$this->addDisintegrateEffectForRegion(self::DISINTEGRATE);
 	}
 
 	/**

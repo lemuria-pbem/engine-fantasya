@@ -11,6 +11,8 @@ use Lemuria\Model\Fantasya\Composition\Spellbook as SpellbookModel;
 
 final class Spellbook extends AbstractOperate
 {
+	private const DISINTEGRATE = 3 * 3;
+
 	use BurnTrait;
 	use LearnSpellTrait;
 
@@ -47,6 +49,10 @@ final class Spellbook extends AbstractOperate
 		} else {
 			$this->message(SpellbookWriteUnknownMessage::class, $unit)->s($spellbook)->e($unicum)->s($spell, SpellbookWriteMessage::SPELL);
 		}
+	}
+
+	protected function addLooseEffect(): void {
+		$this->addDisintegrateEffectForRegion(self::DISINTEGRATE);
 	}
 
 	/**
