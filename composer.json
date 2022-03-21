@@ -17,8 +17,8 @@
 		"php": "~8.1",
 		"ext-json": "~8.1",
 		"ext-mbstring": "~8.1",
-		"lemuria-pbem/lemuria": "~0.10.0",
-		"lemuria-pbem/model-fantasya": "~0.10.0",
+		"lemuria-pbem/lemuria": "~0.11.0",
+		"lemuria-pbem/model-fantasya": "~0.11.0",
 		"monolog/monolog": "~2.3"
 	},
 	"require-dev": {
