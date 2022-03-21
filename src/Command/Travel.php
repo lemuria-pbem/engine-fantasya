@@ -3,16 +3,15 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Factory\Command\Dummy;
-use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\NavigationTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\TravelTrait;
@@ -51,12 +50,10 @@ use Lemuria\Model\World\Direction;
  */
 class Travel extends UnitCommand implements Activity
 {
-	use DefaultActivityTrait;
+	use ModifiedActivityTrait;
 	use NavigationTrait;
 	use SiegeTrait;
 	use TravelTrait;
-
-	protected const ACTIVITY = 'Travel';
 
 	protected DirectionList $directions;
 
@@ -75,16 +72,8 @@ class Travel extends UnitCommand implements Activity
 			parent::commitCommand($this);
 		} else {
 			parent::commitCommand(new Dummy($this->phrase, $this->context));
-			$command = $this->getNewDefault();
-			if ($command) {
-				$this->context->getProtocol($this->unit)->addDefault($command);
-			}
 		}
 		return $this;
-	}
-
-	#[Pure] public function Activity(): string {
-		return self::ACTIVITY;
 	}
 
 	public function getNewDefault(): ?UnitCommand {
@@ -96,6 +85,13 @@ class Travel extends UnitCommand implements Activity
 			return $command;
 		}
 		return null;
+	}
+
+	/**
+	 * Allow execution of other activities of the same class.
+	 */
+	#[Pure] public function allows(Activity $activity): bool {
+		return $activity instanceof Travel;
 	}
 
 	protected function initialize(): void {
@@ -234,6 +230,7 @@ class Travel extends UnitCommand implements Activity
 				$this->message(RoutePauseMessage::class);
 			}
 		}
+		$this->newDefault = $this->getNewDefault();
 		if (isset($directionError)) {
 			throw $directionError;
 		}

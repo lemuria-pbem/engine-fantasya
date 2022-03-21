@@ -60,6 +60,8 @@ class RawMaterial extends AllocationCommand implements Activity
 
 	protected int $production = 0;
 
+	protected int $available = 0;
+
 	protected bool $isInDoublingFacility = false;
 
 	protected bool $hasLodging = false;
@@ -154,7 +156,9 @@ class RawMaterial extends AllocationCommand implements Activity
 			if (!empty($guardParties)) {
 				$this->message(RawMaterialGuardedMessage::class)->s($resource);
 			} else {
-				$this->message(RawMaterialResourcesMessage::class)->s($resource);
+				if ($this->available <= 0) {
+					$this->message(RawMaterialResourcesMessage::class)->s($resource);
+				}
 			}
 		}
 	}
@@ -177,6 +181,7 @@ class RawMaterial extends AllocationCommand implements Activity
 		$size             = $this->unit->Size();
 		$production       = (int)floor($this->potionBoost($size) * $size * $this->knowledge->Level() / $talent->Level());
 		$this->production = $this->reduceByWorkload($production);
+		$this->available  = $this->getAvailability();
 
 		if ($this->production > 0) {
 			if (count($this->phrase) === 2) {
@@ -192,9 +197,8 @@ class RawMaterial extends AllocationCommand implements Activity
 				$this->addToWorkload($this->production);
 				$this->resources->add($quantity);
 			} else {
-				$available        = $this->getAvailability();
 				$production       = (int)ceil($this->production / $factor);
-				$this->production = $factor * min($production, $available);
+				$this->production = $factor * min($production, $this->available);
 				if ($this->production > 0) {
 					$quantity = new Quantity($this->getCommodity(), (int)ceil($this->production / $factor));
 					$this->addToWorkload($this->production);

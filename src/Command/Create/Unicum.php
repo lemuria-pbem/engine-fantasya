@@ -2,18 +2,15 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
-use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\UnicumRead;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
-use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\OperatorActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\UnicumCreateMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnicumMaterialMessage;
@@ -39,7 +36,7 @@ use Lemuria\Model\Fantasya\Unicum as UnicumModel;
 final class Unicum extends UnitCommand implements Activity
 {
 	use CollectTrait;
-	use DefaultActivityTrait;
+	use OperatorActivityTrait;
 	use WorkloadTrait;
 
 	private readonly Composition $composition;
@@ -52,10 +49,6 @@ final class Unicum extends UnitCommand implements Activity
 		parent::__construct($phrase, $context);
 		$this->initWorkload();
 		$this->dictionary = new Dictionary();
-	}
-
-	#[Pure] public function Activity(): string {
-		return Operator::ACTIVITY;
 	}
 
 	public function getUnicumId(): string {

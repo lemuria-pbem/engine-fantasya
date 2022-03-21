@@ -38,10 +38,10 @@ abstract class AbstractSplitMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['id' => 'int', 'name' => 'string', 'from' => 'string', 'to' => 'string', 'count' => 'int', 'battleRow' => 'int'])]
+	#[ArrayShape(['unit' => 'int', 'name' => 'string', 'from' => 'string', 'to' => 'string', 'count' => 'int', 'battleRow' => 'int'])]
 	#[Pure] protected function getParameters(): array {
-		return ['id' => $this->unit->id->Id(), 'name'  => $this->unit->name, 'from'      => $this->from,
-			    'to' => $this->to,             'count' => $this->count,      'battleRow' => $this->battleRow];
+		return ['unit' => $this->unit->id->Id(), 'name'  => $this->unit->name, 'from'      => $this->from,
+			    'to'   => $this->to,             'count' => $this->count,      'battleRow' => $this->battleRow];
 	}
 
 	/**
@@ -56,7 +56,8 @@ abstract class AbstractSplitMessage extends AbstractMessage
 	}
 
 	protected function validateSerializedData(array &$data): void {
-		$this->validate($data, 'id', 'int');
+		parent::validateSerializedData($data);
+		$this->validate($data, 'unit', 'int');
 		$this->validate($data, 'name', 'string');
 		$this->validate($data, 'from', 'string');
 		$this->validate($data, 'to', 'string');

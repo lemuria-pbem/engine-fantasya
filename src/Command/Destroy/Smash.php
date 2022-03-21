@@ -114,7 +114,7 @@ final class Smash extends UnitCommand implements Activity
 			$this->message(SmashNotConstructionMessageOwnerMessage::class)->e($construction);
 			return;
 		}
-		foreach ($inhabitants as $unit /* @var Unit $unit */) {
+		foreach (clone $inhabitants as $unit /* @var Unit $unit */) {
 			if ($unit !== $this->unit) {
 				$inhabitants->remove($unit);
 				$this->message(SmashLeaveConstructionMessage::class, $unit)->e($construction);
@@ -152,7 +152,7 @@ final class Smash extends UnitCommand implements Activity
 			$this->message(SmashNotVesselOwnerMessage::class)->e($vessel);
 			return;
 		}
-		foreach ($passengers as $unit /* @var Unit $unit */) {
+		foreach (clone $passengers as $unit /* @var Unit $unit */) {
 			if ($unit !== $this->unit) {
 				$passengers->remove($unit);
 				$this->message(SmashLeaveVesselMessage::class, $unit)->e($vessel);

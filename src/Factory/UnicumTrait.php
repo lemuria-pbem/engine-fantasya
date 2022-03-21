@@ -32,12 +32,26 @@ trait UnicumTrait
 			$id                  = $this->phrase->getParameter();
 			$this->unicum        = $this->getUnicum($id);
 			$this->composition   = $this->unicum?->Composition();
-			//$this->argumentIndex = 2;
 		} elseif ($n === 2) {
 			$this->composition   = $this->context->Factory()->composition($this->phrase->getParameter());
 			$id                  = $this->phrase->getParameter(2);
 			$this->unicum        = $this->getUnicum($id);
-			//$this->argumentIndex = 3;
+		} else {
+			throw new InvalidCommandException($this);
+		}
+		return $id;
+	}
+
+	private function findUnicum(): string {
+		$n = $this->phrase->count();
+		if ($n === 1) {
+			$id                  = $this->phrase->getParameter();
+			$this->unicum        = $this->searchUnicum($id);
+			$this->composition   = $this->unicum?->Composition();
+		} elseif ($n === 2) {
+			$this->composition   = $this->context->Factory()->composition($this->phrase->getParameter());
+			$id                  = $this->phrase->getParameter(2);
+			$this->unicum        = $this->searchUnicum($id);
 		} else {
 			throw new InvalidCommandException($this);
 		}
@@ -70,6 +84,32 @@ trait UnicumTrait
 	private function getUnicum(string $id): ?Unicum {
 		$id       = Id::fromId($id);
 		$treasury = $this->unit->Treasury();
+		if ($treasury->has($id)) {
+			/** @var Unicum $unicum */
+			$unicum = $treasury[$id];
+			return $unicum;
+		}
+		return null;
+	}
+
+	/**
+	 * @noinspection PhpUnnecessaryLocalVariableInspection
+	 */
+	private function searchUnicum(string $id): ?Unicum {
+		$id       = Id::fromId($id);
+		$treasury = $this->unit->Construction()?->Treasury();
+		if ($treasury && $treasury->has($id)) {
+			/** @var Unicum $unicum */
+			$unicum = $treasury[$id];
+			return $unicum;
+		}
+		$treasury = $this->unit->Vessel()?->Treasury();
+		if ($treasury && $treasury->has($id)) {
+			/** @var Unicum $unicum */
+			$unicum = $treasury[$id];
+			return $unicum;
+		}
+		$treasury = $this->unit->Region()->Treasury();
 		if ($treasury->has($id)) {
 			/** @var Unicum $unicum */
 			$unicum = $treasury[$id];

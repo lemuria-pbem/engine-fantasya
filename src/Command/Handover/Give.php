@@ -168,7 +168,7 @@ final class Give extends UnitCommand
 		$amount = min($count, $fromSize);
 		if ($this->recipient->Construction() && !$this->unit->Construction()) {
 			$construction = $this->recipient->Construction();
-			$used         = $construction->Inhabitants()->count();
+			$used         = $construction->Inhabitants()->Size();
 			$free         = $construction->Size() - $used;
 			if ($free <= 0) {
 				$this->message(GivePersonsNoSpaceMessage::class)->e($this->recipient);

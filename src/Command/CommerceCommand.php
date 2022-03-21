@@ -8,7 +8,7 @@ use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
-use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\CommerceActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Merchant;
@@ -30,10 +30,8 @@ use Lemuria\Model\Fantasya\Talent\Trading;
 abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 {
 	use CollectTrait;
-	use DefaultActivityTrait;
+	use CommerceActivityTrait;
 	use SiegeTrait;
-
-	private const ACTIVITY = 'Trade';
 
 	protected Resources $goods;
 
@@ -69,13 +67,6 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 		$this->goods  = new Resources();
 		$this->traded = new Resources();
 		$this->silver = self::createCommodity(Silver::class);
-	}
-
-	/**
-	 * Get the activity class.
-	 */
-	#[Pure] public function Activity(): string {
-		return self::ACTIVITY;
 	}
 
 	/**

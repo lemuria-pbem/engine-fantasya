@@ -291,6 +291,13 @@ final class State implements Reassignment
 		return $this->monsters;
 	}
 
+	/**
+	 * @return ActivityProtocol[]
+	 */
+	public function getAllProtocols(): array {
+		return $this->protocol;
+	}
+
 	public function setTurnOptions(TurnOptions $options): void {
 		$this->turnOptions = $options;
 	}

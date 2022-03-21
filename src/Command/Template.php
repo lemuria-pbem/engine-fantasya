@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command\Template\Copy;
 use Lemuria\Engine\Fantasya\Command\Template\DefaultCommand;
@@ -89,7 +88,7 @@ final class Template extends DelegatedCommand
 	private function createOrder(string $phrase): Command {
 		$order    = $this->context->Factory()->create(new Phrase($phrase));
 		$delegate = $order->getDelegate();
-		if ($delegate instanceof Activity) {
+		if ($delegate instanceof UnitCommand) {
 			$delegate->preventDefault();
 		}
 		return $order;

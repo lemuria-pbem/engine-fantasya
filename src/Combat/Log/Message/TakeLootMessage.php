@@ -37,9 +37,9 @@ class TakeLootMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['id' => 'int', 'name' => 'string', 'commodity' => 'string', 'count' => 'int'])]
+	#[ArrayShape(['unit' => 'int', 'name' => 'string', 'commodity' => 'string', 'count' => 'int'])]
 	#[Pure]	protected function getParameters(): array {
-		return ['id'        => $this->unit->id->Id(),              'name'  => $this->unit->name,
+		return ['unit'      => $this->unit->id->Id(),              'name'  => $this->unit->name,
 			    'commodity' => getClass($this->loot->Commodity()), 'count' => $this->loot->Count()];
 	}
 
@@ -53,7 +53,8 @@ class TakeLootMessage extends AbstractMessage
 	}
 
 	protected function validateSerializedData(array &$data): void {
-		$this->validate($data, 'id', 'int');
+		parent::validateSerializedData($data);
+		$this->validate($data, 'unit', 'int');
 		$this->validate($data, 'name', 'string');
 		$this->validate($data, 'commodity', 'string');
 		$this->validate($data, 'count', 'int');

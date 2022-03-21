@@ -35,6 +35,9 @@ final class PotionInfluence extends AbstractRegionEffect
 		return $this->isFresh;
 	}
 
+	/**
+	 * @noinspection DuplicatedCode
+	 */
 	#[ArrayShape(['class' => "string", 'id' => "int", 'potions' => "array"])]
 	#[Pure] public function serialize(): array {
 		$data    = parent::serialize();
@@ -47,6 +50,9 @@ final class PotionInfluence extends AbstractRegionEffect
 		return $data;
 	}
 
+	/**
+	 * @noinspection DuplicatedCode
+	 */
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
 		foreach ($data['potions'] as $potionData) {

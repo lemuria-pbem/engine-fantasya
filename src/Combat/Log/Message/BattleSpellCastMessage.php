@@ -33,7 +33,7 @@ class BattleSpellCastMessage extends BattleSpellNoAuraMessage
 		return $this;
 	}
 
-	#[ArrayShape(['id' => 'int', 'name' => 'string', 'spell' => 'string', 'grade' => 'int'])]
+	#[ArrayShape(['unit' => 'int', 'name' => 'string', 'spell' => 'string', 'grade' => 'int'])]
 	#[Pure] protected function getParameters(): array {
 		$parameters          = parent::getParameters();
 		$parameters['grade'] = $this->grade;

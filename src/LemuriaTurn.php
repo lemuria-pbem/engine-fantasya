@@ -215,6 +215,16 @@ class LemuriaTurn implements Turn
 	}
 
 	/**
+	 * Make preparations for the next turn.
+	 */
+	public function prepareNext(): Turn {
+		foreach ($this->state->getAllProtocols() as $protocol) {
+			$protocol->persistNewDefaults();
+		}
+		return $this;
+	}
+
+	/**
 	 * Add events from default progress,
 	 */
 	public function addProgress(Progress $progress): LemuriaTurn {

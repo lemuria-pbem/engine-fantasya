@@ -39,6 +39,7 @@ class AssaultHitMessage extends AbstractMessage
 	}
 
 	protected function validateSerializedData(array &$data): void {
+		parent::validateSerializedData($data);
 		$this->validate($data, 'attacker', 'string');
 		$this->validate($data, 'defender', 'string');
 		$this->validate($data, 'damage', 'int');

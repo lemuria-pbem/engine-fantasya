@@ -28,7 +28,7 @@ abstract class AbstractSplitWeaponMessage extends AbstractSplitMessage
 		return $this;
 	}
 
-	#[ArrayShape(['id' => 'int', 'name' => 'string', 'from' => 'string', 'to' => 'string', 'count' => 'int', 'battleRow' => 'int', 'weapon' => 'string'])]
+	#[ArrayShape(['unit' => 'int', 'name' => 'string', 'from' => 'string', 'to' => 'string', 'count' => 'int', 'battleRow' => 'int', 'weapon' => 'string'])]
 	#[Pure] protected function getParameters(): array {
 		$parameters           = parent::getParameters();
 		$parameters['weapon'] = $this->weapon;

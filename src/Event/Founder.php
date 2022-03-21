@@ -11,7 +11,6 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
-use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
 
@@ -60,14 +59,10 @@ final class Founder extends AbstractEvent
 	}
 
 	private function founder(Vessel $vessel): void {
-		$units = new People();
 		$passengers = $vessel->Passengers();
-		foreach ($passengers as $unit /* @var Unit $unit */) {
+		foreach (clone $passengers as $unit /* @var Unit $unit */) {
 			$unit->Inventory()->clear();
 			$unit->setSize(0);
-			$units->add($unit);
-		}
-		foreach ($units as $unit /* @var Unit $unit */) {
 			$passengers->remove($unit);
 		}
 		$vessel->Region()->Fleet()->remove($vessel);

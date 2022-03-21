@@ -2,10 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Activity;
-use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\OperatorActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\UnicumTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\WriteNoCompositionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\WriteNoUnicumMessage;
@@ -20,12 +18,8 @@ use Lemuria\Model\Fantasya\Practice;
  */
 final class Write extends UnitCommand implements Activity, Operator
 {
-	use DefaultActivityTrait;
+	use OperatorActivityTrait;
 	use UnicumTrait;
-
-	#[Pure] public function Activity(): string {
-		return Operator::ACTIVITY;
-	}
 
 	protected function run(): void {
 		$this->parseUnicumWithArguments();

@@ -62,20 +62,12 @@ final class Teach extends UnitCommand implements Activity
 			foreach ($this->students as $student /* @var Learn $student */) {
 				$ids[] = $student->Unit()->Id();
 			}
-			$oldDefault = $this->newDefault;
-			if (empty($ids)) {
-				$this->replaceDefault($oldDefault);
-			} else {
-				$this->createNewDefault($ids);
-				if ($this->newDefault !== $oldDefault) {
-					$this->replaceDefault($oldDefault, $this->newDefault);
-				}
-			}
+			$this->createNewDefault($ids);
+			$this->context->getProtocol($this->unit)->replaceDefaults($this);
 		}
 	}
 
 	protected function initialize(): void {
-		$this->newDefault = $this;
 		parent::initialize();
 		$ids = [];
 		$i   = 1;
@@ -217,7 +209,9 @@ final class Teach extends UnitCommand implements Activity
 	}
 
 	private function createNewDefault(array $ids): void {
-		if (!empty($ids)) {
+		if (empty($ids)) {
+			$this->newDefault = null;
+		} else {
 			$teach = $this->phrase->getVerb() . ' ' . implode(' ', $ids);
 			/** @var Teach $command */
 			$command          = $this->context->Factory()->create(new Phrase($teach));

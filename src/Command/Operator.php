@@ -8,8 +8,6 @@ use Lemuria\Model\Fantasya\Unit;
 
 interface Operator
 {
-	public final const ACTIVITY = 'Operator';
-
 	public function ArgumentIndex(): int;
 
 	public function Phrase(): Phrase;

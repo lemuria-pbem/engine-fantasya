@@ -25,16 +25,16 @@ abstract class AbstractReinforcementMessage extends AbstractMessage
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->unit      = Entity::create($data['id'], $data['name']);
+		$this->unit      = Entity::create($data['unit'], $data['name']);
 		$this->combatant = $data['combatant'];
 		$this->count     = $data['count'];
 		$this->battleRow = $data['battleRow'];
 		return $this;
 	}
 
-	#[ArrayShape(['id' => 'int', 'name' => 'string', 'combatant' => 'null|string', 'count' => 'int', 'battleRow' => 'int'])]
+	#[ArrayShape(['unit' => 'int', 'name' => 'string', 'combatant' => 'null|string', 'count' => 'int', 'battleRow' => 'int'])]
 	#[Pure] protected function getParameters(): array {
-		return ['id'    => $this->unit->id->Id(), 'name'      => $this->unit->name, 'combatant' => $this->combatant,
+		return ['unit'  => $this->unit->id->Id(), 'name'      => $this->unit->name, 'combatant' => $this->combatant,
 			    'count' => $this->count,          'battleRow' => $this->battleRow];
 	}
 
@@ -50,7 +50,8 @@ abstract class AbstractReinforcementMessage extends AbstractMessage
 	}
 
 	protected function validateSerializedData(array &$data): void {
-		$this->validate($data, 'id', 'int');
+		parent::validateSerializedData($data);
+		$this->validate($data, 'unit', 'int');
 		$this->validate($data, 'name', 'string');
 		$this->validate($data, 'combatant', 'string');
 		$this->validate($data, 'count', 'int');

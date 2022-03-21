@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Command\Operate\AbstractOperate;
+use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\OperateNoCompositionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\OperateNoUnicumMessage;
@@ -82,12 +83,16 @@ trait OperateTrait
 		}
 
 		if ($unicum) {
-			$operate     = $this->context->Factory()->operateUnicum($unicum, $this);
-			$composition = $unicum->Composition();
-			$this->message(OperatePracticeMessage::class)->p((string)$id)->s($composition)->p($practice->name, OperatePracticeMessage::PRACTICE);
-			return $operate;
+			return $this->createOperate($unicum, $practice, $this);
 		}
 		$this->message(OperateNoUnicumMessage::class)->p((string)$id);
 		return null;
+	}
+
+	protected function createOperate(Unicum $unicum, Practice $practice, Operator $operator): AbstractOperate {
+		$operate     = $this->context->Factory()->operateUnicum($unicum, $operator);
+		$composition = $unicum->Composition();
+		$this->message(OperatePracticeMessage::class)->p((string)$unicum->Id())->s($composition)->p($practice->name, OperatePracticeMessage::PRACTICE);
+		return $operate;
 	}
 }

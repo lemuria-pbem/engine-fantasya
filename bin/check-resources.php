@@ -30,6 +30,7 @@ $errors  = checkDirectory('Construction', $messages);
 $errors += checkDirectory('Party', $messages);
 $errors += checkDirectory('Party/Administrator', $messages);
 $errors += checkDirectory('Region', $messages);
+$errors += checkDirectory('Region/Event', $messages);
 $errors += checkDirectory('Unit', $messages);
 $errors += checkDirectory('Unit/Act', $messages);
 $errors += checkDirectory('Unit/Apply', $messages);

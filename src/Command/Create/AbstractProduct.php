@@ -10,6 +10,7 @@ use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Fantasya\Building\AlchemyKitchen;
 use Lemuria\Model\Fantasya\Building\Blacksmith;
 use Lemuria\Model\Fantasya\Building\Dockyard;
 use Lemuria\Model\Fantasya\Building\Saddlery;
@@ -18,6 +19,7 @@ use Lemuria\Model\Fantasya\Artifact;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Requirement;
 use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Fantasya\Talent\Alchemy;
 use Lemuria\Model\Fantasya\Talent\Armory;
 use Lemuria\Model\Fantasya\Talent\Bowmaking;
 use Lemuria\Model\Fantasya\Talent\Carriagemaking;
@@ -39,11 +41,12 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 	use WorkloadTrait;
 
 	protected final const CONSUMPTION = [
-		Armory::class         => [Saddlery::class   => self::CONSUMPTION_RATE],
-		Bowmaking::class      => [Blacksmith::class => self::CONSUMPTION_RATE],
-		Carriagemaking::class => [Workshop::class   => self::CONSUMPTION_RATE],
-		Shipbuilding::class   => [Dockyard::class   => self::CONSUMPTION_RATE],
-		Weaponry::class       => [Blacksmith::class => self::CONSUMPTION_RATE]
+		Alchemy::class        => [AlchemyKitchen::class => self::CONSUMPTION_RATE],
+		Armory::class         => [Saddlery::class       => self::CONSUMPTION_RATE],
+		Bowmaking::class      => [Blacksmith::class     => self::CONSUMPTION_RATE],
+		Carriagemaking::class => [Workshop::class       => self::CONSUMPTION_RATE],
+		Shipbuilding::class   => [Dockyard::class       => self::CONSUMPTION_RATE],
+		Weaponry::class       => [Blacksmith::class     => self::CONSUMPTION_RATE]
 	];
 
 	private const CONSUMPTION_RATE = 0.5;

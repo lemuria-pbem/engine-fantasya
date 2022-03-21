@@ -2,9 +2,12 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Message\Construction\UnmaintainedMessage;
+use Lemuria\Engine\Fantasya\Message\Construction\UnmaintainedOvercrowdedMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\UpkeepAbandonedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UpkeepCharityMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UpkeepDonateMessage;
@@ -40,18 +43,30 @@ final class Upkeep extends AbstractEvent
 
 	private Estate $unmaintained;
 
+	private Estate $overcrowded;
+
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::MIDDLE);
 		$this->silver       = self::createCommodity(Silver::class);
 		$this->unmaintained = new Estate();
+		$this->overcrowded  = new Estate();
 	}
 
 	protected function run(): void {
 		$this->pay();
-		if ($this->unmaintained->count()) {
-			Lemuria::Log()->debug($this->unmaintained->count() . ' parties cannot maintain some of their constructions.');
+		if ($this->unmaintained->count() || $this->overcrowded->count()) {
+			if ($this->overcrowded->count()) {
+				Lemuria::Log()->debug($this->overcrowded->count() . ' constructions are overcrowded and not maintained.');
+			}
+			if ($this->unmaintained->count()) {
+				Lemuria::Log()->debug($this->unmaintained->count() . ' constructions cannot be maintained by their owners.');
+			}
 		} else {
 			Lemuria::Log()->debug('All parties have maintained their estate.');
+		}
+		foreach ($this->overcrowded as $construction /* @var Construction $construction */) {
+			$this->message(UnmaintainedOvercrowdedMessage::class, $construction);
+			Lemuria::Score()->add($this->effect($construction));
 		}
 		foreach ($this->unmaintained as $construction /* @var Construction $construction */) {
 			$owner   = $construction->Inhabitants()->Owner();
@@ -62,8 +77,6 @@ final class Upkeep extends AbstractEvent
 				}
 				Lemuria::Score()->add($this->effect($construction));
 				$this->message(UnmaintainedMessage::class, $construction);
-			} else {
-				Lemuria::Score()->remove($this->effect($construction));
 			}
 		}
 	}
@@ -74,6 +87,10 @@ final class Upkeep extends AbstractEvent
 			$unmaintained->clear();
 			/** @var Construction $construction */
 			foreach ($region->Estate() as $construction) {
+				if ($this->isOvercrowded($construction)) {
+					$this->overcrowded->add($construction);
+					continue;
+				}
 				if (!$this->payFromInventory($construction)) {
 					$unmaintained->add($construction);
 				}
@@ -177,12 +194,14 @@ final class Upkeep extends AbstractEvent
 		return $help;
 	}
 
-	/** @noinspection PhpRedundantVariableDocTypeInspection */
+	#[Pure] private function isOvercrowded(Construction $construction): bool {
+		$neededSize = $construction->Inhabitants()->Size() * $construction->Building()->UsefulSize();
+		return $construction->Size() < $neededSize;
+	}
+
 	private function effect(Construction $construction): Unmaintained {
 		$effect = new Unmaintained($this->state);
-		/** @var Unmaintained $effect */
-		/** @noinspection PhpUnnecessaryLocalVariableInspection */
-		$effect = Lemuria::Score()->find($effect->setConstruction($construction));
-		return $effect;
+		$existing = Lemuria::Score()->find($effect->setConstruction($construction));
+		return $existing instanceof Unmaintained ? $existing : $effect;
 	}
 }
