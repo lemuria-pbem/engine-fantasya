@@ -15,7 +15,7 @@ class PresettingBattleRowMessage extends AbstractPartyMessage
 	protected int $position;
 
 	protected function create(): string {
-		return 'The default battle row for new recruits has been set to ' . $this->position . '.';
+		return 'The default battle row for new recruits has been set to "' . $this->position . '".';
 	}
 
 	protected function getData(LemuriaMessage $message): void {

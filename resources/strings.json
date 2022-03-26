@@ -564,7 +564,7 @@
 		"PotionEffectContinuesMessage": "Der Effekt des Tranks $potion hält weiter an.",
 		"PotionEffectEndsMessage": "Der Effekt des Tranks $potion schwindet.",
 		"PotionGiftMessage": "Die Einheit $unit hat einen fahrenden alten Zauberer und Alchemisten getroffen, und von ihm einen Trank als Geschenk erhalten: $gift.",
-		"PresettingBattleRowMessage": "Die Vorgabe für die Kampfposition neuer Rekruten ist nun $position.",
+		"PresettingBattleRowMessage": "Die Vorgabe für die Kampfposition neuer Rekruten ist nun „$position“.",
 		"PresettingDisguiseDoesNotKnowMessage": "Die Partei $id kennt die Partei $party nicht.",
 		"PresettingDisguiseMessage": "Neue Einheiten werden ab sofort ihre Parteizugehörigkeit verheimlichen.",
 		"PresettingDisguisePartyMessage": "Neue Einheiten werden sich ab sofort als Mitglieder der Partei $party ausgeben.",

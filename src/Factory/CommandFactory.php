@@ -107,6 +107,7 @@ use Lemuria\Model\Fantasya\Building\Stronghold;
 use Lemuria\Model\Fantasya\Building\Tavern;
 use Lemuria\Model\Fantasya\Building\Tower;
 use Lemuria\Model\Fantasya\Building\Workshop;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
@@ -893,6 +894,19 @@ class CommandFactory
 	public function talent(string $talent): Talent {
 		$talentClass = $this->identifySingleton($talent, $this->talents);
 		return self::createTalent($talentClass);
+	}
+
+	public function battleRow(string $position): BattleRow {
+		return match(strtolower($position)) {
+			'aggressiv'                   => BattleRow::AGGRESSIVE,
+			'defensiv'                    => BattleRow::DEFENSIVE,
+			'fliehe', 'fliehen', 'flucht' => BattleRow::REFUGEE,
+			'hinten'                      => BattleRow::BACK,
+			'nicht'                       => BattleRow::BYSTANDER,
+			'', 'vorn', 'vorne'           => BattleRow::FRONT,
+			'vorsichtig'                  => BattleRow::CAREFUL,
+			default                       => throw new UnknownCommandException()
+		};
 	}
 
 	public function applyPotion(Potion $potion, Apply $apply): AbstractApply {

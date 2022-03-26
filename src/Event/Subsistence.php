@@ -43,7 +43,7 @@ final class Subsistence extends AbstractEvent
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
 			$effect = new CivilCommotionEffect($this->state);
-			if (Lemuria::Score()->find($effect)) {
+			if (Lemuria::Score()->find($effect->setRegion($region))) {
 				return;
 			}
 
