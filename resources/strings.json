@@ -353,6 +353,7 @@
 		"DriftDamageMessage": "Das Schiff $id wird beim Auflaufen auf das Riff vor der Küste der Region $region beschädigt, weil Kapitän und Crew es nicht mehr steuern können.",
 		"DriftMessage": "Das Schiff $id treibt in Richtung $direction ab, weil Kapitän und Crew es nicht mehr steuern können.",
 		"DrinkOfCreationMessage": "Die Einheit $id ist voller Energie und Tatendrang.",
+		"EagleEyeMessage": "Die Einheit $id hat jetzt Wahrnehmung Stufe $perception.",
 		"EarthquakeMessage": "In der Region $region ereignet sich ein Erdbeben, das alle Gebäude in Mitleidenschaft zieht.",
 		"EarthquakeDestroyedMessage": "Das Gebäude $construction wurde durch das Erdbeben vollständig zerstört.",
 		"ElixirOfPowerMessage": "Die Einheit $id fühlt sich unbesiegbar.",
@@ -679,6 +680,7 @@
 		"SortNotInRegionMessage": "Die Einheit $id ist nicht in der selben Region wie Einheit $other und kann nicht verschoben werden.",
 		"SortWithForeignerMessage": "Die Einheit $id kann nicht mit einer fremden Einheit verschoben werden.",
 		"SortWithItselfMessage": "Die Einheit $id kann nicht mit sich selbst sortiert werden.",
+		"SoundlessShadowMessage": "Die Einheit $id hat jetzt Tarnung Stufe $camouflage und kann sich an den Wachen vorbei schleichen.",
 		"SpellbookNoSpellMessage": "In {der:$composition} $unicum steht nichts über einen Zauberspruch namens $spell.",
 		"SpellbookWriteAlreadyMessage": "Die Einheit $id kann den Zauberspruch $spell nicht erneut in {das:$composition} $unicum schreiben.",
 		"SpellbookWriteMessage": "Die Einheit $id schreibt den Zauberspruch $spell in {das:$composition} $unicum.",
@@ -1286,13 +1288,17 @@
 	"spell": {
 		"AstralChaos": "Astrales Chaos",
 		"AuraTransfer": "Auratransfer",
+		"CivilCommotion": "Aufruhr verursachen",
 		"Daydream": "Tagtraum",
+		"EagleEye": "Adlerauge",
 		"Earthquake": "Erdbeben",
 		"Fireball": "Feuerball",
+		"InciteMonster": "Monster aufhetzen",
 		"Quacksalver": "Wunderdoktor",
 		"Quickening": "Beschleunigung",
 		"ShockWave": "Schockwelle",
-		"SongOfPeace": "Friedenslied"
+		"SongOfPeace": "Friedenslied",
+		"SoundlessShadow": "Lautloser Schatten"
 	},
 	"talent": {
 		"Alchemy": "Alchemie",

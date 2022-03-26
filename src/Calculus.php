@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Combat\WeaponSkill;
 use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Effect\PotionEffect;
+use Lemuria\Engine\Fantasya\Effect\TalentEffect;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\Factory\LodgingTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
@@ -218,6 +219,10 @@ final class Calculus
 				$modification = $race->TerrainEffect()->getEffect($this->unit->Region()->Landscape(), $talent);
 				if ($modification instanceof Modification) {
 					$ability = $modification->getModified($ability);
+				}
+				$talentEffect = $this->talentEffect($talent);
+				if ($talentEffect instanceof Modification) {
+					$ability = $talentEffect->getModified($ability);
 				}
 
 				if ($this->isInMaintainedConstruction()) {
@@ -504,5 +509,17 @@ final class Calculus
 		/** @var Transport $transport */
 		$transport = self::createCommodity($class);
 		return $transport->Payload();
+	}
+
+	private function talentEffect(Talent $talent): ?Modification {
+		$effect   = new TalentEffect(State::getInstance());
+		$existing = Lemuria::Score()->find($effect->setUnit($this->unit));
+		if ($existing instanceof TalentEffect) {
+			$modifications = $existing->Modifications();
+			if (isset($modifications[$talent])) {
+				return $modifications[$talent];
+			}
+		}
+		return null;
 	}
 }

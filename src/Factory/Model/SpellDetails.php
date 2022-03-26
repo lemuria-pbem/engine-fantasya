@@ -99,6 +99,7 @@ class SpellDetails
 	protected function getParameters(): string {
 		return match (SpellParser::getSyntax($this->spell)) {
 			SpellParser::LEVEL            => '[Stufe]',
+			SpellParser::TARGET           => 'Ziel',
 			SpellParser::LEVEL_AND_TARGET => '[Stufe] Ziel',
 			default                       => ''
 		};

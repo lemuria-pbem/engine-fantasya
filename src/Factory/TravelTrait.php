@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Capacity;
+use Lemuria\Engine\Fantasya\Effect\SneakPastEffect;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNewOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNoOwnerMessage;
@@ -155,6 +156,10 @@ trait TravelTrait
 	protected function unitIsStoppedByGuards(Region $region): Gathering {
 		$guards = new Gathering();
 		if ($this->context->getTurnOptions()->IsSimulation()) {
+			return $guards;
+		}
+		$effect = new SneakPastEffect(State::getInstance());
+		if (Lemuria::Score()->find($effect->setUnit($this->unit))) {
 			return $guards;
 		}
 

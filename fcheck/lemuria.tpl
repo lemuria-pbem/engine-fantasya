@@ -51,7 +51,7 @@
 
 ^@?(h|he|hel|helf|helfe|helfen|hi|hil|hilf|hilfe) +[a-z0-9]{1,6} +[a-z]+( +(region|nicht|region +nicht|nicht +region))?$
 
-^@?(kam|kamp|kampf|kampfz|kampfza|kampfzau|kampfzaub|kampfzaube|kampfzauber) +(astrales chaos|feuerball|friedenslied|schockwelle)( +(([0-9]+)|aus|nicht))?$
+^@?(kam|kamp|kampf|kampfz|kampfza|kampfzau|kampfzaub|kampfzaube|kampfzauber) +(astrales chaos|beschleunigung|feuerball|friedenslied|schockwelle)( +(([0-9]+)|aus|nicht))?$
 ^@?(kam|kamp|kampf|kampfz|kampfza|kampfzau|kampfzaub|kampfzaube|kampfzauber) +(aus|kein|keine|keiner|keinen|nicht)$
 
 ^@?(kau|kauf|kaufe|kaufen)( +[0-9]+)? +(balsam|balsame|gewürz|gewürze|gewuerz|gewuerze|juwel|juwelen|myrrhe|myrrhen|öl|öle|oel|oele|pelz|pelze|seide|seiden|weihrauch)$
@@ -72,7 +72,7 @@
 ^@?(m|ma|mac|mach|mache|machen) +[a-zäöüß]+$
 ^@?(m|ma|mac|mach|mache|machen) +[0-9]+ +[a-zäöüß]+$
 ^@?(m|ma|mac|mach|mache|machen) +(schiff|boot|drachenschiff|galeone|karavelle|langboot|trireme)( +[0-9]+)?$
-^@?(m|ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|bergwerk|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|leuchtturm|leuchttürme|minen|mine|monument|monumente|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steingrube|steuerturm|taverne|werkstatt)(( +[0-9]+)|( +[a-z0-9]{1,6}))?$
+^@?(m|ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|akropolis|alchemistenküche|bergwerk|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|kamelzucht|kanal|leuchtturm|leuchttürme|magierturm|minen|mine|monument|monumente|pferdezucht|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steingrube|steuerturm|taverne|wegweiser|werkstatt)(( +[0-9]+)|( +[a-z0-9]{1,6}))?$
 ^@?(m|ma|mac|mach|mache|machen) +straße +(no|o|so|sw|w|nw)$
 ^@?(m|ma|mac|mach|mache|machen) +(schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
 
@@ -136,7 +136,7 @@
 ^(d|de|def|defa|defau|defaul|default) +[0-9]+ +[a-z].+$
 ^(d|de|def|defa|defau|defaul|default) +[0-9]+/+[0-9]+ +[a-z].+$
 
-^@?(za|zau|zaub|zaube|zauber|zaubere|zaubern) +(auratransfer|tagtraum|wunderdoktor)( +[0-9]+)?$
+^@?(za|zau|zaub|zaube|zauber|zaubere|zaubern) +(adlerauge|aufruhr verursachen|auratransfer|erdbeben|lautloser schatten|monster aufhetzen|tagtraum|wunderdoktor)( +[0-9]+)?$
 
 ^@?(zerstö|zerstör|zerstöre|zerstören) +(burg|gebäude|gebaeude|schiff)( +[a-z0-9]{1,6})?$
 ^@?(zerstoe|zerstoer|zerstoere|zerstoeren) +(burg|gebäude|gebaeude|schiff)( +[a-z0-9]{1,6})?$
