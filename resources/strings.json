@@ -451,6 +451,8 @@
 		"HomeNowhereMessage": "Die Einheit $id verzweifelt, weil sie niemals eine Heimat finden wird.",
 		"HorseBlissNoneMessage": "Es gibt hier {kein:$animal}, um Pferdeglück anzuwenden.",
 		"HungerMessage": "Die Gesundheit der Einheit $id sinkt auf $health.",
+		"InciteMonsterNoEnemiesMessage": "Die Einheit $id hat keine Feinde für den Zauber \"Monster aufhetzen\" gefunden.",
+		"InciteMonsterNoMessage": "Die Einheit $id kann die Einheit $unit nicht als Ziel für den Zauber \"Monster aufhetzen\" angeben.",
 		"LayaboutMessage": "Die Einheit $id faulenzt in dieser Woche.",
 		"LearnMagicMessage": "Die Einheit $id erreicht eine neue Magiestufe und erhält {$aura:Aurapunkt}.",
 		"LearnNotMessage": "Die Einheit $id kann kein Silber ausgeben, um $talent zu lernen.",

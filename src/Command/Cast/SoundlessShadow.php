@@ -17,8 +17,6 @@ final class SoundlessShadow extends AbstractCast
 {
 	use BuilderTrait;
 
-	private const RATE = 2.0;
-
 	public function cast(): void {
 		$unit   = $this->cast->Unit();
 		$levels = $this->cast->Level();
