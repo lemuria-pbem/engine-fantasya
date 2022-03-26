@@ -4,6 +4,11 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.11
 
+- weitere Zauber:
+  - Lautloser Schatten (1) (erhöht Tarnung, kein Aufhalten)
+  - Adlerauge (1) (erhöht Wahrnehmung)
+  - Monster aufhetzen (2)
+  - Aufruhr verursachen (2) (Bauern arbeiten nicht, Rekruten = 0)
 
 ## Neue Funktionen
 
@@ -13,6 +18,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Regionsentwicklung im Report anzeigen
   - Veränderungen im Inventar anzeigen
   - Talentveränderungen im Report anzeigen
+- Idee: Kommentare als Notizen im Report anzeigen
 - HTML-Report optisch verbessern
 - Regeldatei für Magellan
 - Kriegselefanten
@@ -23,10 +29,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Monument
   - Steinkreis
 - weitere Zauber:
-  - Lautloser Schatten (1) (erhöht Tarnung, kein Aufhalten)
-  - Adlerauge (1) (erhöht Wahrnehmung)
-  - Monster aufhetzen (2)
-  - Aufruhr verursachen (2) (Bauern arbeiten nicht, Rekruten = 0)
   - Fernsicht (3) (Region zeigen)
   - Erwecke Baumhirten (3) (Baumhirten bewachen den Wald, kämpfen im Kampf)
   - Sturmböe (4) (Kampfzauber)
