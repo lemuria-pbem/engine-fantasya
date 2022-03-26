@@ -285,6 +285,7 @@
 		"CastNoAuraMessage": "Die Einheit $id hat nicht genug Aura für den Spruch $spell übrig.",
 		"CastNoMagicianMessage": "Die Einheit $id ist kein Magier und kann nicht zaubern.",
 		"CastOnlyMessage": "Die Einheit $id kann $spell nur bis zur Stufe $maximum zaubern.",
+		"CivilCommotionMessage": "In der Region $id beginnen die Bauern einen Aufstand und verweigern die Arbeit.",
 		"CommentMessage": "Kommentar für Einheit $id: $comment",
 		"CommerceGuardedMessage": "Die Wachen der Partei $party haben den Handel in der Region $region verhindert.",
 		"CommerceNotPossibleMessage": "Die Einheit $id kann in der Region $region keinen Handel treiben - es gibt hier keine Burg mit einem Markt.",

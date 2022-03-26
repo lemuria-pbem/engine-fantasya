@@ -4,8 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Fehler/Verbesserungen in 0.11
 
-- weitere Zauber:
-  - Aufruhr verursachen (2) (Bauern arbeiten nicht, Rekruten = 0)
 
 ## Neue Funktionen
 

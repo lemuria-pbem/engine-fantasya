@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use Lemuria\Engine\Fantasya\Effect\CivilCommotionEffect;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Factory\WorkplacesTrait;
 use Lemuria\Engine\Fantasya\Message\Region\SubsistenceMessage;
@@ -41,6 +42,11 @@ final class Subsistence extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
+			$effect = new CivilCommotionEffect($this->state);
+			if (Lemuria::Score()->find($effect)) {
+				return;
+			}
+
 			$resources = $region->Resources();
 			$peasants  = $resources[$this->peasant]->Count();
 			if ($peasants > 0) {
