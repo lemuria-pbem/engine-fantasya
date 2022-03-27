@@ -16,7 +16,7 @@
 
 ^@?(a|an|ang|angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren)( +[a-z0-9]{1,6})+$
 
-^@?(ba|ban|bann|banne|banner) +.*$
+^(ba|ban|bann|banne|banner) +.*$
 
 ^@?(benu|benut|benutz|benutze|benutzen)( +[0-9]+)? +(bauernlieb|berserkerblut|elixier der macht|gehirnschmalz|goliathwasser|heiltrank|pferdeglück|pferdeglueck|schaffenstrunk|siebenmeilentee|trank der wahrheit|wasser des lebens|wundsalbe)$
 ^@?(benu|benut|benutz|benutze|benutzen)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
@@ -127,10 +127,15 @@
 
 ^@?(verli|verlie|verlier|verliere|verlieren) +.*$
 
-^(vo|vor|vorl|vorla|vorlag|vorlage) +[a-z].+$
-^(vo|vor|vorl|vorla|vorlag|vorlage) +(\*[0-9]*|[0-9]*\*) +[a-z].+$
-^(vo|vor|vorl|vorla|vorlag|vorlage) +[0-9]+ +[a-z].+$
-^(vo|vor|vorl|vorla|vorlag|vorlage) +[0-9]+/+[0-9]+ +[a-z].+$
+^(vorg|vorga|vorgab|vorgabe) +kämpfen +(aggressiv|defensiv|fliehe|fliehen|flucht|hinten|nicht|vorn|vorne|vorsichtig)?$
+^(vorg|vorga|vorgab|vorgabe) +tarnen( +nicht)?$
+^(vorg|vorga|vorgab|vorgabe) +tarnen +partei( +(nicht|[a-z0-9]{1,6}))?$
+^(vorg|vorga|vorgab|vorgabe) +sammeln( +nicht)?$
+
+^(vorl|vorla|vorlag|vorlage) +[a-z].+$
+^(vorl|vorla|vorlag|vorlage) +(\*[0-9]*|[0-9]*\*) +[a-z].+$
+^(vorl|vorla|vorlag|vorlage) +[0-9]+ +[a-z].+$
+^(vorl|vorla|vorlag|vorlage) +[0-9]+/+[0-9]+ +[a-z].+$
 ^(d|de|def|defa|defau|defaul|default) +[a-z].+$
 ^(d|de|def|defa|defau|defaul|default) +(\*[0-9]*|[0-9]*\*) +[a-z].+$
 ^(d|de|def|defa|defau|defaul|default) +[0-9]+ +[a-z].+$
