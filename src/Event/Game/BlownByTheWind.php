@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Game;
 
+use Lemuria\Engine\Fantasya\Effect\UnicumDisintegrate;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Priority;
@@ -30,6 +31,8 @@ final class BlownByTheWind extends AbstractEvent
 
 	private const DESCRIPTION = 'Ein leicht zerknittertes und fleckiges, beschriebenes Pergamentblatt.';
 
+	private const ROUNDS = 3;
+
 	private Region $region;
 
 	private Spell $spell;
@@ -56,6 +59,8 @@ final class BlownByTheWind extends AbstractEvent
 		$scroll = $this->createUnicum($unicum)->setSpell($this->spell);
 		$this->region->Treasury()->add($unicum->setComposition($scroll));
 		Lemuria::Log()->debug('A new ' . $scroll . ' containing ' . $this->spell . ' has been placed in ' . $this->region . '.');
+		$effect = new UnicumDisintegrate($this->state);
+		Lemuria::Score()->add($effect->setUnicum($unicum)->setRounds(self::ROUNDS));
 	}
 
 	private function createUnicum(Unicum $unicum): Scroll {
