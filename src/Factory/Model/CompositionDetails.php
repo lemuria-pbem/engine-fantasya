@@ -74,9 +74,21 @@ class CompositionDetails
 		return 'GEBEN Einheit [' . $this->Name() . '] Nummer';
 	}
 
+	#[Pure] public function DestroyCommand(): string {
+		return 'VERNICHTEN [' . $this->Name() . '] Nummer';
+	}
+
+	#[Pure] public function LoseCommand(): string {
+		return 'VERLIEREN [' . $this->Name() . '] Nummer';
+	}
+
 	#[Pure] public function ReadCommand(): string {
 		$command = $this->Composition() instanceof Readable ? 'LESEN' : 'UNTERSUCHEN';
 		return $command . ' [' . $this->Name() . '] Nummer';
+	}
+
+	#[Pure] public function TakeCommand(): string {
+		return 'NEHMEN [' . $this->Name() . '] Nummer';
 	}
 
 	#[Pure] public function WriteCommand(): string {

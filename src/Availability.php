@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya;
 
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Engine\Fantasya\Effect\CivilCommotionEffect;
 use Lemuria\Engine\Fantasya\Effect\Unemployment;
 use Lemuria\Engine\Fantasya\Event\Population;
 use Lemuria\Engine\Fantasya\Factory\Model\Herb;
@@ -87,7 +88,13 @@ class Availability
 	}
 
 	private function getUnemployedPeasants(int $totalPeasants): int {
-		$effect       = new Unemployment(State::getInstance());
+		$state  = State::getInstance();
+		$effect = new CivilCommotionEffect($state);
+		if (Lemuria::Score()->find($effect->setRegion($this->region))) {
+			return 0;
+		}
+
+		$effect = new Unemployment($state);
 		/** @var Unemployment $unemployment */
 		$unemployment = Lemuria::Score()->find($effect->setRegion($this->region));
 		return $unemployment?->Peasants() ?? (int)ceil(Population::UNEMPLOYMENT / 100.0 * $totalPeasants);

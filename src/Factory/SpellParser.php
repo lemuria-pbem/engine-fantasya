@@ -14,15 +14,26 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Spell\AstralChaos;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
+use Lemuria\Model\Fantasya\Spell\CivilCommotion;
 use Lemuria\Model\Fantasya\Spell\Daydream;
+use Lemuria\Model\Fantasya\Spell\EagleEye;
+use Lemuria\Model\Fantasya\Spell\Earthquake;
 use Lemuria\Model\Fantasya\Spell\Fireball;
+use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
+use Lemuria\Model\Fantasya\Spell\Quickening;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
+use Lemuria\Model\Fantasya\Spell\SoundlessShadow;
 
 class SpellParser
 {
 	use BuilderTrait;
+
+	/**
+	 * Spell has no parameters.
+	 */
+	public final const NONE = 0;
 
 	/**
 	 * Spell has optional level.
@@ -30,18 +41,29 @@ class SpellParser
 	public final const LEVEL = 1;
 
 	/**
+	 * Spell has mandatory target unit ID.
+	 */
+	public final const TARGET = 2;
+
+	/**
 	 * Spell has optional level and mandatory target unit ID.
 	 */
-	public final const LEVEL_AND_TARGET = 2;
+	public final const LEVEL_AND_TARGET = self::LEVEL + self::TARGET;
 
 	protected final const SYNTAX = [
-		AstralChaos::class  => self::LEVEL,
-		AuraTransfer::class => self::LEVEL_AND_TARGET,
-		Daydream::class     => self::LEVEL_AND_TARGET,
-		Fireball::class     => self::LEVEL,
-		Quacksalver::class  => self::LEVEL,
-		ShockWave::class    => self::LEVEL,
-		SongOfPeace::class  => self::LEVEL
+		AstralChaos::class     => self::LEVEL,
+		AuraTransfer::class    => self::LEVEL_AND_TARGET,
+		CivilCommotion::class  => self::NONE,
+		Daydream::class        => self::LEVEL_AND_TARGET,
+		EagleEye::class        => self::LEVEL,
+		Earthquake::class      => self::LEVEL,
+		Fireball::class        => self::LEVEL,
+		InciteMonster::class   => self::TARGET,
+		Quacksalver::class     => self::LEVEL,
+		Quickening::class      => self::LEVEL,
+		ShockWave::class       => self::LEVEL,
+		SongOfPeace::class     => self::LEVEL,
+		SoundlessShadow::class => self::LEVEL
 	];
 
 	protected final const SPELLS = [
@@ -113,6 +135,9 @@ class SpellParser
 			case self::LEVEL :
 				$this->level = $this->parseOptionalLevel($phrase, $next);
 				break;
+			case self::TARGET :
+				$this->parseTarget($phrase, $next);
+				break;
 			case self::LEVEL_AND_TARGET :
 				$this->parseOptionalLevelAndTarget($phrase, $next);
 				break;
@@ -133,6 +158,15 @@ class SpellParser
 			return 1;
 		}
 		throw new UnknownCommandException($phrase);
+	}
+
+	protected function parseTarget(Phrase $phrase, int $next): void {
+		$target = $phrase->getParameter($next);
+		try {
+			$this->target = Id::fromId($target);
+		} catch (IdException) {
+			throw new InvalidCommandException($phrase);
+		}
 	}
 
 	protected function parseOptionalLevelAndTarget(Phrase $phrase, int $next): void {

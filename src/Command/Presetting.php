@@ -19,7 +19,6 @@ use Lemuria\Engine\Fantasya\Message\Party\PresettingDisguiseUnknownMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Id;
 use Lemuria\Model\Exception\NotRegisteredException;
-use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Party;
 
 /**
@@ -46,7 +45,7 @@ final class Presetting extends UnitCommand
 			throw new InvalidCommandException($this);
 		}
 
-		$what = strtolower($this->phrase->getParameter());
+		$what = mb_strtolower($this->phrase->getParameter());
 		$how  = strtolower($this->phrase->getParameter(2));
 		switch ($what) {
 			case 'kampf' :
@@ -79,17 +78,15 @@ final class Presetting extends UnitCommand
 		return true;
 	}
 
-	protected function setBattleRow(string $battleRow): void {
-		$row = (int)$battleRow;
-		if ((string)$row === $battleRow) {
-			$battleRow = BattleRow::tryFrom($row);
-			if ($battleRow) {
-				$this->party->Presettings()->setBattleRow($battleRow);
-				$this->message(PresettingBattleRowMessage::class, $this->party)->p($row);
-				return;
-			}
+	protected function setBattleRow(string $position): void {
+		try {
+			$battleRow = $this->context->Factory()->battleRow($position);
+		} catch (InvalidCommandException) {
+			throw new InvalidCommandException($this, 'Invalid battle row parameter.');
 		}
-		throw new InvalidCommandException($this, 'Invalid battle row parameter.');
+
+		$this->party->Presettings()->setBattleRow($battleRow);
+		$this->message(PresettingBattleRowMessage::class, $this->party)->p($battleRow->value);
 	}
 
 	protected function setIsLooting(string $not): void {

@@ -107,6 +107,7 @@ use Lemuria\Model\Fantasya\Building\Stronghold;
 use Lemuria\Model\Fantasya\Building\Tavern;
 use Lemuria\Model\Fantasya\Building\Tower;
 use Lemuria\Model\Fantasya\Building\Workshop;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
@@ -205,13 +206,17 @@ use Lemuria\Model\Fantasya\Ship\Trireme;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Spell\AstralChaos;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
+use Lemuria\Model\Fantasya\Spell\CivilCommotion;
 use Lemuria\Model\Fantasya\Spell\Daydream;
+use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
 use Lemuria\Model\Fantasya\Spell\Fireball;
+use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\Quickening;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
+use Lemuria\Model\Fantasya\Spell\SoundlessShadow;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Alchemy;
 use Lemuria\Model\Fantasya\Talent\Archery;
@@ -565,15 +570,19 @@ class CommandFactory
 	 * @var array(string=>string)
 	 */
 	protected array $spells = [
-		'Astrales chaos' => AstralChaos::class,
-		'Auratransfer'   => AuraTransfer::class,
-		'Beschleunigung' => Quickening::class,
-		'Erdbeben'       => Earthquake::class,
-		'Feuerball'      => Fireball::class,
-		'Friedenslied'   => SongOfPeace::class,
-		'Schockwelle'    => ShockWave::class,
-		'Tagtraum'       => Daydream::class,
-		'Wunderdoktor'   => Quacksalver::class
+		'Adlerauge'           => EagleEye::class,
+		'Astrales chaos'      => AstralChaos::class,
+		'Aufruhr verursachen' => CivilCommotion::class,
+		'Auratransfer'        => AuraTransfer::class,
+		'Beschleunigung'      => Quickening::class,
+		'Erdbeben'            => Earthquake::class,
+		'Feuerball'           => Fireball::class,
+		'Friedenslied'        => SongOfPeace::class,
+		'Lautloser Schatten'  => SoundlessShadow::class,
+		'Monster aufhetzen'   => InciteMonster::class,
+		'Schockwelle'         => ShockWave::class,
+		'Tagtraum'            => Daydream::class,
+		'Wunderdoktor'        => Quacksalver::class
 	];
 
 	/**
@@ -885,6 +894,19 @@ class CommandFactory
 	public function talent(string $talent): Talent {
 		$talentClass = $this->identifySingleton($talent, $this->talents);
 		return self::createTalent($talentClass);
+	}
+
+	public function battleRow(string $position): BattleRow {
+		return match(strtolower($position)) {
+			'aggressiv'                   => BattleRow::AGGRESSIVE,
+			'defensiv'                    => BattleRow::DEFENSIVE,
+			'fliehe', 'fliehen', 'flucht' => BattleRow::REFUGEE,
+			'hinten'                      => BattleRow::BACK,
+			'nicht'                       => BattleRow::BYSTANDER,
+			'', 'vorn', 'vorne'           => BattleRow::FRONT,
+			'vorsichtig'                  => BattleRow::CAREFUL,
+			default                       => throw new UnknownCommandException()
+		};
 	}
 
 	public function applyPotion(Potion $potion, Apply $apply): AbstractApply {
