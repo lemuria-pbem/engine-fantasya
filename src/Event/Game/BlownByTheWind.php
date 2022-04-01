@@ -68,6 +68,7 @@ final class BlownByTheWind extends AbstractEvent
 		$unicum->setName($this->dictionary->get('spell', $this->spell));
 		$unicum->setDescription(self::DESCRIPTION);
 		/** @var Scroll $scroll */
+		/** @noinspection PhpUnnecessaryLocalVariableInspection */
 		$scroll = self::createComposition(Scroll::class);
 		return $scroll;
 	}

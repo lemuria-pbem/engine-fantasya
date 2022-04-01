@@ -49,6 +49,9 @@ class SpellDetails
 		return $this->spell;
 	}
 
+	/**
+	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
+	 */
 	#[Pure] public function Name(): string {
 		return self::$dictionary->get('spell', $this->spell);
 	}

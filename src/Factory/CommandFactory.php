@@ -701,7 +701,6 @@ class CommandFactory
 	 *
 	 * @throws UnknownCommandException
 	 *
-	 * @noinspection PhpMultipleClassDeclarationsInspection
 	 */
 	public function create(Phrase $phrase): AbstractCommand {
 		$verb = $this->identifyVerb($phrase->getVerb());

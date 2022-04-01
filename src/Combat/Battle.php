@@ -235,14 +235,14 @@ class Battle
 			if ($combat->hasDefenders()) {
 				Lemuria::Log()->debug('Battle ended in a draw due to exhaustion (' . self::EXHAUSTION_ROUNDS . ' rounds without damage).');
 				BattleLog::getInstance()->add(new BattleExhaustionMessage(self::EXHAUSTION_ROUNDS));
-				$heirs = $this->intelligence->getHeirs($this->attackers[0], true);
+				$heirs = $this->intelligence->getHeirs($this->attackers[0]);
 				$this->giveLootToHeirs($heirs, $attackerLoot);
-				$heirs = $this->intelligence->getHeirs($this->defenders[0], true);
+				$heirs = $this->intelligence->getHeirs($this->defenders[0]);
 				$this->giveLootToHeirs($heirs, $defenderLoot);
 			} else {
 				Lemuria::Log()->debug('Attacker has won the battle, defender is defeated.');
 				BattleLog::getInstance()->add(new AttackerWonMessage());
-				$heirs = $this->intelligence->getHeirs($this->attackers[0], true);
+				$heirs = $this->intelligence->getHeirs($this->attackers[0]);
 				$this->giveLootToHeirs($heirs, $attackerLoot);
 				$this->giveLootToHeirs($heirs, $defenderLoot);
 				$this->takeTrophies($heirs, $this->defendArmies);
@@ -251,7 +251,7 @@ class Battle
 			if ($combat->hasDefenders()) {
 				Lemuria::Log()->debug('Defender has won the battle, attacker is defeated.');
 				BattleLog::getInstance()->add(new DefenderWonMessage());
-				$heirs = $this->intelligence->getHeirs($this->defenders[0], true);
+				$heirs = $this->intelligence->getHeirs($this->defenders[0]);
 				$this->giveLootToHeirs($heirs, $attackerLoot);
 				$this->giveLootToHeirs($heirs, $defenderLoot);
 				$this->takeTrophies($heirs, $this->attackArmies);

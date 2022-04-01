@@ -73,6 +73,8 @@ class WeaponSkill
 
 	/**
 	 * Check if weapon skill is suitable for short distance combat.
+	 *
+	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
 	 */
 	#[Pure] public function isMelee(): bool {
 		$talent = $this->skill->Talent();
@@ -81,6 +83,8 @@ class WeaponSkill
 
 	/**
 	 * Check if weapon skill is suitable for long distance combat.
+	 *
+	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
 	 */
 	#[Pure] public function isDistant(): bool {
 		$talent = $this->skill->Talent();
@@ -89,6 +93,8 @@ class WeaponSkill
 
 	/**
 	 * Check if weapon skill is suitable for guards or tax collectors.
+	 *
+	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
 	 */
 	#[Pure] public function isGuard(): bool {
 		return !$this->isUnarmed() && !$this->isSiege();
@@ -96,6 +102,8 @@ class WeaponSkill
 
 	/**
 	 * Check if weapon skill is suitable for siege.
+	 *
+	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
 	 */
 	#[Pure] public function isSiege(): bool {
 		return $this->skill->Talent() === self::$catapulting;
@@ -103,6 +111,8 @@ class WeaponSkill
 
 	/**
 	 * Check if weapon skill is unarmed.
+	 *
+	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
 	 */
 	#[Pure] public function isUnarmed(): bool {
 		$talent = $this->skill->Talent();

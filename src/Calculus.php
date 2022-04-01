@@ -473,6 +473,7 @@ final class Calculus
 
 	/**
 	 * @noinspection PhpMissingBreakStatementInspection
+	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
 	 */
 	#[Pure] private function talent(array $transports, int $size, bool $max = false, int $carriage = 0): int {
 		$talent = 0;

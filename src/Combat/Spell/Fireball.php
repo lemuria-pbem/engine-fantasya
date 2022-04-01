@@ -67,6 +67,9 @@ class Fireball extends AbstractBattleSpell
 		return $victims;
 	}
 
+	/**
+	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
+	 */
 	#[Pure] protected function calculateDamage(Combatant $combatant, int $damage): int {
 		$armor  = $combatant->Armor();
 		$shield = $combatant->Shield();

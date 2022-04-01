@@ -2,12 +2,7 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Fehler/Verbesserungen in 0.11
-
-
-## Neue Funktionen
-
-### Version 0.12
+## Neue Funktionen in 0.12
 
 - Statistische Daten erstellen
   - Regionsentwicklung im Report anzeigen

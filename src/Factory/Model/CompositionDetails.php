@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use Lemuria\Model\Dictionary;
 use Lemuria\Model\Fantasya\Composition;
@@ -46,11 +44,14 @@ class CompositionDetails
 		$this->validateJson();
 	}
 
-	#[Pure] public function Composition(): Composition {
+	/**
+	 * @noinspection PhpPureAttributeCanBeAddedInspection
+	 */
+	public function Composition(): Composition {
 		return $this->unicum->Composition();
 	}
 
-	#[Pure] public function Name(): string {
+	public function Name(): string {
 		return self::$dictionary->get('composition', $this->Composition());
 	}
 
@@ -61,7 +62,7 @@ class CompositionDetails
 		return $this->json[self::DESCRIPTION];
 	}
 
-	#[Pure] public function ApplyCommand(): string {
+	public function ApplyCommand(): string {
 		$command = 'BENUTZEN [' . $this->Name() . '] Nummer';
 		$apply   = $this->json[self::APPLY];
 		if (strlen($apply) > 0) {
@@ -70,28 +71,28 @@ class CompositionDetails
 		return $command;
 	}
 
-	#[Pure] public function BestowCommand(): string {
+	public function BestowCommand(): string {
 		return 'GEBEN Einheit [' . $this->Name() . '] Nummer';
 	}
 
-	#[Pure] public function DestroyCommand(): string {
+	public function DestroyCommand(): string {
 		return 'VERNICHTEN [' . $this->Name() . '] Nummer';
 	}
 
-	#[Pure] public function LoseCommand(): string {
+	public function LoseCommand(): string {
 		return 'VERLIEREN [' . $this->Name() . '] Nummer';
 	}
 
-	#[Pure] public function ReadCommand(): string {
+	public function ReadCommand(): string {
 		$command = $this->Composition() instanceof Readable ? 'LESEN' : 'UNTERSUCHEN';
 		return $command . ' [' . $this->Name() . '] Nummer';
 	}
 
-	#[Pure] public function TakeCommand(): string {
+	public function TakeCommand(): string {
 		return 'NEHMEN [' . $this->Name() . '] Nummer';
 	}
 
-	#[Pure] public function WriteCommand(): string {
+	public function WriteCommand(): string {
 		$command = 'SCHREIBEN [' . $this->Name() . '] Nummer';
 		$write   = $this->json[self::WRITE];
 		if (strlen($write) > 0) {
