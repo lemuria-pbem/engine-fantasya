@@ -43,11 +43,12 @@ abstract class AbstractOperate
 				throw new LemuriaException('Unexpected Unit collector in take().');
 			}
 
+			$unit = $this->operator->Unit();
 			$collector->Treasury()->remove($unicum);
-			$this->operator->Unit()->Treasury()->add($unicum);
+			$unit->Treasury()->add($unicum);
 			$this->addReadEffect()->Treasury()->add($unicum);
 			$this->removeDisintegrateEffect();
-			$this->message(TakeMessage::class)->s($composition)->e($unicum);
+			$this->message(TakeMessage::class, $unit)->s($composition)->e($unicum);
 			return;
 		}
 

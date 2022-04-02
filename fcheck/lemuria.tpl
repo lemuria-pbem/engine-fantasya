@@ -39,10 +39,12 @@
 
 ^@?(ent|entl|entla|entlas|entlass|entlasse|entlassen) +.*$
 
-^@?(fol|folg|folge|folgen) +[a-z0-9]{1,6}$
-
 ^@?(erf|erfor|erfors|erforsc|erforsch|erforsche|erforschen|for|fors|forsc|forsch|forsche|forschen)$
 ^@?(erf|erfor|erfors|erforsc|erforsch|erforsche|erforschen|for|fors|forsc|forsch|forsche|forschen) +(kraut|kräuter|kraeuter)$
+
+^@?(fol|folg|folge|folgen) +[a-z0-9]{1,6}$
+
+^@?(ers|ersc|ersch|erscha|erschaf|erschaff|erschaffe|erschaffen) +(schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
 
 ^@?(gi|gib|ge|geb|gebe|geben) +[a-z0-9]{1,6}( +.*)?$
 ^@?(gi|gib|ge|geb|gebe|geben) +[a-z0-9]{1,6}( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
@@ -67,6 +69,7 @@
 ^@?(ler|lern|lerne|lernen) +(alchemie|armbrustschießen|armbrustschiessen|ausdauer|bergbau|bogenbau|bogenschießen|bogenschiessen|burgenbau|handel|handeln|hiebwaffen|holzfaellen|holzfällen|katapultbedienung|katapultschießen|katapultschiessen|kräuterkunde|kraeuterkunde|magie|navigation|navigieren|pferdedressur|reiten|ruestungsbau|rüstungsbau|schiffbau|segeln|speerkämpfen|speerkaempfen|speerkampf|spionage|spionieren|stangenwaffen|steinbau|steuereintreiben|steuereintreibung|strassenbau|straßenbau|taktik|tarnen|tarnung|unterhalten|unterhaltung|waffenbauen|waffenbau|wagenbau|wahrnehmen|wahrnehmung)$
 
 ^@?(les|lese|lesen|li|lie|lies)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(unters|untersu|untersuc|untersuch|untersuche|untersuchen)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^@?(m|ma|mac|mach|mache|machen) +(temp) +[a-z0-9]{1,6}$
 ^@?(m|ma|mac|mach|mache|machen) +[a-zäöüß]+$
@@ -79,6 +82,9 @@
 ^@?(nam|name|bene|benen|benenn|benenne|benennen)( +(einheit|region|gebäude|gebaeude|burg|schiff|partei))? +.+$
 
 ^(nä|näc|näch|nächs|nächst|nächste|nächster|nae|naec|naech|naechs|naechst|naechste|naechster)$
+
+^@?(ne|neh|nehm|nehme|nehmen)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(ni|nim|nimm)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^@?(nu|num|numm|numme|nummer|i|id)( +(einheit|gebaeude|gebäude|burg|schiff|partei))? +[a-z0-9]{1,6}$
 
@@ -117,7 +123,7 @@
 ^@?(besteu|besteue|besteuer|besteuern|besteueru|besteuerun|besteuerung)( +[0-9]+)?$
 ^@?(eint|eintr|eintre|eintrei|eintreib|eintreibe|eintreiben)( +[0-9]+)?$
 
-^@?(un|unt|unte|unter|unterh|unterha|unterhal|unterhalt|unterhalte|unterhalten|unterhaltu|unterhaltun|unterhaltung)( +[0-9]+)?$
+^@?(unterh|unterha|unterhal|unterhalt|unterhalte|unterhalten|unterhaltu|unterhaltun|unterhaltung)( +[0-9]+)?$
 
 ^@?(ur|urs|ursp|urspr|urspru|ursprun|ursprung)( +(partei|region) +[a-z0-9]{1,6})?$
 
@@ -126,6 +132,8 @@
 ^@?(verla|verlas|verlass|verlasse|verlassen)$
 
 ^@?(verli|verlie|verlier|verliere|verlieren) +.*$
+
+^@?(vern|verni|vernic|vernich|vernicht|vernichte|vernichten)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^(vorg|vorga|vorgab|vorgabe) +kämpfen +(aggressiv|defensiv|fliehe|fliehen|flucht|hinten|nicht|vorn|vorne|vorsichtig)?$
 ^(vorg|vorga|vorgab|vorgabe) +tarnen( +nicht)?$
