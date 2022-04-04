@@ -83,6 +83,7 @@ trait OperateTrait
 		}
 
 		if ($unicum) {
+			$this->unicum = $unicum;
 			return $this->createOperate($unicum, $practice, $this);
 		}
 		$this->message(OperateNoUnicumMessage::class)->p((string)$id);

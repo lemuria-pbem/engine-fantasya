@@ -12,6 +12,8 @@ use Lemuria\Engine\Fantasya\Command\Handover\Migrate;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Exception\IdException;
 use Lemuria\Id;
+use Lemuria\Lemuria;
+use Lemuria\Model\Domain;
 
 /**
  * Implementation of command GEBEN.
@@ -85,21 +87,18 @@ final class Handover extends DelegatedCommand
 			return new $command($this->phrase, $this->context);
 		}
 
-		try {
-			if ($n > 2) {
-				if ($this->context->Factory()->isComposition($this->phrase->getParameter(2))) {
-					$id = Id::fromId($this->phrase->getParameter(3));
-					if ($this->unit->Treasury()->has($id)) {
-						return new Bestow($this->phrase, $this->context);
-					}
-				}
-			} elseif ($n === 2) {
+		if ($n > 2) {
+			if ($this->context->Factory()->isComposition($this->phrase->getParameter(2))) {
+				return new Bestow($this->phrase, $this->context);
+			}
+		} elseif ($n === 2) {
+			try {
 				$id = Id::fromId($this->phrase->getParameter(2));
-				if ($this->unit->Treasury()->has($id)) {
+				if (Lemuria::Catalog()->has($id, Domain::UNICUM)) {
 					return new Bestow($this->phrase, $this->context);
 				}
+			} catch (IdException) {
 			}
-		} catch (IdException) {
 		}
 
 		return new Give($this->phrase, $this->context);

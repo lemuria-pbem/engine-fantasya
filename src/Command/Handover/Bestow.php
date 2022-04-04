@@ -27,30 +27,30 @@ final class Bestow extends UnitCommand implements Operator
 	use OperateTrait;
 
 	protected function run(): void {
-		$i         = 1;
-		$recipient = $this->nextId($i);
+		$i               = 1;
+		$this->recipient = $this->nextId($i);
 
-		if (!$recipient) {
+		if (!$this->recipient) {
 			throw new InvalidCommandException($this, 'No recipient parameter.');
 		}
-		if ($recipient->Region() !== $this->unit->Region()) {
-			$this->message(GiveNotFoundMessage::class)->e($recipient);
+		if ($this->recipient->Region() !== $this->unit->Region()) {
+			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
 			return;
 		}
-		$isVisible = $this->checkVisibility($this->unit, $recipient);
+		$isVisible = $this->checkVisibility($this->unit, $this->recipient);
 		if (!$this->checkPermission()) {
 			if ($isVisible) {
-				$this->message(GiveFailedMessage::class)->e($recipient);
-				$this->message(BestowRejectedMessage::class, $recipient)->e($this->unit);
+				$this->message(GiveFailedMessage::class)->e($this->recipient);
+				$this->message(BestowRejectedMessage::class, $this->recipient)->e($this->unit);
 				return;
 			}
-			$this->message(GiveNotFoundMessage::class)->e($recipient);
+			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
 		}
 		if (!$isVisible) {
-			$this->message(GiveNotFoundMessage::class)->e($recipient);
+			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
 			return;
 		}
 
-		$this->parseBestow()?->give($recipient);
+		$this->parseBestow()?->give($this->recipient);
 	}
 }

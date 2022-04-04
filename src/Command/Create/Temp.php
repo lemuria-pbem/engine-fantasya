@@ -60,6 +60,12 @@ final class Temp extends UnitCommand implements Immediate
 		$this->createdUnit->setId($id)->setName('Einheit ' . $id);
 		$this->createdUnit->setRace($party->Race());
 
+		$presettings = $party->Presettings();
+		$this->createdUnit->setBattleRow($presettings->BattleRow());
+		$this->createdUnit->setIsLooting($presettings->IsLooting());
+		$this->createdUnit->setIsHiding($presettings->IsHiding());
+		$this->createdUnit->setDisguise($presettings->Disguise());
+
 		$party->People()->add($this->createdUnit);
 		$this->creator->Region()->Residents()->add($this->createdUnit);
 
