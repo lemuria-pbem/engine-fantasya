@@ -710,7 +710,7 @@
 		"SupportNothingMessage": "Die Einheit $id kann ihren Unterhalt nicht zahlen.",
 		"SupportPayMessage": "Die Einheit $id gibt $support für den Unterhalt aus.",
 		"SupportPayOnlyMessage": "Die Einheit $id kann nur $support für den Unterhalt ausgeben.",
-		"TakeMessage": "Die Einheit $unit hat {das:$composition} $unicum in Besitz genommen.",
+		"TakeMessage": "Die Einheit $id hat {das:$composition} $unicum in Besitz genommen.",
 		"TakeNoCompositionMessage": "Die Einheit $id kann {kein:$composition} mit der Nummer $unicum finden.",
 		"TakeNoUnicumMessage": "Die Einheit $id kann keinen Gegenstand mit der Nummer $unicum finden.",
 		"TakeUnsupportedMessage": "Die Einheit $id kann {das:$composition} $unicum nicht in Besitz nehmen.",

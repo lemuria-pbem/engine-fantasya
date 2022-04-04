@@ -24,7 +24,9 @@ final class Allocation
 {
 	use BuilderTrait;
 
-	public const POOL_COMMODITIES = [Silver::class => true, Camel::class, Elephant::class, Horse::class];
+	public const POOL_COMMODITIES = [
+		Silver::class => true, Camel::class => true, Elephant::class => true, Horse::class => true
+	];
 
 	private readonly CommandPriority $priority;
 

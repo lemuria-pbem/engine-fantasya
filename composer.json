@@ -11,14 +11,14 @@
 		}
 	],
 	"version": "0.12.0",
-	"time": "2022-04-01",
+	"time": "2022-04-04",
 
 	"require": {
 		"php": "~8.1",
 		"ext-json": "~8.1",
 		"ext-mbstring": "~8.1",
-		"lemuria-pbem/lemuria": "dev-dev",
-		"lemuria-pbem/model-fantasya": "dev-dev",
+		"lemuria-pbem/lemuria": "dev-feature/statistics",
+		"lemuria-pbem/model-fantasya": "dev-feature/statistics",
 		"monolog/monolog": "~2.3"
 	},
 	"require-dev": {

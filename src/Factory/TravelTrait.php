@@ -54,7 +54,7 @@ trait TravelTrait
 		/** @var Region $neighbour */
 		$neighbour = Lemuria::World()->getNeighbours($region)[$direction] ?? null;
 		if (!$neighbour) {
-			$this->message(TravelIntoChaosMessage::class)->p($direction);
+			$this->message(TravelIntoChaosMessage::class)->p($direction->value);
 			return null;
 		}
 		$landscape = $neighbour->Landscape();
