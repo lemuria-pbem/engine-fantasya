@@ -26,6 +26,7 @@ final class CensusWorkers extends AbstractEvent
 		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
 			$this->placeMetrics(Subject::Population, $region);
 			$this->placeMetrics(Subject::Unemployment, $region);
+			$this->placeMetrics(Subject::Wealth, $region);
 		}
 	}
 }
