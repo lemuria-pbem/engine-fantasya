@@ -7,6 +7,8 @@ use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Message\Region\GrowthMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
+use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
@@ -23,6 +25,7 @@ use Lemuria\Model\Fantasya\Region;
 final class Growth extends AbstractEvent
 {
 	use BuilderTrait;
+	use StatisticsTrait;
 
 	public const RATE = 0.02;
 
@@ -56,6 +59,7 @@ final class Growth extends AbstractEvent
 			if ($this->isSeason) {
 				$place = (int)round($landscape->Workplaces() / Workplaces::TREE);
 				if ($place <= 0) {
+					$this->placeMetrics(Subject::Trees, $region);
 					continue;
 				}
 
@@ -93,6 +97,7 @@ final class Growth extends AbstractEvent
 				$region->setLandscape($plain);
 				Lemuria::Log()->debug('Region ' . $region . ' is a plain now.');
 			}
+			$this->placeMetrics(Subject::Trees, $region);
 		}
 	}
 

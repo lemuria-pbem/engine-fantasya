@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
+use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Region;
 
 /**
@@ -24,6 +25,10 @@ final class CensusWorkers extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
+			if ($region->Landscape() instanceof Ocean) {
+				continue;
+			}
+
 			$this->placeMetrics(Subject::Population, $region);
 			$this->placeMetrics(Subject::Unemployment, $region);
 			$this->placeMetrics(Subject::Wealth, $region);

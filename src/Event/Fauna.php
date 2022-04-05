@@ -13,6 +13,8 @@ use Lemuria\Engine\Fantasya\Message\Region\FaunaMigrantsMessage;
 use Lemuria\Engine\Fantasya\Message\Region\FaunaNewMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
+use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
@@ -38,6 +40,7 @@ use Lemuria\Model\Neighbours;
  */
 final class Fauna extends AbstractEvent
 {
+	use StatisticsTrait;
 	use WorkplacesTrait;
 
 	private const ANIMAL = [Camel::class, Elephant::class, Griffin::class, Horse::class];
@@ -140,6 +143,7 @@ final class Fauna extends AbstractEvent
 					}
 				}
 			}
+			$this->placeMetrics(Subject::Animals, $region);
 		}
 	}
 
