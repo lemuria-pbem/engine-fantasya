@@ -21,4 +21,6 @@ enum Subject
 	case Unemployment;
 
 	case Wealth;
+
+	case Workers;
 }

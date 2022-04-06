@@ -14,6 +14,8 @@ use Lemuria\Engine\Fantasya\Message\Region\PopulationMigrantsMessage;
 use Lemuria\Engine\Fantasya\Message\Region\PopulationNewMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
+use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
@@ -31,6 +33,7 @@ use Lemuria\Model\Neighbours;
  */
 final class Population extends AbstractEvent
 {
+	use StatisticsTrait;
 	use WorkplacesTrait;
 
 	public const UNEMPLOYMENT = 5.0;
@@ -90,6 +93,7 @@ final class Population extends AbstractEvent
 					$quantity = new Quantity($this->peasant, $migrants);
 					$resources->remove($quantity);
 					$this->message(PopulationMigrantsMessage::class, $region)->i($quantity);
+					$this->placeDataMetrics(Subject::Migration, -$migrants, $region);
 					$this->distributeMigrants($migrants, $neighbours, $distribution, $destinations);
 				}
 			}
@@ -110,6 +114,7 @@ final class Population extends AbstractEvent
 			$resources->remove($quantity);
 			$this->message(PopulationFeedMessage::class, $region)->i($feedPeasants)->i($quantity, PopulationFeedMessage::SILVER);
 
+			$this->placeDataMetrics(Subject::Births, $growth + $hungry, $region);
 			$this->calculateUnemployment($region, $years, $peasants, $growth, $migrants, $hungry);
 		}
 	}
@@ -207,6 +212,7 @@ final class Population extends AbstractEvent
 				$quantity = new Quantity($this->peasant, $peasants);
 				$region->Resources()->add($quantity);
 				$this->message(PopulationNewMessage::class, $region)->i($quantity);
+				$this->placeDataMetrics(Subject::Migration, $peasants, $region);
 				$remaining -= $peasants;
 			} else {
 				break;

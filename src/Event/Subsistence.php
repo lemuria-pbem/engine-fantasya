@@ -8,6 +8,8 @@ use Lemuria\Engine\Fantasya\Factory\WorkplacesTrait;
 use Lemuria\Engine\Fantasya\Message\Region\SubsistenceMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
+use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
@@ -21,6 +23,7 @@ use Lemuria\Model\Fantasya\Region;
  */
 final class Subsistence extends AbstractEvent
 {
+	use StatisticsTrait;
 	use WorkplacesTrait;
 
 	public const SILVER = 10;
@@ -44,6 +47,7 @@ final class Subsistence extends AbstractEvent
 		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
 			$effect = new CivilCommotionEffect($this->state);
 			if (Lemuria::Score()->find($effect->setRegion($region))) {
+				$this->placeDataMetrics(Subject::Income, 0, $region);
 				return;
 			}
 
@@ -58,6 +62,8 @@ final class Subsistence extends AbstractEvent
 				$silver    = new Quantity($this->silver, $earnings);
 				$resources->add($silver);
 				$this->message(SubsistenceMessage::class, $region)->i($working)->i($silver, SubsistenceMessage::SILVER)->p($wage);
+				$this->placeDataMetrics(Subject::Income, $earnings, $region);
+				$this->placeDataMetrics(Subject::Workers, $workers, $region);
 			}
 		}
 	}
