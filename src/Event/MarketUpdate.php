@@ -9,6 +9,8 @@ use Lemuria\Engine\Fantasya\Message\Region\MarketUpdateDemandMessage;
 use Lemuria\Engine\Fantasya\Message\Region\MarketUpdateOfferMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
+use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building\Site;
@@ -21,6 +23,8 @@ use Lemuria\Model\Fantasya\Region;
  */
 final class MarketUpdate extends AbstractEvent
 {
+	use StatisticsTrait;
+
 	/**
 	 * @var array(string=>true)
 	 */
@@ -67,6 +71,7 @@ final class MarketUpdate extends AbstractEvent
 					foreach ($luxuries as $demand) {
 						$this->modifyDemand($region, $demand);
 					}
+					$this->placeMetrics(Subject::Market, $region);
 				}
 			}
 		}
