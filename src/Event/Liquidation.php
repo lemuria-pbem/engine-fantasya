@@ -10,6 +10,8 @@ use Lemuria\Engine\Fantasya\Message\Unit\LiquidationHeirMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseToUnitMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
+use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Party;
@@ -24,6 +26,7 @@ use Lemuria\Model\Fantasya\Unit;
 final class Liquidation extends AbstractEvent
 {
 	use GiftTrait;
+	use StatisticsTrait;
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::AFTER);
@@ -57,6 +60,8 @@ final class Liquidation extends AbstractEvent
 				Lemuria::Catalog()->remove($unit);
 				$this->message(LiquidationMessage::class, $party)->e($unit);
 			}
+			$this->placeMetrics(Subject::Units, $party);
+			$this->placeMetrics(Subject::People, $party);
 		}
 	}
 

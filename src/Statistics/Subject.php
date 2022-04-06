@@ -14,11 +14,15 @@ enum Subject
 
 	case Migration;
 
+	case People;
+
 	case Population;
 
 	case Trees;
 
 	case Unemployment;
+
+	case Units;
 
 	case Wealth;
 
