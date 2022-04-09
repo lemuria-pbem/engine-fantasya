@@ -51,6 +51,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Schleuse als Zollgebäude
 - besondere Gebäude/Orte wie Ruinen, Höhlen oder Geschäfte
   - BESUCHEN zum Handel mit NPC-Ladenbesitzer
+- automatischer Beschreibungstext mit Handelsangeboten für Einheit, Gebäude oder Region
 - Gerüchte durch NPC oder Bauern, z.B. zu Monstervorkommen in Nachbarregionen
 - Weltumseglung ermöglichen
 - Ereignis "Juwelen gefunden" beim Bergbau in Gebirgen/Gletschern ohne Luxuswaren
