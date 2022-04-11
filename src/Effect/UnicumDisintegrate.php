@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Serializable;
 
 final class UnicumDisintegrate extends AbstractUnicumEffect
@@ -51,10 +52,13 @@ final class UnicumDisintegrate extends AbstractUnicumEffect
 	}
 
 	protected function run(): void {
-		if ($this->rounds-- <= 0) {
+		$unicum    = $this->Unicum();
+		$collector = $unicum->Collector();
+		if (!($collector instanceof Region)) {
 			Lemuria::Score()->remove($this);
-			$unicum    = $this->Unicum();
-			$collector = $unicum->Collector();
+			Lemuria::Log()->debug('Disintegrate effect of ' . $unicum . ' has been removed.');
+		} elseif ($this->rounds-- <= 0) {
+			Lemuria::Score()->remove($this);
 			$collector->Treasury()->remove($unicum);
 			Lemuria::Catalog()->remove($unicum);
 			Lemuria::Log()->debug('Unicum ' . $unicum . ' in ' . $collector . ' has been disintegrated.');

@@ -97,9 +97,10 @@ final class Sort extends UnitCommand
 	 */
 	private function sortAsFirst(): void {
 		$residents = $this->unit->Region()->Residents();
-		$first     = $residents[0]; /* @var Unit $first */
-		$residents->reorder($this->unit, $first, Reorder::BEFORE);
-		$this->message(SortFirstMessage::class);
+		if ($residents->count() > 1) {
+			$residents->reorder($this->unit, $residents->getFirst(), Reorder::BEFORE);
+			$this->message(SortFirstMessage::class);
+		}
 
 		$construction = $this->unit->Construction();
 		if ($construction) {
@@ -127,18 +128,16 @@ final class Sort extends UnitCommand
 	 */
 	private function sortAsLast(): void {
 		$residents = $this->unit->Region()->Residents();
-		$l         = count($residents) - 1;
-		$last      = $residents[$l]; /* @var Unit $last */
-		$residents->reorder($this->unit, $last, Reorder::AFTER);
-		$this->message(SortLastMessage::class);
+		if ($residents->count() > 1) {
+			$residents->reorder($this->unit, $residents->getLast(), Reorder::AFTER);
+			$this->message(SortLastMessage::class);
+		}
 
 		$construction = $this->unit->Construction();
 		if ($construction) {
 			$inhabitants = $construction->Inhabitants();
 			if ($this->unit !== $inhabitants->Owner()) {
-				$l    = count($inhabitants) - 1;
-				$last = $inhabitants[$l];
-				$inhabitants->reorder($this->unit, $last, Reorder::AFTER);
+				$inhabitants->reorder($this->unit, $inhabitants->getLast(), Reorder::AFTER);
 				$this->message(SortLastInConstructionMessage::class);
 			}
 		}
@@ -147,9 +146,7 @@ final class Sort extends UnitCommand
 		if ($vessel) {
 			$passengers = $vessel->Passengers();
 			if ($this->unit !== $passengers->Owner()) {
-				$l    = count($passengers) - 1;
-				$last = $passengers[$l];
-				$passengers->reorder($this->unit, $last, Reorder::AFTER);
+				$passengers->reorder($this->unit, $passengers->getLast(), Reorder::AFTER);
 				$this->message(SortLastInVesselMessage::class);
 			}
 		}
