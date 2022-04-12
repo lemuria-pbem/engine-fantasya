@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Event\Statistics\CensusWorkers;
+use Lemuria\Engine\Fantasya\Event\Statistics\Economy;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
@@ -18,6 +19,7 @@ final class Statistics extends DelegatedEvent
 
 	protected function createDelegates(): void {
 		Lemuria::Log()->debug('Adding statistics tasks.');
+		$this->delegates[] = new Economy($this->state);
 		$this->delegates[] = new CensusWorkers($this->state);
 	}
 }

@@ -12,6 +12,8 @@ enum Subject
 
 	case Market;
 
+	case MaterialPool;
+
 	case Migration;
 
 	case People;
