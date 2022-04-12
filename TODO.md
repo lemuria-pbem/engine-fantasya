@@ -2,12 +2,15 @@
 
 Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
-## Neue Funktionen in 0.12
+## Verbesserungen und Fehler
 
 - Statistische Daten erstellen
   - Regionsentwicklung im Report anzeigen
-  - Veränderungen im Inventar anzeigen
-  - Talentveränderungen im Report anzeigen
+
+## Neue Funktionen
+
+- Veränderungen im Inventar anzeigen
+- Talentveränderungen im Report anzeigen
 - Idee: Kommentare als Notizen im Report anzeigen
 - HTML-Report optisch verbessern
 - Regeldatei für Magellan
