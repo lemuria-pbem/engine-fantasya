@@ -20,6 +20,10 @@ enum Subject
 
 	case Population;
 
+	case RegionPool;
+
+	case Talents;
+
 	case Trees;
 
 	case Unemployment;
