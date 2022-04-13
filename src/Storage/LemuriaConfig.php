@@ -18,6 +18,7 @@ use Lemuria\Engine\Report;
 use Lemuria\Engine\Score;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Factory\DefaultBuilder;
+use Lemuria\FeatureFlag;
 use Lemuria\Log;
 use Lemuria\Model\Builder;
 use Lemuria\Model\Calendar;
@@ -53,6 +54,8 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 
 	protected array $defaults;
 
+	protected FeatureFlag $featureFlag;
+
 	private bool $hasChanged = false;
 
 	private readonly JsonProvider $file;
@@ -63,6 +66,7 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 	 * @throws JsonException
 	 */
 	public function __construct(private readonly string $storagePath) {
+		$this->featureFlag = new FeatureFlag();
 		$this->initDefaults();
 		$this->file = new JsonProvider($storagePath);
 		if ($this->file->exists(self::CONFIG_FILE)) {
@@ -160,6 +164,10 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 	 */
 	#[Pure] public function Log(): Log {
 		return $this->createLog($this->storagePath . DIRECTORY_SEPARATOR . self::LOG_DIR . DIRECTORY_SEPARATOR . self::LOG_FILE);
+	}
+
+	public function FeatureFlag(): FeatureFlag {
+		return $this->featureFlag;
 	}
 
 	public function getStoragePath(): string {
