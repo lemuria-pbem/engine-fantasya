@@ -38,7 +38,7 @@ class NewcomerStatistics implements Statistics
 	}
 
 	public function getVersion(): VersionTag {
-		$versionFinder = new VersionFinder(__DIR__ . '/..');
+		$versionFinder = new VersionFinder(__DIR__ . '/../..');
 		return $versionFinder->get();
 	}
 }
