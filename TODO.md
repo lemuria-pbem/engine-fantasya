@@ -7,7 +7,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
-- Kommentare als Notizen im Report anzeigen
 - HTML-Report optisch verbessern
 - Regeldatei für Magellan
 - Kriegselefanten
