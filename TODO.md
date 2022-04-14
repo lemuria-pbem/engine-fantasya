@@ -7,9 +7,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
-- Veränderungen im Inventar (Regionspool) anzeigen
-- Talentveränderungen im Report anzeigen
-- Idee: Kommentare als Notizen im Report anzeigen
+- Kommentare als Notizen im Report anzeigen
 - HTML-Report optisch verbessern
 - Regeldatei für Magellan
 - Kriegselefanten
