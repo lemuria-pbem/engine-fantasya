@@ -10,6 +10,8 @@ enum Subject
 
 	case Income;
 
+	case Education;
+
 	case Market;
 
 	case MaterialPool;
