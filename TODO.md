@@ -7,7 +7,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
-- HTML-Report optisch verbessern
 - Regeldatei für Magellan
 - Kriegselefanten
 - weitere Gebäude:
