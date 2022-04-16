@@ -37,15 +37,15 @@ use Lemuria\Registry;
 
 abstract class LemuriaConfig implements \ArrayAccess, Config
 {
-	public const ROUND = 'round';
+	public final const ROUND = 'round';
 
-	public const MDD = 'mdd';
+	public final const MDD = 'mdd';
 
-	public const CONFIG_FILE = 'config.json';
+	public final const CONFIG_FILE = 'config.json';
 
-	public const LOG_DIR = 'log';
+	public final const LOG_DIR = 'log';
 
-	public const LOG_FILE = 'lemuria.log';
+	public final const LOG_FILE = 'lemuria.log';
 
 	private const DEFAULTS = [
 		self::ROUND => 0,
@@ -55,6 +55,8 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 	protected array $defaults;
 
 	protected FeatureFlag $featureFlag;
+
+	private string $logFile = self::LOG_FILE;
 
 	private bool $hasChanged = false;
 
@@ -163,7 +165,7 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 	 * @throws \Exception
 	 */
 	#[Pure] public function Log(): Log {
-		return $this->createLog($this->storagePath . DIRECTORY_SEPARATOR . self::LOG_DIR . DIRECTORY_SEPARATOR . self::LOG_FILE);
+		return $this->createLog($this->storagePath . DIRECTORY_SEPARATOR . self::LOG_DIR . DIRECTORY_SEPARATOR . $this->logFile);
 	}
 
 	public function FeatureFlag(): FeatureFlag {
@@ -172,6 +174,11 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 
 	public function getStoragePath(): string {
 		return $this->storagePath;
+	}
+
+	public function setLogFile(string $fileName): LemuriaConfig {
+		$this->logFile = $fileName;
+		return $this;
 	}
 
 	protected function initDefaults(): void {
