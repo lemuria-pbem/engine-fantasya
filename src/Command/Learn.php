@@ -15,6 +15,8 @@ use Lemuria\Engine\Fantasya\Message\Unit\LearnProgressMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnSilverMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnTeachersMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
+use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Aura;
@@ -36,6 +38,7 @@ final class Learn extends UnitCommand implements Activity
 	use BuilderTrait;
 	use CollectTrait;
 	use OneActivityTrait;
+	use StatisticsTrait;
 
 	private Talent $talent;
 
@@ -82,6 +85,7 @@ final class Learn extends UnitCommand implements Activity
 			}
 
 			$this->unit->Inventory()->remove($expense);
+			$this->placeDataMetrics(Subject::LearningCosts, $silver, $this->unit);
 			if ($silver < $this->expense) {
 				$experience = $this->progress->Experience();
 				$progress   = (int)floor(($expense->Count() / $this->expense) * $experience);

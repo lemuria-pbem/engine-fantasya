@@ -12,6 +12,8 @@ use Lemuria\Engine\Fantasya\Message\Unit\SupportPayMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SupportPayOnlyMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
+use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
@@ -34,6 +36,7 @@ final class Support extends AbstractEvent
 {
 	use BuilderTrait;
 	use CollectTrait;
+	use StatisticsTrait;
 
 	public const SILVER = 10;
 
@@ -118,6 +121,7 @@ final class Support extends AbstractEvent
 				$charity    = $helpSilver->Count();
 				if ($charity > 0) {
 					$help->Inventory()->remove($helpSilver);
+					$this->placeDataMetrics(Subject::Charity, $charity, $help);
 					$inventory->add($helpSilver);
 					$neededSilver -= $charity;
 					$this->message(SupportDonateMessage::class, $help)->e($unit)->i($helpSilver);
@@ -131,6 +135,7 @@ final class Support extends AbstractEvent
 		if ($payed > 0) {
 			$quantity = new Quantity($this->silver, $payed);
 			$inventory->remove($quantity);
+			$this->placeDataMetrics(Subject::Support, $payed, $unit);
 			if ($neededSilver > 0) {
 				$this->message(SupportPayOnlyMessage::class, $unit)->i($quantity);
 			} else {
@@ -150,6 +155,7 @@ final class Support extends AbstractEvent
 		if ($ownSilver >= $support) {
 			$quantity = new Quantity($this->silver, $support);
 			$inventory->remove($quantity);
+			$this->placeDataMetrics(Subject::Support, $support, $unit);
 			$this->message(SupportPayMessage::class, $unit)->i($quantity);
 			return true;
 		}
@@ -161,6 +167,7 @@ final class Support extends AbstractEvent
 		$quantity = $this->collectQuantity($unit, $this->silver, $support);
 		if ($quantity->Count() >= $support) {
 			$unit->Inventory()->remove($quantity);
+			$this->placeDataMetrics(Subject::Support, $quantity->Count(), $unit);
 			$this->message(SupportPayMessage::class, $unit)->i($quantity);
 			return true;
 		}
@@ -174,9 +181,10 @@ final class Support extends AbstractEvent
 	}
 
 	private function findBailOut(Unit $unit): Gathering {
+		$we      = $unit->Party();
 		$bailOut = new Gathering();
 		foreach ($this->context->getIntelligence($unit->Region())->getParties() as $party /* @var Party $party */) {
-			if ($party->Diplomacy()->has(Relation::SILVER, $unit)) {
+			if ($party !== $we && $party->Diplomacy()->has(Relation::SILVER, $unit)) {
 				$bailOut->add($party);
 			}
 		}
