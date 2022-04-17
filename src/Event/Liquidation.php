@@ -39,7 +39,9 @@ final class Liquidation extends AbstractEvent
 			$units = $party->People();
 			$liquidate->clear();
 			foreach ($units as $unit /* @var Unit $unit */) {
-				if ($unit->Size() <= 0) {
+				if ($unit->Size() > 0) {
+					$this->placeMetrics(Subject::Talents, $unit);
+				} else {
 					$liquidate->add($unit);
 					$inventory = $unit->Inventory();
 					if ($inventory->count() > 0) {

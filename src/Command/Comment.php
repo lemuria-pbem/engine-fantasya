@@ -2,6 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use JetBrains\PhpStorm\Pure;
+
 use Lemuria\Engine\Fantasya\Message\Unit\CommentMessage;
 
 /**
@@ -11,8 +13,12 @@ use Lemuria\Engine\Fantasya\Message\Unit\CommentMessage;
  */
 final class Comment extends UnitCommand
 {
+	#[Pure] public function Line(): string {
+		return $this->phrase->getLine();
+	}
+
 	protected function run(): void {
 		$this->context->getProtocol($this->unit)->addDefault($this);
-		$this->message(CommentMessage::class)->p($this->phrase->getLine());
+		$this->message(CommentMessage::class)->p($this->Line());
 	}
 }

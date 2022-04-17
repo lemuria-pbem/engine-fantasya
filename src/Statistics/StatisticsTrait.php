@@ -11,12 +11,20 @@ use Lemuria\Statistics\Metrics\DataMetrics;
 trait StatisticsTrait
 {
 	protected function placeMetrics(Subject $subject, ?Identifiable $entity = null): void {
-		$message = new BaseMetrics($subject->name, $entity);
-		Lemuria::Statistics()->enqueue($message);
+		if ($this->isNoSimulation()) {
+			$message = new BaseMetrics($subject->name, $entity);
+			Lemuria::Statistics()->enqueue($message);
+		}
 	}
 
-	protected function placeDataMetrics(Subject $subject, int|float $data, ?Identifiable $entity = null) {
-		$message = new DataMetrics($subject->name, $entity);
-		Lemuria::Statistics()->enqueue($message->setData(new Number($data)));
+	protected function placeDataMetrics(Subject $subject, int|float $data, ?Identifiable $entity = null): void {
+		if ($this->isNoSimulation()) {
+			$message = new DataMetrics($subject->name, $entity);
+			Lemuria::Statistics()->enqueue($message->setData(new Number($data)));
+		}
+	}
+
+	private function isNoSimulation(): bool {
+		return !$this->context->getTurnOptions()->IsSimulation();
 	}
 }

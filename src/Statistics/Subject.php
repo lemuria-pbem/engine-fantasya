@@ -10,6 +10,8 @@ enum Subject
 
 	case Income;
 
+	case Education;
+
 	case Market;
 
 	case MaterialPool;
@@ -19,6 +21,10 @@ enum Subject
 	case People;
 
 	case Population;
+
+	case RegionPool;
+
+	case Talents;
 
 	case Trees;
 
