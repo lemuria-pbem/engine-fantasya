@@ -16,6 +16,8 @@ use Lemuria\Engine\Fantasya\Message\Unit\UpkeepPayMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UpkeepPayOnlyMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
+use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
@@ -38,6 +40,7 @@ final class Upkeep extends AbstractEvent
 {
 	use BuilderTrait;
 	use CollectTrait;
+	use StatisticsTrait;
 
 	private Commodity $silver;
 
@@ -119,6 +122,7 @@ final class Upkeep extends AbstractEvent
 				$charity    = $helpSilver->Count();
 				if ($charity > 0) {
 					$help->Inventory()->remove($helpSilver);
+					$this->placeDataMetrics(Subject::Charity, $charity, $help);
 					$inventory->add($helpSilver);
 					$neededSilver -= $charity;
 					$this->message(UpkeepDonateMessage::class, $help)->e($construction)->e($unit, UpkeepCharityMessage::UNIT)->i($helpSilver);
@@ -131,6 +135,7 @@ final class Upkeep extends AbstractEvent
 		$payed     = min($ownSilver, $upkeep);
 		if ($payed > 0) {
 			$inventory->remove(new Quantity($this->silver, $payed));
+			$this->placeDataMetrics(Subject::Maintenance, $payed, $unit);
 			if ($neededSilver > 0) {
 				$this->message(UpkeepPayOnlyMessage::class, $unit)->e($construction)->i($payed);
 			} else {
@@ -156,6 +161,7 @@ final class Upkeep extends AbstractEvent
 		if ($ownSilver >= $upkeep) {
 			$quantity = new Quantity($this->silver, $upkeep);
 			$inventory->remove($quantity);
+			$this->placeDataMetrics(Subject::Maintenance, $upkeep, $unit);
 			$this->message(UpkeepPayMessage::class, $unit)->e($construction)->i($quantity);
 			return true;
 		}
@@ -168,6 +174,7 @@ final class Upkeep extends AbstractEvent
 		$quantity = $this->collectQuantity($unit, $this->silver, $upkeep);
 		if ($quantity->Count() >= $upkeep) {
 			$unit->Inventory()->remove($quantity);
+			$this->placeDataMetrics(Subject::Maintenance, $quantity->Count(), $unit);
 			$this->message(UpkeepPayMessage::class, $unit)->e($construction)->i($quantity);
 			return true;
 		}
@@ -175,9 +182,11 @@ final class Upkeep extends AbstractEvent
 	}
 
 	private function findBailOut(Construction $construction): Gathering {
+		$owner   = $construction->Inhabitants()->Owner();
+		$we      = $owner->Party();
 		$bailOut = new Gathering();
 		foreach ($this->context->getIntelligence($construction->Region())->getParties() as $party /* @var Party $party */) {
-			if ($party->Diplomacy()->has(Relation::SILVER, $construction->Inhabitants()->Owner())) {
+			if ($party !== $we && $party->Diplomacy()->has(Relation::SILVER, $owner)) {
 				$bailOut->add($party);
 			}
 		}

@@ -14,6 +14,8 @@ use Lemuria\Engine\Fantasya\Message\Unit\RecruitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitPaymentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitReducedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitTooExpensiveMessage;
+use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
+use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Silver;
@@ -36,6 +38,7 @@ final class Recruit extends AllocationCommand
 {
 	use BuilderTrait;
 	use CollectTrait;
+	use StatisticsTrait;
 
 	private int $demand;
 
@@ -135,6 +138,7 @@ final class Recruit extends AllocationCommand
 		}
 		$payment = new Quantity($silver, $neededSilver);
 		$this->unit->Inventory()->remove($payment);
+		$this->placeDataMetrics(Subject::Recruiting, $neededSilver, $this->unit);
 		$this->message(RecruitPaymentMessage::class)->i($payment)->p($payable);
 		return $payable;
 	}

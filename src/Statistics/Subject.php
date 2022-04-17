@@ -8,9 +8,17 @@ enum Subject
 
 	case Births;
 
+	case Charity;
+
 	case Income;
 
 	case Education;
+
+	case Expenses;
+
+	case LearningCosts;
+
+	case Maintenance;
 
 	case Market;
 
@@ -22,7 +30,13 @@ enum Subject
 
 	case Population;
 
+	case Purchase;
+
+	case Recruiting;
+
 	case RegionPool;
+
+	case Support;
 
 	case Talents;
 
