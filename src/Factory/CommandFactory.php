@@ -113,6 +113,7 @@ use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
 use Lemuria\Model\Fantasya\Commodity\CarriageWreck;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
+use Lemuria\Model\Fantasya\Commodity\ElephantArmor;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg;
 use Lemuria\Model\Fantasya\Commodity\Herb\Bubblemorel;
@@ -180,6 +181,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\FounderingWarElephant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\LooseWarhammer;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustyBattleaxe;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustySword;
@@ -189,6 +191,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\UngirtBow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\UngirtCrossbow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
+use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Composition;
@@ -431,6 +434,7 @@ class CommandFactory
 		'Eisen'                      => Iron::class,
 		'Eisenschilde'               => Ironshield::class,
 		'Elefanten'                  => Elephant::class,
+		'Elefantenpanzer'            => ElephantArmor::class,
 		'Elfenliebe'                 => Elvendear::class,
 		'Elixier der macht'          => ElixirOfPower::class,
 		'Elixiere der macht'         => ElixirOfPower::class,
@@ -473,9 +477,12 @@ class CommandFactory
 		'Knotige saugwurze'          => Knotroot::class,
 		'Knotiger saugwurz'          => Knotroot::class,
 		'Koboldohren'                => GoblinEar::class,
+		'Kriegselefanten'            => WarElephant::class,
 		'Kriegshammer'               => Warhammer::class,
 		'Kriegshaemmer'              => Warhammer::class,
 		'Kriegshämmer'               => Warhammer::class,
+		'Lahme kriegselefanten'      => FounderingWarElephant::class,
+		'Lahmer kriegselefant'       => FounderingWarElephant::class,
 		'Lederruestungen'            => LeatherArmor::class,
 		'Lederrüstungen'             => LeatherArmor::class,
 		'Lockere kriegshaemmer'      => LooseWarhammer::class,

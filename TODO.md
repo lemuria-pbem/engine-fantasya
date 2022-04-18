@@ -7,12 +7,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
-- Kriegselefanten
-  - Waffe, Talent Reiten, Gewicht 240+50+10, Schaden 1W20+4, 3 Angriffe
-  - Transporter, Reiten 2, Tragkraft 240-60-10 
-  - Elefantenpanzer: Rüstungsbau 5, 10 Eisen, Gewicht 50
-  - Waffenbau 5, 2 Holz, 1 Elefantenpanzer, 1 Elefant
-  - Lahmer Kriegselefant kann mittels 1 Elefant repariert werden
 - weitere Gebäude:
   - Greifenzucht
   - Akademie

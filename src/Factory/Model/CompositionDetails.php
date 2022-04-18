@@ -44,9 +44,6 @@ class CompositionDetails
 		$this->validateJson();
 	}
 
-	/**
-	 * @noinspection PhpPureAttributeCanBeAddedInspection
-	 */
 	public function Composition(): Composition {
 		return $this->unicum->Composition();
 	}

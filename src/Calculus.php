@@ -26,6 +26,7 @@ use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Potion\GoliathWater;
 use Lemuria\Model\Fantasya\Commodity\Potion\SevenLeagueTea;
+use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\DoubleAbility;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -122,11 +123,12 @@ final class Calculus
 		$horse        = $inventory[Horse::class] ?? null;
 		$camel        = $inventory[Camel::class] ?? null;
 		$elephant     = $inventory[Elephant::class] ?? null;
+		$warElephant  = $inventory[WarElephant::class] ?? null;
 		$griffin      = $inventory[Griffin::class] ?? null;
 		$pegasus      = $inventory[Pegasus::class] ?? null;
-		$weight       = $this->weight($this->unit->Weight(), [$carriage, $horse, $camel, $elephant, $griffin, $pegasus]);
+		$weight       = $this->weight($this->unit->Weight(), [$carriage, $horse, $camel, $elephant, $warElephant, $griffin, $pegasus]);
 
-		$ride       = $this->transport($carriage) + $this->transport($camel) + $this->transport($elephant);
+		$ride       = $this->transport($carriage) + $this->transport($camel) + $this->transport($elephant) + $this->transport($warElephant);
 		$ride      += $carriage ? $this->transport($horse, $carriage->Count() * 2) : $this->transport($horse);
 		$fly        = $this->transport($griffin) + $this->transport($pegasus);
 		$rideFly    = $ride + $fly;
@@ -137,8 +139,8 @@ final class Calculus
 
 		if ($carriage) {
 			$cars        = $carriage->Count();
-			$speed       = $this->speed([$carriage, $horse, $camel, $elephant, $griffin, $pegasus]);
-			$animals     = [$horse, $camel, $elephant, $griffin, $pegasus];
+			$speed       = $this->speed([$carriage, $horse, $camel, $elephant, $warElephant, $griffin, $pegasus]);
+			$animals     = [$horse, $camel, $elephant, $warElephant, $griffin, $pegasus];
 			$talentDrive = $this->talent($animals, $size, true, $cars);
 			$horseCount  = $horse?->Count();
 			if ($riding >= $talentDrive && $horseCount >= 2 * $cars && $weight <= $rideFly) {
@@ -158,12 +160,12 @@ final class Calculus
 					return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speedBoost, $talentWalk);
 				}
 			}
-			$walk   = $this->transport($camel) + $this->transport($elephant) + $this->transport($horse);
+			$walk   = $this->transport($camel) + $this->transport($elephant) + $this->transport($warElephant)+ $this->transport($horse);
 			$walk  += $this->transport($griffin) + $this->transport($pegasus) + $payload;
 			$weight = $this->unit->Weight() - $size * $race->Weight();
 			return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speedBoost, $talentDrive);
 		}
-		if ($fly > 0 && !$horse && !$camel && !$elephant) {
+		if ($fly > 0 && !$horse && !$camel && !$elephant && !$warElephant) {
 			$animals    = [$griffin, $pegasus];
 			$speed      = $this->speed($animals);
 			$talentFly  = $this->talent($animals, $size, true);
@@ -173,8 +175,8 @@ final class Calculus
 			}
 		}
 		if ($rideFly > 0 && $weight <= $rideFly) {
-			$speed      = $this->speed([$horse, $camel, $elephant]);
-			$animals    = [$horse, $camel, $elephant, $griffin, $pegasus];
+			$speed      = $this->speed([$horse, $camel, $elephant, $warElephant]);
+			$animals    = [$horse, $camel, $elephant, $warElephant, $griffin, $pegasus];
 			$talentRide = $this->talent($animals, $size, true);
 			$talentWalk = $this->talent($animals, $size);
 			if ($riding >= $talentRide) {
@@ -182,8 +184,8 @@ final class Calculus
 			}
 		}
 		$weight -= $size * $race->Weight();
-		$speed   = $this->speed([$horse, $camel, $elephant], $race->Speed());
-		$animals = [$horse, $camel, $elephant, $griffin, $pegasus];
+		$speed   = $this->speed([$horse, $camel, $elephant, $warElephant], $race->Speed());
+		$animals = [$horse, $camel, $elephant, $warElephant, $griffin, $pegasus];
 		$talent  = $this->talent($animals, $size);
 		return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speed, $talent, $speedBoost);
 	}
@@ -276,9 +278,8 @@ final class Calculus
 		$melee   = 0;
 		$distant = 0;
 		foreach ($this->unit->Knowledge() as $ability /* @var Ability $ability */) {
-			$talent = $ability->Talent();
-			if (WeaponSkill::isSkill($talent)) {
-				$skill       = $this->knowledge($talent);
+			if (WeaponSkill::isSkill($ability)) {
+				$skill       = $this->knowledge($ability->Talent());
 				$experience  = $skill->Experience();
 				if ($experience > 0) {
 					$weaponSkill = new WeaponSkill($skill);
@@ -493,6 +494,7 @@ final class Calculus
 						}
 						break;
 					case Elephant::class :
+					case WarElephant::class :
 						$talent += $count * 2;
 						break;
 					case Griffin::class :

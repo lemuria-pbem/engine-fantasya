@@ -23,7 +23,7 @@ class Capacity
 
 	private readonly int $walkSpeed;
 
-	#[Pure] public static function forVessel(Vessel $vessel): self {
+	public static function forVessel(Vessel $vessel): self {
 		$ship   = $vessel->Ship();
 		$weight = 0;
 		foreach ($vessel->Passengers() as $unit /* @var Unit $unit */) {
