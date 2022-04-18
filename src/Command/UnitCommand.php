@@ -56,6 +56,7 @@ abstract class UnitCommand extends AbstractCommand
 	public function execute(): Action {
 		parent::execute();
 		if ($this instanceof Activity) {
+			/** @noinspection PhpParamsInspection */
 			$this->context->getProtocol($this->unit)->addNewDefaults($this);
 		}
 		return $this;

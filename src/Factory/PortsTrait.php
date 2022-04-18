@@ -63,7 +63,7 @@ trait PortsTrait
 	 */
 	protected array $used = [];
 
-	protected function init(Unit $unit, Region $region) {
+	protected function init(Unit $unit, Region $region): void {
 		$this->unit   = $unit;
 		$this->party  = $unit->Party();
 		$this->region = $region;

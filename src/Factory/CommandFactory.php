@@ -147,6 +147,7 @@ use Lemuria\Model\Fantasya\Commodity\Luxury\Olibanum;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Silk;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Spice;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Potion\BerserkBlood;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Potion\DrinkOfCreation;
@@ -485,6 +486,8 @@ class CommandFactory
 		'Myrrhen'                    => Myrrh::class,
 		'Oele'                       => Oil::class,
 		'Öle'                        => Oil::class,
+		'Pegasi'                     => Pegasus::class,
+		'Pegasus'                    => Pegasus::class,
 		'Pelze'                      => Fur::class,
 		'Pferd'                      => Horse::class,
 		'Pferde'                     => Horse::class,

@@ -7,7 +7,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
-- Regeldatei für Magellan
 - Kriegselefanten
 - weitere Gebäude:
   - Greifenzucht

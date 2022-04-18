@@ -13,7 +13,6 @@ class CombatEffect extends Item
 		parent::__construct($spell, $points);
 	}
 
-	/** @noinspection PhpUnnecessaryLocalVariableInspection */
 	#[Pure] public function Spell(): BattleSpell {
 		/** @var BattleSpell $spell */
 		$spell = $this->getObject();

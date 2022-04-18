@@ -174,9 +174,6 @@ final class Construction extends AbstractProduct
 		return parent::calculateProduction($craft);
 	}
 
-	/**
-	 * @noinspection PhpUnnecessaryLocalVariableInspection
-	 */
 	private function prepareBuildingFromOutside(): ?ConstructionModel {
 		$building = $this->job->getObject();
 		if ($building::class === AnyBuilding::class) {

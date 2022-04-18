@@ -122,7 +122,7 @@ class WeaponSkill
 	/**
 	 * Init static talents.
 	 */
-	protected static function initTalents() {
+	protected static function initTalents(): void {
 		if (!self::$archery) {
 			self::$archery       = self::createTalent(Archery::class);
 			self::$bladefighting = self::createTalent(Bladefighting::class);

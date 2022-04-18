@@ -55,9 +55,6 @@ final class Spellbook extends AbstractOperate
 		$this->addDisintegrateEffectForRegion(self::DISINTEGRATE);
 	}
 
-	/**
-	 * @noinspection PhpUnnecessaryLocalVariableInspection
-	 */
 	private function getSpellbook(): SpellbookModel {
 		/** @var SpellbookModel $spellbook */
 		$spellbook = $this->operator->Unicum()->Composition();

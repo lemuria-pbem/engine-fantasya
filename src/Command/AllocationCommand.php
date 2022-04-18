@@ -115,7 +115,6 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 		}
 
 		/** @var Quantity $quantity */
-		/** @noinspection PhpUnnecessaryLocalVariableInspection */
 		$quantity = $this->resources[$class];
 		return $quantity;
 	}
