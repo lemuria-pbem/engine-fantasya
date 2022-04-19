@@ -365,6 +365,7 @@
 		"DriftDamageMessage": "Das Schiff $id wird beim Auflaufen auf das Riff vor der Küste der Region $region beschädigt, weil Kapitän und Crew es nicht mehr steuern können.",
 		"DriftMessage": "Das Schiff $id treibt in Richtung $direction ab, weil Kapitän und Crew es nicht mehr steuern können.",
 		"DrinkOfCreationMessage": "Die Einheit $id ist voller Energie und Tatendrang.",
+		"DrownMessage": "Die Einheit $id ertrinkt im Ozean $ocean.",
 		"EagleEyeMessage": "Die Einheit $id hat jetzt Wahrnehmung Stufe $perception.",
 		"EarthquakeMessage": "In der Region $region ereignet sich ein Erdbeben, das alle Gebäude in Mitleidenschaft zieht.",
 		"EarthquakeDestroyedMessage": "Das Gebäude $construction wurde durch das Erdbeben vollständig zerstört.",

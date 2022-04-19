@@ -10,6 +10,7 @@ use Lemuria\Engine\Fantasya\Event\Breeding;
 use Lemuria\Engine\Fantasya\Event\Conduct;
 use Lemuria\Engine\Fantasya\Event\Decease;
 use Lemuria\Engine\Fantasya\Event\Drift;
+use Lemuria\Engine\Fantasya\Event\Drown;
 use Lemuria\Engine\Fantasya\Event\Fauna;
 use Lemuria\Engine\Fantasya\Event\Finish;
 use Lemuria\Engine\Fantasya\Event\Founder;
@@ -44,7 +45,7 @@ class DefaultProgress implements Progress
 		// after
 		Finish::class, MarketUpdate::class, Founder::class, Support::class,
 		Population::class, Fauna::class, Griffinegg::class, Growth::class, Regrow::class,
-		Decease::class, Liquidation::class,
+		Decease::class, Drown::class, Liquidation::class,
 		Obtainment::class, Acquaintance::class, Recreate::class, Layabout::class, Retirement::class,
 		Statistics::class, Aftercare::class
 	];
