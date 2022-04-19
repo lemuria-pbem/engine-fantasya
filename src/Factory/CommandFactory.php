@@ -197,7 +197,9 @@ use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Composition;
 use Lemuria\Model\Fantasya\Composition\Scroll;
 use Lemuria\Model\Fantasya\Composition\Spellbook;
+use Lemuria\Model\Fantasya\Container;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Kind;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\RawMaterial;
 use Lemuria\Model\Fantasya\Ship;
@@ -569,6 +571,25 @@ class CommandFactory
 	];
 
 	/**
+	 * @var array(string=>Kind)
+	 */
+	protected array $kind = [
+		'Kraeuter'    => Kind::Herb,
+		'Kräuter'     => Kind::Herb,
+		'Luxusgueter' => Kind::Luxury,
+		'Luxusgüter'  => Kind::Luxury,
+		'Luxuswaren'  => Kind::Luxury,
+		'Ruestungen'  => Kind::Protection,
+		'Rüstungen'   => Kind::Protection,
+		'Schilde'     => Kind::Shield,
+		'Tiere'       => Kind::Animal,
+		'Traenke'     => Kind::Potion,
+		'Tränke'      => Kind::Potion,
+		'Transporter' => Kind::Transport,
+		'Waffen'      => Kind::Weapon
+	];
+
+	/**
 	 * @var array(string=>string)
 	 */
 	protected array $compositions = [
@@ -836,6 +857,17 @@ class CommandFactory
 	public function commodity(string $commodity): Commodity {
 		$commodityClass = $this->identifySingleton($commodity, $this->commodities);
 		return self::createCommodity($commodityClass);
+	}
+
+	/**
+	 * Create a commodity container for a given kind.
+	 */
+	public function kind(string $kind): ?Container {
+		$kind = mbUcFirst(mb_strtolower($kind));
+		if (isset($this->kind[$kind])) {
+			return new Container($this->kind[$kind]);
+		}
+		return null;
 	}
 
 	/**

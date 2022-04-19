@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Message;
 use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 
+use Lemuria\Model\Fantasya\Container;
 use function Lemuria\getClass;
 use function Lemuria\number;
 use Lemuria\Item;
@@ -112,11 +113,16 @@ abstract class AbstractMessage implements MessageType
 
 	protected function item(string $property, string $name): ?string {
 		if ($property === $name) {
-			$commodity = getClass($this->$name->Commodity());
-			$count     = $this->$name->Count();
-			$item      = $this->translateKey('resource.' . $commodity, $count > 1 ? 1 : 0);
+			$commodity = $this->$name->Commodity();
+			if ($commodity instanceof Container) {
+				return $this->translateKey('kind.' . $commodity->Type()->name);
+			}
+
+			$resource = getClass($commodity);
+			$count    = $this->$name->Count();
+			$item     = $this->translateKey('resource.' . $resource, $count > 1 ? 1 : 0);
 			if ($item) {
-				return number($count) . ' ' . $item;
+				return $count < PHP_INT_MAX ? number($count) . ' ' . $item : $item;
 			}
 		}
 		return null;

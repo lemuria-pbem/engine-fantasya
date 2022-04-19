@@ -183,6 +183,16 @@
 		"default": ["gesund", "erschöpft", "verletzt", "schwer verletzt", "dem Tode nah"],
 		"hunger": ["gesund", "hungert", "hungert sehr", "ausgezehrt", "fast verhungert"]
 	},
+	"kind": {
+		"Animal": "Tiere",
+		"Herb": "Kräuter",
+		"Luxury": "Luxusgüter",
+		"Potion": "Tränke",
+		"Protection": "Rüstungen",
+		"Shield": "Schilde",
+		"Transport": "Transporter",
+		"Weapon" : "Waffen"
+	},
 	"landscape": {
 		"Desert": "Wüste",
 		"Forest": "Wald",

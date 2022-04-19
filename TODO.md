@@ -31,7 +31,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
-- Gegenstandsklassen für verkürzte Übergaben (Kräuter, Luxuswaren, Rüstungen, Schilde, Tiere, Trophäen, Tränke, Waffen)
 - neue Gebäude, die Arbeitsplätze verdoppeln
   - Gebirge: Pilzhöhle
   - Sumpf: Elefantengehege
