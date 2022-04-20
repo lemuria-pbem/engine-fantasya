@@ -26,6 +26,7 @@ use Lemuria\Model\Fantasya\Spell\Quickening;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Spell\SoundlessShadow;
+use Lemuria\Model\Fantasya\Spell\SummonEnts;
 
 class SpellParser
 {
@@ -70,7 +71,8 @@ class SpellParser
 		Quickening::class      => self::LEVEL,
 		ShockWave::class       => self::LEVEL,
 		SongOfPeace::class     => self::LEVEL,
-		SoundlessShadow::class => self::LEVEL
+		SoundlessShadow::class => self::LEVEL,
+		SummonEnts::class      => self::LEVEL
 	];
 
 	protected final const SPELLS = [
@@ -79,6 +81,7 @@ class SpellParser
 		'Auratransfer'   => AuraTransfer::class,
 		'Beschleunigung' => Quickening::class,
 		'Erdbeben'       => Earthquake::class,
+		'Erwecke'        => ['Baumhirten' => SummonEnts::class],
 		'Fernsicht'      => Farsight::class,
 		'Feuerball'      => Fireball::class,
 		'Friedenslied'   => SongOfPeace::class,

@@ -722,6 +722,8 @@
 		"StealOwnUnitMessage": "Es gibt keinen Grund, die Einheit $unit unseres eigenen Volkes zu bestehlen.",
 		"StealRevealedMessage": "Die Einheit $unit hat versucht, uns in der Region $region zu bestehlen.",
 		"SubsistenceMessage": "{$peasants:verdient} $silver in der Region $id (Lohn $wage).",
+		"SummonEntsMessage": "Die Einheit $id ruft $size Baumhirten als Einheit $ents herbei.",
+		"SummonEntsNoWoodMessage": "Der Zauber Erwecke Baumhirten kann nur in Wäldern gezaubert werden.",
 		"SupportCharityMessage": "Die Einheit $id erhält $support Almosen von der Einheit $unit.",
 		"SupportDonateMessage": "Die Einheit $id spendet $support für den Unterhalt der Einheit $unit.",
 		"SupportHungerMessage": "Die Einheit $id hungert.",
@@ -1341,7 +1343,8 @@
 		"Quickening": "Beschleunigung",
 		"ShockWave": "Schockwelle",
 		"SongOfPeace": "Friedenslied",
-		"SoundlessShadow": "Lautloser Schatten"
+		"SoundlessShadow": "Lautloser Schatten",
+		"SummonEnts": "Erwecke Baumhirten"
 	},
 	"talent": {
 		"Alchemy": "Alchemie",

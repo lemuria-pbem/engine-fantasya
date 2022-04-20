@@ -8,7 +8,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Neue Funktionen
 
 - weitere Zauber:
-  - Erwecke Baumhirten (3) (Baumhirten bewachen den Wald, kämpfen im Kampf)
   - Sturmböe (4) (Kampfzauber)
   - Blick des Greifen (4) (Kartografieren)
   - Astraler Weg (5) (Magier teleportiert sich)

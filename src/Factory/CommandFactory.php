@@ -227,6 +227,7 @@ use Lemuria\Model\Fantasya\Spell\Quickening;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Spell\SoundlessShadow;
+use Lemuria\Model\Fantasya\Spell\SummonEnts;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Alchemy;
 use Lemuria\Model\Fantasya\Talent\Archery;
@@ -614,10 +615,11 @@ class CommandFactory
 		'Auratransfer'        => AuraTransfer::class,
 		'Beschleunigung'      => Quickening::class,
 		'Erdbeben'            => Earthquake::class,
+		'Erwecke baumhirten'  => SummonEnts::class,
 		'Fernsicht'           => Farsight::class,
 		'Feuerball'           => Fireball::class,
 		'Friedenslied'        => SongOfPeace::class,
-		'Lautloser Schatten'  => SoundlessShadow::class,
+		'Lautloser schatten'  => SoundlessShadow::class,
 		'Monster aufhetzen'   => InciteMonster::class,
 		'Schockwelle'         => ShockWave::class,
 		'Tagtraum'            => Daydream::class,
