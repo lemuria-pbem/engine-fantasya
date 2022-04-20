@@ -797,6 +797,8 @@
 		"UpkeepNothingMessage": "Die Einheit $id kann den Unterhalt für das Gebäude $construction nicht zahlen.",
 		"UpkeepPayMessage": "Die Einheit $id gibt $upkeep für den Unterhalt des Gebäudes $construction aus.",
 		"UpkeepPayOnlyMessage": "Die Einheit $id kann nur $upkeep für den Unterhalt des Gebäudes $construction ausgeben.",
+		"VanishEffectCreateMessage": "Die Einheit $id wird in $weeks verschwinden.",
+		"VanishEffectMessage": "Die Einheit $id verschwindet spurlos.",
 		"VesselAlreadyFinishedMessage": "Die Einheit $id hat nichts zu tun, das Schiff $vessel ist bereits fertiggestellt.",
 		"VesselBuildMessage": "Die Einheit $id baut {$size:Größenpunkt} am Schiff $vessel.",
 		"VesselCreateMessage": "Die Einheit $id hat kein Baumaterial für {ein:$ship}.",
@@ -1226,6 +1228,7 @@
 		"verlässt": ["verlässt", "verlassen"],
 		"wandert": ["wandert", "wandern"],
 		"wächst": ["wächst", "wachsen"],
+		"week": ["Woche", "Wochen"],
 		"wird": ["wird", "werden"]
 	},
 	"resource": {
