@@ -89,6 +89,7 @@ use Lemuria\Model\Fantasya\Building\Canal;
 use Lemuria\Model\Fantasya\Building\Citadel;
 use Lemuria\Model\Fantasya\Building\Dockyard;
 use Lemuria\Model\Fantasya\Building\Fort;
+use Lemuria\Model\Fantasya\Building\GriffinBreeding;
 use Lemuria\Model\Fantasya\Building\HorseBreeding;
 use Lemuria\Model\Fantasya\Building\Lighthouse;
 use Lemuria\Model\Fantasya\Building\Magespire;
@@ -388,6 +389,7 @@ class CommandFactory
 		'Festung'           => Stronghold::class,
 		'Gebäude'           => AnyBuilding::class,
 		'Gebaeude'          => AnyBuilding::class,
+		'Greifenzucht'      => GriffinBreeding::class,
 		'Hafen'             => Port::class,
 		'Holzfällerhütte'   => Cabin::class,
 		'Holzfaellerhuette' => Cabin::class,

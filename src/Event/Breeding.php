@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use JetBrains\PhpStorm\Pure;
-use Lemuria\Engine\Fantasya\Command\Create\Commodity;
+
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\PotionReserve;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
@@ -15,6 +15,7 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
+use Lemuria\Model\Fantasya\Animal;
 use Lemuria\Model\Fantasya\Building\AbstractBreeding;
 use Lemuria\Model\Fantasya\Commodity\Potion\HorseBliss;
 use Lemuria\Model\Fantasya\Construction;
@@ -75,7 +76,7 @@ final class Breeding extends AbstractEvent
 		}
 	}
 
-	#[Pure] private function countStock(Construction $construction, Commodity $animal): int {
+	#[Pure] private function countStock(Construction $construction, Animal $animal): int {
 		$stock = 0;
 		foreach ($construction->Inhabitants() as $unit /* @var Unit $unit */) {
 			$inventory = $unit->Inventory();
