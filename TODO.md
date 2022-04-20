@@ -9,7 +9,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 - weitere Gebäude:
   - Akademie
-  - Megapolis
   - Monument
   - Steinkreis
 - weitere Zauber:

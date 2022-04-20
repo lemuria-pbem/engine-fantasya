@@ -93,6 +93,7 @@ use Lemuria\Model\Fantasya\Building\GriffinBreeding;
 use Lemuria\Model\Fantasya\Building\HorseBreeding;
 use Lemuria\Model\Fantasya\Building\Lighthouse;
 use Lemuria\Model\Fantasya\Building\Magespire;
+use Lemuria\Model\Fantasya\Building\Megapolis;
 use Lemuria\Model\Fantasya\Building\Mine;
 use Lemuria\Model\Fantasya\Building\Palace;
 use Lemuria\Model\Fantasya\Building\Pit;
@@ -397,6 +398,7 @@ class CommandFactory
 		'Kanal'             => Canal::class,
 		'Leuchtturm'        => Lighthouse::class,
 		'Magierturm'        => Magespire::class,
+		'Megapolis'         => Megapolis::class,
 		'Mine'              => Pit::class,
 		'Palast'            => Palace::class,
 		'Pferdezucht'       => HorseBreeding::class,
