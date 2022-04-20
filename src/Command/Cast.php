@@ -12,6 +12,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\CastNoAuraMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastNoMagicianMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastOnlyMessage;
 use Lemuria\Model\Fantasya\BattleSpell;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Talent\Magic;
 use Lemuria\Model\Fantasya\Unit;
@@ -34,6 +35,8 @@ final class Cast extends UnitCommand
 
 	private ?Unit $target;
 
+	private ?Region $region;
+
 	private ?ActionException $exception = null;
 
 	public function Context(): Context {
@@ -54,6 +57,10 @@ final class Cast extends UnitCommand
 
 	public function Target(): ?Unit {
 		return $this->target;
+	}
+
+	public function Region(): ?Region {
+		return $this->region;
 	}
 
 	public function Knowledge(): int {
@@ -101,7 +108,9 @@ final class Cast extends UnitCommand
 		$target       = $parser->Target();
 		$this->spell  = $this->context->Factory()->spell($parser->Spell());
 		$this->level  = $parser->Level();
-		$this->target = $target ? Unit::get($target) : null;
+		$syntax       = SpellParser::getSyntax($this->spell);
+		$this->target = ($syntax | SpellParser::TARGET) && $target ? Unit::get($target) : null;
+		$this->region = ($syntax | SpellParser::REGION) && $target ? Region::get($target) : null;
 		$this->context->getCasts()->add($this);
 	}
 

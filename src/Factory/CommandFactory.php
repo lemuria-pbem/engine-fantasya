@@ -219,6 +219,7 @@ use Lemuria\Model\Fantasya\Spell\CivilCommotion;
 use Lemuria\Model\Fantasya\Spell\Daydream;
 use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
+use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
@@ -613,6 +614,7 @@ class CommandFactory
 		'Auratransfer'        => AuraTransfer::class,
 		'Beschleunigung'      => Quickening::class,
 		'Erdbeben'            => Earthquake::class,
+		'Fernsicht'           => Farsight::class,
 		'Feuerball'           => Fireball::class,
 		'Friedenslied'        => SongOfPeace::class,
 		'Lautloser Schatten'  => SoundlessShadow::class,

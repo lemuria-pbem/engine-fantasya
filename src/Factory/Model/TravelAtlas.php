@@ -5,7 +5,10 @@ namespace Lemuria\Engine\Fantasya\Factory\Model;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Census;
+use Lemuria\Engine\Fantasya\Effect\FarsightEffect;
 use Lemuria\Engine\Fantasya\Outlook;
+use Lemuria\Engine\Fantasya\State;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\World\Atlas;
@@ -48,11 +51,12 @@ final class TravelAtlas extends Atlas
 		$chronicle = $this->party->Chronicle();
 		foreach ($chronicle as $id => $region /* @var Region $region */) {
 			if ($chronicle->getVisit($region)->Round() === $round) {
+				$visibility = $this->hasFarsight($region) ? Visibility::FARSIGHT : Visibility::TRAVELLED;
 				if (!isset($this->visibility[$id])) {
 					$this->add($region);
-					$this->visibility[$id] = Visibility::TRAVELLED;
-				} elseif ($this->visibility[$id] < Visibility::TRAVELLED) {
-					$this->visibility[$id] = Visibility::TRAVELLED;
+					$this->visibility[$id] = $visibility;
+				} elseif ($this->visibility[$id]->value < $visibility->value) {
+					$this->visibility[$id] = $visibility;
 				}
 			}
 		}
@@ -68,5 +72,14 @@ final class TravelAtlas extends Atlas
 	public function setVisibility(Region $region, Visibility $visibility): TravelAtlas {
 		$this->visibility[$region->Id()->Id()] = $visibility;
 		return $this;
+	}
+
+	private function hasFarsight(Region $region): bool {
+		$effect = new FarsightEffect(State::getInstance());
+		$effect = Lemuria::Score()->find($effect->setRegion($region));
+		if ($effect instanceof FarsightEffect) {
+			return $effect->Parties()->has($this->party->Id());
+		}
+		return false;
 	}
 }

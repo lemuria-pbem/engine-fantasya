@@ -2,17 +2,19 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
-enum Visibility
+enum Visibility : int
 {
-	case UNKNOWN;
+	case UNKNOWN = 0;
 
-	case HISTORIC;
+	case HISTORIC = 1;
 
-	case NEIGHBOUR;
+	case NEIGHBOUR = 2;
 
-	case LIGHTHOUSE;
+	case LIGHTHOUSE = 3;
 
-	case TRAVELLED;
+	case TRAVELLED = 4;
 
-	case WITH_UNIT;
+	case FARSIGHT = 5;
+
+	case WITH_UNIT = 6;
 }
