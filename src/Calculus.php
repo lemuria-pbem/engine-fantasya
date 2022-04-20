@@ -17,6 +17,7 @@ use Lemuria\Item;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Building;
+use Lemuria\Model\Fantasya\Building\College;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
@@ -250,20 +251,32 @@ final class Calculus
 	 * Get learning progress.
 	 */
 	public function progress(Talent $talent): Ability {
-		$teachBonus = 0.0;
+		$isInCollege = ($this->unit->Construction() instanceof College) && $this->isInMaintainedConstruction();
+		$teachBonus  = 0.0;
 		foreach ($this->teachers as $teach /* @var Teach $teach */) {
-			$teachBonus += $teach->getBonus();
+			if ($isInCollege) {
+				$teacher   = $teach->Unit();
+				$inCollege = $teacher->Construction() instanceof College;
+				if ($inCollege) {
+					$calculus = new Calculus($teacher);
+					if ($calculus->isInMaintainedConstruction()) {
+						$teachBonus += 2.0 * $teach->getBonus();
+					}
+				}
+			} else {
+				$teachBonus += $teach->getBonus();
+			}
 		}
-		$teachBonus = min(1.0, $teachBonus);
+		$teachBonus = min($isInCollege ? 2.0 : 1.0, $teachBonus);
+
 		$brainpower = $this->hasApplied(Brainpower::class);
 		$count      = $brainpower?->Count();
-		if ($brainpower && $count) {
-			$boost       = min(1.0, $count * Brainpower::PERSONS / $this->unit->Size());
-			$probability = 1.25 * (1.0 + $boost);
-		} else {
-			$probability = rand(750, 1250) / 1000;
-		}
-		$progress = (int)round(100 * ($probability + $teachBonus));
+		$boost      = $brainpower && $count ? min(1.0, $count * Brainpower::PERSONS / $this->unit->Size()) : 0.0;
+
+		$baseProbability = $boost > 0.0 ? 1.25 : ($isInCollege ? rand(90, 110) / 100 : rand(75, 125) / 100);
+		$baseFactor      = $isInCollege ? 2.0 : 1.0;
+		$probability     = $baseProbability * ($baseFactor + $boost);
+		$progress        = (int)round(100 * (min(5.0, $probability + $teachBonus)));
 		return new Ability($talent, $progress);
 	}
 

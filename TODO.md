@@ -8,7 +8,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Neue Funktionen
 
 - weitere Gebäude:
-  - Akademie
   - Monument
   - Steinkreis
 - weitere Zauber:

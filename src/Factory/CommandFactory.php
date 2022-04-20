@@ -87,6 +87,7 @@ use Lemuria\Model\Fantasya\Building\Cabin;
 use Lemuria\Model\Fantasya\Building\CamelBreeding;
 use Lemuria\Model\Fantasya\Building\Canal;
 use Lemuria\Model\Fantasya\Building\Citadel;
+use Lemuria\Model\Fantasya\Building\College;
 use Lemuria\Model\Fantasya\Building\Dockyard;
 use Lemuria\Model\Fantasya\Building\Fort;
 use Lemuria\Model\Fantasya\Building\GriffinBreeding;
@@ -381,6 +382,7 @@ class CommandFactory
 	 * @var array(string=>string)
 	 */
 	protected array $buildings = [
+		'Akademie'          => College::class,
 		'Akropolis'         => Acropolis::class,
 		'Alchemistenküche'  => AlchemyKitchen::class,
 		'Baustelle'         => Site::class,
