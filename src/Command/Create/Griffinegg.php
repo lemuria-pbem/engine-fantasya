@@ -119,7 +119,7 @@ final class Griffinegg extends AllocationCommand implements Activity
 			$unit->setName($griffins->Count() > 1 ? 'Greife' : 'Greif');
 			/** @var Race $griffin */
 			$griffin = $griffins->Commodity();
-			$effect->setGriffins($unit->setRace($griffin));
+			$effect->setGriffins($unit->setRace($griffin)->setSize($griffins->Count()));
 			$party = Party::get(Spawn::getPartyId(Type::MONSTER));
 			$party->People()->add($unit);
 			$region->Residents()->add($unit);
