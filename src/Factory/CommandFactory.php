@@ -443,6 +443,7 @@ class CommandFactory
 		'Eisblumen'                  => IceBegonia::class,
 		'Eisen'                      => Iron::class,
 		'Eisenschilde'               => Ironshield::class,
+		'Elefant'                    => Elephant::class,
 		'Elefanten'                  => Elephant::class,
 		'Elefantenpanzer'            => ElephantArmor::class,
 		'Elfenliebe'                 => Elvendear::class,
