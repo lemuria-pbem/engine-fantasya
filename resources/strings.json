@@ -42,6 +42,7 @@
 		"Magespire": "Magierturm",
 		"Megapolis": "Megapolis",
 		"Mine": "Bergwerk",
+		"Monument": "Monument",
 		"Palace": "Schloss",
 		"Pit": "Mine",
 		"Port": "Hafen",
@@ -162,6 +163,11 @@
 	"composition": {
 		"Scroll": ["Schriftrolle", "Schriftrollen"],
 		"Spellbook": ["Zauberbuch", "Zauberbücher"]
+	},
+	"description": {
+		"decay": {
+			"Monument": "Inzwischen ist dieses ehemalige Monument nur noch eine Ruine."
+		}
 	},
 	"diplomacy": {
 		"relation": {
@@ -325,6 +331,8 @@
 		"DaydreamMessage": "Die Einheit $id zaubert Tagtraum mit Stufe $needed auf die Zieleinheit $unit.",
 		"DaydreamOnlyMessage": "Die Einheit $id kann Tagtraum nur mit Stufe $needed auf die Zieleinheit $unit zaubern.",
 		"DaydreamProductivityMessage": "Die Einheit $id hängt ihren Tagträumen nach und wird von der Arbeit abgelenkt.",
+		"DecayMessage": "Der Zahn der Zeit nagt {an:$building} $id.",
+		"DecayToRuinMessage": "Der Zahn der Zeit hat sein Werk vollendet und {das:$building} in eine Ruine verwandelt.",
 		"DeceaseMessage": "Die Einheit $unit stirbt.",
 		"DefaultInvalidMessage": "\"$command\" ist keine gültige Vorlage für die Einheit $id.",
 		"DefaultMessage": "Für die Einheit $id wurde eine Vorlage gesetzt: $command.",
@@ -334,6 +342,7 @@
 		"DescribeConstructionMessage" : "Das Gebäude $id hat nun eine neue Beschreibung.",
 		"DescribeContinentMessage": "Die Partei $id hat dem Kontinent $continent eine neue Beschreibung gegeben.",
 		"DescribeContinentUndoMessage": "Die Partei $id hat ihre Beschreibung für den Kontinent $continent gestrichen.",
+		"DescribeMonumentOnceMessage": "Die Inschrift eines Monuments kann nicht geändert werden.",
 		"DescribeNoContinentMessage": "Die Einheit $id muss sich für die Beschreibung auf einem Kontinent befinden.",
 		"DescribeNotInConstructionMessage": "Die Einheit $id ist in keinem Gebäude, das sie beschreiben könnte.",
 		"DescribeNotInVesselMessage": "Die Einheit $id ist in keinem Schiff, das sie beschreiben könnte.",
@@ -530,6 +539,7 @@
 		"NameConstructionMessage": "Das Gebäude $id trägt nun den Namen $name.",
 		"NameContinentMessage": "Die Partei $id hat dem Kontinent $continent den Namen $name gegeben.",
 		"NameContinentUndoMessage": "Die Partei $id hat ihren Namen für den Kontinent $continent gestrichen.",
+		"NameMonumentOnceMessage": "Der Name eines Monuments kann nicht geändert werden, wenn es einmal benannt wurde.",
 		"NameNoContinentMessage": "Die Einheit $id muss sich für die Namensgebung auf einem Kontinent befinden.",
 		"NameNoUnicumMessage": "Die Einheit $id hat keinen Gegenstand mit der Nummer $unicum.",
 		"NameOwnerMessage": "Die Einheit $owner ist nicht der Besitzer des Gebäudes $id und kann daher dessen Namen nicht ändern.",
@@ -959,8 +969,12 @@
 			"Woodshield": "alle verfügbaren",
 			"Woundshut": "alle verfügbaren"
 		},
+		"an": {
+			"Monument": "am"
+		},
 		"Aurapunkt": ["Aurapunkt", "Aurapunkte"],
 		"das": {
+			"Monument": "das",
 			"Scroll": "die",
 			"Spellbook": "das"
 		},
@@ -1030,6 +1044,7 @@
 			"Mandrake": "eine",
 			"Megapolis": "eine",
 			"Mine": "ein",
+			"Monument": "ein",
 			"Owlsgaze": "ein",
 			"Palace": "ein",
 			"PeasantJoy": "ein",
@@ -1145,6 +1160,7 @@
 			"Mandrake": "keine",
 			"Megapolis": "keine",
 			"Mine": "kein",
+			"Monument": "kein",
 			"Myrrh": "keine",
 			"Oil": "kein",
 			"Olibanum": "keinen",

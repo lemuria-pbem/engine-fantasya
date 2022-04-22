@@ -12,6 +12,7 @@ use Lemuria\Engine\Fantasya\Message\Party\NameContinentUndoMessage;
 use Lemuria\Engine\Fantasya\Message\Party\NamePartyMessage;
 use Lemuria\Engine\Fantasya\Message\Region\NameCastleMessage;
 use Lemuria\Engine\Fantasya\Message\Region\NameRegionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NameMonumentOnceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameNoContinentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameNoUnicumMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameUnicumMessage;
@@ -22,6 +23,7 @@ use Lemuria\Engine\Fantasya\Message\Vessel\NameCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\NameVesselMessage;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Building\Castle;
+use Lemuria\Model\Fantasya\Building\Monument;
 use Lemuria\Model\Fantasya\Construction;
 
 /**
@@ -107,6 +109,13 @@ final class Name extends UnitCommand
 	private function renameConstruction(string $name): void {
 		$construction = $this->unit->Construction();
 		if ($construction) {
+			if ($construction->Building() instanceof Monument) {
+				if ($name !== 'Monument ' . $construction->Id()) {
+					$this->message(NameMonumentOnceMessage::class);
+					return;
+				}
+			}
+
 			$owner = $construction->Inhabitants()->Owner();
 			if ($owner && $owner === $this->unit) {
 				$construction->setName($name);

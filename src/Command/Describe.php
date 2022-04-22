@@ -12,6 +12,7 @@ use Lemuria\Engine\Fantasya\Message\Party\DescribeContinentUndoMessage;
 use Lemuria\Engine\Fantasya\Message\Party\DescribePartyMessage;
 use Lemuria\Engine\Fantasya\Message\Region\DescribeCastleMessage;
 use Lemuria\Engine\Fantasya\Message\Region\DescribeRegionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\DescribeMonumentOnceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DescribeNoContinentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DescribeNoUnicumMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DescribeUnicumMessage;
@@ -22,6 +23,7 @@ use Lemuria\Engine\Fantasya\Message\Vessel\DescribeCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\DescribeVesselMessage;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Building\Castle;
+use Lemuria\Model\Fantasya\Building\Monument;
 use Lemuria\Model\Fantasya\Construction;
 
 /**
@@ -106,6 +108,13 @@ final class Describe extends UnitCommand
 	private function describeConstruction(string $description): void {
 		$construction = $this->unit->Construction();
 		if ($construction) {
+			if ($construction->Building() instanceof Monument) {
+				if ($construction->Description()) {
+					$this->message(DescribeMonumentOnceMessage::class);
+					return;
+				}
+			}
+
 			$owner = $construction->Inhabitants()->Owner();
 			if ($owner && $owner === $this->unit) {
 				$construction->setDescription($description);
