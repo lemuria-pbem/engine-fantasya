@@ -47,7 +47,6 @@ abstract class AbstractOperate
 			$collector->Treasury()->remove($unicum);
 			$unit->Treasury()->add($unicum);
 			$this->addReadEffect()->Treasury()->add($unicum);
-			$this->removeDisintegrateEffect();
 			$this->message(TakeMessage::class, $unit)->s($composition)->e($unicum);
 			return;
 		}
@@ -153,10 +152,5 @@ abstract class AbstractOperate
 		}
 		Lemuria::Score()->add($effect);
 		return $effect;
-	}
-
-	private function removeDisintegrateEffect(): void {
-		$effect = new UnicumDisintegrate(State::getInstance());
-		Lemuria::Score()->remove($effect->setUnicum($this->operator->Unicum()));
 	}
 }
