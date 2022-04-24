@@ -7,17 +7,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
-- Regeldatei für Magellan
-- Kriegselefanten
-- weitere Gebäude:
-  - Greifenzucht
-  - Akademie
-  - Megapolis
-  - Monument
-  - Steinkreis
 - weitere Zauber:
-  - Fernsicht (3) (Region zeigen)
-  - Erwecke Baumhirten (3) (Baumhirten bewachen den Wald, kämpfen im Kampf)
   - Sturmböe (4) (Kampfzauber)
   - Blick des Greifen (4) (Kartografieren)
   - Astraler Weg (5) (Magier teleportiert sich)
@@ -33,7 +23,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Ideen
 
-- Gegenstandsklassen für verkürzte Übergaben (Kräuter, Luxuswaren, Rüstungen, Schilde, Tiere, Trophäen, Tränke, Waffen)
 - neue Gebäude, die Arbeitsplätze verdoppeln
   - Gebirge: Pilzhöhle
   - Sumpf: Elefantengehege
@@ -43,6 +32,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Schleuse als Zollgebäude
 - besondere Gebäude/Orte wie Ruinen, Höhlen oder Geschäfte
   - BESUCHEN zum Handel mit NPC-Ladenbesitzer
+  - Steinkreis als Portal für Magier
 - automatischer Beschreibungstext mit Handelsangeboten für Einheit, Gebäude oder Region
 - Gerüchte durch NPC oder Bauern, z.B. zu Monstervorkommen in Nachbarregionen
 - Weltumseglung ermöglichen

@@ -2,7 +2,10 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
+use function Lemuria\getClass;
+use Lemuria\Engine\Fantasya\Command\Trespass\Enter;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Effect\DecayEffect;
 use Lemuria\Engine\Fantasya\Effect\SignpostEffect;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\MarketBuilder;
@@ -23,10 +26,13 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
+use Lemuria\Model\Dictionary;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\AbstractCastle;
 use Lemuria\Model\Fantasya\Building\Castle;
+use Lemuria\Model\Fantasya\Building\Monument;
+use Lemuria\Model\Fantasya\Building\Ruin;
 use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Construction as ConstructionModel;
@@ -98,7 +104,9 @@ final class Construction extends AbstractProduct
 			} else {
 				$id           = Lemuria::Catalog()->nextId(Domain::CONSTRUCTION);
 				$construction = new ConstructionModel();
-				$construction->setName('Gebäude ' . $id)->setId($id);
+				$dictionary   = new Dictionary();
+				$name         = $dictionary->get('building.' . getClass($building)) . ' ' . $id;
+				$construction->setName($name)->setId($id);
 				$construction->Inhabitants()->add($this->unit);
 				$this->unit->Region()->Estate()->add($construction);
 				$construction->setBuilding($building)->setSize($yield);
@@ -110,11 +118,7 @@ final class Construction extends AbstractProduct
 			}
 			$this->addToWorkload($yield);
 			$this->initializeMarket($construction);
-
-			if ($building instanceof Signpost) {
-				$effect = $this->signpostEffect($construction);
-				Lemuria::Score()->add($effect->resetAge());
-			}
+			$this->addConstructionEffects($construction);
 		} else {
 			if ($this->capability > 0) {
 				if ($construction) {
@@ -174,9 +178,6 @@ final class Construction extends AbstractProduct
 		return parent::calculateProduction($craft);
 	}
 
-	/**
-	 * @noinspection PhpUnnecessaryLocalVariableInspection
-	 */
 	private function prepareBuildingFromOutside(): ?ConstructionModel {
 		$building = $this->job->getObject();
 		if ($building::class === AnyBuilding::class) {
@@ -188,7 +189,10 @@ final class Construction extends AbstractProduct
 				if ($estate->has($id)) {
 					/** @var ConstructionModel $construction */
 					$construction = $estate[$id];
-					return $construction;
+					$building     = $construction->Building();
+					if (!in_array($building::class, Enter::FORBIDDEN)) {
+						return $construction;
+					}
 				}
 			}
 		}
@@ -197,6 +201,10 @@ final class Construction extends AbstractProduct
 
 	private function replacePlaceholderJob(): void {
 		$building = $this->job->getObject();
+		if ($building instanceof Ruin) {
+			throw new InvalidCommandException($this);
+		}
+
 		if ($building instanceof AnyCastle) {
 			$building = $this->unit->Construction()?->Building();
 			if ($building) {
@@ -283,6 +291,24 @@ final class Construction extends AbstractProduct
 			$marketBuilder->initPrices();
 			Lemuria::Log()->debug('Market opens the first time in region ' . $region . ' - prices have been initialized.');
 		}
+	}
+
+	private function addConstructionEffects(ConstructionModel $construction): void {
+		$building = $construction->Building();
+		if ($building instanceof Monument) {
+			$effect = $this->monumentEffect($construction);
+			Lemuria::Score()->add($effect->resetAge());
+		} elseif ($building instanceof Signpost) {
+			$effect = $this->signpostEffect($construction);
+			Lemuria::Score()->add($effect->resetAge());
+		}
+	}
+
+	private function monumentEffect(ConstructionModel $signpost): DecayEffect {
+		$effect = new DecayEffect(State::getInstance());
+		/** @var DecayEffect $monumentEffect */
+		$monumentEffect = Lemuria::Score()->find($effect->setConstruction($signpost)->setInterval(DecayEffect::MONUMENT));
+		return $monumentEffect ?? $effect;
 	}
 
 	private function signpostEffect(ConstructionModel $signpost): SignpostEffect {

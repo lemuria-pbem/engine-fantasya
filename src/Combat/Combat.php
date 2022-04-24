@@ -50,7 +50,7 @@ use Lemuria\Model\Fantasya\Unit;
 class Combat
 {
 	public const ROW_NAME = [self::REFUGEE => 'refugees', self::BYSTANDER => 'bystanders', self::BACK => 'back',
-							 self::FRONT   => 'front'];
+		                     self::FRONT   => 'front'];
 
 	protected const BATTLE_ROWS = [self::REFUGEE, self::BYSTANDER, self::BACK, self::FRONT];
 

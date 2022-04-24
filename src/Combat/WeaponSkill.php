@@ -12,6 +12,7 @@ use Lemuria\Model\Fantasya\Talent\Bladefighting;
 use Lemuria\Model\Fantasya\Talent\Catapulting;
 use Lemuria\Model\Fantasya\Talent\Crossbowing;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
+use Lemuria\Model\Fantasya\Talent\Riding;
 use Lemuria\Model\Fantasya\Talent\Spearfighting;
 use Lemuria\Model\Fantasya\Talent\Stoning;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
@@ -22,6 +23,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Dingbats;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
+use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 
 /**
@@ -37,6 +39,7 @@ class WeaponSkill
 		Catapulting::class   => [Catapult::class],
 		Crossbowing::class   => [Crossbow::class],
 		Fistfight::class     => [Fists::class],
+		Riding::class        => [WarElephant::class],
 		Spearfighting::class => [Spear::class],
 		Stoning::class       => [Dingbats::class]
 	];
@@ -51,14 +54,17 @@ class WeaponSkill
 
 	private static Talent $fistfight;
 
+	private static Talent $riding;
+
 	private static Talent $spearfighting;
 
 	private static Talent $stoning;
 
-	public static function isSkill(Talent $talent): bool {
+	public static function isSkill(Ability $ability): bool {
 		self::initTalents();
-		return match ($talent) {
-			self::$bladefighting, self::$spearfighting,	self::$archery, self::$crossbowing, self::$catapulting => true,
+		return match ($ability->Talent()) {
+			self::$bladefighting, self::$spearfighting,	self::$archery, self::$crossbowing, self::$catapulting => $ability->Level() >= 1,
+			self::$riding => $ability->Level() >= 2, // War elephant
 			default => false
 		};
 	}
@@ -78,7 +84,7 @@ class WeaponSkill
 	 */
 	#[Pure] public function isMelee(): bool {
 		$talent = $this->skill->Talent();
-		return $talent === self::$bladefighting || $talent === self::$spearfighting;
+		return $talent === self::$bladefighting || $talent === self::$spearfighting || $talent === self::$riding;
 	}
 
 	/**
@@ -97,7 +103,7 @@ class WeaponSkill
 	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
 	 */
 	#[Pure] public function isGuard(): bool {
-		return !$this->isUnarmed() && !$this->isSiege();
+		return !$this->isUnarmed() && !$this->isSiege() && $this->skill->Talent() !== self::$riding;
 	}
 
 	/**
@@ -122,13 +128,14 @@ class WeaponSkill
 	/**
 	 * Init static talents.
 	 */
-	protected static function initTalents() {
+	protected static function initTalents(): void {
 		if (!self::$archery) {
 			self::$archery       = self::createTalent(Archery::class);
 			self::$bladefighting = self::createTalent(Bladefighting::class);
 			self::$catapulting   = self::createTalent(Catapulting::class);
 			self::$crossbowing   = self::createTalent(Crossbowing::class);
 			self::$fistfight     = self::createTalent(Fistfight::class);
+			self::$riding        = self::createTalent(Riding::class);
 			self::$spearfighting = self::createTalent(Spearfighting::class);
 			self::$stoning       = self::createTalent(Stoning::class);
 		}

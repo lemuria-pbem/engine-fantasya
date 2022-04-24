@@ -43,10 +43,16 @@ trait GiftTrait
 			}
 		}
 		$this->commodity = match (strtolower($commodity)) {
-			'' => new Everything(),
+			''                   => new Everything(),
 			'person', 'personen' => $this->context->Factory()->person(),
-			default => $this->context->Factory()->commodity($commodity)
+			default              => $this->parseCommodity($commodity)
 		};
+	}
+
+	private function parseCommodity(string $commodity): Commodity {
+		$factory   = $this->context->Factory();
+		$container = $factory->kind($commodity);
+		return $container ?: $factory->commodity($commodity);
 	}
 
 	/**

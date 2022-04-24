@@ -19,7 +19,9 @@ use Lemuria\Engine\Fantasya\Message\Unit\LoseAllMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseOnlyMessage;
+use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Container;
 use Lemuria\Model\Fantasya\Quantity;
 
 /**
@@ -67,8 +69,13 @@ final class Dismiss extends UnitCommand
 			$this->dismissEverything();
 		} elseif ($this->commodity instanceof Peasant) {
 			$this->dismissPeasants();
+		} elseif ($this->commodity instanceof Container) {
+			$this->commodity->setResources($this->unit->Inventory());
+			foreach ($this->commodity->Commodities() as $commodity /* @var Commodity $commodity */) {
+				$this->dismiss($commodity);
+			}
 		} else {
-			$this->dismiss();
+			$this->dismiss($this->commodity);
 		}
 	}
 
@@ -97,11 +104,11 @@ final class Dismiss extends UnitCommand
 		}
 	}
 
-	private function dismiss(): void {
-		$quantity  = new Quantity($this->commodity, $this->amount);
+	private function dismiss(Commodity $commodity): void {
+		$quantity  = new Quantity($commodity, $this->amount);
 		$inventory = $this->unit->Inventory();
-		$reserve   = $inventory[$this->commodity] ?? null;
-		if (isset(Allocation::POOL_COMMODITIES[$this->commodity::class])) {
+		$reserve   = $inventory[$commodity] ?? null;
+		if (isset(Allocation::POOL_COMMODITIES[$commodity::class])) {
 			if ($reserve) {
 				if ($this->amount < PHP_INT_MAX) {
 					if ($reserve->Count() > $this->amount) {
@@ -110,20 +117,20 @@ final class Dismiss extends UnitCommand
 						$this->message(DismissMessage::class)->i($quantity);
 					} else {
 						$this->giftToRegion($reserve);
-						unset($inventory[$this->commodity]);
+						unset($inventory[$commodity]);
 						if ($reserve->Count() < $this->amount) {
 							$this->message(DismissOnlyMessage::class)->i($reserve);
 						} else {
-							$this->message(DismissAllMessage::class)->s($this->commodity);
+							$this->message(DismissAllMessage::class)->s($commodity);
 						}
 					}
 				} else {
 					$this->giftToRegion($reserve);
-					unset($inventory[$this->commodity]);
-					$this->message(DismissAllMessage::class)->s($this->commodity);
+					unset($inventory[$commodity]);
+					$this->message(DismissAllMessage::class)->s($commodity);
 				}
 			} else {
-				$this->message(DismissNoneMessage::class)->s($this->commodity);
+				$this->message(DismissNoneMessage::class)->s($commodity);
 			}
 		} else {
 			if ($reserve) {
@@ -132,19 +139,19 @@ final class Dismiss extends UnitCommand
 						$this->unit->Inventory()->remove($quantity);
 						$this->message(LoseMessage::class)->i($quantity);
 					} else {
-						unset($inventory[$this->commodity]);
+						unset($inventory[$commodity]);
 						if ($reserve->Count() < $this->amount) {
 							$this->message(LoseOnlyMessage::class)->i($reserve);
 						} else {
-							$this->message(LoseAllMessage::class)->s($this->commodity);
+							$this->message(LoseAllMessage::class)->s($commodity);
 						}
 					}
 				} else {
-					unset($inventory[$this->commodity]);
-					$this->message(LoseAllMessage::class)->s($this->commodity);
+					unset($inventory[$commodity]);
+					$this->message(LoseAllMessage::class)->s($commodity);
 				}
 			} else {
-				$this->message(LoseNothingMessage::class)->s($this->commodity);
+				$this->message(LoseNothingMessage::class)->s($commodity);
 			}
 		}
 	}

@@ -87,11 +87,14 @@ use Lemuria\Model\Fantasya\Building\Cabin;
 use Lemuria\Model\Fantasya\Building\CamelBreeding;
 use Lemuria\Model\Fantasya\Building\Canal;
 use Lemuria\Model\Fantasya\Building\Citadel;
+use Lemuria\Model\Fantasya\Building\College;
 use Lemuria\Model\Fantasya\Building\Dockyard;
 use Lemuria\Model\Fantasya\Building\Fort;
+use Lemuria\Model\Fantasya\Building\GriffinBreeding;
 use Lemuria\Model\Fantasya\Building\HorseBreeding;
 use Lemuria\Model\Fantasya\Building\Lighthouse;
 use Lemuria\Model\Fantasya\Building\Magespire;
+use Lemuria\Model\Fantasya\Building\Megapolis;
 use Lemuria\Model\Fantasya\Building\Mine;
 use Lemuria\Model\Fantasya\Building\Palace;
 use Lemuria\Model\Fantasya\Building\Pit;
@@ -113,6 +116,7 @@ use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
 use Lemuria\Model\Fantasya\Commodity\CarriageWreck;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
+use Lemuria\Model\Fantasya\Commodity\ElephantArmor;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg;
 use Lemuria\Model\Fantasya\Commodity\Herb\Bubblemorel;
@@ -147,6 +151,7 @@ use Lemuria\Model\Fantasya\Commodity\Luxury\Olibanum;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Silk;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Spice;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Potion\BerserkBlood;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Potion\DrinkOfCreation;
@@ -179,6 +184,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\FounderingWarElephant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\LooseWarhammer;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustyBattleaxe;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustySword;
@@ -188,12 +194,15 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\UngirtBow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\UngirtCrossbow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
+use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Composition;
 use Lemuria\Model\Fantasya\Composition\Scroll;
 use Lemuria\Model\Fantasya\Composition\Spellbook;
+use Lemuria\Model\Fantasya\Container;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Kind;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\RawMaterial;
 use Lemuria\Model\Fantasya\Ship;
@@ -210,6 +219,7 @@ use Lemuria\Model\Fantasya\Spell\CivilCommotion;
 use Lemuria\Model\Fantasya\Spell\Daydream;
 use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
+use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
@@ -217,6 +227,7 @@ use Lemuria\Model\Fantasya\Spell\Quickening;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Spell\SoundlessShadow;
+use Lemuria\Model\Fantasya\Spell\SummonEnts;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Alchemy;
 use Lemuria\Model\Fantasya\Talent\Archery;
@@ -373,6 +384,7 @@ class CommandFactory
 	 * @var array(string=>string)
 	 */
 	protected array $buildings = [
+		'Akademie'          => College::class,
 		'Akropolis'         => Acropolis::class,
 		'Alchemistenküche'  => AlchemyKitchen::class,
 		'Baustelle'         => Site::class,
@@ -382,6 +394,7 @@ class CommandFactory
 		'Festung'           => Stronghold::class,
 		'Gebäude'           => AnyBuilding::class,
 		'Gebaeude'          => AnyBuilding::class,
+		'Greifenzucht'      => GriffinBreeding::class,
 		'Hafen'             => Port::class,
 		'Holzfällerhütte'   => Cabin::class,
 		'Holzfaellerhuette' => Cabin::class,
@@ -389,6 +402,7 @@ class CommandFactory
 		'Kanal'             => Canal::class,
 		'Leuchtturm'        => Lighthouse::class,
 		'Magierturm'        => Magespire::class,
+		'Megapolis'         => Megapolis::class,
 		'Mine'              => Pit::class,
 		'Palast'            => Palace::class,
 		'Pferdezucht'       => HorseBreeding::class,
@@ -429,7 +443,9 @@ class CommandFactory
 		'Eisblumen'                  => IceBegonia::class,
 		'Eisen'                      => Iron::class,
 		'Eisenschilde'               => Ironshield::class,
+		'Elefant'                    => Elephant::class,
 		'Elefanten'                  => Elephant::class,
+		'Elefantenpanzer'            => ElephantArmor::class,
 		'Elfenliebe'                 => Elvendear::class,
 		'Elixier der macht'          => ElixirOfPower::class,
 		'Elixiere der macht'         => ElixirOfPower::class,
@@ -472,9 +488,12 @@ class CommandFactory
 		'Knotige saugwurze'          => Knotroot::class,
 		'Knotiger saugwurz'          => Knotroot::class,
 		'Koboldohren'                => GoblinEar::class,
+		'Kriegselefanten'            => WarElephant::class,
 		'Kriegshammer'               => Warhammer::class,
 		'Kriegshaemmer'              => Warhammer::class,
 		'Kriegshämmer'               => Warhammer::class,
+		'Lahme kriegselefanten'      => FounderingWarElephant::class,
+		'Lahmer kriegselefant'       => FounderingWarElephant::class,
 		'Lederruestungen'            => LeatherArmor::class,
 		'Lederrüstungen'             => LeatherArmor::class,
 		'Lockere kriegshaemmer'      => LooseWarhammer::class,
@@ -485,6 +504,8 @@ class CommandFactory
 		'Myrrhen'                    => Myrrh::class,
 		'Oele'                       => Oil::class,
 		'Öle'                        => Oil::class,
+		'Pegasi'                     => Pegasus::class,
+		'Pegasus'                    => Pegasus::class,
 		'Pelze'                      => Fur::class,
 		'Pferd'                      => Horse::class,
 		'Pferde'                     => Horse::class,
@@ -559,6 +580,25 @@ class CommandFactory
 	];
 
 	/**
+	 * @var array(string=>Kind)
+	 */
+	protected array $kind = [
+		'Kraeuter'    => Kind::Herb,
+		'Kräuter'     => Kind::Herb,
+		'Luxusgueter' => Kind::Luxury,
+		'Luxusgüter'  => Kind::Luxury,
+		'Luxuswaren'  => Kind::Luxury,
+		'Ruestungen'  => Kind::Protection,
+		'Rüstungen'   => Kind::Protection,
+		'Schilde'     => Kind::Shield,
+		'Tiere'       => Kind::Animal,
+		'Traenke'     => Kind::Potion,
+		'Tränke'      => Kind::Potion,
+		'Transporter' => Kind::Transport,
+		'Waffen'      => Kind::Weapon
+	];
+
+	/**
 	 * @var array(string=>string)
 	 */
 	protected array $compositions = [
@@ -576,9 +616,11 @@ class CommandFactory
 		'Auratransfer'        => AuraTransfer::class,
 		'Beschleunigung'      => Quickening::class,
 		'Erdbeben'            => Earthquake::class,
+		'Erwecke baumhirten'  => SummonEnts::class,
+		'Fernsicht'           => Farsight::class,
 		'Feuerball'           => Fireball::class,
 		'Friedenslied'        => SongOfPeace::class,
-		'Lautloser Schatten'  => SoundlessShadow::class,
+		'Lautloser schatten'  => SoundlessShadow::class,
 		'Monster aufhetzen'   => InciteMonster::class,
 		'Schockwelle'         => ShockWave::class,
 		'Tagtraum'            => Daydream::class,
@@ -826,6 +868,17 @@ class CommandFactory
 	public function commodity(string $commodity): Commodity {
 		$commodityClass = $this->identifySingleton($commodity, $this->commodities);
 		return self::createCommodity($commodityClass);
+	}
+
+	/**
+	 * Create a commodity container for a given kind.
+	 */
+	public function kind(string $kind): ?Container {
+		$kind = mbUcFirst(mb_strtolower($kind));
+		if (isset($this->kind[$kind])) {
+			return new Container($this->kind[$kind]);
+		}
+		return null;
 	}
 
 	/**

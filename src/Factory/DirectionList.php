@@ -51,7 +51,6 @@ class DirectionList implements \Countable
 	public function next(): Direction {
 		if ($this->hasMore()) {
 			$direction = $this->directions[$this->index++];
-			/** @noinspection PhpConditionAlreadyCheckedInspection */
 			if (!$this->hasMore() && $this->isRotating) {
 				$this->index = 0;
 			}

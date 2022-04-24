@@ -228,7 +228,6 @@ final class Initiate implements Command
 			}
 			if ($locations->count()) {
 				/** @var Region $region */
-				/** @noinspection PhpUnnecessaryLocalVariableInspection */
 				$region = $locations->Atlas()->sort(SortMode::BY_RESIDENTS)->current();
 				return $region;
 			}

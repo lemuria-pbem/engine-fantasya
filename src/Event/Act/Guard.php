@@ -3,10 +3,13 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Act;
 
 use function Lemuria\randChance;
+use Lemuria\Engine\Fantasya\Effect\VanishEffect;
 use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\UnguardMessage;
+use Lemuria\Engine\Fantasya\State;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 
 /**
@@ -29,18 +32,30 @@ class Guard implements Act
 	}
 
 	public function act(): Guard {
-		$this->isGuarding = $this->unit->IsGuarding();
-		if ($this->isGuarding) {
-			if (randChance(self::UNGUARD)) {
-				$this->isGuarding = false;
-				$this->unit->setIsGuarding(false);
-				$this->message(UnguardMessage::class, $this->unit);
-			}
+		if ($this->hasVanishEffect()) {
+			$this->isGuarding = true;
 		} else {
-			if ($this->unit->BattleRow() >= BattleRow::DEFENSIVE && randChance(self::GUARD)) {
-				$this->isGuarding = true;
+			$this->isGuarding = $this->unit->IsGuarding();
+			if ($this->isGuarding) {
+				if (randChance(self::UNGUARD)) {
+					$this->isGuarding = false;
+					$this->unit->setIsGuarding(false);
+					$this->message(UnguardMessage::class, $this->unit);
+				}
+			} else {
+				if ($this->unit->BattleRow() >= BattleRow::DEFENSIVE && randChance(self::GUARD)) {
+					$this->isGuarding = true;
+				}
 			}
 		}
 		return $this;
+	}
+
+	private function hasVanishEffect(): bool {
+		if ($this->unit->Size() > 0) {
+			$effect = new VanishEffect(State::getInstance());
+			return Lemuria::Score()->find($effect->setUnit($this->unit)) instanceof VanishEffect;
+		}
+		return false;
 	}
 }

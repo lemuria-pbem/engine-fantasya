@@ -52,9 +52,6 @@ final class Scroll extends AbstractOperate
 		$this->addDisintegrateEffectForRegion(self::DISINTEGRATE);
 	}
 
-	/**
-	 * @noinspection PhpUnnecessaryLocalVariableInspection
-	 */
 	private function getScroll(): ScrollModel {
 		/** @var ScrollModel $scroll */
 		$scroll = $this->operator->Unicum()->Composition();

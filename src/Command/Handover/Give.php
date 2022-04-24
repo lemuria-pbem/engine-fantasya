@@ -27,6 +27,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\GiveSiegeMessage;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Container;
 use Lemuria\Model\Fantasya\Quantity;
 
 /**
@@ -89,6 +90,11 @@ final class Give extends UnitCommand
 			$this->giveEverything();
 			if ($this->phrase->count() === 1) {
 				$this->givePersons($this->unit->Size());
+			}
+		} elseif ($this->commodity instanceof Container) {
+			$this->commodity->setResources($this->unit->Inventory());
+			foreach ($this->commodity->Commodities() as $commodity /* @var Commodity $commodity */) {
+				$this->give($commodity, $this->amount);
 			}
 		} else {
 			$this->give($this->commodity, $this->amount);

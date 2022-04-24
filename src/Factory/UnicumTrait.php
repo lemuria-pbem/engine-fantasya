@@ -78,9 +78,6 @@ trait UnicumTrait
 		}
 	}
 
-	/**
-	 * @noinspection PhpUnnecessaryLocalVariableInspection
-	 */
 	private function getUnicum(string $id): ?Unicum {
 		$id       = Id::fromId($id);
 		$treasury = $this->unit->Treasury();
@@ -92,9 +89,6 @@ trait UnicumTrait
 		return null;
 	}
 
-	/**
-	 * @noinspection PhpUnnecessaryLocalVariableInspection
-	 */
 	private function searchUnicum(string $id): ?Unicum {
 		$id       = Id::fromId($id);
 		$treasury = $this->unit->Construction()?->Treasury();

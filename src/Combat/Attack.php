@@ -16,6 +16,8 @@ use Lemuria\Model\Fantasya\Commodity\Protection\LeatherArmor;
 use Lemuria\Model\Fantasya\Commodity\Protection\Mail;
 use Lemuria\Model\Fantasya\Commodity\Protection\Woodshield;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
+use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Protection;
 use Lemuria\Model\Fantasya\Race\Monster;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
@@ -39,6 +41,10 @@ class Attack
 		Mail::class         => 1
 	];
 
+	protected const ATTACK_FAILURE = [
+		WarElephant::class => [Spear::class]
+	];
+
 	protected const FLIGHT = [1.0, 0.9, 0.9, 0.9, 0.2, 0.2, 0.0];
 
 	protected int $round = 0;
@@ -59,7 +65,11 @@ class Attack
 		$chance   = $unit->Race()->FlightChance();
 		if ($isFighting) {
 			$chance += $this->combatant->WeaponSkill()->Skill()->Level() * 0.05;
-			if ($this->combatant->Distribution()->offsetExists(Horse::class)) {
+			if ($this->combatant->Distribution()->offsetExists(WarElephant::class)) {
+				if ($calculus->knowledge(Riding::class)->Level() > 1) {
+					$chance += 0.5;
+				}
+			} elseif ($this->combatant->Distribution()->offsetExists(Horse::class)) {
 				if ($calculus->knowledge(Riding::class)->Level() > 0) {
 					$chance += 0.25;
 				}
@@ -96,7 +106,16 @@ class Attack
 			return null;
 		}
 
-		$skill    = $weaponSkill->Skill()->Level();
+		$skill     = $weaponSkill->Skill()->Level();
+		$defWeapon = $defender->Weapon()::class;
+		if (isset(self::ATTACK_FAILURE[$defWeapon])) {
+			$attWeapon = $weapon::class;
+			if (!isset(self::ATTACK_FAILURE[$defWeapon][$attWeapon])) {
+				$skill = 0;
+				// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' has no chance against ' . $defender->getId($fD, true) . '.');
+			}
+		}
+
 		$armor    = $this->combatant->Armor();
 		$hasBonus = $attacker->potion instanceof BerserkBlood;
 		$shield   = $defender->Shield();

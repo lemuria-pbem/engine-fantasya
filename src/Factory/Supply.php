@@ -26,7 +26,7 @@ class Supply implements \Countable
 
 	private bool $isOffer = false;
 
-	public function __construct(private readonly Region $region) {
+	#[Pure] public function __construct(private readonly Region $region) {
 		$resources      = $region->Resources();
 		$this->peasants = $resources[Peasant::class]->Count();
 		$this->step     = $this->peasants / 100.0;

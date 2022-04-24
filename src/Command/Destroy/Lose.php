@@ -17,7 +17,9 @@ use Lemuria\Engine\Fantasya\Message\Unit\LoseMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseToUnitMessage;
 use Lemuria\Exception\IdException;
 use Lemuria\Id;
+use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Container;
 use Lemuria\Model\Fantasya\Practice;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unicum;
@@ -78,8 +80,13 @@ final class Lose extends UnitCommand implements Operator
 			$this->loseEverything();
 		} elseif ($this->commodity instanceof Peasant) {
 			$this->dismissPeasants();
+		} elseif ($this->commodity instanceof Container) {
+			$this->commodity->setResources($this->unit->Inventory());
+			foreach ($this->commodity->Commodities() as $commodity /* @var Commodity $commodity */) {
+				$this->lose($commodity);
+			}
 		} else {
-			$this->lose();
+			$this->lose($this->commodity);
 		}
 	}
 
@@ -113,8 +120,8 @@ final class Lose extends UnitCommand implements Operator
 		}
 	}
 
-	protected function lose(): void {
-		$quantity = new Quantity($this->commodity, $this->amount);
+	protected function lose(Commodity $commodity): void {
+		$quantity = new Quantity($commodity, $this->amount);
 		$unit     = $this->giftToRandomUnit($quantity);
 		if ($unit) {
 			$this->message(LoseToUnitMessage::class, $unit)->e($this->unit)->i($quantity);
@@ -152,9 +159,5 @@ final class Lose extends UnitCommand implements Operator
 		} catch (IdException) {
 		}
 		return $unicum;
-	}
-
-	protected function loseUnicum(Unicum $unicum): void {
-
 	}
 }

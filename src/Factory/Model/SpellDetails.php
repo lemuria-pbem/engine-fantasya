@@ -103,6 +103,7 @@ class SpellDetails
 		return match (SpellParser::getSyntax($this->spell)) {
 			SpellParser::LEVEL            => '[Stufe]',
 			SpellParser::TARGET           => 'Ziel',
+			SpellParser::REGION           => '[Region]',
 			SpellParser::LEVEL_AND_TARGET => '[Stufe] Ziel',
 			default                       => ''
 		};

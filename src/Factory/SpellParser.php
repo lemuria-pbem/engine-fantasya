@@ -18,6 +18,7 @@ use Lemuria\Model\Fantasya\Spell\CivilCommotion;
 use Lemuria\Model\Fantasya\Spell\Daydream;
 use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
+use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
@@ -25,6 +26,7 @@ use Lemuria\Model\Fantasya\Spell\Quickening;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Spell\SoundlessShadow;
+use Lemuria\Model\Fantasya\Spell\SummonEnts;
 
 class SpellParser
 {
@@ -46,6 +48,11 @@ class SpellParser
 	public final const TARGET = 2;
 
 	/**
+	 * Spell has optional target region ID.
+	 */
+	public final const REGION = 4;
+
+	/**
 	 * Spell has optional level and mandatory target unit ID.
 	 */
 	public final const LEVEL_AND_TARGET = self::LEVEL + self::TARGET;
@@ -57,23 +64,32 @@ class SpellParser
 		Daydream::class        => self::LEVEL_AND_TARGET,
 		EagleEye::class        => self::LEVEL,
 		Earthquake::class      => self::LEVEL,
+		Farsight::class        => self::REGION,
 		Fireball::class        => self::LEVEL,
 		InciteMonster::class   => self::TARGET,
 		Quacksalver::class     => self::LEVEL,
 		Quickening::class      => self::LEVEL,
 		ShockWave::class       => self::LEVEL,
 		SongOfPeace::class     => self::LEVEL,
-		SoundlessShadow::class => self::LEVEL
+		SoundlessShadow::class => self::LEVEL,
+		SummonEnts::class      => self::LEVEL
 	];
 
 	protected final const SPELLS = [
-		'Astrales'     => ['Chaos' => AstralChaos::class],
-		'Auratransfer' => AuraTransfer::class,
-		'Feuerball'    => Fireball::class,
-		'Friedenslied' => SongOfPeace::class,
-		'Schockwelle'  => ShockWave::class,
-		'Tagtraum'     => Daydream::class,
-		'Wunderdoktor' => Quacksalver::class
+		'Astrales'       => ['Chaos' => AstralChaos::class],
+		'Aufruhr'        => ['verursachen' => CivilCommotion::class],
+		'Auratransfer'   => AuraTransfer::class,
+		'Beschleunigung' => Quickening::class,
+		'Erdbeben'       => Earthquake::class,
+		'Erwecke'        => ['Baumhirten' => SummonEnts::class],
+		'Fernsicht'      => Farsight::class,
+		'Feuerball'      => Fireball::class,
+		'Friedenslied'   => SongOfPeace::class,
+		'Lautloser'      => ['Schatten' => SoundlessShadow::class],
+		'Monster'        => ['aufhetzen' => InciteMonster::class],
+		'Schockwelle'    => ShockWave::class,
+		'Tagtraum'       => Daydream::class,
+		'Wunderdoktor'   => Quacksalver::class
 	];
 
 	protected readonly string $spell;
@@ -138,6 +154,9 @@ class SpellParser
 			case self::TARGET :
 				$this->parseTarget($phrase, $next);
 				break;
+			case self::REGION :
+				$this->parseOptionalRegion($phrase, $next);
+				break;
 			case self::LEVEL_AND_TARGET :
 				$this->parseOptionalLevelAndTarget($phrase, $next);
 				break;
@@ -166,6 +185,17 @@ class SpellParser
 			$this->target = Id::fromId($target);
 		} catch (IdException) {
 			throw new InvalidCommandException($phrase);
+		}
+	}
+
+	protected function parseOptionalRegion(Phrase $phrase, int $next): void {
+		$target = $phrase->getParameter($next);
+		if (!empty($target)) {
+			try {
+				$this->target = Id::fromId($target);
+			} catch (IdException) {
+				throw new InvalidCommandException($phrase);
+			}
 		}
 	}
 

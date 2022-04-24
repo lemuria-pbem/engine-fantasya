@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Engine\Fantasya\Effect\ContactEffect;
+use Lemuria\Engine\Fantasya\Effect\FarsightEffect;
 use Lemuria\Engine\Fantasya\Factory\Model\TravelAtlas;
 use Lemuria\Engine\Fantasya\Factory\Model\Visibility;
 use Lemuria\Lemuria;
@@ -57,6 +58,7 @@ final class Outlook
 		foreach ($this->census->getPeople($region) as $unit /* @var Unit $unit */) {
 			$calculus = new Calculus($unit);
 			$level    = max($level, $calculus->knowledge($perception)->Level());
+			$level    = max($level, $this->getFarsightPerception($region));
 		}
 
 		$units      = new People();
@@ -204,5 +206,11 @@ final class Outlook
 			}
 		}
 		return $range;
+	}
+
+	private function getFarsightPerception(Region $region): int {
+		$effect   = new FarsightEffect(State::getInstance());
+		$existing = Lemuria::Score()->find($effect->setRegion($region));
+		return $existing instanceof FarsightEffect ? $existing->getPerception($this->Census()->Party()) : 0;
 	}
 }

@@ -15,9 +15,12 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\TakeLootMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\TakeTrophiesMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\UnitDiedMessage;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Effect\VanishEffect;
+use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\DisguisedParty;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackUnguardMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Gathering;
@@ -67,8 +70,14 @@ class Battle
 
 	private Intelligence $intelligence;
 
+	/**
+	 * @var array(int=>Unit)
+	 */
+	private array $monsters = [];
+
 	#[Pure] public function __construct(private Region $region) {
 		$this->intelligence = new Intelligence($this->region);
+		$this->initMonsters();
 	}
 
 	public function Region(): Region {
@@ -85,11 +94,25 @@ class Battle
 
 	public function addAttacker(Unit $unit): Battle {
 		$this->attackers[] = $unit;
+		$id                = $unit->Id()->Id();
+		if (isset($this->monsters[$id])) {
+			foreach ($this->monsters[$id] as $monster /* @var Unit $monster */) {
+				$this->attackers[] = $monster;
+				Lemuria::Log()->debug('Monster ' . $monster . ' supports attacker in battle.');
+			}
+		}
 		return $this;
 	}
 
 	public function addDefender(Unit $unit): Battle {
 		$this->defenders[] = $unit;
+		$id                = $unit->Id()->Id();
+		if (isset($this->monsters[$id])) {
+			foreach ($this->monsters[$id] as $monster /* @var Unit $monster */) {
+				$this->defenders[] = $monster;
+				Lemuria::Log()->debug('Monster ' . $monster . ' supports defender in battle.');
+			}
+		}
 		return $this;
 	}
 
@@ -359,6 +382,25 @@ class Battle
 				$health       = min(1.0, $hitpoints[$id] / ($size * $maxHitpoints));
 				$unit->setHealth($health);
 				Lemuria::Log()->debug('Unit ' . $unit . ' of army ' . $army->Id() . ' has health ' . $health . '.');
+			}
+		}
+	}
+
+	private function initMonsters(): void {
+		$score  = Lemuria::Score();
+		$effect = new VanishEffect(State::getInstance());
+		$party  = Party::get(Spawn::getPartyId(Type::MONSTER));
+		foreach ($this->intelligence->getUnits($party) as $monster /* @var Unit $monster */) {
+			$existing = $score->find($effect->setUnit($monster));
+			if ($existing instanceof VanishEffect) {
+				$unit = $existing->Summoner();
+				if ($unit) {
+					$id = $unit->Id()->Id();
+					if (!isset($this->monsters[$id])) {
+						$this->monsters[$id] = [];
+					}
+					$this->monsters[$id][] = $monster;
+				}
 			}
 		}
 	}

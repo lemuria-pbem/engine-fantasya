@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Spell;
 
+use JetBrains\PhpStorm\Pure;
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
@@ -92,7 +93,7 @@ abstract class AbstractBattleSpell
 		$aura->setAura($available - $grade * $consumption);
 	}
 
-	protected function getCombatEffect(Spell $spell): ?CombatEffect {
+	#[Pure] protected function getCombatEffect(Spell $spell): ?CombatEffect {
 		if ($spell instanceof BattleSpell) {
 			$effect = $this->grade->Combat()->Effects()[$spell];
 			if ($effect instanceof CombatEffect) {
