@@ -322,7 +322,7 @@
 		"ConstructionMessage": "Die Einheit $id erbaut {ein:$building}.",
 		"ConstructionOnlyMessage": "Die Einheit $id kann nur {$size:Größenpunkt} am Gebäude $construction bauen.",
 		"ConstructionResourcesMessage": "Die Einheit $id hat kein Baumaterial, um am Gebäude $construction zu bauen.",
-		"ConstructionUnableMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um $building zu bauen.",
+		"ConstructionUnableMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um {ein:$building} zu bauen.",
 		"ContactMessage": "Die Einheit $id kontaktiert die Einheit $unit.",
 		"ContactNotFoundMessage": "Die Einheit $id kann die Einheit $unit nicht finden, um sie zu kontaktieren.",
 		"DaydreamConcentrateMessage": "Die Einheit $id ist unkonzentriert.",

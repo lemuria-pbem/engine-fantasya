@@ -7,6 +7,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Neue Funktionen
 
+- ausgeführte Befehle im Report anzeigen
 - weitere Zauber:
   - Sturmböe (4) (Kampfzauber)
   - Blick des Greifen (4) (Kartografieren)
