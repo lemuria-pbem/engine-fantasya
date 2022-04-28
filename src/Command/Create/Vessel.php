@@ -109,7 +109,7 @@ final class Vessel extends AbstractProduct
 					if ($vessel) {
 						$this->message(VesselExperienceMessage::class)->e($vessel)->s($talent);
 					} else {
-						$this->message(VesselUnableMessage::class)->s($ship);
+						$this->message(VesselUnableMessage::class)->s($ship)->s($talent, VesselUnableMessage::TALENT);
 					}
 				}
 			}

@@ -12,9 +12,11 @@ use Lemuria\Engine\Fantasya\Command\Create\Road;
 use Lemuria\Engine\Fantasya\Command\Create\Temp;
 use Lemuria\Engine\Fantasya\Command\Create\Unicum;
 use Lemuria\Engine\Fantasya\Command\Create\Unknown;
+use Lemuria\Engine\Fantasya\Command\Create\Vessel;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyBuilding;
+use Lemuria\Engine\Fantasya\Factory\Model\AnyShip;
 use Lemuria\Engine\Fantasya\Factory\Model\Herb as HerbModel;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg as GriffineggModel;
@@ -55,6 +57,10 @@ final class Create extends DelegatedCommand
 		// MACHEN Straße
 		if ($lower === 'straße' || $lower === 'strasse') {
 			return new Road($this->phrase, $this->context);
+		}
+		// MACHEN Schiff <ID>
+		if ($n === 2 && $lower === 'schiff') {
+			return new Vessel($this->phrase, $this->context, new Job(new AnyShip()));
 		}
 		// MACHEN Gebäude <ID>
 		if ($n === 2 && ($lower === 'gebäude' || $lower === 'gebaeude')) {

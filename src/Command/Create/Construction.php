@@ -130,7 +130,7 @@ final class Construction extends AbstractProduct
 				if ($construction) {
 					$this->message(ConstructionExperienceMessage::class)->e($construction)->s($talent);
 				} else {
-					$this->message(ConstructionUnableMessage::class)->s($building);
+					$this->message(ConstructionUnableMessage::class)->s($building)->s($talent, ConstructionUnableMessage::TALENT);
 				}
 			}
 		}
