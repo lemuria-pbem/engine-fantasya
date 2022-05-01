@@ -16,6 +16,8 @@ enum Subject
 
 	case Expenses;
 
+	case Experts;
+
 	case LearningCosts;
 
 	case Maintenance;
