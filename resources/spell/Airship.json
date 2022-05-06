@@ -1,0 +1,7 @@
+{
+	"description": [
+		"Dieser Zauber ermöglicht es dem Magier, ein ganzes Schiff in die Luft zu erheben, so dass sich dieses über Land bewegen kann.",
+		"Der Magier muss als Passagier mitreisen, und umso mehr Aura aufwenden, je schwerer das Schiff und seine Ladung ist. In jeder Region, die das Schiff durchreist, muss er die Zauberwirkung erneuern, um das Schiff in der Luft zu halten."
+	],
+	"aura": "1 pro 100 GE und Region"
+}

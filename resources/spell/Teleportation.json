@@ -1,0 +1,7 @@
+{
+	"description": [
+		"Dieser Zauber ermöglicht es dem Magier, eine beliebige Einheit der eigenen Partei zu sich zu teleportieren. Dabei spielt es keine Rolle, wo sich die Einheit aufhält.",
+		"Pro Aurapunkt kann der Magier eine Person mitsamt der am Körper getragenen Ausrüstung teleportieren. Durch zusätzliche Aura können weitere Gegenstände im Besitz der Einheit mitbewegt werden.",
+		"Wenn keine Stufe angegeben wird, verbraucht der Magier so viel Aurapunkte, wie er für die gesamte Einheit benötigt. Reicht die Aura des Magiers jedoch nicht aus, wird nur ein Teil der Einheit teleportiert."
+	]
+}
