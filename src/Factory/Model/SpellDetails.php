@@ -102,7 +102,8 @@ class SpellDetails
 
 	protected function validateJson(): void {
 		$this->validate($this->json, self::DESCRIPTION, 'array');
-		$this->validate($this->json, self::COMPONENTS, 'array');
+		$this->validateIfExists($this->json, self::COMPONENTS, 'array');
+		$this->validateIfExists($this->json, self::AURA, 'string');
 	}
 
 	protected function getParameters(): string {

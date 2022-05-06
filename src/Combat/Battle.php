@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerWonMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleEndedInDrawMessage;
@@ -75,7 +73,7 @@ class Battle
 	 */
 	private array $monsters = [];
 
-	#[Pure] public function __construct(private Region $region) {
+	public function __construct(private Region $region) {
 		$this->intelligence = new Intelligence($this->region);
 		$this->initMonsters();
 	}
