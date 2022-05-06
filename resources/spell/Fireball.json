@@ -2,6 +2,5 @@
 	"description": [
 		"Eine Kugel aus magischem Feuer verwundet jeden getroffenen Gegner durch schreckliche Verbrennungen.",
 		"Der verursachte Schaden richtet sich nach der Stärke des Feuerball-Zaubers. Talentierte Magier können außerdem mehr Gegner treffen als Magier mit geringerem Talent."
-	],
-	"components": []
+	]
 }

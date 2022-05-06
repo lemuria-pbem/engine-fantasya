@@ -10,8 +10,10 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Unit;
 
-class Comments implements \Countable
+class Orders
 {
+	public array $orders = [];
+
 	public array $comments = [];
 
 	public function __construct(Unit $unit) {
@@ -24,11 +26,9 @@ class Comments implements \Countable
 				if ($line) {
 					$this->comments[] = $line;
 				}
+			} else {
+				$this->orders[] = trim($command);
 			}
 		}
-	}
-
-	public function count(): int {
-		return count($this->comments);
 	}
 }

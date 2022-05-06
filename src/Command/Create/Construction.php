@@ -286,10 +286,14 @@ final class Construction extends AbstractProduct
 			return;
 		}
 		if ($construction->Building() instanceof Castle && $construction->Size() > Site::MAX_SIZE) {
-			$region        = $construction->Region();
-			$marketBuilder = new MarketBuilder($this->context->getIntelligence($region));
-			$marketBuilder->initPrices();
-			Lemuria::Log()->debug('Market opens the first time in region ' . $region . ' - prices have been initialized.');
+			$region = $construction->Region();
+			if ($region->Luxuries()) {
+				$marketBuilder = new MarketBuilder($this->context->getIntelligence($region));
+				$marketBuilder->initPrices();
+				Lemuria::Log()->debug('Market opens the first time in region ' . $region . ' - prices have been initialized.');
+			} else {
+				Lemuria::Log()->debug('Region ' . $region . ' produces no luxuries - no prices initialized.');
+			}
 		}
 	}
 

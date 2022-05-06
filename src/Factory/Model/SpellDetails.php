@@ -22,6 +22,8 @@ class SpellDetails
 
 	protected final const COMPONENTS = 'components';
 
+	protected final const AURA = 'aura';
+
 	protected static ?JsonProvider $provider = null;
 
 	protected static ?Dictionary $dictionary = null;
@@ -67,7 +69,11 @@ class SpellDetails
 	 * @return string[]
 	 */
 	public function Components(): array {
-		return $this->json[self::COMPONENTS];
+		return $this->json[self::COMPONENTS] ?? [];
+	}
+
+	public function Aura(): ?string {
+		return $this->json[self::AURA] ?? null;
 	}
 
 	public function IsBattleSpell(): bool {
@@ -96,7 +102,8 @@ class SpellDetails
 
 	protected function validateJson(): void {
 		$this->validate($this->json, self::DESCRIPTION, 'array');
-		$this->validate($this->json, self::COMPONENTS, 'array');
+		$this->validateIfExists($this->json, self::COMPONENTS, 'array');
+		$this->validateIfExists($this->json, self::AURA, 'string');
 	}
 
 	protected function getParameters(): string {

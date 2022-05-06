@@ -27,6 +27,7 @@ final class Education extends AbstractEvent
 		foreach (Lemuria::Catalog()->getAll(Domain::PARTY) as $party /* @var Party $party */) {
 			if ($party->Type() === Type::PLAYER) {
 				$this->placeMetrics(Subject::Education, $party);
+				$this->placeMetrics(Subject::Experts, $party);
 			}
 		}
 	}
