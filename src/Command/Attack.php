@@ -4,13 +4,16 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleBeginsMessage;
+use Lemuria\Engine\Fantasya\Combat\Side;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Message\Region\AttackBattleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackAllyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackCancelMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMonsterMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackInCastleMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackInvolveMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFightingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFoundMessage;
@@ -101,16 +104,30 @@ final class Attack extends UnitCommand
 		if (!empty($this->units)) {
 			$campaign = $this->context->getCampaign($this->unit->Region());
 			foreach ($this->units as $unit) {
-				$campaign->addAttack($this->unit, $unit);
-				$this->message(AttackMessage::class)->e($unit);
-				$party = $this->unit->Party();
-				if ($party->Type() === Type::PLAYER) {
-					$this->message(AttackFromMessage::class, $unit)->e($this->unit->Party());
-				} else {
-					$this->message(AttackFromMonsterMessage::class, $unit);
+				$side = $campaign->addAttack($this->unit, $unit);
+				switch ($side) {
+					case Side::Attacker :
+						$this->message(AttackMessage::class)->e($unit);
+						$this->addAttackFromMessage($unit);
+						break;
+					case Side::Involve :
+						$this->message(AttackInvolveMessage::class)->e($unit);
+						$this->addAttackFromMessage($unit);
+						break;
+					case Side::Defender :
+						$this->message(AttackCancelMessage::class)->e($unit);
 				}
 			}
 			parent::commitCommand($command);
+		}
+	}
+
+	private function addAttackFromMessage(Unit $unit): void {
+		$party = $this->unit->Party();
+		if ($party->Type() === Type::PLAYER) {
+			$this->message(AttackFromMessage::class, $unit)->e($party);
+		} else {
+			$this->message(AttackFromMonsterMessage::class, $unit);
 		}
 	}
 

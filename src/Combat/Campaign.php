@@ -70,15 +70,27 @@ class Campaign
 		return $this->battles ?? [];
 	}
 
-	public function addAttack(Unit $attacker, Unit $defender): Campaign {
-		$attackId                     = $attacker->Id()->Id();
+	public function addAttack(Unit $attacker, Unit $defender): Side {
+		$attackId = $attacker->Id()->Id();
+		$defendId = $defender->Id()->Id();
+		if (isset($this->defenders[$attackId])) {
+			Lemuria::Log()->debug($attacker . ' is already attacked. Attack against ' . $defender . ' cancelled.');
+			if (isset($this->attackers[$defendId])) {
+				return Side::Defender;
+			}
+			$this->armies[$defendId]      = $defender;
+			$this->attackers[$defendId][] = $attackId;
+			$this->defenders[$attackId][] = $defendId;
+			Lemuria::Log()->debug($defender . ' is attacked by ' . $attacker . ' and joins the battle as attacker.');
+			return Side::Involve;
+		}
+
 		$this->armies[$attackId]      = $attacker;
-		$defendId                     = $defender->Id()->Id();
 		$this->armies[$defendId]      = $defender;
 		$this->attackers[$attackId][] = $defendId;
 		$this->defenders[$defendId][] = $attackId;
 		Lemuria::Log()->debug($attacker . ' attacks ' . $defender . ' in ' . $this->region . '.');
-		return $this;
+		return Side::Attacker;
 	}
 
 	public function mount(): bool {
