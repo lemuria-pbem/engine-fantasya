@@ -327,6 +327,7 @@
 		"ConstructionUnableMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um {ein:$building} zu bauen.",
 		"ContactMessage": "Die Einheit $id kontaktiert die Einheit $unit.",
 		"ContactNotFoundMessage": "Die Einheit $id kann die Einheit $unit nicht finden, um sie zu kontaktieren.",
+		"CreateMessage": "Die Einheit $id hat die Welt betreten.",
 		"DaydreamConcentrateMessage": "Die Einheit $id ist unkonzentriert.",
 		"DaydreamGuardMessage": "Die Einheit $id ist unkonzentriert und verlässt ihren Wachtposten.",
 		"DaydreamLevelMessage": "Die Einheit $id kann die Zieleinheit $unit nicht mit Tagträumen verzaubern - es sind wenigstens $needed Aura nötig.",

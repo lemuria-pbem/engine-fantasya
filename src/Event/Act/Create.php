@@ -3,9 +3,11 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Act;
 
 use Lemuria\Engine\Fantasya\Event\Act;
+use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Factory\Namer;
 use Lemuria\Engine\Fantasya\Factory\Namer\RaceNamer;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\CreateMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Ability;
@@ -27,6 +29,7 @@ use Lemuria\Model\Fantasya\Unit;
 class Create implements Act
 {
 	use BuilderTrait;
+	use MessageTrait;
 	use OptionsTrait;
 
 	protected const NAMER = [
@@ -85,6 +88,7 @@ class Create implements Act
 				$unit->setIsHiding(true);
 			}
 			$this->units[] = $unit;
+			$this->message(CreateMessage::class, $unit);
 			Lemuria::Log()->debug('A new unit of ' . $gang . ' has been spawned in ' . $this->region . '.');
 		}
 		return $this;
