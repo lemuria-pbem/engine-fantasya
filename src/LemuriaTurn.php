@@ -176,8 +176,17 @@ class LemuriaTurn implements Turn
 	public function evaluate(): Turn {
 		Lemuria::Hostilities()->clear();
 		Lemuria::Orders()->clear();
+
+		Lemuria::Log()->debug('Shuffling all queues.');
+		$priorities = array_keys($this->queue);
+		foreach ($priorities as $priority) {
+			if ($this->priority->canShuffle($priority)) {
+				$this->shuffle($priority);
+			}
+		}
+
 		Lemuria::Log()->debug('Executing queued actions.', ['queues' => count($this->queue)]);
-		foreach (array_keys($this->queue) as $priority) {
+		foreach ($priorities as $priority) {
 			$this->currentPriority = $priority;
 			$actions               = $this->queue[$priority];
 			Lemuria::Log()->debug('Queue ' . $priority . ' has ' . count($actions) . ' actions.');
@@ -282,6 +291,32 @@ class LemuriaTurn implements Turn
 		$this->enqueue($effect);
 		Lemuria::Log()->debug('New effect: ' . $effect . '.', ['effect' => $effect]);
 		return $this;
+	}
+
+	private function shuffle(int $priority): void {
+		$units         = [];
+		$isUnitCommand = false;
+		foreach ($this->queue[$priority] as $action) {
+			if ($action instanceof UnitCommand) {
+				$id = $action->Unit()->Id()->Id();
+				if (!isset($units[$id])) {
+					$units[$id] = [];
+				}
+				$units[$id][]  = $action;
+				$isUnitCommand = true;
+			} else {
+				$units[] = $action;
+			}
+		}
+
+		if ($isUnitCommand) {
+			shuffle($units);
+			$queue = [];
+			foreach ($units as $actions) {
+				array_push($queue, ...$actions);
+			}
+			$this->queue[$priority] = $queue;
+		}
 	}
 
 	private function throwExceptions(): bool {

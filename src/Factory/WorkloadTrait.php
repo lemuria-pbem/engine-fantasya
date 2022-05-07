@@ -37,9 +37,12 @@ trait WorkloadTrait
 	}
 
 	protected function potionBoost(int $unitSize): float {
-		$effect     = $this->context->getCalculus($this->unit)->hasApplied(DrinkOfCreation::class);
-		$potionSize = $effect?->Count() * DrinkOfCreation::PERSONS;
-		return min(2.0, 1.0 + $potionSize / $unitSize);
+		if ($unitSize > 0) {
+			$effect     = $this->context->getCalculus($this->unit)->hasApplied(DrinkOfCreation::class);
+			$potionSize = $effect?->Count() * DrinkOfCreation::PERSONS;
+			return min(2.0, 1.0 + $potionSize / $unitSize);
+		}
+		return 0.0;
 	}
 
 	protected function getProductivity(Ability|Talent|string $talent, ?Calculus $calculus = null): Ability {
