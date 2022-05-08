@@ -19,7 +19,7 @@ class Orders
 	public function __construct(Unit $unit) {
 		$context = new Context(new State());
 		$factory = new CommandFactory($context->setUnit($unit));
-		foreach (Lemuria::Orders()->getDefault($unit->Id()) as $command) {
+		foreach (Lemuria::Orders()->getCurrent($unit->Id()) as $command) {
 			$comment = $factory->create(new Phrase($command))->getDelegate();
 			if ($comment instanceof Comment) {
 				$line = trim($comment->Line());

@@ -22,7 +22,7 @@ trait LodgingTrait
 			if ($construction->Building() === $dependency) {
 				$inhabitants = $construction->Inhabitants();
 				$owner       = $inhabitants->Owner();
-				if ($owner->Party() === $party || $diplomacy->has(Relation::ENTER, $owner)) {
+				if ($owner && ($owner->Party() === $party || $diplomacy->has(Relation::ENTER, $owner))) {
 					$calculus = new Calculus($owner);
 					if ($calculus->isInMaintainedConstruction()) {
 						$lodging = $this->getWorkerLodging($construction);
@@ -49,7 +49,7 @@ trait LodgingTrait
 			if ($construction->Building() === $dependency) {
 				$inhabitants = $construction->Inhabitants();
 				$owner       = $inhabitants->Owner();
-				if ($owner->Party() === $party || $diplomacy->has(Relation::ENTER, $owner)) {
+				if ($owner && ($owner->Party() === $party || $diplomacy->has(Relation::ENTER, $owner))) {
 					$calculus = new Calculus($owner);
 					if ($calculus->isInMaintainedConstruction()) {
 						$lodging = $this->getWorkerLodging($construction);
