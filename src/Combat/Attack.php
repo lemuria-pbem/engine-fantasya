@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultBlockMessage;
@@ -16,16 +14,23 @@ use Lemuria\Model\Fantasya\Commodity\Protection\LeatherArmor;
 use Lemuria\Model\Fantasya\Commodity\Protection\Mail;
 use Lemuria\Model\Fantasya\Commodity\Protection\Woodshield;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Protection;
 use Lemuria\Model\Fantasya\Race\Monster;
+use Lemuria\Model\Fantasya\Spell;
+use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Riding;
 use Lemuria\Model\Fantasya\Weapon;
 
 class Attack
 {
+	use BuilderTrait;
+
 	protected const DAMAGE_BONUS = [
 		Bow::class => 0.5
 	];
@@ -45,14 +50,25 @@ class Attack
 		WarElephant::class => [Spear::class]
 	];
 
+	protected const WIND_EFFECT = [
+		Bow::class      => 1.0,
+		Catapult::class => 0.2,
+		Crossbow::class => 0.5
+	];
+
 	protected const FLIGHT = [1.0, 0.9, 0.9, 0.9, 0.2, 0.2, 0.0];
 
 	protected int $round = 0;
 
 	private float $flight;
 
-	#[Pure] public function __construct(private Combatant $combatant) {
+	private static ?Spell $gustOfWind = null;
+
+	public function __construct(private Combatant $combatant) {
 		$this->flight = self::FLIGHT[$combatant->Unit()->BattleRow()->value];
+		if (!self::$gustOfWind) {
+			self::$gustOfWind = self::createSpell(GustOfWind::class);
+		}
 	}
 
 	public function Flight(): float {
@@ -107,12 +123,25 @@ class Attack
 		}
 
 		$skill     = $weaponSkill->Skill()->Level();
+		$attWeapon = $weapon::class;
 		$defWeapon = $defender->Weapon()::class;
 		if (isset(self::ATTACK_FAILURE[$defWeapon])) {
-			$attWeapon = $weapon::class;
 			if (!isset(self::ATTACK_FAILURE[$defWeapon][$attWeapon])) {
 				$skill = 0;
 				// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' has no chance against ' . $defender->getId($fD, true) . '.');
+			}
+		}
+
+		// Reduce distant weapon skill for Gust Of Wind effect.
+		if (isset(self::WIND_EFFECT[$attWeapon])) {
+			$effects = $this->combatant->Army()->Combat()->Effects();
+			if (isset($effects[self::$gustOfWind])) {
+				$effect = self::WIND_EFFECT[$attWeapon];
+				$level  = $effects[self::$gustOfWind]->Count();
+				$factor = 1.0 / ($level / self::$gustOfWind->Difficulty() + 1);
+				$malus  = (int)floor($effect * $skill * $factor);
+				$skill  = max(0, $skill - $malus);
+				// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' has Gust Of Wind malus of ' . $malus . '.');
 			}
 		}
 

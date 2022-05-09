@@ -42,17 +42,23 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Potion\HealingPotion;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Native;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Unit;
 
 class Combat
 {
+	use BuilderTrait;
+
 	public const ROW_NAME = [self::REFUGEE => 'refugees', self::BYSTANDER => 'bystanders', self::BACK => 'back',
 		                     self::FRONT   => 'front'];
 
 	protected const BATTLE_ROWS = [self::REFUGEE, self::BYSTANDER, self::BACK, self::FRONT];
+
+	protected const ONE_ROUND_SPELLS = [GustOfWind::class];
 
 	protected const OVERRUN = 3.0;
 
@@ -98,6 +104,8 @@ class Combat
 
 	protected Effects $effects;
 
+	protected array $oneRoundSpells = [];
+
 	#[Pure] public static function getBattleRow(Unit $unit): BattleRow {
 		$battleRow = $unit->BattleRow();
 		return match ($battleRow) {
@@ -107,10 +115,13 @@ class Combat
 		};
 	}
 
-	#[Pure] public function __construct(private Context $context) {
+	public function __construct(private Context $context) {
 		$this->attacker = array_fill_keys(self::BATTLE_ROWS, []);
 		$this->defender = array_fill_keys(self::BATTLE_ROWS, []);
 		$this->effects  = new Effects();
+		foreach (self::ONE_ROUND_SPELLS as $spell) {
+			$this->oneRoundSpells[] = self::createSpell($spell);
+		}
 	}
 
 	public function Effects(): Effects {
@@ -254,6 +265,7 @@ class Combat
 	}
 
 	public function nextRound(): int {
+		$this->unsetExpiredCombatSpells();
 		$this->everybodyTryToFlee();
 		if ($this->arrangeBattleRows()) {
 			$this->fleeFromBattle($this->attacker[self::REFUGEE], 'Attacker', true);
@@ -288,7 +300,7 @@ class Combat
 		$party = $unit->Party();
 		$id    = $party->Id()->Id();
 		if (!isset($this->armies[$id])) {
-			$this->armies[$id] = new Army($party);
+			$this->armies[$id] = new Army($party, $this);
 		}
 		return $this->armies[$id];
 	}
@@ -553,6 +565,12 @@ class Combat
 		}
 		if ($hasChanges) {
 			$combatantRow = array_values($combatantRow);
+		}
+	}
+
+	protected function unsetExpiredCombatSpells(): void {
+		foreach ($this->oneRoundSpells as $spells) {
+			$this->effects->offsetUnset($spells);
 		}
 	}
 

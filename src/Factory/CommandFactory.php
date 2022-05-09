@@ -221,6 +221,7 @@ use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
 use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
+use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\Quickening;
@@ -623,6 +624,8 @@ class CommandFactory
 		'Lautloser schatten'  => SoundlessShadow::class,
 		'Monster aufhetzen'   => InciteMonster::class,
 		'Schockwelle'         => ShockWave::class,
+		'Sturmboe'            => GustOfWind::class,
+		'Sturmböe'            => GustOfWind::class,
 		'Tagtraum'            => Daydream::class,
 		'Wunderdoktor'        => Quacksalver::class
 	];

@@ -20,6 +20,7 @@ use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
 use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
+use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\Quickening;
@@ -66,6 +67,7 @@ class SpellParser
 		Earthquake::class      => self::LEVEL,
 		Farsight::class        => self::REGION,
 		Fireball::class        => self::LEVEL,
+		GustOfWind::class      => self::NONE,
 		InciteMonster::class   => self::TARGET,
 		Quacksalver::class     => self::LEVEL,
 		Quickening::class      => self::LEVEL,
@@ -88,6 +90,8 @@ class SpellParser
 		'Lautloser'      => ['Schatten' => SoundlessShadow::class],
 		'Monster'        => ['aufhetzen' => InciteMonster::class],
 		'Schockwelle'    => ShockWave::class,
+		'Sturmboe'       => GustOfWind::class,
+		'Sturmböe'       => GustOfWind::class,
 		'Tagtraum'       => Daydream::class,
 		'Wunderdoktor'   => Quacksalver::class
 	];
