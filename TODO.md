@@ -8,7 +8,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Neue Funktionen
 
 - weitere Zauber:
-  - Blick des Greifen (4) (Kartografieren)
   - Astraler Weg (5) (Magier teleportiert sich)
   - Günstige Winde (5) (erhöht Reichweite)
   - Rosthauch (6)

@@ -221,6 +221,7 @@ use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
 use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
+use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
 use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
@@ -616,6 +617,7 @@ class CommandFactory
 		'Aufruhr verursachen' => CivilCommotion::class,
 		'Auratransfer'        => AuraTransfer::class,
 		'Beschleunigung'      => Quickening::class,
+		'Blick des Greifen'   => GazeOfTheGriffin::class,
 		'Erdbeben'            => Earthquake::class,
 		'Erwecke baumhirten'  => SummonEnts::class,
 		'Fernsicht'           => Farsight::class,

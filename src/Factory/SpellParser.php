@@ -3,11 +3,13 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use function Lemuria\isInt;
+use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
-use Lemuria\Exception\IdException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\State;
+use Lemuria\Exception\IdException;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -20,6 +22,7 @@ use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
 use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
+use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
 use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
@@ -54,27 +57,33 @@ class SpellParser
 	public final const REGION = 4;
 
 	/**
+	 * Spell has mandatory directions.
+	 */
+	public final const DIRECTIONS = 8;
+
+	/**
 	 * Spell has optional level and mandatory target unit ID.
 	 */
 	public final const LEVEL_AND_TARGET = self::LEVEL + self::TARGET;
 
 	protected final const SYNTAX = [
-		AstralChaos::class     => self::LEVEL,
-		AuraTransfer::class    => self::LEVEL_AND_TARGET,
-		CivilCommotion::class  => self::NONE,
-		Daydream::class        => self::LEVEL_AND_TARGET,
-		EagleEye::class        => self::LEVEL,
-		Earthquake::class      => self::LEVEL,
-		Farsight::class        => self::REGION,
-		Fireball::class        => self::LEVEL,
-		GustOfWind::class      => self::NONE,
-		InciteMonster::class   => self::TARGET,
-		Quacksalver::class     => self::LEVEL,
-		Quickening::class      => self::LEVEL,
-		ShockWave::class       => self::LEVEL,
-		SongOfPeace::class     => self::LEVEL,
-		SoundlessShadow::class => self::LEVEL,
-		SummonEnts::class      => self::LEVEL
+		AstralChaos::class      => self::LEVEL,
+		AuraTransfer::class     => self::LEVEL_AND_TARGET,
+		CivilCommotion::class   => self::NONE,
+		Daydream::class         => self::LEVEL_AND_TARGET,
+		EagleEye::class         => self::LEVEL,
+		Earthquake::class       => self::LEVEL,
+		Farsight::class         => self::REGION,
+		Fireball::class         => self::LEVEL,
+		GazeOfTheGriffin::class => self::DIRECTIONS,
+		GustOfWind::class       => self::NONE,
+		InciteMonster::class    => self::TARGET,
+		Quacksalver::class      => self::LEVEL,
+		Quickening::class       => self::LEVEL,
+		ShockWave::class        => self::LEVEL,
+		SongOfPeace::class      => self::LEVEL,
+		SoundlessShadow::class  => self::LEVEL,
+		SummonEnts::class       => self::LEVEL
 	];
 
 	protected final const SPELLS = [
@@ -82,6 +91,7 @@ class SpellParser
 		'Aufruhr'        => ['verursachen' => CivilCommotion::class],
 		'Auratransfer'   => AuraTransfer::class,
 		'Beschleunigung' => Quickening::class,
+		'Blick'          => ['des' => ['Greifen' => GazeOfTheGriffin::class]],
 		'Erdbeben'       => Earthquake::class,
 		'Erwecke'        => ['Baumhirten' => SummonEnts::class],
 		'Fernsicht'      => Farsight::class,
@@ -101,6 +111,8 @@ class SpellParser
 	protected readonly int $level;
 
 	protected ?Id $target = null;
+
+	protected ?DirectionList $directions = null;
 
 	/**
 	 * @throws UnknownItemException
@@ -149,6 +161,10 @@ class SpellParser
 		return $this->target;
 	}
 
+	public function Directions(): ?DirectionList {
+		return $this->directions;
+	}
+
 	protected function parseParameters(Phrase $phrase, int $next, int $config, array $spell): void {
 		$this->spell = implode(' ', $spell);
 		switch ($config) {
@@ -160,6 +176,9 @@ class SpellParser
 				break;
 			case self::REGION :
 				$this->parseOptionalRegion($phrase, $next);
+				break;
+			case self::DIRECTIONS :
+				$this->parseDirections($phrase, $next);
 				break;
 			case self::LEVEL_AND_TARGET :
 				$this->parseOptionalLevelAndTarget($phrase, $next);
@@ -189,6 +208,16 @@ class SpellParser
 			$this->target = Id::fromId($target);
 		} catch (IdException) {
 			throw new InvalidCommandException($phrase);
+		}
+	}
+
+	protected function parseDirections(Phrase $phrase, int $next): void {
+		$context          = new Context(State::getInstance());
+		$this->directions = new DirectionList($context);
+		$n                = $phrase->count();
+		while ($next <= $n) {
+			$direction = $context->Factory()->direction($phrase->getParameter($next++));
+			$this->directions->add($direction);
 		}
 	}
 

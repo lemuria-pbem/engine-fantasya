@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\ActionException;
+use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\SpellParser;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Message\Unit\CastBattleSpellMessage;
@@ -37,6 +38,8 @@ final class Cast extends UnitCommand
 
 	private ?Region $region;
 
+	private ?DirectionList $directions;
+
 	private ?ActionException $exception = null;
 
 	public function Context(): Context {
@@ -61,6 +64,10 @@ final class Cast extends UnitCommand
 
 	public function Region(): ?Region {
 		return $this->region;
+	}
+
+	public function Directions(): ?DirectionList {
+		return $this->directions;
 	}
 
 	public function Knowledge(): int {
@@ -104,13 +111,14 @@ final class Cast extends UnitCommand
 
 	protected function initialize(): void {
 		parent::initialize();
-		$parser       = new SpellParser($this->phrase);
-		$target       = $parser->Target();
-		$this->spell  = $this->context->Factory()->spell($parser->Spell());
-		$this->level  = $parser->Level();
-		$syntax       = SpellParser::getSyntax($this->spell);
-		$this->target = ($syntax | SpellParser::TARGET) && $target ? Unit::get($target) : null;
-		$this->region = ($syntax | SpellParser::REGION) && $target ? Region::get($target) : null;
+		$parser           = new SpellParser($this->phrase);
+		$target           = $parser->Target();
+		$this->spell      = $this->context->Factory()->spell($parser->Spell());
+		$this->level      = $parser->Level();
+		$syntax           = SpellParser::getSyntax($this->spell);
+		$this->target     = ($syntax | SpellParser::TARGET) && $target ? Unit::get($target) : null;
+		$this->region     = ($syntax | SpellParser::REGION) && $target ? Region::get($target) : null;
+		$this->directions = $parser->Directions();
 		$this->context->getCasts()->add($this);
 	}
 

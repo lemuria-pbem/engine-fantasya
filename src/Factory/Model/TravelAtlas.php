@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Factory\Model;
 use JetBrains\PhpStorm\Pure;
 
 use Lemuria\Engine\Fantasya\Census;
+use Lemuria\Engine\Fantasya\Effect\Cartography;
 use Lemuria\Engine\Fantasya\Effect\FarsightEffect;
 use Lemuria\Engine\Fantasya\Outlook;
 use Lemuria\Engine\Fantasya\State;
@@ -51,7 +52,13 @@ final class TravelAtlas extends Atlas
 		$chronicle = $this->party->Chronicle();
 		foreach ($chronicle as $id => $region /* @var Region $region */) {
 			if ($chronicle->getVisit($region)->Round() === $round) {
-				$visibility = $this->hasFarsight($region) ? Visibility::FARSIGHT : Visibility::TRAVELLED;
+				$visibility = Visibility::TRAVELLED;
+				if ($this->hasCartography($region)) {
+					$visibility = Visibility::NEIGHBOUR;
+				}
+				if ($this->hasFarsight($region)) {
+					$visibility = Visibility::FARSIGHT;
+				}
 				if (!isset($this->visibility[$id])) {
 					$this->add($region);
 					$this->visibility[$id] = $visibility;
@@ -78,6 +85,15 @@ final class TravelAtlas extends Atlas
 		$effect = new FarsightEffect(State::getInstance());
 		$effect = Lemuria::Score()->find($effect->setRegion($region));
 		if ($effect instanceof FarsightEffect) {
+			return $effect->Parties()->has($this->party->Id());
+		}
+		return false;
+	}
+
+	private function hasCartography(Region $region): bool {
+		$effect = new Cartography(State::getInstance());
+		$effect = Lemuria::Score()->find($effect->setRegion($region));
+		if ($effect instanceof Cartography) {
 			return $effect->Parties()->has($this->party->Id());
 		}
 		return false;
