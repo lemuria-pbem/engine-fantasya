@@ -12,9 +12,11 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\IdException;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Spell\AstralChaos;
+use Lemuria\Model\Fantasya\Spell\AstralPassage;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
 use Lemuria\Model\Fantasya\Spell\CivilCommotion;
 use Lemuria\Model\Fantasya\Spell\Daydream;
@@ -47,27 +49,38 @@ class SpellParser
 	public final const LEVEL = 1;
 
 	/**
+	 * Spell has optional target domain.
+	 */
+	public final const DOMAIN = 2;
+
+	/**
 	 * Spell has mandatory target unit ID.
 	 */
-	public final const TARGET = 2;
+	public final const TARGET = 4;
 
 	/**
 	 * Spell has optional target region ID.
 	 */
-	public final const REGION = 4;
+	public final const REGION = 8;
 
 	/**
 	 * Spell has mandatory directions.
 	 */
-	public final const DIRECTIONS = 8;
+	public final const DIRECTIONS = 16;
 
 	/**
 	 * Spell has optional level and mandatory target unit ID.
 	 */
 	public final const LEVEL_AND_TARGET = self::LEVEL + self::TARGET;
 
+	/**
+	 * Spell has optional target domain and mandatory target ID.
+	 */
+	public final const DOMAIN_AND_TARGET = self::DOMAIN + self::TARGET;
+
 	protected final const SYNTAX = [
 		AstralChaos::class      => self::LEVEL,
+		AstralPassage::class    => self::DOMAIN_AND_TARGET,
 		AuraTransfer::class     => self::LEVEL_AND_TARGET,
 		CivilCommotion::class   => self::NONE,
 		Daydream::class         => self::LEVEL_AND_TARGET,
@@ -87,18 +100,19 @@ class SpellParser
 	];
 
 	protected final const SPELLS = [
-		'Astrales'       => ['Chaos' => AstralChaos::class],
+		'Astrales'       => ['Chaos'       => AstralChaos::class],
+		'Astraler'       => ['Weg'         => AstralPassage::class],
 		'Aufruhr'        => ['verursachen' => CivilCommotion::class],
 		'Auratransfer'   => AuraTransfer::class,
 		'Beschleunigung' => Quickening::class,
-		'Blick'          => ['des' => ['Greifen' => GazeOfTheGriffin::class]],
+		'Blick'          => ['des'         => ['Greifen' => GazeOfTheGriffin::class]],
 		'Erdbeben'       => Earthquake::class,
-		'Erwecke'        => ['Baumhirten' => SummonEnts::class],
+		'Erwecke'        => ['Baumhirten'  => SummonEnts::class],
 		'Fernsicht'      => Farsight::class,
 		'Feuerball'      => Fireball::class,
 		'Friedenslied'   => SongOfPeace::class,
-		'Lautloser'      => ['Schatten' => SoundlessShadow::class],
-		'Monster'        => ['aufhetzen' => InciteMonster::class],
+		'Lautloser'      => ['Schatten'    => SoundlessShadow::class],
+		'Monster'        => ['aufhetzen'   => InciteMonster::class],
 		'Schockwelle'    => ShockWave::class,
 		'Sturmboe'       => GustOfWind::class,
 		'Sturmböe'       => GustOfWind::class,
@@ -109,6 +123,8 @@ class SpellParser
 	protected readonly string $spell;
 
 	protected readonly int $level;
+
+	protected readonly ?Domain $domain;
 
 	protected ?Id $target = null;
 
@@ -124,7 +140,7 @@ class SpellParser
 		throw new UnknownItemException($spell);
 	}
 
-	public function __construct(Phrase $phrase) {
+	public function __construct(protected Context $context, Phrase $phrase) {
 		$spells = self::SPELLS;
 		$i      = 1;
 		$spell  = [];
@@ -157,6 +173,10 @@ class SpellParser
 		return $this->level;
 	}
 
+	public function Domain(): ?Domain {
+		return $this->domain;
+	}
+
 	public function Target(): ?Id {
 		return $this->target;
 	}
@@ -182,6 +202,9 @@ class SpellParser
 				break;
 			case self::LEVEL_AND_TARGET :
 				$this->parseOptionalLevelAndTarget($phrase, $next);
+				break;
+			case self::DOMAIN_AND_TARGET :
+				$this->parseOptionalDomainAndTarget($phrase, $next);
 				break;
 			default :
 				throw new LemuriaException();
@@ -246,6 +269,24 @@ class SpellParser
 			}
 		} else {
 			$this->level = 1;
+		}
+		try {
+			$this->target = Id::fromId($target);
+		} catch (IdException) {
+			throw new InvalidCommandException($phrase);
+		}
+	}
+
+	protected function parseOptionalDomainAndTarget(Phrase $phrase, int $next): void {
+		$domain = $phrase->getParameter($next++);
+		$target = $phrase->getParameter($next);
+		if ($target) {
+			if ($phrase->count() > $next) {
+				throw new UnknownCommandException($phrase);
+			}
+			$this->domain = $this->context->Factory()->domain($domain);
+		} else {
+			$this->domain = null;
 		}
 		try {
 			$this->target = Id::fromId($target);

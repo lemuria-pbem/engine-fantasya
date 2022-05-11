@@ -8,7 +8,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Neue Funktionen
 
 - weitere Zauber:
-  - Astraler Weg (5) (Magier teleportiert sich)
   - Günstige Winde (5) (erhöht Reichweite)
   - Rosthauch (6)
   - Elementarwesen (6) (Kampfzauber)

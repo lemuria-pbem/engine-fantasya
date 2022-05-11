@@ -12,11 +12,14 @@ use Lemuria\Engine\Fantasya\Message\Unit\CastMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastNoAuraMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastNoMagicianMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastOnlyMessage;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\BattleSpell;
+use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Talent\Magic;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Fantasya\Vessel;
 
 /**
  * Cast a spell.
@@ -37,6 +40,10 @@ final class Cast extends UnitCommand
 	private ?Unit $target;
 
 	private ?Region $region;
+
+	private ?Construction $construction;
+
+	private ?Vessel $vessel;
 
 	private ?DirectionList $directions;
 
@@ -64,6 +71,14 @@ final class Cast extends UnitCommand
 
 	public function Region(): ?Region {
 		return $this->region;
+	}
+
+	public function Construction(): ?Construction {
+		return $this->construction;
+	}
+
+	public function Vessel(): ?Vessel {
+		return $this->vessel;
 	}
 
 	public function Directions(): ?DirectionList {
@@ -111,14 +126,18 @@ final class Cast extends UnitCommand
 
 	protected function initialize(): void {
 		parent::initialize();
-		$parser           = new SpellParser($this->phrase);
-		$target           = $parser->Target();
-		$this->spell      = $this->context->Factory()->spell($parser->Spell());
-		$this->level      = $parser->Level();
-		$syntax           = SpellParser::getSyntax($this->spell);
-		$this->target     = ($syntax | SpellParser::TARGET) && $target ? Unit::get($target) : null;
-		$this->region     = ($syntax | SpellParser::REGION) && $target ? Region::get($target) : null;
-		$this->directions = $parser->Directions();
+		$parser             = new SpellParser($this->context, $this->phrase);
+		$domain             = $parser->Domain();
+		$target             = $parser->Target();
+		$this->spell        = $this->context->Factory()->spell($parser->Spell());
+		$this->level        = $parser->Level();
+		$syntax             = SpellParser::getSyntax($this->spell);
+		$this->target       = ($syntax | SpellParser::TARGET) && $target ? Unit::get($target) : null;
+		$this->region       = ($syntax | SpellParser::REGION) && $target ? Region::get($target) : null;
+		$this->region       = ($syntax | SpellParser::DOMAIN) && in_array($domain, [null, Domain::LOCATION]) && $target ? Region::get($target) : null;
+		$this->construction = ($syntax | SpellParser::DOMAIN) && $domain === Domain::CONSTRUCTION && $target ? Construction::get($target) : null;
+		$this->vessel       = ($syntax | SpellParser::DOMAIN) && $domain === Domain::VESSEL && $target ? Vessel::get($target) : null;
+		$this->directions   = $parser->Directions();
 		$this->context->getCasts()->add($this);
 	}
 
