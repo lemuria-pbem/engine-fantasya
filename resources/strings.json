@@ -427,6 +427,8 @@
 		"FaunaHungerMessage": "In der Region $id {verhungert:$animals}.",
 		"FaunaMigrantsMessage": "{$animals:verlässt} die Region $id.",
 		"FaunaNewMessage": "{$animals:wandert} in die Region $id ein.",
+		"FavorableWindsMessage": "Beständige Winde helfen uns, schneller voranzukommen und weiter zu segeln.",
+		"FavorableWindsNoMessage": "Die Einheit $id befindet sich nicht auf einem Schiff und kann Günstige Winde nicht zaubern.",
 		"FightMessage": "Die Einheit $id wird $position.",
 		"FightUnguardMessage": "Die Einheit $id bewacht nicht länger die Region.",
 		"FindWalletMessage": "Die Einheit $unit hat einen verlorenen Silberbeutel mit $silver gefunden.",

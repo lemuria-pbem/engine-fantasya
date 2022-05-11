@@ -13,8 +13,6 @@ use Lemuria\Model\Fantasya\Unit;
 
 trait MoveTrait
 {
-	use MessageTrait;
-
 	protected function clearUnitStatus(Unit $unit): void {
 		if ($unit->IsGuarding()) {
 			$unit->setIsGuarding(false);
