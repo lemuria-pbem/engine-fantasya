@@ -4,11 +4,12 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen und Fehler
 
+- Kampfzauber in richtiger Reihenfolge zaubern
+- Rosthauch fertigstellen
 
 ## Neue Funktionen
 
 - weitere Zauber:
-  - Rosthauch (6)
   - Elementarwesen (6) (Kampfzauber)
   - Teleportation (7) (anderer Einheiten) zum Magier
   - Geisterkämpfer (7) (Kampfzauber, erschafft Doppelgänger)

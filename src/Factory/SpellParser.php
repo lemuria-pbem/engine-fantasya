@@ -29,6 +29,7 @@ use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\Quickening;
+use Lemuria\Model\Fantasya\Spell\RustyMist;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Spell\SoundlessShadow;
@@ -93,6 +94,7 @@ class SpellParser
 		InciteMonster::class    => self::TARGET,
 		Quacksalver::class      => self::LEVEL,
 		Quickening::class       => self::LEVEL,
+		RustyMist::class        => self::LEVEL,
 		ShockWave::class        => self::LEVEL,
 		SongOfPeace::class      => self::LEVEL,
 		SoundlessShadow::class  => self::LEVEL,
@@ -113,6 +115,7 @@ class SpellParser
 		'Friedenslied'   => SongOfPeace::class,
 		'Lautloser'      => ['Schatten'    => SoundlessShadow::class],
 		'Monster'        => ['aufhetzen'   => InciteMonster::class],
+		'Rosthauch'      => RustyMist::class,
 		'Schockwelle'    => ShockWave::class,
 		'Sturmboe'       => GustOfWind::class,
 		'Sturmböe'       => GustOfWind::class,

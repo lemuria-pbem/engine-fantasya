@@ -228,6 +228,7 @@ use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\Quickening;
+use Lemuria\Model\Fantasya\Spell\RustyMist;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Spell\SoundlessShadow;
@@ -628,6 +629,7 @@ class CommandFactory
 		'Friedenslied'        => SongOfPeace::class,
 		'Lautloser schatten'  => SoundlessShadow::class,
 		'Monster aufhetzen'   => InciteMonster::class,
+		'Rosthauch'           => RustyMist::class,
 		'Schockwelle'         => ShockWave::class,
 		'Sturmboe'            => GustOfWind::class,
 		'Sturmböe'            => GustOfWind::class,
