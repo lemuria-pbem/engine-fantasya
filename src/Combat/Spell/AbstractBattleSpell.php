@@ -33,6 +33,10 @@ abstract class AbstractBattleSpell
 	public function __construct(protected BattleSpellGrade $grade) {
 	}
 
+	public function Spell(): BattleSpell {
+		return $this->grade->Spell();
+	}
+
 	public function setCaster(array $combatantRows): AbstractBattleSpell {
 		$this->caster = &$combatantRows;
 		return $this;

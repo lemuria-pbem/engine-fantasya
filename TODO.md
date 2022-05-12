@@ -4,8 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen und Fehler
 
-- Kampfzauber in richtiger Reihenfolge zaubern
-- Rosthauch fertigstellen
 
 ## Neue Funktionen
 

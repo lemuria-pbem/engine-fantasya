@@ -222,24 +222,22 @@ class Combat
 	}
 
 	public function castPreparationSpells(?Party $first): Combat {
+		$casts = new Casts();
 		if ($first) {
 			if ($this->isAttacker[$first->Id()->Id()]) {
-				$units = $this->prepareBattleSpells($this->attacker);
-				$this->castPreparationSpell($units, $this->attacker, $this->defender);
-				$units = $this->prepareBattleSpells($this->defender);
-				$this->castPreparationSpell($units, $this->defender, $this->attacker);
+				$this->addPreparationSpells($casts, $this->attacker, $this->defender);
+				$casts->cast();
+				$this->addPreparationSpells($casts->clear(), $this->defender, $this->attacker);
 			} else {
-				$units = $this->prepareBattleSpells($this->defender);
-				$this->castPreparationSpell($units, $this->defender, $this->attacker);
-				$units = $this->prepareBattleSpells($this->attacker);
-				$this->castPreparationSpell($units, $this->attacker, $this->defender);
+				$this->addPreparationSpells($casts, $this->defender, $this->attacker);
+				$casts->cast();
+				$this->addPreparationSpells($casts->clear(), $this->attacker, $this->defender);
 			}
 		} else {
-			$attacker = $this->prepareBattleSpells($this->attacker);
-			$defender = $this->prepareBattleSpells($this->defender);
-			$this->castPreparationSpell($attacker, $this->attacker, $this->defender);
-			$this->castPreparationSpell($defender, $this->defender, $this->attacker);
+			$this->addPreparationSpells($casts, $this->attacker, $this->defender);
+			$this->addPreparationSpells($casts, $this->defender, $this->attacker);
 		}
+		$casts->cast();
 		return $this;
 	}
 
@@ -325,37 +323,15 @@ class Combat
 		return $count;
 	}
 
-	/**
-	 * @return Unit[]
-	 */
-	protected function prepareBattleSpells(array $caster): array {
-		$units = [];
-		foreach ($caster[self::FRONT] as $combatant /* @var Combatant $combatant */) {
-			$unit = $combatant->Unit();
-			if ($unit->BattleSpells()?->Preparation()) {
-				$units[$unit->Id()->Id()] = $unit;
-			}
-		}
-		foreach ($caster[self::BACK] as $combatant /* @var Combatant $combatant */) {
-			$unit = $combatant->Unit();
-			if ($unit->BattleSpells()?->Preparation()) {
-				$units[$unit->Id()->Id()] = $unit;
-			}
-		}
-		return array_values($units);
-	}
-
-	/**
-	 * @param Unit[] $units
-	 */
-	protected function castPreparationSpell(array $units, array $caster, array $victim): void {
-		foreach ($units as $unit) {
-			$grade = new BattleSpellGrade($unit->BattleSpells()->Preparation(), $this);
-			$spell = $this->context->Factory()->castBattleSpell($grade);
-			$grade = $spell->setCaster($caster)->setVictim($victim)->cast($unit);
-			if ($grade > 0) {
-				$this->setHasCast($unit, $caster[self::FRONT]);
-				$this->setHasCast($unit, $caster[self::BACK]);
+	protected function addPreparationSpells(Casts $casts, array $caster, array $victim): void {
+		foreach ([self::FRONT, self::BACK] as $row) {
+			foreach ($caster[$row] as $combatant/* @var Combatant $combatant */) {
+				$unit = $combatant->Unit();
+				if ($unit->BattleSpells()?->Preparation()) {
+					$grade = new BattleSpellGrade($unit->BattleSpells()->Preparation(), $this);
+					$spell = $this->context->Factory()->castBattleSpell($grade);
+					$casts->add($spell->setCaster($caster)->setVictim($victim));
+				}
 			}
 		}
 	}

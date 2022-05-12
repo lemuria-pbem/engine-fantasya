@@ -2,8 +2,12 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Spell;
 
+use Lemuria\Engine\Fantasya\Combat\BattleLog;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\CombatantWeaponDegradedMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\CombatantWeaponSplitMessage;
 use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Protection\Armor;
@@ -67,19 +71,19 @@ class RustyMist extends AbstractBattleSpell
 
 			if ($rustyWeapon || $rustyProtection || $rustyShield) {
 				$size  = $combatant->Size();
-				$rusty = (int)round(0.5 * $size);
+				$rusty = $this->calculateRusty($grade, $size);
 				if ($rusty < $size) {
 					$newCombatant = $combatant->split($rusty);
 					$combatant->Army()->addCombatant($newCombatant);
 					$combatants[] = $newCombatant;
-					$combatant    = $newCombatant;
-					//Lemuria::Log()->debug($who . ' ' . $unit . ' sends ' . $additional . ' persons from combatant ' . $combatant->Id() . ' in ' . $name . ' row to the front as combatant ' . $newCombatant->Id() . '.');
-					//BattleLog::getInstance()->add(new EveryoneHasFledMessage());
-					//TODO some rust
+					BattleLog::getInstance()->add(new CombatantWeaponSplitMessage($combatant, $rusty, $newCombatant));
+					Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' sends ' . $rusty . ' fighters to new combatant ' . $newCombatant->Id() . '.');
+					BattleLog::getInstance()->add(new CombatantWeaponDegradedMessage($newCombatant));
+					Lemuria::Log()->debug('Weapon ' . $weapon . ' of combatant ' . $newCombatant->Id() . ' degrades.');
+					$combatant = $newCombatant;
 				} else {
-					//Lemuria::Log()->debug($who . ' ' . $unit . ' sends ' . $additional . ' persons from combatant ' . $combatant->Id() . ' in ' . $name . ' row to the front as combatant ' . $newCombatant->Id() . '.');
-					//BattleLog::getInstance()->add(new EveryoneHasFledMessage());
-					//TODO rust
+					Lemuria::Log()->debug('Weapon ' . $weapon . ' of combatant ' . $combatant->Id() . ' degrades.');
+					BattleLog::getInstance()->add(new CombatantWeaponDegradedMessage($combatant));
 				}
 				if ($rustyWeapon) {
 					$this->replace($combatant, $weapon, $rustyWeapon);
@@ -102,5 +106,14 @@ class RustyMist extends AbstractBattleSpell
 		unset($inventory[$from]);
 		$inventory->add(new Quantity($commodity, $combatant->Size()));
 		$combatant->degradeGear($from, $commodity);
+	}
+
+	private function calculateRusty(int $grade, int $size): int {
+		$factor = match ($grade) {
+			1       => 0.3 + rand(-5, 3) / 100,
+			2       => 0.5 + rand(-10, 5) / 100,
+			default => min(1.0, $grade / ++$grade + rand(-3, 3) / 100)
+		};
+		return (int)round($factor * $size);
 	}
 }

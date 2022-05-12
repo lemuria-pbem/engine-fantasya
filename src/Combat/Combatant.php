@@ -164,6 +164,7 @@ class Combatant
 	}
 
 	public function degradeGear(Commodity $gear, Commodity $degradedGear): void {
+		/** @noinspection PhpStrictComparisonWithOperandsOfDifferentTypesInspection */
 		if ($this->Weapon() === $gear) {
 			/** @var Weapon $degradedGear */
 			$this->weapon = $degradedGear;
