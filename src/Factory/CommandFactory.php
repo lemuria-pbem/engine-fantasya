@@ -221,6 +221,7 @@ use Lemuria\Model\Fantasya\Spell\CivilCommotion;
 use Lemuria\Model\Fantasya\Spell\Daydream;
 use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
+use Lemuria\Model\Fantasya\Spell\ElementalBeing;
 use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
@@ -622,6 +623,7 @@ class CommandFactory
 		'Auratransfer'        => AuraTransfer::class,
 		'Beschleunigung'      => Quickening::class,
 		'Blick des Greifen'   => GazeOfTheGriffin::class,
+		'Elementarwesen'      => ElementalBeing::class,
 		'Erdbeben'            => Earthquake::class,
 		'Erwecke baumhirten'  => SummonEnts::class,
 		'Fernsicht'           => Farsight::class,

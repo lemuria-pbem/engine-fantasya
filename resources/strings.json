@@ -886,11 +886,14 @@
 		"Spice": ["einige", "viele", "eine riesige Menge"]
 	},
 	"race": {
+		"AirElemental": ["Luftelementar", "Luftelementare"],
 		"Aquan": ["Aquaner", "Aquaner"],
 		"Bear": ["Bär", "Bären"],
 		"Dwarf": ["Zwerg", "Zwerge"],
+		"EarthElemental": ["Erdelementar", "Erdelementare"],
 		"Elf": ["Elf", "Elfen"],
 		"Ent": ["Baumhirte", "Baumhirten"],
+		"FireElemental": ["Feuerelementar", "Feuerelementare"],
 		"Ghoul": ["Ghoul", "Ghoule"],
 		"Goblin": ["Kobold", "Kobolde"],
 		"Griffin": ["Greif", "Greife"],
@@ -902,6 +905,7 @@
 		"Orc": ["Ork", "Orks"],
 		"Skeleton": ["Skelett", "Skelette"],
 		"Troll": ["Troll", "Trolle"],
+		"WaterElemental": ["Wasserelementar", "Wasserelementare"],
 		"Zombie": ["Zombie", "Zombies"]
 	},
 	"replace": {
@@ -1370,6 +1374,7 @@
 		"Daydream": "Tagtraum",
 		"EagleEye": "Adlerauge",
 		"Earthquake": "Erdbeben",
+		"ElementalBeing": "Elementarwesen",
 		"Farsight": "Fernsicht",
 		"FavorableWinds": "Günstige Winde",
 		"Fireball": "Feuerball",

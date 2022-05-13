@@ -43,9 +43,6 @@ class CombatantWeaponSplitMessage extends AbstractMessage
 		return ['combatant' => $this->combatant, 'count' => $this->count, 'newCombatant' => $this->newCombatant];
 	}
 
-	/**
-	 * @noinspection DuplicatedCode
-	 */
 	protected function translate(string $template): string {
 		$message   = parent::translate($template);
 		$fighter   = parent::dictionary()->get('combat.fighter', $this->count > 1 ? 1 : 0);

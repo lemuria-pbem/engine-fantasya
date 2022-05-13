@@ -22,6 +22,7 @@ use Lemuria\Model\Fantasya\Spell\CivilCommotion;
 use Lemuria\Model\Fantasya\Spell\Daydream;
 use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
+use Lemuria\Model\Fantasya\Spell\ElementalBeing;
 use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
@@ -87,6 +88,7 @@ class SpellParser
 		Daydream::class         => self::LEVEL_AND_TARGET,
 		EagleEye::class         => self::LEVEL,
 		Earthquake::class       => self::LEVEL,
+		ElementalBeing::class   => self::NONE,
 		Farsight::class         => self::REGION,
 		Fireball::class         => self::LEVEL,
 		GazeOfTheGriffin::class => self::DIRECTIONS,
@@ -108,6 +110,7 @@ class SpellParser
 		'Auratransfer'   => AuraTransfer::class,
 		'Beschleunigung' => Quickening::class,
 		'Blick'          => ['des'         => ['Greifen' => GazeOfTheGriffin::class]],
+		'Elementarwesen' => ElementalBeing::class,
 		'Erdbeben'       => Earthquake::class,
 		'Erwecke'        => ['Baumhirten'  => SummonEnts::class],
 		'Fernsicht'      => Farsight::class,
