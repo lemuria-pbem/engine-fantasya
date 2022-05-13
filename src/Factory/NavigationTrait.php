@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Effect\FavorableWinds;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
 use Lemuria\Engine\Fantasya\Factory\Model\Ports;
 use Lemuria\Engine\Fantasya\Message\Region\TravelVesselMessage;
@@ -104,6 +105,11 @@ trait NavigationTrait
 			return $points >= $this->vessel->Ship()->Crew();
 		}
 		return false;
+	}
+
+	private function hasFavorableWinds(): bool {
+		$effect = new FavorableWinds(State::getInstance());
+		return Lemuria::Score()->find($effect->setVessel($this->vessel)) instanceof FavorableWinds;
 	}
 
 	private function moveVessel(Region $destination): void {

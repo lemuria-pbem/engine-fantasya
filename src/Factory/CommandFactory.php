@@ -78,6 +78,7 @@ use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Artifact;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\Acropolis;
@@ -214,16 +215,21 @@ use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Ship\Trireme;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Spell\AstralChaos;
+use Lemuria\Model\Fantasya\Spell\AstralPassage;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
 use Lemuria\Model\Fantasya\Spell\CivilCommotion;
 use Lemuria\Model\Fantasya\Spell\Daydream;
 use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
+use Lemuria\Model\Fantasya\Spell\ElementalBeing;
 use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
+use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
+use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\Quickening;
+use Lemuria\Model\Fantasya\Spell\RustyMist;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Spell\SoundlessShadow;
@@ -612,9 +618,12 @@ class CommandFactory
 	protected array $spells = [
 		'Adlerauge'           => EagleEye::class,
 		'Astrales chaos'      => AstralChaos::class,
+		'Astraler weg'        => AstralPassage::class,
 		'Aufruhr verursachen' => CivilCommotion::class,
 		'Auratransfer'        => AuraTransfer::class,
 		'Beschleunigung'      => Quickening::class,
+		'Blick des Greifen'   => GazeOfTheGriffin::class,
+		'Elementarwesen'      => ElementalBeing::class,
 		'Erdbeben'            => Earthquake::class,
 		'Erwecke baumhirten'  => SummonEnts::class,
 		'Fernsicht'           => Farsight::class,
@@ -622,7 +631,10 @@ class CommandFactory
 		'Friedenslied'        => SongOfPeace::class,
 		'Lautloser schatten'  => SoundlessShadow::class,
 		'Monster aufhetzen'   => InciteMonster::class,
+		'Rosthauch'           => RustyMist::class,
 		'Schockwelle'         => ShockWave::class,
+		'Sturmboe'            => GustOfWind::class,
+		'Sturmböe'            => GustOfWind::class,
 		'Tagtraum'            => Daydream::class,
 		'Wunderdoktor'        => Quacksalver::class
 	];
@@ -692,6 +704,17 @@ class CommandFactory
 		'Wahrnehmen'        => Perception::class,
 		'Wahrnehmung'       => Perception::class,
 		'Wagenbau'          => Carriagemaking::class
+	];
+
+	protected array $domains = [
+		'Burg'      => Domain::CONSTRUCTION,
+		'Einheit'   => Domain::UNIT,
+		'Kontinent' => Domain::CONTINENT,
+		'Gebaeude'  => Domain::CONSTRUCTION,
+		'Gebäude'   => Domain::CONSTRUCTION,
+		'Partei'    => Domain::PARTY,
+		'Region'    => Domain::LOCATION,
+		'Schiff'    => Domain::VESSEL
 	];
 
 	protected array $directions = [
@@ -817,6 +840,14 @@ class CommandFactory
 
 	public function person(): Commodity {
 		return self::createCommodity(Peasant::class);
+	}
+
+	public function domain(string $domain): Domain {
+		$domain = ucfirst(mb_strtolower($domain));
+		if (!isset($this->domains[$domain])) {
+			throw new UnknownItemException($domain);
+		}
+		return $this->domains[$domain];
 	}
 
 	/**

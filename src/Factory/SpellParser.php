@@ -3,26 +3,34 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use function Lemuria\isInt;
+use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
-use Lemuria\Exception\IdException;
 use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\State;
+use Lemuria\Exception\IdException;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Spell\AstralChaos;
+use Lemuria\Model\Fantasya\Spell\AstralPassage;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
 use Lemuria\Model\Fantasya\Spell\CivilCommotion;
 use Lemuria\Model\Fantasya\Spell\Daydream;
 use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
+use Lemuria\Model\Fantasya\Spell\ElementalBeing;
 use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
+use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
+use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\Quickening;
+use Lemuria\Model\Fantasya\Spell\RustyMist;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Spell\SoundlessShadow;
@@ -43,51 +51,77 @@ class SpellParser
 	public final const LEVEL = 1;
 
 	/**
+	 * Spell has optional target domain.
+	 */
+	public final const DOMAIN = 2;
+
+	/**
 	 * Spell has mandatory target unit ID.
 	 */
-	public final const TARGET = 2;
+	public final const TARGET = 4;
 
 	/**
 	 * Spell has optional target region ID.
 	 */
-	public final const REGION = 4;
+	public final const REGION = 8;
+
+	/**
+	 * Spell has mandatory directions.
+	 */
+	public final const DIRECTIONS = 16;
 
 	/**
 	 * Spell has optional level and mandatory target unit ID.
 	 */
 	public final const LEVEL_AND_TARGET = self::LEVEL + self::TARGET;
 
+	/**
+	 * Spell has optional target domain and mandatory target ID.
+	 */
+	public final const DOMAIN_AND_TARGET = self::DOMAIN + self::TARGET;
+
 	protected final const SYNTAX = [
-		AstralChaos::class     => self::LEVEL,
-		AuraTransfer::class    => self::LEVEL_AND_TARGET,
-		CivilCommotion::class  => self::NONE,
-		Daydream::class        => self::LEVEL_AND_TARGET,
-		EagleEye::class        => self::LEVEL,
-		Earthquake::class      => self::LEVEL,
-		Farsight::class        => self::REGION,
-		Fireball::class        => self::LEVEL,
-		InciteMonster::class   => self::TARGET,
-		Quacksalver::class     => self::LEVEL,
-		Quickening::class      => self::LEVEL,
-		ShockWave::class       => self::LEVEL,
-		SongOfPeace::class     => self::LEVEL,
-		SoundlessShadow::class => self::LEVEL,
-		SummonEnts::class      => self::LEVEL
+		AstralChaos::class      => self::LEVEL,
+		AstralPassage::class    => self::DOMAIN_AND_TARGET,
+		AuraTransfer::class     => self::LEVEL_AND_TARGET,
+		CivilCommotion::class   => self::NONE,
+		Daydream::class         => self::LEVEL_AND_TARGET,
+		EagleEye::class         => self::LEVEL,
+		Earthquake::class       => self::LEVEL,
+		ElementalBeing::class   => self::NONE,
+		Farsight::class         => self::REGION,
+		Fireball::class         => self::LEVEL,
+		GazeOfTheGriffin::class => self::DIRECTIONS,
+		GustOfWind::class       => self::NONE,
+		InciteMonster::class    => self::TARGET,
+		Quacksalver::class      => self::LEVEL,
+		Quickening::class       => self::LEVEL,
+		RustyMist::class        => self::LEVEL,
+		ShockWave::class        => self::LEVEL,
+		SongOfPeace::class      => self::LEVEL,
+		SoundlessShadow::class  => self::LEVEL,
+		SummonEnts::class       => self::LEVEL
 	];
 
 	protected final const SPELLS = [
-		'Astrales'       => ['Chaos' => AstralChaos::class],
+		'Astrales'       => ['Chaos'       => AstralChaos::class],
+		'Astraler'       => ['Weg'         => AstralPassage::class],
 		'Aufruhr'        => ['verursachen' => CivilCommotion::class],
 		'Auratransfer'   => AuraTransfer::class,
 		'Beschleunigung' => Quickening::class,
+		'Blick'          => ['des'         => ['Greifen' => GazeOfTheGriffin::class]],
+		'Elementarwesen' => ElementalBeing::class,
 		'Erdbeben'       => Earthquake::class,
-		'Erwecke'        => ['Baumhirten' => SummonEnts::class],
+		'Erwecke'        => ['Baumhirten'  => SummonEnts::class],
 		'Fernsicht'      => Farsight::class,
 		'Feuerball'      => Fireball::class,
 		'Friedenslied'   => SongOfPeace::class,
-		'Lautloser'      => ['Schatten' => SoundlessShadow::class],
-		'Monster'        => ['aufhetzen' => InciteMonster::class],
+		'Lautloser'      => ['Schatten'    => SoundlessShadow::class],
+		'Monster'        => ['aufhetzen'   => InciteMonster::class],
+		'Rosthauch'      => RustyMist::class,
 		'Schockwelle'    => ShockWave::class,
+		'Sturmboe'       => GustOfWind::class,
+		'Sturmböe'       => GustOfWind::class,
 		'Tagtraum'       => Daydream::class,
 		'Wunderdoktor'   => Quacksalver::class
 	];
@@ -96,7 +130,11 @@ class SpellParser
 
 	protected readonly int $level;
 
+	protected readonly ?Domain $domain;
+
 	protected ?Id $target = null;
+
+	protected ?DirectionList $directions = null;
 
 	/**
 	 * @throws UnknownItemException
@@ -108,7 +146,7 @@ class SpellParser
 		throw new UnknownItemException($spell);
 	}
 
-	public function __construct(Phrase $phrase) {
+	public function __construct(protected Context $context, Phrase $phrase) {
 		$spells = self::SPELLS;
 		$i      = 1;
 		$spell  = [];
@@ -141,8 +179,16 @@ class SpellParser
 		return $this->level;
 	}
 
+	public function Domain(): ?Domain {
+		return $this->domain;
+	}
+
 	public function Target(): ?Id {
 		return $this->target;
+	}
+
+	public function Directions(): ?DirectionList {
+		return $this->directions;
 	}
 
 	protected function parseParameters(Phrase $phrase, int $next, int $config, array $spell): void {
@@ -157,8 +203,14 @@ class SpellParser
 			case self::REGION :
 				$this->parseOptionalRegion($phrase, $next);
 				break;
+			case self::DIRECTIONS :
+				$this->parseDirections($phrase, $next);
+				break;
 			case self::LEVEL_AND_TARGET :
 				$this->parseOptionalLevelAndTarget($phrase, $next);
+				break;
+			case self::DOMAIN_AND_TARGET :
+				$this->parseOptionalDomainAndTarget($phrase, $next);
 				break;
 			default :
 				throw new LemuriaException();
@@ -188,6 +240,16 @@ class SpellParser
 		}
 	}
 
+	protected function parseDirections(Phrase $phrase, int $next): void {
+		$context          = new Context(State::getInstance());
+		$this->directions = new DirectionList($context);
+		$n                = $phrase->count();
+		while ($next <= $n) {
+			$direction = $context->Factory()->direction($phrase->getParameter($next++));
+			$this->directions->add($direction);
+		}
+	}
+
 	protected function parseOptionalRegion(Phrase $phrase, int $next): void {
 		$target = $phrase->getParameter($next);
 		if (!empty($target)) {
@@ -213,6 +275,24 @@ class SpellParser
 			}
 		} else {
 			$this->level = 1;
+		}
+		try {
+			$this->target = Id::fromId($target);
+		} catch (IdException) {
+			throw new InvalidCommandException($phrase);
+		}
+	}
+
+	protected function parseOptionalDomainAndTarget(Phrase $phrase, int $next): void {
+		$domain = $phrase->getParameter($next++);
+		$target = $phrase->getParameter($next);
+		if ($target) {
+			if ($phrase->count() > $next) {
+				throw new UnknownCommandException($phrase);
+			}
+			$this->domain = $this->context->Factory()->domain($domain);
+		} else {
+			$this->domain = null;
 		}
 		try {
 			$this->target = Id::fromId($target);

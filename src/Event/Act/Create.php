@@ -3,15 +3,21 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Act;
 
 use Lemuria\Engine\Fantasya\Event\Act;
+use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Factory\Namer;
 use Lemuria\Engine\Fantasya\Factory\Namer\RaceNamer;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\Act\CreateMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
+use Lemuria\Model\Fantasya\Commodity\Monster\AirElemental;
+use Lemuria\Model\Fantasya\Commodity\Monster\EarthElemental;
+use Lemuria\Model\Fantasya\Commodity\Monster\FireElemental;
 use Lemuria\Model\Fantasya\Commodity\Monster\Goblin;
 use Lemuria\Model\Fantasya\Commodity\Monster\Skeleton;
+use Lemuria\Model\Fantasya\Commodity\Monster\WaterElemental;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gang;
@@ -27,6 +33,7 @@ use Lemuria\Model\Fantasya\Unit;
 class Create implements Act
 {
 	use BuilderTrait;
+	use MessageTrait;
 	use OptionsTrait;
 
 	protected const NAMER = [
@@ -34,10 +41,14 @@ class Create implements Act
 	];
 
 	protected const BATTLE_ROW = [
-		''              => BattleRow::FRONT,
-		Goblin::class   => BattleRow::CAREFUL,
-		Skeleton::class => BattleRow::AGGRESSIVE,
-		Zombie::class   => BattleRow::AGGRESSIVE
+		''                    => BattleRow::FRONT,
+		AirElemental::class   => BattleRow::AGGRESSIVE,
+		EarthElemental::class => BattleRow::AGGRESSIVE,
+		FireElemental::class  => BattleRow::AGGRESSIVE,
+		Goblin::class         => BattleRow::CAREFUL,
+		Skeleton::class       => BattleRow::AGGRESSIVE,
+		WaterElemental::class => BattleRow::AGGRESSIVE,
+		Zombie::class         => BattleRow::AGGRESSIVE
 	];
 
 	protected const IS_HIDING = [
@@ -85,6 +96,7 @@ class Create implements Act
 				$unit->setIsHiding(true);
 			}
 			$this->units[] = $unit;
+			$this->message(CreateMessage::class, $unit);
 			Lemuria::Log()->debug('A new unit of ' . $gang . ' has been spawned in ' . $this->region . '.');
 		}
 		return $this;

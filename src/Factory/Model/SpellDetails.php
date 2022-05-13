@@ -108,11 +108,13 @@ class SpellDetails
 
 	protected function getParameters(): string {
 		return match (SpellParser::getSyntax($this->spell)) {
-			SpellParser::LEVEL            => '[Stufe]',
-			SpellParser::TARGET           => 'Ziel',
-			SpellParser::REGION           => '[Region]',
-			SpellParser::LEVEL_AND_TARGET => '[Stufe] Ziel',
-			default                       => ''
+			SpellParser::LEVEL             => '[Stufe]',
+			SpellParser::TARGET            => 'Ziel',
+			SpellParser::REGION            => '[Region]',
+			SpellParser::DIRECTIONS        => 'Richtung [Richtung ...]',
+			SpellParser::LEVEL_AND_TARGET  => '[Stufe] Ziel',
+			SpellParser::DOMAIN_AND_TARGET => '[Burg | Gebäude | Region | Schiff] Nummer',
+			default                        => ''
 		};
 	}
 }

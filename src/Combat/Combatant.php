@@ -10,6 +10,9 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Armature;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
+use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Dingbats;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Protection;
@@ -19,8 +22,6 @@ use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Stoning;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Weapon;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Dingbats;
 
 /**
  * Combatants are groups of persons from a unit that fight with the same equipment.
@@ -160,6 +161,20 @@ class Combatant
 
 	public function getId(int $fighter, bool $map = false): string {
 		return $this->id . '-' . ($map ? $this->fighterIndex[$fighter] + 1 : ++$fighter);
+	}
+
+	public function degradeGear(Commodity $gear, Commodity $degradedGear): void {
+		/** @noinspection PhpStrictComparisonWithOperandsOfDifferentTypesInspection */
+		if ($this->Weapon() === $gear) {
+			/** @var Weapon $degradedGear */
+			$this->weapon = $degradedGear;
+		} elseif ($this->Armor() === $gear) {
+			/** @var Protection $degradedGear */
+			$this->armor = $degradedGear;
+		} elseif ($this->Shield() === $gear) {
+			/** @var Shield $degradedGear */
+			$this->shield = $degradedGear;
+		}
 	}
 
 	/**

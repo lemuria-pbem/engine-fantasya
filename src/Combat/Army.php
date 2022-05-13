@@ -45,7 +45,7 @@ class Army
 	 */
 	private array $combatants = [];
 
-	public function __construct(private Party $party) {
+	public function __construct(private Party $party, private Combat $combat) {
 		$this->id       = ++self::$nextId;
 		$this->units    = new People();
 		$this->loss     = new Resources();
@@ -66,6 +66,10 @@ class Army
 
 	public function Party(): Party {
 		return $this->party;
+	}
+
+	public function Combat(): Combat {
+		return $this->combat;
 	}
 
 	public function Units(): People {

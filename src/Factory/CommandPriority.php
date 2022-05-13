@@ -117,6 +117,15 @@ final class CommandPriority
 		return self::$instance;
 	}
 
+	public function canShuffle(int $priority): bool {
+		return match($priority) {
+			self::B_ACTION - 1, self::B_ACTION,
+			self::M_ACTION - 1, self::M_ACTION,
+			self::A_ACTION - 1, self::A_ACTION => false,
+			default                            => true
+		};
+	}
+
 	/**
 	 * Get the priority of an Action.
 	 *

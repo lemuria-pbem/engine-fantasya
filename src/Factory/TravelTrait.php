@@ -5,12 +5,8 @@ namespace Lemuria\Engine\Fantasya\Factory;
 use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Effect\SneakPastEffect;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
-use Lemuria\Engine\Fantasya\Message\Construction\LeaveNewOwnerMessage;
-use Lemuria\Engine\Fantasya\Message\Construction\LeaveNoOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Region\TravelUnitMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelCanalMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardCancelMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoChaosMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoOceanMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNeighbourMessage;
@@ -38,6 +34,7 @@ trait TravelTrait
 {
 	use BuilderTrait;
 	use ContextTrait;
+	use MoveTrait;
 
 	private ?Vessel $vessel = null;
 
@@ -115,25 +112,8 @@ trait TravelTrait
 	protected function moveTo(Region $destination): void {
 		$region = $this->unit->Region();
 
-		if ($this->unit->IsGuarding()) {
-			$this->unit->setIsGuarding(false);
-			$this->message(TravelGuardCancelMessage::class);
-		}
-
-		$construction = $this->unit->Construction();
-		if ($construction) {
-			$isOwner = $construction->Inhabitants()->Owner() === $this->unit;
-			$construction->Inhabitants()->remove($this->unit);
-			$this->message(LeaveConstructionDebugMessage::class)->e($construction);
-			if ($isOwner) {
-				$owner = $construction->Inhabitants()->Owner();
-				if ($owner) {
-					$this->message(LeaveNewOwnerMessage::class, $construction)->e($owner);
-				} else {
-					$this->message(LeaveNoOwnerMessage::class, $construction);
-				}
-			}
-		}
+		$this->clearUnitStatus($this->unit);
+		$this->clearConstructionOwner($this->unit);
 
 		if ($this->vessel) {
 			$this->moveVessel($destination);

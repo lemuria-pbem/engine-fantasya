@@ -378,6 +378,8 @@ final class Calculus
 					$distribution->add(new Quantity($commodity, $take));
 				}
 			}
+
+			$size            = min($maxSize, $size);
 			$distributions[] = $distribution->setSize($size);
 			$maxSize        -= $size;
 			$amount          = $newAmount;

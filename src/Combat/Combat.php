@@ -42,17 +42,23 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Potion\HealingPotion;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Native;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Unit;
 
 class Combat
 {
+	use BuilderTrait;
+
 	public const ROW_NAME = [self::REFUGEE => 'refugees', self::BYSTANDER => 'bystanders', self::BACK => 'back',
 		                     self::FRONT   => 'front'];
 
 	protected const BATTLE_ROWS = [self::REFUGEE, self::BYSTANDER, self::BACK, self::FRONT];
+
+	protected const ONE_ROUND_SPELLS = [GustOfWind::class];
 
 	protected const OVERRUN = 3.0;
 
@@ -98,6 +104,8 @@ class Combat
 
 	protected Effects $effects;
 
+	protected array $oneRoundSpells = [];
+
 	#[Pure] public static function getBattleRow(Unit $unit): BattleRow {
 		$battleRow = $unit->BattleRow();
 		return match ($battleRow) {
@@ -107,10 +115,13 @@ class Combat
 		};
 	}
 
-	#[Pure] public function __construct(private Context $context) {
+	public function __construct(private Context $context) {
 		$this->attacker = array_fill_keys(self::BATTLE_ROWS, []);
 		$this->defender = array_fill_keys(self::BATTLE_ROWS, []);
 		$this->effects  = new Effects();
+		foreach (self::ONE_ROUND_SPELLS as $spell) {
+			$this->oneRoundSpells[] = self::createSpell($spell);
+		}
 	}
 
 	public function Effects(): Effects {
@@ -211,24 +222,22 @@ class Combat
 	}
 
 	public function castPreparationSpells(?Party $first): Combat {
+		$casts = new Casts();
 		if ($first) {
 			if ($this->isAttacker[$first->Id()->Id()]) {
-				$units = $this->prepareBattleSpells($this->attacker);
-				$this->castPreparationSpell($units, $this->attacker, $this->defender);
-				$units = $this->prepareBattleSpells($this->defender);
-				$this->castPreparationSpell($units, $this->defender, $this->attacker);
+				$this->addPreparationSpells($casts, $this->attacker, $this->defender);
+				$casts->cast();
+				$this->addPreparationSpells($casts->clear(), $this->defender, $this->attacker);
 			} else {
-				$units = $this->prepareBattleSpells($this->defender);
-				$this->castPreparationSpell($units, $this->defender, $this->attacker);
-				$units = $this->prepareBattleSpells($this->attacker);
-				$this->castPreparationSpell($units, $this->attacker, $this->defender);
+				$this->addPreparationSpells($casts, $this->defender, $this->attacker);
+				$casts->cast();
+				$this->addPreparationSpells($casts->clear(), $this->attacker, $this->defender);
 			}
 		} else {
-			$attacker = $this->prepareBattleSpells($this->attacker);
-			$defender = $this->prepareBattleSpells($this->defender);
-			$this->castPreparationSpell($attacker, $this->attacker, $this->defender);
-			$this->castPreparationSpell($defender, $this->defender, $this->attacker);
+			$this->addPreparationSpells($casts, $this->attacker, $this->defender);
+			$this->addPreparationSpells($casts, $this->defender, $this->attacker);
 		}
+		$casts->cast();
 		return $this;
 	}
 
@@ -254,6 +263,7 @@ class Combat
 	}
 
 	public function nextRound(): int {
+		$this->unsetExpiredCombatSpells();
 		$this->everybodyTryToFlee();
 		if ($this->arrangeBattleRows()) {
 			$this->fleeFromBattle($this->attacker[self::REFUGEE], 'Attacker', true);
@@ -284,11 +294,11 @@ class Combat
 		return $this->round;
 	}
 
-	protected function getArmy(Unit $unit): Army {
+	public function getArmy(Unit $unit): Army {
 		$party = $unit->Party();
 		$id    = $party->Id()->Id();
 		if (!isset($this->armies[$id])) {
-			$this->armies[$id] = new Army($party);
+			$this->armies[$id] = new Army($party, $this);
 		}
 		return $this->armies[$id];
 	}
@@ -313,37 +323,15 @@ class Combat
 		return $count;
 	}
 
-	/**
-	 * @return Unit[]
-	 */
-	protected function prepareBattleSpells(array $caster): array {
-		$units = [];
-		foreach ($caster[self::FRONT] as $combatant /* @var Combatant $combatant */) {
-			$unit = $combatant->Unit();
-			if ($unit->BattleSpells()?->Preparation()) {
-				$units[$unit->Id()->Id()] = $unit;
-			}
-		}
-		foreach ($caster[self::BACK] as $combatant /* @var Combatant $combatant */) {
-			$unit = $combatant->Unit();
-			if ($unit->BattleSpells()?->Preparation()) {
-				$units[$unit->Id()->Id()] = $unit;
-			}
-		}
-		return array_values($units);
-	}
-
-	/**
-	 * @param Unit[] $units
-	 */
-	protected function castPreparationSpell(array $units, array $caster, array $victim): void {
-		foreach ($units as $unit) {
-			$grade = new BattleSpellGrade($unit->BattleSpells()->Preparation(), $this);
-			$spell = $this->context->Factory()->castBattleSpell($grade);
-			$grade = $spell->setCaster($caster)->setVictim($victim)->cast($unit);
-			if ($grade > 0) {
-				$this->setHasCast($unit, $caster[self::FRONT]);
-				$this->setHasCast($unit, $caster[self::BACK]);
+	protected function addPreparationSpells(Casts $casts, array $caster, array $victim): void {
+		foreach ([self::FRONT, self::BACK] as $row) {
+			foreach ($caster[$row] as $combatant/* @var Combatant $combatant */) {
+				$unit = $combatant->Unit();
+				if ($unit->BattleSpells()?->Preparation()) {
+					$grade = new BattleSpellGrade($unit->BattleSpells()->Preparation(), $this);
+					$spell = $this->context->Factory()->castBattleSpell($grade);
+					$casts->add($spell->setCaster($caster)->setVictim($victim));
+				}
 			}
 		}
 	}
@@ -553,6 +541,12 @@ class Combat
 		}
 		if ($hasChanges) {
 			$combatantRow = array_values($combatantRow);
+		}
+	}
+
+	protected function unsetExpiredCombatSpells(): void {
+		foreach ($this->oneRoundSpells as $spells) {
+			$this->effects->offsetUnset($spells);
 		}
 	}
 

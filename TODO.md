@@ -8,11 +8,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Neue Funktionen
 
 - weitere Zauber:
-  - Sturmböe (4) (Kampfzauber)
-  - Blick des Greifen (4) (Kartografieren)
-  - Astraler Weg (5) (Magier teleportiert sich)
-  - Günstige Winde (5) (erhöht Reichweite)
-  - Rosthauch (6)
   - Elementarwesen (6) (Kampfzauber)
   - Teleportation (7) (anderer Einheiten) zum Magier
   - Geisterkämpfer (7) (Kampfzauber, erschafft Doppelgänger)

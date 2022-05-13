@@ -1,7 +1,7 @@
 {
 	"description": [
-		"Der Astrale Weg ist ein Teleportationszauber, mit dem sich der Magier an einen beliebigen ihm bekannten Ort begeben kann. Dies kann ein Gebäude, ein Schiff, oder auch eine entfernte Region und die dort befindlichen Gebäude und Schiffe sein.",
-		"Der Magier kann durch die Teleportation auch Orte betreten, die ihm durch Bewachung verwehrt sind. Der Zielort muss lediglich der Partei des Magiers bekannt sein.",
-		"Die Teleportation erlaubt dem Magier, alles mitzunehmen, was er am Körper tragen kann, jedoch keine Reittiere oder andere schwere Lasten."
+		"Der Astrale Weg ist ein Teleportationszauber, mit dem sich der Magier an einen beliebigen ihm bekannten Ort begeben kann. Dies kann ein Gebäude, ein Schiff, oder auch eine entfernte Region sein.",
+		"Um sich in eine Region zu teleportieren, muss diese der Partei bekannt sein. Der Magier kann alles mitnehmen, was er am Körper tragen kann, jedoch keine Reittiere oder andere schwere Lasten.",
+		"Der Magier kann durch die Teleportation auch Orte betreten, die ihm durch Bewachung verwehrt sind. Um sich in ein Gebäude oder auf ein Schiff zu teleportieren, muss der Magier sich bereits in der Region aufhalten."
 	]
 }

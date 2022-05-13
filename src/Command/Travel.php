@@ -35,6 +35,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TravelTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelShipTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Fantasya\Spell\FavorableWinds;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Navigation;
 use Lemuria\Model\Fantasya\Talent\Riding;
@@ -133,6 +134,9 @@ class Travel extends UnitCommand implements Activity
 			}
 			if ($this->isNavigatedByAquans()) {
 				$speed++;
+			}
+			if ($this->hasFavorableWinds()) {
+				$speed += FavorableWinds::SPEED_BONUS;
 			}
 		} else {
 			$riding = $this->Unit()->Size() * $this->calculus()->knowledge($this->riding)->Level();
