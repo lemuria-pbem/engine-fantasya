@@ -477,7 +477,7 @@
 		"GuardBattleRowMessage": "Die Einheit $id kämpft nicht und kann deshalb nicht bewachen.",
 		"GuardMessage": "Die Einheit $id bewacht nun die Region.",
 		"GuardSiegeMessage": "Die Einheit $id ist in einem belagerten Gebäude und kann nicht bewachen.",
-		"GuardWithoutWeaponMessage": "Die Einheit $id kann die Region nicht ohne Waffen bewachen.",
+		"GuardWithoutWeaponMessage": "Die Einheit $id kann die Region nicht ohne Waffen oder Kampftalent bewachen.",
 		"HatchGriffinEggMessage": "Aus einem der Greifeneier von Einheit $unit schlüpft ein Greif.",
 		"HealingPotionMessage": "Die Einheit $id wappnet sich für den bevorstehenden Kampf.",
 		"HelpMessage": "Die Einheit $id hat HELFEN $agreement für alle Parteien gesetzt.",

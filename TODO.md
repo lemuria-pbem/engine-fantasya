@@ -8,7 +8,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Neue Funktionen
 
 - weitere Zauber:
-  - Elementarwesen (6) (Kampfzauber)
   - Teleportation (7) (anderer Einheiten) zum Magier
   - Geisterkämpfer (7) (Kampfzauber, erschafft Doppelgänger)
   - Steinhaut (8)
