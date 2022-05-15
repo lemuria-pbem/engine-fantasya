@@ -778,6 +778,11 @@
 		"TeachSiegeMessage": "Die Einheit $id kann die Einheit $student wegen einer Belagerung nicht lehren.",
 		"TeachStudentMessage": "Die Einheit $id lehrt die Einheit $student.",
 		"TeachUnableMessage": "Die Einheit $id kann die Einheit $student nicht mehr lehren.",
+		"TeleportationErrorMessage": "Die Einheit $id kann die Einheit $unit nicht teleportieren - ihre Unikate sind zu schwer.",
+		"TeleportationForeignMessage": "Die Einheit $id kann die fremde Einheit $unit nicht teleportieren.",
+		"TeleportationGiftMessage": "Die Einheit $id erbt das Eigentum von der teleportierten Einheit $unit.",
+		"TeleportationMessage": "Die Einheit $id teleportiert die Einheit $unit in die Region.",
+		"TeleportationMoveMessage": "Die Einheit $id wird in die Region der Einheit $unit teleportiert.",
 		"TempMessage": "Neue Einheit $id erzeugt.",
 		"TheWildHuntMessage": "In einer stürmischen Nacht werden unsere Wachen in $region vom Lärm eines rumpelnden Wagens, dem Stampfen vieler Hufe und gellenden Schreien aufgeschreckt. Mit wahnsinnigem Tempo rauscht die furchtsame Erscheinung vorbei, während die Wachen unfähig sind etwas zu tun. Plötzlich überkommt sie eine große Müdigkeit und sie fallen kurz darauf in einen tiefen Schlaf. Am nächsten Morgen finden sie eine Kiste, die einige Phiolen und andere Dinge enthält.",
 		"TravelAllowedMessage": "Unsere Wachen haben die Einheit $unit in der Region $region durchreisen lassen.",
@@ -1387,7 +1392,8 @@
 		"ShockWave": "Schockwelle",
 		"SongOfPeace": "Friedenslied",
 		"SoundlessShadow": "Lautloser Schatten",
-		"SummonEnts": "Erwecke Baumhirten"
+		"SummonEnts": "Erwecke Baumhirten",
+		"Teleportation": "Teleportation"
 	},
 	"talent": {
 		"Alchemy": "Alchemie",

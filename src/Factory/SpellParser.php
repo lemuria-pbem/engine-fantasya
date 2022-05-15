@@ -35,6 +35,7 @@ use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Spell\SoundlessShadow;
 use Lemuria\Model\Fantasya\Spell\SummonEnts;
+use Lemuria\Model\Fantasya\Spell\Teleportation;
 
 class SpellParser
 {
@@ -80,6 +81,13 @@ class SpellParser
 	 */
 	public final const DOMAIN_AND_TARGET = self::DOMAIN + self::TARGET;
 
+	/**
+	 * Spell has mandatory target ID and optional level.
+	 *
+	 * If level is not given, it is set to the maximum.
+	 */
+	public final const TARGET_AND_LEVEL = self::TARGET - self::LEVEL;
+
 	protected final const SYNTAX = [
 		AstralChaos::class      => self::LEVEL,
 		AstralPassage::class    => self::DOMAIN_AND_TARGET,
@@ -100,7 +108,8 @@ class SpellParser
 		ShockWave::class        => self::LEVEL,
 		SongOfPeace::class      => self::LEVEL,
 		SoundlessShadow::class  => self::LEVEL,
-		SummonEnts::class       => self::LEVEL
+		SummonEnts::class       => self::LEVEL,
+		Teleportation::class    => self::TARGET_AND_LEVEL
 	];
 
 	protected final const SPELLS = [
@@ -123,6 +132,7 @@ class SpellParser
 		'Sturmboe'       => GustOfWind::class,
 		'Sturmböe'       => GustOfWind::class,
 		'Tagtraum'       => Daydream::class,
+		'Teleportation'  => Teleportation::class,
 		'Wunderdoktor'   => Quacksalver::class
 	];
 
@@ -209,6 +219,9 @@ class SpellParser
 			case self::LEVEL_AND_TARGET :
 				$this->parseOptionalLevelAndTarget($phrase, $next);
 				break;
+			case self::TARGET_AND_LEVEL :
+				$this->parseOptionalLevelAndTarget($phrase, $next, PHP_INT_MAX);
+				break;
 			case self::DOMAIN_AND_TARGET :
 				$this->parseOptionalDomainAndTarget($phrase, $next);
 				break;
@@ -261,7 +274,7 @@ class SpellParser
 		}
 	}
 
-	protected function parseOptionalLevelAndTarget(Phrase $phrase, int $next): void {
+	protected function parseOptionalLevelAndTarget(Phrase $phrase, int $next, int $default = 1): void {
 		$level  = $phrase->getParameter($next++);
 		$target = $phrase->getParameter($next);
 		if ($target) {
@@ -270,11 +283,14 @@ class SpellParser
 			}
 			if (isInt($level)) {
 				$this->level = $this->parseLevel($level);
-			} elseif ($level !== '') {
-				throw new UnknownCommandException($phrase);
+			} else {
+				if ($level !== '') {
+					throw new UnknownCommandException($phrase);
+				}
+				$this->level = $default;
 			}
 		} else {
-			$this->level = 1;
+			$this->level = $default;
 		}
 		try {
 			$this->target = Id::fromId($target);

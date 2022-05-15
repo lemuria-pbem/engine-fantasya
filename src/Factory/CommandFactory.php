@@ -234,6 +234,7 @@ use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Spell\SoundlessShadow;
 use Lemuria\Model\Fantasya\Spell\SummonEnts;
+use Lemuria\Model\Fantasya\Spell\Teleportation;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Alchemy;
 use Lemuria\Model\Fantasya\Talent\Archery;
@@ -636,6 +637,7 @@ class CommandFactory
 		'Sturmboe'            => GustOfWind::class,
 		'Sturmböe'            => GustOfWind::class,
 		'Tagtraum'            => Daydream::class,
+		'Teleportation'       => Teleportation::class,
 		'Wunderdoktor'        => Quacksalver::class
 	];
 
