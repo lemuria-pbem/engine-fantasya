@@ -15,6 +15,10 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Luftschiff (9) (Einheit mit Wagen/Schiff reist durch die Luft)
   - Blick des Basilisken (9) (Kampfzauber)
 
+## Version 1.0
+
+- Monolog-Upgrade auf 3.0 + Anpassungen
+
 ## Ideen
 
 - neue Gebäude, die Arbeitsplätze verdoppeln

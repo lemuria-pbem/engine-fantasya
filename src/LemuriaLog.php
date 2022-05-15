@@ -33,6 +33,7 @@ class LemuriaLog implements Log
 
 	/**
 	 * @return HandlerInterface[]
+	 * @todo Upgrade to Monolog\Level.
 	 */
 	protected function getHandlers(): array {
 		$handlers = [];
