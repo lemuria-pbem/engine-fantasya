@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Spell;
 
 use Lemuria\Engine\Fantasya\Calculus;
-use Lemuria\Engine\Fantasya\Combat\Combatant;
+use Lemuria\Engine\Fantasya\Combat\Rank;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Talent\Magic;
@@ -46,18 +46,14 @@ class Quickening extends AbstractBattleSpell
 		return $grade;
 	}
 
-	/**
-	 * @param Combatant[] $combatants
-	 */
-	protected function quickenFighters(array $combatants, int $fighters): int {
-		foreach (array_keys($combatants) as $i) {
+	protected function quickenFighters(Rank $combatants, int $fighters): int {
+		foreach ($combatants as $combatant) {
 			if ($fighters <= 0) {
 				break;
 			}
-			$combatant = $combatants[$i];
-			$size      = $combatant->Size();
-			$next      = 0;
-			$count     = 0;
+			$size  = $combatant->Size();
+			$next  = 0;
+			$count = 0;
 			while ($fighters > 0 && $next < $size) {
 				$fighter = $combatant->fighters[$next++];
 				if ($fighter->quickening > 0 && !$this->addQuickening) {

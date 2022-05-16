@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\FireballHitMessage;
+use Lemuria\Engine\Fantasya\Combat\Rank;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Protection\Armor;
@@ -45,14 +46,13 @@ class Fireball extends AbstractBattleSpell
 	/**
 	 * @param Combatant[] $combatants
 	 */
-	protected function castOnCombatants(array &$combatants, int $damage, int $victims): int {
-		foreach (array_keys($combatants) as $i) {
+	protected function castOnCombatants(Rank $combatants, int $damage, int $victims): int {
+		foreach ($combatants as $combatant) {
 			if ($victims <= 0) {
 				break;
 			}
-			$combatant = &$combatants[$i];
-			$damage    = $this->calculateDamage($combatant, $damage);
-			$size      = min($combatant->Size(), $victims);
+			$damage = $this->calculateDamage($combatant, $damage);
+			$size   = min($combatant->Size(), $victims);
 			for ($i = 0; $i < $size; $i++) {
 				if ($damage > 0) {
 					$health                         = $combatant->fighter($i)->health;

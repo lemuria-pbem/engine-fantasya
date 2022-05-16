@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Spell;
 
 use JetBrains\PhpStorm\Pure;
+
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
@@ -10,6 +11,7 @@ use Lemuria\Engine\Fantasya\Combat\CombatEffect;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellCastMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellFailedMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellNoAuraMessage;
+use Lemuria\Engine\Fantasya\Combat\Ranks;
 use Lemuria\Engine\Fantasya\Factory\MagicTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
 use Lemuria\Lemuria;
@@ -24,9 +26,9 @@ abstract class AbstractBattleSpell
 	use BuilderTrait;
 	use MagicTrait;
 
-	protected array $caster;
+	protected Ranks $caster;
 
-	protected array $victim;
+	protected Ranks $victim;
 
 	protected Calculus $calculus;
 
@@ -37,13 +39,13 @@ abstract class AbstractBattleSpell
 		return $this->grade->Spell();
 	}
 
-	public function setCaster(array $combatantRows): AbstractBattleSpell {
-		$this->caster = &$combatantRows;
+	public function setCaster(Ranks $ranks): AbstractBattleSpell {
+		$this->caster = $ranks;
 		return $this;
 	}
 
-	public function setVictim(array &$combatantRows): AbstractBattleSpell {
-		$this->victim = &$combatantRows;
+	public function setVictim(Ranks $ranks): AbstractBattleSpell {
+		$this->victim = $ranks;
 		return $this;
 	}
 
