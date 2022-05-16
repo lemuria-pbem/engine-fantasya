@@ -26,6 +26,7 @@ use Lemuria\Model\Fantasya\Spell\ElementalBeing;
 use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
+use Lemuria\Model\Fantasya\Spell\GhostEnemy;
 use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
@@ -100,6 +101,7 @@ class SpellParser
 		Farsight::class         => self::REGION,
 		Fireball::class         => self::LEVEL,
 		GazeOfTheGriffin::class => self::DIRECTIONS,
+		GhostEnemy::class       => self::LEVEL,
 		GustOfWind::class       => self::NONE,
 		InciteMonster::class    => self::TARGET,
 		Quacksalver::class      => self::LEVEL,
@@ -113,27 +115,29 @@ class SpellParser
 	];
 
 	protected final const SPELLS = [
-		'Astrales'       => ['Chaos'       => AstralChaos::class],
-		'Astraler'       => ['Weg'         => AstralPassage::class],
-		'Aufruhr'        => ['verursachen' => CivilCommotion::class],
-		'Auratransfer'   => AuraTransfer::class,
-		'Beschleunigung' => Quickening::class,
-		'Blick'          => ['des'         => ['Greifen' => GazeOfTheGriffin::class]],
-		'Elementarwesen' => ElementalBeing::class,
-		'Erdbeben'       => Earthquake::class,
-		'Erwecke'        => ['Baumhirten'  => SummonEnts::class],
-		'Fernsicht'      => Farsight::class,
-		'Feuerball'      => Fireball::class,
-		'Friedenslied'   => SongOfPeace::class,
-		'Lautloser'      => ['Schatten'    => SoundlessShadow::class],
-		'Monster'        => ['aufhetzen'   => InciteMonster::class],
-		'Rosthauch'      => RustyMist::class,
-		'Schockwelle'    => ShockWave::class,
-		'Sturmboe'       => GustOfWind::class,
-		'Sturmböe'       => GustOfWind::class,
-		'Tagtraum'       => Daydream::class,
-		'Teleportation'  => Teleportation::class,
-		'Wunderdoktor'   => Quacksalver::class
+		'Astrales'        => ['Chaos'       => AstralChaos::class],
+		'Astraler'        => ['Weg'         => AstralPassage::class],
+		'Aufruhr'         => ['verursachen' => CivilCommotion::class],
+		'Auratransfer'    => AuraTransfer::class,
+		'Beschleunigung'  => Quickening::class,
+		'Blick'           => ['des'         => ['Greifen' => GazeOfTheGriffin::class]],
+		'Elementarwesen'  => ElementalBeing::class,
+		'Erdbeben'        => Earthquake::class,
+		'Erwecke'         => ['Baumhirten'  => SummonEnts::class],
+		'Fernsicht'       => Farsight::class,
+		'Feuerball'       => Fireball::class,
+		'Friedenslied'    => SongOfPeace::class,
+		'Geisterkaempfer' => GhostEnemy::class,
+		'Geisterkämpfer'  => GhostEnemy::class,
+		'Lautloser'       => ['Schatten'    => SoundlessShadow::class],
+		'Monster'         => ['aufhetzen'   => InciteMonster::class],
+		'Rosthauch'       => RustyMist::class,
+		'Schockwelle'     => ShockWave::class,
+		'Sturmboe'        => GustOfWind::class,
+		'Sturmböe'        => GustOfWind::class,
+		'Tagtraum'        => Daydream::class,
+		'Teleportation'   => Teleportation::class,
+		'Wunderdoktor'    => Quacksalver::class
 	];
 
 	protected readonly string $spell;

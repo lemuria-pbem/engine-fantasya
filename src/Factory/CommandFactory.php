@@ -225,6 +225,7 @@ use Lemuria\Model\Fantasya\Spell\ElementalBeing;
 use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
+use Lemuria\Model\Fantasya\Spell\GhostEnemy;
 use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
@@ -630,6 +631,8 @@ class CommandFactory
 		'Fernsicht'           => Farsight::class,
 		'Feuerball'           => Fireball::class,
 		'Friedenslied'        => SongOfPeace::class,
+		'Geisterkaempfer'     => GhostEnemy::class,
+		'Geisterkämpfer'      => GhostEnemy::class,
 		'Lautloser schatten'  => SoundlessShadow::class,
 		'Monster aufhetzen'   => InciteMonster::class,
 		'Rosthauch'           => RustyMist::class,

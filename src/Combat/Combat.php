@@ -46,7 +46,6 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
-use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Unit;
 
 class Combat
@@ -57,8 +56,6 @@ class Combat
 		                     self::FRONT   => 'front'];
 
 	protected const BATTLE_ROWS = [self::REFUGEE, self::BYSTANDER, self::BACK, self::FRONT];
-
-	protected const ONE_ROUND_SPELLS = [GustOfWind::class];
 
 	protected const OVERRUN = 3.0;
 
@@ -104,8 +101,6 @@ class Combat
 
 	protected Effects $effects;
 
-	protected array $oneRoundSpells = [];
-
 	#[Pure] public static function getBattleRow(Unit $unit): BattleRow {
 		$battleRow = $unit->BattleRow();
 		return match ($battleRow) {
@@ -115,13 +110,10 @@ class Combat
 		};
 	}
 
-	public function __construct(private Context $context) {
+	#[Pure] public function __construct(private Context $context) {
 		$this->attacker = array_fill_keys(self::BATTLE_ROWS, []);
 		$this->defender = array_fill_keys(self::BATTLE_ROWS, []);
 		$this->effects  = new Effects();
-		foreach (self::ONE_ROUND_SPELLS as $spell) {
-			$this->oneRoundSpells[] = self::createSpell($spell);
-		}
 	}
 
 	public function Effects(): Effects {
@@ -545,8 +537,17 @@ class Combat
 	}
 
 	protected function unsetExpiredCombatSpells(): void {
-		foreach ($this->oneRoundSpells as $spells) {
-			$this->effects->offsetUnset($spells);
+		$removal = [];
+		foreach ($this->effects as $effect /* @var CombatEffect $effect */) {
+			$duration = $effect->Duration() - 1;
+			if ($duration > 0) {
+				$effect->setDuration($duration);
+			} else {
+				$removal[] = $effect->Spell();
+			}
+		}
+		foreach ($removal as $spell) {
+			$this->effects->offsetUnset($spell);
 		}
 	}
 
