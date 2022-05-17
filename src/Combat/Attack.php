@@ -21,7 +21,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Protection;
-use Lemuria\Model\Fantasya\Race\Monster;
+use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Riding;
@@ -156,8 +156,7 @@ class Attack
 		for ($i = 0; $i < $attacks; $i++) {
 			if ($this->isSuccessful($skill, $block, $armor, $shield, $hasBonus)) {
 				// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' hits enemy ' . $defender->getId($fD, true) . '.');
-				$race = $defender->Unit()->Race();
-				/** @noinspection PhpPossiblePolymorphicInvocationInspection */
+				$race    = $defender->Unit()->Race();
 				$block   = $race instanceof Monster ? $race->Block() : 0;
 				$armor   = $defender->Armor();
 				$damage += $this->calculateDamage($weapon, $skill, $block, $armor, $shield);
