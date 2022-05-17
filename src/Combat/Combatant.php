@@ -180,10 +180,12 @@ class Combatant
 	/**
 	 * Receive an attack from an assaulting attacker and return the damage done to the defending fighter.
 	 */
-	public function assault(int $fighter, Combatant $attacker, int $assaulter): int {
-		//TODO: Respect GhostEnemy effect.
-		$health = $this->fighter($fighter)->health;
-		$damage = $attacker->attack->perform($assaulter, $this, $fighter);
+	public function assault(Charge $charge): int {
+		$fighter   = $charge->Defender();
+		$attacker  = $charge->Attacking();
+		$assaulter = $charge->Attacker();
+		$health    = $this->fighter($fighter)->health;
+		$damage    = $attacker->attack->perform($assaulter, $this, $fighter);
 		if ($damage > 0) {
 			if ($health > $damage) {
 				$this->fighter($fighter)->health -= $damage;

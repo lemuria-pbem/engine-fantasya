@@ -269,15 +269,16 @@ class Combat
 	}
 
 	public function getEffect(BattleSpell $spell, ?Combatant $combatant = null): ?CombatEffect {
+		/** @var CombatEffect $effect */
 		if ($combatant) {
 			$id      = $combatant->Unit()->Party()->Id()->Id();
 			$effects = isset($this->isAttacker[$id]) ? $this->attacker->Effects() : $this->defender->Effects();
-		} else {
-			$effects = $this->effects;
+			if ($effects->offsetExists($spell)) {
+				$effect = $effects[$spell];
+				return $effect;
+			}
 		}
-
-		/** @var CombatEffect $effect */
-		$effect = $effects[$spell];
+		$effect = $this->effects->offsetExists($spell) ? $this->effects[$spell] : null;
 		return $effect;
 	}
 
@@ -574,7 +575,7 @@ class Combat
 		}
 		// Lemuria::Log()->debug($message);
 
-		$damage = 0;
+		$charge = new Charge();
 		$d      = count($defender);
 		$d1     = $defender->Size();
 		$rate   = $d1 / $a1;
@@ -591,7 +592,6 @@ class Combat
 		$fD     = 0;
 		$nD     = 0;
 		$comA   = null;
-		$comD   = null;
 		while ($cA < $a && $cD < $d) {
 			/** @var Combatant $comA */
 			if ($comA?->hasCast || $fA >= $nA) {
@@ -600,6 +600,7 @@ class Combat
 				$hits = $comA?->Weapon()->Hits();
 				$fA   = 0;
 				$hit  = 0;
+				$charge->setAttacking($comA)->setAttacker($fA);
 				continue;
 			}
 			if ($fD >= $nD) {
@@ -609,27 +610,30 @@ class Combat
 				$nD   = $comD?->Size();
 				$last = $sum + $nD;
 				$fD   = $nextD - $sum;
+				$charge->setDefending($comD)->setDefender($fD);
 				continue;
 			}
 			if ($nextD >= $last) {
 				$fD = $nD;
+				$charge->setDefender($fD);
 				continue;
 			}
 
 			if ($comA->fighter($fA)->health > 0) {
-				$damage += $comD->assault($fD, $comA, $fA);
+				$charge->assault();
 			}
 			if (++$hit >= $hits) {
-				$fA++;
+				$charge->setAttacker(++$fA);
 				$hit = 0;
 			}
 			$fDStep = $nextD;
 			$nextD  = (int)floor(++$nextA * $rate);
 			$fDStep = $nextD - $fDStep;
 			$fD    += $fDStep;
+			$charge->setDefender($fD);
 		}
 
-		return $damage;
+		return $charge->Damage();
 	}
 
 	/**

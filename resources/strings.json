@@ -98,6 +98,7 @@
 		"leave": ["verlässt", "verlassen"],
 		"message": {
 			"AssaultBlockMessage": "$defender blockt den Angriff von $attacker.",
+			"AssaultGhostEnemyMessage": "$attacker greift das Spiegelbild von $defender an.",
 			"AssaultHitMessage": "$attacker fügt $defender $damage $hitpoint zu.",
 			"AttackerHasFledMessage": "Alle Angreifer sind vom Schlachtfeld geflohen und der Kampf ist vorbei.",
 			"AttackerNoReinforcementMessage": "Die angreifende Seite kann keine weiteren Kräfte an die Front schicken.",
