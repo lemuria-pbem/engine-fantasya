@@ -6,6 +6,7 @@ use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultBlockMessage;
 use Lemuria\Engine\Fantasya\Command\Apply\BerserkBlood as BerserkBloodEffect;
+use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Potion\BerserkBlood;
 use Lemuria\Model\Fantasya\Commodity\Protection\Armor;
@@ -21,7 +22,6 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Protection;
 use Lemuria\Model\Fantasya\Race\Monster;
-use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Riding;
@@ -62,12 +62,14 @@ class Attack
 
 	private float $flight;
 
-	private static ?Spell $gustOfWind = null;
+	private static ?BattleSpell $gustOfWind = null;
 
 	public function __construct(private Combatant $combatant) {
 		$this->flight = self::FLIGHT[$combatant->Unit()->BattleRow()->value];
 		if (!self::$gustOfWind) {
-			self::$gustOfWind = self::createSpell(GustOfWind::class);
+			/** @var BattleSpell $spell */
+			$spell            = self::createSpell(GustOfWind::class);
+			self::$gustOfWind = $spell;
 		}
 	}
 
@@ -134,10 +136,10 @@ class Attack
 
 		// Reduce distant weapon skill for Gust Of Wind effect.
 		if (isset(self::WIND_EFFECT[$attWeapon])) {
-			$effects = $this->combatant->Army()->Combat()->Effects();
-			if (isset($effects[self::$gustOfWind])) {
+			$gustOfWind = $this->combatant->Army()->Combat()->getEffect(self::$gustOfWind, $this->combatant);
+			if ($gustOfWind) {
 				$effect = self::WIND_EFFECT[$attWeapon];
-				$level  = $effects[self::$gustOfWind]->Count();
+				$level  = $gustOfWind->Count();
 				$factor = 1.0 / ($level / self::$gustOfWind->Difficulty() + 1);
 				$malus  = (int)floor($effect * $skill * $factor);
 				$skill  = max(0, $skill - $malus);

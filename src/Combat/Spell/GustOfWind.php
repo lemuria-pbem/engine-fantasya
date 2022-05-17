@@ -17,7 +17,7 @@ class GustOfWind extends AbstractBattleSpell
 			$calculus = new Calculus($unit);
 			$level    = $calculus->knowledge(Magic::class)->Level();
 			$effect   = new CombatEffect($spell, $level);
-			$this->grade->Combat()->Effects()->add($effect->setDuration(1));
+			$this->grade->Combat()->addEffect($effect->setDuration(1));
 			Lemuria::Log()->debug('A sharp gust of wind blows over the battlefield.');
 		}
 		return $grade;

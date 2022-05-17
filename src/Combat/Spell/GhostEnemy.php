@@ -17,7 +17,7 @@ class GhostEnemy extends AbstractBattleSpell
 			$spell    = $this->Spell();
 			$effect   = new CombatEffect($spell, $grade);
 			$duration = $magic + 2 * ($magic - $spell->Difficulty());
-			$this->grade->Combat()->Effects()->add($effect->setDuration($duration));
+			$this->caster->Effects()->add($effect->setDuration($duration));
 		}
 		return $grade;
 	}

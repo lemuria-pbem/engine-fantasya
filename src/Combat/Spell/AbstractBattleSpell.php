@@ -17,7 +17,6 @@ use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Spell\AstralChaos;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -74,7 +73,9 @@ abstract class AbstractBattleSpell
 
 	protected function modifyReliability(int $grade): int {
 		// 1. Apply effects that influence reliability and grade.
-		$astralChaos = $this->getCombatEffect(self::createSpell(AstralChaos::class));
+		/** @var BattleSpell $spell */
+		$spell       = self::createSpell(AstralChaos::class);
+		$astralChaos = $this->getCombatEffect($spell);
 		if ($astralChaos) {
 			$grade = $this->applyAstralChaos($astralChaos, $grade);
 		}
@@ -99,14 +100,12 @@ abstract class AbstractBattleSpell
 		$aura->setAura($available - $grade * $consumption);
 	}
 
-	#[Pure] protected function getCombatEffect(Spell $spell): ?CombatEffect {
-		if ($spell instanceof BattleSpell) {
-			$effect = $this->grade->Combat()->Effects()[$spell];
-			if ($effect instanceof CombatEffect) {
-				return $effect;
-			}
+	protected function getCombatEffect(BattleSpell $spell, ?Ranks $side = null): ?CombatEffect {
+		if ($side) {
+			$effect = $side->Effects()[$spell];
+			return $effect instanceof CombatEffect ? $effect : null;
 		}
-		return null;
+		return $this->grade->Combat()->getEffect($spell);
 	}
 
 	protected function applyAstralChaos(CombatEffect $astralChaos, int $grade): int {

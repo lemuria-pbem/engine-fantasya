@@ -39,6 +39,7 @@ use Lemuria\Engine\Fantasya\Combat\Log\Participant;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Potion\HealingPotion;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Native;
@@ -82,6 +83,9 @@ class Combat
 	 */
 	protected array $defendParticipants = [];
 
+	/**
+	 * Effects that impact both sides.
+	 */
 	protected Effects $effects;
 
 	#[Pure] public static function getBattleRow(Unit $unit): BattleRow {
@@ -97,10 +101,6 @@ class Combat
 		$this->attacker = new Ranks(true);
 		$this->defender = new Ranks(false);
 		$this->effects  = new Effects();
-	}
-
-	public function Effects(): Effects {
-		return $this->effects;
 	}
 
 	#[Pure] public function hasAttackers(): bool {
@@ -266,6 +266,24 @@ class Combat
 			$this->armies[$id] = new Army($party, $this);
 		}
 		return $this->armies[$id];
+	}
+
+	public function getEffect(BattleSpell $spell, ?Combatant $combatant = null): ?CombatEffect {
+		if ($combatant) {
+			$id      = $combatant->Unit()->Party()->Id()->Id();
+			$effects = isset($this->isAttacker[$id]) ? $this->attacker->Effects() : $this->defender->Effects();
+		} else {
+			$effects = $this->effects;
+		}
+
+		/** @var CombatEffect $effect */
+		$effect = $effects[$spell];
+		return $effect;
+	}
+
+	public function addEffect(CombatEffect $effect): Combat {
+		$this->effects->add($effect);
+		return $this;
 	}
 
 	protected function addPreparationSpells(Casts $casts, Ranks $caster, Ranks $victim): void {
@@ -470,18 +488,25 @@ class Combat
 		}
 	}
 
-	protected function unsetExpiredCombatSpells(): void {
-		$removal = [];
-		foreach ($this->effects as $effect /* @var CombatEffect $effect */) {
-			$duration = $effect->Duration() - 1;
-			if ($duration > 0) {
-				$effect->setDuration($duration);
-			} else {
-				$removal[] = $effect->Spell();
+	protected function unsetExpiredCombatSpells(?Effects $effects = null): void {
+		if (!$effects) {
+			$this->unsetExpiredCombatSpells($this->effects);
+			$this->unsetExpiredCombatSpells($this->attacker->Effects());
+			$this->unsetExpiredCombatSpells($this->defender->Effects());
+		} else {
+			$removal = [];
+			foreach ($effects as $effect /* @var CombatEffect $effect */) {
+				$duration = $effect->Duration() - 1;
+				if ($duration > 0) {
+					$effect->setDuration($duration);
+				} else {
+					$removal[] = $effect->Spell();
+				}
 			}
-		}
-		foreach ($removal as $spell) {
-			$this->effects->offsetUnset($spell);
+			foreach ($removal as $spell) {
+				$effects->offsetUnset($spell);
+				Lemuria::Log()->debug('Battle spell ' . $spell . ' has expired.');
+			}
 		}
 	}
 

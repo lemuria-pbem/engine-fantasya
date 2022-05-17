@@ -15,6 +15,8 @@ class Ranks implements \ArrayAccess, \Countable, \Iterator
 	 */
 	protected array $ranks;
 
+	protected Effects $effects;
+
 	private int $index = 0;
 
 	private int $count;
@@ -24,7 +26,8 @@ class Ranks implements \ArrayAccess, \Countable, \Iterator
 		foreach (self::BATTLE_ROWS as $row) {
 			$this->ranks[$row] = new Rank();
 		}
-		$this->count = count(self::BATTLE_ROWS);
+		$this->count   = count(self::BATTLE_ROWS);
+		$this->effects = new Effects();
 	}
 
 	public function IsAttacker(): bool {
@@ -33,6 +36,10 @@ class Ranks implements \ArrayAccess, \Countable, \Iterator
 
 	public function IsDefender(): bool {
 		return !$this->isAttacker;
+	}
+
+	public function Effects(): Effects {
+		return $this->effects;
 	}
 
 	/**
