@@ -65,7 +65,7 @@ final class Smash extends UnitCommand implements Activity
 
 	protected function run(): void {
 		$param = $this->phrase->getParameter(2);
-		switch (strtolower($this->phrase->getParameter())) {
+		switch (mb_strtolower($this->phrase->getParameter())) {
 			case 'burg' :
 			case 'gebäude' :
 			case 'gebaeude' :

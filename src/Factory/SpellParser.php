@@ -169,9 +169,9 @@ class SpellParser
 		$spell  = [];
 		$config = null;
 		do {
-			$part = strtolower($phrase->getParameter($i++));
+			$part = mb_strtolower($phrase->getParameter($i++));
 			foreach ($spells as $key => &$value) {
-				if (strtolower($key) === $part) {
+				if (mb_strtolower($key) === $part) {
 					if (is_string($value)) {
 						$spell[] = $key;
 						$config  = self::SYNTAX[$value];

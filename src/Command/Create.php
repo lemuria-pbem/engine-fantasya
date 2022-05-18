@@ -49,7 +49,7 @@ final class Create extends DelegatedCommand
 		}
 
 		$param = $this->phrase->getParameter();
-		$lower = strtolower($param);
+		$lower = mb_strtolower($param);
 		// MACHEN TEMP
 		if ($lower === 'temp') {
 			return new Temp($this->phrase, $this->context);
@@ -83,7 +83,7 @@ final class Create extends DelegatedCommand
 		}
 
 		// MACHEN Kräuter
-		$lower = strtolower($what);
+		$lower = mb_strtolower($what);
 		if ($lower === 'kraut' || $lower === 'kraeuter' || $lower === 'kräuter') {
 			return new Herb($this->phrase, $this->context, new Job(new HerbModel(), $number));
 		}

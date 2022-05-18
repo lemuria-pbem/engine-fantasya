@@ -57,7 +57,7 @@ final class Describe extends UnitCommand
 			$description = self::trimDescription($this->phrase->getLine(2));
 		}
 
-		switch (strtolower($type)) {
+		switch (mb_strtolower($type)) {
 			case 'einheit' :
 				$this->describeUnit($description);
 				break;
