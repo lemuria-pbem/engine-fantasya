@@ -234,6 +234,7 @@ use Lemuria\Model\Fantasya\Spell\RustyMist;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Spell\SoundlessShadow;
+use Lemuria\Model\Fantasya\Spell\StoneSkin;
 use Lemuria\Model\Fantasya\Spell\SummonEnts;
 use Lemuria\Model\Fantasya\Spell\Teleportation;
 use Lemuria\Model\Fantasya\Talent;
@@ -637,6 +638,7 @@ class CommandFactory
 		'Monster aufhetzen'   => InciteMonster::class,
 		'Rosthauch'           => RustyMist::class,
 		'Schockwelle'         => ShockWave::class,
+		'Steinhaut'           => StoneSkin::class,
 		'Sturmboe'            => GustOfWind::class,
 		'Sturmböe'            => GustOfWind::class,
 		'Tagtraum'            => Daydream::class,

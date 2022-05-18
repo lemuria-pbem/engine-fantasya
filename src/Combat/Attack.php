@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Combat;
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultBlockMessage;
+use Lemuria\Engine\Fantasya\Combat\Spell\StoneSkin;
 use Lemuria\Engine\Fantasya\Command\Apply\BerserkBlood as BerserkBloodEffect;
 use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Commodity\Horse;
@@ -148,9 +149,14 @@ class Attack
 		}
 
 		$armor    = $this->combatant->Armor();
-		$hasBonus = $attacker->potion instanceof BerserkBlood;
 		$shield   = $defender->Shield();
 		$block    = $fD < $defender->distracted ? 0 : $defender->WeaponSkill()->Skill()->Level();
+		$hasBonus = null;
+		if ($attacker->potion instanceof BerserkBlood) {
+			$hasBonus = true;
+		} elseif ($attacker->hasFeature(Feature::StoneSkin)) {
+			$hasBonus = false;
+		}
 
 		$damage = null;
 		for ($i = 0; $i < $attacks; $i++) {
@@ -158,6 +164,7 @@ class Attack
 				// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' hits enemy ' . $defender->getId($fD, true) . '.');
 				$race    = $defender->Unit()->Race();
 				$block   = $race instanceof Monster ? $race->Block() : 0;
+				$block  += $defender->fighter($fD)->hasFeature(Feature::StoneSkin) ? StoneSkin::BLOCK : 0;
 				$armor   = $defender->Armor();
 				$damage += $this->calculateDamage($weapon, $skill, $block, $armor, $shield);
 			}
@@ -169,12 +176,17 @@ class Attack
 		return $damage;
 	}
 
-	protected function isSuccessful(int $skill, int $block, ?Protection $armor, ?Protection $shield, bool $hasAttackBonus): bool {
-		$malus = 0;
+	protected function isSuccessful(int $skill, int $block, ?Protection $armor, ?Protection $shield, bool|null $hasAttackBonus): bool {
 		if ($hasAttackBonus) {
 			$malus = -BerserkBloodEffect::BONUS;
-		} elseif ($armor) {
-			$malus = self::ATTACK_MALUS[$armor::class];
+		} else {
+			$malus = 0;
+			if ($hasAttackBonus === false) {
+				$malus += StoneSkin::ATTACK_MALUS;
+			}
+			if ($armor) {
+				$malus += self::ATTACK_MALUS[$armor::class];
+			}
 		}
 		$bonus = $shield ? self::BLOCK_BONUS[$shield::class] : 0;
 
