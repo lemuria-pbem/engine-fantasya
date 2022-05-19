@@ -109,7 +109,8 @@ abstract class AbstractOperate
 		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::WRITE);
 	}
 
-	abstract protected function destroyMessage(): void;
+	protected function destroyMessage(): void {
+	}
 
 	protected function addLooseEffect(): void {
 		$unicum = $this->operator->Unicum();

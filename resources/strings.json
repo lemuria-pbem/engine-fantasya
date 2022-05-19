@@ -164,8 +164,9 @@
 		"will": ["wird", "werden"]
 	},
 	"composition": {
-		"Scroll": ["Schriftrolle", "Schriftrollen"],
-		"Spellbook": ["Zauberbuch", "Zauberbücher"]
+		"RingOfInvisibility": ["Ring der Unsichtbarkeit", "Ringe der Unsichtbarkeit", "Ringes der Unsichtbarkeit"],
+		"Scroll": ["Schriftrolle", "Schriftrollen", "Schriftrolle"],
+		"Spellbook": ["Zauberbuch", "Zauberbücher", "Zauberbuches"]
 	},
 	"description": {
 		"decay": {
@@ -540,6 +541,7 @@
 		"LoseToNoneMessage": "Die Einheit $id wirft ihren gesamten Besitz weg.",
 		"LoseToUnitMessage": "Die Einheit $id erbt $quantity von der aufgelösten Einheit $from.",
 		"LoseUnicumMessage": "Die Einheit $id wirft {das:$composition} $unicum weg.",
+		"MagicRingActiveMessage": "Der Effekt {des:$composition} $composition $unicum hält weiterhin an.",
 		"MarketUpdateDemandMessage": "Der Handel in der Region $id hat den {price=$luxury} auf $price gedrückt.",
 		"MarketUpdateOfferMessage": "Der Handel in der Region $id hat den {price=$luxury} auf $price angehoben.",
 		"MigrateFailedMessage": "Die Einheit $migrant kann sich der Partei $party nicht anschließen, weil diese die Aufnahme verweigert.",
@@ -662,6 +664,10 @@
 		"ReserveNothingMessage": "Die Einheit $id kann {kein:$commodity} aus dem Materialpool reservieren.",
 		"ReserveOnlyMessage": "Die Einheit $id kann nur $reserve aus dem Materialpool reservieren.",
 		"RetirementMessage": "Du hast heute Deine letzte Einheit verloren und beendest damit das Spiel. Lebe wohl!",
+		"RingOfInvisibilityApplyMessage": "Die Einheit $id steckt {das:$composition} $composition $unicum über den Finger und wird unsichtbar.",
+		"RingOfInvisibilityEnchantmentMessage": "Die Einheit $id besitzt einen verzauberten Goldring, aus dem sie jetzt ein Ring der Unsichtbarkeit erschaffen kann.",
+		"RingOfInvisibilityGoldRingMessage": "Die Einheit $id hat keinen Goldring, um Ring der Unsichtbarkeit zu zaubern.",
+		"RingOfInvisibilityTakeOffMessage": "Die Einheit $id legt {das:$composition} $composition $unicum ab, um wieder sichtbar zu werden.",
 		"RoadAlreadyCompletedMessage": "Die Straße nach $direction in der Region $region ist schon fertiggestellt.",
 		"RoadCompletedMessage": "Die Einheit $id stellt in der Region $region die Straße nach $direction mit $stones fertig.",
 		"RoadExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um eine Straße in der Region $region zu bauen.",
@@ -946,6 +952,7 @@
 			"Gapgrowth": "alle verfügbaren",
 			"Gem": "alle verfügbaren",
 			"Gold": "alles verfügbare",
+			"GoldRing": "alle verfügbaren",
 			"GoliathWater": "alle verfügbaren",
 			"Griffin": "alle verfügbaren",
 			"Griffinegg": "alle verfügbaren",
@@ -1002,6 +1009,7 @@
 		"Aurapunkt": ["Aurapunkt", "Aurapunkte"],
 		"das": {
 			"Monument": "das",
+			"RingOfInvisibility": "den",
 			"Scroll": "die",
 			"Spellbook": "das"
 		},
@@ -1013,9 +1021,15 @@
 			"Mountain": "dem",
 			"Ocean": "dem",
 			"Plain": "der",
+			"RingOfInvisibility": "dem",
 			"Scroll": "der",
 			"Spellbook": "dem",
 			"Swamp": "dem"
+		},
+		"des": {
+			"RingOfInvisibility": "des",
+			"Scroll": "der",
+			"Spellbook": "des"
 		},
 		"ein": {
 			"Acropolis": "eine",
@@ -1080,6 +1094,7 @@
 			"Port": "einen",
 			"Quarry": "einen",
 			"Quay": "einen",
+			"RingOfInvisibility": "einen",
 			"Rockweed": "einen",
 			"RustyBattleaxe": "eine",
 			"RustyMail": "ein",
@@ -1119,6 +1134,7 @@
 			"Woundshut": "eine"
 		},
 		"es": {
+			"RingOfInvisibility": "er",
 			"Scroll": "sie",
 			"Spellbook": "es"
 		},
@@ -1167,6 +1183,7 @@
 			"Gapgrowth": "kein",
 			"Gem": "kein",
 			"Gold": "kein",
+			"GoldRing": "keinen",
 			"GoliathWater": "kein",
 			"Griffin": "keinen",
 			"GriffinBreeding": "keine",
@@ -1200,6 +1217,7 @@
 			"Port": "keinen",
 			"Quarry": "keinen",
 			"Quay": "keinen",
+			"RingOfInvisibility": "keinen",
 			"Rockweed": "keinen",
 			"RustyBattleaxe": "keine",
 			"RustyMail": "kein",
@@ -1310,6 +1328,7 @@
 		"Gem": ["Juwel", "Juwelen", "Juwelen"],
 		"GoblinEar": ["Koboldohr", "Koboldohren", "Koboldohren"],
 		"Gold": ["Gold", "Gold", "Gold"],
+		"GoldRing": ["Goldring", "Goldringe", "Goldringen"],
 		"GoliathWater": ["Goliathwasser", "Goliathwässer", "Goliathwässern"],
 		"Griffin": ["Greif", "Greife", "Greifen"],
 		"Griffinegg": ["Greifenei", "Greifeneier", "Greifeneiern"],
@@ -1390,6 +1409,7 @@
 		"InciteMonster": "Monster aufhetzen",
 		"Quacksalver": "Wunderdoktor",
 		"Quickening": "Beschleunigung",
+		"RingOfInvisibility": "Ring der Unsichtbarkeit",
 		"RustyMist": "Rosthauch",
 		"ShockWave": "Schockwelle",
 		"SongOfPeace": "Friedenslied",
@@ -1412,6 +1432,7 @@
 		"Espionage": "Spionage",
 		"Herballore": "Kräuterkunde",
 		"Horsetaming": "Pferdedressur",
+		"Jewelry": "Juwelierskunst",
 		"Magic": "Magie",
 		"Mining": "Bergbau",
 		"Navigation": "Segeln",

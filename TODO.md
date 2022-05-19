@@ -8,7 +8,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Neue Funktionen
 
 - weitere Zauber:
-  - Ring der Unsichtbarkeit (8) (erschafft einen Ring)
   - Luftschiff (9) (Einheit mit Wagen/Schiff reist durch die Luft)
   - Blick des Basilisken (9) (Kampfzauber)
 

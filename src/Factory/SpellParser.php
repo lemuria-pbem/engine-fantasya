@@ -31,6 +31,7 @@ use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\Quickening;
+use Lemuria\Model\Fantasya\Spell\RingOfInvisibility;
 use Lemuria\Model\Fantasya\Spell\RustyMist;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
@@ -91,29 +92,30 @@ class SpellParser
 	public final const TARGET_AND_LEVEL = self::TARGET - self::LEVEL;
 
 	protected final const SYNTAX = [
-		AstralChaos::class      => self::LEVEL,
-		AstralPassage::class    => self::DOMAIN_AND_TARGET,
-		AuraTransfer::class     => self::LEVEL_AND_TARGET,
-		CivilCommotion::class   => self::NONE,
-		Daydream::class         => self::LEVEL_AND_TARGET,
-		EagleEye::class         => self::LEVEL,
-		Earthquake::class       => self::LEVEL,
-		ElementalBeing::class   => self::NONE,
-		Farsight::class         => self::REGION,
-		Fireball::class         => self::LEVEL,
-		GazeOfTheGriffin::class => self::DIRECTIONS,
-		GhostEnemy::class       => self::LEVEL,
-		GustOfWind::class       => self::NONE,
-		InciteMonster::class    => self::TARGET,
-		Quacksalver::class      => self::LEVEL,
-		Quickening::class       => self::LEVEL,
-		RustyMist::class        => self::LEVEL,
-		ShockWave::class        => self::LEVEL,
-		SongOfPeace::class      => self::LEVEL,
-		SoundlessShadow::class  => self::LEVEL,
-		StoneSkin::class        => self::LEVEL,
-		SummonEnts::class       => self::LEVEL,
-		Teleportation::class    => self::TARGET_AND_LEVEL
+		AstralChaos::class        => self::LEVEL,
+		AstralPassage::class      => self::DOMAIN_AND_TARGET,
+		AuraTransfer::class       => self::LEVEL_AND_TARGET,
+		CivilCommotion::class     => self::NONE,
+		Daydream::class           => self::LEVEL_AND_TARGET,
+		EagleEye::class           => self::LEVEL,
+		Earthquake::class         => self::LEVEL,
+		ElementalBeing::class     => self::NONE,
+		Farsight::class           => self::REGION,
+		Fireball::class           => self::LEVEL,
+		GazeOfTheGriffin::class   => self::DIRECTIONS,
+		GhostEnemy::class         => self::LEVEL,
+		GustOfWind::class         => self::NONE,
+		InciteMonster::class      => self::TARGET,
+		Quacksalver::class        => self::LEVEL,
+		Quickening::class         => self::LEVEL,
+		RingOfInvisibility::class => self::NONE,
+		RustyMist::class          => self::LEVEL,
+		ShockWave::class          => self::LEVEL,
+		SongOfPeace::class        => self::LEVEL,
+		SoundlessShadow::class    => self::LEVEL,
+		StoneSkin::class          => self::LEVEL,
+		SummonEnts::class         => self::LEVEL,
+		Teleportation::class      => self::TARGET_AND_LEVEL
 	];
 
 	protected final const SPELLS = [
@@ -133,6 +135,7 @@ class SpellParser
 		'Geisterkämpfer'  => GhostEnemy::class,
 		'Lautloser'       => ['Schatten'    => SoundlessShadow::class],
 		'Monster'         => ['aufhetzen'   => InciteMonster::class],
+		'Ring'            => ['der'         => ['Unsichtbarkeit' => RingOfInvisibility::class]],
 		'Rosthauch'       => RustyMist::class,
 		'Schockwelle'     => ShockWave::class,
 		'Steinhaut'       => StoneSkin::class,
