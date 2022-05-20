@@ -38,7 +38,7 @@ final class Explore extends UnitCommand implements Activity
 			throw new UnknownCommandException($this);
 		}
 		if ($n === 1) {
-			switch (strtolower($this->phrase->getParameter())) {
+			switch (mb_strtolower($this->phrase->getParameter())) {
 				case 'kraut' :
 				case 'kräuter' :
 				case 'kraeuter' :

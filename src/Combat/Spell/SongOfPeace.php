@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Combat\BattleLog;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\SongOfPeaceCombatantMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\SongOfPeaceFighterMessage;
+use Lemuria\Engine\Fantasya\Combat\Rank;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Talent\Magic;
@@ -33,13 +34,12 @@ class SongOfPeace extends AbstractBattleSpell
 	/**
 	 * @param Combatant[] $combatants
 	 */
-	protected function castOnCombatants(array &$combatants, int $gradePoints): int {
-		foreach (array_keys($combatants) as $i) {
+	protected function castOnCombatants(Rank $combatants, int $gradePoints): int {
+		foreach ($combatants as $i => $combatant) {
 			if ($gradePoints <= 0) {
 				break;
 			}
-			$combatant = $combatants[$i];
-			$size      = $combatant->Size();
+			$size = $combatant->Size();
 			if ($size > $gradePoints) {
 				array_splice($combatant->fighters, -$gradePoints, $gradePoints);
 				Lemuria::Log()->debug($gradePoints . ' fighters of combatant ' . $combatant->Id() . ' leave the battlefield in peace.');

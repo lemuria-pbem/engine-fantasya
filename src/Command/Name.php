@@ -58,7 +58,7 @@ final class Name extends UnitCommand
 			$name = self::trimName($this->phrase->getLine(2));
 		}
 
-		switch (strtolower($type)) {
+		switch (mb_strtolower($type)) {
 			case 'einheit' :
 				$this->renameUnit($name);
 				break;

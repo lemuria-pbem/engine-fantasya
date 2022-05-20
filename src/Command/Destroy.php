@@ -31,7 +31,7 @@ final class Destroy extends DelegatedCommand
 	 */
 	protected function createDelegate(): Command {
 		if (count($this->phrase) === 2) {
-			$param = strtolower($this->phrase->getParameter());
+			$param = mb_strtolower($this->phrase->getParameter());
 			switch ($param) {
 				case 'burg' :
 				case 'gebäude' :

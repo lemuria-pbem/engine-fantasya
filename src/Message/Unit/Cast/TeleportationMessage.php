@@ -3,17 +3,21 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit\Cast;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message;
+use Lemuria\Id;
 
-class SoundlessShadowMessage extends AbstractCastMessage
+class TeleportationMessage extends AbstractCastMessage
 {
-	protected int $camouflage;
+	protected string $level = Message::SUCCESS;
+
+	protected Id $unit;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' now has Camouflage level ' . $this->camouflage . ' and will sneak past guards.';
+		return 'Unit ' . $this->id . ' teleports unit ' . $this->unit . '.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->camouflage = $message->getParameter();
+		$this->unit = $message->get();
 	}
 }

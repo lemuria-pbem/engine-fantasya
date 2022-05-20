@@ -118,6 +118,7 @@ use Lemuria\Model\Fantasya\Commodity\Carriage;
 use Lemuria\Model\Fantasya\Commodity\CarriageWreck;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
 use Lemuria\Model\Fantasya\Commodity\ElephantArmor;
+use Lemuria\Model\Fantasya\Commodity\Gold;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg;
 use Lemuria\Model\Fantasya\Commodity\Herb\Bubblemorel;
@@ -143,6 +144,7 @@ use Lemuria\Model\Fantasya\Commodity\Herb\WhiteHemlock;
 use Lemuria\Model\Fantasya\Commodity\Herb\Windbag;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Iron;
+use Lemuria\Model\Fantasya\Commodity\Jewelry\GoldRing;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Balsam;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Fur;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Gem;
@@ -199,6 +201,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Composition;
+use Lemuria\Model\Fantasya\Composition\RingOfInvisibility;
 use Lemuria\Model\Fantasya\Composition\Scroll;
 use Lemuria\Model\Fantasya\Composition\Spellbook;
 use Lemuria\Model\Fantasya\Container;
@@ -225,15 +228,19 @@ use Lemuria\Model\Fantasya\Spell\ElementalBeing;
 use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
+use Lemuria\Model\Fantasya\Spell\GhostEnemy;
 use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\Quickening;
+use Lemuria\Model\Fantasya\Spell\RingOfInvisibility as RingOfInvisibilitySpell;
 use Lemuria\Model\Fantasya\Spell\RustyMist;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Spell\SoundlessShadow;
+use Lemuria\Model\Fantasya\Spell\StoneSkin;
 use Lemuria\Model\Fantasya\Spell\SummonEnts;
+use Lemuria\Model\Fantasya\Spell\Teleportation;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Alchemy;
 use Lemuria\Model\Fantasya\Talent\Archery;
@@ -250,6 +257,7 @@ use Lemuria\Model\Fantasya\Talent\Espionage;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Herballore;
 use Lemuria\Model\Fantasya\Talent\Horsetaming;
+use Lemuria\Model\Fantasya\Talent\Jewelry;
 use Lemuria\Model\Fantasya\Talent\Magic;
 use Lemuria\Model\Fantasya\Talent\Mining;
 use Lemuria\Model\Fantasya\Talent\Navigation;
@@ -463,6 +471,8 @@ class CommandFactory
 		'Gespaltener holzschild'     => SplitWoodshield::class,
 		'Gewuerze'                   => Spice::class,
 		'Gewürze'                    => Spice::class,
+		'Gold'                       => Gold::class,
+		'Goldring'                   => GoldRing::class,
 		'Goliathwaesser'             => GoliathWater::class,
 		'Goliathwasser'              => GoliathWater::class,
 		'Goliathwässer'              => GoliathWater::class,
@@ -608,35 +618,41 @@ class CommandFactory
 	 * @var array(string=>string)
 	 */
 	protected array $compositions = [
-		'Schriftrolle' => Scroll::class,
-		'Zauberbuch'   => Spellbook::class,
+		'Ring der Unsichtbarkeit' => RingOfInvisibility::class,
+		'Schriftrolle'            => Scroll::class,
+		'Zauberbuch'              => Spellbook::class
 	];
 
 	/**
 	 * @var array(string=>string)
 	 */
 	protected array $spells = [
-		'Adlerauge'           => EagleEye::class,
-		'Astrales chaos'      => AstralChaos::class,
-		'Astraler weg'        => AstralPassage::class,
-		'Aufruhr verursachen' => CivilCommotion::class,
-		'Auratransfer'        => AuraTransfer::class,
-		'Beschleunigung'      => Quickening::class,
-		'Blick des Greifen'   => GazeOfTheGriffin::class,
-		'Elementarwesen'      => ElementalBeing::class,
-		'Erdbeben'            => Earthquake::class,
-		'Erwecke baumhirten'  => SummonEnts::class,
-		'Fernsicht'           => Farsight::class,
-		'Feuerball'           => Fireball::class,
-		'Friedenslied'        => SongOfPeace::class,
-		'Lautloser schatten'  => SoundlessShadow::class,
-		'Monster aufhetzen'   => InciteMonster::class,
-		'Rosthauch'           => RustyMist::class,
-		'Schockwelle'         => ShockWave::class,
-		'Sturmboe'            => GustOfWind::class,
-		'Sturmböe'            => GustOfWind::class,
-		'Tagtraum'            => Daydream::class,
-		'Wunderdoktor'        => Quacksalver::class
+		'Adlerauge'               => EagleEye::class,
+		'Astrales chaos'          => AstralChaos::class,
+		'Astraler weg'            => AstralPassage::class,
+		'Aufruhr verursachen'     => CivilCommotion::class,
+		'Auratransfer'            => AuraTransfer::class,
+		'Beschleunigung'          => Quickening::class,
+		'Blick des Greifen'       => GazeOfTheGriffin::class,
+		'Elementarwesen'          => ElementalBeing::class,
+		'Erdbeben'                => Earthquake::class,
+		'Erwecke baumhirten'      => SummonEnts::class,
+		'Fernsicht'               => Farsight::class,
+		'Feuerball'               => Fireball::class,
+		'Friedenslied'            => SongOfPeace::class,
+		'Geisterkaempfer'         => GhostEnemy::class,
+		'Geisterkämpfer'          => GhostEnemy::class,
+		'Lautloser schatten'      => SoundlessShadow::class,
+		'Monster aufhetzen'       => InciteMonster::class,
+		'Ring der Unsichtbarkeit' => RingOfInvisibilitySpell::class,
+		'Rosthauch'               => RustyMist::class,
+		'Schockwelle'             => ShockWave::class,
+		'Steinhaut'               => StoneSkin::class,
+		'Sturmboe'                => GustOfWind::class,
+		'Sturmböe'                => GustOfWind::class,
+		'Tagtraum'                => Daydream::class,
+		'Teleportation'           => Teleportation::class,
+		'Wunderdoktor'            => Quacksalver::class
 	];
 
 	/**
@@ -670,6 +686,7 @@ class CommandFactory
 		'Hiebwaffen'        => Bladefighting::class,
 		'Holzfaellen'       => Woodchopping::class,
 		'Holzfällen'        => Woodchopping::class,
+		'Juwelierskunst'    => Jewelry::class,
 		'Katapultbedienung' => Catapulting::class,
 		'Katapultschiessen' => Catapulting::class,
 		'Katapultschießen'  => Catapulting::class,

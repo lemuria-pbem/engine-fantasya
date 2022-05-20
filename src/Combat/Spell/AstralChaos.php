@@ -16,7 +16,7 @@ class AstralChaos extends AbstractBattleSpell
 			$calculus = new Calculus($unit);
 			$level    = $calculus->knowledge(Magic::class)->Level();
 			$points   = $grade * $level;
-			$this->grade->Combat()->Effects()->add(new CombatEffect($spell, $points));
+			$this->grade->Combat()->addEffect(new CombatEffect($spell, $points));
 		}
 		return $grade;
 	}

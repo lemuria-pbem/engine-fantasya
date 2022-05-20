@@ -12,6 +12,8 @@ class CombatEffect extends Item
 {
 	private AbstractBattleSpell $combatSpell;
 
+	private int $duration = PHP_INT_MAX;
+
 	#[Pure] public function __construct(BattleSpell $spell, int $points) {
 		parent::__construct($spell, $points);
 	}
@@ -26,12 +28,17 @@ class CombatEffect extends Item
 		return $this->Count();
 	}
 
+	public function Duration(): int {
+		return $this->duration;
+	}
+
 	public function CombatSpell(): AbstractBattleSpell {
 		return $this->combatSpell;
 	}
 
 	public function add(CombatEffect $effect): CombatEffect {
 		$this->addItem($effect);
+		$this->duration = max($this->duration, $effect->duration);
 
 		return $this;
 	}
@@ -44,6 +51,11 @@ class CombatEffect extends Item
 
 	public function setCombatSpell(AbstractBattleSpell $combatSpell): CombatEffect {
 		$this->combatSpell = $combatSpell;
+		return $this;
+	}
+
+	public function setDuration(int $duration): CombatEffect {
+		$this->duration = $duration;
 		return $this;
 	}
 }

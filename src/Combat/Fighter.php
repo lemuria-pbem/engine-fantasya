@@ -10,6 +10,8 @@ class Fighter
 
 	public int $quickening = 0;
 
+	private int $features = 0;
+
 	private bool $hasBeenHealed = false;
 
 	public function __construct(public int $health) {
@@ -17,6 +19,19 @@ class Fighter
 
 	public function HasBeenHealed(): bool {
 		return $this->hasBeenHealed;
+	}
+
+	public function hasFeature(Feature $feature): bool {
+		return ($this->features & $feature->value) === $feature->value;
+	}
+
+	public function setFeature(Feature $feature, bool $active = true): Fighter {
+		if ($active) {
+			$this->features |= $feature->value;
+		} else {
+			$this->features &= Feature::SIZE - $feature->value;
+		}
+		return $this;
 	}
 
 	public function heal(): Fighter {

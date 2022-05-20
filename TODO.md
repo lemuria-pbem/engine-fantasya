@@ -8,13 +8,17 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Neue Funktionen
 
 - weitere Zauber:
-  - Elementarwesen (6) (Kampfzauber)
-  - Teleportation (7) (anderer Einheiten) zum Magier
-  - Geisterkämpfer (7) (Kampfzauber, erschafft Doppelgänger)
-  - Steinhaut (8)
-  - Ring der Unsichtbarkeit (8) (erschafft einen Ring)
   - Luftschiff (9) (Einheit mit Wagen/Schiff reist durch die Luft)
   - Blick des Basilisken (9) (Kampfzauber)
+
+### Version 1.0
+
+- Textreport im Markdown-Format
+- Einstellen der erwünschten Reportformate
+- Talentübersicht pro Region
+- Übersetzungen auf MessageFormat umstellen
+- Generische Typen ergänzen
+- Monolog-Upgrade auf 3.0 + Anpassungen (Webseite: Symfony 6.1)
 
 ## Ideen
 
@@ -40,10 +44,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - VERSENKEN (Schiff vor Entern bewahren)
 - EROBERN (fremden Hafen einnehmen)
 - Monsterrasse bestimmt maximalen Übermacht-Faktor
-- Textreport im Markdown-Format
-- Einstellen der erwünschten Reportformate
-- Talentübersicht pro Region
-- Übersetzungen auf MessageFormat umstellen
 - Luxuswarenangebot neu definieren, wenn der erste Bauer eine Region besiedelt
 - Besteuerung bei Nutzung fremder Infrastruktur
   - Hafenbenutzungsgebühr an den Hafenmeister

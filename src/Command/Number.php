@@ -54,7 +54,7 @@ final class Number extends UnitCommand
 			throw new InvalidCommandException($this, 'Invalid ID given.', $e);
 		}
 
-		switch (strtolower($type)) {
+		switch (mb_strtolower($type)) {
 			case 'einheit' :
 				$this->setUnitId($newId);
 				break;

@@ -32,7 +32,7 @@ final class Trespass extends DelegatedCommand
 			return new Enter($this->phrase, $this->context);
 		}
 		if ($n === 2) {
-			$type = strtolower($this->phrase->getParameter());
+			$type = mb_strtolower($this->phrase->getParameter());
 			try {
 				return match ($type) {
 					'burg', 'gebäude', 'gebaeude' => new Enter($this->phrase, $this->context),

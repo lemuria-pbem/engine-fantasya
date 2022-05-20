@@ -5,7 +5,9 @@ namespace Lemuria\Engine\Fantasya\Combat;
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultBlockMessage;
+use Lemuria\Engine\Fantasya\Combat\Spell\StoneSkin;
 use Lemuria\Engine\Fantasya\Command\Apply\BerserkBlood as BerserkBloodEffect;
+use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Potion\BerserkBlood;
 use Lemuria\Model\Fantasya\Commodity\Protection\Armor;
@@ -20,8 +22,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Protection;
-use Lemuria\Model\Fantasya\Race\Monster;
-use Lemuria\Model\Fantasya\Spell;
+use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Riding;
@@ -62,12 +63,14 @@ class Attack
 
 	private float $flight;
 
-	private static ?Spell $gustOfWind = null;
+	private static ?BattleSpell $gustOfWind = null;
 
 	public function __construct(private Combatant $combatant) {
 		$this->flight = self::FLIGHT[$combatant->Unit()->BattleRow()->value];
 		if (!self::$gustOfWind) {
-			self::$gustOfWind = self::createSpell(GustOfWind::class);
+			/** @var BattleSpell $spell */
+			$spell            = self::createSpell(GustOfWind::class);
+			self::$gustOfWind = $spell;
 		}
 	}
 
@@ -134,10 +137,10 @@ class Attack
 
 		// Reduce distant weapon skill for Gust Of Wind effect.
 		if (isset(self::WIND_EFFECT[$attWeapon])) {
-			$effects = $this->combatant->Army()->Combat()->Effects();
-			if (isset($effects[self::$gustOfWind])) {
+			$gustOfWind = $this->combatant->Army()->Combat()->getEffect(self::$gustOfWind, $this->combatant);
+			if ($gustOfWind) {
 				$effect = self::WIND_EFFECT[$attWeapon];
-				$level  = $effects[self::$gustOfWind]->Count();
+				$level  = $gustOfWind->Count();
 				$factor = 1.0 / ($level / self::$gustOfWind->Difficulty() + 1);
 				$malus  = (int)floor($effect * $skill * $factor);
 				$skill  = max(0, $skill - $malus);
@@ -146,17 +149,22 @@ class Attack
 		}
 
 		$armor    = $this->combatant->Armor();
-		$hasBonus = $attacker->potion instanceof BerserkBlood;
 		$shield   = $defender->Shield();
 		$block    = $fD < $defender->distracted ? 0 : $defender->WeaponSkill()->Skill()->Level();
+		$hasBonus = null;
+		if ($attacker->potion instanceof BerserkBlood) {
+			$hasBonus = true;
+		} elseif ($attacker->hasFeature(Feature::StoneSkin)) {
+			$hasBonus = false;
+		}
 
 		$damage = null;
 		for ($i = 0; $i < $attacks; $i++) {
 			if ($this->isSuccessful($skill, $block, $armor, $shield, $hasBonus)) {
 				// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' hits enemy ' . $defender->getId($fD, true) . '.');
-				$race = $defender->Unit()->Race();
-				/** @noinspection PhpPossiblePolymorphicInvocationInspection */
+				$race    = $defender->Unit()->Race();
 				$block   = $race instanceof Monster ? $race->Block() : 0;
+				$block  += $defender->fighter($fD)->hasFeature(Feature::StoneSkin) ? StoneSkin::BLOCK : 0;
 				$armor   = $defender->Armor();
 				$damage += $this->calculateDamage($weapon, $skill, $block, $armor, $shield);
 			}
@@ -168,12 +176,17 @@ class Attack
 		return $damage;
 	}
 
-	protected function isSuccessful(int $skill, int $block, ?Protection $armor, ?Protection $shield, bool $hasAttackBonus): bool {
-		$malus = 0;
+	protected function isSuccessful(int $skill, int $block, ?Protection $armor, ?Protection $shield, bool|null $hasAttackBonus): bool {
 		if ($hasAttackBonus) {
 			$malus = -BerserkBloodEffect::BONUS;
-		} elseif ($armor) {
-			$malus = self::ATTACK_MALUS[$armor::class];
+		} else {
+			$malus = 0;
+			if ($hasAttackBonus === false) {
+				$malus += StoneSkin::ATTACK_MALUS;
+			}
+			if ($armor) {
+				$malus += self::ATTACK_MALUS[$armor::class];
+			}
 		}
 		$bonus = $shield ? self::BLOCK_BONUS[$shield::class] : 0;
 

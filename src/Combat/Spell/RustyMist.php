@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Combat\BattleLog;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\CombatantWeaponDegradedMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\CombatantWeaponSplitMessage;
+use Lemuria\Engine\Fantasya\Combat\Rank;
 use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
@@ -45,11 +46,8 @@ class RustyMist extends AbstractBattleSpell
 		return $grade;
 	}
 
-	protected function rustCombatants(array &$combatants, int $grade): void {
-		$n = count($combatants);
-		for ($i = 0; $i <= $n; $i++) {
-			/** @var Combatant $combatant */
-			$combatant = &$combatants[$i];
+	protected function rustCombatants(Rank $combatants, int $grade): void {
+		foreach ($combatants as $combatant) {
 			/** @var Commodity $weapon */
 			$weapon      = $combatant->Weapon();
 			$rustyWeapon = null;

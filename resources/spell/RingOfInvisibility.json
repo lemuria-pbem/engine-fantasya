@@ -1,6 +1,8 @@
 {
 	"description": [
-		"Mit diesem Spruch kann der Magier einen Ring der Unsichtbarkeit erschaffen. Der Träger des Ringes wird für alle Einheiten anderer Parteien unsichtbar, egal wie gut ihre Wahrnehmung auch sein mag. Damit eine Einheit unsichtbar wird, muss jede Person einen solchen Ring tragen."
+		"Mit Hilfe dieses Spruchs kann der Magier einen Goldring verzaubern und so einen Ring der Unsichtbarkeit erschaffen.",
+		"Der Träger des Ringes wird für alle Einheiten anderer Parteien unsichtbar, egal wie gut ihre Wahrnehmung auch sein mag. Damit eine Einheit unsichtbar wird, muss jede Person einen solchen Ring tragen.",
+		"Nach der Verzauberung des Goldringes muss der Magier ein Goldring-Unikat erschaffen, um den Ring der Unsichtbarkeit zu erhalten."
 	],
 	"components": {
 		"GoldRing": 1

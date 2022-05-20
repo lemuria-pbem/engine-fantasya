@@ -28,7 +28,7 @@ final class Loot extends UnitCommand
 		if ($n < 1) {
 			throw new InvalidCommandException($this);
 		}
-		$what = strtolower($this->phrase->getParameter());
+		$what = mb_strtolower($this->phrase->getParameter());
 		$not  = false;
 		if ($n === 2) {
 			if (strtolower($this->phrase->getParameter(2)) === 'nicht') {

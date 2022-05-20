@@ -93,7 +93,17 @@ final class ActivityProtocol
 	 * Add the new default of an Activity.
 	 */
 	public function replaceDefaults(Activity $activity): void {
-		$this->defaultActivities = $activity->getNewDefaults();
+		$defaults = $activity->getNewDefaults();
+		if (empty($defaults)) {
+			/** @var UnitCommand $activity */
+			$default = (string)$activity->Phrase();
+			foreach ($this->defaultActivities as $activity) {
+				if ((string)$activity->Phrase() !== $default) {
+					$defaults[] = $activity;
+				}
+			}
+		}
+		$this->defaultActivities = $defaults;
 	}
 
 	/**

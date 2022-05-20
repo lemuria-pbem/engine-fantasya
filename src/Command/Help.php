@@ -99,7 +99,7 @@ final class Help extends UnitCommand
 	}
 
 	private function getAgreement(string $agreement): ?int {
-		return match (strtolower($agreement)) {
+		return match (mb_strtolower($agreement)) {
 			'abbau', 'abbauen', 'mache', 'machen', 'ressourcen' => Relation::RESOURCES,
 			'alles'                                             => Relation::ALL,
 			'betrete', 'betreten'                               => Relation::ENTER,

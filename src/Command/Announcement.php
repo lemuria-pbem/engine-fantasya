@@ -42,7 +42,7 @@ final class Announcement extends UnitCommand
 		$n = $this->phrase->count();
 		if ($n >= 2) {
 			$i = 2;
-			switch (strtolower($this->phrase->getParameter())) {
+			switch (mb_strtolower($this->phrase->getParameter())) {
 				case 'einheit' :
 					$this->sendToUnit($this->nextId($i), $this->getMessage());
 					break;

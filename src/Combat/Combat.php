@@ -39,6 +39,7 @@ use Lemuria\Engine\Fantasya\Combat\Log\Participant;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Potion\HealingPotion;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Native;
@@ -46,41 +47,21 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
-use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Unit;
 
 class Combat
 {
 	use BuilderTrait;
 
-	public const ROW_NAME = [self::REFUGEE => 'refugees', self::BYSTANDER => 'bystanders', self::BACK => 'back',
-		                     self::FRONT   => 'front'];
-
-	protected const BATTLE_ROWS = [self::REFUGEE, self::BYSTANDER, self::BACK, self::FRONT];
-
-	protected const ONE_ROUND_SPELLS = [GustOfWind::class];
+	public const ROW_NAME = [Rank::REFUGEE => 'refugees', Rank::BYSTANDER => 'bystanders', Rank::BACK => 'back', Rank::FRONT => 'front'];
 
 	protected const OVERRUN = 3.0;
 
-	private const FRONT = 5;
-
-	private const BACK = 3;
-
-	private const BYSTANDER = 1;
-
-	private const REFUGEE = 0;
-
 	protected int $round = 0;
 
-	/**
-	 * @var array(int=>array)
-	 */
-	protected array $attacker;
+	protected Ranks $attacker;
 
-	/**
-	 * @var array(int=>array)
-	 */
-	protected array $defender;
+	protected Ranks $defender;
 
 	/**
 	 * @var array(int=>bool)
@@ -102,9 +83,10 @@ class Combat
 	 */
 	protected array $defendParticipants = [];
 
+	/**
+	 * Effects that impact both sides.
+	 */
 	protected Effects $effects;
-
-	protected array $oneRoundSpells = [];
 
 	#[Pure] public static function getBattleRow(Unit $unit): BattleRow {
 		$battleRow = $unit->BattleRow();
@@ -115,35 +97,18 @@ class Combat
 		};
 	}
 
-	public function __construct(private Context $context) {
-		$this->attacker = array_fill_keys(self::BATTLE_ROWS, []);
-		$this->defender = array_fill_keys(self::BATTLE_ROWS, []);
+	#[Pure] public function __construct(private Context $context) {
+		$this->attacker = new Ranks(true);
+		$this->defender = new Ranks(false);
 		$this->effects  = new Effects();
-		foreach (self::ONE_ROUND_SPELLS as $spell) {
-			$this->oneRoundSpells[] = self::createSpell($spell);
-		}
 	}
 
-	public function Effects(): Effects {
-		return $this->effects;
+	#[Pure] public function hasAttackers(): bool {
+		return $this->attacker->count() > 0;
 	}
 
-	public function hasAttackers(): bool {
-		foreach (self::BATTLE_ROWS as $row) {
-			if ($this->attacker[$row]) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public function hasDefenders(): bool {
-		foreach (self::BATTLE_ROWS as $row) {
-			if ($this->defender[$row]) {
-				return true;
-			}
-		}
-		return false;
+	#[Pure] public function hasDefenders(): bool {
+		return $this->defender->count() > 0;
 	}
 
 	public function addAttacker(Unit $unit): Army {
@@ -172,7 +137,7 @@ class Combat
 				foreach ($army->Units() as $unit /* @var Unit $unit */) {
 					$combatants = $army->getCombatants($unit);
 					foreach ($combatants as $combatant) {
-						$this->attacker[$combatant->BattleRow()->value][] = $combatant;
+						$this->attacker->add($combatant);
 					}
 					$this->attackParticipants[] = new Participant(new Entity($unit), $army->getCombatants($unit));
 				}
@@ -194,7 +159,7 @@ class Combat
 				foreach ($army->Units() as $unit /* @var Unit $unit */) {
 					$combatants = $army->getCombatants($unit);
 					foreach ($combatants as $combatant) {
-						$this->defender[$combatant->BattleRow()->value][] = $combatant;
+						$this->defender->add($combatant);
 					}
 					$this->defendParticipants[] = new Participant(new Entity($unit), $army->getCombatants($unit));
 				}
@@ -207,14 +172,14 @@ class Combat
 	public function embattle(): Combat {
 		$log = BattleLog::getInstance();
 		$log->add(new AttackerSideMessage($this->attackParticipants));
-		foreach ($this->attacker as $combatants) {
-			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
+		foreach ($this->attacker as $rank) {
+			foreach ($rank as $combatant /* @var Combatant $combatant */) {
 				$log->add($this->getCombatantMessage($combatant));
 			}
 		}
 		$log->add(new DefenderSideMessage($this->defendParticipants));
-		foreach ($this->defender as $combatants) {
-			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
+		foreach ($this->defender as $rank) {
+			foreach ($rank as $combatant /* @var Combatant $combatant */) {
 				$log->add($this->getCombatantMessage($combatant));
 			}
 		}
@@ -244,8 +209,8 @@ class Combat
 	public function tacticsRound(Party $party): Combat {
 		$this->everybodyTryToFlee();
 		if ($this->arrangeBattleRows()) {
-			$this->fleeFromBattle($this->attacker[self::REFUGEE], 'Attacker', true);
-			$this->fleeFromBattle($this->defender[self::REFUGEE], 'Defender', true);
+			$this->fleeFromBattle($this->attacker[Rank::REFUGEE], 'Attacker', true);
+			$this->fleeFromBattle($this->defender[Rank::REFUGEE], 'Defender', true);
 			if ($this->isAttacker[$party->Id()->Id()]) {
 				Lemuria::Log()->debug('Attacker gets first strike in tactics round.');
 				BattleLog::getInstance()->add(new AttackerTacticsRoundMessage());
@@ -266,8 +231,8 @@ class Combat
 		$this->unsetExpiredCombatSpells();
 		$this->everybodyTryToFlee();
 		if ($this->arrangeBattleRows()) {
-			$this->fleeFromBattle($this->attacker[self::REFUGEE], 'Attacker', true);
-			$this->fleeFromBattle($this->defender[self::REFUGEE], 'Defender', true);
+			$this->fleeFromBattle($this->attacker[Rank::REFUGEE], 'Attacker', true);
+			$this->fleeFromBattle($this->defender[Rank::REFUGEE], 'Defender', true);
 			$this->round++;
 			BattleLog::getInstance()->add(new CombatRoundMessage($this->round));
 			$this->castCombatSpells();
@@ -303,28 +268,25 @@ class Combat
 		return $this->armies[$id];
 	}
 
-	#[Pure] protected function countRowCombatants(array $side, int $row): int {
-		$count = 0;
-		foreach ($side[$row] as $combatant /* @var Combatant $combatant */) {
-			$count += $combatant->Size();
-		}
-		return $count;
-	}
-
-	#[Pure] protected function countCombatants(array $side, bool $isAttack = false): int {
-		$count = 0;
-		foreach ($side as $combatant /* @var Combatant $combatant */) {
-			if ($isAttack) {
-				$count += $combatant->Size() * $combatant->Weapon()->Hits();
-			} else {
-				$count += $combatant->Size();
+	public function getEffect(BattleSpell $spell, ?Combatant $combatant = null): ?CombatEffect {
+		/** @var CombatEffect $effect */
+		if ($combatant) {
+			$id      = $combatant->Unit()->Party()->Id()->Id();
+			$effects = isset($this->isAttacker[$id]) ? $this->attacker->Effects() : $this->defender->Effects();
+			if ($effects->offsetExists($spell)) {
+				return $effects[$spell];
 			}
 		}
-		return $count;
+		return $this->effects->offsetExists($spell) ? $this->effects[$spell] : null;
 	}
 
-	protected function addPreparationSpells(Casts $casts, array $caster, array $victim): void {
-		foreach ([self::FRONT, self::BACK] as $row) {
+	public function addEffect(CombatEffect $effect): Combat {
+		$this->effects->add($effect);
+		return $this;
+	}
+
+	protected function addPreparationSpells(Casts $casts, Ranks $caster, Ranks $victim): void {
+		foreach ([Rank::FRONT, Rank::BACK] as $row) {
 			foreach ($caster[$row] as $combatant/* @var Combatant $combatant */) {
 				$unit = $combatant->Unit();
 				if ($unit->BattleSpells()?->Preparation()) {
@@ -336,11 +298,8 @@ class Combat
 		}
 	}
 
-	/**
-	 * @param Combatant[] $combatants
-	 */
-	protected function setHasCast(Unit $unit, array $combatants): void {
-		foreach ($combatants as $combatant) {
+	protected function setHasCast(Unit $unit, Rank $rank): void {
+		foreach ($rank as $combatant) {
 			if ($combatant->Unit() === $unit) {
 				$combatant->hasCast = true;
 			}
@@ -375,8 +334,8 @@ class Combat
 	}
 
 	protected function arrangeBattleRows(): bool {
-		$attackers = $this->countRowCombatants($this->attacker, self::FRONT);
-		$defenders = $this->countRowCombatants($this->defender, self::FRONT);
+		$attackers = $this->attacker[Rank::FRONT]->Size();
+		$defenders = $this->defender[Rank::FRONT]->Size();
 		if ($attackers > 0 || $defenders > 0) {
 			$ratio = $defenders > 0 ? $attackers / $defenders : PHP_INT_MAX;
 			if ($ratio > self::OVERRUN) {
@@ -400,15 +359,15 @@ class Combat
 		return $this->hasAttackers() && $this->hasDefenders();
 	}
 
-	protected function arrangeRows(int $additional, array &$side, $isAttacker): void {
+	protected function arrangeRows(int $additional, Ranks $side, $isAttacker): void {
 		if ($additional > 0) {
-			$additional = $this->arrangeFromRow($side, $isAttacker, self::BACK, $additional);
+			$additional = $this->arrangeFromRow($side, $isAttacker, Rank::BACK, $additional);
 		}
 		if ($additional > 0) {
-			$additional = $this->arrangeFromRow($side, $isAttacker, self::BYSTANDER, $additional);
+			$additional = $this->arrangeFromRow($side, $isAttacker, Rank::BYSTANDER, $additional);
 		}
 		if ($additional > 0) {
-			$additional = $this->arrangeFromRow($side, $isAttacker, self::REFUGEE, $additional);
+			$additional = $this->arrangeFromRow($side, $isAttacker, Rank::REFUGEE, $additional);
 		}
 		if ($additional > 0) {
 			if ($isAttacker) {
@@ -419,21 +378,20 @@ class Combat
 		}
 	}
 
-	protected function arrangeFromRow(array &$side, bool $isAttacker, int $battleRow, int $additional): int {
-		$n    = count($side[$battleRow]);
-		$name = self::ROW_NAME[$battleRow];
-		if ($n <= 0) {
+	protected function arrangeFromRow(Ranks $side, bool $isAttacker, int $battleRow, int $additional): int {
+		$rank = $side[$battleRow];
+		if ($rank->count() <= 0) {
 			return $additional;
 		}
 
-		for ($i = $n - 1; $i >= 0; $i--) {
-			/** @var Combatant $combatant */
-			$combatant = $side[$battleRow][$i];
-			$unit      = $combatant->Unit();
-			$size      = $combatant->Size();
+		$name  = self::ROW_NAME[$battleRow];
+		$front = $side[Rank::FRONT];
+		foreach ($rank as $i => $combatant) {
+			$unit = $combatant->Unit();
+			$size = $combatant->Size();
 			if ($size <= $additional) {
-				$side[self::FRONT][] = $combatant->setBattleRow(BattleRow::FRONT);
-				unset($side[$battleRow][$i]);
+				$front->add($combatant->setBattleRow(BattleRow::FRONT));
+				unset($rank[$i]);
 				$additional -= $size;
 				$who         = $isAttacker ? 'Attacker' : 'Defender';
 				Lemuria::Log()->debug($who . ' ' . $unit . ' sends combatant ' . $combatant->Id() . ' (size ' . $size . ') from ' . $name . ' row to the front.');
@@ -454,9 +412,9 @@ class Combat
 			} else {
 				$newCombatant = $combatant->split($additional);
 				$combatant->Army()->addCombatant($newCombatant);
-				$side[self::FRONT][] = $newCombatant;
-				$who                 = $isAttacker ? 'Attacker' : 'Defender';
-				$hasWeapon           = !($newCombatant->Weapon() instanceof Native);
+				$front->add($newCombatant);
+				$who       = $isAttacker ? 'Attacker' : 'Defender';
+				$hasWeapon = !($newCombatant->Weapon() instanceof Native);
 				Lemuria::Log()->debug($who . ' ' . $unit . ' sends ' . $additional . ' persons from combatant ' . $combatant->Id() . ' in ' . $name . ' row to the front as combatant ' . $newCombatant->Id() . '.');
 				if ($isAttacker) {
 					$message = $hasWeapon ?
@@ -476,27 +434,23 @@ class Combat
 	}
 
 	protected function everybodyTryToFlee(): void {
-		$this->fleeIfWounded($this->attacker[self::FRONT], 'Attacker');
-		$this->fleeIfWounded($this->attacker[self::BACK], 'Attacker');
-		$this->fleeIfWounded($this->attacker[self::BYSTANDER], 'Attacker');
-		$this->fleeFromBattle($this->attacker[self::REFUGEE], 'Attacker');
-		$this->fleeIfWounded($this->defender[self::FRONT], 'Defender');
-		$this->fleeIfWounded($this->defender[self::BACK], 'Defender');
-		$this->fleeIfWounded($this->defender[self::BYSTANDER], 'Defender');
-		$this->fleeFromBattle($this->defender[self::REFUGEE], 'Defender');
+		$this->fleeIfWounded($this->attacker[Rank::FRONT], 'Attacker');
+		$this->fleeIfWounded($this->attacker[Rank::BACK], 'Attacker');
+		$this->fleeIfWounded($this->attacker[Rank::BYSTANDER], 'Attacker');
+		$this->fleeFromBattle($this->attacker[Rank::REFUGEE], 'Attacker');
+		$this->fleeIfWounded($this->defender[Rank::FRONT], 'Defender');
+		$this->fleeIfWounded($this->defender[Rank::BACK], 'Defender');
+		$this->fleeIfWounded($this->defender[Rank::BYSTANDER], 'Defender');
+		$this->fleeFromBattle($this->defender[Rank::REFUGEE], 'Defender');
 	}
 
-	protected function fleeIfWounded(array &$combatantRow, string $who): void {
-		$hasChanges = false;
-		foreach (array_keys($combatantRow) as $i) {
-			/** @var Combatant $combatant */
-			$combatant = $combatantRow[$i];
+	protected function fleeIfWounded(Rank $rank, string $who): void {
+		foreach ($rank as $i => $combatant) {
 			foreach ($combatant->fighters as $f => $fighter) {
 				$chance = $combatant->isFleeing($fighter);
 				if (is_float($chance)) {
 					if ($chance >= 0.0) {
 						$combatant->flee($f);
-						$hasChanges = true;
 						Lemuria::Log()->debug($who . ' fighter ' . $combatant->getId($f) . ' is wounded and flees from battle (chance: ' . $chance . ').');
 						BattleLog::getInstance()->add(new FighterFleesMessage($combatant->getId($f)));
 					} else {
@@ -507,30 +461,22 @@ class Combat
 			}
 			if ($combatant->Size() <= 0) {
 				$combatant->flee();
-				unset($combatantRow[$i]);
+				unset($rank[$i]);
 				// Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' has fled from battle.');
 			}
 		}
-		if ($hasChanges) {
-			$combatantRow = array_values($combatantRow);
-		}
 	}
 
-	protected function fleeFromBattle(array &$combatantRow, string $who, $fleeSuccessfully = false): void {
-		$hasChanges = false;
-		foreach (array_keys($combatantRow) as $i) {
-			/** @var Combatant $combatant */
-			$combatant = $combatantRow[$i];
+	protected function fleeFromBattle(Rank $rank, string $who, $fleeSuccessfully = false): void {
+		foreach ($rank as $i => $combatant) {
 			if ($fleeSuccessfully) {
-				unset($combatantRow[$i]);
-				$hasChanges = true;
+				unset($rank[$i]);
 				Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' flees from battle.');
 				BattleLog::getInstance()->add(new FleeFromBattleMessage($combatant));
 			} else {
 				$chance = $combatant->canFlee();
 				if ($chance >= 0.0) {
-					unset($combatantRow[$i]);
-					$hasChanges = true;
+					unset($rank[$i]);
 					Lemuria::Log()->debug($who . ' combatant ' . $combatant->Id() . ' managed to flee from battle (chance: ' . $chance . ').');
 					BattleLog::getInstance()->add(new ManagedToFleeFromBattleMessage($combatant));
 				} else {
@@ -539,14 +485,27 @@ class Combat
 				}
 			}
 		}
-		if ($hasChanges) {
-			$combatantRow = array_values($combatantRow);
-		}
 	}
 
-	protected function unsetExpiredCombatSpells(): void {
-		foreach ($this->oneRoundSpells as $spells) {
-			$this->effects->offsetUnset($spells);
+	protected function unsetExpiredCombatSpells(?Effects $effects = null): void {
+		if (!$effects) {
+			$this->unsetExpiredCombatSpells($this->effects);
+			$this->unsetExpiredCombatSpells($this->attacker->Effects());
+			$this->unsetExpiredCombatSpells($this->defender->Effects());
+		} else {
+			$removal = [];
+			foreach ($effects as $effect /* @var CombatEffect $effect */) {
+				$duration = $effect->Duration() - 1;
+				if ($duration > 0) {
+					$effect->setDuration($duration);
+				} else {
+					$removal[] = $effect->Spell();
+				}
+			}
+			foreach ($removal as $spell) {
+				$effects->offsetUnset($spell);
+				Lemuria::Log()->debug('Battle spell ' . $spell . ' has expired.');
+			}
 		}
 	}
 
@@ -560,15 +519,15 @@ class Combat
 	/**
 	 * @return Unit[]
 	 */
-	protected function prepareCombatSpells(array $caster): array {
+	protected function prepareCombatSpells(Ranks $caster): array {
 		$units = [];
-		foreach ($caster[self::FRONT] as $combatant /* @var Combatant $combatant */) {
+		foreach ($caster[Rank::FRONT] as $combatant /* @var Combatant $combatant */) {
 			$unit = $combatant->Unit();
 			if ($unit->BattleSpells()?->Combat()) {
 				$units[$unit->Id()->Id()] = $unit;
 			}
 		}
-		foreach ($caster[self::BACK] as $combatant /* @var Combatant $combatant */) {
+		foreach ($caster[Rank::BACK] as $combatant /* @var Combatant $combatant */) {
 			$unit = $combatant->Unit();
 			if ($unit->BattleSpells()?->Combat()) {
 				$units[$unit->Id()->Id()] = $unit;
@@ -580,24 +539,24 @@ class Combat
 	/**
 	 * @param Unit[] $units
 	 */
-	protected function castCombatSpell(array $units, array $caster, array $victim): void {
+	protected function castCombatSpell(array $units, Ranks $caster, Ranks $victim): void {
 		foreach ($units as $unit) {
 			$grade = new BattleSpellGrade($unit->BattleSpells()->Combat(), $this);
 			$spell = $this->context->Factory()->castBattleSpell($grade);
 			$grade = $spell->setCaster($caster)->setVictim($victim)->cast($unit);
 			if ($grade > 0) {
-				$this->setHasCast($unit, $caster[self::FRONT]);
-				$this->setHasCast($unit, $caster[self::BACK]);
+				$this->setHasCast($unit, $caster[Rank::FRONT]);
+				$this->setHasCast($unit, $caster[Rank::BACK]);
 			}
 		}
 	}
 
-	protected function attack(array &$attacker, array &$defender, string $who): int {
+	protected function attack(Ranks $attacker, Ranks $defender, string $who): int {
 
 		$message = $who . ': Front row attacks.';
-		$damage  = $this->attackRowAgainstRow($attacker[self::FRONT], $defender[self::FRONT], $message);
+		$damage  = $this->attackRowAgainstRow($attacker[Rank::FRONT], $defender[Rank::FRONT], $message);
 		$message = $who . ': Back row attacks.';
-		$damage += $this->attackRowAgainstRow($attacker[self::BACK], $defender[self::FRONT], $message);
+		$damage += $this->attackRowAgainstRow($attacker[Rank::BACK], $defender[Rank::FRONT], $message);
 		$this->removeTheDead($attacker);
 		$this->removeTheDead($defender);
 		return $damage;
@@ -606,17 +565,17 @@ class Combat
 	/**
 	 * @noinspection PhpUnusedParameterInspection
 	 */
-	protected function attackRowAgainstRow(array $attacker, array $defender, string $message): int {
+	protected function attackRowAgainstRow(Rank $attacker, Rank $defender, string $message): int {
 		$a  = count($attacker);
-		$a1 = $this->countCombatants($attacker, true);
+		$a1 = $attacker->Hits();
 		if ($a <= 0 || $a1 <= 0) {
 			return 0;
 		}
 		// Lemuria::Log()->debug($message);
 
-		$damage = 0;
+		$charge = new Charge();
 		$d      = count($defender);
-		$d1     = $this->countCombatants($defender);
+		$d1     = $defender->Size();
 		$rate   = $d1 / $a1;
 		$nextA  = 0;
 		$nextD  = 0;
@@ -631,7 +590,6 @@ class Combat
 		$fD     = 0;
 		$nD     = 0;
 		$comA   = null;
-		$comD   = null;
 		while ($cA < $a && $cD < $d) {
 			/** @var Combatant $comA */
 			if ($comA?->hasCast || $fA >= $nA) {
@@ -640,6 +598,7 @@ class Combat
 				$hits = $comA?->Weapon()->Hits();
 				$fA   = 0;
 				$hit  = 0;
+				$charge->setAttacking($comA)->setAttacker($fA);
 				continue;
 			}
 			if ($fD >= $nD) {
@@ -649,35 +608,38 @@ class Combat
 				$nD   = $comD?->Size();
 				$last = $sum + $nD;
 				$fD   = $nextD - $sum;
+				$charge->setDefending($comD)->setDefender($fD);
 				continue;
 			}
 			if ($nextD >= $last) {
 				$fD = $nD;
+				$charge->setDefender($fD);
 				continue;
 			}
 
 			if ($comA->fighter($fA)->health > 0) {
-				$damage += $comD->assault($fD, $comA, $fA);
+				$charge->assault();
 			}
 			if (++$hit >= $hits) {
-				$fA++;
+				$charge->setAttacker(++$fA);
 				$hit = 0;
 			}
 			$fDStep = $nextD;
 			$nextD  = (int)floor(++$nextA * $rate);
 			$fDStep = $nextD - $fDStep;
 			$fD    += $fDStep;
+			$charge->setDefender($fD);
 		}
 
-		return $damage;
+		return $charge->Damage();
 	}
 
 	/**
 	 * @noinspection PhpStatementHasEmptyBodyInspection
 	 */
-	protected function removeTheDead(array &$combatantRows): void {
-		foreach ($combatantRows as &$combatants) {
-			foreach ($combatants as $c => &$combatant /* @var Combatant $combatant */) {
+	protected function removeTheDead(Ranks $ranks): void {
+		foreach ($ranks as $combatants /* @var Rank $combatants */) {
+			foreach ($combatants as $c => $combatant /* @var Combatant $combatant */) {
 				$size                  = $combatant->Size();
 				$combatant->distracted = 0;
 				$combatant->hasCast    = false;
@@ -713,7 +675,6 @@ class Combat
 					}
 					if ($combatant->Size() <= 0) {
 						unset($combatants[$c]);
-						$combatants = array_values($combatants);
 						// Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' was wiped out.');
 					} else {
 						//$combatant->fighters = array_values($combatant->fighters);
