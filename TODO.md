@@ -17,7 +17,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Einstellen der erwünschten Reportformate
 - Talentübersicht pro Region
 - Übersetzungen auf MessageFormat umstellen
-- Monolog-Upgrade auf 3.0 + Anpassungen
+- Generische Typen ergänzen
+- Monolog-Upgrade auf 3.0 + Anpassungen (Webseite: Symfony 6.1)
 
 ## Ideen
 

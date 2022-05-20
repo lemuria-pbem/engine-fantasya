@@ -274,12 +274,10 @@ class Combat
 			$id      = $combatant->Unit()->Party()->Id()->Id();
 			$effects = isset($this->isAttacker[$id]) ? $this->attacker->Effects() : $this->defender->Effects();
 			if ($effects->offsetExists($spell)) {
-				$effect = $effects[$spell];
-				return $effect;
+				return $effects[$spell];
 			}
 		}
-		$effect = $this->effects->offsetExists($spell) ? $this->effects[$spell] : null;
-		return $effect;
+		return $this->effects->offsetExists($spell) ? $this->effects[$spell] : null;
 	}
 
 	public function addEffect(CombatEffect $effect): Combat {
