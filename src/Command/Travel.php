@@ -170,7 +170,7 @@ class Travel extends UnitCommand implements Activity
 
 				$region = $this->canMoveTo($next);
 				if ($region) {
-					$overRoad  = $this->overRoad($this->unit->Region(), $next, $region);
+					$overRoad = $this->overRoad($this->unit->Region(), $next, $region);
 					$this->moveTo($region);
 					$this->addToTravelRoute($next->value);
 					$this->message(TravelRegionMessage::class)->e($region);
@@ -184,7 +184,7 @@ class Travel extends UnitCommand implements Activity
 
 					$this->workload->add();
 					$guards = $this->unitIsStoppedByGuards($region);
-					if ($guards->count() > 0) {
+					if ($guards->count() > 0 && !$this->airshipped) {
 						$notPassGuards = $this->unitIsAllowedToPass($region, $guards);
 						if ($notPassGuards->count() > 0) {
 							$this->workload->add($regions);

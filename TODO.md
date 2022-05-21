@@ -4,11 +4,14 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen und Fehler
 
+- Kampfbericht in HTML-Report verlinken
+- prüfen: Preisveränderung Angebot hat richtige Farbe
+- viele Fehler in Magellan
+- nach MACHEN Karavelle Default-Befehl zum Weiterbauen geben
 
 ## Neue Funktionen
 
 - weitere Zauber:
-  - Luftschiff (9) (Einheit mit Wagen/Schiff reist durch die Luft)
   - Blick des Basilisken (9) (Kampfzauber)
 
 ### Version 1.0
@@ -33,7 +36,9 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - BESUCHEN zum Handel mit NPC-Ladenbesitzer
   - Steinkreis als Portal für Magier
 - automatischer Beschreibungstext mit Handelsangeboten für Einheit, Gebäude oder Region
-- Gerüchte durch NPC oder Bauern, z.B. zu Monstervorkommen in Nachbarregionen
+- Gerüchte durch NPC oder Bauern
+  - Monstervorkommen in Nachbarregionen
+  - Kämpfe in Nachbarregionen
 - Weltumseglung ermöglichen
 - Ereignis "Juwelen gefunden" beim Bergbau in Gebirgen/Gletschern ohne Luxuswaren
 - Umweltereignisse

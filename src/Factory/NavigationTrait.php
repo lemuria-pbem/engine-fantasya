@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Effect\FavorableWinds;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
 use Lemuria\Engine\Fantasya\Factory\Model\Ports;
+use Lemuria\Engine\Fantasya\Message\Region\TravelAirshipMessage;
 use Lemuria\Engine\Fantasya\Message\Region\TravelVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterPortDutyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterPortSmuggleMessage;
@@ -121,8 +122,13 @@ trait NavigationTrait
 			$this->vessel->setAnchor(Direction::IN_DOCK);
 			$this->vessel->setPort(null);
 		} else {
-			$neighbours = Lemuria::World()->getNeighbours($destination);
-			$this->vessel->setAnchor($neighbours->getDirection($region));
+			if ($this->airshipped) {
+				$this->vessel->setAnchor(Direction::IN_DOCK);
+				$this->vessel->setPort(null);
+			} else {
+				$neighbours = Lemuria::World()->getNeighbours($destination);
+				$this->vessel->setAnchor($neighbours->getDirection($region));
+			}
 		}
 
 		foreach ($this->vessel->Passengers() as $unit /* @var Unit $unit */) {
@@ -137,7 +143,11 @@ trait NavigationTrait
 			$unit->Party()->Chronicle()->add($destination);
 		}
 
-		$this->message(TravelVesselMessage::class, $region)->p((string)$this->vessel);
+		if ($this->airshipped) {
+			$this->message(TravelAirshipMessage::class, $region)->p((string)$this->vessel);
+		} else {
+			$this->message(TravelVesselMessage::class, $region)->p((string)$this->vessel);
+		}
 		if ($this->vessel->Port()) {
 			$this->payDutyToHarbourMaster();
 		}

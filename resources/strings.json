@@ -229,6 +229,10 @@
 		"group_256": "Trophäen"
 	},
 	"message": {
+		"AirshipCannotContinueMessage": "Die Einheit $id kann nicht genügend Aurapunkte aufwenden, um das Schiff $vessel in der Luft zu halten.",
+		"AirshipCannotLiftMessage": "Die Einheit $id kann nicht genügend Aurapunkte aufwenden, um das Schiff $vessel in die Luft zu heben.",
+		"AirshipLiftMessage": "Das Schiff $id erhebt sich hoch in die Luft und schwebt über das Land.",
+		"AirshipNotOnBoardMessage": "Die Einheit $id muss Passagier auf einem Schiff sein, um Luftschiff zu zaubern.",
 		"AllocationSiegeMessage": "Die Einheit $id ist in einem belagerten Gebäude und kann nichts produzieren.",
 		"AllocationTakeMessage": "Die Einheit $id nimmt sich $item aus dem Materialpool.",
 		"AcquaintanceMessage": "Wir haben zum ersten Mal ein Mitglied der Partei $party getroffen.",
@@ -792,6 +796,7 @@
 		"TeleportationMoveMessage": "Die Einheit $id wird in die Region der Einheit $unit teleportiert.",
 		"TempMessage": "Neue Einheit $id erzeugt.",
 		"TheWildHuntMessage": "In einer stürmischen Nacht werden unsere Wachen in $region vom Lärm eines rumpelnden Wagens, dem Stampfen vieler Hufe und gellenden Schreien aufgeschreckt. Mit wahnsinnigem Tempo rauscht die furchtsame Erscheinung vorbei, während die Wachen unfähig sind etwas zu tun. Plötzlich überkommt sie eine große Müdigkeit und sie fallen kurz darauf in einen tiefen Schlaf. Am nächsten Morgen finden sie eine Kiste, die einige Phiolen und andere Dinge enthält.",
+		"TravelAirshipMessage": "Das Schiff $vessel hat die Region $id überflogen.",
 		"TravelAllowedMessage": "Unsere Wachen haben die Einheit $unit in der Region $region durchreisen lassen.",
 		"TravelAllowedRegionMessage": "Die Wachen der Partei $party haben die Einheit $unit durchreisen lassen.",
 		"TravelAnchorMessage": "Das Schiff $id ankert im $anchor und kann nicht nach $direction auslaufen.",

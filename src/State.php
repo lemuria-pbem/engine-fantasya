@@ -159,6 +159,10 @@ final class State implements Reassignment
 		}
 	}
 
+	#[Pure] public function getCurrentPriority(): int {
+		return $this->turn->getCurrentPriority();
+	}
+
 	public function getTurnOptions(): TurnOptions {
 		if (!$this->turnOptions) {
 			$this->turnOptions = new TurnOptions();

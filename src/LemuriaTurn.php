@@ -70,6 +70,13 @@ class LemuriaTurn implements Turn
 	}
 
 	/**
+	 * Get the current order priority while evaluating.
+	 */
+	public function getCurrentPriority(): int {
+		return $this->currentPriority;
+	}
+
+	/**
 	 * Add commands.
 	 */
 	public function add(Move $move): EntitySet {

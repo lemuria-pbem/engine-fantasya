@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Capacity;
+use Lemuria\Engine\Fantasya\Effect\Airship;
 use Lemuria\Engine\Fantasya\Effect\SneakPastEffect;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
 use Lemuria\Engine\Fantasya\Message\Region\TravelUnitMessage;
@@ -46,7 +47,12 @@ trait TravelTrait
 
 	private bool $hasTravelled = false;
 
+	private Airship|false|null $airship = false;
+
+	private bool $airshipped = false;
+
 	protected function canMoveTo(Direction $direction): ?Region {
+		$this->airshipped = false;
 		$region = $this->unit->Region();
 		/** @var Region $neighbour */
 		$neighbour = Lemuria::World()->getNeighbours($region)[$direction] ?? null;
@@ -64,6 +70,10 @@ trait TravelTrait
 						$this->message(TravelCanalMessage::class)->e($region);
 						return $neighbour;
 					}
+					if ($this->useAirshipEffect()) {
+						$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
+						return $neighbour;
+					}
 					$this->message(TravelAnchorMessage::class, $this->vessel)->p($direction)->p($anchor, TravelAnchorMessage::ANCHOR);
 					return null;
 				}
@@ -73,7 +83,7 @@ trait TravelTrait
 				return $neighbour;
 			}
 			if ($region->Landscape() instanceof Ocean) {
-				if (!$this->canSailTo($neighbour)) {
+				if (!$this->canSailTo($neighbour) && !$this->useAirshipEffect()) {
 					$this->message(TravelLandMessage::class, $this->vessel)->p($direction)->s($landscape)->e($neighbour);
 					return null;
 				}
@@ -82,6 +92,10 @@ trait TravelTrait
 			}
 			if ($this->canUseCanal($neighbour)) {
 				$this->message(TravelCanalMessage::class)->e($region);
+				return $neighbour;
+			}
+			if ($this->useAirshipEffect()) {
+				$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
 				return $neighbour;
 			}
 			$this->message(TravelOverLandMessage::class, $this->vessel)->p($direction);
@@ -257,5 +271,26 @@ trait TravelTrait
 		if (!Lemuria::Score()->find($effect->setUnit($this->unit))) {
 			Lemuria::Score()->add($effect);
 		}
+	}
+
+	private function useAirshipEffect(): bool {
+		$airship = $this->airshipEffect();
+		if ($airship) {
+			if ($this->hasTravelled && !$airship->continueEffect()) {
+				return false;
+			}
+			$this->airshipped = true;
+			return true;
+		}
+		return false;
+	}
+
+	private function airshipEffect(): ?Airship {
+		if ($this->airship === false) {
+			$effect        = new Airship(State::getInstance());
+			$effect        = Lemuria::Score()->find($effect->setVessel($this->vessel));
+			$this->airship = $effect instanceof Airship ? $effect : null;
+		}
+		return $this->airship;
 	}
 }

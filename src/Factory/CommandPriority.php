@@ -94,6 +94,11 @@ final class CommandPriority
 	];
 
 	/**
+	 * Priority of A-Effects.
+	 */
+	public final const AFTER_EFFECT = self::A_ACTION - 1;
+
+	/**
 	 * Priority of B-Events.
 	 */
 	private const B_ACTION = 2;

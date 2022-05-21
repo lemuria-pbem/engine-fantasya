@@ -36,6 +36,10 @@ final class AnyShip implements Ship
 		return 0;
 	}
 
+	public function Tare(): int {
+		return 0;
+	}
+
 	public function getCraft(): Requirement {
 		$talent = self::createTalent(Shipbuilding::class);
 		return new Requirement($talent, 0);
