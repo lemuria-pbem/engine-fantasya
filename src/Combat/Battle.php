@@ -46,6 +46,8 @@ class Battle
 
 	protected const WEAR_DIVISOR = self::WEAR_ROUNDS ** 2 / self::WEAR;
 
+	public int $counter;
+
 	/**
 	 * @var Unit[]
 	 */

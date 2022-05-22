@@ -28,6 +28,8 @@ class BattleLog implements BattleModel
 
 	private Region $region;
 
+	private int $counter;
+
 	/**
 	 * @var Party[]
 	 */
@@ -51,7 +53,8 @@ class BattleLog implements BattleModel
 
 	public function __construct(private ?Battle $battle = null) {
 		if ($battle) {
-			$this->region = $battle->Region();
+			$this->region  = $battle->Region();
+			$this->counter = $battle->counter;
 			foreach ($battle->Attacker() as $party) {
 				$this->parties[] = $party;
 			}
@@ -63,6 +66,10 @@ class BattleLog implements BattleModel
 
 	#[Pure] public function Location(): Location {
 		return $this->region;
+	}
+
+	public function Counter(): int {
+		return $this->counter;
 	}
 
 	/**
@@ -80,7 +87,7 @@ class BattleLog implements BattleModel
 		return $this->log[$this->index];
 	}
 
-	#[ArrayShape(['region' => "int", 'parties' => "array", 'messages' => "array"])]
+	#[ArrayShape(['region' => 'int', 'counter' => 'int', 'parties' => 'array', 'messages' => 'array'])]
 	public function serialize(): array {
 		$parties = [];
 		foreach ($this->parties as $party) {
@@ -90,12 +97,13 @@ class BattleLog implements BattleModel
 		foreach ($this->log as $message) {
 			$messages[] = $message->serialize();
 		}
-		return ['region' => $this->region->Id()->Id(), 'parties' => $parties, 'messages' => $messages];
+		return ['region' => $this->region->Id()->Id(), 'counter' => $this->counter, 'parties' => $parties, 'messages' => $messages];
 	}
 
 	public function unserialize(array $data): Serializable {
 		$this->validateSerializedData($data);
-		$this->region = Region::get(new Id($data['region']));
+		$this->region  = Region::get(new Id($data['region']));
+		$this->counter = $data['counter'];
 		foreach ($data['parties'] as $id) {
 			$this->parties[] = Party::get(new Id($id));
 		}
@@ -121,6 +129,7 @@ class BattleLog implements BattleModel
 	 */
 	protected function validateSerializedData(array &$data): void {
 		$this->validate($data, 'region', 'int');
+		$this->validate($data, 'counter', 'int');
 		$this->validate($data, 'parties', 'array');
 		foreach ($data['parties'] as $id) {
 			if (!is_int($id)) {
