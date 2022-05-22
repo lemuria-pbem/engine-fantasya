@@ -513,11 +513,13 @@ class Combat
 	protected function unsetFighterFeatures(): void {
 		foreach ($this->attacker as $rank) {
 			foreach ($rank as $combatant) {
+				$combatant->unsetFeatures([Feature::Shockwave]);
 				$combatant->unsetFeatures([Feature::GazeOfTheBasilisk]);
 			}
 		}
 		foreach ($this->defender as $rank) {
 			foreach ($rank as $combatant) {
+				$combatant->unsetFeatures([Feature::Shockwave]);
 				$combatant->unsetFeatures([Feature::GazeOfTheBasilisk]);
 			}
 		}
@@ -654,9 +656,8 @@ class Combat
 	protected function removeTheDead(Ranks $ranks): void {
 		foreach ($ranks as $combatants /* @var Rank $combatants */) {
 			foreach ($combatants as $c => $combatant /* @var Combatant $combatant */) {
-				$size                  = $combatant->Size();
-				$combatant->distracted = 0;
-				$combatant->hasCast    = false;
+				$size               = $combatant->Size();
+				$combatant->hasCast = false;
 				foreach ($combatant->fighters as $f => $fighter) {
 					if ($fighter->health <= 0) {
 						if ($fighter->potion instanceof HealingPotion) {

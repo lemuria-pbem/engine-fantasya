@@ -40,8 +40,6 @@ class Combatant
 	 */
 	public array $refugees = [];
 
-	public int $distracted = 0;
-
 	public bool $hasCast = false;
 
 	/**

@@ -131,7 +131,7 @@ class Attack
 			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' is not ready yet.');
 			return null;
 		}
-		if ($fA < $this->combatant->distracted) {
+		if ($attacker->hasFeature(Feature::Shockwave)) {
 			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' is distracted.');
 			return null;
 		}
@@ -163,7 +163,7 @@ class Attack
 		$defFighter = $defender->fighter($fD);
 		$shield     = $defender->Shield();
 		$block      = $defender->WeaponSkill()->Skill()->Level();
-		if ($fD < $defender->distracted) {
+		if ($defFighter->hasFeature(Feature::Shockwave)) {
 			$block = 0;
 		}
 		if ($defFighter->hasFeature(Feature::GazeOfTheBasilisk)) {

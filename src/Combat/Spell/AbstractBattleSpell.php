@@ -7,10 +7,13 @@ use JetBrains\PhpStorm\Pure;
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
+use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\CombatEffect;
+use Lemuria\Engine\Fantasya\Combat\Feature;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellCastMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellFailedMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellNoAuraMessage;
+use Lemuria\Engine\Fantasya\Combat\Rank;
 use Lemuria\Engine\Fantasya\Combat\Ranks;
 use Lemuria\Engine\Fantasya\Factory\MagicTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
@@ -128,5 +131,30 @@ abstract class AbstractBattleSpell
 		$this->grade->setReliability($reliability);
 
 		return $grade;
+	}
+
+	protected function featureFighters(Rank $combatants, int $fighters, Feature $feature): int {
+		foreach ($combatants as $combatant) {
+			if ($fighters <= 0) {
+				break;
+			}
+			$size  = $combatant->Size();
+			$next  = 0;
+			$count = 0;
+			while ($fighters > 0 && $next < $size) {
+				$fighter = $combatant->fighters[$next++];
+				if ($fighter->hasFeature($feature)) {
+					continue;
+				}
+				$fighter->setFeature($feature);
+				$fighters--;
+				$count++;
+			}
+			$this->featureFightersMessage($combatant, $count);
+		}
+		return $fighters;
+	}
+
+	protected function featureFightersMessage(Combatant $combatant, int $count): void {
 	}
 }
