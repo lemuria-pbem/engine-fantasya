@@ -229,6 +229,7 @@ class Combat
 
 	public function nextRound(): int {
 		$this->unsetExpiredCombatSpells();
+		$this->unsetFighterFeatures();
 		$this->everybodyTryToFlee();
 		if ($this->arrangeBattleRows()) {
 			$this->fleeFromBattle($this->attacker[Rank::REFUGEE], 'Attacker', true);
@@ -505,6 +506,19 @@ class Combat
 			foreach ($removal as $spell) {
 				$effects->offsetUnset($spell);
 				Lemuria::Log()->debug('Battle spell ' . $spell . ' has expired.');
+			}
+		}
+	}
+
+	protected function unsetFighterFeatures(): void {
+		foreach ($this->attacker as $rank) {
+			foreach ($rank as $combatant) {
+				$combatant->unsetFeatures([Feature::GazeOfTheBasilisk]);
+			}
+		}
+		foreach ($this->defender as $rank) {
+			foreach ($rank as $combatant) {
+				$combatant->unsetFeatures([Feature::GazeOfTheBasilisk]);
 			}
 		}
 	}

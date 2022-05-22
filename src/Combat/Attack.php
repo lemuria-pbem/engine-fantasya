@@ -5,6 +5,8 @@ namespace Lemuria\Engine\Fantasya\Combat;
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultBlockMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultPetrifiedMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\GazeOfTheBasiliskMessage;
 use Lemuria\Engine\Fantasya\Combat\Spell\StoneSkin;
 use Lemuria\Engine\Fantasya\Command\Apply\BerserkBlood as BerserkBloodEffect;
 use Lemuria\Model\Fantasya\BattleSpell;
@@ -20,6 +22,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Protection;
 use Lemuria\Model\Fantasya\Monster;
@@ -50,6 +53,8 @@ class Attack
 	protected const ATTACK_FAILURE = [
 		WarElephant::class => [Spear::class]
 	];
+
+	protected const BASILISK_WEAPON = [Warhammer::class, Catapult::class];
 
 	protected const WIND_EFFECT = [
 		Bow::class      => 1.0,
@@ -100,7 +105,13 @@ class Attack
 	}
 
 	public function perform(int $fA, Combatant $defender, int $fD): ?int {
-		$attacker    = $this->combatant->fighter($fA);
+		$attacker = $this->combatant->fighter($fA);
+		if ($attacker->hasFeature(Feature::GazeOfTheBasilisk)) {
+			BattleLog::getInstance()->add(new GazeOfTheBasiliskMessage($this->combatant->getId($fA, true)));
+			//Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA) . ' is petrified by Gaze of the Basilisk.');
+			return null;
+		}
+
 		$attacks     = 1;
 		$weapon      = $this->combatant->Weapon();
 		$weaponSkill = $this->combatant->WeaponSkill();
@@ -148,9 +159,17 @@ class Attack
 			}
 		}
 
-		$armor    = $this->combatant->Armor();
-		$shield   = $defender->Shield();
-		$block    = $fD < $defender->distracted ? 0 : $defender->WeaponSkill()->Skill()->Level();
+		$armor      = $this->combatant->Armor();
+		$defFighter = $defender->fighter($fD);
+		$shield     = $defender->Shield();
+		$block      = $defender->WeaponSkill()->Skill()->Level();
+		if ($fD < $defender->distracted) {
+			$block = 0;
+		}
+		if ($defFighter->hasFeature(Feature::GazeOfTheBasilisk)) {
+			$block  = 0;
+			$shield = null;
+		}
 		$hasBonus = null;
 		if ($attacker->potion instanceof BerserkBlood) {
 			$hasBonus = true;
@@ -162,9 +181,16 @@ class Attack
 		for ($i = 0; $i < $attacks; $i++) {
 			if ($this->isSuccessful($skill, $block, $armor, $shield, $hasBonus)) {
 				// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' hits enemy ' . $defender->getId($fD, true) . '.');
+				if ($defFighter->hasFeature(Feature::GazeOfTheBasilisk)) {
+					if (!in_array($attWeapon, [Warhammer::class, Catapult::class])) {
+						//Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' cannot hurt ' . $defender->getId($fD, true) . ' who is protected by Gaze of the Basilisk.');
+						BattleLog::getInstance()->add(new AssaultPetrifiedMessage($this->combatant->getId($fA, true), $defender->getId($fD)));
+						return null;
+					}
+				}
 				$race    = $defender->Unit()->Race();
 				$block   = $race instanceof Monster ? $race->Block() : 0;
-				$block  += $defender->fighter($fD)->hasFeature(Feature::StoneSkin) ? StoneSkin::BLOCK : 0;
+				$block  += $defFighter->hasFeature(Feature::StoneSkin) ? StoneSkin::BLOCK : 0;
 				$armor   = $defender->Armor();
 				$damage += $this->calculateDamage($weapon, $skill, $block, $armor, $shield);
 			}

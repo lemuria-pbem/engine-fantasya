@@ -248,6 +248,14 @@ class Combatant
 		return $newCombatant;
 	}
 
+	public function unsetFeatures(array $features): void {
+		foreach ($features as $feature) {
+			foreach (array_keys($this->fighters) as $i) {
+				$this->fighters[$i]->setFeature($feature, false);
+			}
+		}
+	}
+
 	protected function initWeaponSkill(): void {
 		if ($this->distribution) {
 			$this->weaponSkill = $this->getWeaponSkill();

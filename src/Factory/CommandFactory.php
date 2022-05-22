@@ -227,6 +227,7 @@ use Lemuria\Model\Fantasya\Spell\Earthquake;
 use Lemuria\Model\Fantasya\Spell\ElementalBeing;
 use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
+use Lemuria\Model\Fantasya\Spell\GazeOfTheBasilisk;
 use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
 use Lemuria\Model\Fantasya\Spell\GhostEnemy;
 use Lemuria\Model\Fantasya\Spell\GustOfWind;
@@ -633,6 +634,7 @@ class CommandFactory
 		'Aufruhr verursachen'     => CivilCommotion::class,
 		'Auratransfer'            => AuraTransfer::class,
 		'Beschleunigung'          => Quickening::class,
+		'Blick des Basilisken'    => GazeOfTheBasilisk::class,
 		'Blick des Greifen'       => GazeOfTheGriffin::class,
 		'Elementarwesen'          => ElementalBeing::class,
 		'Erdbeben'                => Earthquake::class,

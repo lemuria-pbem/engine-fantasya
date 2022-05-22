@@ -5,11 +5,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Verbesserungen und Fehler
 
 
-## Neue Funktionen
-
-- weitere Zauber:
-  - Blick des Basilisken (9) (Kampfzauber)
-
 ### Version 1.0
 
 - Textreport im Markdown-Format
@@ -19,7 +14,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 - Generische Typen ergänzen
 - Monolog-Upgrade auf 3.0 + Anpassungen (Webseite: Symfony 6.1)
 
-## Ideen
+### Ideen
 
 - neue Gebäude, die Arbeitsplätze verdoppeln
   - Gebirge: Pilzhöhle

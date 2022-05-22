@@ -10,24 +10,19 @@ use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Talent\Magic;
 use Lemuria\Model\Fantasya\Unit;
 
-class StoneSkin extends AbstractBattleSpell
+class GazeOfTheBasilisk extends AbstractBattleSpell
 {
-	public final const ATTACK_MALUS = 1;
-
-	public final const BLOCK = 3;
-
 	public function cast(Unit $unit): int {
 		$grade = parent::cast($unit);
 		if ($grade > 0) {
 			$calculus = new Calculus($unit);
 			$level    = $calculus->knowledge(Magic::class)->Level();
-			$spell    = $this->grade->Spell()->Difficulty();
-			$fighters = (int)floor($grade * $level / $spell);
+			$fighters = $grade * $level;
 
-			$fighters = $this->armorFighters($this->victim[BattleRow::FRONT->value], $fighters);
-			$fighters = $this->armorFighters($this->victim[BattleRow::BACK->value], $fighters);
-			$fighters = $this->armorFighters($this->victim[BattleRow::BYSTANDER->value], $fighters);
-			$this->armorFighters($this->victim[BattleRow::REFUGEE->value], $fighters);
+			$fighters = $this->stoneFighters($this->victim[BattleRow::FRONT->value], $fighters);
+			$fighters = $this->stoneFighters($this->victim[BattleRow::BACK->value], $fighters);
+			$fighters = $this->stoneFighters($this->victim[BattleRow::BYSTANDER->value], $fighters);
+			$this->stoneFighters($this->victim[BattleRow::REFUGEE->value], $fighters);
 		}
 		return $grade;
 	}
@@ -35,7 +30,7 @@ class StoneSkin extends AbstractBattleSpell
 	/**
 	 * @noinspection DuplicatedCode
 	 */
-	protected function armorFighters(Rank $combatants, int $fighters): int {
+	protected function stoneFighters(Rank $combatants, int $fighters): int {
 		foreach ($combatants as $combatant) {
 			if ($fighters <= 0) {
 				break;
@@ -45,14 +40,14 @@ class StoneSkin extends AbstractBattleSpell
 			$count = 0;
 			while ($fighters > 0 && $next < $size) {
 				$fighter = $combatant->fighters[$next++];
-				if ($fighter->hasFeature(Feature::StoneSkin)) {
+				if ($fighter->hasFeature(Feature::GazeOfTheBasilisk)) {
 					continue;
 				}
-				$fighter->setFeature(Feature::StoneSkin);
+				$fighter->setFeature(Feature::GazeOfTheBasilisk);
 				$fighters--;
 				$count++;
 			}
-			Lemuria::Log()->debug($count . ' fighters of combatant ' . $combatant->Id() . ' receive StoneSkin.');
+			Lemuria::Log()->debug($count . ' fighters of combatant ' . $combatant->Id() . ' receive GazeOfTheBasilisk.');
 		}
 		return $fighters;
 	}

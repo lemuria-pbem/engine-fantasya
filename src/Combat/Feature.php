@@ -10,4 +10,6 @@ enum Feature : int
 	public final const SIZE = 256;
 
 	case StoneSkin = 1;
+
+	case GazeOfTheBasilisk = 2;
 }
