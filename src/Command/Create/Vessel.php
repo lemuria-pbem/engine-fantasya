@@ -17,6 +17,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\VesselResourcesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselSpaceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselUnableMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\VesselFinishedMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
@@ -97,6 +98,8 @@ final class Vessel extends AbstractProduct
 				if ($vessel->Completion() === 1.0) {
 					$this->message(VesselFinishedMessage::class, $vessel);
 					$this->preventDefault();
+				} else {
+					$this->newDefault = new Vessel(new Phrase('MACHEN Schiff ' . $vessel->Id()), $this->context, $this->job);
 				}
 			} else {
 				if ($this->capability > 0) {

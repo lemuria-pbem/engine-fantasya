@@ -4,10 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen und Fehler
 
-- Kampfbericht in HTML-Report verlinken
-- prüfen: Preisveränderung Angebot hat richtige Farbe
-- viele Fehler in Magellan
-- nach MACHEN Karavelle Default-Befehl zum Weiterbauen geben
 
 ## Neue Funktionen
 
