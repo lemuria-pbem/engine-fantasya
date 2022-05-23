@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Exception;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Consumer;
 use Lemuria\Model\Fantasya\Region;
 
@@ -15,7 +13,7 @@ class AllocationException extends \InvalidArgumentException
 	/**
 	 * Create an exception for a Consumer that was not considered in an allocation.
 	 */
-	#[Pure] public function __construct(Consumer $consumer, Region $region) {
+	public function __construct(Consumer $consumer, Region $region) {
 		$message = 'The consumer ' . $consumer->getId() . ' is not part of allocation in region ' . $region->Id() . '.';
 		parent::__construct($message);
 	}

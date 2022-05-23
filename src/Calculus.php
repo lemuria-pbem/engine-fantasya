@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Combat\WeaponSkill;
 use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Teach;
@@ -89,7 +87,7 @@ final class Calculus
 	/**
 	 * Get student status.
 	 */
-	#[Pure] public function getStudent(): ?Learn {
+	public function getStudent(): ?Learn {
 		return $this->student;
 	}
 
@@ -98,7 +96,7 @@ final class Calculus
 	 *
 	 * @return array(int=>Teach)
 	 */
-	#[Pure] public function getTeachers(): array {
+	public function getTeachers(): array {
 		return $this->teachers;
 	}
 
@@ -423,7 +421,7 @@ final class Calculus
 		return $existing?->Potion() === $potion ? $existing : null;
 	}
 
-	#[Pure] public function hunger(Unit $unit, float $currentHunger = 0.0): int {
+	public function hunger(Unit $unit, float $currentHunger = 0.0): int {
 		$health = $unit->Health();
 		if ($health >= 0.9) {
 			$factor = $currentHunger < 0.5 ? 1.1 : 1.2;
@@ -460,7 +458,7 @@ final class Calculus
 		return false;
 	}
 
-	#[Pure] private function transport(?Item $quantity, int $reduceBy = 0): int {
+	private function transport(?Item $quantity, int $reduceBy = 0): int {
 		$transport = $quantity?->getObject();
 		if ($transport instanceof Transport) {
 			return max($quantity->Count() - $reduceBy, 0) * $transport->Payload();
@@ -468,7 +466,7 @@ final class Calculus
 		return 0;
 	}
 
-	#[Pure] private function weight(int $total, array $goods): int {
+	private function weight(int $total, array $goods): int {
 		foreach ($goods as $quantity /* @var Quantity $quantity */) {
 			if ($quantity) {
 				$total -= $quantity->Weight();
@@ -477,7 +475,7 @@ final class Calculus
 		return $total;
 	}
 
-	#[Pure] private function speed(array $transports, int $speed = PHP_INT_MAX): int {
+	private function speed(array $transports, int $speed = PHP_INT_MAX): int {
 		foreach ($transports as $item /* @var Item $item */) {
 			$transport = $item?->getObject();
 			if ($transport instanceof Transport) {
@@ -489,9 +487,8 @@ final class Calculus
 
 	/**
 	 * @noinspection PhpMissingBreakStatementInspection
-	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
 	 */
-	#[Pure] private function talent(array $transports, int $size, bool $max = false, int $carriage = 0): int {
+	private function talent(array $transports, int $size, bool $max = false, int $carriage = 0): int {
 		$talent = 0;
 		foreach ($transports as $item /* @var Item $item */) {
 			if ($item) {

@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
@@ -31,8 +28,7 @@ final class FarsightEffect extends AbstractRegionEffect
 		return $this->parties;
 	}
 
-	#[ArrayShape(['class' => "string", 'id' => "int", 'parties' => "int[]"])]
-	#[Pure] public function serialize(): array {
+	public function serialize(): array {
 		$data            = parent::serialize();
 		$data['parties'] = $this->parties->serialize();
 		return $data;
@@ -44,7 +40,7 @@ final class FarsightEffect extends AbstractRegionEffect
 		return $this;
 	}
 
-	#[Pure] public function getPerception(Party $party): int {
+	public function getPerception(Party $party): int {
 		$id = $party->Id()->Id();
 		return $this->perception[$id] ?? 0;
 	}

@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Move;
 use Lemuria\Lemuria;
@@ -39,14 +37,14 @@ class Parser
 	/**
 	 * Check if parser has more commands.
 	 */
-	#[Pure] public function hasMore(): bool {
+	public function hasMore(): bool {
 		return $this->index < $this->count;
 	}
 
 	/**
 	 * Check if current command shall be skipped.
 	 */
-	#[Pure] public function isSkip(): bool {
+	public function isSkip(): bool {
 		return $this->skipLevel > 0;
 	}
 

@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
@@ -14,7 +11,7 @@ abstract class AbstractSplitWeaponMessage extends AbstractSplitMessage
 {
 	protected string $weapon;
 
-	#[Pure] public function __construct(protected ?Entity $unit = null, ?Combatant $from = null, ?Combatant $to = null,
+	public function __construct(protected ?Entity $unit = null, ?Combatant $from = null, ?Combatant $to = null,
 										protected ?int    $count = null, protected ?int $battleRow = null) {
 		parent::__construct($unit, $from, $to, $count, $battleRow);
 		if ($to) {
@@ -28,8 +25,7 @@ abstract class AbstractSplitWeaponMessage extends AbstractSplitMessage
 		return $this;
 	}
 
-	#[ArrayShape(['unit' => 'int', 'name' => 'string', 'from' => 'string', 'to' => 'string', 'count' => 'int', 'battleRow' => 'int', 'weapon' => 'string'])]
-	#[Pure] protected function getParameters(): array {
+	protected function getParameters(): array {
 		$parameters           = parent::getParameters();
 		$parameters['weapon'] = $this->weapon;
 		return $parameters;

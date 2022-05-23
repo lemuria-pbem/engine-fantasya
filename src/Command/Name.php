@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Construction\NameConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\NameOwnerMessage;
@@ -91,7 +89,7 @@ final class Name extends UnitCommand
 		}
 	}
 
-	#[Pure] protected function checkSize(): bool {
+	protected function checkSize(): bool {
 		return true;
 	}
 

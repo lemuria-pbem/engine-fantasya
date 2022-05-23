@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Trespass;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\FreeSpaceTrait;
@@ -90,7 +88,7 @@ final class Enter extends UnitCommand
 		$this->message(EnterMessage::class)->e($newConstruction);
 	}
 
-	#[Pure] protected function checkSize(): bool {
+	protected function checkSize(): bool {
 		return true;
 	}
 }

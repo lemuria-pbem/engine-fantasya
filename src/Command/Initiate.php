@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Factory\ActionTrait;
@@ -113,7 +111,7 @@ final class Initiate implements Command
 		$this->id = AbstractCommand::id();
 	}
 
-	#[Pure] public function __toString(): string {
+	public function __toString(): string {
 		return 'INITIATE ' . $this->newcomer->Uuid();
 	}
 
@@ -135,11 +133,11 @@ final class Initiate implements Command
 		return $this;
 	}
 
-	#[Pure] public function getId(): int {
+	public function getId(): int {
 		return $this->id;
 	}
 
-	#[Pure] public function getDelegate(): Command {
+	public function getDelegate(): Command {
 		return $this;
 	}
 

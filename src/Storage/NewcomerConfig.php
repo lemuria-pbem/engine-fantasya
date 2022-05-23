@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Storage;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Model\Game;
 use Lemuria\Statistics;
 
@@ -16,7 +14,7 @@ class NewcomerConfig extends LemuriaConfig
 		return new NewcomerGame($this);
 	}
 
-	#[Pure] public function Statistics(): Statistics {
+	public function Statistics(): Statistics {
 		return new NewcomerStatistics();
 	}
 

@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Message\Construction\UnmaintainedMessage;
@@ -203,7 +201,7 @@ final class Upkeep extends AbstractEvent
 		return $help;
 	}
 
-	#[Pure] private function isOvercrowded(Construction $construction): bool {
+	private function isOvercrowded(Construction $construction): bool {
 		$neededSize = $construction->Inhabitants()->Size() * $construction->Building()->UsefulSize();
 		return $construction->Size() < $neededSize;
 	}

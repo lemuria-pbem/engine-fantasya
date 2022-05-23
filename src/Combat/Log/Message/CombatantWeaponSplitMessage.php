@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Serializable;
 
@@ -16,7 +13,7 @@ class CombatantWeaponSplitMessage extends AbstractMessage
 
 	protected string $newCombatant;
 
-	#[Pure] public function __construct(?Combatant $combatant = null, protected ?int $count = null,
+	public function __construct(?Combatant $combatant = null, protected ?int $count = null,
 										?Combatant $newCombatant = null) {
 		if ($combatant) {
 			$this->combatant = $combatant->Id();
@@ -26,7 +23,7 @@ class CombatantWeaponSplitMessage extends AbstractMessage
 		}
 	}
 
-	#[Pure] public function getDebug(): string {
+	public function getDebug(): string {
 		return 'Combatant ' . $this->combatant . ' sends ' . $this->count . ' fighters to the new combatant ' . $this->newCombatant . '.';
 	}
 
@@ -38,8 +35,7 @@ class CombatantWeaponSplitMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['combatant' => 'string', 'count' => 'int', 'newCombatant' => 'string'])]
-	#[Pure] protected function getParameters(): array {
+	protected function getParameters(): array {
 		return ['combatant' => $this->combatant, 'count' => $this->count, 'newCombatant' => $this->newCombatant];
 	}
 

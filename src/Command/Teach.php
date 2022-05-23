@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
@@ -50,7 +48,7 @@ final class Teach extends UnitCommand implements Activity
 	/**
 	 * Get learning bonus.
 	 */
-	#[Pure] public function getBonus(): float {
+	public function getBonus(): float {
 		return $this->bonus;
 	}
 

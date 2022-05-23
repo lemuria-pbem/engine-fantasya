@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Exception\CommerceException;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
 use Lemuria\Engine\Fantasya\Factory\Supply;
@@ -58,7 +56,7 @@ final class Commerce
 		$this->silver   = self::createCommodity(Silver::class);
 	}
 
-	#[Pure] public function Region(): Region {
+	public function Region(): Region {
 		return $this->region;
 	}
 

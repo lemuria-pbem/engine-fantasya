@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
 
@@ -44,7 +42,7 @@ class Capacity
 	 * @param array|int $talent
 	 * @param int $walkSpeed
 	 */
-	#[Pure] public function __construct(private readonly int $walk, private readonly int $ride,
+	public function __construct(private readonly int $walk, private readonly int $ride,
 		                                private readonly string $movement,
 		                                private readonly int $weight, readonly private int $speed,
 		                                mixed $talent = 0, int $walkSpeed = 0) {

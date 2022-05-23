@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Context;
@@ -39,7 +36,7 @@ abstract class AbstractEffect implements Effect
 		return false;
 	}
 
-	#[Pure] public function Id(): Id {
+	public function Id(): Id {
 		return $this->id;
 	}
 
@@ -51,7 +48,7 @@ abstract class AbstractEffect implements Effect
 	/**
 	 * Get action as string.
 	 */
-	#[Pure] public function __toString(): string {
+	public function __toString(): string {
 		return 'Effect[' . $this->getPriority() . '] ' . getClass($this);
 	}
 
@@ -77,8 +74,7 @@ abstract class AbstractEffect implements Effect
 		return $this;
 	}
 
-	#[ArrayShape(['class' => "string", 'id' => "int"])]
-	#[Pure] public function serialize(): array {
+	public function serialize(): array {
 		return ['class' => getClass($this), 'id' => $this->id->Id()];
 	}
 

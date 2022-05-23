@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\CountableTrait;
 use Lemuria\Engine\Combat\Battle as BattleModel;
 use Lemuria\Engine\Fantasya\Combat\Log\LemuriaMessage;
@@ -64,7 +61,7 @@ class BattleLog implements BattleModel
 		}
 	}
 
-	#[Pure] public function Location(): Location {
+	public function Location(): Location {
 		return $this->region;
 	}
 
@@ -87,7 +84,6 @@ class BattleLog implements BattleModel
 		return $this->log[$this->index];
 	}
 
-	#[ArrayShape(['region' => 'int', 'counter' => 'int', 'parties' => 'array', 'messages' => 'array'])]
 	public function serialize(): array {
 		$parties = [];
 		foreach ($this->parties as $party) {

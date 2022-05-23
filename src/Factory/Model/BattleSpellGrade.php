@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Combat\Combat;
 use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\SpellGrade;
@@ -15,11 +13,11 @@ class BattleSpellGrade
 	public function __construct(protected readonly SpellGrade $spellGrade, protected readonly Combat $combat) {
 	}
 
-	#[Pure] public function Spell(): BattleSpell {
+	public function Spell(): BattleSpell {
 		return $this->spellGrade->Spell();
 	}
 
-	#[Pure] public function Level(): int {
+	public function Level(): int {
 		return $this->spellGrade->Level();
 	}
 

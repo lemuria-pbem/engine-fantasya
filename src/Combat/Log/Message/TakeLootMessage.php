@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -20,7 +17,7 @@ class TakeLootMessage extends AbstractMessage
 
 	protected Entity $unit;
 
-	#[Pure] public function __construct(?Unit $unit = null, protected ?Quantity $loot = null) {
+	public function __construct(?Unit $unit = null, protected ?Quantity $loot = null) {
 		if ($unit) {
 			$this->unit = new Entity($unit);
 		}
@@ -37,8 +34,7 @@ class TakeLootMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['unit' => 'int', 'name' => 'string', 'commodity' => 'string', 'count' => 'int'])]
-	#[Pure]	protected function getParameters(): array {
+		protected function getParameters(): array {
 		return ['unit'      => $this->unit->id->Id(),              'name'  => $this->unit->name,
 			    'commodity' => getClass($this->loot->Commodity()), 'count' => $this->loot->Count()];
 	}

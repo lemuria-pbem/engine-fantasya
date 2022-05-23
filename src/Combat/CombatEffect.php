@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
 use Lemuria\Item;
 use Lemuria\Model\Fantasya\BattleSpell;
@@ -14,17 +12,17 @@ class CombatEffect extends Item
 
 	private int $duration = PHP_INT_MAX;
 
-	#[Pure] public function __construct(BattleSpell $spell, int $points) {
+	public function __construct(BattleSpell $spell, int $points) {
 		parent::__construct($spell, $points);
 	}
 
-	#[Pure] public function Spell(): BattleSpell {
+	public function Spell(): BattleSpell {
 		/** @var BattleSpell $spell */
 		$spell = $this->getObject();
 		return $spell;
 	}
 
-	#[Pure] public function Points(): int {
+	public function Points(): int {
 		return $this->Count();
 	}
 

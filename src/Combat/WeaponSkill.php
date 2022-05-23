@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Talent;
@@ -73,54 +71,44 @@ class WeaponSkill
 		self::initTalents();
 	}
 
-	#[Pure] public function Skill(): Ability {
+	public function Skill(): Ability {
 		return $this->skill;
 	}
 
 	/**
 	 * Check if weapon skill is suitable for short distance combat.
-	 *
-	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
 	 */
-	#[Pure] public function isMelee(): bool {
+	public function isMelee(): bool {
 		$talent = $this->skill->Talent();
 		return $talent === self::$bladefighting || $talent === self::$spearfighting || $talent === self::$riding;
 	}
 
 	/**
 	 * Check if weapon skill is suitable for long distance combat.
-	 *
-	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
 	 */
-	#[Pure] public function isDistant(): bool {
+	public function isDistant(): bool {
 		$talent = $this->skill->Talent();
 		return $talent === self::$archery || $talent === self::$crossbowing || $talent === self::$catapulting;
 	}
 
 	/**
 	 * Check if weapon skill is suitable for guards or tax collectors.
-	 *
-	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
 	 */
-	#[Pure] public function isGuard(): bool {
+	public function isGuard(): bool {
 		return !$this->isUnarmed() && !$this->isSiege() && $this->skill->Talent() !== self::$riding;
 	}
 
 	/**
 	 * Check if weapon skill is suitable for siege.
-	 *
-	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
 	 */
-	#[Pure] public function isSiege(): bool {
+	public function isSiege(): bool {
 		return $this->skill->Talent() === self::$catapulting;
 	}
 
 	/**
 	 * Check if weapon skill is unarmed.
-	 *
-	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
 	 */
-	#[Pure] public function isUnarmed(): bool {
+	public function isUnarmed(): bool {
 		$talent = $this->skill->Talent();
 		return $talent === self::$fistfight || $talent === self::$stoning;
 	}

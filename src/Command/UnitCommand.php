@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Calculus;
@@ -33,11 +31,11 @@ abstract class UnitCommand extends AbstractCommand
 		$this->unit = $context->Unit();
 	}
 
-	#[Pure] public function Phrase(): Phrase {
+	public function Phrase(): Phrase {
 		return $this->phrase;
 	}
 
-	#[Pure] public function Unit(): Unit {
+	public function Unit(): Unit {
 		return $this->unit;
 	}
 
@@ -65,7 +63,7 @@ abstract class UnitCommand extends AbstractCommand
 	/**
 	 * Get command as string.
 	 */
-	#[Pure] public function __toString(): string {
+	public function __toString(): string {
 		return '[' . $this->unit->Id() . '] ' . parent::__toString();
 	}
 
@@ -87,7 +85,7 @@ abstract class UnitCommand extends AbstractCommand
 		}
 	}
 
-	#[Pure] protected function checkSize(): bool {
+	protected function checkSize(): bool {
 		return $this->unit->Size() > 0;
 	}
 

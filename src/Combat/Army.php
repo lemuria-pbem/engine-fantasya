@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Command\Apply\ElixirOfPower as ElixirOfPowerEffect;
 use Lemuria\Engine\Fantasya\Effect\PotionEffect;
@@ -87,7 +85,7 @@ class Army
 	/**
 	 * @return Combatant[]
 	 */
-	#[Pure] public function getCombatants(Unit $unit): array {
+	public function getCombatants(Unit $unit): array {
 		$combatants = [];
 		foreach ($this->combatants as $combatant) {
 			if ($combatant->Unit() === $unit) {
@@ -145,7 +143,7 @@ class Army
 		return null;
 	}
 
-	#[Pure] protected function getPotionFighters(PotionEffect $effect): int {
+	protected function getPotionFighters(PotionEffect $effect): int {
 		$potion = $effect->Potion();
 		if ($potion instanceof BerserkBlood) {
 			return $effect->Count() * BerserkBlood::PERSONS;

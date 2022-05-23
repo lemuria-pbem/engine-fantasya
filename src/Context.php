@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Combat\Besieger;
 use Lemuria\Engine\Fantasya\Combat\Campaign;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
@@ -48,7 +46,7 @@ final class Context implements Reassignment
 	 */
 	private array $sieges = [];
 
-	#[Pure] public function __construct(private readonly State $state) {
+	public function __construct(private readonly State $state) {
 		$this->parser  = new Parser();
 		$this->factory = new CommandFactory($this);
 	}
@@ -80,11 +78,11 @@ final class Context implements Reassignment
 	/**
 	 * Get the command factory.
 	 */
-	#[Pure] public function Factory(): CommandFactory {
+	public function Factory(): CommandFactory {
 		return $this->factory;
 	}
 
-	#[Pure] public function Parser(): Parser {
+	public function Parser(): Parser {
 		return $this->parser;
 	}
 
@@ -175,7 +173,7 @@ final class Context implements Reassignment
 	/**
 	 * Check if a unit is travelling.
 	 */
-	#[Pure] public function isTravelling(Unit $unit): bool {
+	public function isTravelling(Unit $unit): bool {
 		return $this->state->isTravelling && $this->state->getTravelRoute($unit) !== null;
 	}
 
@@ -208,7 +206,7 @@ final class Context implements Reassignment
 	/**
 	 * Get the casts queue.
 	 */
-	#[Pure] public function getCasts(): Casts {
+	public function getCasts(): Casts {
 		return $this->state->getCasts();
 	}
 

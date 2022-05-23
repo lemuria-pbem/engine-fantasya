@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Apply;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Command\Use\Apply;
 use Lemuria\Engine\Fantasya\Factory\ActionTrait;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
@@ -21,7 +19,7 @@ final class WaterOfLife extends AbstractUnitApply
 	use BuilderTrait;
 	use CollectTrait;
 
-	#[Pure] public function __construct(Apply $apply) {
+	public function __construct(Apply $apply) {
 		parent::__construct($apply);
 		$this->context = $apply->Context();
 	}

@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Engine\Fantasya\Priority;
@@ -38,8 +35,7 @@ final class PotionReserve extends AbstractConstructionEffect
 	/**
 	 * @noinspection DuplicatedCode
 	 */
-	#[ArrayShape(['class' => "string", 'id' => "int", 'potions' => "array"])]
-	#[Pure] public function serialize(): array {
+	public function serialize(): array {
 		$data    = parent::serialize();
 		$potions = [];
 		foreach ($this->potions as $class => $count) {
@@ -76,11 +72,11 @@ final class PotionReserve extends AbstractConstructionEffect
 		return $potions;
 	}
 
-	#[Pure] public function hasPotion(Potion $potion): bool {
+	public function hasPotion(Potion $potion): bool {
 		return $this->getCount($potion) > 0;
 	}
 
-	#[Pure] public function getCount(Potion $potion): int {
+	public function getCount(Potion $potion): int {
 		return $this->potions[getClass($potion)] ?? 0;
 	}
 

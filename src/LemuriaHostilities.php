@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Combat\Battle;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
 use Lemuria\Engine\Hostilities;
@@ -33,7 +31,7 @@ class LemuriaHostilities implements Hostilities
 	/**
 	 * Search for the battle in a location where a specific entity is engaged.
 	 */
-	#[Pure] public function find(Location $location, Identifiable $entity): ?Battle {
+	public function find(Location $location, Identifiable $entity): ?Battle {
 		$id = $this->regionParty[$location->Id()->Id()][$entity->Id()->Id()] ?? null;
 		return $id ? $this->logs[$id] : null;
 	}
@@ -43,7 +41,7 @@ class LemuriaHostilities implements Hostilities
 	 *
 	 * @return Battle[]
 	 */
-	#[Pure] public function findAll(Location $location): array {
+	public function findAll(Location $location): array {
 		$id = $location->Id()->Id();
 		if (isset($this->regionParty[$id])) {
 			$logs = [];
@@ -62,7 +60,7 @@ class LemuriaHostilities implements Hostilities
 	 *
 	 * @return Battle[]
 	 */
-	#[Pure] public function findFor(Identifiable $entity): array {
+	public function findFor(Identifiable $entity): array {
 		$id = $entity->Id()->Id();
 		if (isset($this->party[$id])) {
 			$logs = [];

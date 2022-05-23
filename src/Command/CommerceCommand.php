@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
@@ -72,7 +70,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	/**
 	 * Get the resources this merchant wants to trade.
 	 */
-	#[Pure] public function getGoods(): Resources {
+	public function getGoods(): Resources {
 		return $this->goods;
 	}
 
@@ -193,7 +191,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 		return $quantity;
 	}
 
-	#[Pure] protected function cost(): Quantity {
+	protected function cost(): Quantity {
 		return new Quantity($this->silver, $this->cost);
 	}
 }

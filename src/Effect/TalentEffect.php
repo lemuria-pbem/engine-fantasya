@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
@@ -25,8 +22,7 @@ final class TalentEffect extends AbstractUnitEffect
 		return $this->modifications;
 	}
 
-	#[ArrayShape(['class' => "string", 'id' => "int", 'modifications' => "array"])]
-	#[Pure] public function serialize(): array {
+	public function serialize(): array {
 		$data = parent::serialize();
 		$data['modifications'] = $this->modifications->serialize();
 		return $data;

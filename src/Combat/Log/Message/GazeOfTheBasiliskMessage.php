@@ -2,19 +2,16 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Serializable;
 
 class GazeOfTheBasiliskMessage extends AbstractMessage
 {
 	protected array $simpleParameters = ['attacker'];
 
-	#[Pure] public function __construct(protected ?string $attacker = null) {
+	public function __construct(protected ?string $attacker = null) {
 	}
 
-	#[Pure] public function getDebug(): string {
+	public function getDebug(): string {
 		return $this->attacker . ' is petrified by Gaze of the Basilisk.';
 	}
 
@@ -24,8 +21,7 @@ class GazeOfTheBasiliskMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['attacker' => 'string'])]
-	#[Pure] protected function getParameters(): array {
+	protected function getParameters(): array {
 		return ['attacker' => $this->attacker];
 	}
 

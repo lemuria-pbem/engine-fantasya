@@ -3,8 +3,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Command\Exception\TempUnitException;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Context;
@@ -102,7 +100,7 @@ final class Temp extends UnitCommand implements Immediate
 	/**
 	 * Get TEMP number.
 	 */
-	#[Pure] public function getTempNumber(): string {
+	public function getTempNumber(): string {
 		return strtolower($this->phrase->getParameter(2));
 	}
 

@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Message\Region\UnemploymentMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
@@ -28,8 +25,7 @@ final class Unemployment extends AbstractRegionEffect
 		return $this;
 	}
 
-	#[ArrayShape(['class' => "string", 'id' => "int", 'peasants' => "int"])]
-	#[Pure] public function serialize(): array {
+	public function serialize(): array {
 		$data = parent::serialize();
 		$data['peasants'] = $this->peasants;
 		return $data;

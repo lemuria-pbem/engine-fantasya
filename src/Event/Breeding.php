@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\PotionReserve;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
@@ -76,7 +74,7 @@ final class Breeding extends AbstractEvent
 		}
 	}
 
-	#[Pure] private function countStock(Construction $construction, Animal $animal): int {
+	private function countStock(Construction $construction, Animal $animal): int {
 		$stock = 0;
 		foreach ($construction->Inhabitants() as $unit /* @var Unit $unit */) {
 			$inventory = $unit->Inventory();

@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Spell;
 
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
@@ -37,7 +35,7 @@ abstract class AbstractBattleSpell
 	public function __construct(protected BattleSpellGrade $grade) {
 	}
 
-	#[Pure] public function Spell(): BattleSpell {
+	public function Spell(): BattleSpell {
 		return $this->grade->Spell();
 	}
 
@@ -105,7 +103,8 @@ abstract class AbstractBattleSpell
 
 	protected function getCombatEffect(BattleSpell $spell, ?Ranks $side = null): ?CombatEffect {
 		if ($side) {
-			$effect = $side->Effects()[$spell];
+			$effects = $side->Effects();
+			$effect = $effects[$spell];
 			return $effect instanceof CombatEffect ? $effect : null;
 		}
 		return $this->grade->Combat()->getEffect($spell);

@@ -4,7 +4,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen und Fehler
 
-
 ### Version 1.0
 
 - Textreport im Markdown-Format
