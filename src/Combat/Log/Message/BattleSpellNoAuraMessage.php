@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -19,7 +16,7 @@ class BattleSpellNoAuraMessage extends AbstractMessage
 
 	protected array $simpleParameters = ['unit'];
 
-	#[Pure] public function __construct(?Unit $unit = null, protected ?BattleSpell $spell = null) {
+	public function __construct(?Unit $unit = null, protected ?BattleSpell $spell = null) {
 		if ($unit) {
 			$this->unit = new Entity($unit);
 		}
@@ -38,8 +35,7 @@ class BattleSpellNoAuraMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['unit' => 'int', 'name' => 'string', 'spell' => 'string'])]
-	#[Pure] protected function getParameters(): array {
+	protected function getParameters(): array {
 		return ['unit' => $this->unit->id->Id(), 'name' => $this->unit->name, 'spell' => $this->spell];
 	}
 

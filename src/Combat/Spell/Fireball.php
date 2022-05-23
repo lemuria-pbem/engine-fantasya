@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Spell;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
@@ -67,10 +65,7 @@ class Fireball extends AbstractBattleSpell
 		return $victims;
 	}
 
-	/**
-	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
-	 */
-	#[Pure] protected function calculateDamage(Combatant $combatant, int $damage): int {
+	protected function calculateDamage(Combatant $combatant, int $damage): int {
 		$armor  = $combatant->Armor();
 		$shield = $combatant->Shield();
 		if ($armor && isset(self::PROTECTION[$armor::class])) {

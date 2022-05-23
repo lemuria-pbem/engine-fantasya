@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Message\Region\SignpostDecayMessage;
 use Lemuria\Engine\Fantasya\Priority;
@@ -27,8 +24,7 @@ final class SignpostEffect extends AbstractConstructionEffect
 		return $this->age;
 	}
 
-	#[ArrayShape(['class' => 'string', 'id' => "int", 'age' => 'int'])]
-	#[Pure] public function serialize(): array {
+	public function serialize(): array {
 		$data        = parent::serialize();
 		$data['age'] = $this->age;
 		return $data;

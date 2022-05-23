@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Effect\CivilCommotionEffect;
 use Lemuria\Engine\Fantasya\Effect\Unemployment;
 use Lemuria\Engine\Fantasya\Event\Population;
@@ -26,11 +24,11 @@ class Availability
 
 	protected readonly Resources $available;
 
-	#[Pure] public function __construct(protected readonly Region $region) {
+	public function __construct(protected readonly Region $region) {
 		$this->available = new Resources();
 	}
 
-	#[Pure] public function Region(): Region {
+	public function Region(): Region {
 		return $this->region;
 	}
 
@@ -100,7 +98,7 @@ class Availability
 		return $unemployment?->Peasants() ?? (int)ceil(Population::UNEMPLOYMENT / 100.0 * $totalPeasants);
 	}
 
-	#[Pure] private function getHerbCount(?HerbInterface $herb = null):int {
+	private function getHerbCount(?HerbInterface $herb = null):int {
 		$herbage = $this->region->Herbage();
 		if ($herbage && (!$herb || $herb === $herbage->Herb())) {
 			return (int)round($herbage->Occurrence() * self::HERBS_PER_REGION);
@@ -108,7 +106,7 @@ class Availability
 		return 0;
 	}
 
-	#[Pure] private function getDefaultCount(Quantity $quantity): int {
+	private function getDefaultCount(Quantity $quantity): int {
 		$commodity = $quantity->Commodity();
 		if ($commodity instanceof HerbInterface) {
 			return $this->getHerbCount($commodity);

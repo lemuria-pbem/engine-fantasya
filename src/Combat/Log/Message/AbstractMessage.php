@@ -2,13 +2,11 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-
-use Lemuria\Lemuria;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Log\Message;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
+use Lemuria\Lemuria;
 use Lemuria\Model\Dictionary;
 use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
@@ -41,7 +39,6 @@ abstract class AbstractMessage implements Message
 		return $message === $key ? $this->getDebug() : $this->translate($message);
 	}
 
-	#[ArrayShape(['id' => 'int', 'type' => 'string'])]
 	public function serialize(): array {
 		$data = ['id' => $this->Id()->Id(), 'type' => getClass($this)];
 		foreach ($this->getParameters() as $key => $value) {

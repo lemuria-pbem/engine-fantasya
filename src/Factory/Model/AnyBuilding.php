@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\BuildingEffect;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -17,31 +15,31 @@ class AnyBuilding implements Building
 	use BuilderTrait;
 	use SingletonTrait;
 
-	#[Pure] public function Weight(): int {
+	public function Weight(): int {
 		return 0;
 	}
 
-	#[Pure] public function Dependency(): ?Building {
+	public function Dependency(): ?Building {
 		return Building::IS_INDEPENDENT;
 	}
 
-	#[Pure] public function Feed(): int {
+	public function Feed(): int {
 		return 0;
 	}
 
-	#[Pure] public function Talent(): int {
+	public function Talent(): int {
 		return 0;
 	}
 
-	#[Pure] public function Upkeep(): int {
+	public function Upkeep(): int {
 		return Building::IS_FREE;
 	}
 
-	#[Pure] public function UsefulSize(): int {
+	public function UsefulSize(): int {
 		return Building::IS_UNLIMITED;
 	}
 
-	#[Pure] public function BuildingEffect(): BuildingEffect {
+	public function BuildingEffect(): BuildingEffect {
 		return new BuildingEffect();
 	}
 
@@ -50,7 +48,7 @@ class AnyBuilding implements Building
 		return new Requirement($talent);
 	}
 
-	#[Pure] public function getMaterial(): Resources {
+	public function getMaterial(): Resources {
 		return new Resources();
 	}
 

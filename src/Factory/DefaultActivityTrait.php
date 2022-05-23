@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command;
@@ -38,7 +36,7 @@ trait DefaultActivityTrait
 	/**
 	 * Allow execution of other activities of the same class.
 	 */
-	#[Pure] public function allows(Activity $activity): bool {
+	public function allows(Activity $activity): bool {
 		return getClass($activity) === getClass($this);
 	}
 }

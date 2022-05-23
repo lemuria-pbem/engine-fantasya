@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Message\Construction\AbstractConstructionMessage;
@@ -129,7 +127,7 @@ final class Announcement extends UnitCommand
 		$this->message(AnnouncementRegionMessage::class, $region)->p($message)->p($sender, AnnouncementRegionMessage::SENDER);
 	}
 
-	#[Pure] private function getMessage(int $i = 3): string {
+	private function getMessage(int $i = 3): string {
 		$message = $this->phrase->getLine($i);
 		return trim($message, "\"'\t ");
 	}

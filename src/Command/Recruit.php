@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Message\Party\RecruitPreventMessage;
@@ -84,7 +82,7 @@ final class Recruit extends AllocationCommand
 		}
 	}
 
-	#[Pure] protected function checkSize(): bool {
+	protected function checkSize(): bool {
 		return true;
 	}
 

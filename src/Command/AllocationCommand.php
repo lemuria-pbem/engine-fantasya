@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Consumer;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
@@ -40,7 +38,7 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	/**
 	 * Get the requested resources.
 	 */
-	#[Pure] public function getDemand(): Resources {
+	public function getDemand(): Resources {
 		return $this->resources;
 	}
 

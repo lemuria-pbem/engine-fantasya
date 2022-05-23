@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Factory\PortsTrait;
 use Lemuria\Model\Fantasya\Construction;
@@ -23,7 +21,7 @@ class Dockyards
 		return $this->canBeSailedTo($this->ship);
 	}
 
-	#[Pure] public function Port(): ?Construction {
+	public function Port(): ?Construction {
 		$size = $this->ship->Captain();
 		foreach ($this->friendly as $port) {
 			if ($this->hasSpace($port, $size)) {

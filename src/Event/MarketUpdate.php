@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Message\Region\MarketUpdateDemandMessage;
 use Lemuria\Engine\Fantasya\Message\Region\MarketUpdateOfferMessage;
@@ -83,7 +81,6 @@ final class MarketUpdate extends AbstractEvent
 	}
 
 	private function modifyOffer(Region $region, Offer $offer): void {
-		/** @var Luxury $luxury */
 		$luxury = $offer->Commodity();
 		if (!isset($this->commerce[$this->id($region, $luxury)])) {
 			$price = $offer->Price();
@@ -94,7 +91,6 @@ final class MarketUpdate extends AbstractEvent
 	}
 
 	private function modifyDemand(Region $region, Offer $offer): void {
-		/** @var Luxury $luxury */
 		$luxury = $offer->Commodity();
 		if (!isset($this->commerce[$this->id($region, $luxury)])) {
 			$price = $offer->Price();
@@ -104,7 +100,7 @@ final class MarketUpdate extends AbstractEvent
 		}
 	}
 
-	#[Pure] private function id(Region $region, Luxury $luxury): string {
+	private function id(Region $region, Luxury $luxury): string {
 		return $region->Id()->Id() . '-' . getClass($luxury);
 	}
 }

@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Combat\Campaign;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
@@ -96,7 +94,7 @@ final class State implements Reassignment
 		return self::$instance;
 	}
 
-	#[Pure] public function __construct() {
+	public function __construct() {
 		$this->casts = new Casts();
 	}
 
@@ -159,7 +157,7 @@ final class State implements Reassignment
 		}
 	}
 
-	#[Pure] public function getCurrentPriority(): int {
+	public function getCurrentPriority(): int {
 		return $this->turn->getCurrentPriority();
 	}
 
@@ -265,7 +263,7 @@ final class State implements Reassignment
 	/**
 	 * Get the travel route of a unit.
 	 */
-	#[Pure] public function getTravelRoute(Unit $unit): ?DirectionList {
+	public function getTravelRoute(Unit $unit): ?DirectionList {
 		$id = $unit->Id()->Id();
 		return $this->travelRoute[$id] ?? null;
 	}

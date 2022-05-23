@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Exception;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Command;
 
 /**
@@ -11,7 +9,7 @@ use Lemuria\Engine\Fantasya\Command;
  */
 class InvalidCommandException extends CommandException
 {
-	#[Pure] public function __construct(Command|string $command, ?string $explanation = null, ?\Throwable $previous = null) {
+	public function __construct(Command|string $command, ?string $explanation = null, ?\Throwable $previous = null) {
 		$message = 'Error in command "' . $command . '"' . ($explanation ? ': ' . $explanation : '.');
 		parent::__construct($message, 0, $previous);
 	}

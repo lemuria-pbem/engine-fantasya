@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Effect\Unemployment;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Factory\WorkplacesTrait;
@@ -133,7 +131,7 @@ final class Population extends AbstractEvent
 		return (int)ceil((1.0 - $boost) * $rate * $peasants + self::BOOST * $boost * $rate * $peasants);
 	}
 
-	#[Pure] private function calculateMigrants(int $peasants, int $workplaces, float $years): int {
+	private function calculateMigrants(int $peasants, int $workplaces, float $years): int {
 		$pressure = -$workplaces / $peasants;
 		$migrants = $peasants * $pressure * self::MIGRATION;
 		if ($years < 1 / self::WEALTH) {

@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Combat\Battle;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 
@@ -35,7 +33,7 @@ class BattleBeginsMessage extends AbstractMessage
 		}
 	}
 
-	#[Pure] public function getDebug(): string {
+	public function getDebug(): string {
 		return 'In region ' . $this->region . ' a battle is raging: ' .
 			   'Parties ' . implode(', ', $this->attackers) . ' attack parties ' . implode(', ', $this->defenders) . '.';
 	}

@@ -2,19 +2,16 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Serializable;
 
 class FireballHitMessage extends AbstractMessage
 {
 	protected array $simpleParameters = ['fighter', 'damage'];
 
-	#[Pure] public function __construct(protected ?string $fighter = null, protected ?int $damage = null) {
+	public function __construct(protected ?string $fighter = null, protected ?int $damage = null) {
 	}
 
-	#[Pure] public function getDebug(): string {
+	public function getDebug(): string {
 		return 'Fighter ' . $this->fighter . ' is hit by a Fireball and receives ' . $this->damage . '.';
 	}
 
@@ -25,8 +22,7 @@ class FireballHitMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['fighter' => 'string', 'damage' => 'int'])]
-	#[Pure] protected function getParameters(): array {
+	protected function getParameters(): array {
 		return ['fighter' => $this->fighter, 'damage' => $this->damage];
 	}
 

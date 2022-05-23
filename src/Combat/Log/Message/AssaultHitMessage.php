@@ -2,20 +2,17 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Serializable;
 
 class AssaultHitMessage extends AbstractMessage
 {
 	protected array $simpleParameters = ['attacker', 'damage', 'defender'];
 
-	#[Pure] public function __construct(protected ?string $attacker = null, protected ?string $defender = null,
+	public function __construct(protected ?string $attacker = null, protected ?string $defender = null,
 										protected ?int $damage = null) {
 	}
 
-	#[Pure] public function getDebug(): string {
+	public function getDebug(): string {
 		return 'Fighter ' . $this->attacker . ' deals ' . $this->damage . ' damage to enemy ' . $this->defender . '.';
 	}
 
@@ -27,8 +24,7 @@ class AssaultHitMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['attacker' => 'string', 'defender' => 'string', 'damage' => 'int'])]
-	#[Pure] protected function getParameters(): array {
+	protected function getParameters(): array {
 		return ['attacker' => $this->attacker, 'defender' => $this->defender, 'damage' => $this->damage];
 	}
 

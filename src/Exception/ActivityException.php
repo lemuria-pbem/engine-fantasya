@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Exception;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 
 /**
@@ -11,7 +9,7 @@ use Lemuria\Engine\Fantasya\Command\UnitCommand;
  */
 class ActivityException extends CommandException
 {
-	#[Pure] public function __construct(UnitCommand $command) {
+	public function __construct(UnitCommand $command) {
 		parent::__construct('Unit ' . $command->Unit()->Id() . ' cannot have more than one activity.');
 	}
 }

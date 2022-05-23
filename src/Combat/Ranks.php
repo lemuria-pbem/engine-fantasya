@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Exception\LemuriaException;
 
 class Ranks implements \ArrayAccess, \Countable, \Iterator
@@ -21,7 +19,7 @@ class Ranks implements \ArrayAccess, \Countable, \Iterator
 
 	private int $count;
 
-	#[Pure] public function __construct(protected bool $isAttacker) {
+	public function __construct(protected bool $isAttacker) {
 		$this->ranks = [];
 		foreach (self::BATTLE_ROWS as $row) {
 			$this->ranks[$row] = new Rank();
@@ -73,7 +71,7 @@ class Ranks implements \ArrayAccess, \Countable, \Iterator
 		throw new LemuriaException('Unsetting a rank is not allowed.');
 	}
 
-	#[Pure] public function count(): int {
+	public function count(): int {
 		$count = 0;
 		foreach ($this->ranks as $rank) {
 			$count += $rank->count();

@@ -4,14 +4,11 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen und Fehler
 
-
 ### Version 1.0
 
 - Textreport im Markdown-Format
 - Einstellen der erwünschten Reportformate
 - Talentübersicht pro Region
-- Übersetzungen auf MessageFormat umstellen
-- Generische Typen ergänzen
 - Monolog-Upgrade auf 3.0 + Anpassungen (Webseite: Symfony 6.1)
 
 ### Ideen

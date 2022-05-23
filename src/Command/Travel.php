@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
@@ -90,7 +89,7 @@ class Travel extends UnitCommand implements Activity
 	/**
 	 * Allow execution of other activities of the same class.
 	 */
-	#[Pure] public function allows(Activity $activity): bool {
+	public function allows(Activity $activity): bool {
 		return $activity instanceof Travel;
 	}
 

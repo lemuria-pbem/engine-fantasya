@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Serializable;
@@ -15,7 +12,7 @@ class UnitDiedMessage extends AbstractMessage
 
 	protected Entity $unit;
 
-	#[Pure] public function __construct(?Unit $unit = null) {
+	public function __construct(?Unit $unit = null) {
 		if ($unit) {
 			$this->unit = new Entity($unit);
 		}
@@ -31,8 +28,7 @@ class UnitDiedMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['unit' => 'int', 'name' => 'string'])]
-	#[Pure]	protected function getParameters(): array {
+		protected function getParameters(): array {
 		return ['unit' => $this->unit->id->Id(), 'name'  => $this->unit->name];
 	}
 

@@ -2,10 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\ExpectedValues;
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use Lemuria\Singleton;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait as EngineBuilderTrait;
@@ -56,25 +52,23 @@ class LemuriaMessage implements Message
 
 	private ?array $parameters = null;
 
-	#[Pure] public function Id(): Id {
+	public function Id(): Id {
 		return $this->id;
 	}
 
-	#[Pure] public function Report(): Domain {
+	public function Report(): Domain {
 		return $this->type->Report();
 	}
 
-	#[ExpectedValues(valuesFromClass: Message::class)]
-	#[Pure]
 	public function Level(): string {
 		return $this->type->Level();
 	}
 
-	#[Pure] public function Assignee(): Id {
+	public function Assignee(): Id {
 		return $this->assignee;
 	}
 
-	#[Pure] public function Entity(): Id {
+	public function Entity(): Id {
 		return $this->newAssignee ?? $this->assignee;
 	}
 
@@ -106,8 +100,6 @@ class LemuriaMessage implements Message
 	/**
 	 * Get a plain data array of the model's data.
 	 */
-	#[ArrayShape(['id' => 'int', 'type' => 'string', 'assignee' => 'int', 'newAssignee' => 'int|null', 'parameters' => 'array|null', 'items' => 'array|null', 'singletons' => 'array|null', 'entities' => 'array|null'])]
-	#[Pure]
 	public function serialize(): array {
 		$data = ['id' => $this->Id()->Id(), 'type' => getClass($this->type), 'assignee' => $this->assignee->Id()];
 		if ($this->newAssignee) {

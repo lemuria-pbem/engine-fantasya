@@ -21,7 +21,6 @@ function checkDirectory(string $type, array &$messages): int {
 	return $errors;
 }
 
-
 $resources = json_decode(file_get_contents(__DIR__ . '/../resources/strings.json'), true);
 $messages  = $resources['message'];
 echo 'Checking ' . count($messages) . ' message translations...' . PHP_EOL;

@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
@@ -24,8 +21,7 @@ final class BrokenCarriageEffect extends AbstractPartyEffect
 		return $this->unit;
 	}
 
-	#[ArrayShape(['class' => "string", 'id' => "int", 'unit' => "int"])]
-	#[Pure] public function serialize(): array {
+	public function serialize(): array {
 		$data = parent::serialize();
 		$data['unit'] = $this->unit->Id()->Id();
 		return $data;

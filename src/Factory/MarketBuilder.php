@@ -30,11 +30,9 @@ class MarketBuilder
 	public function initPrices(): void {
 		$luxuries = $this->initLuxuries();
 		$offer    = $luxuries->Offer();
-		/** @var Luxury $luxury */
-		$luxury = $luxuries->Offer()->Commodity();
+		$luxury   = $luxuries->Offer()->Commodity();
 		$offer->setPrice($luxury->Value());
 		foreach ($luxuries as $demand /* @var Offer $demand */) {
-			/** @var Luxury $luxury */
 			$luxury = $demand->Commodity();
 			$demand->setPrice(self::INITIAL_PRICE_FACTOR * $luxury->Value());
 		}

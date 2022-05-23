@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use JetBrains\PhpStorm\Pure;
-
 class Rank implements \ArrayAccess, \Countable, \Iterator
 {
 	public final const FRONT = 5;
@@ -23,7 +21,7 @@ class Rank implements \ArrayAccess, \Countable, \Iterator
 
 	private bool $isUnset = false;
 
-	#[Pure] public function Size(): int {
+	public function Size(): int {
 		$size = 0;
 		foreach ($this->combatants as $combatant) {
 			$size += $combatant->Size();
@@ -31,7 +29,7 @@ class Rank implements \ArrayAccess, \Countable, \Iterator
 		return $size;
 	}
 
-	#[Pure] public function Hits(): int {
+	public function Hits(): int {
 		$hits = 0;
 		foreach ($this->combatants as $combatant) {
 			$hits += $combatant->Size() * $combatant->Weapon()->Hits();

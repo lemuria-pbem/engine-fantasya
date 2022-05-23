@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Luxury;
@@ -26,7 +24,7 @@ class Supply implements \Countable
 
 	private bool $isOffer = false;
 
-	#[Pure] public function __construct(private readonly Region $region) {
+	public function __construct(private readonly Region $region) {
 		$resources      = $region->Resources();
 		$this->peasants = $resources[Peasant::class]->Count();
 		$this->step     = $this->peasants / 100.0;
@@ -74,7 +72,7 @@ class Supply implements \Countable
 	/**
 	 * Estimate total cost of given number of items.
 	 */
-	#[Pure] public function estimate(int $count): int {
+	public function estimate(int $count): int {
 		$count = min($count, $this->count());
 		$step  = (int)floor($this->step);
 		$steps = (int)floor($count / $step);
@@ -145,7 +143,7 @@ class Supply implements \Countable
 		return $this;
 	}
 
-	#[Pure] protected function askPrice(int $count): int {
+	protected function askPrice(int $count): int {
 		$factor = (int)floor($count / $this->step);
 		if ($this->isOffer) {
 			return $factor * $this->luxury->Value() + $this->offer->Price();

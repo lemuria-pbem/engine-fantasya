@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Combat\Combat;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Serializable;
@@ -19,7 +16,7 @@ class CombatantNoWeaponMessage extends AbstractMessage
 
 	protected int $battleRow;
 
-	#[Pure] public function __construct(?Combatant $combatant = null) {
+	public function __construct(?Combatant $combatant = null) {
 		if ($combatant) {
 			$this->combatant = $combatant->Id();
 			$this->count     = $combatant->Size();
@@ -35,12 +32,11 @@ class CombatantNoWeaponMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[Pure] public function getDebug(): string {
+	public function getDebug(): string {
 		return $this->combatant . ', ' . $this->count .' fighters, ' . Combat::ROW_NAME[$this->battleRow] . ' row';
 	}
 
-	#[ArrayShape(['combatant' => 'null|string', 'count' => 'int', 'battleRow' => 'int'])]
-	#[Pure] protected function getParameters(): array {
+	protected function getParameters(): array {
 		return ['combatant' => $this->combatant, 'count' => $this->count, 'battleRow' => $this->battleRow];
 	}
 

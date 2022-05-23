@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Debut;
 use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
 use Lemuria\Engine\Newcomer;
@@ -19,7 +17,7 @@ class LemuriaDebut implements Debut
 
 	private bool $isLoaded = false;
 
-	#[Pure] public function count(): int {
+	public function count(): int {
 		return count($this->newcomers);
 	}
 
