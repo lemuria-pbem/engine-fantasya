@@ -34,6 +34,8 @@ enum Subject
 
 	case Purchase;
 
+	case Qualification;
+
 	case Recruiting;
 
 	case RegionPool;

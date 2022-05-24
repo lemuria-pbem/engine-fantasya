@@ -8,7 +8,6 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 - Textreport im Markdown-Format
 - Einstellen der erwünschten Reportformate
-- Talentübersicht pro Region
 - Monolog-Upgrade auf 3.0 + Anpassungen (Webseite: Symfony 6.1)
 
 ### Ideen
