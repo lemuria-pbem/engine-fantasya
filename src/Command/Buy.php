@@ -11,7 +11,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\CommerceNotPossibleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CommerceSiegeMessage;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
-use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Quantity;
 
@@ -65,7 +64,7 @@ final class Buy extends CommerceCommand
 	 */
 	public function costEstimation(int $cost): Merchant {
 		$payment = new Quantity($this->silver, $cost);
-		Lemuria::Log()->debug('Merchant ' . $this . ' expects buy cost of ' . $payment . '.');
+		// Lemuria::Log()->debug('Merchant ' . $this . ' expects buy cost of ' . $payment . '.');
 		$this->context->getResourcePool($this->unit)->reserve($this->unit, $payment);
 		return $this;
 	}

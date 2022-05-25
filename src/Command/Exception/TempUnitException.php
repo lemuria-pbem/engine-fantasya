@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Exception;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 
 /**
@@ -11,7 +9,7 @@ use Lemuria\Engine\Fantasya\Exception\CommandException;
  */
 class TempUnitException extends CommandException
 {
-	#[Pure] public function __construct(string $message, ?CommandException $commandException = null) {
+	public function __construct(string $message, ?CommandException $commandException = null) {
 		parent::__construct($message, 0, $commandException);
 	}
 }

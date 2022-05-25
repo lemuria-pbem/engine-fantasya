@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Combat\Combat;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
@@ -16,7 +13,7 @@ abstract class AbstractReinforcementMessage extends AbstractMessage
 
 	protected string $combatant;
 
-	#[Pure] public function __construct(protected ?Entity $unit = null, ?Combatant $combatant = null,
+	public function __construct(protected ?Entity $unit = null, ?Combatant $combatant = null,
 		                                protected ?int    $count = null, protected ?int $battleRow = null) {
 		if ($combatant) {
 			$this->combatant = $combatant->Id();
@@ -32,8 +29,7 @@ abstract class AbstractReinforcementMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['unit' => 'int', 'name' => 'string', 'combatant' => 'null|string', 'count' => 'int', 'battleRow' => 'int'])]
-	#[Pure] protected function getParameters(): array {
+	protected function getParameters(): array {
 		return ['unit'  => $this->unit->id->Id(), 'name'      => $this->unit->name, 'combatant' => $this->combatant,
 			    'count' => $this->count,          'battleRow' => $this->battleRow];
 	}

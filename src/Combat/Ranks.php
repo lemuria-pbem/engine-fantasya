@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Exception\LemuriaException;
 
 class Ranks implements \ArrayAccess, \Countable, \Iterator
@@ -21,7 +19,7 @@ class Ranks implements \ArrayAccess, \Countable, \Iterator
 
 	private int $count;
 
-	#[Pure] public function __construct(protected bool $isAttacker) {
+	public function __construct(protected bool $isAttacker) {
 		$this->ranks = [];
 		foreach (self::BATTLE_ROWS as $row) {
 			$this->ranks[$row] = new Rank();
@@ -58,15 +56,22 @@ class Ranks implements \ArrayAccess, \Countable, \Iterator
 		return $this->ranks[$offset];
 	}
 
+	/**
+	 * @param int $offset
+	 * @param Rank $value
+	 */
 	public function offsetSet(mixed $offset, mixed $value): void {
 		throw new LemuriaException('Setting a rank is not allowed.');
 	}
 
+	/**
+	 * @param int $offset
+	 */
 	public function offsetUnset(mixed $offset): void {
 		throw new LemuriaException('Unsetting a rank is not allowed.');
 	}
 
-	#[Pure] public function count(): int {
+	public function count(): int {
 		$count = 0;
 		foreach ($this->ranks as $rank) {
 			$count += $rank->count();
@@ -74,10 +79,16 @@ class Ranks implements \ArrayAccess, \Countable, \Iterator
 		return $count;
 	}
 
+	/**
+	 * @return Rank
+	 */
 	public function current(): mixed {
 		return $this->ranks[self::BATTLE_ROWS[$this->index]];
 	}
 
+	/**
+	 * @return int
+	 */
 	public function key(): mixed {
 		return self::BATTLE_ROWS[$this->index];
 	}

@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\OneActivityTrait;
@@ -70,7 +68,7 @@ final class Explore extends UnitCommand implements Activity
 		}
 	}
 
-	#[Pure] private function occurrence(Herbage $herbage): string {
+	private function occurrence(Herbage $herbage): string {
 		$occurrence = $herbage->Occurrence();
 		return match (true) {
 			$occurrence <= 0.2 => 'tiny',

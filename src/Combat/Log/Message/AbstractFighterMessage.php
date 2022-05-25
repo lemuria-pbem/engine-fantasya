@@ -2,16 +2,13 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Serializable;
 
 abstract class AbstractFighterMessage extends AbstractMessage
 {
 	protected array $simpleParameters = ['fighter'];
 
-	#[Pure] public function __construct(protected ?string $fighter = null) {
+	public function __construct(protected ?string $fighter = null) {
 	}
 
 	public function unserialize(array $data): Serializable {
@@ -20,8 +17,7 @@ abstract class AbstractFighterMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['fighter' => 'string'])]
-	#[Pure] protected function getParameters(): array {
+	protected function getParameters(): array {
 		return ['fighter' => $this->fighter];
 	}
 

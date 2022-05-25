@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\State;
@@ -120,7 +118,7 @@ trait PortsTrait
 		return Lemuria::Score()->find($effect->setConstruction($port)) instanceof Unmaintained;
 	}
 
-	#[Pure] protected function hasSpace(Construction $port, int $size): bool {
+	protected function hasSpace(Construction $port, int $size): bool {
 		$id   = $port->Id()->Id();
 		$free = $port->Size();
 		if (isset($this->used[$id])) {

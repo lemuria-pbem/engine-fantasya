@@ -10,7 +10,9 @@ use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Party\Census;
 use Lemuria\Model\Fantasya\Party\Type;
+use Lemuria\Model\Fantasya\Region;
 
 /**
  * Collect talent statistics for the parties.
@@ -28,6 +30,12 @@ final class Education extends AbstractEvent
 			if ($party->Type() === Type::PLAYER) {
 				$this->placeMetrics(Subject::Education, $party);
 				$this->placeMetrics(Subject::Experts, $party);
+
+				$census = new Census($party);
+				foreach ($census->getAtlas() as $region /* @var Region $region */) {
+					$people = $census->getPeople($region);
+					$this->placeMetrics(Subject::Qualification, $people->getFirst());
+				}
 			}
 		}
 	}

@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
-use JetBrains\PhpStorm\Pure;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Model\Fantasya\Building\Magespire;
 use Lemuria\Model\Fantasya\Talent\Magic;
@@ -35,7 +34,7 @@ trait MagicTrait
 		};
 	}
 
-	#[Pure] protected function reduceConsumption(int $consumption): int {
+	protected function reduceConsumption(int $consumption): int {
 		return $this->reduceGrade($consumption);
 	}
 }

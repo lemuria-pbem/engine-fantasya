@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Context;
@@ -45,8 +42,7 @@ final class Enchantment extends AbstractUnitEffect
 		return $this->enchantments;
 	}
 
-	#[ArrayShape(['class' => "string", 'id' => "int", 'enchantments' => "int[]"])]
-	#[Pure] public function serialize(): array {
+	public function serialize(): array {
 		$data = parent::serialize();
 		$data['enchantments'] = $this->enchantments->serialize();
 		return $data;

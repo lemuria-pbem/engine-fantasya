@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
@@ -29,7 +27,7 @@ class DirectionList implements \Countable
 
 	private bool $isRotating = false;
 
-	#[Pure] public function __construct(Context $context) {
+	public function __construct(Context $context) {
 		$this->factory = $context->Factory();
 	}
 

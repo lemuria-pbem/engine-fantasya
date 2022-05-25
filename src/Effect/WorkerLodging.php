@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
@@ -28,11 +26,11 @@ final class WorkerLodging extends AbstractConstructionEffect
 		return max(0, $this->Construction()->getFreeSpace() - $this->bookings->Size());
 	}
 
-	#[Pure] public function hasBooked(Unit $unit): bool {
+	public function hasBooked(Unit $unit): bool {
 		return $this->bookings->has($unit->Id());
 	}
 
-	#[Pure] public function hasSpace(Unit $unit): bool {
+	public function hasSpace(Unit $unit): bool {
 		$id = $unit->Id()->Id();
 		if (array_key_exists($id, $this->hasSpace)) {
 			return $this->hasSpace[$id];

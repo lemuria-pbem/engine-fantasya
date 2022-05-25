@@ -2,16 +2,13 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Serializable;
 
 class BattleExhaustionMessage extends AbstractMessage
 {
 	protected array $simpleParameters = ['rounds'];
 
-	#[Pure] public function __construct(protected ?int $rounds = null) {
+	public function __construct(protected ?int $rounds = null) {
 	}
 
 	public function getDebug(): string {
@@ -24,8 +21,7 @@ class BattleExhaustionMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['rounds' => 'int'])]
-	#[Pure] protected function getParameters(): array {
+	protected function getParameters(): array {
 		return ['rounds' => $this->rounds];
 	}
 

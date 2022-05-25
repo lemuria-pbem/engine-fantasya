@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
@@ -32,8 +29,7 @@ final class SiegeEffect extends AbstractConstructionEffect
 		return $this->perception;
 	}
 
-	#[ArrayShape(['class' => 'string', 'id' => "int", 'perception' => 'int'])]
-	#[Pure] public function serialize(): array {
+	public function serialize(): array {
 		$data               = parent::serialize();
 		$data['perception'] = $this->perception;
 		return $data;

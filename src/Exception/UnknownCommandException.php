@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Exception;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Phrase;
 
@@ -12,7 +10,7 @@ use Lemuria\Engine\Fantasya\Phrase;
  */
 class UnknownCommandException extends CommandException
 {
-	#[Pure] public function __construct(Command|Phrase|string|null $command = null, ?CommandException $exception = null) {
+	public function __construct(Command|Phrase|string|null $command = null, ?CommandException $exception = null) {
 		$message = 'Unknown command' . ($command ? ' ' . $command : '.');
 		parent::__construct($message, 0, $exception);
 	}

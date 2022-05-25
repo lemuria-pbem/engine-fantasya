@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Message\Unit\VanishEffectCreateMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VanishEffectMessage;
 use Lemuria\Engine\Fantasya\Priority;
@@ -33,8 +30,7 @@ final class VanishEffect extends AbstractUnitEffect
 		return $this->weeks;
 	}
 
-	#[ArrayShape(['class' => "string", 'id' => "int", 'weeks' => "int"])]
-	#[Pure] public function serialize(): array {
+	public function serialize(): array {
 		$data = parent::serialize();
 		$data['summoner'] = $this->summoner;
 		$data['weeks']    = $this->weeks;

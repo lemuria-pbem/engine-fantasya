@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Party;
 
@@ -14,7 +12,7 @@ final class DisguisedParty extends Party
 		$this->setName('Unknown party');
 	}
 
-	#[Pure] public function Id(): Id {
+	public function Id(): Id {
 		return new Id(0);
 	}
 }

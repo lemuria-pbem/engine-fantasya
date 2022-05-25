@@ -25,6 +25,7 @@ use Lemuria\Model\Fantasya\Spell\Earthquake;
 use Lemuria\Model\Fantasya\Spell\ElementalBeing;
 use Lemuria\Model\Fantasya\Spell\Farsight;
 use Lemuria\Model\Fantasya\Spell\Fireball;
+use Lemuria\Model\Fantasya\Spell\GazeOfTheBasilisk;
 use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
 use Lemuria\Model\Fantasya\Spell\GhostEnemy;
 use Lemuria\Model\Fantasya\Spell\GustOfWind;
@@ -102,6 +103,7 @@ class SpellParser
 		ElementalBeing::class     => self::NONE,
 		Farsight::class           => self::REGION,
 		Fireball::class           => self::LEVEL,
+		GazeOfTheBasilisk::class  => self::LEVEL,
 		GazeOfTheGriffin::class   => self::DIRECTIONS,
 		GhostEnemy::class         => self::LEVEL,
 		GustOfWind::class         => self::NONE,
@@ -124,7 +126,7 @@ class SpellParser
 		'Aufruhr'         => ['verursachen' => CivilCommotion::class],
 		'Auratransfer'    => AuraTransfer::class,
 		'Beschleunigung'  => Quickening::class,
-		'Blick'           => ['des'         => ['Greifen' => GazeOfTheGriffin::class]],
+		'Blick'           => ['des'         => ['Basilisken' => GazeOfTheBasilisk::class, 'Greifen' => GazeOfTheGriffin::class]],
 		'Elementarwesen'  => ElementalBeing::class,
 		'Erdbeben'        => Earthquake::class,
 		'Erwecke'         => ['Baumhirten'  => SummonEnts::class],

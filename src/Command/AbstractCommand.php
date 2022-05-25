@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Context;
@@ -44,14 +42,14 @@ abstract class AbstractCommand implements Command
 	/**
 	 * Get command as string.
 	 */
-	#[Pure] public function __toString(): string {
+	public function __toString(): string {
 		return (string)$this->phrase;
 	}
 
 	/**
 	 * Get the command ID.
 	 */
-	#[Pure] public function getId(): int {
+	public function getId(): int {
 		return $this->id;
 	}
 

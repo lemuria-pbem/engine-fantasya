@@ -40,8 +40,6 @@ class Combatant
 	 */
 	public array $refugees = [];
 
-	public int $distracted = 0;
-
 	public bool $hasCast = false;
 
 	/**
@@ -246,6 +244,14 @@ class Combatant
 		$newCombatant->initShieldAndArmor();
 
 		return $newCombatant;
+	}
+
+	public function unsetFeatures(array $features): void {
+		foreach ($features as $feature) {
+			foreach (array_keys($this->fighters) as $i) {
+				$this->fighters[$i]->setFeature($feature, false);
+			}
+		}
 	}
 
 	protected function initWeaponSkill(): void {

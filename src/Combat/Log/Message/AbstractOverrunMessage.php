@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Serializable;
 
 abstract class AbstractOverrunMessage extends AbstractMessage
@@ -20,8 +17,7 @@ abstract class AbstractOverrunMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['additional' => 'int'])]
-	#[Pure] protected function getParameters(): array {
+	protected function getParameters(): array {
 		return ['additional' => $this->additional];
 	}
 

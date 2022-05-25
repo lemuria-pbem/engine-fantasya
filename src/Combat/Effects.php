@@ -2,13 +2,15 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Item;
 use Lemuria\ItemSet;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\BattleSpell;
 
+/**
+ * @\ArrayAccess <Item|Singleton|string, CombatEffect>
+ * @\Iterator <string, CombatEffect>
+ */
 class Effects extends ItemSet
 {
 	use BuilderTrait;
@@ -29,7 +31,7 @@ class Effects extends ItemSet
 		return new CombatEffect($battleSpell, $count);
 	}
 
-	#[Pure] protected function isValidItem(Item $item): bool {
+	protected function isValidItem(Item $item): bool {
 		return $item instanceof BattleSpell;
 	}
 }

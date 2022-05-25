@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Combat\Log\Participant;
 use Lemuria\Serializable;
 
@@ -25,8 +22,7 @@ abstract class AbstractBattleSideMessage extends AbstractMessage
 		return $this;
 	}
 
-	#[ArrayShape(['participants' => 'array'])]
-	#[Pure] protected function getParameters(): array {
+	protected function getParameters(): array {
 		$participants = [];
 		foreach ($this->participants as $participant) {
 			$participants[] = $participant->serialize();

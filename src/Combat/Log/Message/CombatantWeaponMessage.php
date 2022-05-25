@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Combat;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
@@ -14,7 +11,7 @@ class CombatantWeaponMessage extends CombatantNoWeaponMessage
 {
 	protected string $weapon;
 
-	#[Pure] public function __construct(?Combatant $combatant = null) {
+	public function __construct(?Combatant $combatant = null) {
 		parent::__construct($combatant);
 		if ($combatant) {
 			$this->weapon = getClass($combatant->Weapon());
@@ -27,12 +24,11 @@ class CombatantWeaponMessage extends CombatantNoWeaponMessage
 		return $this;
 	}
 
-	#[Pure] public function getDebug(): string {
+	public function getDebug(): string {
 		return 'Combatant ' . $this->combatant . ', ' . $this->count .' fighters with ' . $this->weapon . ', ' . Combat::ROW_NAME[$this->battleRow] . ' row';
 	}
 
-	#[ArrayShape(['combatant' => 'null|string', 'count' => 'int', 'battleRow' => 'int', 'weapon' => 'string'])]
-	#[Pure] protected function getParameters(): array {
+	protected function getParameters(): array {
 		$parameters           = parent::getParameters();
 		$parameters['weapon'] = $this->weapon;
 		return $parameters;

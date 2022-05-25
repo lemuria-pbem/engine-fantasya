@@ -2,19 +2,15 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message;
 
-use JetBrains\PhpStorm\ExpectedValues;
-use JetBrains\PhpStorm\Pure;
-
-use Lemuria\Model\Fantasya\Container;
 use function Lemuria\getClass;
 use function Lemuria\number;
 use Lemuria\Item;
 use Lemuria\Singleton;
-use Lemuria\Engine\Report;
 use Lemuria\Engine\Message;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 use Lemuria\Model\Dictionary;
+use Lemuria\Model\Fantasya\Container;
 use Lemuria\SingletonTrait;
 
 abstract class AbstractMessage implements MessageType
@@ -27,8 +23,7 @@ abstract class AbstractMessage implements MessageType
 
 	protected Id $id;
 
-	#[ExpectedValues(valuesFromClass: Report::class)]
-	#[Pure] public function Level(): string {
+	public function Level(): string {
 		return $this->level;
 	}
 
@@ -148,7 +143,7 @@ abstract class AbstractMessage implements MessageType
 		return $this->getTranslatedName($property, $name, 'world.short');
 	}
 
-	#[Pure] protected function number(string $property, string $name): ?string {
+	protected function number(string $property, string $name): ?string {
 		return $property === $name ? number($this->$name) : null;
 	}
 

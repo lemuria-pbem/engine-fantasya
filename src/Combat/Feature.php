@@ -9,5 +9,9 @@ enum Feature : int
 {
 	public final const SIZE = 256;
 
-	case StoneSkin = 1;
+	case Shockwave = 1;
+
+	case StoneSkin = 2;
+
+	case GazeOfTheBasilisk = 4;
 }

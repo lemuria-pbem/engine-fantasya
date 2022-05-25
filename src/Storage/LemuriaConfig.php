@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Storage;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Debut;
 use Lemuria\Engine\Fantasya\LemuriaDebut;
 use Lemuria\Engine\Fantasya\LemuriaHostilities;
@@ -35,6 +33,9 @@ use Lemuria\Model\World;
 use Lemuria\Model\World\HexagonalMap;
 use Lemuria\Registry;
 
+/**
+ * @\ArrayAccess<string, mixed>
+ */
 abstract class LemuriaConfig implements \ArrayAccess, Config
 {
 	public final const ROUND = 'round';
@@ -125,11 +126,11 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 		return new LemuriaCatalog();
 	}
 
-	#[Pure] public function Calendar(): Calendar {
+	public function Calendar(): Calendar {
 		return new BaseCalendar();
 	}
 
-	#[Pure] public function Debut(): Debut {
+	public function Debut(): Debut {
 		return new LemuriaDebut();
 	}
 
@@ -145,7 +146,7 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 		return new LemuriaReport();
 	}
 
-	#[Pure] public function World(): World {
+	public function World(): World {
 		return new HexagonalMap();
 	}
 
@@ -153,18 +154,18 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 		return new LemuriaScore();
 	}
 
-	#[Pure] public function Hostilities(): Hostilities {
+	public function Hostilities(): Hostilities {
 		return new LemuriaHostilities();
 	}
 
-	#[Pure] public function Registry(): Registry {
+	public function Registry(): Registry {
 		return new LemuriaRegistry();
 	}
 
 	/**
 	 * @throws \Exception
 	 */
-	#[Pure] public function Log(): Log {
+	public function Log(): Log {
 		return $this->createLog($this->storagePath . DIRECTORY_SEPARATOR . self::LOG_DIR . DIRECTORY_SEPARATOR . $this->logFile);
 	}
 
@@ -185,7 +186,7 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 		$this->defaults = self::DEFAULTS;
 	}
 
-	#[Pure] protected function createLog(string $logPath): Log {
+	protected function createLog(string $logPath): Log {
 		return new LemuriaLog($logPath);
 	}
 }

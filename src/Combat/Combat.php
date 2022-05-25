@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 use Lemuria\Engine\Fantasya\Combat\Log\Message;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerHasFledMessage;
@@ -88,7 +86,7 @@ class Combat
 	 */
 	protected Effects $effects;
 
-	#[Pure] public static function getBattleRow(Unit $unit): BattleRow {
+	public static function getBattleRow(Unit $unit): BattleRow {
 		$battleRow = $unit->BattleRow();
 		return match ($battleRow) {
 			BattleRow::DEFENSIVE                      => BattleRow::BACK,
@@ -97,17 +95,17 @@ class Combat
 		};
 	}
 
-	#[Pure] public function __construct(private Context $context) {
+	public function __construct(private Context $context) {
 		$this->attacker = new Ranks(true);
 		$this->defender = new Ranks(false);
 		$this->effects  = new Effects();
 	}
 
-	#[Pure] public function hasAttackers(): bool {
+	public function hasAttackers(): bool {
 		return $this->attacker->count() > 0;
 	}
 
-	#[Pure] public function hasDefenders(): bool {
+	public function hasDefenders(): bool {
 		return $this->defender->count() > 0;
 	}
 
@@ -229,6 +227,7 @@ class Combat
 
 	public function nextRound(): int {
 		$this->unsetExpiredCombatSpells();
+		$this->unsetFighterFeatures();
 		$this->everybodyTryToFlee();
 		if ($this->arrangeBattleRows()) {
 			$this->fleeFromBattle($this->attacker[Rank::REFUGEE], 'Attacker', true);
@@ -269,15 +268,18 @@ class Combat
 	}
 
 	public function getEffect(BattleSpell $spell, ?Combatant $combatant = null): ?CombatEffect {
-		/** @var CombatEffect $effect */
 		if ($combatant) {
 			$id      = $combatant->Unit()->Party()->Id()->Id();
 			$effects = isset($this->isAttacker[$id]) ? $this->attacker->Effects() : $this->defender->Effects();
 			if ($effects->offsetExists($spell)) {
-				return $effects[$spell];
+				/** @var CombatEffect $effect */
+				$effect = $effects[$spell];
+				return $effect;
 			}
 		}
-		return $this->effects->offsetExists($spell) ? $this->effects[$spell] : null;
+		/** @var CombatEffect $effect */
+		$effect = $this->effects[$spell] ?? null;
+		return $effect;
 	}
 
 	public function addEffect(CombatEffect $effect): Combat {
@@ -287,7 +289,7 @@ class Combat
 
 	protected function addPreparationSpells(Casts $casts, Ranks $caster, Ranks $victim): void {
 		foreach ([Rank::FRONT, Rank::BACK] as $row) {
-			foreach ($caster[$row] as $combatant/* @var Combatant $combatant */) {
+			foreach ($caster[$row] as $combatant /* @var Combatant $combatant */) {
 				$unit = $combatant->Unit();
 				if ($unit->BattleSpells()?->Preparation()) {
 					$grade = new BattleSpellGrade($unit->BattleSpells()->Preparation(), $this);
@@ -306,7 +308,7 @@ class Combat
 		}
 	}
 
-	#[Pure] protected function getCombatantMessage(Combatant $combatant): Message {
+	protected function getCombatantMessage(Combatant $combatant): Message {
 		if ($combatant->Weapon() instanceof Native) {
 			return new CombatantNoWeaponMessage($combatant);
 		}
@@ -509,6 +511,21 @@ class Combat
 		}
 	}
 
+	protected function unsetFighterFeatures(): void {
+		foreach ($this->attacker as $rank) {
+			foreach ($rank as $combatant) {
+				$combatant->unsetFeatures([Feature::Shockwave]);
+				$combatant->unsetFeatures([Feature::GazeOfTheBasilisk]);
+			}
+		}
+		foreach ($this->defender as $rank) {
+			foreach ($rank as $combatant) {
+				$combatant->unsetFeatures([Feature::Shockwave]);
+				$combatant->unsetFeatures([Feature::GazeOfTheBasilisk]);
+			}
+		}
+	}
+
 	protected function castCombatSpells(): void {
 		$attacker = $this->prepareCombatSpells($this->attacker);
 		$defender = $this->prepareCombatSpells($this->defender);
@@ -640,9 +657,8 @@ class Combat
 	protected function removeTheDead(Ranks $ranks): void {
 		foreach ($ranks as $combatants /* @var Rank $combatants */) {
 			foreach ($combatants as $c => $combatant /* @var Combatant $combatant */) {
-				$size                  = $combatant->Size();
-				$combatant->distracted = 0;
-				$combatant->hasCast    = false;
+				$size               = $combatant->Size();
+				$combatant->hasCast = false;
 				foreach ($combatant->fighters as $f => $fighter) {
 					if ($fighter->health <= 0) {
 						if ($fighter->potion instanceof HealingPotion) {

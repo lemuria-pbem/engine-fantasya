@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Context;
@@ -28,7 +26,7 @@ abstract class AbstractEvent implements Event
 	/**
 	 * Get action as string.
 	 */
-	#[Pure] public function __toString(): string {
+	public function __toString(): string {
 		return 'Event[' . $this->getPriority() . '] ' . getClass($this);
 	}
 

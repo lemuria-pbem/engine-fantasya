@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Factory\SpellParser;
 use Lemuria\Model\Dictionary;
@@ -51,10 +49,7 @@ class SpellDetails
 		return $this->spell;
 	}
 
-	/**
-	 * @noinspection PhpPureFunctionMayProduceSideEffectsInspection
-	 */
-	#[Pure] public function Name(): string {
+	public function Name(): string {
 		return self::$dictionary->get('spell', $this->spell);
 	}
 

@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
@@ -40,6 +38,8 @@ final class Learn extends UnitCommand implements Activity
 	use OneActivityTrait;
 	use StatisticsTrait;
 
+	public final const PROGRESS = 100;
+
 	private Talent $talent;
 
 	private ?Ability $progress = null;
@@ -56,7 +56,7 @@ final class Learn extends UnitCommand implements Activity
 		$this->calculus()->setStudent($this);
 	}
 
-	#[Pure] public function getTalent(): Talent {
+	public function getTalent(): Talent {
 		return $this->talent;
 	}
 

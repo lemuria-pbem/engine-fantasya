@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Effect\Cartography;
 use Lemuria\Engine\Fantasya\Effect\FarsightEffect;
@@ -22,7 +20,7 @@ final class TravelAtlas extends Atlas
 	 */
 	private array $visibility = [];
 
-	#[Pure] public function __construct(private readonly Party $party) {
+	public function __construct(private readonly Party $party) {
 		parent::__construct();
 	}
 
@@ -72,7 +70,7 @@ final class TravelAtlas extends Atlas
 		return $this;
 	}
 
-	#[Pure] public function getVisibility(Region $region): Visibility {
+	public function getVisibility(Region $region): Visibility {
 		return $this->visibility[$region->Id()->Id()] ?? Visibility::UNKNOWN;
 	}
 

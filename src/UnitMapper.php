@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Engine\Fantasya\Command\Create\Temp;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Command\Exception\TempUnitException;
@@ -27,7 +25,7 @@ class UnitMapper
 	/**
 	 * Check if temp unit is already mapped.
 	 */
-	#[Pure] public function has(string $tempNumber): bool {
+	public function has(string $tempNumber): bool {
 		return isset($this->map[$tempNumber]);
 	}
 

@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Message\Construction\DecayMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\DecayToRuinMessage;
@@ -42,8 +39,7 @@ final class DecayEffect extends AbstractConstructionEffect
 		return $this->interval;
 	}
 
-	#[ArrayShape(['class' => 'string', 'id' => "int", 'age' => 'int', 'interval' => 'int'])]
-	#[Pure] public function serialize(): array {
+	public function serialize(): array {
 		$data             = parent::serialize();
 		$data['age']      = $this->age;
 		$data['interval'] = $this->interval;

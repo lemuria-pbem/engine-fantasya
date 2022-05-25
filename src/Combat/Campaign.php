@@ -104,6 +104,10 @@ class Campaign
 		$this->addDefenderAlliedUnits();
 		$this->mergeAttackerBattles();
 		$this->battles = array_values($this->battles);
+		$n             = count($this->battles);
+		for ($i = 0; $i < $n; $i++) {
+			$this->battles[$i]->counter = $i + 1;
+		}
 		Lemuria::Log()->debug('Campaign in ' . $this->region . ' consists of ' . count($this->battles) . ' battles.');
 		return true;
 	}

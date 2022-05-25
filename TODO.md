@@ -5,22 +5,11 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 ## Verbesserungen und Fehler
 
 
-## Neue Funktionen
-
-- weitere Zauber:
-  - Luftschiff (9) (Einheit mit Wagen/Schiff reist durch die Luft)
-  - Blick des Basilisken (9) (Kampfzauber)
-
 ### Version 1.0
 
-- Textreport im Markdown-Format
-- Einstellen der erwünschten Reportformate
-- Talentübersicht pro Region
-- Übersetzungen auf MessageFormat umstellen
-- Generische Typen ergänzen
 - Monolog-Upgrade auf 3.0 + Anpassungen (Webseite: Symfony 6.1)
 
-## Ideen
+### Ideen
 
 - neue Gebäude, die Arbeitsplätze verdoppeln
   - Gebirge: Pilzhöhle
@@ -33,7 +22,9 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - BESUCHEN zum Handel mit NPC-Ladenbesitzer
   - Steinkreis als Portal für Magier
 - automatischer Beschreibungstext mit Handelsangeboten für Einheit, Gebäude oder Region
-- Gerüchte durch NPC oder Bauern, z.B. zu Monstervorkommen in Nachbarregionen
+- Gerüchte durch NPC oder Bauern
+  - Monstervorkommen in Nachbarregionen
+  - Kämpfe in Nachbarregionen
 - Weltumseglung ermöglichen
 - Ereignis "Juwelen gefunden" beim Bergbau in Gebirgen/Gletschern ohne Luxuswaren
 - Umweltereignisse
@@ -50,6 +41,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Kanalbenutzungsgebühr an den Besitzer
   - Handelssteuer an den Besitzer der größten Burg
   - Maut für Wagengespanne an den Besitzer der größten Burg
+- Einstellen der erwünschten Reportformate
+  - Textreport im Markdown-Format
 
 ### Weiterentwicklung des Spielkonzepts
 

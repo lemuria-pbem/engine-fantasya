@@ -2,9 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Storage;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 use Lemuria\Model\Fantasya\Storage\JsonGame;
 use Lemuria\Model\Fantasya\Storage\JsonProvider;
 use Lemuria\Storage\Provider;
@@ -33,7 +30,6 @@ class LemuriaGame extends JsonGame
 	/**
 	 * @return array(string=>string)
 	 */
-	#[ArrayShape([Provider::DEFAULT => '\Lemuria\Model\Fantasya\Storage\JsonProvider'])]
 	protected function getSaveStorage(): array {
 		$round = $this->config[LemuriaConfig::ROUND] + 1;
 		$path  = $this->config->getStoragePath() . DIRECTORY_SEPARATOR . self::GAME_DIR . DIRECTORY_SEPARATOR . $round;
@@ -43,7 +39,7 @@ class LemuriaGame extends JsonGame
 	/**
 	 * @return array(string=>string)
 	 */
-	#[Pure] protected function addStringsStorage(array $storage): array {
+	protected function addStringsStorage(array $storage): array {
 		$storage[self::STRINGS_FILE] = new JsonProvider(self::STRINGS_DIR);
 		return $storage;
 	}

@@ -5,7 +5,6 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 use Lemuria\Engine\Message;
 use Lemuria\Engine\Message\Section;
 
-
 abstract class AbstractNoDemandMessage extends AbstractUnitMessage
 {
 	protected string $level = Message::DEBUG;

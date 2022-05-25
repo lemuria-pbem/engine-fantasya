@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use JetBrains\PhpStorm\Pure;
-
 use function Lemuria\getClass;
 use function Lemuria\randDistribution23;
 use function Lemuria\random;
@@ -23,7 +21,7 @@ trait ActTrait
 		$this->unit = $behaviour->Unit();
 	}
 
-	#[Pure] protected function getMonster(): ?Monster {
+	protected function getMonster(): ?Monster {
 		$race = $this->unit->Race();
 		return $race instanceof Monster ? $race : null;
 	}
