@@ -46,12 +46,14 @@ final class Commerce
 
 	private int $round = 0;
 
+	private bool $resetGoods = false;
+
 	private readonly Commodity $silver;
 
 	private int $regionSilver;
 
 	public function __construct(private readonly Region $region) {
-		Lemuria::Log()->debug('New commerce helper for region ' . $region->Id() . '.', ['commerce' => $this]);
+		// Lemuria::Log()->debug('New commerce helper for region ' . $region->Id() . '.', ['commerce' => $this]);
 		$this->priority = CommandPriority::getInstance();
 		$this->silver   = self::createCommodity(Silver::class);
 	}
@@ -68,6 +70,12 @@ final class Commerce
 	 * Register a Merchant.
 	 */
 	public function register(Merchant $merchant): Commerce {
+		if ($this->resetGoods) {
+			$this->goods = [];
+			$this->resetGoods = false;
+			// Lemuria::Log()->debug('Goods have been reset in commerce of region ' . $this->region->Id() . '.');
+		}
+
 		$id                           = $merchant->getId();
 		$priority                     = $this->priority->getPriority($merchant);
 		$this->rounds[$priority][$id] = $id;
@@ -101,6 +109,7 @@ final class Commerce
 				$this->round = $round;
 			}
 		}
+		$this->resetGoods = true;
 	}
 
 	/**
@@ -207,8 +216,9 @@ final class Commerce
 				$i = 0;
 			}
 		}
+		/** @noinspection PhpStatementHasEmptyBodyInspection */
 		if ($supply->hasMore()) {
-			Lemuria::Log()->debug('All merchants have stopped trading ' . $class . '.');
+			// Lemuria::Log()->debug('All merchants have stopped trading ' . $class . '.');
 		} else {
 			Lemuria::Log()->debug('No more peasants want to trade ' . $class . '.');
 		}
@@ -227,7 +237,7 @@ final class Commerce
 			}
 			return true;
 		}
-		Lemuria::Log()->debug('Merchant ' . $merchant . ' has stopped trading.');
+		// Lemuria::Log()->debug('Merchant ' . $merchant . ' has stopped trading.');
 		return false;
 	}
 

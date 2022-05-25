@@ -10,7 +10,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\CommerceSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellOnlyMessage;
-use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Quantity;
 
@@ -57,8 +56,8 @@ final class Sell extends CommerceCommand
 	 * Give a cost estimation to the merchant to allow silver reservation from pool.
 	 */
 	public function costEstimation(int $cost): Merchant {
-		$income = new Quantity($this->silver, $cost);
-		Lemuria::Log()->debug('Merchant ' . $this . ' expects income of ' . $income . '.');
+		// $income = new Quantity($this->silver, $cost);
+		// Lemuria::Log()->debug('Merchant ' . $this . ' expects income of ' . $income . '.');
 		return $this;
 	}
 

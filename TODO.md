@@ -4,10 +4,9 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen und Fehler
 
+
 ### Version 1.0
 
-- Textreport im Markdown-Format
-- Einstellen der erwünschten Reportformate
 - Monolog-Upgrade auf 3.0 + Anpassungen (Webseite: Symfony 6.1)
 
 ### Ideen
@@ -42,6 +41,8 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
   - Kanalbenutzungsgebühr an den Besitzer
   - Handelssteuer an den Besitzer der größten Burg
   - Maut für Wagengespanne an den Besitzer der größten Burg
+- Einstellen der erwünschten Reportformate
+  - Textreport im Markdown-Format
 
 ### Weiterentwicklung des Spielkonzepts
 
