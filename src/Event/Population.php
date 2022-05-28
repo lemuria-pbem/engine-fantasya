@@ -147,7 +147,7 @@ final class Population extends AbstractEvent
 
 	private function getMigrantDistribution(Neighbours $neighbours): array {
 		$distribution = [];
-		foreach ($neighbours->getAll() as $d => $neighbour /* @var Region $neighbour */) {
+		foreach ($neighbours as $direction => $neighbour /* @var Region $neighbour */) {
 			if ($neighbour->Landscape()->Workplaces() <= 0) {
 				continue;
 			}
@@ -158,6 +158,7 @@ final class Population extends AbstractEvent
 				$peasants = 1;
 			}
 			$years            = $resources[$this->silver]->Count() / $peasants / Subsistence::SILVER / self::WEALTH;
+			$d                = $direction->value;
 			$distribution[$d] = $this->calculateMigrants($peasants, $workplaces, $years);
 		}
 		asort($distribution);

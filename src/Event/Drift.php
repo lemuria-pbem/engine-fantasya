@@ -57,16 +57,18 @@ final class Drift extends AbstractEvent
 				$neighbours = $this->getNeighbourRegions($region);
 				$coastline  = $this->getCoastline($neighbours);
 				if (count($coastline) > 0) {
-					$direction = array_rand($coastline->getAll());
+					$directions = $coastline->getDirections();
 				} else {
-					$direction = array_rand($neighbours->getAll());
+					$directions = $neighbours->getDirections();
 				}
+				$direction = $directions[array_rand($directions)];
+
 				/** @var Region $driftRegion */
 				$driftRegion = $neighbours[$direction];
 				$landscape   = $driftRegion->Landscape();
 				if ($landscape instanceof Ocean || $this->canSailTo($driftRegion)) {
 					$this->moveVessel($driftRegion);
-					$this->message(DriftMessage::class, $vessel)->p($direction);
+					$this->message(DriftMessage::class, $vessel)->p($direction->value);
 				} else {
 					$damage = rand(1, 15) / 100;
 					$vessel->setCompletion(max(0, $vessel->Completion() - $damage));
