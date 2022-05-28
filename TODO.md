@@ -4,6 +4,7 @@ Hier werden Ideen gesammelt und zu behebende Fehler gelistet.
 
 ## Verbesserungen und Fehler
 
+- Magellan-Report enthält viele Fehler
 
 ### Version 1.0
 
