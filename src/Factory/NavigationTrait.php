@@ -57,7 +57,7 @@ trait NavigationTrait
 
 	private function getNeighbourRegions(Region $region): Neighbours {
 		$neighbours = Lemuria::World()->getNeighbours($region);
-		foreach (array_keys($neighbours->getAll()) as $direction) {
+		foreach ($neighbours->getDirections() as $direction) {
 			if (!$neighbours[$direction]) {
 				unset($neighbours[$direction]);
 			}

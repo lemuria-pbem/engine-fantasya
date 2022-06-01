@@ -149,7 +149,7 @@ final class Fauna extends AbstractEvent
 
 	private function getMigrantDistribution(Neighbours $neighbours, array $rates): array {
 		$distribution = [];
-		foreach ($neighbours->getAll() as $d => $neighbour /* @var Region $neighbour */) {
+		foreach ($neighbours as $direction => $neighbour /* @var Region $neighbour */) {
 			$landscape = $neighbour->Landscape();
 			$class     = get_class($landscape);
 			$rate      = $rates[$class] ?? 0.0;
@@ -158,6 +158,7 @@ final class Fauna extends AbstractEvent
 			}
 			$workplaces       = $this->getAvailableWorkplaces($neighbour) - $this->getCultivatedWorkplaces($neighbour);
 			$available        = max(0, $workplaces);
+			$d                = $direction->value;
 			$distribution[$d] = -$rate / self::MAX_RATE * $available;
 		}
 		asort($distribution);

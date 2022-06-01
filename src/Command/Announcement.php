@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
-use Lemuria\Engine\Fantasya\Message\Construction\AbstractConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\AnnouncementConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Party\AnnouncementPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Region\AnnouncementRegionMessage;
@@ -13,9 +12,12 @@ use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementNoConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementNoPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementNoUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementNoVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementToConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementToPartyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementToRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementToUnitAnonymousMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementToUnitMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementToVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\AnnouncementVesselMessage;
 use Lemuria\Engine\Fantasya\Outlook;
@@ -104,7 +106,8 @@ final class Announcement extends UnitCommand
 		if ($construction->Region() === $this->unit->Region()) {
 			$message = $this->getMessage();
 			$sender  = $this->unit->Party()->Name();
-			$this->message(AbstractConstructionMessage::class, $construction)->p($message)->p($sender, AnnouncementConstructionMessage::SENDER);
+			$this->message(AnnouncementConstructionMessage::class, $construction)->p($message)->p($sender, AnnouncementConstructionMessage::SENDER);
+			$this->message(AnnouncementToConstructionMessage::class)->p($message)->e($construction);
 		} else {
 			$this->message(AnnouncementNoConstructionMessage::class)->e($construction);
 		}
@@ -115,6 +118,7 @@ final class Announcement extends UnitCommand
 			$message = $this->getMessage();
 			$sender  = $this->unit->Party()->Name();
 			$this->message(AnnouncementVesselMessage::class, $vessel)->p($message)->p($sender, AnnouncementVesselMessage::SENDER);
+			$this->message(AnnouncementToVesselMessage::class)->p($message)->e($vessel);
 		} else {
 			$this->message(AnnouncementNoVesselMessage::class)->e($vessel);
 		}
@@ -125,6 +129,7 @@ final class Announcement extends UnitCommand
 		$message = $this->getMessage(2);
 		$sender  = $this->unit->Party()->Name();
 		$this->message(AnnouncementRegionMessage::class, $region)->p($message)->p($sender, AnnouncementRegionMessage::SENDER);
+		$this->message(AnnouncementToRegionMessage::class)->p($message)->e($region);
 	}
 
 	private function getMessage(int $i = 3): string {

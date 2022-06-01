@@ -6,6 +6,7 @@ use Monolog\ErrorHandler;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
+use Monolog\Level;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
@@ -33,7 +34,6 @@ class LemuriaLog implements Log
 
 	/**
 	 * @return HandlerInterface[]
-	 * @todo Upgrade to Monolog\Level.
 	 */
 	protected function getHandlers(): array {
 		$handlers = [];
@@ -44,7 +44,7 @@ class LemuriaLog implements Log
 			$handlers[] = $this->createFileHandler();
 		}
 		if (empty($handlers)) {
-			$handlers[] = new NullHandler(Logger::EMERGENCY);
+			$handlers[] = new NullHandler(Level::Emergency);
 		}
 		return $handlers;
 	}

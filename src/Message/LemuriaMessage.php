@@ -145,6 +145,10 @@ class LemuriaMessage implements Message
 		return $this;
 	}
 
+	public function isInstanceOf(string $class): bool {
+		return $this->type instanceof $class;
+	}
+
 	public function setType(MessageType $type): LemuriaMessage {
 		$this->type = $type;
 		return $this;

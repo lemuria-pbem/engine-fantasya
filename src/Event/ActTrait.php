@@ -38,7 +38,7 @@ trait ActTrait
 			$regions[getClass($landscape)] = [];
 		}
 		$region = $this->unit->Region();
-		foreach (Lemuria::World()->getNeighbours($region)->getAll() as $neighbour /* @var Region $neighbour */) {
+		foreach (Lemuria::World()->getNeighbours($region) as $neighbour /* @var Region $neighbour */) {
 			$landscape = getClass($neighbour->Landscape());
 			if (isset($regions[$landscape])) {
 				$regions[$landscape][] = $neighbour;
@@ -72,12 +72,13 @@ trait ActTrait
 	}
 
 	protected function chooseRandomNeighbour(): ?Region {
-		$neighbours = Lemuria::World()->getNeighbours($this->unit->Region())->getAll();
+		$neighbours = Lemuria::World()->getNeighbours($this->unit->Region());
 		if (empty($neighbours)) {
 			return null;
 		}
-		$direction = array_rand($neighbours);
-		return $neighbours[$direction];
+		$directions = $neighbours->getDirections();
+		$direction  = array_rand($directions);
+		return $neighbours[$directions[$direction]];
 	}
 
 	protected function moveTo(Region $region): void {

@@ -146,8 +146,7 @@ final class Outlook
 
 		// Add direct neighbours and collect directions.
 		$directions = [];
-		$neighbours = $world->getNeighbours($region)->getAll();
-		foreach ($neighbours as $direction => $neighbour /* @var Region $neighbour */) {
+		foreach ($world->getNeighbours($region) as $direction => $neighbour /* @var Region $neighbour */) {
 			if ($neighbour->Landscape() instanceof Ocean) {
 				$directions[] = $direction;
 				if ($hasLighthouse) {
@@ -163,7 +162,7 @@ final class Outlook
 		$distance = 1;
 		while ($distance++ < $range) {
 			$nextDirections = $directions;
-			foreach ($nextDirections as $direction) {
+			foreach ($nextDirections as $i => $direction) {
 				$isOcean = false;
 				foreach ($world->getPath($region, $direction, $distance) as $way) {
 					$neighbour = array_pop($way);
@@ -176,7 +175,7 @@ final class Outlook
 					}
 				}
 				if (!$isOcean) {
-					unset($directions[$direction]);
+					unset($directions[$i]);
 				}
 			}
 		}

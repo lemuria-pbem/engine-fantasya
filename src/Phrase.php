@@ -78,7 +78,7 @@ class Phrase implements \Countable, \Stringable
 		if ($offset >= $n) {
 			return '';
 		}
-		$parts = array_slice($this->parts, 0, $n - $offset);
+		$parts = array_slice($this->parts, 1, $n - $offset);
 		return implode(' ', $parts);
 	}
 }

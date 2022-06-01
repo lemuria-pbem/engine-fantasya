@@ -103,7 +103,7 @@ final class Growth extends AbstractEvent
 
 	private function countNeighbourTrees(Region $region): int {
 		$trees = 0;
-		foreach (Lemuria::World()->getNeighbours($region)->getAll() as $neighbour /* @var Region $neighbour */) {
+		foreach (Lemuria::World()->getNeighbours($region) as $neighbour /* @var Region $neighbour */) {
 			$trees += $neighbour->Resources()[$this->tree]->Count();
 		}
 		return $trees;

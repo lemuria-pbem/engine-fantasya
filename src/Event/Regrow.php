@@ -184,7 +184,7 @@ final class Regrow extends AbstractEvent
 
 	private function getNeighbourLandscapes(Region $region): array {
 		$neighbours = [];
-		foreach (Lemuria::World()->getNeighbours($region)->getAll() as $neighbour /* @var Region $neighbour */) {
+		foreach (Lemuria::World()->getNeighbours($region) as $neighbour /* @var Region $neighbour */) {
 			$landscape = $neighbour->Landscape();
 			$neighbours[$landscape::class] = true;
 		}
