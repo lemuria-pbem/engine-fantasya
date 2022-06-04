@@ -56,6 +56,7 @@ final class Subsistence extends AbstractEvent
 			if ($peasants > 0) {
 				$wage      = $this->context->getIntelligence($region)->getWage(self::WAGE);
 				$available = $this->getAvailableWorkplaces($region);
+				$this->placeDataMetrics(Subject::Workplaces, $available, $region);
 				$workers   = min($peasants, $available);
 				$earnings  = $workers * $wage;
 				$working   = new Quantity($this->peasant, $workers);

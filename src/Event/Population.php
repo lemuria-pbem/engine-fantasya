@@ -71,6 +71,7 @@ final class Population extends AbstractEvent
 			$reserve    = $resources[$this->silver]->Count();
 			$wealth     = $reserve / $peasants / Subsistence::SILVER;
 			$years      = $wealth / self::WEALTH;
+			$this->placeDataMetrics(Subject::Prosperity, $years, $region);
 
 			$growth = $this->calculateGrowth($peasants, $available, $years, $region);
 			if ($growth > 0) {
@@ -237,6 +238,8 @@ final class Population extends AbstractEvent
 		}
 		$unemployed = (int)ceil(($percent / 100.0) * ($peasants + $growth - $migrants - $hungry));
 		$unemployment->setPeasants($unemployed);
+
+		$this->placeDataMetrics(Subject::Joblessness, $percent, $region);
 		Lemuria::Log()->debug('Unemployment in region ' . $region->Id() . ' is ' . round($percent, 1) . '%.');
 	}
 }
