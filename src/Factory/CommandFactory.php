@@ -688,6 +688,7 @@ class CommandFactory
 		'Hiebwaffen'        => Bladefighting::class,
 		'Holzfaellen'       => Woodchopping::class,
 		'Holzfällen'        => Woodchopping::class,
+		'Juwelierkunst'     => Jewelry::class,
 		'Juwelierskunst'    => Jewelry::class,
 		'Katapultbedienung' => Catapulting::class,
 		'Katapultschiessen' => Catapulting::class,

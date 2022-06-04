@@ -23,6 +23,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoMonsterMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNoCrewMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelNoMoreMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNoNavigationMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNoRidingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNotCaptainMessage;
@@ -157,11 +158,12 @@ class Travel extends UnitCommand implements Activity
 		}
 		$this->setRoadsLeft($movement);
 
-		$route   = [$this->unit->Region()];
-		$regions = $speed - $this->workload->count();
+		$route       = [$this->unit->Region()];
+		$regions     = $speed - $this->workload->count();
+		$roadRegions = 2 * $regions;
 		$this->message(TravelSpeedMessage::class)->p($regions)->p($weight, TravelSpeedMessage::WEIGHT);
 		try {
-			while ($regions > 0 && $this->directions->hasMore()) {
+			while (($regions > 0 || $roadRegions > 0) && $this->directions->hasMore()) {
 				$next = $this->directions->next();
 				if ($next === Direction::ROUTE_STOP) {
 					break;
@@ -170,16 +172,24 @@ class Travel extends UnitCommand implements Activity
 				$region = $this->canMoveTo($next);
 				if ($region) {
 					$overRoad = $this->overRoad($this->unit->Region(), $next, $region);
+					if ($overRoad) {
+						if ($this->roadsLeft > 0) {
+							$this->message(TravelRoadMessage::class);
+						}
+						$roadRegions--;
+					} else {
+						if ($regions <= 0) {
+							$this->message(TravelNoMoreMessage::class);
+							break;
+						}
+						$roadRegions -= 2;
+					}
+					$regions--;
+
 					$this->moveTo($region);
 					$this->addToTravelRoute($next->value);
 					$this->message(TravelRegionMessage::class)->e($region);
 					$route[] = $region;
-
-					if ($overRoad && $this->roadsLeft > 0) {
-						$this->message(TravelRoadMessage::class);
-					} else {
-						$regions--;
-					}
 
 					$this->workload->add();
 					$guards = $this->unitIsStoppedByGuards($region);

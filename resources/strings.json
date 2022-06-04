@@ -814,6 +814,7 @@
 		"TravelMessage": "Die Einheit $id $move $route.",
 		"TravelNeighbourMessage": "Die Einheit $id kann sich in Richtung $direction nach $landscape $region bewegen.",
 		"TravelNoCrewMessage": "Die Einheit $id kann das Schiff $vessel nicht ohne eine erfahrene Crew steuern.",
+		"TravelNoMoreMessage": "Die Einheit $id kann nicht weiter auf der Straße reisen.",
 		"TravelNoNavigationMessage": "Die Einheit $id hat nicht genügend Erfahrung im Segeln, um das Schiff $vessel zu steuern.",
 		"TravelNoRidingMessage": "Die Einheit $id hat nicht genügend Erfahrung in Reiten, um zu reisen.",
 		"TravelNotCaptainMessage": "Die Einheit $id muss der Kapitän des Schiffes $vessel sein, um es zu steuern.",
