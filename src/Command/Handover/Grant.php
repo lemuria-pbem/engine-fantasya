@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command\Handover;
 
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantAlreadyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GrantFromInsideMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantFromOutsideMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantNoConstructionMessage;
@@ -91,7 +92,7 @@ final class Grant extends UnitCommand
 				$this->message(GrantMessage::class, $owner)->e($this->unit);
 				$this->message(GrantTakeoverMessage::class)->e($owner);
 			} else {
-				$this->message(GrantNothingMessage::class);
+				$this->message(GrantFromInsideMessage::class);
 			}
 			return;
 		}
@@ -107,7 +108,7 @@ final class Grant extends UnitCommand
 				$this->message(GrantMessage::class, $captain)->e($this->unit);
 				$this->message(GrantTakeoverMessage::class)->e($captain);
 			} else {
-				$this->message(GrantNothingMessage::class);
+				$this->message(GrantFromInsideMessage::class);
 			}
 			return;
 		}

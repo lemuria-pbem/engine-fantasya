@@ -467,6 +467,7 @@
 		"GiveSiegeMessage": "Die Einheit $id kann wegen einer Belagerung nichts an die Einheit $recipient übergeben.",
 		"GoliathWaterMessage": "Die Einheit $id fühlt sich stark wie ein Pferd und bekommt Bärenkräfte.",
 		"GrantAlreadyMessage": "Die Einheit $id hat bereits das Kommando.",
+		"GrantFromInsideMessage": "Die Einheit $id kann kein Kommando von einer fremden Einheit übernehmen.",
 		"GrantFromOutsideMessage":"Die Einheit $id kann kein Kommando von außerhalb übergeben.",
 		"GrantMessage": "Die Einheit übergibt das Kommando an die Einheit $target.",
 		"GrantNoConstructionMessage": "Die Einheit ist in keinem Gebäude, das sie übernehmen könnte.",
