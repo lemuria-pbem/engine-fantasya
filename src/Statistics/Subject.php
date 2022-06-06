@@ -18,6 +18,8 @@ enum Subject
 
 	case Experts;
 
+	case Joblessness;
+
 	case LearningCosts;
 
 	case Maintenance;
@@ -31,6 +33,8 @@ enum Subject
 	case People;
 
 	case Population;
+
+	case Prosperity;
 
 	case Purchase;
 
@@ -53,4 +57,6 @@ enum Subject
 	case Wealth;
 
 	case Workers;
+
+	case Workplaces;
 }
