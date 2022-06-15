@@ -72,7 +72,7 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 		if ($product instanceof Artifact) {
 			$building = $this->unit->Construction()?->Building();
 			if ($building) {
-				$talent      = $product->getCraft();
+				$talent      = $product->getCraft()->Talent();
 				$consumption = self::CONSUMPTION[$talent::class][$building::class] ?? null;
 				if ($consumption) {
 					if ($this->calculus()->isInMaintainedConstruction()) {
