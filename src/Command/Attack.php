@@ -39,6 +39,11 @@ final class Attack extends UnitCommand
 	use CamouflageTrait;
 
 	/**
+	 * @var array(int=>array)
+	 */
+	private static array $attackers = [];
+
+	/**
 	 * @var Unit[]
 	 */
 	private array $units = [];
@@ -122,11 +127,22 @@ final class Attack extends UnitCommand
 		}
 	}
 
+	private static function isAttacked(int $id, int $from = 0): bool {
+		if (isset(self::$attackers[$id][$from])) {
+			return true;
+		}
+		self::$attackers[$id][$from] = true;
+		return false;
+	}
+
 	private function addAttackFromMessage(Unit $unit): void {
+		$id    = $unit->Id()->Id();
 		$party = $this->unit->Party();
 		if ($party->Type() === Type::PLAYER) {
-			$this->message(AttackFromMessage::class, $unit)->e($party);
-		} else {
+			if (!self::isAttacked($id, $party->Id()->Id())) {
+				$this->message(AttackFromMessage::class, $unit)->e($party);
+			}
+		} elseif (!self::isAttacked($id)) {
 			$this->message(AttackFromMonsterMessage::class, $unit);
 		}
 	}

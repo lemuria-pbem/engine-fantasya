@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Factory\NavigationTrait;
+use Lemuria\Engine\Fantasya\Factory\TravelTrait;
 use Lemuria\Engine\Fantasya\Message\Vessel\DriftDamageMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\DriftMessage;
 use Lemuria\Engine\Fantasya\Priority;
@@ -32,6 +33,7 @@ final class Drift extends AbstractEvent
 {
 	use BuilderTrait;
 	use NavigationTrait;
+	use TravelTrait;
 
 	private Talent $navigation;
 

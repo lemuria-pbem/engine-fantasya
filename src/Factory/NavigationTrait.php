@@ -49,7 +49,7 @@ trait NavigationTrait
 		$passengers = $this->vessel->Passengers();
 		$captain    = $passengers->Owner();
 		$knowledge  = $this->context->getCalculus($captain)->knowledge($this->navigation)->Level();
-		if ($knowledge <= $ship->Captain()) {
+		if ($knowledge < $ship->Captain()) {
 			return false;
 		}
 		return $this->navigationTalent() >= $ship->Crew();
@@ -67,9 +67,9 @@ trait NavigationTrait
 
 	private function getCoastline(Neighbours $neighbours): Neighbours {
 		$coastlines = new Neighbours();
-		foreach ($neighbours as $direction => $neighbour /* @var Region $region */) {
+		foreach ($neighbours as $direction => $region /* @var Region $region */) {
 			if (!($region->Landscape() instanceof Ocean)) {
-				$coastlines[$direction] = $neighbour;
+				$coastlines[$direction] = $region;
 			}
 		}
 		return $coastlines;

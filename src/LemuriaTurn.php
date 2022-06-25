@@ -431,7 +431,7 @@ class LemuriaTurn implements Turn
 
 	private function getDefaultActivity(Unit $unit, Context $context): ?Command {
 		foreach (Lemuria::Orders()->getDefault($unit->Id()) as $order) {
-			$command = $context->Factory()->create(new Phrase($order));
+			$command = $context->Factory()->create(new Phrase($order))->getDelegate();
 			if ($command instanceof Activity) {
 				$command->setIsDefault();
 				return $command;
