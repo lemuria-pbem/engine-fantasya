@@ -17,11 +17,15 @@ use Lemuria\Model\Fantasya\Quantity;
 /**
  * Buy goods on the market.
  *
- * KAUFEN [<amount>] <commodity>
+ * KAUFEN <commodity>
+ * KAUFEN <amount> <commodity>
+ * KAUFEN Alle|Alles <commodity>
  */
 final class Buy extends CommerceCommand
 {
 	use StatisticsTrait;
+
+	protected int $threshold = PHP_INT_MAX;
 
 	/**
 	 * Get the type of trade.
@@ -43,7 +47,7 @@ final class Buy extends CommerceCommand
 	}
 
 	public function trade(Luxury $good, int $price): bool {
-		if ($this->count < $this->amount) {
+		if ($this->count < $this->amount && $price <= $this->threshold) {
 			$payment = $this->collectQuantity($this->unit, $this->silver, $price);
 			if ($payment->Count() === $price) {
 				$inventory = $this->unit->Inventory();
@@ -73,8 +77,8 @@ final class Buy extends CommerceCommand
 	 * Finish trade, create messages.
 	 */
 	public function finish(): Merchant {
-		if ($this->demand > 0) {
-			if ($this->count < $this->demand && $this->demand < PHP_INT_MAX) {
+		if ($this->count > 0) {
+			if ($this->demand > 0 && $this->count < $this->demand && $this->demand < PHP_INT_MAX) {
 				$this->message(BuyOnlyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
 			} else {
 				$this->message(BuyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);

@@ -16,10 +16,14 @@ use Lemuria\Model\Fantasya\Quantity;
 /**
  * Sell goods on the market.
  *
+ * VERKAUFEN <commodity>
  * VERKAUFEN [<amount>] <commodity>
+ * VERKAUFEN Alle|Alles <commodity>
  */
 final class Sell extends CommerceCommand
 {
+	protected int $threshold = 0;
+
 	/**
 	 * Get the type of trade.
 	 */
@@ -40,7 +44,7 @@ final class Sell extends CommerceCommand
 	}
 
 	public function trade(Luxury $good, int $price): bool {
-		if ($this->count < $this->amount) {
+		if ($this->count < $this->amount && $price >= $this->threshold) {
 			$inventory = $this->unit->Inventory();
 			$this->traded->add(new Quantity($good, 1));
 			$inventory->remove(new Quantity($good, 1));
@@ -65,8 +69,8 @@ final class Sell extends CommerceCommand
 	 * Finish trade, create messages.
 	 */
 	public function finish(): Merchant {
-		if ($this->demand > 0) {
-			if ($this->count < $this->demand && $this->demand < PHP_INT_MAX) {
+		if ($this->count > 0) {
+			if ($this->demand > 0 && $this->count < $this->demand && $this->demand < PHP_INT_MAX) {
 				$this->message(SellOnlyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
 			} else {
 				$this->message(SellMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);

@@ -16,6 +16,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
+use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Relation;
@@ -32,6 +33,8 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	use SiegeTrait;
 
 	protected Resources $goods;
+
+	protected int $threshold;
 
 	protected int $demand;
 
@@ -53,9 +56,9 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 
 	protected Resources $traded;
 
-	private ?bool $isTradePossible = null;
+	protected Commodity $commodity;
 
-	private Commodity $commodity;
+	private ?bool $isTradePossible = null;
 
 	/**
 	 * Create a new command for given Phrase.
@@ -150,16 +153,32 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 		$n = $this->phrase->count();
 		if ($n === 1) {
 			$demand       = $this->getMaximum();
-			$this->demand = PHP_INT_MAX;
+			$this->demand = 0;
 			$luxury       = $this->phrase->getParameter();
 		} elseif ($n === 2) {
-			$demand       = (int)$this->phrase->getParameter();
-			$this->demand = $demand;
-			$luxury       = $this->phrase->getParameter(2);
+			$parameter = $this->phrase->getParameter();
+			if (in_array(strtolower($parameter), ['alle', 'alles'])) {
+				$demand       = $this->getMaximum();
+				$this->demand = PHP_INT_MAX;
+			} else {
+				$demand       = (int)$parameter;
+				$this->demand = $demand;
+			}
+			$luxury = $this->phrase->getParameter(2);
 		} else {
 			throw new UnknownCommandException($this);
 		}
+
 		$this->commodity = $this->context->Factory()->commodity($luxury);
+		if ($this->demand === 0 && $this->commodity instanceof Luxury) {
+			$luxuries = $this->unit->Region()->Luxuries();
+			$offer    = $luxuries->Offer();
+			if ($offer->Commodity() === $this->commodity) {
+				$this->threshold = $offer->Price();
+			} else {
+				$this->threshold = $luxuries[$this->commodity]->Price();
+			}
+		}
 		return new Quantity($this->commodity, $demand);
 	}
 
