@@ -1459,6 +1459,13 @@
 		"Weaponry": "Waffenbau",
 		"Woodchopping": "Holzfällen"
 	},
+	"visit": {
+		"ago": "vor $rounds Wochen",
+		"in": "in $rounds Wochen",
+		"last": "letzte Woche",
+		"next": "nächste Woche",
+		"now": "diese Woche"
+	},
 	"world": {
 		"N": "Norden",
 		"NE": "Nordosten",

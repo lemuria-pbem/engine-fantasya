@@ -30,6 +30,17 @@ final class Explore extends UnitCommand implements Activity
 
 	private const LEVEL = 3;
 
+	public static function occurrence(Herbage $herbage): string {
+		$occurrence = $herbage->Occurrence();
+		return match (true) {
+			$occurrence <= 0.2 => 'tiny',
+			$occurrence <= 0.4 => 'small',
+			$occurrence <= 0.6 => 'average',
+			$occurrence <= 0.8 => 'big',
+			$occurrence <= 1.0 => 'huge'
+		};
+	}
+
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n > 1) {
@@ -58,7 +69,7 @@ final class Explore extends UnitCommand implements Activity
 			$this->unit->Party()->HerbalBook()->record($region, $herbage);
 			if ($herbage && !$this->context->getTurnOptions()->IsSimulation()) {
 				$herb       = $herbage->Herb();
-				$occurrence = $this->occurrence($herbage);
+				$occurrence = self::occurrence($herbage);
 				$this->message(ExploreMessage::class)->e($region)->s($herb)->p($occurrence);
 			} else {
 				$this->message(ExploreNothingMessage::class)->e($region);
@@ -66,16 +77,5 @@ final class Explore extends UnitCommand implements Activity
 		} else {
 			$this->message(ExploreSiegeMessage::class);
 		}
-	}
-
-	private function occurrence(Herbage $herbage): string {
-		$occurrence = $herbage->Occurrence();
-		return match (true) {
-			$occurrence <= 0.2 => 'tiny',
-			$occurrence <= 0.4 => 'small',
-			$occurrence <= 0.6 => 'average',
-			$occurrence <= 0.8 => 'big',
-			$occurrence <= 1.0 => 'huge'
-		};
 	}
 }
