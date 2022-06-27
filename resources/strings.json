@@ -166,6 +166,7 @@
 		"will": ["wird", "werden"]
 	},
 	"composition": {
+		"HerbAlmanac": ["Kräuteralmanach", "Kräuteralmanache", "Kräuteralmanachs"],
 		"RingOfInvisibility": ["Ring der Unsichtbarkeit", "Ringe der Unsichtbarkeit", "Ringes der Unsichtbarkeit"],
 		"Scroll": ["Schriftrolle", "Schriftrollen", "Schriftrolle"],
 		"Spellbook": ["Zauberbuch", "Zauberbücher", "Zauberbuches"]
@@ -1017,6 +1018,7 @@
 		},
 		"Aurapunkt": ["Aurapunkt", "Aurapunkte"],
 		"das": {
+			"HerbAlmanac": "den",
 			"Monument": "das",
 			"RingOfInvisibility": "den",
 			"Scroll": "die",
@@ -1026,6 +1028,7 @@
 			"Desert": "der",
 			"Forest": "dem",
 			"Glacier": "dem",
+			"HerbAlmanac": "dem",
 			"Highland": "dem",
 			"Mountain": "dem",
 			"Ocean": "dem",
@@ -1036,6 +1039,7 @@
 			"Swamp": "dem"
 		},
 		"des": {
+			"HerbAlmanac": "des",
 			"RingOfInvisibility": "des",
 			"Scroll": "der",
 			"Spellbook": "des"
@@ -1081,6 +1085,7 @@
 			"GoliathWater": "ein",
 			"GriffinBreeding": "eine",
 			"HealingPotion": "einen",
+			"HerbAlmanac": "einen",
 			"HorseBliss": "ein",
 			"HorseBreeding": "eine",
 			"IceBegonia": "eine",
@@ -1143,6 +1148,7 @@
 			"Woundshut": "eine"
 		},
 		"es": {
+			"HerbAlmanac": "er",
 			"RingOfInvisibility": "er",
 			"Scroll": "sie",
 			"Spellbook": "es"
@@ -1198,6 +1204,7 @@
 			"GriffinBreeding": "keine",
 			"Griffinegg": "kein",
 			"HealingPotion": "keinen",
+			"HerbAlmanac": "keinen",
 			"Horse": "kein",
 			"HorseBliss": "kein",
 			"HorseBreeding": "keine",

@@ -28,8 +28,6 @@ final class Explore extends UnitCommand implements Activity
 	use OneActivityTrait;
 	use SiegeTrait;
 
-	private const LEVEL = 3;
-
 	public static function occurrence(Herbage $herbage): string {
 		$occurrence = $herbage->Occurrence();
 		return match (true) {
@@ -58,7 +56,7 @@ final class Explore extends UnitCommand implements Activity
 		}
 
 		$knowledge = $this->calculus()->knowledge(Herballore::class)->Level();
-		if ($knowledge < self::LEVEL) {
+		if ($knowledge < Herballore::EXPLORE_LEVEL) {
 			$this->message(ExploreExperienceMessage::class);
 			return;
 		}
