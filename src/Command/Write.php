@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Factory\UnicumTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\WriteNoCompositionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\WriteNoUnicumMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\WriteUnsupportedMessage;
+use Lemuria\Model\Fantasya\Composition;
 use Lemuria\Model\Fantasya\Practice;
 
 /**
@@ -20,6 +21,11 @@ final class Write extends UnitCommand implements Activity, Operator
 {
 	use OperatorActivityTrait;
 	use UnicumTrait;
+
+	public function Composition(): Composition {
+		$this->parseUnicum();
+		return $this->unicum->Composition();
+	}
 
 	protected function run(): void {
 		$this->parseUnicumWithArguments();

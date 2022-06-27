@@ -4,12 +4,13 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
-use Lemuria\Engine\Fantasya\Factory\OneActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\ExploreExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ExploreMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ExploreNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ExploreSiegeMessage;
+use Lemuria\Model\Fantasya\Composition\HerbAlmanac;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Herbage;
 use Lemuria\Model\Fantasya\Talent\Herballore;
@@ -25,7 +26,7 @@ use Lemuria\Model\Fantasya\Talent\Herballore;
 final class Explore extends UnitCommand implements Activity
 {
 	use BuilderTrait;
-	use OneActivityTrait;
+	use DefaultActivityTrait;
 	use SiegeTrait;
 
 	public static function occurrence(Herbage $herbage): string {
@@ -37,6 +38,13 @@ final class Explore extends UnitCommand implements Activity
 			$occurrence <= 0.8 => 'big',
 			$occurrence <= 1.0 => 'huge'
 		};
+	}
+
+	/**
+	 * Allow writing of explored herbage.
+	 */
+	public function allows(Activity $activity): bool {
+		return $activity instanceof Write && $activity->Composition() instanceof HerbAlmanac;
 	}
 
 	protected function run(): void {
