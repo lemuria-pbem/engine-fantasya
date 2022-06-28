@@ -19,7 +19,7 @@
 ^(ba|ban|bann|banne|banner) +.*$
 
 ^@?(benu|benut|benutz|benutze|benutzen)( +[0-9]+)? +(bauernlieb|berserkerblut|elixier der macht|gehirnschmalz|goliathwasser|heiltrank|pferdeglück|pferdeglueck|schaffenstrunk|siebenmeilentee|trank der wahrheit|wasser des lebens|wundsalbe)$
-^@?(benu|benut|benutz|benutze|benutzen)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(benu|benut|benutz|benutze|benutzen)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^@?(beschreibu|beschreibun|beschreibung|beschreibe|beschreiben|te|tex|text)( +(einheit|region|gebaeude|gebäude|burg|schiff|partei))? .+$
 
@@ -44,12 +44,12 @@
 
 ^@?(fol|folg|folge|folgen) +[a-z0-9]{1,6}$
 
-^@?(ers|ersc|ersch|erscha|erschaf|erschaff|erschaffe|erschaffen) +(schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
+^@?(ers|ersc|ersch|erscha|erschaf|erschaff|erschaffe|erschaffen) +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
 
 ^@?(gi|gib|ge|geb|gebe|geben) +[a-z0-9]{1,6}( +.*)?$
-^@?(gi|gib|ge|geb|gebe|geben) +[a-z0-9]{1,6}( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(gi|gib|ge|geb|gebe|geben) +[a-z0-9]{1,6}( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 ^@?(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6}( +.*)?$
-^@?(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6}( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6}( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^@?(h|he|hel|helf|helfe|helfen|hi|hil|hilf|hilfe) +[a-z0-9]{1,6} +[a-z]+( +(region|nicht|region +nicht|nicht +region))?$
 
@@ -68,8 +68,8 @@
 
 ^@?(ler|lern|lerne|lernen) +(alchemie|armbrustschießen|armbrustschiessen|ausdauer|bergbau|bogenbau|bogenschießen|bogenschiessen|burgenbau|handel|handeln|hiebwaffen|holzfaellen|holzfällen|juwelierkunst|juwelierskunst|katapultbedienung|katapultschießen|katapultschiessen|kräuterkunde|kraeuterkunde|magie|navigation|navigieren|pferdedressur|reiten|ruestungsbau|rüstungsbau|schiffbau|segeln|speerkämpfen|speerkaempfen|speerkampf|spionage|spionieren|stangenwaffen|steinbau|steuereintreiben|steuereintreibung|strassenbau|straßenbau|taktik|tarnen|tarnung|unterhalten|unterhaltung|waffenbauen|waffenbau|wagenbau|wahrnehmen|wahrnehmung)$
 
-^@?(les|lese|lesen|li|lie|lies)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
-^@?(unters|untersu|untersuc|untersuch|untersuche|untersuchen)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(les|lese|lesen|li|lie|lies)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(unters|untersu|untersuc|untersuch|untersuche|untersuchen)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^@?(m|ma|mac|mach|mache|machen) +(temp) +[a-z0-9]{1,6}$
 ^@?(m|ma|mac|mach|mache|machen) +[a-zäöüß]+$
@@ -77,14 +77,14 @@
 ^@?(m|ma|mac|mach|mache|machen) +(schiff|boot|drachenschiff|galeone|karavelle|langboot|trireme)( +[0-9]+)?$
 ^@?(m|ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|akropolis|alchemistenküche|bergwerk|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|kamelzucht|kanal|leuchtturm|leuchttürme|magierturm|minen|mine|monument|monumente|pferdezucht|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steingrube|steuerturm|taverne|wegweiser|werkstatt)(( +[0-9]+)|( +[a-z0-9]{1,6}))?$
 ^@?(m|ma|mac|mach|mache|machen) +straße +(no|o|so|sw|w|nw)$
-^@?(m|ma|mac|mach|mache|machen) +(schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
+^@?(m|ma|mac|mach|mache|machen) +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
 
 ^@?(nam|name|bene|benen|benenn|benenne|benennen)( +(einheit|region|gebäude|gebaeude|burg|schiff|partei))? +.+$
 
 ^(nä|näc|näch|nächs|nächst|nächste|nächster|nae|naec|naech|naechs|naechst|naechste|naechster)$
 
-^@?(ne|neh|nehm|nehme|nehmen)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
-^@?(ni|nim|nimm)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(ne|neh|nehm|nehme|nehmen)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(ni|nim|nimm)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^@?(nu|num|numm|numme|nummer|i|id)( +(einheit|gebaeude|gebäude|burg|schiff|partei))? +[a-z0-9]{1,6}$
 
@@ -103,7 +103,7 @@
 
 ^@?(ro|rou|rout|route)( +(e|ne|no|nw|o|so|sw|w|east|nordosten|nordwesten|northeast|northwest|osten|suedosten|suedwesten|southeast|southwest|westen|west|pause))+$
 
-^@?(sc|sch|schr|schre|schrei|schreib|schreibe|schreiben)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6} +[a-zäöüß]+( [a-zäöüß]+)*$
+^@?(sc|sch|schr|schre|schrei|schreib|schreibe|schreiben)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6} +[a-zäöüß]+( [a-zäöüß]+)*$
 
 ^@?(s|so|sor|sort|sorti|sortie|sortier|sortiere|sortieren|sortieru|sortierun|sortierung) +(anfang|erste|erster|zuerst|ende|letzte|letzter|zuletzt)$
 ^@?(s|so|sor|sort|sorti|sortie|sortier|sortiere|sortieren|sortieru|sortierun|sortierung) +(vor|hinter|nach|austausch|austauschen|auswechseln|mit|tausch|tausche|tauschen|wechsel|wechseln)( +temp)? +[a-z0-9]{1,6}$
@@ -133,7 +133,7 @@
 
 ^@?(verli|verlie|verlier|verliere|verlieren) +.*$
 
-^@?(vern|verni|vernic|vernich|vernicht|vernichte|vernichten)( +(schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(vern|verni|vernic|vernich|vernicht|vernichte|vernichten)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^(vorg|vorga|vorgab|vorgabe) +kämpfen +(aggressiv|defensiv|fliehe|fliehen|flucht|hinten|nicht|vorn|vorne|vorsichtig)?$
 ^(vorg|vorga|vorgab|vorgabe) +tarnen( +nicht)?$

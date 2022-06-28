@@ -620,6 +620,7 @@ class CommandFactory
 	 * @var array(string=>string)
 	 */
 	protected array $compositions = [
+		'Kraeuteralmanach'        => HerbAlmanac::class,
 		'Kräuteralmanach'         => HerbAlmanac::class,
 		'Ring der Unsichtbarkeit' => RingOfInvisibility::class,
 		'Schriftrolle'            => Scroll::class,

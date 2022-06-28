@@ -1,7 +1,7 @@
 {
 	"description": [
 		"Kräuterkundige Einheiten können die erforschten Kräutervorkommen in einem Kräuteralmanach aufschreiben und in dieser Form an andere Parteien weitergeben.",
-		"Durch das Anwenden eines Kräuteralmanachs ergänzen die Einheiten der fremden Partei ihre eigenen Aufzeichnungen. Dabei können die einzelnen Vorkommen oder der ganze Almanach übernommen werden.",
+		"Durch das BENUTZEN eines Kräuteralmanachs (kurzer Befehl) ergänzen die Einheiten der fremden Partei ihre eigenen Aufzeichnungen. Dabei können die einzelnen Vorkommen oder der ganze Almanach übernommen werden.",
 		"Das Aufschreiben von Vorkommen kann ebenfalls vollständig oder als Einzelvorkommen erfolgen."
 	],
 	"apply": "[Regionsnummer]",
