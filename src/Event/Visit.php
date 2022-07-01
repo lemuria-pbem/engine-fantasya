@@ -16,6 +16,16 @@ use Lemuria\Model\Fantasya\Region;
  */
 final class Visit extends AbstractEvent
 {
+	public static function when(int $rounds): string {
+		return match(true) {
+			$rounds <   -1 => 'ago',
+			$rounds === -1 => 'last',
+			$rounds ===  1 => 'next',
+			$rounds >    1 => 'in',
+			default        => 'now'
+		};
+	}
+
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::BEFORE);
 	}

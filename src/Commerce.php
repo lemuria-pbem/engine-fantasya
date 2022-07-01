@@ -71,7 +71,7 @@ final class Commerce
 	 */
 	public function register(Merchant $merchant): Commerce {
 		if ($this->resetGoods) {
-			$this->goods = [];
+			$this->goods      = [];
 			$this->resetGoods = false;
 			// Lemuria::Log()->debug('Goods have been reset in commerce of region ' . $this->region->Id() . '.');
 		}

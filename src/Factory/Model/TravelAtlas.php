@@ -41,7 +41,7 @@ final class TravelAtlas extends Atlas
 				if (!isset($this->visibility[$id])) {
 					$this->add($neighbour);
 					$this->visibility[$id] = $visibility;
-				} elseif ($this->visibility[$id] < $visibility) {
+				} elseif ($visibility->value > $this->visibility[$id]->value) {
 					$this->visibility[$id] = $visibility;
 				}
 			}

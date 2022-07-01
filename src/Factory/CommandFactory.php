@@ -201,6 +201,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Composition;
+use Lemuria\Model\Fantasya\Composition\HerbAlmanac;
 use Lemuria\Model\Fantasya\Composition\RingOfInvisibility;
 use Lemuria\Model\Fantasya\Composition\Scroll;
 use Lemuria\Model\Fantasya\Composition\Spellbook;
@@ -619,6 +620,8 @@ class CommandFactory
 	 * @var array(string=>string)
 	 */
 	protected array $compositions = [
+		'Kraeuteralmanach'        => HerbAlmanac::class,
+		'Kräuteralmanach'         => HerbAlmanac::class,
 		'Ring der Unsichtbarkeit' => RingOfInvisibility::class,
 		'Schriftrolle'            => Scroll::class,
 		'Zauberbuch'              => Spellbook::class

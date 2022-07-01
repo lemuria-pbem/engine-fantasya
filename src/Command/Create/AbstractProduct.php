@@ -114,7 +114,7 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 			$commodity    = $quantity->Commodity();
 			$resourceNeed = $this->consumption * $quantity->Count();
 			$needed       = (int)ceil($this->capability * $resourceNeed);
-			$this->collectQuantity($this->unit, $commodity, $needed);
+			$this->collectQuantity($this->unit, $commodity, min($needed, $this->job->Count()));
 			$reserve    = $reserves->offsetGet($commodity);
 			$amount     = (int)floor($reserve->Count() / $resourceNeed);
 			$production = min($production, $amount);

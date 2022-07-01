@@ -166,6 +166,7 @@
 		"will": ["wird", "werden"]
 	},
 	"composition": {
+		"HerbAlmanac": ["Kräuteralmanach", "Kräuteralmanache", "Kräuteralmanachs"],
 		"RingOfInvisibility": ["Ring der Unsichtbarkeit", "Ringe der Unsichtbarkeit", "Ringes der Unsichtbarkeit"],
 		"Scroll": ["Schriftrolle", "Schriftrollen", "Schriftrolle"],
 		"Spellbook": ["Zauberbuch", "Zauberbücher", "Zauberbuches"]
@@ -500,6 +501,14 @@
 		"HelpRegionNotMessage": "Die Einheit $id hat HELFEN $agreement für alle Parteien in der Region $region widerrufen.",
 		"HelpSelfMessage": "Die Einheit $id kann nicht der eigenen Partei helfen.",
 		"HelpUnknownPartyMessage": "Die Einheit $id kennt die Partei $party nicht, um ihr zu helfen.",
+		"HerbageApplyAllMessage": "Wir übernehmen die Kräutervorkommen aus dem Almanach $almanac.",
+		"HerbageApplyEmptyMessage": "Der Almanac $almanac enthält keine Kräutervorkommen.",
+		"HerbageApplyMessage": "Wir übernehmen das Kräutervorkommen der Region $region aus dem Almanach $almanac.",
+		"HerbageApplySkipMessage": "Das Kräutervorkommen der Region $region aus dem Almanach $almanac scheint veraltet zu sein.",
+		"HerbageApplyUnknownMessage": "Wir können mit dem Kräutervorkommen der uns unbekannten Region $region nichts anfangen.",
+		"HerbageWriteAllMessage": "Die Einheit $id zeichnet alle bekannten Kräutervorkommen im Almanach $almanac auf.",
+		"HerbageWriteEmptyMessage": "Wir haben keine Kenntnisse über Kräutervorkommen, die wir aufschreiben könnten.",
+		"HerbageWriteUnknownMessage": "Wir können das Kräutervorkommen der unbekannten Region $region nicht aufschreiben.",
 		"HerbUnknownMessage": "Die Einheit $id kann in der Region $region keine Kräuter pflücken - die Gegend muss zuerst erforscht werden.",
 		"HomeMessage": "Die Einheit $id gelangt auf der Suche nach einer Heimat in die Region $region.",
 		"HomeNowhereMessage": "Die Einheit $id verzweifelt, weil sie niemals eine Heimat finden wird.",
@@ -1017,6 +1026,7 @@
 		},
 		"Aurapunkt": ["Aurapunkt", "Aurapunkte"],
 		"das": {
+			"HerbAlmanac": "den",
 			"Monument": "das",
 			"RingOfInvisibility": "den",
 			"Scroll": "die",
@@ -1026,6 +1036,7 @@
 			"Desert": "der",
 			"Forest": "dem",
 			"Glacier": "dem",
+			"HerbAlmanac": "dem",
 			"Highland": "dem",
 			"Mountain": "dem",
 			"Ocean": "dem",
@@ -1036,6 +1047,7 @@
 			"Swamp": "dem"
 		},
 		"des": {
+			"HerbAlmanac": "des",
 			"RingOfInvisibility": "des",
 			"Scroll": "der",
 			"Spellbook": "des"
@@ -1081,6 +1093,7 @@
 			"GoliathWater": "ein",
 			"GriffinBreeding": "eine",
 			"HealingPotion": "einen",
+			"HerbAlmanac": "einen",
 			"HorseBliss": "ein",
 			"HorseBreeding": "eine",
 			"IceBegonia": "eine",
@@ -1143,6 +1156,7 @@
 			"Woundshut": "eine"
 		},
 		"es": {
+			"HerbAlmanac": "er",
 			"RingOfInvisibility": "er",
 			"Scroll": "sie",
 			"Spellbook": "es"
@@ -1198,6 +1212,7 @@
 			"GriffinBreeding": "keine",
 			"Griffinegg": "kein",
 			"HealingPotion": "keinen",
+			"HerbAlmanac": "keinen",
 			"Horse": "kein",
 			"HorseBliss": "kein",
 			"HorseBreeding": "keine",
@@ -1458,6 +1473,13 @@
 		"Trading": "Handeln",
 		"Weaponry": "Waffenbau",
 		"Woodchopping": "Holzfällen"
+	},
+	"visit": {
+		"ago": "vor $rounds Wochen",
+		"in": "in $rounds Wochen",
+		"last": "letzte Woche",
+		"next": "nächste Woche",
+		"now": "diese Woche"
 	},
 	"world": {
 		"N": "Norden",

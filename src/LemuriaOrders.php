@@ -26,11 +26,6 @@ class LemuriaOrders implements Orders, Reassignment
 	 */
 	private array $default = [];
 
-	/**
-	 * @var array(int=>array)
-	 */
-	private array $commands = [];
-
 	private bool $isLoaded = false;
 
 	public function __construct() {
@@ -54,8 +49,7 @@ class LemuriaOrders implements Orders, Reassignment
 	public function getDefault(Id $id): Instructions {
 		$id = $id->Id();
 		if (!isset($this->default[$id])) {
-			$this->default[$id]  = new LemuriaInstructions();
-			$this->commands[$id] = [];
+			$this->default[$id] = new LemuriaInstructions();
 		}
 		return $this->default[$id];
 	}
