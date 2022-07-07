@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\Operate\HerbageApplySkipMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\HerbageApplyUnknownMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\HerbageWriteAllMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\HerbageWriteEmptyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\Operate\HerbageWriteRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\HerbageWriteUnknownMessage;
 use Lemuria\Id;
 use Lemuria\Model\Exception\NotRegisteredException;
@@ -59,8 +60,11 @@ final class HerbAlmanac extends AbstractOperate
 		$id         = $this->operator->Phrase()->getLine($this->operator->ArgumentIndex());
 		if ($id) {
 			try {
-				$id = Id::fromId($id);
-				$this->writeHerbage($almanac, Region::get($id), $herbalBook);
+				$id     = Id::fromId($id);
+				$region = Region::get($id);
+				$this->writeHerbage($almanac, $region, $herbalBook);
+				$unicum = $this->operator->Unicum();
+				$this->message(HerbageWriteRegionMessage::class, $this->unit)->e($unicum)->e($region, HerbageWriteRegionMessage::REGION);
 			} catch (NotRegisteredException) {
 				$this->message(HerbageWriteUnknownMessage::class, $this->unit)->p((string)$id);
 				return;

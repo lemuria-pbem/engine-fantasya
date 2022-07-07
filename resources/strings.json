@@ -508,6 +508,7 @@
 		"HerbageApplyUnknownMessage": "Wir können mit dem Kräutervorkommen der uns unbekannten Region $region nichts anfangen.",
 		"HerbageWriteAllMessage": "Die Einheit $id zeichnet alle bekannten Kräutervorkommen im Almanach $almanac auf.",
 		"HerbageWriteEmptyMessage": "Wir haben keine Kenntnisse über Kräutervorkommen, die wir aufschreiben könnten.",
+		"HerbageWriteRegionMessage": "Die Einheit $id vermerkt das Kräutervorkommen in der Region $region im Almanach $almanac.",
 		"HerbageWriteUnknownMessage": "Wir können das Kräutervorkommen der unbekannten Region $region nicht aufschreiben.",
 		"HerbUnknownMessage": "Die Einheit $id kann in der Region $region keine Kräuter pflücken - die Gegend muss zuerst erforscht werden.",
 		"HomeMessage": "Die Einheit $id gelangt auf der Suche nach einer Heimat in die Region $region.",
