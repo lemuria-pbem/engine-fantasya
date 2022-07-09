@@ -3,10 +3,13 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message;
 use Lemuria\Id;
 
 class SupportCharityMessage extends SupportPayMessage
 {
+	protected string $level = Message::EVENT;
+
 	protected Id $unit;
 
 	protected function create(): string {

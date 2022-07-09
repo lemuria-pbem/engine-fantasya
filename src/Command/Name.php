@@ -82,7 +82,7 @@ final class Name extends UnitCommand
 				if ($n < 3) {
 					throw new InvalidCommandException('No name given.');
 				}
-				$this->renameUnicum($name, $this->phrase->getParameter(3));
+				$this->renameUnicum($this->phrase->getParameter(2), $this->phrase->getLine(3));
 				break;
 			default :
 				$this->renameUnit(self::trimName($this->phrase->getLine()));

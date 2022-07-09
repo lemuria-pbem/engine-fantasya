@@ -81,7 +81,7 @@ final class Describe extends UnitCommand
 				if ($n < 3) {
 					throw new InvalidCommandException('No description given.');
 				}
-				$this->describeUnicum($description, $this->phrase->getParameter(3));
+				$this->describeUnicum($this->phrase->getParameter(2), $this->phrase->getLine(3));
 				break;
 			default :
 				$this->describeUnit(self::trimDescription($this->phrase->getLine()));

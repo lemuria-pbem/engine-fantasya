@@ -113,8 +113,10 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 		foreach ($resources as $quantity /* @var Quantity $quantity */) {
 			$commodity    = $quantity->Commodity();
 			$resourceNeed = $this->consumption * $quantity->Count();
-			$needed       = (int)ceil($this->capability * $resourceNeed);
-			$this->collectQuantity($this->unit, $commodity, min($needed, $this->job->Count()));
+			$capaNeeded   = (int)ceil($this->capability * $resourceNeed);
+			$needed       = $this->job->Count();
+			$needed       = $needed < PHP_INT_MAX ? (int)ceil($needed * $resourceNeed) : PHP_INT_MAX;
+			$this->collectQuantity($this->unit, $commodity, min($capaNeeded, $needed));
 			$reserve    = $reserves->offsetGet($commodity);
 			$amount     = (int)floor($reserve->Count() / $resourceNeed);
 			$production = min($production, $amount);

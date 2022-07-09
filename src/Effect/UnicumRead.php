@@ -40,6 +40,9 @@ final class UnicumRead extends AbstractPartyEffect implements Reassignment
 	}
 
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
+		if ($this->treasury->has($oldId)) {
+			$this->treasury->replace($oldId, $identifiable->Id());
+		}
 	}
 
 	public function remove(Identifiable $identifiable): void {
