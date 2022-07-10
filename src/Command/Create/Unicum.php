@@ -42,6 +42,8 @@ final class Unicum extends UnitCommand implements Activity
 	use OperatorActivityTrait;
 	use WorkloadTrait;
 
+	protected bool $preventDefault = true;
+
 	private readonly Composition $composition;
 
 	private ?Id $id = null;

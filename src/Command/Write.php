@@ -22,6 +22,8 @@ final class Write extends UnitCommand implements Activity, Operator
 	use OperatorActivityTrait;
 	use UnicumTrait;
 
+	protected bool $preventDefault = true;
+
 	public function Composition(): Composition {
 		$this->parseUnicum();
 		return $this->unicum->Composition();

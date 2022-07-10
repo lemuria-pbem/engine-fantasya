@@ -20,6 +20,8 @@ final class Operate extends UnitCommand implements Activity, Operator
 	use DefaultActivityTrait;
 	use OperateTrait;
 
+	protected bool $preventDefault = true;
+
 	protected function run(): void {
 		$this->parseOperate(Practice::APPLY)?->apply();
 	}

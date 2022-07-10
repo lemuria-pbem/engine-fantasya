@@ -30,8 +30,8 @@ final class Commodity extends AbstractProduct
 		$reserve          = $this->calculateResources($artifact->getMaterial());
 		$production       = min($this->capability, $reserve);
 		if ($production > 0) {
-			$count = $this->job->Count();
-			$yield = min($production, $count);
+			$jobCount = $this->job->Count();
+			$yield    = min($production, $jobCount);
 			foreach ($artifact->getMaterial() as $quantity /* @var Quantity $quantity */) {
 				$count       = (int)ceil($this->consumption * $yield * $quantity->Count());
 				$consumption = new Quantity($quantity->Commodity(), $count);
@@ -45,7 +45,7 @@ final class Commodity extends AbstractProduct
 			$this->addToWorkload($yield);
 			$output = new Quantity($commodity, $yield);
 			$this->unit->Inventory()->add($output);
-			if ($this->job->hasCount() && $count > $production) {
+			if ($this->job->hasCount() && $jobCount > $production) {
 				$this->message(CommodityOnlyMessage::class)->i($output)->s($talent);
 			} else {
 				$this->message(CommodityCreateMessage::class)->i($output)->s($talent);

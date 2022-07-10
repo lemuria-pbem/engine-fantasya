@@ -22,6 +22,6 @@ class NumberUnicumMessage extends NumberUnicumUsedMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->composition($name, 'composition') ?? parent::getTranslation($name);
+		return $this->composition($name, 'composition', 2) ?? parent::getTranslation($name);
 	}
 }
