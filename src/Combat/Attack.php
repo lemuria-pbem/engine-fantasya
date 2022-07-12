@@ -64,6 +64,8 @@ class Attack
 
 	protected const FLIGHT = [1.0, 0.9, 0.9, 0.9, 0.2, 0.2, 0.0];
 
+	protected const BLOCK_EFFECT = 0.5;
+
 	protected int $round = 0;
 
 	private float $flight;
@@ -237,8 +239,17 @@ class Attack
 		$bonus   = self::DAMAGE_BONUS[$weapon::class] ?? 0.0;
 		$b       = $bonus > 0.0 ? (int)floor($bonus * $skill) : 0;
 		$attack  = $damage->Count() * rand(1, $damage->Dice() + $b) + $damage->Addition();
-		$block  += $shield?->Block() + $armor?->Block();
+		$block  += $this->getBlockValue($shield) + $this->getBlockValue($armor);
 		// Lemuria::Log()->debug('Damage calculation: ' . getClass($weapon) . ':' . $damage . ' bonus:' . $b . ' damage:' . $attack . '-' . $block);
 		return max(0, $attack - $block);
+	}
+
+	private function getBlockValue(?Protection $protection): int {
+		if ($protection) {
+			$max = $protection->Block();
+			$min = (int)ceil(self::BLOCK_EFFECT * $max);
+			return rand($min, $max);
+		}
+		return 0;
 	}
 }
