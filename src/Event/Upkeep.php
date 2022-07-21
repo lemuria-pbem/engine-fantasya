@@ -132,12 +132,13 @@ final class Upkeep extends AbstractEvent
 		$ownSilver = $inventory->offsetGet($this->silver)->Count();
 		$payed     = min($ownSilver, $upkeep);
 		if ($payed > 0) {
-			$inventory->remove(new Quantity($this->silver, $payed));
+			$payedSilver = new Quantity($this->silver, $payed);
+			$inventory->remove($payedSilver);
 			$this->placeDataMetrics(Subject::Maintenance, $payed, $unit);
 			if ($neededSilver > 0) {
-				$this->message(UpkeepPayOnlyMessage::class, $unit)->e($construction)->i($payed);
+				$this->message(UpkeepPayOnlyMessage::class, $unit)->e($construction)->i($payedSilver);
 			} else {
-				$this->message(UpkeepPayMessage::class, $unit)->e($construction)->i($payed);
+				$this->message(UpkeepPayMessage::class, $unit)->e($construction)->i($payedSilver);
 			}
 		}
 		return ($upkeep - $payed) / $upkeep;

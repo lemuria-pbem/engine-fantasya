@@ -2,14 +2,18 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Message\Unit\CommodityExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CommodityResourcesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CommodityCreateMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CommodityOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CommodityUnmaintainedMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Artifact as ArtifactInterface;
 use Lemuria\Model\Fantasya\Commodity as CommodityModel;
+use Lemuria\Model\Fantasya\Commodity\Protection\LeatherArmor;
 use Lemuria\Model\Fantasya\Quantity;
 
 /**
@@ -22,6 +26,15 @@ use Lemuria\Model\Fantasya\Quantity;
  */
 final class Commodity extends AbstractProduct
 {
+	private const EFFICIENCY = [
+		LeatherArmor::class => 5.0
+	];
+
+	public function __construct(Phrase $phrase, Context $context, protected Job $job) {
+		parent::__construct($phrase, $context, $this->job);
+		$this->setEfficiency();
+	}
+
 	/** @noinspection DuplicatedCode */
 	protected function run(): void {
 		$artifact         = $this->getArtifact();
@@ -33,7 +46,7 @@ final class Commodity extends AbstractProduct
 			$jobCount = $this->job->Count();
 			$yield    = min($production, $jobCount);
 			foreach ($artifact->getMaterial() as $quantity /* @var Quantity $quantity */) {
-				$count       = (int)ceil($this->consumption * $yield * $quantity->Count());
+				$count       = (int)ceil($this->consumption * $yield * $quantity->Count() / $this->efficiency);
 				$consumption = new Quantity($quantity->Commodity(), $count);
 				$this->unit->Inventory()->remove($consumption);
 			}
@@ -59,6 +72,14 @@ final class Commodity extends AbstractProduct
 			} else {
 				$this->message(CommodityExperienceMessage::class)->s($talent, CommodityExperienceMessage::TALENT)->s($artifact, CommodityExperienceMessage::ARTIFACT);
 			}
+		}
+	}
+
+	private function setEfficiency(): void {
+		$artifact = $this->job->getObject();
+		$class    = $artifact::class;
+		if (isset(self::EFFICIENCY[$class])) {
+			$this->efficiency = self::EFFICIENCY[$class];
 		}
 	}
 

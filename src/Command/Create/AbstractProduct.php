@@ -57,6 +57,8 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 
 	protected float $consumption = 1.0;
 
+	protected float $efficiency = 1.0;
+
 	public function __construct(Phrase $phrase, Context $context, protected Job $job) {
 		parent::__construct($phrase, $context);
 		$this->initWorkload();
@@ -112,7 +114,7 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 		$production = PHP_INT_MAX;
 		foreach ($resources as $quantity /* @var Quantity $quantity */) {
 			$commodity    = $quantity->Commodity();
-			$resourceNeed = $this->consumption * $quantity->Count();
+			$resourceNeed = $this->consumption * $quantity->Count() / $this->efficiency;
 			$capaNeeded   = (int)ceil($this->capability * $resourceNeed);
 			$needed       = $this->job->Count();
 			$needed       = $needed < PHP_INT_MAX ? (int)ceil($needed * $resourceNeed) : PHP_INT_MAX;

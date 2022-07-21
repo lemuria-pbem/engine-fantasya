@@ -120,6 +120,7 @@ class RawMaterial extends AllocationCommand implements Activity
 				return;
 			}
 			$this->addUnmaintainedMessage();
+			$this->hasLodging = false;
 		} elseif ($this->isInDoublingFacility) {
 			$this->addUnusableMessage();
 		}
