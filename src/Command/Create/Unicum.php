@@ -62,6 +62,11 @@ final class Unicum extends UnitCommand implements Activity
 
 	protected function initialize(): void {
 		parent::initialize();
+		if (!$this->checkSize() && $this->IsDefault()) {
+			Lemuria::Log()->debug('Unicum command skipped due to empty unit.', ['command' => $this]);
+			return;
+		}
+
 		$n = $this->phrase->count();
 		if ($n < 1 || $n > 2) {
 			throw new InvalidCommandException($this);

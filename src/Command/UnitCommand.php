@@ -12,6 +12,7 @@ use Lemuria\Engine\Fantasya\Factory\UnitTrait;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Entity;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -82,6 +83,8 @@ abstract class UnitCommand extends AbstractCommand
 		$this->context->setUnit($this->unit);
 		if ($this->checkSize()) {
 			$this->commitCommand($this);
+		} else {
+			Lemuria::Log()->debug('Command execution skipped due to empty unit.', ['command' => $this]);
 		}
 	}
 

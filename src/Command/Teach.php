@@ -17,6 +17,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TeachSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachStudentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachUnableMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -67,6 +68,11 @@ final class Teach extends UnitCommand implements Activity
 
 	protected function initialize(): void {
 		parent::initialize();
+		if (!$this->checkSize() && $this->IsDefault()) {
+			Lemuria::Log()->debug('Teach command skipped due to empty unit.', ['command' => $this]);
+			return;
+		}
+
 		$ids = [];
 		$i   = 1;
 		if (count($this->phrase) >= $i) {

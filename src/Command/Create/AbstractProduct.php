@@ -10,6 +10,7 @@ use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\AlchemyKitchen;
 use Lemuria\Model\Fantasya\Building\Blacksmith;
 use Lemuria\Model\Fantasya\Building\Dockyard;
@@ -66,6 +67,11 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 
 	protected function initialize(): void {
 		parent::initialize();
+		if (!$this->checkSize() && $this->IsDefault()) {
+			Lemuria::Log()->debug('Production command skipped due to empty unit.', ['command' => $this]);
+			return;
+		}
+
 		$this->calculateConsumption();
 	}
 
