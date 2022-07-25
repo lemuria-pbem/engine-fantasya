@@ -74,7 +74,7 @@ trait TravelTrait
 						$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
 						return $neighbour;
 					}
-					$this->message(TravelAnchorMessage::class, $this->vessel)->p($direction)->p($anchor, TravelAnchorMessage::ANCHOR);
+					$this->message(TravelAnchorMessage::class, $this->vessel)->p($direction->value)->p($anchor->value, TravelAnchorMessage::ANCHOR);
 					return null;
 				}
 			}
@@ -84,7 +84,7 @@ trait TravelTrait
 			}
 			if ($region->Landscape() instanceof Ocean) {
 				if (!$this->canSailTo($neighbour) && !$this->useAirshipEffect()) {
-					$this->message(TravelLandMessage::class, $this->vessel)->p($direction)->s($landscape)->e($neighbour);
+					$this->message(TravelLandMessage::class, $this->vessel)->p($direction->value)->s($landscape)->e($neighbour);
 					return null;
 				}
 				$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
@@ -98,7 +98,7 @@ trait TravelTrait
 				$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
 				return $neighbour;
 			}
-			$this->message(TravelOverLandMessage::class, $this->vessel)->p($direction);
+			$this->message(TravelOverLandMessage::class, $this->vessel)->p($direction->value);
 			return null;
 		}
 
@@ -108,7 +108,7 @@ trait TravelTrait
 		}
 
 		if ($landscape instanceof Ocean) {
-			$this->message(TravelIntoOceanMessage::class)->p($direction);
+			$this->message(TravelIntoOceanMessage::class)->p($direction->value);
 			return null;
 		}
 		$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
