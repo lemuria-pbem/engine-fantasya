@@ -345,6 +345,7 @@
 		"ConstructionUnableMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um {ein:$building} zu bauen.",
 		"ContactMessage": "Die Einheit $id kontaktiert die Einheit $unit.",
 		"ContactNotFoundMessage": "Die Einheit $id kann die Einheit $unit nicht finden, um sie zu kontaktieren.",
+		"ContinentUpheavalMessage": "Ein leises, dumpfes Grollen aus der Ferne ist eines ruhigen Frühlingsabends zu vernehmen. Kurz nach einem sehr prächtigen, tiefroten Sonnenuntergang kann man in südlicher Richtung gerade noch schwarze Rauchwolken erkennen, bevor die Nacht hereinbricht. Das vermeintliche Donnergrollen hält die ganze Nacht an, an den Küsten rauschen ungewöhnlich hohe Wellen an den Strand, und die schwarzen Wolken breiten sich aus, bis sie schließlich die Sterne verdunkeln. Die Sonne geht nicht auf an diesem denkwürdigen Morgen. Es herrscht völlige Stille, und die abergläubischen Bauern fürchten den unmittelbar bevorstehenden Untergang der Welt. Am Abend beginnt es Asche zu regnen, und fahles rotes Sonnenlicht durchdringt die sich langsam lichtenden Schwaden. Nach einer weiteren langen Nacht dämmert es endlich wieder, und die Geräusche der Natur kehren zurück. Später berichten einige wagemutige Fischer nach ihrer Rückkehr, sie hätten weit im Süden jenseits des Meeres die schwachen Umrisse eines Gebirgszuges erspäht.",
 		"CreateMessage": "Die Einheit $id hat die Welt betreten.",
 		"DaydreamConcentrateMessage": "Die Einheit $id ist unkonzentriert.",
 		"DaydreamGuardMessage": "Die Einheit $id ist unkonzentriert und verlässt ihren Wachtposten.",
