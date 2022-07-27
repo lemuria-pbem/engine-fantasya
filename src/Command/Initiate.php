@@ -213,7 +213,7 @@ final class Initiate implements Command
 				$locations->coastal();
 			}
 			if ($locations->void()->count()) {
-				return $locations[0];
+				return $locations->random();
 			}
 			$locations->reset();
 		}
