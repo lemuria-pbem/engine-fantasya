@@ -14,9 +14,9 @@ use Lemuria\Log;
 
 class LemuriaLog implements Log
 {
-	protected ?int $consoleLevel = null;
+	protected ?Level $consoleLevel = null;
 
-	protected ?int $fileLevel = null;
+	protected ?Level $fileLevel = null;
 
 	public function __construct(protected readonly string $logPath, protected readonly bool $addErrorHandler = true) {
 	}
