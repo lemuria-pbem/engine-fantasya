@@ -21,7 +21,6 @@ use Lemuria\Model\Fantasya\Repairable;
  */
 final class Repair extends AbstractProduct
 {
-	/** @noinspection DuplicatedCode */
 	protected function run(): void {
 		$repairable       = $this->getRepairable();
 		$talent           = $repairable->getCraft()->Talent();

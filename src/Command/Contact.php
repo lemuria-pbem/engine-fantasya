@@ -40,7 +40,7 @@ final class Contact extends UnitCommand
 			try {
 				$unit = $this->nextId($i, $id);
 			} catch (CommandException) {
-				$this->message(ContactNotFoundMessage::class)->p($id);
+				$this->message(ContactNotFoundMessage::class)->p((string)$id);
 				return;
 			}
 			$party = $unit ? $census->getParty($unit) : null;
@@ -50,7 +50,7 @@ final class Contact extends UnitCommand
 				$this->createEffect($party, $unit);
 				$this->message(ContactMessage::class)->e($unit);
 			} else {
-				$this->message(ContactNotFoundMessage::class)->p($id);
+				$this->message(ContactNotFoundMessage::class)->p((string)$id);
 			}
 		}
 	}

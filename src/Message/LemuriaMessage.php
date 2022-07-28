@@ -210,7 +210,7 @@ class LemuriaMessage implements Message
 		return Lemuria::Builder()->create($this->singletons[$name]);
 	}
 
-	public function getParameter(?string $name = null): mixed {
+	public function getParameter(?string $name = null): array|bool|float|int|string {
 		if (!$name) {
 			$name = self::PARAMETER;
 		}
@@ -276,10 +276,7 @@ class LemuriaMessage implements Message
 	/**
 	 * Set a parameter.
 	 */
-	public function p(mixed $value, ?string $name = null): LemuriaMessage {
-		if ($value instanceof \UnitEnum) {
-			throw new LemuriaException('Parameter is an enum in ' . $this->MessageClass() . ' message ' . $this->Id() . '.');
-		}
+	public function p(array|bool|float|int|string $value, ?string $name = null): LemuriaMessage {
 		if (!$name) {
 			$name = self::PARAMETER;
 		}
