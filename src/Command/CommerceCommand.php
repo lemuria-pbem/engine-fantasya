@@ -104,6 +104,11 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	 */
 	protected function initialize(): void {
 		parent::initialize();
+		if (!$this->checkSize() && $this->IsDefault()) {
+			Lemuria::Log()->debug('Commerce command skipped due to empty unit.', ['command' => $this]);
+			return;
+		}
+
 		if ($this->isTradePossible()) {
 			$commerce     = $this->context->getCommerce($this->unit->Region());
 			$this->trades = $commerce->getWorkload($this->unit);

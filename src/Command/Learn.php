@@ -16,6 +16,7 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Exception\LemuriaException;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Aura;
 use Lemuria\Model\Fantasya\Commodity;
@@ -62,6 +63,11 @@ final class Learn extends UnitCommand implements Activity
 
 	protected function initialize(): void {
 		parent::initialize();
+		if (!$this->checkSize() && $this->IsDefault()) {
+			Lemuria::Log()->debug('Learning command skipped due to empty unit.', ['command' => $this]);
+			return;
+		}
+
 		$this->message(LearnTeachersMessage::class)->p(count($this->calculus()->getTeachers()));
 		$calculus       = $this->calculus();
 		$knowledge      = $this->unit->Knowledge();

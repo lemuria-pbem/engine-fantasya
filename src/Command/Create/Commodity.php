@@ -35,7 +35,6 @@ final class Commodity extends AbstractProduct
 		$this->setEfficiency();
 	}
 
-	/** @noinspection DuplicatedCode */
 	protected function run(): void {
 		$artifact         = $this->getArtifact();
 		$talent           = $artifact->getCraft()->Talent();

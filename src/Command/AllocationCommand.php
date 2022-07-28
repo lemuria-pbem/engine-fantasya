@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Consumer;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
@@ -79,6 +80,11 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	 */
 	protected function initialize(): void {
 		parent::initialize();
+		if (!$this->checkSize() && $this instanceof Activity && $this->IsDefault()) {
+			Lemuria::Log()->debug('Allocation command skipped due to empty unit.', ['command' => $this]);
+			return;
+		}
+
 		$allocation = $this->context->getAllocation($this->unit->Region());
 		if ($this->isSieged($this->unit->Construction())) {
 			$this->message(AllocationSiegeMessage::class);
