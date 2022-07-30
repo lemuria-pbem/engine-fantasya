@@ -45,13 +45,16 @@ final class Sell extends CommerceCommand
 
 	public function trade(Luxury $good, int $price): bool {
 		if ($this->count < $this->amount && $price >= $this->threshold) {
-			$inventory = $this->unit->Inventory();
-			$this->traded->add(new Quantity($good, 1));
-			$inventory->remove(new Quantity($good, 1));
-			$inventory->add(new Quantity($this->silver, $price));
-			$this->count++;
-			$this->cost += $price;
-			return true;
+			$luxury = $this->collectQuantity($this->unit, $good, 1);
+			if ($luxury->Count() > 0) {
+				$inventory = $this->unit->Inventory();
+				$this->traded->add($luxury);
+				$inventory->remove(new Quantity($good, 1));
+				$inventory->add(new Quantity($this->silver, $price));
+				$this->count++;
+				$this->cost += $price;
+				return true;
+			}
 		}
 		return false;
 	}
@@ -83,7 +86,7 @@ final class Sell extends CommerceCommand
 
 	protected function getDemand(): Quantity {
 		$demand = parent::getDemand();
-		if ($demand->Count() > 0) {
+		if ($demand->Count() > 0 && $this->threshold <= 0) {
 			$demand = $this->collectQuantity($this->unit, $demand->Commodity(), $demand->Count());
 		}
 		return $demand;
