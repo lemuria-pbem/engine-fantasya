@@ -60,7 +60,8 @@
 
 ^@?(kä|käm|kämp|kämpf|kämpfe|kämpfen|kae|kaem|kaemp|kaempf|kaempfe|kaempfen|ka|kam|kamp|kampf) +(aggressiv|defensiv|fliehe|fliehen|flucht|hinten|nicht|vorn|vorne|vorsichtig)?$
 
-^@?(komma|komman|kommand|kommando)( +[a-z0-9]{1,6})?$
+^@?(komma|komman|kommand|kommando)$
+^@?(komma|komman|kommand|kommando) +(temp +)?[a-z0-9]{1,6}$
 
 ^@?(kon|kont|konta|kontak|kontakt|kontakti|kontaktie|kontaktier|kontaktiere|kontaktieren)( +[a-z0-9]{1,6})+$
 

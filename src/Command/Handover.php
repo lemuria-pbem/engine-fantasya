@@ -77,6 +77,13 @@ final class Handover extends DelegatedCommand
 					return new Migrate($this->phrase, $this->context);
 			}
 		}
+		if ($n === 3) {
+			$temp  = strtolower($this->phrase->getParameter());
+			$grant = strtolower($this->phrase->getParameter(3));
+			if ($temp === 'temp' && $grant === 'kommando') {
+				return new Grant($this->phrase, $this->context);
+			}
+		}
 
 		$command = match (strtolower($this->phrase->getParameter())) {
 			'bauern' => Dismiss::class,
