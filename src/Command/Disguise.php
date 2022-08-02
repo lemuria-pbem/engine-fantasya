@@ -50,8 +50,8 @@ final class Disguise extends UnitCommand
 					try {
 						$party = Party::get($partyId);
 						if (!$this->unit->Party()->Diplomacy()->isKnown($party)) {
-							$party = null;
 							$this->message(DisguiseDoesNotKnowMessage::class)->e($party);
+							$party = null;
 						}
 					} catch (NotRegisteredException) {
 						$party = null;

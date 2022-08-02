@@ -123,8 +123,8 @@ final class Presetting extends UnitCommand
 		try {
 			$party = Party::get($partyId);
 			if (!$this->party->Diplomacy()->isKnown($party)) {
-				$party = null;
 				$this->message(PresettingDisguiseDoesNotKnowMessage::class, $this->party)->e($party);
+				$party = null;
 			}
 		} catch (NotRegisteredException) {
 			$party = null;
