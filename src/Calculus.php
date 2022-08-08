@@ -30,6 +30,7 @@ use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\DoubleAbility;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Modification;
+use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Race\Troll;
@@ -456,6 +457,33 @@ final class Calculus
 			}
 		}
 		return false;
+	}
+
+	public function getKinsmen(): People {
+		$kinsmen = new People();
+		$region  = $this->unit->Region();
+		$party   = $this->unit->Party();
+		$race    = $this->unit->Race();
+		foreach ($region->Residents() as $unit /* @var Unit $unit */) {
+			if ($unit !== $this->unit && $unit->Party() === $party && $unit->Race() === $race) {
+				$kinsmen->add($unit);
+			}
+		}
+		return $kinsmen;
+	}
+
+	public function getRelatives(): People {
+		$kinsmen = new People();
+		$party   = $this->unit->Party();
+		$race    = $this->unit->Race();
+		foreach (Lemuria::World()->getNeighbours($this->unit->Region()) as $region /* @var Region $region */) {
+			foreach ($region->Residents() as $unit /* @var Unit $unit */) {
+				if ($unit !== $this->unit && $unit->Party() === $party && $unit->Race() === $race) {
+					$kinsmen->add($unit);
+				}
+			}
+		}
+		return $kinsmen;
 	}
 
 	private function transport(?Item $quantity, int $reduceBy = 0): int {

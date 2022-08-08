@@ -10,6 +10,8 @@ interface Behaviour
 
 	public function Unit(): Unit;
 
+	public function Reproduction(): Reproduction;
+
 	public function prepare(): Behaviour;
 
 	public function conduct(): Behaviour;

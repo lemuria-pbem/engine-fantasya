@@ -2,9 +2,12 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Behaviour;
 
+use function Lemuria\getClass;
+use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Effect\RoamEffect;
 use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\Act\Attack;
+use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Event\Act\Guard;
 use Lemuria\Engine\Fantasya\Event\Act\Home;
 use Lemuria\Engine\Fantasya\Event\Act\PickPocket;
@@ -12,14 +15,18 @@ use Lemuria\Engine\Fantasya\Event\Act\Roam;
 use Lemuria\Engine\Fantasya\Event\Act\Seek;
 use Lemuria\Engine\Fantasya\Event\Act\Watch;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
+use Lemuria\Engine\Fantasya\Event\Reproduction;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Unit;
 
 abstract class AbstractBehaviour implements Behaviour
 {
+	use BuilderTrait;
 	use MessageTrait;
 
 	protected ?Act $guard = null;
@@ -31,6 +38,10 @@ abstract class AbstractBehaviour implements Behaviour
 
 	public function Unit(): Unit {
 		return $this->unit;
+	}
+
+	public function Reproduction(): Reproduction {
+		return new Reproduction($this->race());
 	}
 
 	public function prepare(): Behaviour {
@@ -52,35 +63,35 @@ abstract class AbstractBehaviour implements Behaviour
 	}
 
 	protected function guard(): AbstractBehaviour {
-		$guard = new Guard($this);
+		$guard       = new Guard($this);
 		$this->guard = $guard->act();
 		return $this;
 	}
 
 	protected function watch(): AbstractBehaviour {
-		$watch = new Watch($this);
+		$watch       = new Watch($this);
 		$this->guard = $watch->act();
 		return $this;
 	}
 
 	protected function seek(): AbstractBehaviour {
-		$seek = new Seek($this);
+		$seek      = new Seek($this);
 		$this->act = $seek->act();
 		return $this;
 	}
 
-	protected function roam(): AbstractBehaviour {
+	protected function roam(bool $leave = false): AbstractBehaviour {
 		if ($this->unit->Size() > 0) {
 			$roam = new Roam($this);
-			$roam->act();
+			$roam->setLeave($leave)->act();
 		}
 		return $this;
 	}
 
 	protected function home(): AbstractBehaviour {
 		if ($this->unit->Size() > 0) {
-			$roam = new Home($this);
-			$roam->act();
+			$home = new Home($this);
+			$home->act();
 		}
 		return $this;
 
@@ -100,8 +111,7 @@ abstract class AbstractBehaviour implements Behaviour
 	protected function roamOrGuard(): AbstractBehaviour {
 		if (!$this->hasRoamEffect()) {
 			if (!($this->guard instanceof Guard) || !$this->guard->IsGuarding()) {
-				$roam = new Roam($this);
-				$roam->act();
+				$this->roam();
 			}
 		}
 		return $this;
@@ -118,10 +128,7 @@ abstract class AbstractBehaviour implements Behaviour
 				}
 			}
 		}
-
-		$roam = new Roam($this);
-		$roam->act();
-		return $this;
+		return $this->roam();
 	}
 
 	protected function pickPocketOrRoam(): AbstractBehaviour {
@@ -136,10 +143,26 @@ abstract class AbstractBehaviour implements Behaviour
 				}
 			}
 		}
+		return $this->roam($forceRoam);
+	}
 
-		$roam = new Roam($this);
-		$roam->setLeave($forceRoam)->act();
+	protected function reproduce(): AbstractBehaviour {
+		$reproduction = $this->Reproduction();
+		if (randChance($reproduction->Chance())) {
+			$create = new Create($this->unit->Party(), $this->unit->Region());
+			$create->add($reproduction->Gang())->act();
+		}
 		return $this;
+	}
+
+	protected function reproduceAndLeaveOrRoam(): AbstractBehaviour {
+		$reproduction = $this->Reproduction();
+		if (randChance($reproduction->Chance())) {
+			$create = new Create($this->unit->Party(), $this->unit->Region());
+			$create->add($reproduction->Gang())->act();
+			return $this->roam(true);
+		}
+		return $this->roam();
 	}
 
 	protected function attackOnWatch(): AbstractBehaviour {
@@ -155,5 +178,9 @@ abstract class AbstractBehaviour implements Behaviour
 			return Lemuria::Score()->find($effect->setUnit($this->unit)) instanceof RoamEffect;
 		}
 		return false;
+	}
+
+	protected function race(): Monster {
+		return self::createMonster(getClass($this));
 	}
 }
