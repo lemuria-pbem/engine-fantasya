@@ -20,6 +20,7 @@ use Lemuria\Model\Fantasya\Ship\Galleon;
 use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Ship\Trireme;
 use Lemuria\Model\Fantasya\Talent\Navigation;
+use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
 
 class Kraken extends AbstractBehaviour
@@ -93,6 +94,7 @@ class Kraken extends AbstractBehaviour
 				Lemuria::Log()->debug($this->unit . ' got curious about ' . $victim . '.');
 			}
 		}
+		return $this;
 	}
 
 	protected function getVictim(Fleet $big, Fleet $small): ?Vessel {
