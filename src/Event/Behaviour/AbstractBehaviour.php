@@ -33,6 +33,8 @@ abstract class AbstractBehaviour implements Behaviour
 
 	protected ?Act $act = null;
 
+	protected ?Act $roam = null;
+
 	public function __construct(protected Unit $unit) {
 	}
 
@@ -82,8 +84,8 @@ abstract class AbstractBehaviour implements Behaviour
 
 	protected function roam(bool $leave = false): AbstractBehaviour {
 		if ($this->unit->Size() > 0) {
-			$roam = new Roam($this);
-			$roam->setLeave($leave)->act();
+			$this->roam = new Roam($this);
+			$this->roam->setLeave($leave)->act();
 		}
 		return $this;
 	}

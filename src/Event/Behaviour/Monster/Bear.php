@@ -36,6 +36,7 @@ class Bear extends AbstractBehaviour
 			$kinsmen  = $calculus->getKinsmen()->add($this->unit);
 			if ($kinsmen->Size() === 2) {
 				$reproduction->setChance(self::CHANCE)->setSize(self::REPRODUCTION);
+				Lemuria::Log()->debug($this->unit . ' will reproduce this round.');
 			}
 		}
 		return $reproduction;

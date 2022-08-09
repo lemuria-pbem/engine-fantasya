@@ -21,6 +21,12 @@ class Roam implements Act
 
 	protected bool $leave = false;
 
+	protected bool $hasMoved = false;
+
+	public function HasMoved(): bool {
+		return $this->hasMoved;
+	}
+
 	public function act(): Roam {
 		$region  = $this->unit->Region();
 		$regions = $this->getPossibleRegions(!$this->leave);
@@ -33,6 +39,7 @@ class Roam implements Act
 				$this->message(RoamHereMessage::class, $this->unit)->e($region);
 			} else {
 				$this->moveTo($target);
+				$this->hasMoved = true;
 				$this->message(RoamMessage::class, $this->unit)->e($region);
 			}
 		}

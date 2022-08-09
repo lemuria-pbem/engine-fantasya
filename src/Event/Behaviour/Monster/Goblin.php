@@ -51,6 +51,7 @@ class Goblin extends AbstractBehaviour
 					if ($size > self::MINIMUM) {
 						$this->reproduction->setChance(1.0)->setSize($size);
 						$this->reproduce();
+						Lemuria::Log()->debug($this->unit . ' has nothing to do and reproduced.');
 					}
 				}
 			}
