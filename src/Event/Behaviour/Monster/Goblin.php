@@ -72,7 +72,7 @@ class Goblin extends AbstractBehaviour
 		$calculus = new Calculus($this->unit);
 		$total    = $this->unit->Size() + $calculus->getKinsmen()->Size() + $calculus->getRelatives()->Size();
 		$factor   = 2.0 * self::VARIANCE * random() - self::VARIANCE;
-		$goblins  = (1.0 + $factor) * $total;
+		$goblins  = (int)floor((1.0 + $factor) * $total);
 		$maximum  = (int)floor(self::MAXIMUM * ($peasants + $units));
 		return min($goblins, $maximum);
 	}
