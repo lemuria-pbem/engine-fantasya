@@ -92,10 +92,8 @@ class Availability
 			return 0;
 		}
 
-		$effect = new Unemployment($state);
-		/** @var Unemployment $unemployment */
-		$unemployment = Lemuria::Score()->find($effect->setRegion($this->region));
-		return $unemployment?->Peasants() ?? (int)ceil(Population::UNEMPLOYMENT / 100.0 * $totalPeasants);
+		$unemployment = Unemployment::getFor($this->region);
+		return $unemployment->getPeasants($this->region) ?? (int)ceil(Population::UNEMPLOYMENT / 100.0 * $totalPeasants);
 	}
 
 	private function getHerbCount(?HerbInterface $herb = null):int {

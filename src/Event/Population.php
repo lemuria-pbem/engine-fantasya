@@ -221,15 +221,9 @@ final class Population extends AbstractEvent
 	}
 
 	private function calculateUnemployment(Region $region, float $years = 0.0, int $peasants = 0, int $growth = 0, int $migrants = 0, int $hungry = 0): void {
-		$effect       = new Unemployment($this->state);
-		$unemployment = Lemuria::Score()->find($effect->setRegion($region));
-		if (!$unemployment) {
-			$unemployment = $effect;
-			Lemuria::Score()->add($unemployment);
-		}
-
-		$percent  = self::UNEMPLOYMENT;
-		$percent -= min((2.0 * (self::UNEMPLOYMENT - 0.5)), $years) * 0.5;
+		$unemployment = Unemployment::getFor($region);
+		$percent      = self::UNEMPLOYMENT;
+		$percent     -= min((2.0 * (self::UNEMPLOYMENT - 0.5)), $years) * 0.5;
 		if ($growth > 0) {
 			$percent /= 2.0;
 		}
@@ -237,9 +231,9 @@ final class Population extends AbstractEvent
 			$percent *= 4.0;
 		}
 		$unemployed = (int)ceil(($percent / 100.0) * ($peasants + $growth - $migrants - $hungry));
-		$unemployment->setPeasants($unemployed);
+		$unemployment->setPeasants($region, $unemployed);
 
 		$this->placeDataMetrics(Subject::Joblessness, $percent, $region);
-		Lemuria::Log()->debug('Unemployment in region ' . $region->Id() . ' is ' . round($percent, 1) . '%.');
+		//Lemuria::Log()->debug('Unemployment in region ' . $region->Id() . ' is ' . round($percent, 1) . '%.');
 	}
 }

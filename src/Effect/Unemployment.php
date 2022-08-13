@@ -6,22 +6,43 @@ use Lemuria\Engine\Fantasya\Message\Region\UnemploymentMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
+use Lemuria\Id;
+use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Continent;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Serializable;
 
-final class Unemployment extends AbstractRegionEffect
+final class Unemployment extends AbstractContinentEffect
 {
-	private int $peasants = 0;
+	/**
+	 * @var array<int, Unemployment>
+	 */
+	private static array $unemployment = [];
+
+	/**
+	 * @var array<int, int>
+	 */
+	private array $peasants = [];
+
+	public static function getFor(Region $region): Unemployment {
+		$continent = $region->Continent();
+		$id        = $continent->Id()->Id();
+		if (!isset(self::$unemployment[$id])) {
+			self::$unemployment[$id] = self::findUnemployment($continent);
+		}
+		return self::$unemployment[$id];
+	}
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::BEFORE);
 	}
 
-	public function Peasants(): int {
-		return $this->peasants;
+	public function getPeasants(Region $region): ?int {
+		return $this->peasants[$region->Id()->Id()] ?? null;
 	}
 
-	public function setPeasants(int $peasants): Unemployment {
-		$this->peasants = $peasants;
+	public function setPeasants(Region $region, int $peasants): Unemployment {
+		$this->peasants[$region->Id()->Id()] = $peasants;
 		return $this;
 	}
 
@@ -43,13 +64,25 @@ final class Unemployment extends AbstractRegionEffect
 	 */
 	protected function validateSerializedData(array &$data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'peasants', 'int');
+		$this->validate($data, 'peasants', 'array');
 	}
 
 	protected function run(): void {
-		$region = $this->Region();
-		if ($region->Landscape()->Workplaces() > 0) {
-			$this->message(UnemploymentMessage::class, $region)->p($this->peasants);
+		foreach ($this->peasants as $id => $peasants) {
+			$region = Region::get(new Id($id));
+			if ($region->Landscape()->Workplaces() > 0) {
+				$this->message(UnemploymentMessage::class, $region)->p($peasants);
+			}
 		}
+	}
+
+	private static function findUnemployment(Continent $continent): Unemployment {
+		$unemployment = new Unemployment(State::getInstance());
+		$existing     = Lemuria::Score()->find($unemployment->setContinent($continent));
+		if ($existing instanceof Unemployment) {
+			return $existing;
+		}
+		Lemuria::Score()->add($unemployment);
+		return $unemployment;
 	}
 }
