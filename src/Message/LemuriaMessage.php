@@ -80,6 +80,10 @@ class LemuriaMessage implements Message
 		return $this->type::class;
 	}
 
+	public function MessageType(): MessageType {
+		return $this->type;
+	}
+
 	public function setId(Id $id): Message {
 		if ($this->id) {
 			throw new LemuriaException('Cannot set ID twice.');
@@ -143,10 +147,6 @@ class LemuriaMessage implements Message
 		$message = self::createMessageType($data['type']);
 		$this->setType($message)->setAssignee(new Id($data['assignee']))->setId(new Id($data['id']));
 		return $this;
-	}
-
-	public function isInstanceOf(string $class): bool {
-		return $this->type instanceof $class;
 	}
 
 	public function setType(MessageType $type): LemuriaMessage {

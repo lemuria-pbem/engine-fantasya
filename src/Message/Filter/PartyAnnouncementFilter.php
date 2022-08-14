@@ -14,6 +14,6 @@ final class PartyAnnouncementFilter implements Filter
 {
 	public function retains(Message $message): bool {
 		/** @var LemuriaMessage $message */
-		return $message->isInstanceOf(AnnouncementPartyMessage::class);
+		return $message->MessageType() instanceof AnnouncementPartyMessage;
 	}
 }

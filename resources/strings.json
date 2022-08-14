@@ -195,6 +195,15 @@
 			"agreement_8191": "Alles"
 		}
 	},
+	"domain": {
+		"CONSTRUCTION": "Gebäude",
+		"CONTINENT": "Kontinent",
+		"LOCATION": "Region",
+		"PARTY": "Partei",
+		"UNICUM": "Unikat",
+		"UNIT": "Einheit",
+		"VESSEL": "Schiff"
+	},
 	"health": {
 		"default": ["gesund", "erschöpft", "verletzt", "schwer verletzt", "dem Tode nah"],
 		"hunger": ["gesund", "hungert", "hungert sehr", "ausgezehrt", "fast verhungert"]
