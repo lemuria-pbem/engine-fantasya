@@ -63,6 +63,19 @@ final class TravelAtlas extends Atlas
 				} elseif ($this->visibility[$id]->value < $visibility->value) {
 					$this->visibility[$id] = $visibility;
 				}
+
+				if ($visibility === Visibility::TRAVELLED) {
+					$visibility = Visibility::NEIGHBOUR;
+					foreach (Lemuria::World()->getNeighbours($region) as $neighbour) {
+						$id = $neighbour->Id()->Id();
+						if (!isset($this->visibility[$id])) {
+							$this->add($neighbour);
+							$this->visibility[$id] = $visibility;
+						} elseif ($this->visibility[$id]->value < $visibility->value) {
+							$this->visibility[$id] = $visibility;
+						}
+					}
+				}
 			}
 		}
 
