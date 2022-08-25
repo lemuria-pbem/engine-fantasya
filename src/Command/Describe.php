@@ -127,10 +127,17 @@ final class Describe extends UnitCommand
 
 	private function describeRegion(string $description): void {
 		$region = $this->unit->Region();
-		$home   = $this->unit->Construction();
+		$estate = $region->Estate();
+		if ($estate->isEmpty()) {
+			$region->setDescription($description);
+			$this->message(DescribeRegionMessage::class)->e($region);
+			return;
+		}
+
+		$home = $this->unit->Construction();
 		if ($home) {
 			$castle = null; /* @var Construction $castle */
-			foreach ($region->Estate() as $construction /* @var Construction $construction */) {
+			foreach ($estate as $construction /* @var Construction $construction */) {
 				if ($construction->Building() instanceof Castle) {
 					if (!$castle || $construction->Size() >= $castle->Size()) {
 						$castle = $construction;
