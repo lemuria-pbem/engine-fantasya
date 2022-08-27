@@ -8,7 +8,6 @@ use Lemuria\Engine\Fantasya\Event\Act\Seek;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Event\Behaviour\AbstractBehaviour;
 use Lemuria\Engine\Fantasya\Event\Reproduction;
-use Lemuria\Engine\Fantasya\Factory\Model\Season;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Region;
@@ -16,11 +15,15 @@ use Lemuria\Model\Fantasya\Unit;
 
 class Goblin extends AbstractBehaviour
 {
+	protected const RATE = 0.33;
+
 	protected const VARIANCE = 0.2;
 
 	protected const MINIMUM = 5;
 
 	protected const MAXIMUM = 0.01;
+
+	protected const MAX_UNITS = 3;
 
 	protected Reproduction $reproduction;
 
@@ -46,7 +49,8 @@ class Goblin extends AbstractBehaviour
 	public function conduct(): Behaviour {
 		if ($this->act instanceof Seek) {
 			if ($this->act->Enemy()->isEmpty()) {
-				if (in_array(Lemuria::Calendar()->Season(), [Season::SPRING, Season::FALL])) {
+				$calendar = Lemuria::Calendar();
+				if (in_array($calendar->Month(), [1, 5]) && $calendar->Week() === 1) {
 					$size = $this->calculateReproductionSize();
 					if ($size > self::MINIMUM) {
 						$this->reproduction->setChance(1.0)->setSize($size);
@@ -69,11 +73,16 @@ class Goblin extends AbstractBehaviour
 			$units    += $neighbour->Residents()->Size();
 		}
 
-		$calculus = new Calculus($this->unit);
-		$total    = $this->unit->Size() + $calculus->getKinsmen()->Size() + $calculus->getRelatives()->Size();
-		$factor   = 2.0 * self::VARIANCE * random() - self::VARIANCE;
-		$goblins  = (int)floor((1.0 + $factor) * $total);
-		$maximum  = (int)floor(self::MAXIMUM * ($peasants + $units));
-		return min($goblins, $maximum);
+		$calculus  = new Calculus($this->unit);
+		$kinsmen   = $calculus->getKinsmen();
+		$relatives = $calculus->getRelatives();
+		if ($kinsmen->count() + $relatives->count() < self::MAX_UNITS - 1) {
+			$total    = $this->unit->Size() + $kinsmen->Size() + $relatives->Size();
+			$variance = 2.0 * self::VARIANCE * random() - self::VARIANCE;
+			$goblins  = (int)floor(self::RATE * (1.0 + $variance) * $total);
+			$maximum  = (int)floor(self::MAXIMUM * ($peasants + $units));
+			return min($goblins, $maximum);
+		}
+		return 0;
 	}
 }
