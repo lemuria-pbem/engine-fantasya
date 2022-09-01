@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Game;
 
-use function Lemuria\random;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
@@ -132,7 +131,7 @@ final class PopulateContinent extends AbstractEvent
 				}
 			}
 			foreach (array_rand($regions, (int)ceil(count($regions) / $chance)) as $i) {
-				$size            = (int)round((1.0 + self::VARIATION * 2.0 * (random() - 0.5)) * self::SIZE[$race]);
+				$size            = (int)round((1.0 + self::VARIATION * 2.0 * (lcg_value() - 0.5)) * self::SIZE[$race]);
 				$create          = new Create($party, $regions[$i]);
 				$this->creates[] = $create->add(new Gang($monster, $size));
 			}
@@ -153,7 +152,7 @@ final class PopulateContinent extends AbstractEvent
 					$experience = $skill->Experience() + Ability::getExperience(rand(0, self::MAX_SKILL));
 					$unit->Knowledge()->add(new Ability($skill->Talent(), $experience));
 
-					$chance = random();
+					$chance = lcg_value();
 					if ($chance <= self::HAS_SHIELD) {
 						$shield = self::SHIELD[array_rand(self::SHIELD)];
 						$inventory->add(new Quantity(self::createCommodity($shield), $size));

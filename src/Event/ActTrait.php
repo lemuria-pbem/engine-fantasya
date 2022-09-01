@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Event;
 
 use function Lemuria\getClass;
 use function Lemuria\randDistribution23;
-use function Lemuria\random;
 use Lemuria\Engine\Fantasya\Effect\RoamEffect;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
@@ -61,7 +60,7 @@ trait ActTrait
 	}
 
 	protected function chooseLandscape(array $regions): array {
-		$random       = random();
+		$random       = lcg_value();
 		$distribution = randDistribution23(count($regions));
 		foreach ($distribution as $i => $chance) {
 			if ($random <= $chance) {
