@@ -249,7 +249,7 @@ final class Calculus
 	/**
 	 * Get learning progress.
 	 */
-	public function progress(Talent $talent): Ability {
+	public function progress(Talent $talent, float $effectivity = 1.0): Ability {
 		$isInCollege = ($this->unit->Construction() instanceof College) && $this->isInMaintainedConstruction();
 		$teachBonus  = 0.0;
 		foreach ($this->teachers as $teach /* @var Teach $teach */) {
@@ -275,7 +275,7 @@ final class Calculus
 		$baseProbability = $boost > 0.0 ? 1.25 : ($isInCollege ? rand(90, 110) / 100 : rand(75, 125) / 100);
 		$baseFactor      = $isInCollege ? 2.0 : 1.0;
 		$probability     = $baseProbability * ($baseFactor + $boost);
-		$progress        = (int)round(Learn::PROGRESS * (min(5.0, $probability + $teachBonus)));
+		$progress        = (int)round(Learn::PROGRESS * (min(5.0, $probability + $teachBonus)) * $effectivity);
 		return new Ability($talent, $progress);
 	}
 
