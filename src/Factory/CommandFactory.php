@@ -29,6 +29,7 @@ use Lemuria\Engine\Fantasya\Command\Disguise;
 use Lemuria\Engine\Fantasya\Command\End;
 use Lemuria\Engine\Fantasya\Command\Entertain;
 use Lemuria\Engine\Fantasya\Command\Explore;
+use Lemuria\Engine\Fantasya\Command\Fee;
 use Lemuria\Engine\Fantasya\Command\Fight;
 use Lemuria\Engine\Fantasya\Command\Follow;
 use Lemuria\Engine\Fantasya\Command\Gather;
@@ -373,6 +374,9 @@ class CommandFactory
 		'SPIONAGE'     => 'SPIONIEREN',
 		'SPIONIEREN'   => true,
 		'STEHLEN'      => true,
+		'STEUER'       => true,
+		'STEUERN'      => 'STEUER',
+		'STEUERSATZ'   => 'STEUER',
 		'TARNEN'       => true,
 		'TARNUNG'      => 'TARNEN',
 		'TAUSCHEN'     => 'SORTIEREN',
@@ -836,6 +840,7 @@ class CommandFactory
 				'SORTIEREN'    => Sort::class,
 				'SPIONIEREN'   => Spy::class,
 				'STEHLEN'      => Steal::class,
+				'STEUER'       => Fee::class,
 				'TARNEN'       => Disguise::class,
 				'TREIBEN'      => Tax::class,
 				'UNTERHALTEN'  => Entertain::class,
