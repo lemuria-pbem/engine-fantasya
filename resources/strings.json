@@ -184,15 +184,16 @@
 			"agreement_4": "Versorgung",
 			"agreement_8": "Ressourcen",
 			"agreement_16": "Betreten",
-			"agreement_32": "Geben",
-			"agreement_64": "Durchreise",
-			"agreement_128": "Bewachen",
-			"agreement_256": "Tarnung",
-			"agreement_512": "Parteitarnung",
-			"agreement_1024": "Silber",
-			"agreement_2048": "Nahrung",
-			"agreement_4096": "Kampf",
-			"agreement_8191": "Alles"
+			"agreement_32": "Markt",
+			"agreement_64": "Geben",
+			"agreement_128": "Durchreise",
+			"agreement_256": "Bewachen",
+			"agreement_512": "Tarnung",
+			"agreement_1024": "Parteitarnung",
+			"agreement_2048": "Silber",
+			"agreement_4096": "Nahrung",
+			"agreement_8192": "Kampf",
+			"agreement_16383": "Alles"
 		}
 	},
 	"domain": {

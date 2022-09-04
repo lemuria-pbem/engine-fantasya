@@ -17,9 +17,11 @@ use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
 use Lemuria\Id;
+use Lemuria\Model\Fantasya\Building\Market;
 use Lemuria\Model\Fantasya\Building\Ruin;
 use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Construction;
+use Lemuria\Model\Fantasya\Relation;
 
 /**
  * A unit enters a construction using the Enter command.
@@ -64,7 +66,8 @@ final class Enter extends UnitCommand
 			$this->message(EnterTooLargeMessage::class)->e($newConstruction);
 			return;
 		}
-		if (!$this->hasPermission($newConstruction->Inhabitants())) {
+		$agreement = $building instanceof Market ? Relation::MARKET : Relation::ENTER;
+		if (!$this->hasPermission($newConstruction->Inhabitants(), $agreement)) {
 			$this->message(EnterDeniedMessage::class)->e($newConstruction);
 			return;
 		}

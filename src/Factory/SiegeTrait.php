@@ -71,7 +71,7 @@ trait SiegeTrait
 		return !($weCanLeave && $weCanEnter || $otherCanLeave && $otherCanEnter || $weCanLeave && $otherCanLeave);
 	}
 
-	protected function hasPermission(Inhabitants $inhabitants): bool {
+	protected function hasPermission(Inhabitants $inhabitants, int $agreement = Relation::ENTER): bool {
 		$owner = $inhabitants->Owner();
 		if ($owner) {
 			$party      = $this->unit->Party();
@@ -82,7 +82,7 @@ trait SiegeTrait
 						return true;
 					}
 				}
-				if ($this->context->getTurnOptions()->IsSimulation() || !$ownerParty->Diplomacy()->has(Relation::ENTER, $this->unit)) {
+				if ($this->context->getTurnOptions()->IsSimulation() || !$ownerParty->Diplomacy()->has($agreement, $this->unit)) {
 					return false;
 				}
 			}
