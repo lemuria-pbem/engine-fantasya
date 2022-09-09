@@ -7,6 +7,7 @@ use function Lemuria\mbUcFirst;
 use function Lemuria\undupChar;
 use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
+use Lemuria\Engine\Fantasya\Command\Allow;
 use Lemuria\Engine\Fantasya\Command\Announcement;
 use Lemuria\Engine\Fantasya\Command\Apply\AbstractApply;
 use Lemuria\Engine\Fantasya\Command\Apply\HorseBlissBreed;
@@ -32,6 +33,7 @@ use Lemuria\Engine\Fantasya\Command\Explore;
 use Lemuria\Engine\Fantasya\Command\Fee;
 use Lemuria\Engine\Fantasya\Command\Fight;
 use Lemuria\Engine\Fantasya\Command\Follow;
+use Lemuria\Engine\Fantasya\Command\Forbid;
 use Lemuria\Engine\Fantasya\Command\Gather;
 use Lemuria\Engine\Fantasya\Command\Handover;
 use Lemuria\Engine\Fantasya\Command\Handover\Grant;
@@ -96,6 +98,7 @@ use Lemuria\Model\Fantasya\Building\GriffinBreeding;
 use Lemuria\Model\Fantasya\Building\HorseBreeding;
 use Lemuria\Model\Fantasya\Building\Lighthouse;
 use Lemuria\Model\Fantasya\Building\Magespire;
+use Lemuria\Model\Fantasya\Building\Market;
 use Lemuria\Model\Fantasya\Building\Megapolis;
 use Lemuria\Model\Fantasya\Building\Mine;
 use Lemuria\Model\Fantasya\Building\Palace;
@@ -324,6 +327,7 @@ class CommandFactory
 		'ENTLASSEN'    => true,
 		'ERESSEA'      => 'PARTEI',
 		'ERFORSCHEN'   => 'FORSCHEN',
+		'ERLAUBEN'     => true,
 		'ERSCHAFFEN'   => true,
 		'FANTASYA'     => 'PARTEI',
 		'FOLGEN'       => true,
@@ -388,6 +392,7 @@ class CommandFactory
 		'URSPRUNG'     => true,
 		'ÜBERGEBEN'    => 'GIB',
 		'UEBERGEBEN'   => 'GIB',
+		'VERBIETEN'    => true,
 		'VERKAUFEN'    => true,
 		'VERLASSEN'    => true,
 		'VERLIEREN'    => true,
@@ -422,6 +427,7 @@ class CommandFactory
 		'Kanal'             => Canal::class,
 		'Leuchtturm'        => Lighthouse::class,
 		'Magierturm'        => Magespire::class,
+		'Markt'             => Market::class,
 		'Megapolis'         => Megapolis::class,
 		'Mine'              => Pit::class,
 		'Palast'            => Palace::class,
@@ -811,6 +817,7 @@ class CommandFactory
 				'EINHEIT'      => Unit::class,
 				'ENDE'         => End::class,
 				'ENTLASSEN'    => Dismiss::class,
+				'ERLAUBEN'     => Allow::class,
 				'ERSCHAFFEN'   => Unicum::class,
 				'FOLGEN'       => Follow::class,
 				'FORSCHEN'     => Explore::class,
@@ -845,6 +852,7 @@ class CommandFactory
 				'TREIBEN'      => Tax::class,
 				'UNTERHALTEN'  => Entertain::class,
 				'URSPRUNG'     => Origin::class,
+				'VERBIETEN'    => Forbid::class,
 				'VERKAUFEN'    => Sell::class,
 				'VERLASSEN'    => Vacate::class,
 				'VERLIEREN'    => Lose::class,
