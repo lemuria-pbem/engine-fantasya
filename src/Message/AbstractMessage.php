@@ -147,6 +147,17 @@ abstract class AbstractMessage implements MessageType
 		return $property === $name ? number($this->$name) : null;
 	}
 
+	protected function percent(string $property, string $name, int $digits = 0): ?string {
+		if ($property === $name) {
+			$percent = round(100.0 * $this->$name, $digits);
+			if ($digits <= 0) {
+				$percent = (int)$percent;
+			}
+			return str_replace('$p', number($percent), $this->translateKey('replace.percent'));
+		}
+		return null;
+	}
+
 	private function getTranslatedName(string $property, string $name, string $prefix, ?int $index = null): ?string {
 		if ($property === $name) {
 			$class = getClass($this->$name);

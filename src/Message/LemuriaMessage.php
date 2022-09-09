@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message;
 
+use Lemuria\Identifiable;
 use function Lemuria\getClass;
 use Lemuria\Singleton;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait as EngineBuilderTrait;
@@ -223,7 +224,7 @@ class LemuriaMessage implements Message
 	/**
 	 * Set an entity.
 	 */
-	public function e(Entity $entity, ?string $name = null): LemuriaMessage {
+	public function e(Identifiable $entity, ?string $name = null): LemuriaMessage {
 		if (!$name) {
 			$name = self::ENTITY;
 		}
