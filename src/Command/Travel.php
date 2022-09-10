@@ -30,6 +30,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TravelNotCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelPassMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelRoadMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelSiegeMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelSimulationMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelSpeedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelRegionMessage;
@@ -163,6 +164,9 @@ class Travel extends UnitCommand implements Activity
 		$roadRegions = 2 * $regions;
 		$this->message(TravelSpeedMessage::class)->p($regions)->p($weight, TravelSpeedMessage::WEIGHT);
 		try {
+			$isSimulation = $this->context->getTurnOptions()->IsSimulation();
+			$chronicle    = $this->unit->Party()->Chronicle();
+
 			while (($regions > 0 || $roadRegions > 0) && $this->directions->hasMore()) {
 				$next = $this->directions->next();
 				if ($next === Direction::ROUTE_STOP) {
@@ -170,6 +174,12 @@ class Travel extends UnitCommand implements Activity
 				}
 
 				$region = $this->canMoveTo($next);
+				if ($isSimulation && !$chronicle->has($region->Id())) {
+					$region      = null;
+					$regions     = 0;
+					$roadRegions = 0;
+					$this->message(TravelSimulationMessage::class);
+				}
 				if ($region) {
 					$overRoad = $this->overRoad($this->unit->Region(), $next, $region);
 					if ($overRoad) {

@@ -38,7 +38,7 @@ trait SiegeTrait
 		if (!$this->siege) {
 			$this->initSiege($unit->Construction());
 		}
-		if ($this->isSieged()) {
+		if ($this->isSieged() && !$this->context->getTurnOptions()->IsSimulation()) {
 			$calculus = new Calculus($unit);
 			return $calculus->knowledge(Camouflage::class)->Level() > $this->siege->Perception();
 		}
