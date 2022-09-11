@@ -25,6 +25,7 @@ use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Potion\GoliathWater;
 use Lemuria\Model\Fantasya\Commodity\Potion\SevenLeagueTea;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
 use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\DoubleAbility;
@@ -119,17 +120,21 @@ final class Calculus
 		$payloadBoost = min($size, $boostSize);
 		$payload      = $size * $racePayload + $payloadBoost * ($this->payload(Horse::class) - $racePayload);
 		$inventory    = $this->unit->Inventory();
-		$carriage     = $inventory[Carriage::class] ?? null;
 		$horse        = $inventory[Horse::class] ?? null;
 		$camel        = $inventory[Camel::class] ?? null;
 		$elephant     = $inventory[Elephant::class] ?? null;
 		$warElephant  = $inventory[WarElephant::class] ?? null;
 		$griffin      = $inventory[Griffin::class] ?? null;
 		$pegasus      = $inventory[Pegasus::class] ?? null;
-		$weight       = $this->weight($this->unit->Weight(), [$carriage, $horse, $camel, $elephant, $warElephant, $griffin, $pegasus]);
 
-		$ride       = $this->transport($carriage) + $this->transport($camel) + $this->transport($elephant) + $this->transport($warElephant);
-		$ride      += $carriage ? $this->transport($horse, $carriage->Count() * 2) : $this->transport($horse);
+		$carriage = $inventory[Carriage::class] ?? null;
+		$catapult = $inventory[Catapult::class] ?? null;
+		$caCount  = $carriage?->Count() + $catapult?->Count();
+		$weight   = $this->weight($this->unit->Weight(), [$carriage, $catapult, $horse, $camel, $elephant, $warElephant, $griffin, $pegasus]);
+
+		$ride       = $this->transport($carriage) + $this->transport($catapult);
+		$ride      += $this->transport($camel) + $this->transport($elephant) + $this->transport($warElephant);
+		$ride      += $this->transport($horse, $caCount * 2);
 		$fly        = $this->transport($griffin) + $this->transport($pegasus);
 		$rideFly    = $ride + $fly;
 		$walk       = $payload + $rideFly;
@@ -137,22 +142,22 @@ final class Calculus
 		$boostSize  = $this->hasApplied(SevenLeagueTea::class)?->Count() * SevenLeagueTea::PERSONS;
 		$speedBoost = ($boostSize >= $size ? 2 : 1) * $race->Speed();
 
-		if ($carriage) {
-			$cars        = $carriage->Count();
-			$speed       = $this->speed([$carriage, $horse, $camel, $elephant, $warElephant, $griffin, $pegasus]);
+		if ($caCount > 0) {
+			$cars        = (int)$carriage?->Count();
+			$speed       = $this->speed([$carriage, $catapult, $horse, $camel, $elephant, $warElephant, $griffin, $pegasus]);
 			$animals     = [$horse, $camel, $elephant, $warElephant, $griffin, $pegasus];
 			$talentDrive = $this->talent($animals, $size, true, $cars);
 			$horseCount  = $horse?->Count();
-			if ($riding >= $talentDrive && $horseCount >= 2 * $cars && $weight <= $rideFly) {
+			if ($riding >= $talentDrive && $horseCount >= 2 * $caCount && $weight <= $rideFly && !$catapult) {
 				return new Capacity($walk, $rideFly, Capacity::DRIVE, $weight, $speed, $talentDrive, $speedBoost);
 			}
 			$talentWalk = $this->talent($animals, $size, false, $cars);
-			if ($riding >= $talentWalk) {
+			if ($horseCount >= 2 * $caCount && $riding >= $talentWalk) {
 				$weight -= $size * $race->Weight();
 				return new Capacity($walk, $rideFly, Capacity::WALK, $weight, 1, $talentWalk, $speedBoost);
 			}
 			if ($race instanceof Troll) {
-				$needed = 2 * $cars;
+				$needed = 2 * $caCount;
 				if ($size >= $needed) {
 					$riding     = $needed * $this->knowledge(Riding::class)->Level();
 					$talentWalk = $this->talent($animals, $size - $needed) + $riding;
