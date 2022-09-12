@@ -21,6 +21,7 @@ use Lemuria\Engine\Fantasya\Command\Comment;
 use Lemuria\Engine\Fantasya\Command\Contact;
 use Lemuria\Engine\Fantasya\Command\Create;
 use Lemuria\Engine\Fantasya\Command\Create\Unicum;
+use Lemuria\Engine\Fantasya\Command\Demand;
 use Lemuria\Engine\Fantasya\Command\Describe;
 use Lemuria\Engine\Fantasya\Command\Destroy;
 use Lemuria\Engine\Fantasya\Command\Destroy\Dismiss;
@@ -44,6 +45,7 @@ use Lemuria\Engine\Fantasya\Command\Name;
 use Lemuria\Engine\Fantasya\Command\Next;
 use Lemuria\Engine\Fantasya\Command\NullCommand;
 use Lemuria\Engine\Fantasya\Command\Number;
+use Lemuria\Engine\Fantasya\Command\Offer;
 use Lemuria\Engine\Fantasya\Command\Operate\AbstractOperate;
 use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Command\Origin;
@@ -297,6 +299,7 @@ class CommandFactory
 	protected array $verbs = [
 		'//'           => 'KOMMENTAR',
 		'@'            => 'VORLAGE',
+		'ANGEBOT'      => true,
 		'ANGREIFEN'    => 'ATTACKIEREN',
 		'ANGRIFF'      => 'ATTACKIEREN',
 		'ATTACKE'      => 'ATTACKIEREN',
@@ -354,9 +357,10 @@ class CommandFactory
 		'LOCALE'       => true,
 		'MACHEN'       => true,
 		'NACH'         => 'REISEN',
-		'NAME'         => true,
+		'NACHFRAGE'    => true,
 		'NÄCHSTER'     => true,
 		'NAECHSTER'    => 'NÄCHSTER',
+		'NAME'         => true,
 		'NEHMEN'       => true,
 		'NIMM'         => 'NEHMEN',
 		'NUMMER'       => true,
@@ -804,6 +808,7 @@ class CommandFactory
 		$verb = $this->identifyVerb($phrase->getVerb());
 		try {
 			$command = match ($verb) {
+				'ANGEBOT'      => Offer::class,
 				'ATTACKIEREN'  => Attack::class,
 				'BANNER'       => Banner::class,
 				'BELAGERN'     => Siege::class,
@@ -833,6 +838,7 @@ class CommandFactory
 				'LERNEN'       => Learn::class,
 				'LESEN'        => Read::class,
 				'MACHEN'       => Create::class,
+				'NACHFRAGE'    => Demand::class,
 				'NAME'         => Name::class,
 				'NÄCHSTER'     => Next::class,
 				'NEHMEN'       => Take::class,
