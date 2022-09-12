@@ -15,6 +15,7 @@ use Lemuria\Engine\Fantasya\Command\Attack;
 use Lemuria\Engine\Fantasya\Command\Banner;
 use Lemuria\Engine\Fantasya\Command\BattleSpell;
 use Lemuria\Engine\Fantasya\Command\Buy;
+use Lemuria\Engine\Fantasya\Command\Cancel;
 use Lemuria\Engine\Fantasya\Command\Cast;
 use Lemuria\Engine\Fantasya\Command\Cast\AbstractCast;
 use Lemuria\Engine\Fantasya\Command\Comment;
@@ -53,8 +54,10 @@ use Lemuria\Engine\Fantasya\Command\Party;
 use Lemuria\Engine\Fantasya\Command\Presetting;
 use Lemuria\Engine\Fantasya\Command\Read;
 use Lemuria\Engine\Fantasya\Command\Recruit;
+use Lemuria\Engine\Fantasya\Command\Repeat;
 use Lemuria\Engine\Fantasya\Command\Reserve;
 use Lemuria\Engine\Fantasya\Command\Route;
+use Lemuria\Engine\Fantasya\Command\Rumor;
 use Lemuria\Engine\Fantasya\Command\Sell;
 use Lemuria\Engine\Fantasya\Command\Sentinel;
 use Lemuria\Engine\Fantasya\Command\Siege;
@@ -72,6 +75,7 @@ use Lemuria\Engine\Fantasya\Command\Unit;
 use Lemuria\Engine\Fantasya\Command\Use\Apply;
 use Lemuria\Engine\Fantasya\Command\UseCommand;
 use Lemuria\Engine\Fantasya\Command\Vacate;
+use Lemuria\Engine\Fantasya\Command\Visit;
 use Lemuria\Engine\Fantasya\Command\Write;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
@@ -305,6 +309,7 @@ class CommandFactory
 		'ATTACKE'      => 'ATTACKIEREN',
 		'ATTACKIEREN'  => true,
 		'BANNER'       => true,
+		'BEENDEN'      => true,
 		'BEKLAUEN'     => 'STEHLEN',
 		'BELAGERE'     => 'BELAGERN',
 		'BELAGERN'     => true,
@@ -317,6 +322,7 @@ class CommandFactory
 		'BESTEIGEN'    => true,
 		'BESTEUERN'    => 'TREIBEN',
 		'BESTEUERUNG'  => 'TREIBEN',
+		'BESUCHEN'     => true,
 		'BETRETEN'     => true,
 		'BEUTE'        => true,
 		'BEWACHEN'     => true,
@@ -337,6 +343,8 @@ class CommandFactory
 		'FORSCHEN'     => true,
 		'GIB'          => 'GEBEN',
 		'GEBEN'        => true,
+		'GERUECHT'     => 'GERÜCHT',
+		'GERÜCHT'      => true,
 		'HELFEN'       => true,
 		'HILFE'        => 'HELFEN',
 		'ID'           => 'NUMMER',
@@ -403,6 +411,7 @@ class CommandFactory
 		'VERNICHTEN'   => true,
 		'VORGABE'      => true,
 		'VORLAGE'      => true,
+		'WIEDERHOLEN'  => true,
 		'ZAUBERE'      => 'ZAUBERN',
 		'ZAUBERN'      => true,
 		'ZERSTÖREN'    => true,
@@ -811,10 +820,12 @@ class CommandFactory
 				'ANGEBOT'      => Offer::class,
 				'ATTACKIEREN'  => Attack::class,
 				'BANNER'       => Banner::class,
+				'BEENDEN'      => Cancel::class,
 				'BELAGERN'     => Siege::class,
 				'BENUTZEN'     => UseCommand::class,
 				'BESCHREIBUNG' => Describe::class,
 				'BESTEIGEN'    => Board::class,
+				'BESUCHEN'     => Visit::class,
 				'BETRETEN'     => Trespass::class,
 				'BEUTE'        => Loot::class,
 				'BEWACHEN'     => Sentinel::class,
@@ -827,6 +838,7 @@ class CommandFactory
 				'FOLGEN'       => Follow::class,
 				'FORSCHEN'     => Explore::class,
 				'GEBEN'        => Handover::class,
+				'GERÜCHT'      => Rumor::class,
 				'HELFEN'       => Help::class,
 				'KAMPFZAUBER'  => BattleSpell::class,
 				'KAUFEN'       => Buy::class,
@@ -865,6 +877,7 @@ class CommandFactory
 				'VERNICHTEN'   => Devastate::class,
 				'VORGABE'      => Presetting::class,
 				'VORLAGE'      => Template::class,
+				'WIEDERHOLEN'  => Repeat::class,
 				'ZAUBERN'      => Cast::class,
 				'ZERSTÖREN'    => Destroy::class,
 
