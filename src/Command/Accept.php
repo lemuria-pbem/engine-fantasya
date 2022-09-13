@@ -3,6 +3,10 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptForbiddenTradeMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptNoMarketMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptNoTradeMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptUnsatisfiableTradeMessage;
 use Lemuria\Id;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Commodity;
@@ -25,6 +29,8 @@ final class Accept extends UnitCommand
 
 	protected ?Sales $sales = null;
 
+	protected ?Id $id = null;
+
 	protected ?Trade $trade = null;
 
 	protected ?int $status = null;
@@ -44,17 +50,18 @@ final class Accept extends UnitCommand
 
 	protected function run(): void {
 		if (!$this->sales) {
-			//TODO no market
+			$this->message(AcceptNoMarketMessage::class);
 			return;
 		}
 		if (!$this->trade) {
-			//TODO not found
+			$this->message(AcceptNoTradeMessage::class)->p((string)$this->id);
 			return;
 		}
 		if ($this->status === Sales::FORBIDDEN) {
-			//TODO forbidden
+			$this->message(AcceptForbiddenTradeMessage::class)->e($this->trade);
 		} elseif ($this->status === Sales::UNSATISFIABLE) {
-			//TODO unsatisfiable
+			$merchant = $this->trade->Unit();
+			$this->message(AcceptUnsatisfiableTradeMessage::class, $this->unit)->e($this->trade)->e($merchant, AcceptUnsatisfiableTradeMessage::MERCHANT);
 		} else {
 			$this->parseParameters();
 			if ($this->trade->Goods()->IsVariable()) {
@@ -109,9 +116,9 @@ final class Accept extends UnitCommand
 		if ($this->phrase->count() <= 0) {
 			throw new InvalidCommandException($this);
 		}
-		$id = Id::fromId($this->phrase->getParameter());
+		$this->id = Id::fromId($this->phrase->getParameter());
 		try {
-			$trade        = Trade::get($id);
+			$trade        = Trade::get($this->id);
 			$this->status = $this->sales->getStatus($trade);
 			$this->trade  = $trade;
 		} catch (NotRegisteredException|SalesException) {
