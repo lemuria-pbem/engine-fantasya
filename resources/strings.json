@@ -845,6 +845,8 @@
 		"TeleportationMoveMessage": "Die Einheit $id wird in die Region der Einheit $unit teleportiert.",
 		"TempMessage": "Neue Einheit $id erzeugt.",
 		"TheWildHuntMessage": "In einer stürmischen Nacht werden unsere Wachen in $region vom Lärm eines rumpelnden Wagens, dem Stampfen vieler Hufe und gellenden Schreien aufgeschreckt. Mit wahnsinnigem Tempo rauscht die furchtsame Erscheinung vorbei, während die Wachen unfähig sind etwas zu tun. Plötzlich überkommt sie eine große Müdigkeit und sie fallen kurz darauf in einen tiefen Schlaf. Am nächsten Morgen finden sie eine Kiste, die einige Phiolen und andere Dinge enthält.",
+		"TradeForbiddenCommodityMessage": "Auf diesem Markt ist es nicht erlaubt, mit $commodity zu handeln.",
+		"TradeForbiddenPaymentMessage": "Auf diesem Markt ist es nicht erlaubt, mit $commodity zu bezahlen.",
 		"TravelAirshipMessage": "Das Schiff $vessel hat die Region $id überflogen.",
 		"TravelAllowedMessage": "Unsere Wachen haben die Einheit $unit in der Region $region durchreisen lassen.",
 		"TravelAllowedRegionMessage": "Die Wachen der Partei $party haben die Einheit $unit durchreisen lassen.",

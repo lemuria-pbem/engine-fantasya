@@ -3,9 +3,12 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\TradeForbiddenCommodityMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TradeForbiddenPaymentMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity\Silver;
+use Lemuria\Model\Fantasya\Extension\Market;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Market\Deal;
 use Lemuria\Model\Fantasya\Market\Trade;
@@ -31,19 +34,32 @@ abstract class TradeCommand extends UnitCommand
 	protected final const PAYMENT = 3;
 
 	protected function createTrade(): Trade {
-		$trade = new Trade();
+		$tradeables = $this->getMarket()?->Tradeables();
+		$trade      = new Trade();
 		$trade->setId(Lemuria::Catalog()->nextId(Domain::TRADE));
 		$parts = $this->parseParts();
 
 		$amount    = $parts[self::AMOUNT];
 		$commodity = $parts[self::COMMODITY];
 		$goods     = is_int($amount) ? new Deal($commodity, $amount) : new Deal($commodity, $amount[0], $amount[1]);
+		if (!$tradeables->isAllowed($commodity)) {
+			$this->message(TradeForbiddenCommodityMessage::class)->s($commodity);
+		}
 
-		$amount    = $parts[self::PRICE];
-		$commodity = $parts[self::PAYMENT];
-		$price     = is_int($amount) ? new Deal($commodity, $amount) : new Deal($commodity, $amount[0], $amount[1]);
+		$amount  = $parts[self::PRICE];
+		$payment = $parts[self::PAYMENT];
+		$price   = is_int($amount) ? new Deal($payment, $amount) : new Deal($payment, $amount[0], $amount[1]);
+		if (!$tradeables->isAllowed($payment)) {
+			$this->message(TradeForbiddenPaymentMessage::class)->s($payment);
+		}
 
 		return $trade->setGoods($goods)->setPrice($price);
+	}
+
+	protected function getMarket(): ?Market {
+		$extensions = $this->unit->Construction()->Extensions();
+		$market     = $extensions[Market::class];
+		return $market instanceof Market ? $market : null;
 	}
 
 	protected function parseParts(): array {
