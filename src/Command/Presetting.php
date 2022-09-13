@@ -14,6 +14,8 @@ use Lemuria\Engine\Fantasya\Message\Party\PresettingNoDisguiseMessage;
 use Lemuria\Engine\Fantasya\Message\Party\PresettingNoHideMessage;
 use Lemuria\Engine\Fantasya\Message\Party\PresettingNoLootMessage;
 use Lemuria\Engine\Fantasya\Message\Party\PresettingDisguiseUnknownMessage;
+use Lemuria\Engine\Fantasya\Message\Party\PresettingNoRepeatMessage;
+use Lemuria\Engine\Fantasya\Message\Party\PresettingRepeatMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Id;
 use Lemuria\Model\Exception\NotRegisteredException;
@@ -27,6 +29,7 @@ use Lemuria\Model\Fantasya\Party;
  * - VORGABE Tarne|Tarnen|Tarnung [Nicht]
  * - VORGABE Tarne|Tarnen|Tarnung Partei [<Party>]
  * - VORGABE Tarne|Tarnen|Tarnung Partei Nicht
+ * - VORGABE Wiederhole|Wiederholen|Wiederholung [Nicht]
  */
 final class Presetting extends UnitCommand
 {
@@ -66,6 +69,11 @@ final class Presetting extends UnitCommand
 				} else {
 					$this->setIsHiding($how);
 				}
+				break;
+			case 'wiederhole' :
+			case 'wiederholen' :
+			case 'wiederholung':
+				$this->setIsRepeat($how);
 				break;
 			default :
 				throw new InvalidCommandException($this, 'Invalid parameter "' . $what . '".');
@@ -140,6 +148,16 @@ final class Presetting extends UnitCommand
 			}
 		} else {
 			$this->message(PresettingDisguiseUnknownMessage::class, $this->party)->p((string)$partyId);
+		}
+	}
+
+	protected function setIsRepeat(string $not): void {
+		$isRepeat = $this->isNot($not);
+		$this->party->Presettings()->setIsRepeat($isRepeat);
+		if ($isRepeat) {
+			$this->message(PresettingRepeatMessage::class, $this->party);
+		} else {
+			$this->message(PresettingNoRepeatMessage::class, $this->party);
 		}
 	}
 

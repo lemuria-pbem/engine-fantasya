@@ -59,7 +59,11 @@
 ^@?(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6}( +.*)?$
 ^@?(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6}( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
-^@?(h|he|hel|helf|helfe|helfen|hi|hil|hilf|hilfe) +[a-z0-9]{1,6} +[a-z]+( +(region|nicht|region +nicht|nicht +region))?$
+^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6}$
+^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9]+[a-z ]+$
+^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9]+[a-z ]+ [0-9]+[a-z ]+$
+
+^@?(he|hel|helf|helfe|helfen|hi|hil|hilf|hilfe) +[a-z0-9]{1,6} +[a-z]+( +(region|nicht|region +nicht|nicht +region))?$
 
 ^@?(kam|kamp|kampf|kampfz|kampfza|kampfzau|kampfzaub|kampfzaube|kampfzauber) +(astrales chaos|beschleunigung|blick des basilisken|elementarwesen|feuerball|friedenslied|geisterk(ae|ä)mpfer|rosthauch|schockwelle|steinhaut)( +(([0-9]+)|aus|nicht))?$
 ^@?(kam|kamp|kampf|kampfz|kampfza|kampfzau|kampfzaub|kampfzaube|kampfzauber) +(aus|kein|keine|keiner|keinen|nicht)$
@@ -153,6 +157,7 @@
 ^(vorg|vorga|vorgab|vorgabe) +tarnen( +nicht)?$
 ^(vorg|vorga|vorgab|vorgabe) +tarnen +partei( +(nicht|[a-z0-9]{1,6}))?$
 ^(vorg|vorga|vorgab|vorgabe) +sammeln( +nicht)?$
+^(vorg|vorga|vorgab|vorgabe) +(wiederhole|wiederholen|wiederholung)( +nicht)?$
 
 ^(vorl|vorla|vorlag|vorlage) +[a-z].+$
 ^(vorl|vorla|vorlag|vorlage) +(\*[0-9]*|[0-9]*\*) +[a-z].+$
