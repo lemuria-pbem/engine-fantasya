@@ -56,14 +56,15 @@ class Phrase implements \Countable, \Stringable
 	/**
 	 * Get a string containing all parameters starting with given parameter, separated with space.
 	 */
-	public function getLine(int $from = 1): string {
+	public function getLine(int $from = 1, int $last = 0): string {
 		if ($from <= 0) {
 			$from = 1;
 		}
 		if ($from > $this->count()) {
 			return '';
 		}
-		$parts = array_slice($this->parts, $from);
+		$length = $last < $from ? null : $last - $from + 1;
+		$parts  = array_slice($this->parts, $from, $length);
 		return implode(' ', $parts);
 	}
 

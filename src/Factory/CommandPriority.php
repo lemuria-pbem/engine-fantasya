@@ -50,7 +50,7 @@ final class CommandPriority
 		'Bestow'           => 30,
 		'Give'             => 32,
 		'Repeat'           => 33,
-		//HANDEL         => 34,
+		'Accept'           => 34,
 		'Cancel'           => 35,
 		'Abandon'          => 36,
 		'Enter'            => 37,

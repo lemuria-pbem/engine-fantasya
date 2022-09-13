@@ -7,6 +7,7 @@ use function Lemuria\mbUcFirst;
 use function Lemuria\undupChar;
 use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
+use Lemuria\Engine\Fantasya\Command\Accept;
 use Lemuria\Engine\Fantasya\Command\Allow;
 use Lemuria\Engine\Fantasya\Command\Announcement;
 use Lemuria\Engine\Fantasya\Command\Apply\AbstractApply;
@@ -345,6 +346,7 @@ class CommandFactory
 		'GEBEN'        => true,
 		'GERUECHT'     => 'GERÜCHT',
 		'GERÜCHT'      => true,
+		'HANDELN'      => true,
 		'HELFEN'       => true,
 		'HILFE'        => 'HELFEN',
 		'ID'           => 'NUMMER',
@@ -839,6 +841,7 @@ class CommandFactory
 				'FORSCHEN'     => Explore::class,
 				'GEBEN'        => Handover::class,
 				'GERÜCHT'      => Rumor::class,
+				'HANDELN'      => Accept::class,
 				'HELFEN'       => Help::class,
 				'KAMPFZAUBER'  => BattleSpell::class,
 				'KAUFEN'       => Buy::class,
