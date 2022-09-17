@@ -1095,11 +1095,15 @@ class CommandFactory
 		$candidates = [];
 		foreach ($this->verbs as $candidate => $isValid) {
 			if (str_starts_with($candidate, $verb)) {
+				$isExactMatch = $candidate === $verb;
 				if (is_string($isValid)) {
 					$candidate = $isValid;
 					$isValid   = $this->verbs[$isValid] ?? false;
 				}
 				if ($isValid === true) {
+					if ($isExactMatch) {
+						return $candidate;
+					}
 					$candidates[$candidate] = true;
 				}
 			}
