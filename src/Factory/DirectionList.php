@@ -27,6 +27,8 @@ class DirectionList implements \Countable
 
 	private bool $isRotating = false;
 
+	private int $previousIndex;
+
 	public function __construct(Context $context) {
 		$this->factory = $context->Factory();
 	}
@@ -48,13 +50,19 @@ class DirectionList implements \Countable
 
 	public function next(): Direction {
 		if ($this->hasMore()) {
-			$direction = $this->directions[$this->index++];
+			$this->previousIndex = $this->index;
+			$direction           = $this->directions[$this->index++];
 			if (!$this->hasMore() && $this->isRotating) {
 				$this->index = 0;
 			}
 			return $direction;
 		}
 		throw new LemuriaException('No more directions.');
+	}
+
+	public function revert(): DirectionList {
+		$this->index = $this->previousIndex;
+		return $this;
 	}
 
 	public function set(Phrase $phrase): DirectionList {

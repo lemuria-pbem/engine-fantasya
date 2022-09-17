@@ -17,4 +17,6 @@ interface Announcement
 	public function Sender(): string;
 
 	public function Message(): string;
+
+	public function init(LemuriaMessage $message): void;
 }

@@ -549,16 +549,19 @@
 		"InciteMonsterNoEnemiesMessage": "Die Einheit $id hat keine Feinde für den Zauber \"Monster aufhetzen\" gefunden.",
 		"InciteMonsterNoMessage": "Die Einheit $id kann die Einheit $unit nicht als Ziel für den Zauber \"Monster aufhetzen\" angeben.",
 		"LayaboutMessage": "Die Einheit $id faulenzt in dieser Woche.",
+		"LearnEffectivityMessage": "Die Einheit $id an Bord des Schiffes hat eine Lerneffektivität von $effectivity.",
 		"LearnMagicMessage": "Die Einheit $id erreicht eine neue Magiestufe und erhält {$aura:Aurapunkt}.",
 		"LearnNotMessage": "Die Einheit $id kann kein Silber ausgeben, um $talent zu lernen.",
 		"LearnOnlyMessage": "Die Einheit $id kann nur $silver Silber ausgeben, um $talent zu lernen.",
 		"LearnProgressMessage": "Die Einheit $id lernt $talent mit $experience Erfahrungspunkten.",
+		"LearnReducedMessage": "Die Einheit $id kann an Bord {aboard=$ship} $talent nur mit $experience Erfahrungspunkten lernen.",
 		"LearnSilverMessage": "Die Einheit $id gibt $silver Silber für das Lernen von $talent aus.",
 		"LearnSpellAlreadyMessage": "Die Einheit $id kennt den Zauberspruch $spell bereits.",
 		"LearnSpellImpossibleMessage": "Die Einheit $id hat nicht genügend Wissen in Magie, um den Zauberspruch $spell zu lernen.",
 		"LearnSpellMessage": "Die Einheit $id lernt den Zauberspruch $spell.",
 		"LearnSpellUnableMessage": "Die Einheit $id kann im den Zauberspruch $spell jetzt nicht lernen.",
 		"LearnTeachersMessage": "Die Einheit $id hat $teachers Lehrer.",
+		"LearnVesselMessage": "Die Einheit $id kann $talent nicht an Bord {aboard=$ship} lernen.",
 		"LeaveConstructionDebugMessage": "Die Einheit $id hat das Gebäude $construction verlassen.",
 		"LeaveConstructionMessage": "Die Einheit $id verlässt das Gebäude $construction.",
 		"LeaveNewCaptainMessage": "Das Schiff $id hat die Einheit $captain als neuen Kapitän.",
@@ -877,6 +880,7 @@
 		"TravelRoadMessage": "Die Einheit $id ist über eine Straße gereist und kann sich eine Region weiter bewegen.",
 		"TravelShipTooHeavyMessage": "Das Schiff $id ist zu schwer, um sich zu bewegen.",
 		"TravelSiegeMessage": "Die Einheit $id kann wegen einer Belagerung nicht reisen.",
+		"TravelSimulationMessage": "Die Einheit $id kann in dieser Simulation nicht weiterreisen.",
 		"TravelSpeedMessage": "Die Einheit $id kann sich {$speed:Region} bewegen (Gewicht: $weight).",
 		"TravelTooHeavyMessage": "Die Einheit $id ist zu schwer, um sich zu bewegen.",
 		"TravelUnitMessage": "Die Einheit $unit ist durch die Region $id gereist.",
@@ -986,6 +990,14 @@
 		"Zombie": ["Zombie", "Zombies"]
 	},
 	"replace": {
+		"aboard": {
+			"Boat": "eines Bootes",
+			"Caravel": "einer Karavelle",
+			"Dragonship": "eines Drachenschiffes",
+			"Galleon": "einer Galeone",
+			"Longboat": "eines Langbootes",
+			"Trireme": "einer Trireme"
+		},
 		"alle verfügbaren": {
 			"Armor": "alle verfügbaren",
 			"Balsam": "alles verfügbare",
