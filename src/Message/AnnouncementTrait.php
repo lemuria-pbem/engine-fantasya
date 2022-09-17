@@ -30,6 +30,10 @@ trait AnnouncementTrait
 		return $this->message;
 	}
 
+	public function init(LemuriaMessage $message): void {
+		$this->getData($message);
+	}
+
 	/**
 	 * @noinspection PhpMultipleClassDeclarationsInspection
 	 */
