@@ -31,11 +31,13 @@ use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\AbstractCastle;
 use Lemuria\Model\Fantasya\Building\Castle;
+use Lemuria\Model\Fantasya\Building\Market;
 use Lemuria\Model\Fantasya\Building\Monument;
 use Lemuria\Model\Fantasya\Building\Ruin;
 use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Construction as ConstructionModel;
+use Lemuria\Model\Fantasya\Extension\Market as MarketExtension;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Requirement;
 
@@ -118,6 +120,7 @@ final class Construction extends AbstractProduct
 			}
 			$this->addToWorkload($yield);
 			$this->initializeMarket($construction);
+			$this->addConstructionExtensions($construction);
 			$this->addConstructionEffects($construction);
 		} else {
 			if ($this->capability > 0) {
@@ -293,6 +296,16 @@ final class Construction extends AbstractProduct
 				Lemuria::Log()->debug('Market opens the first time in region ' . $region . ' - prices have been initialized.');
 			} else {
 				Lemuria::Log()->debug('Region ' . $region . ' produces no luxuries - no prices initialized.');
+			}
+		}
+	}
+
+	private function addConstructionExtensions(ConstructionModel $construction): void {
+		$building = $construction->Building();
+		if ($building instanceof Market) {
+			$extensions = $construction->Extensions();
+			if (!$extensions->offsetExists(MarketExtension::class)) {
+				$extensions->add(new MarketExtension());
 			}
 		}
 	}
