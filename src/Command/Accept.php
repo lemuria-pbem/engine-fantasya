@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandAmountMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandPriceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandRemovedMessage;
@@ -17,6 +18,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\AcceptNoTradeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptBoughtMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferAmountMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferPriceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferRemovedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptSoldMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptUnsatisfiableTradeMessage;
@@ -30,6 +32,7 @@ use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Exception\SalesException;
 use Lemuria\Model\Fantasya\Extension\Market;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Market\Deal;
 use Lemuria\Model\Fantasya\Market\Sales;
 use Lemuria\Model\Fantasya\Market\Trade;
 use Lemuria\Model\Fantasya\Quantity;
@@ -116,20 +119,13 @@ final class Accept extends UnitCommand
 		}
 
 		$price   = $this->trade->Price();
-		$payment = $this->collectQuantity($this->unit, $price->Commodity(), $price->Amount());
-		if ($payment->Count() < $price->Amount()) {
-			if ($this->trade->Trade() === Trade::OFFER) {
-				$this->message(AcceptNoPaymentMessage::class)->s($price->Commodity())->e($this->trade);
-			} else {
-				$this->message(AcceptNoDeliveryMessage::class)->s($price->Commodity())->e($this->trade);
-			}
-			return;
+		$payment = $this->collectPayment($price->Commodity(), $price->Amount());
+		if ($payment) {
+			$goods    = $this->trade->Goods();
+			$quantity = new Quantity($goods->Commodity(), $goods->Amount());
+			$this->exchange($quantity, $payment);
+			$this->tradeMessages($quantity, $payment);
 		}
-
-		$goods    = $this->trade->Goods();
-		$quantity = new Quantity($goods->Commodity(), $goods->Amount());
-		$this->exchange($quantity, $payment);
-		$this->tradeMessages($quantity, $payment);
 	}
 
 	private function acceptPieces(): void {
@@ -137,31 +133,16 @@ final class Accept extends UnitCommand
 			throw new InvalidCommandException($this);
 		}
 
-		$goods = $this->trade->Goods();
-		if ($this->amount < $goods->Minimum() || $this->amount > $goods->Maximum()) {
-			if ($this->trade->Trade() === Trade::OFFER) {
-				$this->message(AcceptOfferAmountMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
-			} else {
-				$this->message(AcceptDemandAmountMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+		$goods = $this->checkPieces();
+		if ($goods) {
+			$price   = $this->trade->Price();
+			$payment = $this->collectPayment($price->Commodity(), $this->amount * $price->Amount());
+			if ($payment) {
+				$quantity = new Quantity($goods->Commodity(), $this->amount);
+				$this->exchange($quantity, $payment);
+				$this->tradeMessages($quantity, $payment);
 			}
-			return;
 		}
-
-		$price   = $this->trade->Price();
-		$sum     = $this->amount * $price->Amount();
-		$payment = $this->collectQuantity($this->unit, $price->Commodity(), $sum);
-		if ($payment->Count() < $sum) {
-			if ($this->trade->Trade() === Trade::OFFER) {
-				$this->message(AcceptNoPaymentMessage::class)->s($price->Commodity())->e($this->trade);
-			} else {
-				$this->message(AcceptNoDeliveryMessage::class)->s($price->Commodity())->e($this->trade);
-			}
-			return;
-		}
-
-		$quantity = new Quantity($goods->Commodity(), $this->amount);
-		$this->exchange($quantity, $payment);
-		$this->tradeMessages($quantity, $payment);
 	}
 
 	private function acceptBargain(): void {
@@ -169,7 +150,23 @@ final class Accept extends UnitCommand
 			throw new InvalidCommandException($this);
 		}
 
-		//TODO trade bargain
+		$price = $this->trade->Price();
+		if ($this->price < $price->Minimum()) {
+			if ($this->trade->Trade() === Trade::OFFER) {
+				$this->message(AcceptOfferPriceMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+			} else {
+				$this->message(AcceptDemandPriceMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+			}
+			return;
+		}
+
+		$payment = $this->collectPayment($price->Commodity(), $this->price);
+		if ($payment) {
+			$goods    = $this->trade->Goods();
+			$quantity = new Quantity($goods->Commodity(), $goods->Amount());
+			$this->exchange($quantity, $payment);
+			$this->tradeMessages($quantity, $payment);
+		}
 	}
 
 	private function acceptPiecesBargain(): void {
@@ -177,7 +174,26 @@ final class Accept extends UnitCommand
 			throw new InvalidCommandException($this);
 		}
 
-		//TODO trade pieces with bargain
+		$goods = $this->checkPieces();
+		if ($goods) {
+			$price   = $this->trade->Price();
+			$minimum = $this->amount * $price->Minimum();
+			if ($this->price < $minimum) {
+				if ($this->trade->Trade() === Trade::OFFER) {
+					$this->message(AcceptOfferPriceMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+				} else {
+					$this->message(AcceptDemandPriceMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+				}
+				return;
+			}
+
+			$payment = $this->collectPayment($price->Commodity(), $this->price);
+			if ($payment) {
+				$quantity = new Quantity($goods->Commodity(), $this->amount);
+				$this->exchange($quantity, $payment);
+				$this->tradeMessages($quantity, $payment);
+			}
+		}
 	}
 
 	private function parseTrade(): void {
@@ -246,6 +262,32 @@ final class Accept extends UnitCommand
 		}
 		$class = $this->phrase->getLine($i, $index - 1);
 		return self::createCommodity($class);
+	}
+
+	private function checkPieces(): ?Deal {
+		$goods = $this->trade->Goods();
+		if ($this->amount < $goods->Minimum() || $this->amount > $goods->Maximum()) {
+			if ($this->trade->Trade() === Trade::OFFER) {
+				$this->message(AcceptOfferAmountMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+			} else {
+				$this->message(AcceptDemandAmountMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+			}
+			return null;
+		}
+		return $goods;
+	}
+
+	private function collectPayment(Commodity $commodity, int $price): ?Quantity {
+		$payment = $this->collectQuantity($this->unit, $commodity, $price);
+		if ($payment->Count() < $price) {
+			if ($this->trade->Trade() === Trade::OFFER) {
+				$this->message(AcceptNoPaymentMessage::class)->s($commodity)->e($this->trade);
+			} else {
+				$this->message(AcceptNoDeliveryMessage::class)->s($commodity)->e($this->trade);
+			}
+			return null;
+		}
+		return $payment;
 	}
 
 	private function exchange(Quantity $quantity, Quantity $payment): void {
