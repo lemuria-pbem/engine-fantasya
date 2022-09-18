@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Id;
 
 class AcceptNoTradeMessage extends AcceptNoMarketMessage
 {

@@ -12,6 +12,7 @@ use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Construction;
+use Lemuria\Model\Fantasya\Extension\Trades;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
@@ -208,6 +209,13 @@ final class Context implements Reassignment
 	 */
 	public function getCasts(): Casts {
 		return $this->state->getCasts();
+	}
+
+	/**
+	 * Get the closed trades.
+	 */
+	public function getClosedTrades(): Trades {
+		return $this->state->getClosedTrades();
 	}
 
 	/**

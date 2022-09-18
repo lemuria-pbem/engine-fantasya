@@ -3,11 +3,26 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\CollectTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandAlreadyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferAlreadyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandRemovedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptForbiddenTradeMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptNoDeliveryMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptNoMarketMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptNoPaymentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptNoTradeMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptBoughtMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferRemovedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptSoldMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptUnsatisfiableTradeMessage;
+use Lemuria\Exception\ItemException;
+use Lemuria\Exception\ItemSetException;
+use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
+use Lemuria\Lemuria;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Exception\SalesException;
@@ -15,6 +30,7 @@ use Lemuria\Model\Fantasya\Extension\Market;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Market\Sales;
 use Lemuria\Model\Fantasya\Market\Trade;
+use Lemuria\Model\Fantasya\Quantity;
 
 /**
  * Accept a trade from a unit.
@@ -26,6 +42,7 @@ use Lemuria\Model\Fantasya\Market\Trade;
 final class Accept extends UnitCommand
 {
 	use BuilderTrait;
+	use CollectTrait;
 
 	protected ?Sales $sales = null;
 
@@ -54,6 +71,17 @@ final class Accept extends UnitCommand
 			return;
 		}
 		if (!$this->trade) {
+			$closedTrades = $this->context->getClosedTrades();
+			/** @var Trade $closed */
+			$closed = $closedTrades->has($this->id) ? $closedTrades->offsetGet($this->id) : null;
+			if ($closed) {
+				if ($closed->Trade() === Trade::OFFER) {
+					$this->message(AcceptOfferAlreadyMessage::class)->p((string)$this->id);
+				} else {
+					$this->message(AcceptDemandAlreadyMessage::class)->p((string)$this->id);
+				}
+				return;
+			}
 			$this->message(AcceptNoTradeMessage::class)->p((string)$this->id);
 			return;
 		}
@@ -85,7 +113,20 @@ final class Accept extends UnitCommand
 			throw new InvalidCommandException($this);
 		}
 
-		//TODO trade
+		$price   = $this->trade->Price();
+		$payment = $this->collectQuantity($this->unit, $price->Commodity(), $price->Amount());
+		if ($payment->Count() < $price) {
+			if ($this->trade->Trade() === Trade::OFFER) {
+				$this->message(AcceptNoPaymentMessage::class)->s($price->Commodity())->e($this->trade);
+			} else {
+				$this->message(AcceptNoDeliveryMessage::class)->s($price->Commodity())->e($this->trade);
+			}
+			return;
+		}
+		$goods    = $this->trade->Goods();
+		$quantity = new Quantity($goods->Commodity(), $goods->Amount());
+		$this->exchange($quantity, $payment);
+		$this->tradeMessages($quantity, $payment);
 	}
 
 	private function acceptPieces(): void {
@@ -178,5 +219,58 @@ final class Accept extends UnitCommand
 		}
 		$class = $this->phrase->getLine($i, $index - 1);
 		return self::createCommodity($class);
+	}
+
+	private function exchange(Quantity $quantity, Quantity $payment): void {
+		$unit     = $this->trade->Unit();
+		$merchant = $unit->Inventory();
+		$customer = $this->unit->Inventory();
+		try {
+			$merchant->remove($quantity);
+		} catch (ItemException|ItemSetException $e) {
+			throw new LemuriaException(previous: $e);
+		}
+		$customer->remove($payment);
+		$merchant->add(new Quantity($payment->Commodity(), $payment->Count()));
+		$customer->add(new Quantity($quantity->Commodity(), $quantity->Count()));
+
+		if (!$this->trade->IsRepeat()) {
+			Lemuria::Catalog()->reassign($this->trade);
+			$unit->Trades()->remove($this->trade);
+			Lemuria::Catalog()->remove($this->trade);
+			if ($this->trade->Trade() === Trade::OFFER) {
+				$this->message(AcceptOfferRemovedMessage::class, $unit)->e($this->trade);
+			} else {
+				$this->message(AcceptDemandRemovedMessage::class, $unit)->e($this->trade);
+			}
+		}
+	}
+
+	private function tradeMessages(Quantity $quantity, Quantity $payment): void {
+		if ($this->trade->Trade() === Trade::OFFER) {
+			$this->offerMessages($quantity, $payment);
+		} else {
+			$this->demandMessages($quantity, $payment);
+		}
+	}
+
+	private function offerMessages(Quantity $quantity, Quantity $payment): void {
+		$trade    = $this->trade;
+		$merchant = $this->trade->Unit();
+		$customer = $this->unit;
+		$unit     = AcceptOfferMessage::UNIT;
+		$pay      = AcceptOfferMessage::PAYMENT;
+		$this->message(AcceptOfferMessage::class, $merchant)->e($trade)->e($customer, $unit)->i($quantity)->i($payment, $pay);
+		$this->message(AcceptBoughtMessage::class)->e($trade)->e($merchant, $unit)->i($quantity)->i($payment, $pay);
+	}
+
+	private function demandMessages(Quantity $quantity, Quantity $payment): void {
+		$trade    = $this->trade;
+		$merchant = $this->trade->Unit();
+		$customer = $this->unit;
+		$unit     = AcceptOfferMessage::UNIT;
+		$pay      = AcceptOfferMessage::PAYMENT;
+		$this->message(AcceptDemandMessage::class, $merchant)->e($trade)->e($customer, $unit)->i($quantity)->i($payment, $pay);
+		$this->message(AcceptSoldMessage::class)->e($trade)->e($merchant, $unit)->i($quantity)->i($payment, $pay);
 	}
 }

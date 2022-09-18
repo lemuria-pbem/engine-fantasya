@@ -243,9 +243,21 @@
 		"group_256": "Trophäen"
 	},
 	"message": {
+		"AcceptDemandAlreadyMessage": "Das Handelsgesuch mit der Nummer $trade wurde bereits von einem anderen Kunden bedient.",
+		"AcceptDemandRemovedMessage": "Das Handelsgesuch mit der Nummer $trade ist beendet.",
 		"AcceptForbiddenTradeMessage": "Der Handel mit dem Angebot $trade wurde von der Marktaufsicht verboten.",
+		"AcceptNoDeliveryMessage": "Die Einheit $id hat nicht genügend $payment, um das Gesuch mit der Nummer $trade zu erfüllen.",
 		"AcceptNoMarketMessage": "Die Einheit $id kann in einer Region ohne Markt nicht handeln.",
+		"AcceptNoPaymentMessage": "Die Einheit $id hat nicht genügend $payment, um das Angebot mit der Nummer $trade zu kaufen.",
 		"AcceptNoTradeMessage": "Es gibt kein Handelsangebot mit der Nummer $trade.",
+		"AcceptBoughtMessage": "Die Einheit $id hat $quantity für $payment von der Einheit $unit gekauft.",
+		"AcceptOfferAlreadyMessage": "Das Handelsangebot mit der Nummer $trade wurde bereits von einem anderen Kunden gekauft.",
+		"AcceptOfferMessage": "Die Einheit $unit hat das Angebot $trade angenommen und $quantity für $payment gekauft.",
+
+		"AcceptDemandMessage": "Customer $unit accepted demand $trade and sold $quantity for $payment.",
+		"AcceptSoldMessage": "Unit $id sold $quantity to merchant $unit for $payment.",
+
+		"AcceptOfferRemovedMessage": "Das Handelsangebot mit der Nummer $trade ist beendet.",
 		"AcceptUnsatisfiableTradeMessage": "Der Händler $merchant kann das Handelsangebot mit der Nummer $trade nicht mehr liefern.",
 		"AcquaintanceMessage": "Wir haben zum ersten Mal ein Mitglied der Partei $party getroffen.",
 		"AcquaintanceTellMessage": "Wir haben diplomatische Beziehungen zur Partei $party aufgenommen und der Einheit $unit von unserem Volk erzählt.",
