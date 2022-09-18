@@ -20,7 +20,7 @@ use Lemuria\Model\Fantasya\Party;
  *
  * - TARNEN
  * - TARNEN Nein|Nicht
- * - TARNEN Partei [<Party>]
+ * - TARNEN Partei [0|<Party>]
  * - TARNEN Partei Nein|Nicht
  */
 final class Disguise extends UnitCommand
@@ -42,7 +42,10 @@ final class Disguise extends UnitCommand
 			}
 			if ($n === 2) {
 				$parameter = strtolower($this->phrase->getParameter(2));
-				if (in_array($parameter, ['nein', 'nicht'])) {
+				if ($parameter === '0') {
+					$this->unit->setDisguise();
+					$this->message(DisguisePartyMessage::class);
+				} elseif (in_array($parameter, ['nein', 'nicht'])) {
 					$this->unit->setDisguise(false);
 					$this->message(DisguisePartyNotMessage::class);
 				} else {
@@ -65,7 +68,7 @@ final class Disguise extends UnitCommand
 							$this->message(DisguiseKnownPartyMessage::class)->e($party);
 						}
 					} else {
-						$this->message(DisguiseUnknownPartyMessage::class)->e($party);
+						$this->message(DisguiseUnknownPartyMessage::class)->p((string)$partyId);
 					}
 				}
 			}
