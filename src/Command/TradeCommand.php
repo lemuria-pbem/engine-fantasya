@@ -2,11 +2,14 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\TradeForbiddenCommodityMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TradeForbiddenPaymentMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
+use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Extension\Market;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -32,6 +35,13 @@ abstract class TradeCommand extends UnitCommand
 	protected final const PRICE = 2;
 
 	protected final const PAYMENT = 3;
+
+	protected Commodity $silver;
+
+	public function __construct(Phrase $phrase, Context $context) {
+		parent::__construct($phrase, $context);
+		$this->silver = self::createCommodity(Silver::class);
+	}
 
 	protected function createTrade(): Trade {
 		$tradeables = $this->getMarket()?->Tradeables();
@@ -63,10 +73,11 @@ abstract class TradeCommand extends UnitCommand
 	}
 
 	protected function parseParts(): array {
-		$parts = [self::AMOUNT => null, self::COMMODITY => [], self::PRICE => null, self::PAYMENT => null];
-		$n     = $this->phrase->count();
-		$i     = 1;
-		$c     = 0;
+		$factory = $this->context->Factory();
+		$parts   = [self::AMOUNT => null, self::COMMODITY => [], self::PRICE => null, self::PAYMENT => null];
+		$n       = $this->phrase->count();
+		$i       = 1;
+		$c       = 0;
 
 		if (preg_match('/^\d+(-\d+)?$/', $this->phrase->getParameter($i++), $matches) === 1) {
 			$parts[self::AMOUNT] = $this->parseNumber($matches[0]);
@@ -86,9 +97,10 @@ abstract class TradeCommand extends UnitCommand
 		if ($c <= 0 || $parts[self::PRICE] === null) {
 			throw new UnknownCommandException($this);
 		}
-		$parts[self::COMMODITY] = self::createCommodity(implode(' ', $parts[self::COMMODITY]));
+		$commodity              = implode(' ', $parts[self::COMMODITY]);
+		$parts[self::COMMODITY] = $factory->commodity($commodity);
 
-		$parts[self::PAYMENT] = self::createCommodity($i <= $n ? $this->phrase->getLine($i) : Silver::class);
+		$parts[self::PAYMENT] = $i <= $n ? $factory->commodity($this->phrase->getLine($i)) : $this->silver;
 		return $parts;
 	}
 
