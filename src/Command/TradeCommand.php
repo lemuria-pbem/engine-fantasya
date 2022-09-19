@@ -63,7 +63,8 @@ abstract class TradeCommand extends UnitCommand
 			$this->message(TradeForbiddenPaymentMessage::class)->s($payment);
 		}
 
-		return $trade->setGoods($goods)->setPrice($price);
+		$isRepeat = $this->unit->Party()->Presettings()->IsRepeat();
+		return $trade->setGoods($goods)->setPrice($price)->setIsRepeat($isRepeat);
 	}
 
 	protected function getMarket(): ?Market {
