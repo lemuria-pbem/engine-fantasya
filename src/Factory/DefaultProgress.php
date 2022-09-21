@@ -18,6 +18,7 @@ use Lemuria\Engine\Fantasya\Event\Griffinegg;
 use Lemuria\Engine\Fantasya\Event\Growth;
 use Lemuria\Engine\Fantasya\Event\Layabout;
 use Lemuria\Engine\Fantasya\Event\Liquidation;
+use Lemuria\Engine\Fantasya\Event\MarketFee;
 use Lemuria\Engine\Fantasya\Event\MarketUpdate;
 use Lemuria\Engine\Fantasya\Event\Monster;
 use Lemuria\Engine\Fantasya\Event\Obtainment;
@@ -39,7 +40,7 @@ class DefaultProgress implements Progress
 {
 	public const EVENTS = [
 		// before
-		Administrator::class, Visit::class, Monster::class, Timer::class,
+		Administrator::class, Visit::class, Monster::class, Timer::class, MarketFee::class,
 		// middle
 		ResetSiege::class, Conduct::class, Upkeep::class, Subsistence::class, Drift::class, Breeding::class,
 		// after

@@ -4,9 +4,14 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
+use Lemuria\Engine\Fantasya\Factory\Model\Sales;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandAmountMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandPriceMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptFeePaidMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptFeeReceivedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptNoFeeMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptNoFeeReceivedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandRemovedMessage;
@@ -33,9 +38,10 @@ use Lemuria\Model\Fantasya\Exception\SalesException;
 use Lemuria\Model\Fantasya\Extension\Market;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Market\Deal;
-use Lemuria\Model\Fantasya\Market\Sales;
+use Lemuria\Model\Fantasya\Market\Sales as SalesModel;
 use Lemuria\Model\Fantasya\Market\Trade;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Accept a trade from a unit.
@@ -48,6 +54,8 @@ final class Accept extends UnitCommand
 {
 	use BuilderTrait;
 	use CollectTrait;
+
+	protected ?Market $market = null;
 
 	protected ?Sales $sales = null;
 
@@ -64,8 +72,12 @@ final class Accept extends UnitCommand
 	protected function initialize(): void {
 		parent::initialize();
 		$construction = $this->unit->Construction();
-		if ($construction->Extensions()->offsetExists(Market::class)) {
-			$this->sales = new Sales($this->unit->Construction());
+		$extensions   = $construction->Extensions();
+		if ($extensions->offsetExists(Market::class)) {
+			/** @var Market $market */
+			$market       = $extensions[Market::class];
+			$this->market = $market;
+			$this->sales  = new Sales($this->unit->Construction());
 			$this->parseTrade();
 		}
 	}
@@ -90,9 +102,9 @@ final class Accept extends UnitCommand
 			$this->message(AcceptNoTradeMessage::class)->p((string)$this->id);
 			return;
 		}
-		if ($this->status === Sales::FORBIDDEN) {
+		if ($this->status === SalesModel::FORBIDDEN) {
 			$this->message(AcceptForbiddenTradeMessage::class)->e($this->trade);
-		} elseif ($this->status === Sales::UNSATISFIABLE) {
+		} elseif ($this->status === SalesModel::UNSATISFIABLE) {
 			$merchant = $this->trade->Unit();
 			$this->message(AcceptUnsatisfiableTradeMessage::class, $this->unit)->e($this->trade)->e($merchant, AcceptUnsatisfiableTradeMessage::MERCHANT);
 		} else {
@@ -303,6 +315,12 @@ final class Accept extends UnitCommand
 		$merchant->add(new Quantity($payment->Commodity(), $payment->Count()));
 		$customer->add(new Quantity($quantity->Commodity(), $quantity->Count()));
 
+
+		$fee = $this->market->Fee();
+		if (is_float($fee) && $fee > 0.0) {
+			$this->payFee($unit, $payment, $fee);
+		}
+
 		if (!$this->trade->IsRepeat()) {
 			Lemuria::Catalog()->reassign($this->trade);
 			$unit->Trades()->remove($this->trade);
@@ -341,5 +359,20 @@ final class Accept extends UnitCommand
 		$pay      = AcceptOfferMessage::PAYMENT;
 		$this->message(AcceptDemandMessage::class, $merchant)->e($trade)->e($customer, $unit)->i($quantity)->i($payment, $pay);
 		$this->message(AcceptSoldMessage::class)->e($trade)->e($merchant, $unit)->i($quantity)->i($payment, $pay);
+	}
+
+	private function payFee(Unit $unit, Quantity $payment, float $rate) {
+		$fee   = (int)round($rate * $payment->Count());
+		$owner = $this->unit->Construction()->Inhabitants()->Owner();
+		if ($fee > 0) {
+			$quantity = new Quantity($payment->Commodity(), $fee);
+			$unit->Inventory()->remove($quantity);
+			$owner->Inventory()->add(new Quantity($payment->Commodity(), $fee));
+			$this->message(AcceptFeePaidMessage::class)->e($owner)->i($quantity);
+			$this->message(AcceptFeeReceivedMessage::class, $owner)->e($this->unit)->i($quantity);
+		} else {
+			$this->message(AcceptNoFeeMessage::class)->e($this->trade);
+			$this->message(AcceptNoFeeReceivedMessage::class, $owner)->e($this->trade)->e($this->unit, AcceptNoFeeReceivedMessage::UNIT);
+		}
 	}
 }
