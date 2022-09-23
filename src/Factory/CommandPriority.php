@@ -52,8 +52,8 @@ final class CommandPriority
 		'Accept'           => 30,
 		'Cancel'           => 31,
 		'Fee'              => 32,
-		'Allow'            => 33,
-		'Forbid'           => 34,
+		'Forbid'           => 33,
+		'Allow'            => 34,
 		//35
 		'Abandon'          => 36,
 		'Enter'            => 37,
