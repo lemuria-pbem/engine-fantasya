@@ -59,12 +59,8 @@ final class Construction extends AbstractProduct
 
 	private ?ConstructionModel $fromOutside;
 
-	public function __construct(Phrase $phrase, Context $context, Job $job) {
-		parent::__construct($phrase, $context, $job);
-		$this->fromOutside = $this->prepareBuildingFromOutside();
-	}
-
 	protected function initialize(): void {
+		$this->fromOutside = $this->prepareBuildingFromOutside();
 		$this->replacePlaceholderJob();
 		parent::initialize();
 		$castle = $this->context->getIntelligence($this->unit->Region())->getGovernment();
