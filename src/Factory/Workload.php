@@ -13,7 +13,7 @@ class Workload implements \Countable
 	}
 
 	public function Percent(): float {
-		return $this->count / $this->maximum;
+		return $this->maximum > 0 ? $this->count / $this->maximum : 1.0;
 	}
 
 	public function Maximum(): int {
