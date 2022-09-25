@@ -44,6 +44,10 @@ final class Road extends UnitCommand implements Activity
 		parent::__construct($phrase, $context);
 		$this->roadmaking = self::createTalent(Roadmaking::class);
 		$this->stone      = self::createCommodity(Stone::class);
+	}
+
+	protected function initialize(): void {
+		parent::initialize();
 		$level            = $this->getProductivity($this->roadmaking)->Level();
 		$size             = $this->unit->Size();
 		$this->maximum    = (int)floor($this->potionBoost($size) * $size * $level);
