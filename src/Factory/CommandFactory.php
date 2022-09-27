@@ -45,6 +45,7 @@ use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Loot;
 use Lemuria\Engine\Fantasya\Command\Name;
 use Lemuria\Engine\Fantasya\Command\Next;
+use Lemuria\Engine\Fantasya\Command\NotImplementedCommand;
 use Lemuria\Engine\Fantasya\Command\NullCommand;
 use Lemuria\Engine\Fantasya\Command\Number;
 use Lemuria\Engine\Fantasya\Command\Offer;
@@ -364,7 +365,6 @@ class CommandFactory
 		'LERNEN'       => true,
 		'LESEN'        => true,
 		'LIES'         => 'LESEN',
-		'LOCALE'       => true,
 		'MACHEN'       => true,
 		'NACH'         => 'REISEN',
 		'NACHFRAGE'    => true,
@@ -375,7 +375,6 @@ class CommandFactory
 		'NIMM'         => 'NEHMEN',
 		'NUMMER'       => true,
 		'PARTEI'       => true,
-		'REGION'       => true,
 		'REISEN'       => true,
 		'REKRUTEN'     => 'REKRUTIEREN',
 		'REKRUTIEREN'  => true,
@@ -383,7 +382,6 @@ class CommandFactory
 		'RESERVIEREN'  => true,
 		'RESERVIERUNG' => 'RESERVIEREN',
 		'ROUTE'        => true,
-		'RUNDE'        => true,
 		'SAMMELN'      => true,
 		'SAMMLE'       => 'SAMMELN',
 		'SCHREIBEN'    => true,
@@ -417,7 +415,37 @@ class CommandFactory
 		'ZAUBERE'      => 'ZAUBERN',
 		'ZAUBERN'      => true,
 		'ZERSTÖREN'    => true,
-		'ZERSTOEREN'   => 'ZERSTÖREN'
+		'ZERSTOEREN'   => 'ZERSTÖREN',
+
+		'LOCALE' => 'NULL',
+		'REGION' => 'NULL',
+		'RUNDE'  => 'NULL',
+		'NULL'   => true,
+
+		'ADRESSE'        => 'NOT',
+		'ARBEITEN'       => 'NOT',
+		'BEANSPRUCHEN'   => 'NOT',
+		'BEFÖRDERE'      => 'NOT',
+		'BESTÄTIGT'      => 'NOT',
+		'BEZAHLEN'       => 'NOT',
+		'EMAIL'          => 'NOT',
+		'FAHREN'         => 'NOT',
+		'GRUPPE'         => 'NOT',
+		'LIEFERE'        => 'NOT',
+		'OPTION'         => 'NOT',
+		'PASSWORT'       => 'NOT',
+		'PFLANZEN'       => 'NOT',
+		'PIRATERIE'      => 'NOT',
+		'PRÄFIX'         => 'NOT',
+		'SENDEN'         => 'NOT',
+		'SPRACHE'        => 'NOT',
+		'STIRB'          => 'NOT',
+		'TRANSPORTIEREN' => 'NOT',
+		'VERGESSEN'      => 'NOT',
+		'VERGISS'        => 'NOT',
+		'ZEIGEN'         => 'NOT',
+		'ZÜCHTEN'        => 'NOT',
+		'NOT'            => true
 	];
 
 	/**
@@ -857,6 +885,8 @@ class CommandFactory
 				'NAME'         => Name::class,
 				'NÄCHSTER'     => Next::class,
 				'NEHMEN'       => Take::class,
+				'NOT'          => NotImplementedCommand::class,
+				'NULL'         => NullCommand::class,
 				'NUMMER'       => Number::class,
 				'PARTEI'       => Party::class,
 				'REISEN'       => Travel::class,
@@ -882,9 +912,7 @@ class CommandFactory
 				'VORLAGE'      => Template::class,
 				'WIEDERHOLEN'  => Repeat::class,
 				'ZAUBERN'      => Cast::class,
-				'ZERSTÖREN'    => Destroy::class,
-
-				'LOCALE', 'REGION', 'RUNDE' => NullCommand::class
+				'ZERSTÖREN'    => Destroy::class
 			};
 			return new $command($phrase, $this->context);
 		} catch (\UnhandledMatchError) {

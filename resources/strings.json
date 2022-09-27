@@ -643,6 +643,7 @@
 		"NameVesselMessage": "Das Schiff $id trägt nun den Namen $name.",
 		"NextMessage": "Runde für Partei $id beendet.",
 		"NoMoveMessage": "Der Server hat für diese Runde keine Befehle für die Partei $id von Dir erhalten.",
+		"NotImplementedMessage": "Der Befehl \"$command\" ist in Lemuria nicht vorhanden.",
 		"NumberCaptainMessage": "Die Einheit $captain ist nicht der Kapitän des Schiffes $id und kann daher dessen Nummer nicht ändern.",
 		"NumberConstructionMessage": "Die neue Nummer des Gebäudes $oldId ist $id.",
 		"NumberConstructionUsedMessage": "Die Nummer des Gebäudes $id wurde nicht geändert. Die Nummer $newId ist schon vergeben.",
