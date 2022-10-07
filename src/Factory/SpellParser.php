@@ -152,7 +152,7 @@ class SpellParser
 
 	protected readonly int $level;
 
-	protected readonly ?Domain $domain;
+	protected ?Domain $domain = null;
 
 	protected ?Id $target = null;
 
