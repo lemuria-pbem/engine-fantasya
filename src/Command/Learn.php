@@ -143,6 +143,8 @@ final class Learn extends UnitCommand implements Activity
 				}
 			}
 
+			$oldLevel = $this->calculus()->knowledge($this->talent)->Level();
+
 			$this->unit->Knowledge()->add($this->progress);
 			foreach ($this->calculus()->getTeachers() as $teacher/** @var Teach $teacher */) {
 				$teacher->hasTaught($this);
@@ -156,11 +158,10 @@ final class Learn extends UnitCommand implements Activity
 			}
 
 			if ($this->talent instanceof Magic) {
-				$level    = $this->calculus()->knowledge($this->talent)->Level();
 				$newLevel = $this->calculus()->knowledge($this->talent)->Level();
-				if ($newLevel > 0 && $newLevel > $level) {
+				if ($newLevel > 0 && $newLevel > $oldLevel) {
 					$aura     = $this->unit->Aura() ?? new Aura();
-					$addition = $newLevel ** 2 - $level ** 2;
+					$addition = $newLevel ** 2 - $oldLevel ** 2;
 					$aura->setMaximum($aura->Maximum() + $addition);
 					$this->unit->setAura($aura);
 					$this->message(LearnMagicMessage::class)->p($addition);
