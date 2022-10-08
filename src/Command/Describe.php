@@ -49,7 +49,7 @@ final class Describe extends UnitCommand
 		}
 		if ($n === 1) {
 			$type        = 'Einheit';
-			$description = $this->phrase->getParameter();
+			$description = self::trimDescription($this->phrase->getParameter());
 		} else {
 			$type        = $this->phrase->getParameter();
 			$description = self::trimDescription($this->phrase->getLine(2));
