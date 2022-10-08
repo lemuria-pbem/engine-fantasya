@@ -104,7 +104,7 @@ final class Accept extends UnitCommand
 		}
 		if ($this->status === SalesModel::FORBIDDEN) {
 			$this->message(AcceptForbiddenTradeMessage::class)->e($this->trade);
-		} elseif ($this->status === SalesModel::UNSATISFIABLE) {
+		} elseif ($this->status === SalesModel::UNSATISFIABLE && !$this->context->getTurnOptions()->IsSimulation()) {
 			$merchant = $this->trade->Unit();
 			$this->message(AcceptUnsatisfiableTradeMessage::class, $this->unit)->e($this->trade)->e($merchant, AcceptUnsatisfiableTradeMessage::MERCHANT);
 		} else {
@@ -306,22 +306,23 @@ final class Accept extends UnitCommand
 		$unit     = $this->trade->Unit();
 		$merchant = $unit->Inventory();
 		$customer = $this->unit->Inventory();
-		try {
-			$merchant->remove($quantity);
-		} catch (ItemException|ItemSetException $e) {
-			throw new LemuriaException(previous: $e);
+		if (!$this->context->getTurnOptions()->IsSimulation()) {
+			try {
+				$merchant->remove($quantity);
+			} catch (ItemException|ItemSetException $e) {
+				throw new LemuriaException(previous: $e);
+			}
+			$customer->remove($payment);
+			$merchant->add(new Quantity($payment->Commodity(), $payment->Count()));
+			$customer->add(new Quantity($quantity->Commodity(), $quantity->Count()));
 		}
-		$customer->remove($payment);
-		$merchant->add(new Quantity($payment->Commodity(), $payment->Count()));
-		$customer->add(new Quantity($quantity->Commodity(), $quantity->Count()));
-
 
 		$fee = $this->market->Fee();
 		if (is_float($fee) && $fee > 0.0) {
 			$this->payFee($unit, $payment, $fee);
 		}
 
-		if (!$this->trade->IsRepeat()) {
+		if (!$this->trade->IsRepeat() && !$this->context->getTurnOptions()->IsSimulation()) {
 			Lemuria::Catalog()->reassign($this->trade);
 			$unit->Trades()->remove($this->trade);
 			Lemuria::Catalog()->remove($this->trade);
