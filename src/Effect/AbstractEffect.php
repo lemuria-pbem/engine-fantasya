@@ -13,12 +13,14 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Exception\UnserializeException;
+use Lemuria\Identifiable;
 use Lemuria\Id;
 use Lemuria\Lemuria;
+use Lemuria\Model\Reassignment;
 use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
 
-abstract class AbstractEffect implements Effect
+abstract class AbstractEffect implements Effect, Reassignment
 {
 	use ActionTrait;
 	use SerializableTrait;
@@ -28,16 +30,30 @@ abstract class AbstractEffect implements Effect
 	private Id $id;
 
 	public function __construct(protected State $state, Priority $priority) {
-		$this->setPriority($priority);
 		$this->context = new Context($state);
+		$this->setPriority($priority);
+		Lemuria::Catalog()->addReassignment($this);
+	}
+
+	public function Id(): Id {
+		return $this->id;
 	}
 
 	public function needsAftercare(): bool {
 		return false;
 	}
 
-	public function Id(): Id {
-		return $this->id;
+
+	public function reassign(Id $oldId, Identifiable $identifiable): void {
+		if ($identifiable->Catalog() === $this->Catalog() && $this->id->Id() === $oldId->Id()) {
+			$this->id = new Id($identifiable->Id()->Id());
+		}
+	}
+
+	public function remove(Identifiable $identifiable): void {
+		if ($identifiable->Catalog() === $this->Catalog() && $this->id->Id() === $identifiable->Id()->Id()) {
+			Lemuria::Score()->remove($this);
+		}
 	}
 
 	public function setId(Id $id): AbstractEffect {
