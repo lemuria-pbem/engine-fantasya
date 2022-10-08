@@ -57,7 +57,7 @@ final class Visit extends UnitCommand
 	private function visit(Unit $unit): void {
 		$effect = new Rumors(State::getInstance());
 		$rumors = Lemuria::Score()->find($effect->setUnit($unit));
-		if ($rumors instanceof Rumors) {
+		if ($rumors instanceof Rumors && !$this->context->getTurnOptions()->IsSimulation()) {
 			foreach ($rumors->Rumors() as $rumor) {
 				$this->message(VisitRumorMessage::class)->e($unit)->p($rumor);
 			}
