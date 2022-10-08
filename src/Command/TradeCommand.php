@@ -52,14 +52,14 @@ abstract class TradeCommand extends UnitCommand
 		$amount    = $parts[self::AMOUNT];
 		$commodity = $parts[self::COMMODITY];
 		$goods     = is_int($amount) ? new Deal($commodity, $amount) : new Deal($commodity, $amount[0], $amount[1]);
-		if (!$tradeables->isAllowed($commodity)) {
+		if ($tradeables && !$tradeables->isAllowed($commodity)) {
 			$this->message(TradeForbiddenCommodityMessage::class)->s($commodity);
 		}
 
 		$amount  = $parts[self::PRICE];
 		$payment = $parts[self::PAYMENT];
 		$price   = is_int($amount) ? new Deal($payment, $amount) : new Deal($payment, $amount[0], $amount[1]);
-		if (!$tradeables->isAllowed($payment)) {
+		if ($tradeables && !$tradeables->isAllowed($payment)) {
 			$this->message(TradeForbiddenPaymentMessage::class)->s($payment);
 		}
 
@@ -69,7 +69,7 @@ abstract class TradeCommand extends UnitCommand
 
 	protected function getMarket(): ?Market {
 		$extensions = $this->unit->Construction()->Extensions();
-		$market     = $extensions[Market::class];
+		$market     = $extensions[Market::class] ?? null;
 		return $market instanceof Market ? $market : null;
 	}
 
