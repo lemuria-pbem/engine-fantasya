@@ -75,6 +75,7 @@ final class Fee extends UnitCommand
 		if ($commodity === '%') {
 			return min(1.0, $number / 100.0);
 		}
-		return new Quantity(self::createCommodity($commodity), $number);
+
+		return new Quantity($this->context->Factory()->commodity($commodity), $number);
 	}
 }
