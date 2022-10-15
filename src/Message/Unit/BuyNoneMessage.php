@@ -25,6 +25,6 @@ class BuyNoneMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'goods') ?? parent::getTranslation($name);
+		return $this->commodity($name, 'goods', 1) ?? parent::getTranslation($name);
 	}
 }
