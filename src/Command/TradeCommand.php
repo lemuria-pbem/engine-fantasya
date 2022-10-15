@@ -68,9 +68,14 @@ abstract class TradeCommand extends UnitCommand
 	}
 
 	protected function getMarket(): ?Market {
-		$extensions = $this->unit->Construction()->Extensions();
-		$market     = $extensions[Market::class] ?? null;
-		return $market instanceof Market ? $market : null;
+		$extensions = $this->unit->Construction()?->Extensions();
+		if ($extensions && $extensions->offsetExists(Market::class)) {
+			$market = $extensions[Market::class];
+			if ($market instanceof Market) {
+				return $market;
+			}
+		}
+		return null;
 	}
 
 	protected function parseParts(): array {
