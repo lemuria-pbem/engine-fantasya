@@ -14,7 +14,7 @@
 ^(locale) +[a-zA-Z0-9]+$
 ^(region) +.+$
 
-^(ange|angeb|angebo|angebot) +[0-9-]+ +[a-z ]+[0-9-]+ +[a-z ]+$
+^(ange|angeb|angebo|angebot) +[0-9-]+ +[a-zäöüß ]+[0-9-]+ +[a-zäöüß ]+$
 
 ^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren)( +[a-z0-9]{1,6})+$
 
@@ -92,7 +92,7 @@
 ^@?(m|ma|mac|mach|mache|machen) +straße +(no|o|so|sw|w|nw)$
 ^@?(m|ma|mac|mach|mache|machen) +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
 
-^(nachf|nachfr|nachfra|nachfrag|nachfrage) +[0-9-]+ +[a-z ]+[0-9-]+ +[a-z ]+$
+^(nachf|nachfr|nachfra|nachfrag|nachfrage) +[0-9-]+ +[a-zäöüß ]+[0-9-]+ +[a-zäöüß ]+$
 
 ^@?(nam|name|bene|benen|benenn|benenne|benennen)( +(einheit|region|gebäude|gebaeude|burg|schiff|partei))? +.+$
 
