@@ -33,7 +33,7 @@ trait LearnSpellTrait
 	protected function learn(Spell $spell): void {
 		$unit      = $this->operator->Unit();
 		$spellBook = $unit->Party()->SpellBook();
-		if ($spellBook[$spell]) {
+		if ($spellBook->offsetExists($spell)) {
 			$this->message(LearnSpellAlreadyMessage::class, $unit)->s($spell);
 			return;
 		}
