@@ -24,7 +24,7 @@ final class Rumor extends UnitCommand
 			Lemuria::Score()->add($effect);
 		}
 
-		$rumor = Describe::trimDescription($this->phrase->getParameter());
+		$rumor = Describe::trimDescription($this->phrase->getLine());
 		if (!$rumor) {
 			throw new InvalidCommandException($this);
 		}

@@ -3,9 +3,12 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message;
 
 class VisitRumorMessage extends VisitNoRumorMessage
 {
+	protected string $level = Message::EVENT;
+
 	protected string $rumor;
 
 	protected function create(): string {

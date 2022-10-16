@@ -36,7 +36,7 @@ final class Visit extends UnitCommand
 			$hasMarket = false;
 			foreach ($region->Estate() as $construction /* @var Construction $construction */) {
 				$extensions = $construction->Extensions();
-				if ($extensions->offsetGet(Market::class)) {
+				if ($extensions->offsetExists(Market::class)) {
 					$hasMarket = true;
 					if ($construction->Inhabitants()->has($id)) {
 						/** @var Unit $unit */
