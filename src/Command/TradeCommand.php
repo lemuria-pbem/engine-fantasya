@@ -45,9 +45,7 @@ abstract class TradeCommand extends UnitCommand
 
 	protected function createTrade(): Trade {
 		$tradeables = $this->getMarket()?->Tradeables();
-		$trade      = new Trade();
-		$trade->setId(Lemuria::Catalog()->nextId(Domain::TRADE));
-		$parts = $this->parseParts();
+		$parts      = $this->parseParts();
 
 		$amount    = $parts[self::AMOUNT];
 		$commodity = $parts[self::COMMODITY];
@@ -64,6 +62,8 @@ abstract class TradeCommand extends UnitCommand
 		}
 
 		$isRepeat = $this->unit->Party()->Presettings()->IsRepeat();
+		$trade    = new Trade();
+		$trade->setId(Lemuria::Catalog()->nextId(Domain::TRADE));
 		return $trade->setGoods($goods)->setPrice($price)->setIsRepeat($isRepeat);
 	}
 

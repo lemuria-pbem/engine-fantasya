@@ -259,6 +259,23 @@ final class Accept extends UnitCommand
 				} else {
 					throw new InvalidCommandException($this);
 				}
+			} else {
+				if ($goods->IsVariable()) {
+					if ($price->IsVariable()) {
+						throw new InvalidCommandException($this);
+					}
+					if ($commodity === $goods->Commodity()) {
+						$this->amount = $number;
+						return;
+					}
+				}
+				if ($price->IsVariable()) {
+					if ($commodity === $price->Commodity()) {
+						$this->price = $number;
+						return;
+					}
+				}
+				throw new InvalidCommandException($this);
 			}
 		}
 	}

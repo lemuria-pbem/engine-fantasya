@@ -14,7 +14,7 @@ class AcceptOfferMessage extends AbstractUnitMessage
 
 	public final const UNIT = 'unit';
 
-	protected string $level = Message::SUCCESS;
+	protected string $level = Message::EVENT;
 
 	protected Section $section = Section::ECONOMY;
 
