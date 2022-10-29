@@ -34,9 +34,9 @@ use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Exception\SalesException;
 use Lemuria\Model\Fantasya\Extension\Market;
-use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Market\Deal;
 use Lemuria\Model\Fantasya\Market\Sales as SalesModel;
 use Lemuria\Model\Fantasya\Market\Trade;
@@ -52,12 +52,19 @@ use Lemuria\Model\Fantasya\Unit;
  */
 final class Accept extends UnitCommand
 {
-	use BuilderTrait;
 	use CollectTrait;
 
-	protected ?Market $market = null;
+	/**
+	 * array<int, Market>
+	 */
+	protected array $market = [];
 
-	protected ?Sales $sales = null;
+	/**
+	 * array<int, Sales>
+	 */
+	protected array $sales = [];
+
+	protected ?int $index = null;
 
 	protected ?Id $id = null;
 
@@ -71,19 +78,20 @@ final class Accept extends UnitCommand
 
 	protected function initialize(): void {
 		parent::initialize();
-		$construction = $this->unit->Construction();
-		$extensions   = $construction->Extensions();
-		if ($extensions->offsetExists(Market::class)) {
-			/** @var Market $market */
-			$market       = $extensions[Market::class];
-			$this->market = $market;
-			$this->sales  = new Sales($this->unit->Construction());
-			$this->parseTrade();
+		foreach ($this->unit->Region()->Estate() as $construction /* @var Construction $construction */) {
+			$extensions = $construction->Extensions();
+			if ($extensions->offsetExists(Market::class)) {
+				/** @var Market $market */
+				$market         = $extensions[Market::class];
+				$this->market[] = $market;
+				$this->sales[]  = new Sales($construction);
+			}
 		}
+		$this->parseTrade();
 	}
 
 	protected function run(): void {
-		if (!$this->sales) {
+		if (empty($this->market)) {
 			$this->message(AcceptNoMarketMessage::class);
 			return;
 		}
@@ -214,9 +222,14 @@ final class Accept extends UnitCommand
 		}
 		$this->id = Id::fromId($this->phrase->getParameter());
 		try {
-			$trade        = Trade::get($this->id);
-			$this->status = $this->sales->getStatus($trade);
-			$this->trade  = $trade;
+			$trade = Trade::get($this->id);
+			foreach ($this->sales as $index => $sales /* @var Sales $sales */) {
+				if ($sales->has($trade)) {
+					$this->index  = $index;
+					$this->status = $sales->getStatus($trade);
+					$this->trade  = $trade;
+				}
+			}
 		} catch (NotRegisteredException|SalesException) {
 		}
 	}
@@ -289,8 +302,8 @@ final class Accept extends UnitCommand
 				break;
 			}
 		}
-		$class = $this->phrase->getLine($i, $index - 1);
-		return self::createCommodity($class);
+		$commodity = $this->phrase->getLine($i, $index - 1);
+		return $this->context->Factory()->commodity($commodity);
 	}
 
 	private function checkPieces(): ?Deal {
@@ -334,7 +347,7 @@ final class Accept extends UnitCommand
 			$customer->add(new Quantity($quantity->Commodity(), $quantity->Count()));
 		}
 
-		$fee = $this->market->Fee();
+		$fee = $this->market[$this->index]->Fee();
 		if (is_float($fee) && $fee > 0.0) {
 			$this->payFee($unit, $payment, $fee);
 		}
