@@ -654,11 +654,13 @@ class CommandFactory
 	 * @var array(string=>Kind)
 	 */
 	protected array $kind = [
+		'Baumaterial' => Kind::Material,
 		'Kraeuter'    => Kind::Herb,
 		'Kräuter'     => Kind::Herb,
 		'Luxusgueter' => Kind::Luxury,
 		'Luxusgüter'  => Kind::Luxury,
 		'Luxuswaren'  => Kind::Luxury,
+		'Material'    => Kind::Material,
 		'Ruestungen'  => Kind::Protection,
 		'Rüstungen'   => Kind::Protection,
 		'Schilde'     => Kind::Shield,
