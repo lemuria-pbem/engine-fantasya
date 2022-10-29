@@ -40,6 +40,11 @@ final class Commerce
 	private array $goods = [];
 
 	/**
+	 * @var array(string=>Supply)
+	 */
+	private array $supplies = [];
+
+	/**
 	 * @var array(int=>array)
 	 */
 	private array $rounds = [];
@@ -116,11 +121,7 @@ final class Commerce
 	 * @return Supply[]
 	 */
 	public function getSupplies(): array {
-		$supplies = [];
-		foreach ($this->goods as $data) {
-			$supplies[] = $data['supply'];
-		}
-		return $supplies;
+		return $this->supplies;
 	}
 
 	/**
@@ -165,7 +166,8 @@ final class Commerce
 	private function trade(string $class): void {
 		Lemuria::Log()->debug('Trading ' . $class . ' between merchants and peasants in region ' . $this->region . '.');
 		/** @var Supply $supply */
-		$supply = $this->goods[$class]['supply'];
+		$supply                 = $this->goods[$class]['supply'];
+		$this->supplies[$class] = $supply;
 		/** @var Luxury $good */
 		$good       = $this->goods[$class]['good'];
 		$demand     = $this->goods[$class]['demand'];
