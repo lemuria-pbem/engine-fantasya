@@ -150,6 +150,8 @@ final class Recruit extends AllocationCommand
 				$ability->removeItem(new Ability($ability->Talent(), $experience - $newExperience));
 			}
 			$this->message(RecruitKnowledgeMessage::class)->p((int)round(100.0 * $percent));
+		} else {
+			$this->unit->Knowledge()->clear();
 		}
 
 		if ($this->unit->Race() instanceof Orc) {
