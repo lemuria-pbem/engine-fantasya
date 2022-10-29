@@ -188,10 +188,8 @@ final class Attack extends UnitCommand
 
 		if (!$construction && !$vessel) {
 			if ($ourConstruction) {
-				$ourConstruction->Inhabitants()->remove($this->unit);
 				$this->message(LeaveConstructionMessage::class)->e($ourConstruction);
 			} elseif ($ourVessel) {
-				$ourVessel->Passengers()->remove($this->unit);
 				$this->message(LeaveVesselMessage::class)->e($ourVessel);
 			}
 		}

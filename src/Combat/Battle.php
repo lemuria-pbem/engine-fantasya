@@ -17,6 +17,8 @@ use Lemuria\Engine\Fantasya\Effect\VanishEffect;
 use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\DisguisedParty;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackBoardAfterCombatMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackEnterAfterCombatMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackUnguardMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
@@ -369,10 +371,12 @@ class Battle
 		foreach ($units as $id => $unit) {
 			$size = $unit->Size();
 			if ($size <= 0) {
+				$this->destroyedUnitLeaves($unit);
 				$unit->setIsGuarding(false)->setHealth(0.0);
 				Lemuria::Log()->debug('Unit ' . $unit . ' of army ' . $army->Id() . ' is destroyed.');
 				BattleLog::getInstance()->add(new UnitDiedMessage($unit));
 			} else {
+				$this->survivingUnitEnters($unit);
 				if ($standing[$id] <= 0 && $unit->IsGuarding()) {
 					$unit->setIsGuarding(false);
 					$this->message(AttackUnguardMessage::class, $unit);
@@ -402,6 +406,30 @@ class Battle
 					$this->monsters[$id][] = $monster;
 				}
 			}
+		}
+	}
+
+	private function survivingUnitEnters(Unit $unit): void {
+		$construction = $unit->Construction();
+		if ($construction) {
+			$this->message(AttackEnterAfterCombatMessage::class, $unit)->e($construction);
+			return;
+		}
+		$vessel = $unit->Vessel();
+		if ($vessel) {
+			$this->message(AttackBoardAfterCombatMessage::class, $unit)->e($vessel);
+		}
+	}
+
+	private function destroyedUnitLeaves(Unit $unit): void {
+		$construction = $unit->Construction();
+		if ($construction) {
+			$construction->Inhabitants()->remove($unit);
+			return;
+		}
+		$vessel = $unit->Vessel();
+		if ($vessel) {
+			$vessel->Passengers()->remove($unit);
 		}
 	}
 }
