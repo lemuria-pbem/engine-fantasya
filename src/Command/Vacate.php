@@ -15,7 +15,7 @@ use Lemuria\Engine\Fantasya\Command\Vacate\Leave;
 final class Vacate extends DelegatedCommand
 {
 	protected function createDelegate(): Command {
-		$command =  new CompositeCommand($this->phrase, $this->context);
+		$command = new CompositeCommand($this->phrase, $this->context);
 		return $command->setCommands([
 			new Abandon($this->phrase, $this->context),
 			new Leave($this->phrase, $this->context)

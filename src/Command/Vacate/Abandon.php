@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command\Vacate;
 
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Effect\FreeSpace;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Construction;
@@ -16,15 +17,23 @@ use Lemuria\Model\Fantasya\Construction;
  */
 final class Abandon extends UnitCommand
 {
+	use SiegeTrait;
+
 	protected function run(): void {
 		$construction = $this->unit->Construction();
 		if ($construction) {
-			$effect = $this->getEffect($construction);
-			$space  = $this->unit->Size();
-			$effect->addSpace($space);
-			Lemuria::Log()->debug(
-				'Leaving unit ' . $this->unit->Id() . ' will add ' . $space . ' free space to construction ' . $construction->Id() . '.'
-			);
+			if ($this->initSiege($construction)->canEnterOrLeave($this->unit)) {
+				$effect = $this->getEffect($construction);
+				$space  = $this->unit->Size();
+				$effect->addSpace($space);
+				Lemuria::Log()->debug(
+					'Leaving unit ' . $this->unit->Id() . ' will add ' . $space . ' free space to construction ' . $construction->Id() . '.'
+				);
+			} else {
+				Lemuria::Log()->debug(
+					'Unit ' . $this->unit->Id() . ' cannot abandon construction ' . $construction->Id() . ' due to siege.'
+				);
+			}
 		}
 	}
 
