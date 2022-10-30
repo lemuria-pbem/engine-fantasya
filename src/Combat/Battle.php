@@ -13,7 +13,10 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\TakeLootMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\TakeTrophiesMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\UnitDiedMessage;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Effect\ConstructionLoot;
+use Lemuria\Engine\Fantasya\Effect\RegionLoot;
 use Lemuria\Engine\Fantasya\Effect\VanishEffect;
+use Lemuria\Engine\Fantasya\Effect\VesselLoot;
 use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\DisguisedParty;
@@ -23,6 +26,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\AttackUnguardMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Heirs;
 use Lemuria\Model\Fantasya\Intelligence;
@@ -34,6 +38,7 @@ use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Tactics;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Fantasya\Vessel;
 use Lemuria\Model\Fantasya\WearResources;
 
 class Battle
@@ -77,6 +82,12 @@ class Battle
 	 */
 	private array $monsters = [];
 
+	private Resources $battlefieldRemains;
+
+	private ?Construction $construction ;
+
+	private ?Vessel $vessel;
+
 	public function __construct(private Region $region) {
 		$this->intelligence = new Intelligence($this->region);
 		$this->initMonsters();
@@ -103,6 +114,8 @@ class Battle
 				Lemuria::Log()->debug('Monster ' . $monster . ' supports attacker in battle.');
 			}
 		}
+		$this->construction = $unit->Construction();
+		$this->vessel       = $unit->Vessel();
 		return $this;
 	}
 
@@ -115,6 +128,8 @@ class Battle
 				Lemuria::Log()->debug('Monster ' . $monster . ' supports defender in battle.');
 			}
 		}
+		$this->construction = $unit->Construction();
+		$this->vessel       = $unit->Vessel();
 		return $this;
 	}
 
@@ -148,7 +163,7 @@ class Battle
 		}
 		BattleLog::getInstance()->add(new BattleEndsMessage());
 		$this->treatInjuredUnits();
-		return $this->takeLoot($combat);
+		return $this->takeLoot($combat)->addBattlefieldRemains();
 	}
 
 	public function merge(Battle $battle): Battle {
@@ -256,6 +271,8 @@ class Battle
 		$rounds       = $combat->getRounds();
 		$attackerLoot = $this->collectLoot($this->attackArmies, $rounds);
 		$defenderLoot = $this->collectLoot($this->defendArmies, $rounds);
+
+		$this->battlefieldRemains = new Resources();
 		if ($combat->hasAttackers()) {
 			if ($combat->hasDefenders()) {
 				Lemuria::Log()->debug('Battle ended in a draw due to exhaustion (' . self::EXHAUSTION_ROUNDS . ' rounds without damage).');
@@ -303,12 +320,18 @@ class Battle
 
 	protected function giveLootToHeirs(Heirs $heirs, Resources $loot): void {
 		foreach ($loot as $quantity /* @var Quantity $quantity */) {
-			$unit = $heirs->random();
-			$type = $unit->Party()->Type();
+			$unit  = $heirs->random();
+			$party = $unit->Party();
+			$type  = $party->Type();
 			if ($type === Type::PLAYER) {
-				$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
-				Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
-				BattleLog::getInstance()->add(new TakeLootMessage($unit, $quantity));
+				if ($party->Loot()->wants($quantity->Commodity())) {
+					$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
+					Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
+					BattleLog::getInstance()->add(new TakeLootMessage($unit, $quantity));
+				} else {
+					$this->battlefieldRemains->add($quantity);
+					Lemuria::Log()->debug($unit . ' scorns loot ' . $quantity . ', added to battlefield remains.');
+				}
 			} elseif ($type === Type::MONSTER) {
 				$race = $unit->Race();
 				if ($race instanceof Monster) {
@@ -427,9 +450,31 @@ class Battle
 			$construction->Inhabitants()->remove($unit);
 			return;
 		}
-		$vessel = $unit->Vessel();
-		if ($vessel) {
-			$vessel->Passengers()->remove($unit);
+		$unit->Vessel()?->Passengers()->remove($unit);
+	}
+
+	private function addBattlefieldRemains(): Battle {
+		if ($this->battlefieldRemains->count()) {
+			if ($this->construction) {
+				$effect   = new ConstructionLoot(State::getInstance());
+				$existing = Lemuria::Score()->find($effect->setConstruction($this->construction));
+			} elseif ($this->vessel) {
+				$effect   = new VesselLoot(State::getInstance());
+				$existing = Lemuria::Score()->find($effect->setVessel($this->vessel));
+			} else {
+				$effect   = new RegionLoot(State::getInstance());
+				$existing = Lemuria::Score()->find($effect->setRegion($this->region));
+			}
+			if ($existing) {
+				$effect = $existing;
+			} else {
+				Lemuria::Score()->add($effect);
+			}
+			foreach ($this->battlefieldRemains as $quantity /* @var Quantity $quantity */) {
+				$effect->Resources()->add($quantity);
+				Lemuria::Log()->debug('Adding ' . $quantity . ' to battlefield remains.');
+			}
 		}
+		return $this;
 	}
 }

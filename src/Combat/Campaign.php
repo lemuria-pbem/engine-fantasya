@@ -247,6 +247,9 @@ class Campaign
 				unset($this->battles[$second]);
 				$battles[] = $first;
 			}
+			if (count($this->battles) <= 1) {
+				break;
+			}
 		}
 	}
 }
