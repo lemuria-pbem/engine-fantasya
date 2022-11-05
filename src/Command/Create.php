@@ -60,11 +60,13 @@ final class Create extends DelegatedCommand
 		}
 		// MACHEN Schiff <ID>
 		if ($n === 2 && $lower === 'schiff') {
-			return new Vessel($this->phrase, $this->context, new Job(new AnyShip()));
+			$size = (int)$this->phrase->getParameter(2);
+			return new Vessel($this->phrase, $this->context, new Job(new AnyShip(), $size));
 		}
 		// MACHEN Gebäude <ID>
 		if ($n === 2 && ($lower === 'gebäude' || $lower === 'gebaeude')) {
-			return new Construction($this->phrase, $this->context, new Job(new AnyBuilding()));
+			$size = (int)$this->phrase->getParameter(2);
+			return new Construction($this->phrase, $this->context, new Job(new AnyBuilding(), $size));
 		}
 
 		// MACHEN <amount> <Ressource>
