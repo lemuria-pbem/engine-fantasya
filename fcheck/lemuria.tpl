@@ -62,8 +62,8 @@
 ^@?(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6}( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6}$
-^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9]+[a-z ]+$
-^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9]+[a-z ]+ [0-9]+[a-z ]+$
+^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9]+[a-zäöüß ]+$
+^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9]+[a-zäöüß ]+ [0-9]+[a-zäöüß ]+$
 
 ^@?(he|hel|helf|helfe|helfen|hi|hil|hilf|hilfe) +[a-z0-9]{1,6} +[a-z]+( +(region|nicht|region +nicht|nicht +region))?$
 
@@ -91,7 +91,7 @@
 ^@?(m|ma|mac|mach|mache|machen) +[0-9]+ +[a-zäöüß]+$
 ^@?(m|ma|mac|mach|mache|machen) +(schiff|boot|drachenschiff|galeone|karavelle|langboot|trireme)( +[0-9]+)?$
 ^@?(m|ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|akropolis|alchemistenküche|bergwerk|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|kamelzucht|kanal|leuchtturm|leuchttürme|magierturm|markt|minen|mine|monument|monumente|pferdezucht|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steingrube|steuerturm|taverne|wegweiser|werkstatt)(( +[0-9]+)|( +[a-z0-9]{1,6}))?$
-^@?(m|ma|mac|mach|mache|machen) +straße +(no|o|so|sw|w|nw)$
+^@?(m|ma|mac|mach|mache|machen) +straße +(no|o|so|sw|w|nw)( +[0-9]+)?$
 ^@?(m|ma|mac|mach|mache|machen) +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
 
 ^(nachf|nachfr|nachfra|nachfrag|nachfrage) +[0-9-]+ +[a-zäöüß ]+[0-9-]+ +[a-zäöüß ]+$
