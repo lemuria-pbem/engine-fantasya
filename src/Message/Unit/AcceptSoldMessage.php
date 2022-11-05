@@ -5,6 +5,6 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 class AcceptSoldMessage extends AcceptBoughtMessage
 {
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' bought ' . $this->quantity . ' from merchant ' . $this->unit . ' for ' . $this->payment . '.';
+		return 'Unit ' . $this->id . ' buys ' . $this->quantity . ' from merchant ' . $this->unit . ' for ' . $this->payment . '.';
 	}
 }

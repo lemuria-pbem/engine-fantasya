@@ -9,6 +9,6 @@ class AcceptBoughtMessage extends AcceptOfferMessage
 	protected string $level = Message::SUCCESS;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' bought ' . $this->quantity . ' from merchant ' . $this->unit . ' for ' . $this->payment . '.';
+		return 'Unit ' . $this->id . ' buys ' . $this->quantity . ' from merchant ' . $this->unit . ' for ' . $this->payment . '.';
 	}
 }

@@ -27,7 +27,7 @@ class AcceptOfferMessage extends AbstractUnitMessage
 	protected Quantity $payment;
 
 	protected function create(): string {
-		return 'Customer ' . $this->unit . ' accepted offer ' . $this->trade . ' and bought ' . $this->quantity . ' for ' . $this->payment . '.';
+		return 'Customer ' . $this->unit . ' accepts offer ' . $this->trade . ' and buys ' . $this->quantity . ' for ' . $this->payment . '.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {

@@ -244,7 +244,7 @@
 		"group_256": "Trophäen"
 	},
 	"message": {
-		"AcceptBoughtMessage": "Die Einheit $id hat $quantity für $payment von der Einheit $unit gekauft.",
+		"AcceptBoughtMessage": "Die Einheit $id kauft $quantity für $payment von der Einheit $unit.",
 		"AcceptDemandAlreadyMessage": "Das Handelsgesuch mit der Nummer $trade wurde bereits von einem anderen Kunden bedient.",
 		"AcceptDemandAmountMessage": "Die Einheit $unit ist im Gesuch mit der ID $trade nicht an der angebotenen Menge interessiert.",
 		"AcceptDemandMessage": "Die Einheit $unit hat das Gesuch $trade bedient und $quantity für $payment verkauft.",
@@ -264,7 +264,7 @@
 		"AcceptOfferMessage": "Die Einheit $unit hat das Angebot $trade angenommen und $quantity für $payment gekauft.",
 		"AcceptOfferPriceMessage": "Die Einheit $unit akzeptiert unseren Preisvorschlag für das Angebot $trade nicht.",
 		"AcceptOfferRemovedMessage": "Das Handelsangebot mit der Nummer $trade ist beendet.",
-		"AcceptSoldMessage": "Die Einheit $id hat $quantity für $payment an die Einheit $unit verkauft.",
+		"AcceptSoldMessage": "Die Einheit $id verkauft $quantity für $payment an die Einheit $unit.",
 		"AcceptUnsatisfiableTradeMessage": "Der Händler $merchant kann das Handelsangebot mit der Nummer $trade nicht mehr liefern.",
 		"AcquaintanceMessage": "Wir haben zum ersten Mal ein Mitglied der Partei $party getroffen.",
 		"AcquaintanceTellMessage": "Wir haben diplomatische Beziehungen zur Partei $party aufgenommen und der Einheit $unit von unserem Volk erzählt.",
