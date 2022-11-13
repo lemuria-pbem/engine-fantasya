@@ -40,7 +40,7 @@ class Roam implements Act
 			} else {
 				$this->moveTo($target);
 				$this->hasMoved = true;
-				$this->message(RoamMessage::class, $this->unit)->e($region);
+				$this->message(RoamMessage::class, $this->unit)->e($target);
 			}
 		}
 		return $this;
