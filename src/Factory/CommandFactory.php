@@ -923,7 +923,7 @@ class CommandFactory
 	}
 
 	public function isComposition(string $composition): bool {
-		return is_string($this->getCandidate($composition, $this->compositions));
+		return is_string($this->getCandidate($composition, $this->compositions, true));
 	}
 
 	public function person(): Commodity {
@@ -1158,9 +1158,19 @@ class CommandFactory
 	/**
 	 * Parse a singleton.
 	 */
-	protected function getCandidate(string $singleton, array $map): ?string {
-		$singleton  = str_replace(['-', '_', '~'], ' ', $singleton);
-		$singleton  = mbUcFirst(mb_strtolower(undupChar(' ', $singleton)));
+	protected function getCandidate(string $singleton, array $map, bool $isExactMatch = false): ?string {
+		$singleton = str_replace(['-', '_', '~'], ' ', $singleton);
+		$singleton = mbUcFirst(mb_strtolower(undupChar(' ', $singleton)));
+
+		if ($isExactMatch) {
+			foreach ($map as $candidate => $singletonClass) {
+				if ($candidate === $singleton) {
+					return $singletonClass;
+				}
+			}
+			return null;
+		}
+
 		$candidates = [];
 		foreach ($map as $candidate => $singletonClass) {
 			if (str_starts_with($candidate, $singleton)) {
