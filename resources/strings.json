@@ -375,7 +375,7 @@
 		"CommodityExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um {ein:$artifact} zu produzieren.",
 		"CommodityOnlyMessage": "Die Einheit $id kann nur $output mit $talent produzieren.",
 		"CommodityResourcesMessage": "Die Einheit $id hat kein Material, um $artifact zu produzieren.",
-		"CommodityUnmaintainedMessage": "Die Einheit $id kann keine $artifact in {stillgelegt:$building} zu produzieren.",
+		"CommodityUnmaintainedMessage": "Die Einheit $id kann keine $artifact in {stillgelegt:$building} produzieren.",
 		"ConstructionBuildMessage": "Die Einheit $id baut {$size:Größenpunkt} am Gebäude $construction.",
 		"ConstructionCreateMessage": "Die Einheit $id hat kein Baumaterial für {ein:$building}.",
 		"ConstructionDependencyMessage": "Die Einheit $id kann {kein:$building} bauen - die Partei besitzt {kein:$dependency}.",

@@ -17,7 +17,7 @@ class CommodityUnmaintainedMessage extends CommodityResourcesMessage
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->building = $message->getSingleton();
+		$this->building = $message->getSingleton(self::BUILDING);
 	}
 
 	protected function getTranslation(string $name): string {
