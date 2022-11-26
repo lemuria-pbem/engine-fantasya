@@ -25,8 +25,9 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Protection;
 use Lemuria\Model\Fantasya\Monster;
+use Lemuria\Model\Fantasya\Party\Type;
+use Lemuria\Model\Fantasya\Protection;
 use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Riding;
@@ -181,7 +182,10 @@ class Attack
 		} elseif ($attacker->hasFeature(Feature::StoneSkin)) {
 			$hasBonus = false;
 		}
-		$isInfectious = $attacker->hasFeature(Feature::ZombieInfection) && !$defFighter->hasFeature(Feature::ZombieInfection);
+
+		$attInfectious = $attacker->hasFeature(Feature::ZombieInfection);
+		$defInfectious = $defFighter->hasFeature(Feature::ZombieInfection);
+		$isInfectious  = $attInfectious && !$defInfectious && $defender->Unit()->Party()->Type() !== Type::MONSTER;
 
 		$damage = null;
 		for ($i = 0; $i < $attacks; $i++) {

@@ -156,21 +156,23 @@ final class Attack extends UnitCommand
 			$this->message(AttackSelfMessage::class);
 			return false;
 		}
-		$party = $this->unit->Party();
-		if ($unit->Party() === $party) {
-			$this->message(AttackOwnUnitMessage::class)->e($unit);
+		$we    = $this->unit->Party();
+		$party = $unit->Party();
+		if ($party === $we) {
+			$this->message(AttackOwnUnitMessage::class)->p((string)$unit->Id());
 			return false;
 		}
 		if ($unit->Region() !== $this->unit->Region()) {
 			$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
 			return false;
 		}
-		if (!$this->checkVisibility($this->unit, $unit)) {
+		$isMonsterCombat = $we->Type() === Type::MONSTER && $party->Type() === Type::MONSTER;
+		if (!$isMonsterCombat && !$this->checkVisibility($this->unit, $unit)) {
 			$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
 			return false;
 		}
-		if ($party->Diplomacy()->has(Relation::COMBAT, $unit)) {
-			$this->message(AttackAllyMessage::class)->e($unit);
+		if ($we->Diplomacy()->has(Relation::COMBAT, $unit)) {
+			$this->message(AttackAllyMessage::class)->p((string)$unit->Id());
 			return false;
 		}
 

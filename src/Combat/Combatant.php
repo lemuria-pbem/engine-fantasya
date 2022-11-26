@@ -290,8 +290,8 @@ class Combatant
 				$this->weapon = $race->Weapon();
 				if ($this->weapon instanceof NativeMelee) {
 					$weaponSkill->Skill()->addItem($this->weapon->Ability());
+					return true;
 				}
-				return true;
 			}
 			$this->weapon = self::createWeapon(Fists::class);
 			return true;
