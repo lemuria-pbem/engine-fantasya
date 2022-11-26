@@ -15,6 +15,8 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Dingbats;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
+use Lemuria\Model\Fantasya\Commodity\Weapon\NativeDistant;
+use Lemuria\Model\Fantasya\Commodity\Weapon\NativeMelee;
 use Lemuria\Model\Fantasya\Protection;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Shield;
@@ -278,19 +280,28 @@ class Combatant
 	}
 
 	protected function hasOneWeaponOf(WeaponSkill $weaponSkill): bool {
-		$talent = $weaponSkill->Skill()->Talent()::class;
+		$skill  = $weaponSkill->Skill()->Talent();
+		$talent = $skill::class;
+		$race   = $this->unit->Race();
 		if ($talent === Fistfight::class) {
-			$race = $this->unit->Race();
 			if ($race instanceof Monster) {
 				$this->weapon = $race->Weapon();
-				if ($this->weapon) {
-					return true;
+				if ($this->weapon instanceof NativeMelee) {
+					$weaponSkill->Skill()->addItem($this->weapon->Ability());
 				}
+				return true;
 			}
 			$this->weapon = self::createWeapon(Fists::class);
 			return true;
 		}
 		if ($talent === Stoning::class) {
+			if ($race instanceof Monster) {
+				$this->weapon = $race->Weapon();
+				if ($this->weapon instanceof NativeDistant) {
+					$weaponSkill->Skill()->addItem($this->weapon->Ability());
+				}
+				return true;
+			}
 			$this->weapon = self::createWeapon(Dingbats::class);
 			return true;
 		}

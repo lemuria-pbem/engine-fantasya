@@ -23,6 +23,7 @@ use Lemuria\Id;
 use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Building\Monument;
 use Lemuria\Model\Fantasya\Construction;
+use Lemuria\Model\Fantasya\Unicum;
 
 /**
  * The Describe command is used to set the description of a unit, an unicum it possesses or the construction, region or
@@ -172,6 +173,7 @@ final class Describe extends UnitCommand
 		$treasury = $this->unit->Treasury();
 		$id       = Id::fromId($id);
 		if ($treasury->has($id)) {
+			/** @var Unicum $unicum */
 			$unicum = $treasury[$id];
 			$unicum->setDescription($description);
 			$this->message(DescribeUnicumMessage::class)->e($unicum);
