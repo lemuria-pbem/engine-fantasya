@@ -14,4 +14,6 @@ enum Feature : int
 	case StoneSkin = 2;
 
 	case GazeOfTheBasilisk = 4;
+
+	case ZombieInfection = 8;
 }

@@ -15,6 +15,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Dingbats;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
+use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Commodity\Weapon\NativeDistant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\NativeMelee;
 use Lemuria\Model\Fantasya\Protection;
@@ -156,6 +157,7 @@ class Combatant
 		}
 		$this->initWeaponSkill();
 		$this->initShieldAndArmor();
+		$this->initFeatures();
 		return $this;
 	}
 
@@ -328,6 +330,14 @@ class Combatant
 				if (!$this->armor || $protection->Block() > $this->armor->Block()) {
 					$this->armor = $protection;
 				}
+			}
+		}
+	}
+
+	protected function initFeatures(): void {
+		if ($this->unit->Race() instanceof Zombie) {
+			foreach ($this->fighters as $fighter) {
+				$fighter->setFeature(Feature::ZombieInfection);
 			}
 		}
 	}

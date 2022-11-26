@@ -38,6 +38,7 @@ class Fighter
 		$this->health = 1;
 		$this->potion = null;
 		$this->hasBeenHealed = true;
+		$this->setFeature(Feature::ZombieInfection, false);
 		return $this;
 	}
 }
