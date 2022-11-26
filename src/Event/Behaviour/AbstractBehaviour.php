@@ -124,8 +124,6 @@ abstract class AbstractBehaviour implements Behaviour
 			if ($this->act instanceof Seek) {
 				$enemy = $this->act->Enemy();
 				if (!$enemy->isEmpty()) {
-					$attack = new Attack($this);
-					$attack->setEnemy($enemy)->act();
 					return $this;
 				}
 			}
