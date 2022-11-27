@@ -3,9 +3,12 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Event\Game\PopulateContinent;
+use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Commodity\Monster\Wolf;
+use Lemuria\Model\Fantasya\Party\Type;
 
 /**
  * The Timer event adds other events at predefined rounds.
@@ -13,8 +16,11 @@ use Lemuria\Lemuria;
 final class Timer extends DelegatedEvent
 {
 	private const SCHEDULE = [
-		74 => [
-			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 2]]
+		90 => [
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Type::MONSTER, Spawn::REGION => 39, Spawn::SIZE => 8, Spawn::RACE => Wolf::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Type::MONSTER, Spawn::REGION => 60, Spawn::SIZE => 7, Spawn::RACE => Wolf::class]],
+
+			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 2, PopulateContinent::CHANCES   => [Wolf::class => 7]]]
 		]
 	];
 

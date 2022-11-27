@@ -17,6 +17,7 @@ use Lemuria\Model\Fantasya\Commodity\Monster\Ghoul;
 use Lemuria\Model\Fantasya\Commodity\Monster\Goblin;
 use Lemuria\Model\Fantasya\Commodity\Monster\Kraken;
 use Lemuria\Model\Fantasya\Commodity\Monster\Skeleton;
+use Lemuria\Model\Fantasya\Commodity\Monster\Wolf;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Commodity\Protection\Repairable\DentedArmor;
 use Lemuria\Model\Fantasya\Commodity\Protection\Repairable\DentedIronshield;
@@ -53,6 +54,8 @@ final class PopulateContinent extends AbstractEvent
 
 	public const CONTINENT = 'continent';
 
+	public const CHANCES = 'changes';
+
 	private const LANDSCAPE = [
 		Bear::class => Forest::class,
 		Ent::class => Forest::class,
@@ -60,6 +63,7 @@ final class PopulateContinent extends AbstractEvent
 		Goblin::class => Plain::class,
 		Skeleton::class => Mountain::class,
 		Kraken::class => Ocean::class,
+		Wolf::class => Forest::class,
 		Zombie::class => Highland::class
 	];
 
@@ -70,6 +74,7 @@ final class PopulateContinent extends AbstractEvent
 		Goblin::class => 10,
 		Skeleton::class => 8,
 		Kraken::class => 1,
+		Wolf::class => 7,
 		Zombie::class => 6
 	];
 
@@ -80,6 +85,7 @@ final class PopulateContinent extends AbstractEvent
 		Goblin::class => 10,
 		Skeleton::class => 50,
 		Kraken::class => 25,
+		Wolf::class => 7,
 		Zombie::class => 40
 	];
 
@@ -121,7 +127,8 @@ final class PopulateContinent extends AbstractEvent
 	protected function initialize(): void {
 		$party     = Party::get(Spawn::getPartyId(Type::MONSTER));
 		$continent = Continent::get(new Id($this->getOption(self::CONTINENT, 'int')));
-		foreach (self::CHANCE as $race => $chance) {
+		$chances   = $this->hasOption(self::CHANCES) ? $this->getOption(self::CHANCES, 'array') : self::CHANCE;
+		foreach ($chances as $race => $chance) {
 			$regions     = [];
 			$monster     = self::createMonster($race);
 			$environment = self::createLandscape(self::LANDSCAPE[$race]);

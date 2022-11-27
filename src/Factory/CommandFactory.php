@@ -195,6 +195,7 @@ use Lemuria\Model\Fantasya\Commodity\Trophy\Carnassial;
 use Lemuria\Model\Fantasya\Commodity\Trophy\GoblinEar;
 use Lemuria\Model\Fantasya\Commodity\Trophy\GriffinFeather;
 use Lemuria\Model\Fantasya\Commodity\Trophy\Skull;
+use Lemuria\Model\Fantasya\Commodity\Trophy\WolfSkin;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
@@ -641,6 +642,7 @@ class CommandFactory
 		'Weiße wüteriche'            => WhiteHemlock::class,
 		'Weißer wüterich'            => WhiteHemlock::class,
 		'Windbeutel'                 => Windbag::class,
+		'Wolfsfelle'                 => WolfSkin::class,
 		'Wuerzige wagemute'          => TangyTemerity::class,
 		'Wuerziger wagemut'          => TangyTemerity::class,
 		'Wundsalben'                 => Woundshut::class,

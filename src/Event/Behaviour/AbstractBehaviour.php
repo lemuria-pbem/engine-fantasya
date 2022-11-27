@@ -11,6 +11,7 @@ use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Event\Act\Guard;
 use Lemuria\Engine\Fantasya\Event\Act\Home;
 use Lemuria\Engine\Fantasya\Event\Act\PickPocket;
+use Lemuria\Engine\Fantasya\Event\Act\Prey;
 use Lemuria\Engine\Fantasya\Event\Act\Roam;
 use Lemuria\Engine\Fantasya\Event\Act\Seek;
 use Lemuria\Engine\Fantasya\Event\Act\Watch;
@@ -79,6 +80,11 @@ abstract class AbstractBehaviour implements Behaviour
 	protected function seek(): AbstractBehaviour {
 		$seek      = new Seek($this);
 		$this->act = $seek->act();
+		return $this;
+	}
+	protected function prey(): AbstractBehaviour {
+		$prey      = new Prey($this);
+		$this->act = $prey->act();
 		return $this;
 	}
 

@@ -10,6 +10,7 @@ use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\SeekMessage;
 use Lemuria\Model\Fantasya\Commodity\Monster\Bear;
 use Lemuria\Model\Fantasya\Commodity\Monster\Goblin;
+use Lemuria\Model\Fantasya\Commodity\Monster\Wolf;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\People;
@@ -24,7 +25,7 @@ class Seek implements Act
 	use MessageTrait;
 
 	protected const MONSTER = [
-		Zombie::class => [Bear::class, Goblin::class]
+		Zombie::class => [Bear::class, Goblin::class, Wolf::class]
 	];
 
 	protected People $enemy;

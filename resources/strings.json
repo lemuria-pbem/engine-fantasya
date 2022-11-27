@@ -704,6 +704,7 @@
 		"PresettingNoLootMessage": "Neue Einheiten werden ab sofort keine Beute mehr sammeln.",
 		"PresettingNoRepeatMessage": "Neue Angebote und Gesuche werden nicht mehr automatisch wiederholt.",
 		"PresettingRepeatMessage": "Neue Angebote und Gesuche werden ab sofort automatisch wiederholt.",
+		"PreyMessage": "Die Einheit $id hat in der Region $region die Einheit $prey als Beute auserkoren.",
 		"QuacksalverMessage": "Die Einheit $id verdient $silver als Wunderdoktor.",
 		"QuacksalverNoneMessage": "Niemand wollte die Dienste des Wunderdoktors $id in Anspruch nehmen.",
 		"QuacksalverOnlyMessage": "Die Einheit $id hat leider nur $silver als Wunderdoktor verdient.",
@@ -994,7 +995,8 @@
 		"Silk": ["etwas", "viel", "eine riesige Menge"],
 		"Silver": ["etwas", "viel", "eine riesige Menge"],
 		"Skull": ["einige", "viele", "eine riesige Menge"],
-		"Spice": ["einige", "viele", "eine riesige Menge"]
+		"Spice": ["einige", "viele", "eine riesige Menge"],
+		"WolfSkin": ["einige", "viele", "eine riesige Menge"]
 	},
 	"race": {
 		"AirElemental": ["Luftelementar", "Luftelementare"],
@@ -1017,6 +1019,7 @@
 		"Skeleton": ["Skelett", "Skelette"],
 		"Troll": ["Troll", "Trolle"],
 		"WaterElemental": ["Wasserelementar", "Wasserelementare"],
+		"Wolf": ["Wolf", "Wölfe"],
 		"Zombie": ["Zombie", "Zombies"]
 	},
 	"replace": {
@@ -1510,6 +1513,7 @@
 		"WaterOfLife": ["Wasser des Lebens", "Wässer des Lebens", "Wässern des Lebens"],
 		"WhiteHemlock": ["Weißer Wüterich", "Weiße Wüterich", "Weißen Wüterich"],
 		"Windbag": ["Windbeutel", "Windbeutel", "Windbeuteln"],
+		"WolfSkin": ["Wolfsfell", "Wolfsfelle", "Wolfsfellen"],
 		"Wood": ["Holz", "Holz", "Holz"],
 		"Woodshield": ["Holzschild", "Holzschilde", "Holzschilden"],
 		"Woundshut": ["Wundsalbe", "Wundsalben", "Wundsalben"]
