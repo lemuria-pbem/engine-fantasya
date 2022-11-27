@@ -125,10 +125,13 @@ final class PopulateContinent extends AbstractEvent
 	}
 
 	protected function initialize(): void {
-		$party     = Party::get(Spawn::getPartyId(Type::MONSTER));
+		$monsters  = Party::get(Spawn::getPartyId(Type::MONSTER));
+		//$zombies   = Party::get(Id::fromId(Spawn::ZOMBIES)); //TODO 8.2
+		$zombies   = $monsters;
 		$continent = Continent::get(new Id($this->getOption(self::CONTINENT, 'int')));
 		$chances   = $this->hasOption(self::CHANCES) ? $this->getOption(self::CHANCES, 'array') : self::CHANCE;
 		foreach ($chances as $race => $chance) {
+			$party       = $race === Zombie::class ? $zombies : $monsters;
 			$regions     = [];
 			$monster     = self::createMonster($race);
 			$environment = self::createLandscape(self::LANDSCAPE[$race]);

@@ -44,7 +44,7 @@ final class Recreate extends AbstractEvent
 					$this->recreateMonster($unit);
 					break;
 				default :
-					Lemuria::Log()->debug('Unit ' . $unit . ' of party type ' . $type . ' has no recreation yet.');
+					Lemuria::Log()->debug('Unit ' . $unit . ' of party type ' . $type->name . ' has no recreation yet.');
 			}
 		}
 	}

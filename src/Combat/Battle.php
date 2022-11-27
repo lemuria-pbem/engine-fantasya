@@ -489,7 +489,7 @@ class Battle
 			$state  = State::getInstance();
 			$spawn  = new Spawn($state);
 			$state->injectIntoTurn($spawn->setOptions([
-				Spawn::PARTY => Type::MONSTER, Spawn::REGION => $region, Spawn::SIZE => $size, Spawn::RACE => Zombie::class
+				Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => $region, Spawn::SIZE => $size, Spawn::RACE => Zombie::class
 			]));
 			$this->message(AttackInfectedZombiesMessage::class, $this->region)->p($size)->s(self::createRace(Zombie::class));
 		}

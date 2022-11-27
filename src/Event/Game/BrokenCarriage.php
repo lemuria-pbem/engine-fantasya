@@ -16,6 +16,7 @@ use Lemuria\Model\Fantasya\Commodity\Carriage;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Race\Orc;
 use Lemuria\Model\Fantasya\Region;
@@ -34,8 +35,6 @@ final class BrokenCarriage extends AbstractEvent
 	public const REGION = 'region';
 
 	public const CARGO = 'cargo';
-
-	private const NPC = 1;
 
 	private const NAME = 'Abgerissener Ork';
 
@@ -97,7 +96,7 @@ final class BrokenCarriage extends AbstractEvent
 		$unit->setId(Lemuria::Catalog()->nextId(Domain::UNIT));
 		$unit->setSize(1)->setRace($race)->setHealth(self::HEALTH)->setDisguise();
 		$unit->setName(self::NAME)->setDescription(self::DESCRIPTION);
-		Party::get(new Id(self::NPC))->People()->add($unit);
+		Party::get(Spawn::getPartyId(Type::NPC))->People()->add($unit);
 		$this->region->Residents()->add($unit);
 		return $unit;
 	}
