@@ -312,9 +312,10 @@ final class Calculus
 			}
 		}
 
-		$skills[] = new WeaponSkill(new Ability(self::createTalent(Fistfight::class), $melee));
+		$minimum  = Ability::getExperience(1);
+		$skills[] = new WeaponSkill(new Ability(self::createTalent(Fistfight::class), max($minimum, $melee)));
 		$order[]  = 0;
-		$skills[] = new WeaponSkill(new Ability(self::createTalent(Stoning::class), $distant));
+		$skills[] = new WeaponSkill(new Ability(self::createTalent(Stoning::class), max($minimum, $distant)));
 		$order[]  = 0;
 		arsort($order);
 		$weaponSkills = [];
