@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Engine\Combat\Battle;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
+use Lemuria\Engine\Fantasya\Factory\Model\DisguisedParty;
 use Lemuria\Engine\Hostilities;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
@@ -80,9 +81,13 @@ class LemuriaHostilities implements Hostilities
 		$this->logs[] = $battle;
 		$regionId = $battle->Location()->Id()->Id();
 		foreach ($battle->Participants() as $party) {
-			$partyId = $party->Id()->Id();
-			$this->party[$partyId][]                = $id;
+			$partyId                                = $party->Id()->Id();
 			$this->regionParty[$regionId][$partyId] = $id;
+			if ($party instanceof DisguisedParty) {
+				$partyId = $party->Real()->Id()->Id();
+			}
+			$this->party[$partyId][] = $id;
+
 		}
 		return $this;
 	}

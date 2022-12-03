@@ -30,7 +30,6 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Heirs;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Monster;
@@ -101,11 +100,17 @@ class Battle
 		return $this->region;
 	}
 
-	public function Attacker(): Gathering {
+	/**
+	 * @return array<Party>
+	 */
+	public function Attacker(): array {
 		return $this->getParties($this->attackers);
 	}
 
-	public function Defender(): Gathering {
+	/**
+	 * @return array<Party>
+	 */
+	public function Defender(): array {
 		return $this->getParties($this->defenders);
 	}
 
@@ -192,17 +197,23 @@ class Battle
 		return $this;
 	}
 
-	protected function getParties(array $units): Gathering {
-		$parties = new Gathering();
+	/**
+	 * @return array<Party>
+	 */
+	protected function getParties(array $units): array {
+		$parties = [];
 		foreach ($units as $unit /* @var Unit $unit */) {
 			$disguise = $unit->Disguise();
 			if ($disguise) {
-				$parties->add($disguise);
+				$party = new DisguisedParty($unit->Party());
+				$party->setDisguise($disguise);
 			} elseif ($disguise === null) {
-				$parties->add(new DisguisedParty());
+				$party = new DisguisedParty($unit->Party());
 			} else {
-				$parties->add($unit->Party());
+				$party = $unit->Party();
 			}
+			$id           = $party->Id()->Id();
+			$parties[$id] = $party;
 		}
 		return $parties;
 	}

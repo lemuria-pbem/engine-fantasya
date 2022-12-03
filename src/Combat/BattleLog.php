@@ -7,6 +7,7 @@ use Lemuria\Engine\Combat\Battle as BattleModel;
 use Lemuria\Engine\Fantasya\Combat\Log\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait;
+use Lemuria\Engine\Fantasya\Factory\Model\DisguisedParty;
 use Lemuria\Exception\UnserializeException;
 use Lemuria\Id;
 use Lemuria\IteratorTrait;
@@ -87,7 +88,7 @@ class BattleLog implements BattleModel
 	public function serialize(): array {
 		$parties = [];
 		foreach ($this->parties as $party) {
-			$parties[] = $party->Id()->Id();
+			$parties[] = $this->serializeParty($party);
 		}
 		$messages = [];
 		foreach ($this->log as $message) {
@@ -101,7 +102,7 @@ class BattleLog implements BattleModel
 		$this->region  = Region::get(new Id($data['region']));
 		$this->counter = $data['counter'];
 		foreach ($data['parties'] as $id) {
-			$this->parties[] = Party::get(new Id($id));
+			$this->parties[] = $this->initParty($id);
 		}
 		$battleLogMessage = new LemuriaMessage();
 		foreach ($data['messages'] as $row) {
@@ -128,7 +129,10 @@ class BattleLog implements BattleModel
 		$this->validate($data, 'counter', 'int');
 		$this->validate($data, 'parties', 'array');
 		foreach ($data['parties'] as $id) {
-			if (!is_int($id)) {
+			if (is_array($id)) {
+				$this->validate($id, 'real', 'int');
+				$this->validate($id, 'disguise', '?int');
+			} elseif (!is_int($id)) {
 				throw new UnserializeException('Party ID must be an integer.');
 			}
 		}
@@ -138,5 +142,24 @@ class BattleLog implements BattleModel
 				throw new UnserializeException('Message must be an array.');
 			}
 		}
+	}
+
+	private function initParty(array|int $id): Party {
+		if (is_int($id)) {
+			return Party::get(new Id($id));
+		}
+		$party    = new DisguisedParty(Party::get(new Id($id['real'])));
+		$disguise = $id['disguise'];
+		if ($disguise) {
+			$party->setDisguise(Party::get(new Id($disguise)));
+		}
+		return $party;
+	}
+
+	private function serializeParty(Party $party): int|array {
+		if ($party instanceof DisguisedParty) {
+			return ['real' => $party->Real()->Id()->Id(), 'disguise' => $party->Disguise()?->Id()->Id()];
+		}
+		return $party->Id()->Id();
 	}
 }
