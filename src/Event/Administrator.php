@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Event\Administrator\Overcrowded;
-use Lemuria\Engine\Fantasya\Event\Administrator\ZombieParty;
+use Lemuria\Engine\Fantasya\Event\Administrator\MonsterParties;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
@@ -20,6 +20,6 @@ final class Administrator extends DelegatedEvent
 	protected function createDelegates(): void {
 		Lemuria::Log()->debug('Adding administrative events.');
 		$this->delegates[] = new Overcrowded($this->state);
-		$this->delegates[] = new ZombieParty($this->state);
+		$this->delegates[] = new MonsterParties($this->state);
 	}
 }
