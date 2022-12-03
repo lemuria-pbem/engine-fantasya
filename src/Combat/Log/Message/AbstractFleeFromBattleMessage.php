@@ -12,7 +12,9 @@ abstract class AbstractFleeFromBattleMessage extends AbstractMessage
 	protected string $combatant;
 
 	public function __construct(?Combatant $combatant = null) {
-		$this->combatant = $combatant->Id();
+		if ($combatant) {
+			$this->combatant = $combatant->Id();
+		}
 	}
 
 	public function unserialize(array $data): Serializable {
