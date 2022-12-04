@@ -20,14 +20,16 @@ use Lemuria\Engine\Fantasya\Effect\VesselLoot;
 use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\DisguisedParty;
+use Lemuria\Engine\Fantasya\Message\Region\AttackInfectedZombiesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackBoardAfterCombatMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackEnterAfterCombatMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackUnguardMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Construction;
-use Lemuria\Model\Fantasya\Gathering;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Heirs;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Monster;
@@ -43,6 +45,7 @@ use Lemuria\Model\Fantasya\WearResources;
 
 class Battle
 {
+	use BuilderTrait;
 	use MessageTrait;
 
 	protected const EXHAUSTION_ROUNDS = 10;
@@ -97,11 +100,17 @@ class Battle
 		return $this->region;
 	}
 
-	public function Attacker(): Gathering {
+	/**
+	 * @return array<Party>
+	 */
+	public function Attacker(): array {
 		return $this->getParties($this->attackers);
 	}
 
-	public function Defender(): Gathering {
+	/**
+	 * @return array<Party>
+	 */
+	public function Defender(): array {
 		return $this->getParties($this->defenders);
 	}
 
@@ -163,7 +172,7 @@ class Battle
 		}
 		BattleLog::getInstance()->add(new BattleEndsMessage());
 		$this->treatInjuredUnits();
-		return $this->takeLoot($combat)->addBattlefieldRemains();
+		return $this->takeLoot($combat)->addBattlefieldRemains()->createNewZombies($combat);
 	}
 
 	public function merge(Battle $battle): Battle {
@@ -188,17 +197,23 @@ class Battle
 		return $this;
 	}
 
-	protected function getParties(array $units): Gathering {
-		$parties = new Gathering();
+	/**
+	 * @return array<Party>
+	 */
+	protected function getParties(array $units): array {
+		$parties = [];
 		foreach ($units as $unit /* @var Unit $unit */) {
 			$disguise = $unit->Disguise();
 			if ($disguise) {
-				$parties->add($disguise);
+				$party = new DisguisedParty($unit->Party());
+				$party->setDisguise($disguise);
 			} elseif ($disguise === null) {
-				$parties->add(new DisguisedParty());
+				$party = new DisguisedParty($unit->Party());
 			} else {
-				$parties->add($unit->Party());
+				$party = $unit->Party();
 			}
+			$id           = $party->Id()->Id();
+			$parties[$id] = $party;
 		}
 		return $parties;
 	}
@@ -474,6 +489,20 @@ class Battle
 				$effect->Resources()->add($quantity);
 				Lemuria::Log()->debug('Adding ' . $quantity . ' to battlefield remains.');
 			}
+		}
+		return $this;
+	}
+
+	private function createNewZombies(Combat $combat): Battle {
+		$size = $combat->getNewZombies();
+		if ($size > 0) {
+			$region = $this->region->Id()->Id();
+			$state  = State::getInstance();
+			$spawn  = new Spawn($state);
+			$state->injectIntoTurn($spawn->setOptions([
+				Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => $region, Spawn::SIZE => $size, Spawn::RACE => Zombie::class
+			]));
+			$this->message(AttackInfectedZombiesMessage::class, $this->region)->p($size)->s(self::createRace(Zombie::class));
 		}
 		return $this;
 	}

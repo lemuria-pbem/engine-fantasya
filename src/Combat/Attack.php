@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultPetrifiedMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\GazeOfTheBasiliskMessage;
 use Lemuria\Engine\Fantasya\Combat\Spell\StoneSkin;
 use Lemuria\Engine\Fantasya\Command\Apply\BerserkBlood as BerserkBloodEffect;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Potion\BerserkBlood;
@@ -24,8 +25,9 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Protection;
 use Lemuria\Model\Fantasya\Monster;
+use Lemuria\Model\Fantasya\Party\Type;
+use Lemuria\Model\Fantasya\Protection;
 use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Riding;
@@ -65,6 +67,8 @@ class Attack
 	protected const FLIGHT = [1.0, 0.9, 0.9, 0.9, 0.2, 0.2, 0.0];
 
 	protected const BLOCK_EFFECT = 0.5;
+
+	protected const INFECTION = 0.3;
 
 	protected int $round = 0;
 
@@ -179,6 +183,10 @@ class Attack
 			$hasBonus = false;
 		}
 
+		$attInfectious = $attacker->hasFeature(Feature::ZombieInfection);
+		$defInfectious = $defFighter->hasFeature(Feature::ZombieInfection);
+		$isInfectious  = $attInfectious && !$defInfectious && $defender->Unit()->Party()->Type() !== Type::MONSTER;
+
 		$damage = null;
 		for ($i = 0; $i < $attacks; $i++) {
 			if ($this->isSuccessful($skill, $block, $armor, $shield, $hasBonus)) {
@@ -194,7 +202,17 @@ class Attack
 				$block   = $race instanceof Monster ? $race->Block() : 0;
 				$block  += $defFighter->hasFeature(Feature::StoneSkin) ? StoneSkin::BLOCK : 0;
 				$armor   = $defender->Armor();
-				$damage += $this->calculateDamage($weapon, $skill, $block, $armor, $shield);
+				$hit     = $this->calculateDamage($weapon, $skill, $block, $armor, $shield);
+				$damage += $hit;
+
+				if ($isInfectious && $hit > 0) {
+					$chance = $hit / $weapon->Damage()->Maximum() * self::INFECTION;
+					if (randChance($chance)) {
+						$defFighter->setFeature(Feature::ZombieInfection);
+						$isInfectious = false;
+						Lemuria::Log()->debug('Enemy ' . $defender->getId($fD, true) . ' is infected by ' . $this->combatant->getId($fA, true) . '.');
+					}
+				}
 			}
 		}
 		if ($damage === null) {

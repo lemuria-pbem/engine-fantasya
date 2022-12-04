@@ -8,6 +8,10 @@ use Lemuria\Engine\Fantasya\Event\ActTrait;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\SeekMessage;
+use Lemuria\Model\Fantasya\Commodity\Monster\Bear;
+use Lemuria\Model\Fantasya\Commodity\Monster\Goblin;
+use Lemuria\Model\Fantasya\Commodity\Monster\Wolf;
+use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Unit;
@@ -19,6 +23,10 @@ class Seek implements Act
 {
 	use ActTrait;
 	use MessageTrait;
+
+	protected const MONSTER = [
+		Zombie::class => [Bear::class, Goblin::class, Wolf::class]
+	];
 
 	protected People $enemy;
 
@@ -33,9 +41,13 @@ class Seek implements Act
 
 	public function act(): Act {
 		$calculus = new Calculus($this->unit);
+		$races    = self::MONSTER[$this->unit->Race()::class] ?? [];
 		$region   = $this->unit->Region();
 		foreach ($region->Residents() as $unit /* @var Unit $unit */) {
-			if ($unit->Party()->Type() !== Type::PLAYER) {
+			if ($unit->Party()->Type() === Type::MONSTER) {
+				if (in_array($unit->Race()::class, $races) && $unit->Size() > 0) {
+					$this->enemy->add($unit);
+				}
 				continue;
 			}
 			if ($unit->Construction() || $unit->Vessel()) {

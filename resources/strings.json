@@ -315,6 +315,7 @@
 		"AttackFromMessage": "Die Einheit $id wird von Einheiten der Partei $party angegriffen.",
 		"AttackFromMonsterMessage": "Die Einheit $id wird von Monstern angegriffen.",
 		"AttackInCastleMessage": "Die Einheit $id kann die Einheit $unit in der Burg nicht angreifen.",
+		"AttackInfectedZombiesMessage": "In der Region $id erhebt sich eine Einheit aus $size $zombies von den Gefallenen des Kampfes.",
 		"AttackInvolveMessage": "Die Einheit $id involviert die Einheit $unit in den Kampf.",
 		"AttackMessage": "Die Einheit $id greift die Einheit $unit an.",
 		"AttackNotFightingMessage": "Die Einheit $id wird in keinem Angriff kämpfen.",
@@ -375,7 +376,7 @@
 		"CommodityExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um {ein:$artifact} zu produzieren.",
 		"CommodityOnlyMessage": "Die Einheit $id kann nur $output mit $talent produzieren.",
 		"CommodityResourcesMessage": "Die Einheit $id hat kein Material, um $artifact zu produzieren.",
-		"CommodityUnmaintainedMessage": "Die Einheit $id kann keine $artifact in {stillgelegt:$building} zu produzieren.",
+		"CommodityUnmaintainedMessage": "Die Einheit $id kann keine $artifact in {stillgelegt:$building} produzieren.",
 		"ConstructionBuildMessage": "Die Einheit $id baut {$size:Größenpunkt} am Gebäude $construction.",
 		"ConstructionCreateMessage": "Die Einheit $id hat kein Baumaterial für {ein:$building}.",
 		"ConstructionDependencyMessage": "Die Einheit $id kann {kein:$building} bauen - die Partei besitzt {kein:$dependency}.",
@@ -703,6 +704,7 @@
 		"PresettingNoLootMessage": "Neue Einheiten werden ab sofort keine Beute mehr sammeln.",
 		"PresettingNoRepeatMessage": "Neue Angebote und Gesuche werden nicht mehr automatisch wiederholt.",
 		"PresettingRepeatMessage": "Neue Angebote und Gesuche werden ab sofort automatisch wiederholt.",
+		"PreyMessage": "Die Einheit $id hat in der Region $region die Einheit $prey als Beute auserkoren.",
 		"QuacksalverMessage": "Die Einheit $id verdient $silver als Wunderdoktor.",
 		"QuacksalverNoneMessage": "Niemand wollte die Dienste des Wunderdoktors $id in Anspruch nehmen.",
 		"QuacksalverOnlyMessage": "Die Einheit $id hat leider nur $silver als Wunderdoktor verdient.",
@@ -993,7 +995,8 @@
 		"Silk": ["etwas", "viel", "eine riesige Menge"],
 		"Silver": ["etwas", "viel", "eine riesige Menge"],
 		"Skull": ["einige", "viele", "eine riesige Menge"],
-		"Spice": ["einige", "viele", "eine riesige Menge"]
+		"Spice": ["einige", "viele", "eine riesige Menge"],
+		"WolfSkin": ["einige", "viele", "eine riesige Menge"]
 	},
 	"race": {
 		"AirElemental": ["Luftelementar", "Luftelementare"],
@@ -1016,6 +1019,7 @@
 		"Skeleton": ["Skelett", "Skelette"],
 		"Troll": ["Troll", "Trolle"],
 		"WaterElemental": ["Wasserelementar", "Wasserelementare"],
+		"Wolf": ["Wolf", "Wölfe"],
 		"Zombie": ["Zombie", "Zombies"]
 	},
 	"replace": {
@@ -1509,6 +1513,7 @@
 		"WaterOfLife": ["Wasser des Lebens", "Wässer des Lebens", "Wässern des Lebens"],
 		"WhiteHemlock": ["Weißer Wüterich", "Weiße Wüterich", "Weißen Wüterich"],
 		"Windbag": ["Windbeutel", "Windbeutel", "Windbeuteln"],
+		"WolfSkin": ["Wolfsfell", "Wolfsfelle", "Wolfsfellen"],
 		"Wood": ["Holz", "Holz", "Holz"],
 		"Woodshield": ["Holzschild", "Holzschilde", "Holzschilden"],
 		"Woundshut": ["Wundsalbe", "Wundsalben", "Wundsalben"]

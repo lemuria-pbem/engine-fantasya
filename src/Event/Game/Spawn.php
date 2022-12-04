@@ -23,6 +23,8 @@ final class Spawn extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
+	public const TYPE = 'type';
+
 	public const PARTY = 'party';
 
 	public const REGION = 'region';
@@ -31,16 +33,17 @@ final class Spawn extends AbstractEvent
 
 	public const SIZE = 'size';
 
-	private const PARTY_ID = [1 => 'n', 2 => 'm'];
+	public const ZOMBIES = 'z';
+
+	private const PARTY_ID = [1 => 'n', 2 => 'm']; //TODO 8.2
 
 	private Create $create;
 
 	public static function getPartyId(Type $type):Id {
-		$id = match ($type) {
-			Type::NPC     => self::PARTY_ID[1],
-			Type::MONSTER => self::PARTY_ID[2],
-			default       => throw new LemuriaException('Unsupported party type given.')
-		};
+		$id = self::PARTY_ID[$type->value] ?? null;
+		if (!$id) {
+			throw new LemuriaException('Unsupported party type given.');
+		}
 		return Id::fromId($id);
 	}
 
@@ -54,15 +57,15 @@ final class Spawn extends AbstractEvent
 	}
 
 	protected function initialize(): void {
-		/** @var Type $type */
-		$type = $this->getOption(self::PARTY, Type::class);
-		$race = $this->getOption(self::RACE, 'string');
-		$size = $this->getOption(self::SIZE, 'int');
-		if (!isset(self::PARTY_ID[$type->value])) {
-			throw new \InvalidArgumentException(self::PARTY);
+		if ($this->hasOption(self::PARTY)) {
+			$party = Party::get(Id::fromId($this->getOption(self::PARTY, 'string')));
+		} else {
+			/** @var Type $type */
+			$type = $this->getOption(self::TYPE, Type::class);
+			$party = Party::get(self::getPartyId($type));
 		}
-
-		$party  = Party::get(Id::fromId(self::PARTY_ID[$type->value]));
+		$race   = $this->getOption(self::RACE, 'string');
+		$size   = $this->getOption(self::SIZE, 'int');
 		$region = Region::get(new Id($this->getOption(self::REGION, 'int')));
 		$this->create = new Create($party, $region);
 		$this->create->add(new Gang(self::createRace($race), $size));

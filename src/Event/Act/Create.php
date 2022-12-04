@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Act;
 
 use Lemuria\Engine\Fantasya\Event\Act;
+use Lemuria\Engine\Fantasya\Event\Behaviour\Monster\Ghoul;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Factory\Namer;
 use Lemuria\Engine\Fantasya\Factory\Namer\RaceNamer;
@@ -13,11 +14,13 @@ use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Monster\AirElemental;
+use Lemuria\Model\Fantasya\Commodity\Monster\Bear;
 use Lemuria\Model\Fantasya\Commodity\Monster\EarthElemental;
 use Lemuria\Model\Fantasya\Commodity\Monster\FireElemental;
 use Lemuria\Model\Fantasya\Commodity\Monster\Goblin;
 use Lemuria\Model\Fantasya\Commodity\Monster\Skeleton;
 use Lemuria\Model\Fantasya\Commodity\Monster\WaterElemental;
+use Lemuria\Model\Fantasya\Commodity\Monster\Wolf;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gang;
@@ -25,6 +28,7 @@ use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
+use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -51,6 +55,14 @@ class Create implements Act
 		Zombie::class         => BattleRow::AGGRESSIVE
 	];
 
+	protected const IS_SENSING = [
+		''            => 0,
+		Bear::class   => 7,
+		Ghoul::class  => 1,
+		Wolf::class   => 4,
+		Zombie::class => 1
+	];
+
 	protected const IS_HIDING = [
 		''            => 0,
 		Goblin::class => 5
@@ -66,9 +78,12 @@ class Create implements Act
 	 */
 	protected array $units = [];
 
+	private Talent $perception;
+
 	private Talent $camouflage;
 
 	public function __construct(protected Party $party, protected Region $region) {
+		$this->perception = self::createTalent(Perception::class);
 		$this->camouflage = self::createTalent(Camouflage::class);
 	}
 
@@ -90,6 +105,10 @@ class Create implements Act
 
 			$battleRow = self::BATTLE_ROW[$race] ?? self::BATTLE_ROW[''];
 			$unit->setBattleRow($battleRow);
+			$perception = self::IS_SENSING[$race] ?? self::IS_SENSING[''];
+			if ($perception > 0) {
+				$unit->Knowledge()->add(new Ability($this->perception, Ability::getExperience($perception)));
+			}
 			$camouflage = self::IS_HIDING[$race] ?? self::IS_HIDING[''];
 			if ($camouflage > 0) {
 				$unit->Knowledge()->add(new Ability($this->camouflage, Ability::getExperience($camouflage)));

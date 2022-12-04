@@ -15,6 +15,9 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Dingbats;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
+use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
+use Lemuria\Model\Fantasya\Commodity\Weapon\NativeDistant;
+use Lemuria\Model\Fantasya\Commodity\Weapon\NativeMelee;
 use Lemuria\Model\Fantasya\Protection;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Shield;
@@ -154,6 +157,7 @@ class Combatant
 		}
 		$this->initWeaponSkill();
 		$this->initShieldAndArmor();
+		$this->initFeatures();
 		return $this;
 	}
 
@@ -278,12 +282,14 @@ class Combatant
 	}
 
 	protected function hasOneWeaponOf(WeaponSkill $weaponSkill): bool {
-		$talent = $weaponSkill->Skill()->Talent()::class;
+		$skill  = $weaponSkill->Skill()->Talent();
+		$talent = $skill::class;
+		$race   = $this->unit->Race();
 		if ($talent === Fistfight::class) {
-			$race = $this->unit->Race();
 			if ($race instanceof Monster) {
 				$this->weapon = $race->Weapon();
-				if ($this->weapon) {
+				if ($this->weapon instanceof NativeMelee) {
+					$weaponSkill->Skill()->addItem($this->weapon->Ability());
 					return true;
 				}
 			}
@@ -291,6 +297,13 @@ class Combatant
 			return true;
 		}
 		if ($talent === Stoning::class) {
+			if ($race instanceof Monster) {
+				$this->weapon = $race->Weapon();
+				if ($this->weapon instanceof NativeDistant) {
+					$weaponSkill->Skill()->addItem($this->weapon->Ability());
+				}
+				return true;
+			}
 			$this->weapon = self::createWeapon(Dingbats::class);
 			return true;
 		}
@@ -317,6 +330,14 @@ class Combatant
 				if (!$this->armor || $protection->Block() > $this->armor->Block()) {
 					$this->armor = $protection;
 				}
+			}
+		}
+	}
+
+	protected function initFeatures(): void {
+		if ($this->unit->Race() instanceof Zombie) {
+			foreach ($this->fighters as $fighter) {
+				$fighter->setFeature(Feature::ZombieInfection);
 			}
 		}
 	}

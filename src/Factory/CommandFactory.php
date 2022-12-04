@@ -195,6 +195,7 @@ use Lemuria\Model\Fantasya\Commodity\Trophy\Carnassial;
 use Lemuria\Model\Fantasya\Commodity\Trophy\GoblinEar;
 use Lemuria\Model\Fantasya\Commodity\Trophy\GriffinFeather;
 use Lemuria\Model\Fantasya\Commodity\Trophy\Skull;
+use Lemuria\Model\Fantasya\Commodity\Trophy\WolfSkin;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
@@ -641,6 +642,7 @@ class CommandFactory
 		'Weiße wüteriche'            => WhiteHemlock::class,
 		'Weißer wüterich'            => WhiteHemlock::class,
 		'Windbeutel'                 => Windbag::class,
+		'Wolfsfelle'                 => WolfSkin::class,
 		'Wuerzige wagemute'          => TangyTemerity::class,
 		'Wuerziger wagemut'          => TangyTemerity::class,
 		'Wundsalben'                 => Woundshut::class,
@@ -923,7 +925,7 @@ class CommandFactory
 	}
 
 	public function isComposition(string $composition): bool {
-		return is_string($this->getCandidate($composition, $this->compositions));
+		return is_string($this->getCandidate($composition, $this->compositions, true));
 	}
 
 	public function person(): Commodity {
@@ -1158,9 +1160,19 @@ class CommandFactory
 	/**
 	 * Parse a singleton.
 	 */
-	protected function getCandidate(string $singleton, array $map): ?string {
-		$singleton  = str_replace(['-', '_', '~'], ' ', $singleton);
-		$singleton  = mbUcFirst(mb_strtolower(undupChar(' ', $singleton)));
+	protected function getCandidate(string $singleton, array $map, bool $isExactMatch = false): ?string {
+		$singleton = str_replace(['-', '_', '~'], ' ', $singleton);
+		$singleton = mbUcFirst(mb_strtolower(undupChar(' ', $singleton)));
+
+		if ($isExactMatch) {
+			foreach ($map as $candidate => $singletonClass) {
+				if ($candidate === $singleton) {
+					return $singletonClass;
+				}
+			}
+			return null;
+		}
+
 		$candidates = [];
 		foreach ($map as $candidate => $singletonClass) {
 			if (str_starts_with($candidate, $singleton)) {

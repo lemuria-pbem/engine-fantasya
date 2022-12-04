@@ -11,6 +11,7 @@ use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Event\Act\Guard;
 use Lemuria\Engine\Fantasya\Event\Act\Home;
 use Lemuria\Engine\Fantasya\Event\Act\PickPocket;
+use Lemuria\Engine\Fantasya\Event\Act\Prey;
 use Lemuria\Engine\Fantasya\Event\Act\Roam;
 use Lemuria\Engine\Fantasya\Event\Act\Seek;
 use Lemuria\Engine\Fantasya\Event\Act\Watch;
@@ -81,6 +82,11 @@ abstract class AbstractBehaviour implements Behaviour
 		$this->act = $seek->act();
 		return $this;
 	}
+	protected function prey(): AbstractBehaviour {
+		$prey      = new Prey($this);
+		$this->act = $prey->act();
+		return $this;
+	}
 
 	protected function roam(bool $leave = false): AbstractBehaviour {
 		if ($this->unit->Size() > 0) {
@@ -124,8 +130,6 @@ abstract class AbstractBehaviour implements Behaviour
 			if ($this->act instanceof Seek) {
 				$enemy = $this->act->Enemy();
 				if (!$enemy->isEmpty()) {
-					$attack = new Attack($this);
-					$attack->setEnemy($enemy)->act();
 					return $this;
 				}
 			}

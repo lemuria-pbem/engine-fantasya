@@ -25,6 +25,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
+use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Unit;
@@ -88,11 +89,11 @@ final class Attack extends UnitCommand
 			foreach ($campaign->Battles() as $battle) {
 				Lemuria::Log()->debug('Beginning battle ' . ++$i . ' in region ' . $battle->Region() . '.');
 				$attacker = [];
-				foreach ($battle->Attacker() as $party) {
+				foreach ($battle->Attacker() as $party /* @var Party $party */) {
 					$attacker[] = $party->Name();
 				}
 				$defender = [];
-				foreach ($battle->Defender() as $party) {
+				foreach ($battle->Defender() as $party /* @var Party $party */) {
 					$defender[] = $party->Name();
 				}
 				$this->message(AttackBattleMessage::class, $region)->p($attacker, AttackBattleMessage::ATTACKER)->p($defender, AttackBattleMessage::DEFENDER);
@@ -155,21 +156,23 @@ final class Attack extends UnitCommand
 			$this->message(AttackSelfMessage::class);
 			return false;
 		}
-		$party = $this->unit->Party();
-		if ($unit->Party() === $party) {
-			$this->message(AttackOwnUnitMessage::class)->e($unit);
+		$we    = $this->unit->Party();
+		$party = $unit->Party();
+		if ($party === $we) {
+			$this->message(AttackOwnUnitMessage::class)->p((string)$unit->Id());
 			return false;
 		}
 		if ($unit->Region() !== $this->unit->Region()) {
 			$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
 			return false;
 		}
-		if (!$this->checkVisibility($this->unit, $unit)) {
+		$isMonsterCombat = $we->Type() === Type::MONSTER && $party->Type() === Type::MONSTER;
+		if (!$isMonsterCombat && !$this->checkVisibility($this->unit, $unit)) {
 			$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
 			return false;
 		}
-		if ($party->Diplomacy()->has(Relation::COMBAT, $unit)) {
-			$this->message(AttackAllyMessage::class)->e($unit);
+		if ($we->Diplomacy()->has(Relation::COMBAT, $unit)) {
+			$this->message(AttackAllyMessage::class)->p((string)$unit->Id());
 			return false;
 		}
 

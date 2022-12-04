@@ -147,8 +147,6 @@ class LemuriaTurn implements Turn
 
 	/**
 	 * Bring a new party into the game.
-	 *
-	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
 	public function initiate(Newcomer $newcomer): Turn {
 		if ($newcomer instanceof LemuriaNewcomer) {

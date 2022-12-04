@@ -32,7 +32,6 @@ abstract class AbstractEffect implements Effect, Reassignment
 	public function __construct(protected State $state, Priority $priority) {
 		$this->context = new Context($state);
 		$this->setPriority($priority);
-		Lemuria::Catalog()->addReassignment($this);
 	}
 
 	public function Id(): Id {

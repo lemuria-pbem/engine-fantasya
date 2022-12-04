@@ -44,6 +44,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Native;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -85,6 +86,8 @@ class Combat
 	 * Effects that impact both sides.
 	 */
 	protected Effects $effects;
+
+	protected int $newZombies = 0;
 
 	public static function getBattleRow(Unit $unit): BattleRow {
 		$battleRow = $unit->BattleRow();
@@ -285,6 +288,10 @@ class Combat
 	public function addEffect(CombatEffect $effect): Combat {
 		$this->effects->add($effect);
 		return $this;
+	}
+
+	public function getNewZombies(): int {
+		return $this->newZombies;
 	}
 
 	protected function addPreparationSpells(Casts $casts, Ranks $caster, Ranks $victim): void {
@@ -659,10 +666,11 @@ class Combat
 			foreach ($combatants as $c => $combatant /* @var Combatant $combatant */) {
 				$size               = $combatant->Size();
 				$combatant->hasCast = false;
+				$createZombies      = $combatant->Unit()->Party()->Type() !== Type::MONSTER;
 				foreach ($combatant->fighters as $f => $fighter) {
 					if ($fighter->health <= 0) {
 						if ($fighter->potion instanceof HealingPotion) {
-							$combatant->fighters[$f]->heal();
+							$fighter->heal();
 							Lemuria::Log()->debug('Fighter ' . $combatant->getId($f) . ' is saved from a deadly strike by a healing potion.');
 							BattleLog::getInstance()->add(new FighterSavedMessage($combatant->getId($f)));
 						} else {
@@ -670,6 +678,9 @@ class Combat
 							Lemuria::Log()->debug('Fighter ' . $id . ' is dead.');
 							BattleLog::getInstance()->add(new FighterIsDeadMessage($id));
 							$combatant->hasDied($f);
+							if ($createZombies && $fighter->hasFeature(Feature::ZombieInfection)) {
+								$this->newZombies++;
+							}
 						}
 					}
 				}

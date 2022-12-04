@@ -8,6 +8,10 @@ trait OptionsTrait
 {
 	protected array $options;
 
+	protected function hasOption(string $name): bool {
+		return isset($this->options[$name]);
+	}
+
 	protected function getOption(string $name, string $type): mixed {
 		$option = $this->options[$name] ?? null;
 		if (isClass($type)) {

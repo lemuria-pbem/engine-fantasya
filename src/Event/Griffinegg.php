@@ -12,6 +12,7 @@ use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg as GriffineggModel;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -36,9 +37,11 @@ final class Griffinegg extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Domain::UNIT) as $unit /* @var Unit $unit */) {
-			if ($unit->Inventory()[$this->egg]->Count()) {
-				if (randChance(self::CHANCE)) {
-					$this->hatchFor($unit);
+			if ($unit->Party()->Type() === Type::PLAYER) {
+				if ($unit->Inventory()[$this->egg]->Count()) {
+					if (randChance(self::CHANCE)) {
+						$this->hatchFor($unit);
+					}
 				}
 			}
 		}
