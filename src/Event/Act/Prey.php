@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Act;
 
+use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\PreyMessage;
@@ -18,6 +19,7 @@ class Prey extends Seek
 	}
 
 	public function act(): Act {
+		$calculus = new Calculus($this->unit);
 		$region   = $this->unit->Region();
 		$smallest = PHP_INT_MAX;
 		$prey     = null;
@@ -29,7 +31,7 @@ class Prey extends Seek
 				continue;
 			}
 			$size = $unit->Size();
-			if ($size > 0 && $size < $smallest) {
+			if ($size > 0 && $size < $smallest && $calculus->canDiscover($unit)) {
 				$prey     = $unit;
 				$smallest = $size;
 			}
