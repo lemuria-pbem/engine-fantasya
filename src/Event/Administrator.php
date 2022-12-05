@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use Lemuria\Engine\Fantasya\Event\Administrator\LocationNames;
 use Lemuria\Engine\Fantasya\Event\Administrator\Overcrowded;
 use Lemuria\Engine\Fantasya\Event\Administrator\MonsterParties;
 use Lemuria\Engine\Fantasya\Priority;
@@ -21,5 +22,6 @@ final class Administrator extends DelegatedEvent
 		Lemuria::Log()->debug('Adding administrative events.');
 		$this->delegates[] = new Overcrowded($this->state);
 		$this->delegates[] = new MonsterParties($this->state);
+		$this->delegates[] = new LocationNames($this->state);
 	}
 }

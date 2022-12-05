@@ -18,20 +18,26 @@ use Lemuria\Model\Fantasya\Vessel;
 
 class DefaultNamer implements Namer
 {
-	protected readonly Dictionary $dictionary;
-
-	public function __construct() {
-		$this->dictionary = new Dictionary();
-	}
+	protected static ?Dictionary $dictionary = null;
 
 	public function name(Domain|Identifiable $entity): string {
 		$domain = strtolower($entity instanceof Identifiable ? $entity->Catalog()->name : $entity->name);
 		return $this->$domain($entity);
 	}
 
+	protected static function dictionary(): Dictionary {
+		if (!self::$dictionary) {
+			self::$dictionary = new Dictionary();
+		}
+		return self::$dictionary;
+	}
+	protected static function translate(string $key, Identifiable $entity): string {
+		return self::dictionary()->get($key) . ' ' . $entity->Id();
+	}
+
 	protected function construction(Construction $construction): string {
 		$building = getClass($construction->Building());
-		return $this->dictionary->get('building.' . $building) . ' ' . $construction->Id();
+		return self::translate('building.' . $building, $construction);
 	}
 
 	protected function continent(Continent $continent): string {
@@ -40,7 +46,7 @@ class DefaultNamer implements Namer
 
 	protected function location(Region $region): string {
 		$landscape = getClass($region->Landscape());
-		return $this->dictionary->get('landscape.' . $landscape) . ' ' . $region->Id();
+		return self::translate('landscape.' . $landscape, $region);
 	}
 
 	protected function party(Party $party): string {
@@ -53,7 +59,7 @@ class DefaultNamer implements Namer
 
 	protected function unicum(Unicum $unicum): string {
 		$composition = getClass($unicum->Composition());
-		return $this->dictionary->get('composition.' . $composition) . ' ' . $unicum->Id();
+		return self::translate('composition.' . $composition, $unicum);
 	}
 
 	protected function unit(Unit $unit): string {
@@ -62,6 +68,6 @@ class DefaultNamer implements Namer
 
 	protected function vessel(Vessel $vessel): string {
 		$ship = getClass($vessel->Ship());
-		return $this->dictionary->get('ship.' . $ship) . ' ' . $vessel->Id();
+		return self::translate('ship.' . $ship, $vessel);
 	}
 }
