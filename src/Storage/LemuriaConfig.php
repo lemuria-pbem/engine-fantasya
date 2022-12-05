@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Storage;
 
 use Lemuria\Engine\Debut;
+use Lemuria\Engine\Fantasya\Factory\Namer\DefaultNamer;
 use Lemuria\Engine\Fantasya\LemuriaDebut;
 use Lemuria\Engine\Fantasya\LemuriaHostilities;
 use Lemuria\Engine\Fantasya\LemuriaLog;
@@ -16,6 +17,7 @@ use Lemuria\Engine\Report;
 use Lemuria\Engine\Score;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Factory\DefaultBuilder;
+use Lemuria\Factory\Namer;
 use Lemuria\FeatureFlag;
 use Lemuria\Log;
 use Lemuria\Model\Builder;
@@ -171,6 +173,10 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 
 	public function FeatureFlag(): FeatureFlag {
 		return $this->featureFlag;
+	}
+
+	public function Namer(): Namer {
+		return new DefaultNamer();
 	}
 
 	public function getStoragePath(): string {
