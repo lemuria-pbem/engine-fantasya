@@ -8,7 +8,7 @@ use Lemuria\Item;
 
 class BreedingSuccessMessage extends AbstractConstructionMessage
 {
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected Item $growth;
 

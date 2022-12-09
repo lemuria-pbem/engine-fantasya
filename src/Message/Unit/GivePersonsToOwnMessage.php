@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class GivePersonsToOwnMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' can transfer persons to units of its own party only.';

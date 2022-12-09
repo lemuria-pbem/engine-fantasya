@@ -29,18 +29,18 @@ class Quickening extends AbstractBattleSpell
 
 			// First iteration: Add Quickening to fighters that have no Quickening yet.
 			$this->addQuickening = false;
-			$fighters = $this->quickenFighters($this->victim[BattleRow::FRONT->value], $fighters);
-			$fighters = $this->quickenFighters($this->victim[BattleRow::BACK->value], $fighters);
-			$fighters = $this->quickenFighters($this->victim[BattleRow::BYSTANDER->value], $fighters);
-			$fighters = $this->quickenFighters($this->victim[BattleRow::REFUGEE->value], $fighters);
+			$fighters = $this->quickenFighters($this->victim[BattleRow::Front->value], $fighters);
+			$fighters = $this->quickenFighters($this->victim[BattleRow::Back->value], $fighters);
+			$fighters = $this->quickenFighters($this->victim[BattleRow::Bystander->value], $fighters);
+			$fighters = $this->quickenFighters($this->victim[BattleRow::Refugee->value], $fighters);
 
 			// Second iteration: Increase Quickening for fighters that have less.
 			if ($fighters > 0) {
 				$this->addQuickening = true;
-				$fighters = $this->quickenFighters($this->victim[BattleRow::FRONT->value], $fighters);
-				$fighters = $this->quickenFighters($this->victim[BattleRow::BACK->value], $fighters);
-				$fighters = $this->quickenFighters($this->victim[BattleRow::BYSTANDER->value], $fighters);
-				$this->quickenFighters($this->victim[BattleRow::REFUGEE->value], $fighters);
+				$fighters = $this->quickenFighters($this->victim[BattleRow::Front->value], $fighters);
+				$fighters = $this->quickenFighters($this->victim[BattleRow::Back->value], $fighters);
+				$fighters = $this->quickenFighters($this->victim[BattleRow::Bystander->value], $fighters);
+				$this->quickenFighters($this->victim[BattleRow::Refugee->value], $fighters);
 			}
 		}
 		return $grade;

@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class RetirementMessage extends AbstractPartyMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected function create(): string {
 		return 'You have lost your last unit, and retire. This will be your last report. Farewell!';

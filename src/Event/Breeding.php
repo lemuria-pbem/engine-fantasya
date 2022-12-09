@@ -46,7 +46,7 @@ final class Breeding extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::CONSTRUCTION) as $construction /* @var Construction $construction */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Construction) as $construction /* @var Construction $construction */) {
 			$building = $construction->Building();
 			if ($building instanceof AbstractBreeding) {
 				$animal   = $building->Animal();

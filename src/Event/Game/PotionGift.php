@@ -22,9 +22,9 @@ final class PotionGift extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
-	public const UNIT = 'unit';
+	public final const UNIT = 'unit';
 
-	public const POTION = 'potion';
+	public final const POTION = 'potion';
 
 	private Unit $unit;
 

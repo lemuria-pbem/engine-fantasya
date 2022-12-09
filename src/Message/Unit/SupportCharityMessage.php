@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class SupportCharityMessage extends SupportPayMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected Id $unit;
 

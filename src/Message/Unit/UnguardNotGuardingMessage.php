@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class UnguardNotGuardingMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is not guarding, unguarding not possible.';

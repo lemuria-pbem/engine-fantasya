@@ -47,7 +47,7 @@ final class Drift extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::VESSEL) as $vessel /* @var Vessel $vessel */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Vessel) as $vessel /* @var Vessel $vessel */) {
 			$this->vessel = $vessel;
 			$region       = $vessel->Region();
 			if ($region->Landscape() instanceof Ocean) {

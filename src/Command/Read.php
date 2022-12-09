@@ -31,8 +31,8 @@ final class Read extends UnitCommand implements Operator
 			$this->message(ReadNoCompositionMessage::class)->s($this->composition)->p($id);
 			return;
 		}
-		if ($composition->supports(Practice::READ)) {
-			$this->getOperate(Practice::READ)->read();
+		if ($composition->supports(Practice::Read)) {
+			$this->getOperate(Practice::Read)->read();
 		} else {
 			$this->message(ReadUnsupportedMessage::class)->e($this->unicum)->s($this->unicum->Composition());
 		}

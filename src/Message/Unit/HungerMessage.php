@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Result;
 
 class HungerMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::DEBUG;
+	protected Result $result = Result::Debug;
 
 	protected float $health;
 

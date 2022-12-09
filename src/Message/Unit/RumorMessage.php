@@ -8,9 +8,9 @@ use Lemuria\Engine\Message\Section;
 
 class RumorMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::MAIL;
+	protected Section $section = Section::Mail;
 
 	protected string $rumor;
 

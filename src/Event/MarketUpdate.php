@@ -61,7 +61,7 @@ final class MarketUpdate extends AbstractEvent
 
 	protected function run(): void {
 		Lemuria::Log()->debug('Moving prices in all regions with a market.');
-		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
 			if ($this->hasMarket($region)) {
 				$luxuries = $region->Luxuries();
 				if ($luxuries) {

@@ -111,9 +111,9 @@ class DirectionList implements \Countable
 		/** @var Direction $direction */
 		$direction = $this->directions[$i];
 		return match ($direction) {
-			Direction::NORTHEAST  => self::NORTH_EAST,
-			Direction::EAST       => self::EAST,
-			Direction::SOUTHEAST  => self::SOUTH_EAST,
+			Direction::Northeast  => self::NORTH_EAST,
+			Direction::East       => self::EAST,
+			Direction::Southeast  => self::SOUTH_EAST,
 			Direction::ROUTE_STOP => self::ROUTE_STOP,
 			default               => $direction->value
 		};

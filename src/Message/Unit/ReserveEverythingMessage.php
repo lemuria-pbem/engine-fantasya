@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class ReserveEverythingMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' reserves everything that is available in the pool.';

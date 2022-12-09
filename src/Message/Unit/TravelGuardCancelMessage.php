@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class TravelGuardCancelMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::MOVEMENT;
+	protected Section $section = Section::Movement;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has cancelled guarding the region.';

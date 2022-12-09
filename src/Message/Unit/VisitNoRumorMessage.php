@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class VisitNoRumorMessage extends VisitNoMarketMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Id $unit;
 

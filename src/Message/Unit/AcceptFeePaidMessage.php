@@ -9,7 +9,7 @@ use Lemuria\Model\Fantasya\Quantity;
 
 class AcceptFeePaidMessage extends AcceptNoMarketMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected Id $unit;
 

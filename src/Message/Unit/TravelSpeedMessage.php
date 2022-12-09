@@ -6,7 +6,7 @@ use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 
 class TravelSpeedMessage extends TravelNoMoreMessage
 {
-	public const WEIGHT = 'weight';
+	public final const WEIGHT = 'weight';
 
 	protected int $speed;
 

@@ -8,13 +8,13 @@ use Lemuria\Engine\Message\Section;
 
 class AttackBattleMessage extends AbstractRegionMessage
 {
-	public const ATTACKER = 'attacker';
+	public final const ATTACKER = 'attacker';
 
-	public const DEFENDER = 'defender';
+	public final const DEFENDER = 'defender';
 
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
-	protected Section $section = Section::BATTLE;
+	protected Section $section = Section::Battle;
 
 	protected array $attacker;
 

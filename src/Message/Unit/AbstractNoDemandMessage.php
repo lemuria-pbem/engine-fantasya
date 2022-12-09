@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 abstract class AbstractNoDemandMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::DEBUG;
+	protected Result $result = Result::Debug;
 
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot ' . $this->createActivity() . ', no demand.';

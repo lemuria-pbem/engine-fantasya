@@ -9,9 +9,9 @@ use Lemuria\Id;
 
 class AcceptOfferRemovedMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::DEBUG;
+	protected Result $result = Result::Debug;
 
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected Id $trade;
 

@@ -7,15 +7,15 @@ use Lemuria\Model\Fantasya\Vessel;
 
 class Capacity
 {
-	public const WALK = 'walk';
+	public final const WALK = 'walk';
 
-	public const RIDE = 'ride';
+	public final const RIDE = 'ride';
 
-	public const DRIVE = 'drive';
+	public final const DRIVE = 'drive';
 
-	public const SHIP = 'ship';
+	public final const SHIP = 'ship';
 
-	public const FLY = 'fly';
+	public final const FLY = 'fly';
 
 	private readonly array $talent;
 

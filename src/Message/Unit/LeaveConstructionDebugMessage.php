@@ -6,5 +6,5 @@ use Lemuria\Engine\Message\Result;
 
 class LeaveConstructionDebugMessage extends LeaveConstructionMessage
 {
-	protected Result $result = Result::DEBUG;
+	protected Result $result = Result::Debug;
 }

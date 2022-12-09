@@ -8,7 +8,7 @@ use Lemuria\Item;
 
 class PickPocketMessage extends PickPocketRevealedMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Item $silver;
 

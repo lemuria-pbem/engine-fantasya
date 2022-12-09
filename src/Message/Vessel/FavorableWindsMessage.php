@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Section;
 
 class FavorableWindsMessage extends AbstractVesselMessage
 {
-	protected Section $section = Section::MAGIC;
+	protected Section $section = Section::Magic;
 
 	protected function create(): string {
 		return 'Favorable winds help us to sail faster.';

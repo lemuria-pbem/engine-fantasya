@@ -146,13 +146,13 @@ final class Initiate implements Command
 		$origin = $this->pickOrigin($race);
 
 		$party  = new Party($this->newcomer);
-		$party->setId(Lemuria::Catalog()->nextId(Domain::PARTY));
+		$party->setId(Lemuria::Catalog()->nextId(Domain::Party));
 		$party->setName($this->cleanName($this->newcomer->Name()));
 		$party->setDescription($this->cleanDescription($this->newcomer->Description()));
 		$party->setRace($race)->setOrigin($origin);
 
 		$unit = new Unit();
-		$id   = Lemuria::Catalog()->nextId(Domain::UNIT);
+		$id   = Lemuria::Catalog()->nextId(Domain::Unit);
 		$unit->setId($id);
 		$unit->setSize(1)->setName('Einheit ' . $id)->setDescription('')->setRace($race);
 		if ($this->newcomer->Inventory()->count()) {
@@ -226,7 +226,7 @@ final class Initiate implements Command
 			}
 			if ($locations->count()) {
 				/** @var Region $region */
-				$region = $locations->Atlas()->sort(SortMode::BY_RESIDENTS)->current();
+				$region = $locations->Atlas()->sort(SortMode::ByResidents)->current();
 				return $region;
 			}
 			$locations->reset();

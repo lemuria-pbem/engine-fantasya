@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class HelpPartyUnknownMessage extends HelpPartyMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot set a relation to unknown party ' . $this->party . '.';

@@ -8,6 +8,6 @@ use Lemuria\Model\Domain;
 abstract class AbstractPartyMessage extends AbstractMessage
 {
 	public function Report(): Domain {
-		return Domain::PARTY;
+		return Domain::Party;
 	}
 }

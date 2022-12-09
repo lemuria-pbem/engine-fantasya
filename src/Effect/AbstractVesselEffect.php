@@ -10,7 +10,7 @@ abstract class AbstractVesselEffect extends AbstractEffect
 	private ?Vessel $vessel = null;
 
 	public function Catalog(): Domain {
-		return Domain::VESSEL;
+		return Domain::Vessel;
 	}
 
 	public function Vessel(): Vessel {

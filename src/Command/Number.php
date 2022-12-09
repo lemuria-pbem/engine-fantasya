@@ -81,7 +81,7 @@ final class Number extends UnitCommand
 	}
 
 	private function setUnitId(Id $id): void {
-		if (Lemuria::Catalog()->has($id, Domain::UNIT)) {
+		if (Lemuria::Catalog()->has($id, Domain::Unit)) {
 			$this->message(NumberUnitUsedMessage::class)->p($id->Id());
 			return;
 		}
@@ -97,7 +97,7 @@ final class Number extends UnitCommand
 			$this->message(NumberNotInConstructionMessage::class);
 			return;
 		}
-		if (Lemuria::Catalog()->has($id, Domain::CONSTRUCTION)) {
+		if (Lemuria::Catalog()->has($id, Domain::Construction)) {
 			$this->message(NumberConstructionUsedMessage::class, $construction)->p($id->Id());
 			return;
 		}
@@ -119,7 +119,7 @@ final class Number extends UnitCommand
 			$this->message(NumberNotInVesselMessage::class);
 			return;
 		}
-		if (Lemuria::Catalog()->has($id, Domain::VESSEL)) {
+		if (Lemuria::Catalog()->has($id, Domain::Vessel)) {
 			$this->message(NumberVesselUsedMessage::class, $vessel)->p($id->Id());
 			return;
 		}
@@ -137,7 +137,7 @@ final class Number extends UnitCommand
 
 	private function setPartyId(Id $id): void {
 		$party = $this->unit->Party();
-		if (Lemuria::Catalog()->has($id, Domain::PARTY)) {
+		if (Lemuria::Catalog()->has($id, Domain::Party)) {
 			$this->message(NumberPartyUsedMessage::class, $party)->p($id->Id());
 			return;
 		}
@@ -154,7 +154,7 @@ final class Number extends UnitCommand
 			return;
 		}
 		$newId = Id::fromId($this->phrase->getParameter(3));
-		if (Lemuria::Catalog()->has($newId, Domain::UNICUM)) {
+		if (Lemuria::Catalog()->has($newId, Domain::Unicum)) {
 			$this->message(NumberUnicumUsedMessage::class)->p($newId->Id());
 			return;
 		}

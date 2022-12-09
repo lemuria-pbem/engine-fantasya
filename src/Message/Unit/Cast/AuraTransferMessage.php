@@ -6,7 +6,7 @@ use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 
 class AuraTransferMessage extends AuraTransferReceivedMessage
 {
-	public const COST = 'cost';
+	public final const COST = 'cost';
 
 	protected int $cost;
 

@@ -8,7 +8,7 @@ use Lemuria\Model\Fantasya\Quantity;
 
 class MarketFeePaidMessage extends MarketFeeBannedMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Quantity $fee;
 

@@ -33,7 +33,7 @@ final class TheWildHunt extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
-	public const UNIT = 'unit';
+	public final const UNIT = 'unit';
 
 	private const GIFTS = [
 		Gold::class       => 1,

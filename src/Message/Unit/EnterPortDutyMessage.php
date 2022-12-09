@@ -9,9 +9,9 @@ use Lemuria\Item;
 
 class EnterPortDutyMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected Item $duty;
 

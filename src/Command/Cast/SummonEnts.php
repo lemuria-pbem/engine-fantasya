@@ -41,7 +41,7 @@ final class SummonEnts extends AbstractCast
 			return;
 		}
 
-		$party = Party::get(Spawn::getPartyId(Type::MONSTER));
+		$party = Party::get(Spawn::getPartyId(Type::Monster));
 		$race  = self::createRace(Ent::class);
 		$size  = self::size($this->cast->Level());
 		$unit->Aura()->consume($this->cast->Aura());

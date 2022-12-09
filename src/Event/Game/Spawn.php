@@ -23,19 +23,19 @@ final class Spawn extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
-	public const TYPE = 'type';
+	public final const TYPE = 'type';
 
-	public const PARTY = 'party';
+	public final const PARTY = 'party';
 
-	public const REGION = 'region';
+	public final const REGION = 'region';
 
-	public const RACE = 'race';
+	public final const RACE = 'race';
 
-	public const SIZE = 'size';
+	public final const SIZE = 'size';
 
-	public const ZOMBIES = 'z';
+	public final const ZOMBIES = 'z';
 
-	private const PARTY_ID = [1 => 'n', 2 => 'm']; //TODO 8.2
+	private const PARTY_ID = [Type::NPC->value => 'n', Type::Monster->value => 'm'];
 
 	private Create $create;
 

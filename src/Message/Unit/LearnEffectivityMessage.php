@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Section;
 
 class LearnEffectivityMessage extends AbstractUnitMessage
 {
-	protected Section $section = Section::STUDY;
+	protected Section $section = Section::Study;
 
 	protected float $effectivity;
 

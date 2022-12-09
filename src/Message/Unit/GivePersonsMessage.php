@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class GivePersonsMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Id $recipient;
 

@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class TempMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected function create(): string {
 		return 'New unit ' . $this->id . ' created.';

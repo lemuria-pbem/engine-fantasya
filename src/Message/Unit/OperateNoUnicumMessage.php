@@ -8,9 +8,9 @@ use Lemuria\Engine\Message\Section;
 
 class OperateNoUnicumMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::MAGIC;
+	protected Section $section = Section::Magic;
 
 	protected string $unicum;
 

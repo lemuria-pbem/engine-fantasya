@@ -137,11 +137,11 @@ final class Unicum extends UnitCommand implements Activity
 	}
 
 	private function createId(): Id {
-		if ($this->id && !Lemuria::Catalog()->has($this->id, Domain::UNICUM)) {
+		if ($this->id && !Lemuria::Catalog()->has($this->id, Domain::Unicum)) {
 			$this->context->UnicumMapper()->map((string)$this->id, $this->id);
 			return $this->id;
 		}
-		$id = Lemuria::Catalog()->nextId(Domain::UNICUM);
+		$id = Lemuria::Catalog()->nextId(Domain::Unicum);
 		if ($this->id) {
 			$this->context->UnicumMapper()->map((string)$this->id, $id);
 		}

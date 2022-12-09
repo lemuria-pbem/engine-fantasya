@@ -9,9 +9,9 @@ use Lemuria\Id;
 
 class DrownMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::MOVEMENT;
+	protected Section $section = Section::Movement;
 
 	protected Id $ocean;
 

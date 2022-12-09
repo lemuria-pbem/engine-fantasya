@@ -20,7 +20,7 @@ final class ResetSiege extends AbstractEvent
 
 	protected function run(): void {
 		$siege = new SiegeEffect($this->state);
-		foreach (Lemuria::Catalog()->getAll(Domain::CONSTRUCTION) as $construction /* @var Construction $construction */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Construction) as $construction /* @var Construction $construction */) {
 			$effect = Lemuria::Score()->find($siege->setConstruction($construction));
 			if ($effect instanceof SiegeEffect) {
 				$effect->reset();

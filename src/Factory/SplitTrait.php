@@ -16,7 +16,7 @@ trait SplitTrait
 	protected function splitUnit(Unit $unit, int $size): Unit {
 		$race  = $unit->Race();
 		$split = new Unit();
-		$split->setId(Lemuria::Catalog()->nextId(Domain::UNIT));
+		$split->setId(Lemuria::Catalog()->nextId(Domain::Unit));
 		$split->setRace($unit->Race())->setSize($size);
 		$split->setName($unit->Name())->setDescription($unit->Description());
 		$split->setHealth($unit->Health())->setBattleRow($unit->BattleRow());

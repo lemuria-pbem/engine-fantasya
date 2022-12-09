@@ -31,13 +31,13 @@ abstract class AbstractOperate
 	}
 
 	public function apply(): void {
-		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::APPLY);
+		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::Apply);
 	}
 
 	public function take(): void {
 		$unicum      = $this->operator->Unicum();
 		$composition = $unicum->Composition();
-		if ($composition->supports(Practice::TAKE)) {
+		if ($composition->supports(Practice::Take)) {
 			$collector = $unicum->Collector();
 			if ($collector instanceof Unit) {
 				throw new LemuriaException('Unexpected Unit collector in take().');
@@ -51,21 +51,21 @@ abstract class AbstractOperate
 			return;
 		}
 
-		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::TAKE);
+		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::Take);
 	}
 
 	public function give(Unit $recipient): void {
-		if ($this->operator->Unicum()->Composition()->supports(Practice::GIVE)) {
+		if ($this->operator->Unicum()->Composition()->supports(Practice::Give)) {
 			$this->transferTo($recipient);
 			return;
 		}
-		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::GIVE);
+		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::Give);
 	}
 
 	public function lose(): void {
 		$unicum      = $this->operator->Unicum();
 		$composition = $unicum->Composition();
-		if ($composition->supports(Practice::LOSE)) {
+		if ($composition->supports(Practice::Lose)) {
 			$location = $this->unit->Construction();
 			if (!$location) {
 				$location = $this->unit->Vessel();
@@ -79,25 +79,25 @@ abstract class AbstractOperate
 			$this->addLooseEffect();
 			return;
 		}
-		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::LOSE);
+		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::Lose);
 	}
 
 	public function destroy(): void {
 		$unicum      = $this->operator->Unicum();
 		$composition = $unicum->Composition();
-		if ($composition->supports(Practice::DESTROY)) {
+		if ($composition->supports(Practice::Destroy)) {
 			$this->unit->Treasury()->remove($unicum);
 			Lemuria::Catalog()->remove($unicum);
 			$this->destroyMessage();
 			return;
 		}
-		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::DESTROY);
+		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::Destroy);
 	}
 
 	public function read(): void {
 		$unicum = $this->operator->Unicum();
-		if (!$unicum->Composition()->supports(Practice::READ)) {
-			throw new UnsupportedOperateException($unicum, Practice::READ);
+		if (!$unicum->Composition()->supports(Practice::Read)) {
+			throw new UnsupportedOperateException($unicum, Practice::Read);
 		}
 
 		$party = $this->unit->Party();
@@ -106,7 +106,7 @@ abstract class AbstractOperate
 	}
 
 	public function write(): void {
-		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::WRITE);
+		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::Write);
 	}
 
 	protected function destroyMessage(): void {

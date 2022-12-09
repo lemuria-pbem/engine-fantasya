@@ -18,7 +18,7 @@ final class CommandPriority
 	/**
 	 * Execution order of all command classes.
 	 */
-	public const ORDER = [
+	public final const ORDER = [
 		// 0 forbidden
 		'EFFECT_BEFORE'    => 1,
 		'EVENT_BEFORE'     => 2,

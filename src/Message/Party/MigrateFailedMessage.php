@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class MigrateFailedMessage extends MigrateFromMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->migrant . ' cannot migrate to party ' . $this->party. '. The recipient refused to accept the unit.';

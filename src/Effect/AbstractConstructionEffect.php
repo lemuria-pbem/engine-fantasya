@@ -10,7 +10,7 @@ abstract class AbstractConstructionEffect extends AbstractEffect
 	private ?Construction $construction = null;
 
 	public function Catalog(): Domain {
-		return Domain::CONSTRUCTION;
+		return Domain::Construction;
 	}
 
 	public function Construction(): Construction {

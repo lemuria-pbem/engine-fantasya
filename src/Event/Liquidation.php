@@ -34,7 +34,7 @@ final class Liquidation extends AbstractEvent
 
 	protected function run(): void {
 		$liquidate = new People();
-		foreach (Lemuria::Catalog()->getAll(Domain::PARTY) as $party /* @var Party $party */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
 			Lemuria::Log()->debug('Running Liquidation for Party ' . $party->Id() . '.', ['party' => $party]);
 			$units = $party->People();
 			$liquidate->clear();

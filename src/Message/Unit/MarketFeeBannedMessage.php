@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class MarketFeeBannedMessage extends MarketFeeNotPaidMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected Id $unit;
 

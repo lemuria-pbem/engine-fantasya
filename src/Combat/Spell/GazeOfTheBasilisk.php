@@ -19,10 +19,10 @@ class GazeOfTheBasilisk extends AbstractBattleSpell
 			$level    = $calculus->knowledge(Magic::class)->Level();
 			$fighters = $grade * $level;
 
-			$fighters = $this->featureFighters($this->victim[BattleRow::FRONT->value], $fighters, Feature::GazeOfTheBasilisk);
-			$fighters = $this->featureFighters($this->victim[BattleRow::BACK->value], $fighters, Feature::GazeOfTheBasilisk);
-			$fighters = $this->featureFighters($this->victim[BattleRow::BYSTANDER->value], $fighters, Feature::GazeOfTheBasilisk);
-			$this->featureFighters($this->victim[BattleRow::REFUGEE->value], $fighters, Feature::GazeOfTheBasilisk);
+			$fighters = $this->featureFighters($this->victim[BattleRow::Front->value], $fighters, Feature::GazeOfTheBasilisk);
+			$fighters = $this->featureFighters($this->victim[BattleRow::Back->value], $fighters, Feature::GazeOfTheBasilisk);
+			$fighters = $this->featureFighters($this->victim[BattleRow::Bystander->value], $fighters, Feature::GazeOfTheBasilisk);
+			$this->featureFighters($this->victim[BattleRow::Refugee->value], $fighters, Feature::GazeOfTheBasilisk);
 		}
 		return $grade;
 	}

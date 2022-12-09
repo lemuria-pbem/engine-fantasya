@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class VesselFinishedMessage extends AbstractVesselMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected function create(): string {
 		return 'Vessel ' . $this->id . ' has been finished.';

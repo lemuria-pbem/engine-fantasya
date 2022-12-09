@@ -238,7 +238,7 @@ class Combatant
 		$newDistribution->setSize($size);
 
 		$newCombatant = new Combatant($this->army, $this->unit);
-		$newCombatant->setBattleRow(BattleRow::FRONT);
+		$newCombatant->setBattleRow(BattleRow::Front);
 
 		$newCombatant->distribution = $newDistribution;
 		$newCombatant->fighters     = array_splice($this->fighters, -$size, $size);
@@ -266,7 +266,7 @@ class Combatant
 
 	protected function getWeaponSkill(): WeaponSkill {
 		$calculus = new Calculus($this->unit);
-		$isMelee  = $this->battleRow !== BattleRow::BACK;
+		$isMelee  = $this->battleRow !== BattleRow::Back;
 		foreach ($calculus->weaponSkill() as $weaponSkill) {
 			if ($isMelee && $weaponSkill->isMelee() && $this->hasOneWeaponOf($weaponSkill)) {
 				return $weaponSkill;

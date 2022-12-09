@@ -22,10 +22,10 @@ final class Drown extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
 			if ($region->Landscape() instanceof Ocean) {
 				foreach ($region->Residents() as $unit /* @var Unit $unit */) {
-					if ($unit->Size() > 0 && $unit->Party()->Type() === Type::PLAYER && !$unit->Vessel()) {
+					if ($unit->Size() > 0 && $unit->Party()->Type() === Type::Player && !$unit->Vessel()) {
 						$unit->setHealth(0.0);
 						$unit->setSize(0);
 						$this->message(DrownMessage::class, $unit)->e($region);

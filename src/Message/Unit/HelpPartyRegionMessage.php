@@ -7,7 +7,7 @@ use Lemuria\Id;
 
 class HelpPartyRegionMessage extends HelpPartyMessage
 {
-	public const REGION = 'region';
+	public final const REGION = 'region';
 
 	protected Id $region;
 

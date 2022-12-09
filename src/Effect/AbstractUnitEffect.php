@@ -10,7 +10,7 @@ abstract class AbstractUnitEffect extends AbstractEffect
 	private ?Unit $unit = null;
 
 	public function Catalog(): Domain {
-		return Domain::UNIT;
+		return Domain::Unit;
 	}
 
 	public function Unit(): Unit {

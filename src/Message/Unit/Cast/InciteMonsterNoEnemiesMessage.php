@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class InciteMonsterNoEnemiesMessage extends AbstractCastMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot find any enemy to cast the Incite Monster spell.';

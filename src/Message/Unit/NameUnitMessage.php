@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Result;
 
 class NameUnitMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected string $name;
 

@@ -47,8 +47,8 @@ final class Acquaintance extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::PARTY) as $party /* @var Party $party */) {
-			if ($party->Type() !== Type::PLAYER) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
+			if ($party->Type() !== Type::Player) {
 				continue;
 			}
 
@@ -139,7 +139,7 @@ final class Acquaintance extends AbstractEvent
 		}
 		foreach ($ids as $id => $camouflage) {
 			$foreign = $census->getParty($unit);
-			if ($foreign?->Type() === Type::PLAYER) {
+			if ($foreign?->Type() === Type::Player) {
 				$fid                        = $foreign ? $foreign->Id()->Id() : 0;
 				$this->network[$id][$fid][] = [$census, $unit, $camouflage];
 			}

@@ -9,9 +9,9 @@ use Lemuria\Singleton;
 
 class TradeForbiddenCommodityMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected Singleton $commodity;
 

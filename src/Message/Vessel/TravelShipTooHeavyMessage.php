@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class TravelShipTooHeavyMessage extends AbstractVesselMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::MOVEMENT;
+	protected Section $section = Section::Movement;
 
 	protected function create(): string {
 		return 'Vessel ' . $this->id . ' is too heavy to move.';

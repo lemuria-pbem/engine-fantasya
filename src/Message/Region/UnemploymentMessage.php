@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Section;
 
 class UnemploymentMessage extends AbstractRegionMessage
 {
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected int $recruits;
 

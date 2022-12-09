@@ -8,7 +8,7 @@ use Lemuria\Engine\Message\Section;
 
 class EagleEyeMessage extends AbstractUnitMessage
 {
-	protected Section $section = Section::EVENT;
+	protected Section $section = Section::Event;
 
 	protected int $perception;
 

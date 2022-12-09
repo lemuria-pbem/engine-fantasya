@@ -12,9 +12,9 @@ class ReadMessage extends AbstractPartyMessage
 {
 	public final const UNICUM = 'unicum';
 
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::MAGIC;
+	protected Section $section = Section::Magic;
 
 	protected Id $unit;
 

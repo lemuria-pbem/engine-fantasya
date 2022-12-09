@@ -6,5 +6,5 @@ use Lemuria\Engine\Message\Result;
 
 abstract class AbstractEarnOnlyMessage extends AbstractEarnMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 }

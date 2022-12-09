@@ -10,9 +10,9 @@ use Lemuria\Singleton;
 
 class TakeMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected Singleton $composition;
 

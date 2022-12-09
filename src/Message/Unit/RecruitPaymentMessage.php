@@ -9,7 +9,7 @@ use Lemuria\Model\Fantasya\Quantity;
 
 class RecruitPaymentMessage extends RecruitMessage
 {
-	protected Result $result = Result::DEBUG;
+	protected Result $result = Result::Debug;
 
 	protected Quantity $cost;
 

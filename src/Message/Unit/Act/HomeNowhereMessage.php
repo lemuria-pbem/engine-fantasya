@@ -8,9 +8,9 @@ use Lemuria\Engine\Message\Section;
 
 class HomeNowhereMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::MOVEMENT;
+	protected Section $section = Section::Movement;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is desperate because it will never make a home.';

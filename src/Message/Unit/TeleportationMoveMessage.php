@@ -9,9 +9,9 @@ use Lemuria\Id;
 
 class TeleportationMoveMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::MOVEMENT;
+	protected Section $section = Section::Movement;
 
 	protected Id $unit;
 

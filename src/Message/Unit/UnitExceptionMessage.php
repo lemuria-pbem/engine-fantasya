@@ -8,11 +8,11 @@ use Lemuria\Engine\Message\Section;
 
 class UnitExceptionMessage extends AbstractUnitMessage
 {
-	public const ACTION = 'action';
+	public final const ACTION = 'action';
 
-	protected Result $result = Result::ERROR;
+	protected Result $result = Result::Error;
 
-	protected Section $section = Section::ERROR;
+	protected Section $section = Section::Error;
 
 	protected string $exception;
 

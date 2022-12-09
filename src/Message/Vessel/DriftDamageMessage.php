@@ -7,7 +7,7 @@ use Lemuria\Id;
 
 class DriftDamageMessage extends AbstractVesselMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected Id $region;
 

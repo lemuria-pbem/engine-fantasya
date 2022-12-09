@@ -21,7 +21,7 @@ final class Retirement extends AbstractEvent
 
 	protected function run(): void {
 		Lemuria::Log()->debug('Running Retirement check.');
-		$parties   = Lemuria::Catalog()->getAll(Domain::PARTY);
+		$parties   = Lemuria::Catalog()->getAll(Domain::Party);
 		$all       = count($parties);
 		$active    = 0;
 		$retired   = 0;
@@ -29,7 +29,7 @@ final class Retirement extends AbstractEvent
 		$deceased  = [];
 
 		foreach ($parties as $party /* @var Party $party */) {
-			if ($party->Type() !== Type::PLAYER) {
+			if ($party->Type() !== Type::Player) {
 				$nonPlayer++;
 				continue;
 			}

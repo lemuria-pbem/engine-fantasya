@@ -101,7 +101,7 @@ final class Handover extends DelegatedCommand
 		} elseif ($n === 2) {
 			try {
 				$id = Id::fromId($this->phrase->getParameter(2));
-				if (Lemuria::Catalog()->has($id, Domain::UNICUM)) {
+				if (Lemuria::Catalog()->has($id, Domain::Unicum)) {
 					return new Bestow($this->phrase, $this->context);
 				}
 			} catch (IdException) {

@@ -6,7 +6,7 @@ use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 
 class TravelAnchorMessage extends TravelOverLandMessage
 {
-	public const ANCHOR = 'anchor';
+	public final const ANCHOR = 'anchor';
 
 	protected string $anchor;
 

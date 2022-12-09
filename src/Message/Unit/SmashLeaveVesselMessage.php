@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class SmashLeaveVesselMessage extends SmashNotVesselOwnerMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has left the vessel ' . $this->vessel . ' before it is destroyed.';

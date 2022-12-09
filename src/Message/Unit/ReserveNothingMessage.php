@@ -9,9 +9,9 @@ use Lemuria\Singleton;
 
 class ReserveNothingMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected Singleton $commodity;
 

@@ -51,7 +51,7 @@ trait OperateTrait
 	}
 
 	protected function parseBestow(): ?AbstractOperate {
-		return $this->parseAbstractOperate(Practice::GIVE, 1);
+		return $this->parseAbstractOperate(Practice::Give, 1);
 	}
 
 	protected function parseOperate(Practice $practice): ?AbstractOperate {

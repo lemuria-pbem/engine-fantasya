@@ -27,10 +27,10 @@ final class Recreate extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::UNIT) as $unit /* @var Unit $unit */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Unit) as $unit /* @var Unit $unit */) {
 			$type = $unit->Party()->Type();
 			switch ($type) {
-				case Type::PLAYER :
+				case Type::Player :
 					if (!$this->hasHunger($unit)) {
 						if ($unit->Health() < 1.0) {
 							$this->recreateHealth($unit);
@@ -40,7 +40,7 @@ final class Recreate extends AbstractEvent
 						}
 					}
 					break;
-				case Type::MONSTER :
+				case Type::Monster :
 					$this->recreateMonster($unit);
 					break;
 				default :

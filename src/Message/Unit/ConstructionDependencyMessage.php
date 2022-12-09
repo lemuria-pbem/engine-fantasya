@@ -8,9 +8,9 @@ use Lemuria\Singleton;
 
 class ConstructionDependencyMessage extends AbstractUnitMessage
 {
-	public const DEPENDENCY = 'dependency';
+	public final const DEPENDENCY = 'dependency';
 
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Singleton $building;
 

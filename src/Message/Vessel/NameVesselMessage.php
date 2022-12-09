@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Result;
 
 class NameVesselMessage extends AbstractVesselMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected string $name;
 

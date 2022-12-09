@@ -7,8 +7,8 @@ use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Event\Behaviour\AbstractBehaviour;
 use Lemuria\Engine\Fantasya\Event\Reproduction;
-use Lemuria\Engine\Fantasya\Factory\Model\Season;
 use Lemuria\Lemuria;
+use Lemuria\Model\Calendar\Season;
 use Lemuria\Model\Fantasya\Gang;
 
 class Bear extends AbstractBehaviour
@@ -22,7 +22,7 @@ class Bear extends AbstractBehaviour
 	 */
 	public function Reproduction(): Reproduction {
 		$reproduction = parent::Reproduction();
-		if (Lemuria::Calendar()->Season() === Season::SUMMER) {
+		if (Lemuria::Calendar()->Season() === Season::Summer) {
 			$size = $this->unit->Size();
 			if ($size > 1) {
 				$this->unit->setSize(1);

@@ -81,7 +81,7 @@ class LemuriaReport implements Reassignment, Report
 				$messages[$i] = $this->message[$i];
 			}
 		}
-		if ($namespace === Domain::PARTY && isset($this->removed[$id])) {
+		if ($namespace === Domain::Party && isset($this->removed[$id])) {
 			foreach ($this->removed[$id] as $i) {
 				$messages[$i] = $this->message[$i];
 			}

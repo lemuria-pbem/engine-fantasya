@@ -79,7 +79,7 @@ final class TravelAtlas extends Atlas
 			}
 		}
 
-		$this->sort(SortMode::NORTH_TO_SOUTH);
+		$this->sort(SortMode::NorthToSouth);
 		return $this;
 	}
 

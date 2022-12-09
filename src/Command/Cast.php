@@ -134,9 +134,9 @@ final class Cast extends UnitCommand
 		$syntax             = SpellParser::getSyntax($this->spell);
 		$this->target       = ($syntax | SpellParser::TARGET) && $target ? Unit::get($target) : null;
 		$this->region       = ($syntax | SpellParser::REGION) && $target ? Region::get($target) : null;
-		$this->region       = ($syntax | SpellParser::DOMAIN) && in_array($domain, [null, Domain::LOCATION]) && $target ? Region::get($target) : null;
-		$this->construction = ($syntax | SpellParser::DOMAIN) && $domain === Domain::CONSTRUCTION && $target ? Construction::get($target) : null;
-		$this->vessel       = ($syntax | SpellParser::DOMAIN) && $domain === Domain::VESSEL && $target ? Vessel::get($target) : null;
+		$this->region       = ($syntax | SpellParser::DOMAIN) && in_array($domain, [null, Domain::Location]) && $target ? Region::get($target) : null;
+		$this->construction = ($syntax | SpellParser::DOMAIN) && $domain === Domain::Construction && $target ? Construction::get($target) : null;
+		$this->vessel       = ($syntax | SpellParser::DOMAIN) && $domain === Domain::Vessel && $target ? Vessel::get($target) : null;
 		$this->directions   = $parser->Directions();
 		$this->context->getCasts()->add($this);
 	}

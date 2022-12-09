@@ -180,7 +180,7 @@ final class Outlook
 			}
 		}
 
-		return $visible->sort(SortMode::NORTH_TO_SOUTH);
+		return $visible->sort(SortMode::NorthToSouth);
 	}
 
 	/**

@@ -10,9 +10,9 @@ use Lemuria\Singleton;
 
 class ReadUnsupportedMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::MAGIC;
+	protected Section $section = Section::Magic;
 
 	protected Singleton $composition;
 

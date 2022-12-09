@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class BrokenCarriageDiesMessage extends BrokenCarriageMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected function create(): string {
 		return 'The ragged orc dies, leaving behind his horses, carriage and its strange payload.';

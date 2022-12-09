@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class PresettingHideMessage extends AbstractPartyMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::MOVEMENT;
+	protected Section $section = Section::Movement;
 
 	protected function create(): string {
 		return 'New units will hide by default.';

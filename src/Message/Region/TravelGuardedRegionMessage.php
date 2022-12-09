@@ -9,11 +9,11 @@ use Lemuria\Id;
 
 class TravelGuardedRegionMessage extends AbstractRegionMessage
 {
-	public const PARTY = 'party';
+	public final const PARTY = 'party';
 
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
-	protected Section $section = Section::MOVEMENT;
+	protected Section $section = Section::Movement;
 
 	protected Id $unit;
 

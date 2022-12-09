@@ -68,7 +68,7 @@ final class Lose extends UnitCommand implements Operator
 		$unicum = $this->parseUnicum($count, $commodity);
 		if ($unicum) {
 			$this->unicum = $unicum;
-			$this->createOperate($unicum, Practice::LOSE, $this)->lose();
+			$this->createOperate($unicum, Practice::Lose, $this)->lose();
 			return;
 		}
 

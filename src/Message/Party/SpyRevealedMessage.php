@@ -8,9 +8,9 @@ use Lemuria\Id;
 
 class SpyRevealedMessage extends AbstractPartyMessage
 {
-	public const UNIT = 'unit';
+	public final const UNIT = 'unit';
 
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected Id $region;
 

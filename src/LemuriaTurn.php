@@ -163,10 +163,10 @@ class LemuriaTurn implements Turn
 	 */
 	public function substitute(Identifiable $entity): Turn {
 		switch ($entity->Catalog()) {
-			case Domain::PARTY :
+			case Domain::Party :
 				$this->substituteParty($entity->Id());
 				break;
-			case Domain::UNIT :
+			case Domain::Unit :
 				$this->substituteUnit($entity->Id());
 				break;
 			default :

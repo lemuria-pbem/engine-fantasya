@@ -185,7 +185,7 @@ class Attack
 
 		$attInfectious = $attacker->hasFeature(Feature::ZombieInfection);
 		$defInfectious = $defFighter->hasFeature(Feature::ZombieInfection);
-		$isInfectious  = $attInfectious && !$defInfectious && $defender->Unit()->Party()->Type() !== Type::MONSTER;
+		$isInfectious  = $attInfectious && !$defInfectious && $defender->Unit()->Party()->Type() !== Type::Monster;
 
 		$damage = null;
 		for ($i = 0; $i < $attacks; $i++) {

@@ -53,8 +53,8 @@ class ElementalBeing extends AbstractBattleSpell
 			Lemuria::Score()->add($effect->setUnit($elemental));
 
 			$combatant                               = $this->createCombatant($unit, $elemental);
-			$this->caster[BattleRow::FRONT->value][] = $combatant;
-			BattleLog::getInstance()->add(new SummonBeingMessage(new Entity($elemental), $combatant, $unit->Size(), BattleRow::FRONT->value));
+			$this->caster[BattleRow::Front->value][] = $combatant;
+			BattleLog::getInstance()->add(new SummonBeingMessage(new Entity($elemental), $combatant, $unit->Size(), BattleRow::Front->value));
 			Lemuria::Log()->debug('New combatant ' . $combatant->Id() . ' for party ' . $party . ' consisting of one ' . $race . ' has been summoned.');
 		}
 		return $grade;
@@ -65,7 +65,7 @@ class ElementalBeing extends AbstractBattleSpell
 		$distribution->setSize($elemental->Size());
 		$army      = $this->grade->Combat()->getArmy($unit);
 		$combatant = new Combatant($army, $elemental);
-		$combatant->setBattleRow(BattleRow::FRONT);
+		$combatant->setBattleRow(BattleRow::Front);
 		$combatant->setDistribution($distribution);
 		$army->addCombatant($combatant);
 		return $combatant;

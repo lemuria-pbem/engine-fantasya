@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class DescribeOwnerMessage extends AbstractConstructionMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Id $owner;
 

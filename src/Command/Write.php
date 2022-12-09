@@ -40,8 +40,8 @@ final class Write extends UnitCommand implements Activity, Operator
 			$this->message(WriteNoCompositionMessage::class)->s($this->composition)->p((string)$this->unicum->Id());
 			return;
 		}
-		if ($composition->supports(Practice::WRITE)) {
-			$this->getOperate(Practice::WRITE)->write();
+		if ($composition->supports(Practice::Write)) {
+			$this->getOperate(Practice::Write)->write();
 		} else {
 			$this->message(WriteUnsupportedMessage::class)->e($this->unicum)->s($this->unicum->Composition());
 		}

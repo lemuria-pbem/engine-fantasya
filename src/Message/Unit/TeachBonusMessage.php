@@ -7,11 +7,11 @@ use Lemuria\Engine\Message\Section;
 
 class TeachBonusMessage extends AbstractUnitMessage
 {
-	public const STUDENTS = 's';
+	public final const STUDENTS = 's';
 
-	public const BONUS = 'b';
+	public final const BONUS = 'b';
 
-	protected Section $section = Section::STUDY;
+	protected Section $section = Section::Study;
 
 	protected int $students;
 

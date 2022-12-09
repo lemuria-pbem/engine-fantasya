@@ -79,8 +79,8 @@ class SpellDetails
 	public function CombatPhase(): string {
 		if ($this->spell instanceof BattleSpell) {
 			return match ($this->spell->Phase()) {
-				Phase::PREPARATION => 'Vorbereitung',
-				Phase::COMBAT      => 'Angriff'
+				Phase::Preparation => 'Vorbereitung',
+				Phase::Combat      => 'Angriff'
 			};
 		}
 		return '';

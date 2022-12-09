@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class PresettingLootMessage extends AbstractPartyMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::BATTLE;
+	protected Section $section = Section::Battle;
 
 	protected function create(): string {
 		return 'New recruits will gather loot by default.';

@@ -79,10 +79,10 @@ final class Support extends AbstractEvent
 
 	private function pay(): void {
 		$hungry = new People();
-		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
 			$intelligence = $this->context->getIntelligence($region);
 			foreach ($intelligence->getParties() as $party /* @var Party $party */) {
-				if ($party->Type() !== Type::PLAYER) {
+				if ($party->Type() !== Type::Player) {
 					continue;
 				}
 

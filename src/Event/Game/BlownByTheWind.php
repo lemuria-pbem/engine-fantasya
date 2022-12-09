@@ -25,9 +25,9 @@ final class BlownByTheWind extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
-	public const REGION = 'region';
+	public final const REGION = 'region';
 
-	public const SPELL = 'spell';
+	public final const SPELL = 'spell';
 
 	private const DESCRIPTION = 'Ein leicht zerknittertes und fleckiges, beschriebenes Pergamentblatt.';
 
@@ -64,7 +64,7 @@ final class BlownByTheWind extends AbstractEvent
 	}
 
 	private function createUnicum(Unicum $unicum): Scroll {
-		$unicum->setId(Lemuria::Catalog()->nextId(Domain::UNICUM));
+		$unicum->setId(Lemuria::Catalog()->nextId(Domain::Unicum));
 		$unicum->setName($this->dictionary->get('spell', $this->spell));
 		$unicum->setDescription(self::DESCRIPTION);
 		/** @var Scroll $scroll */

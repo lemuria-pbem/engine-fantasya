@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class ContinentUpheavalMessage extends AbstractPartyMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected function create(): string {
 		return 'One calm evening a gentle hollow growl from afar is heard. Shortly after a gorgeous and deep red ' .

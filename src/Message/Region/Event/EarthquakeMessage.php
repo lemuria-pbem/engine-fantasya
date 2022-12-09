@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Result;
 
 class EarthquakeMessage extends AbstractRegionMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected function create(): string {
 		return 'Suddenly, in region ' . $this->id . ' the earth is shaking, and the buildings are damaged by an earthquake.';

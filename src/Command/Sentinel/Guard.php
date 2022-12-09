@@ -27,7 +27,7 @@ final class Guard extends UnitCommand
 			$this->message(GuardAlreadyMessage::class);
 			return;
 		}
-		if ($this->unit->BattleRow() <= BattleRow::BYSTANDER) {
+		if ($this->unit->BattleRow() <= BattleRow::Bystander) {
 			$this->message(GuardBattleRowMessage::class);
 			return;
 		}

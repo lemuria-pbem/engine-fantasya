@@ -27,8 +27,8 @@ final class Monster extends AbstractEvent
 
 	protected function run(): void {
 		$count = 0;
-		foreach (Lemuria::Catalog()->getAll(Domain::PARTY) as $party /* @var Party $party */) {
-			if ($party->Type() === Type::MONSTER) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
+			if ($party->Type() === Type::Monster) {
 				foreach ($party->People() as $unit /* @var Unit $unit */) {
 					if ($unit->Size() > 0) {
 						$race = $unit->Race();

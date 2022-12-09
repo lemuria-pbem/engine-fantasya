@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Section;
 
 class UpkeepAbandonedMessage extends AbstractConstructionMessage
 {
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected function create(): string {
 		return 'Construction ' . $this->id . ' is abandoned, nobody has paid its upkeep.';

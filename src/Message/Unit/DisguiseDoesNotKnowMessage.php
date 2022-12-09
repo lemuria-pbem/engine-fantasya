@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class DisguiseDoesNotKnowMessage extends DisguiseKnownPartyMessage
 {
-	protected Result $result = Result::DEBUG;
+	protected Result $result = Result::Debug;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' does not know party ' . $this->party . '.';

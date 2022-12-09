@@ -20,8 +20,8 @@ class Shockwave extends AbstractBattleSpell
 			$calculus = new Calculus($unit);
 			$level    = $calculus->knowledge(Magic::class)->Level();
 			$fighters = $grade * self::VICTIMS * sqrt($level);
-			$fighters = $this->featureFighters($this->caster[BattleRow::FRONT->value], $fighters, Feature::Shockwave);
-			$this->featureFighters($this->caster[BattleRow::BACK->value], $fighters, Feature::Shockwave);
+			$fighters = $this->featureFighters($this->caster[BattleRow::Front->value], $fighters, Feature::Shockwave);
+			$this->featureFighters($this->caster[BattleRow::Back->value], $fighters, Feature::Shockwave);
 		}
 		return $grade;
 	}

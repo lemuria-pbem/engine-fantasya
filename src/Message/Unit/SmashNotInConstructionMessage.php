@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class SmashNotInConstructionMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' must be inside the construction to destroy it.';

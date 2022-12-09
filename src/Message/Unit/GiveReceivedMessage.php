@@ -9,7 +9,7 @@ use Lemuria\Item;
 
 class GiveReceivedMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Id $from;
 

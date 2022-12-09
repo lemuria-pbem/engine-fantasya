@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class VisitNoMarketMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::MAIL;
+	protected Section $section = Section::Mail;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot visit any merchant unit - there is no market here.';

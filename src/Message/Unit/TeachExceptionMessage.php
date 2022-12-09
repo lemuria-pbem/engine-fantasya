@@ -8,9 +8,9 @@ use Lemuria\Engine\Message\Section;
 
 class TeachExceptionMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::STUDY;
+	protected Section $section = Section::Study;
 
 	protected string $error;
 

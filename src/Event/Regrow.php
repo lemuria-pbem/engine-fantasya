@@ -3,11 +3,11 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use function Lemuria\getClass;
-use Lemuria\Engine\Fantasya\Factory\Model\Season;
 use Lemuria\Engine\Fantasya\Message\Region\RegrowMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Calendar\Season;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Herb;
 use Lemuria\Model\Fantasya\Commodity\Herb\Bubblemorel;
@@ -106,9 +106,9 @@ final class Regrow extends AbstractEvent
 
 	protected function initialize(): void {
 		$this->rate = 1.0 + match (Lemuria::Calendar()->Season()) {
-			Season::SPRING, Season::SUMMER => self::GROW,
-			Season::FALL                   => 0.0,
-			Season::WINTER                 => self::SHRINK
+			Season::Spring, Season::Summer => self::GROW,
+			Season::Fall                   => 0.0,
+			Season::Winter                 => self::SHRINK
 		};
 		Lemuria::Log()->debug('Herbage grow rate is ' . $this->rate . '.');
 	}
@@ -117,7 +117,7 @@ final class Regrow extends AbstractEvent
 	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
 			$landscape = $region->Landscape();
 			if ($landscape instanceof Ocean) {
 				continue;

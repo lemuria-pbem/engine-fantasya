@@ -225,14 +225,14 @@ trait TravelTrait
 
 	protected function getOppositeDirection(Direction $direction): Direction {
 		return match ($direction) {
-			Direction::NORTH     => Direction::SOUTH,
-			Direction::NORTHEAST => Direction::SOUTHWEST,
-			Direction::EAST      => Direction::WEST,
-			Direction::SOUTHEAST => Direction::NORTHWEST,
-			Direction::SOUTH     => Direction::NORTH,
-			Direction::SOUTHWEST => Direction::NORTHEAST,
-			Direction::WEST      => Direction::EAST,
-			Direction::NORTHWEST => Direction::SOUTHEAST,
+			Direction::North     => Direction::South,
+			Direction::Northeast => Direction::Southwest,
+			Direction::East      => Direction::West,
+			Direction::Southeast => Direction::Northwest,
+			Direction::South     => Direction::North,
+			Direction::Southwest => Direction::Northeast,
+			Direction::West      => Direction::East,
+			Direction::Northwest => Direction::Southeast,
 			default              => throw new LemuriaException('Cannot determine opposite direction.')
 		};
 	}

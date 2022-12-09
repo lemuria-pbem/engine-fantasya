@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Result;
 
 class HerbageApplySkipMessage extends HerbageApplyMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'The herb occurrence in almanac ' . $this->almanac . ' for region ' . $this->region . ' seems to be outdated.';

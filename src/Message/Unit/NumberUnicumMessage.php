@@ -8,7 +8,7 @@ use Lemuria\Singleton;
 
 class NumberUnicumMessage extends NumberUnicumUsedMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Singleton $composition;
 

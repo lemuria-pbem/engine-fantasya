@@ -8,6 +8,6 @@ use Lemuria\Model\Domain;
 abstract class AbstractRegionMessage extends AbstractMessage
 {
 	public function Report(): Domain {
-		return Domain::LOCATION;
+		return Domain::Location;
 	}
 }

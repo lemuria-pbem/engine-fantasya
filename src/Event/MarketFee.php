@@ -32,7 +32,7 @@ final class MarketFee extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::CONSTRUCTION) as $construction /* @var Construction $construction */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Construction) as $construction /* @var Construction $construction */) {
 			$extensions = $construction->Extensions();
 			$market     = $extensions[Market::class] ?? null;
 			if ($market instanceof Market) {

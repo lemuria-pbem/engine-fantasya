@@ -212,7 +212,7 @@ class Travel extends UnitCommand implements Activity
 							// Guard message to the guards and the stopped unit.
 							foreach ($notPassGuards as $party /* @var Party $party */) {
 								$this->message(TravelGuardMessage::class, $party)->e($region)->e($this->unit, TravelGuardMessage::UNIT);
-								if ($party->Type() === Type::MONSTER) {
+								if ($party->Type() === Type::Monster) {
 									$this->message(TravelIntoMonsterMessage::class)->e($region);
 								} else {
 									$this->message(TravelGuardedMessage::class)->e($region)->e($party, TravelGuardedMessage::GUARD);

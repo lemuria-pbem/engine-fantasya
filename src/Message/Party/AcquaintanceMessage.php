@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Result;
 
 class AcquaintanceMessage extends AbstractPartyMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected string $party;
 

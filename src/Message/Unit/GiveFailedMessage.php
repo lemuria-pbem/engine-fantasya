@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class GiveFailedMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Id $recipient;
 

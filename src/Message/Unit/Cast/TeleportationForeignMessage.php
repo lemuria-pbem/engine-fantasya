@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class TeleportationForeignMessage extends TeleportationMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot teleport foreign unit ' . $this->unit . '.';

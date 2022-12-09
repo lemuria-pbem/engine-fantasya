@@ -33,10 +33,10 @@ class Fireball extends AbstractBattleSpell
 			$calculus = new Calculus($unit);
 			$level    = $calculus->knowledge(Magic::class)->Level();
 			$victims  = self::VICTIMS + (int)round(sqrt($level)) - 1;
-			$victims  = $this->castOnCombatants($this->victim[BattleRow::FRONT->value], $damage, $victims);
-			$victims  = $this->castOnCombatants($this->victim[BattleRow::BACK->value], $damage, $victims);
-			$victims  = $this->castOnCombatants($this->victim[BattleRow::BYSTANDER->value], $damage, $victims);
-			$this->castOnCombatants($this->victim[BattleRow::REFUGEE->value], $damage, $victims);
+			$victims  = $this->castOnCombatants($this->victim[BattleRow::Front->value], $damage, $victims);
+			$victims  = $this->castOnCombatants($this->victim[BattleRow::Back->value], $damage, $victims);
+			$victims  = $this->castOnCombatants($this->victim[BattleRow::Bystander->value], $damage, $victims);
+			$this->castOnCombatants($this->victim[BattleRow::Refugee->value], $damage, $victims);
 		}
 		return $damage;
 	}

@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Result;
 
 class DaydreamConcentrateMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot concentrate any more.';

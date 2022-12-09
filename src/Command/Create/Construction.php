@@ -98,7 +98,7 @@ final class Construction extends AbstractProduct
 					$this->message(ConstructionBuildMessage::class)->e($construction)->p($yield);
 				}
 			} else {
-				$id           = Lemuria::Catalog()->nextId(Domain::CONSTRUCTION);
+				$id           = Lemuria::Catalog()->nextId(Domain::Construction);
 				$construction = new ConstructionModel();
 				$dictionary   = new Dictionary();
 				$name         = $dictionary->get('building.' . getClass($building)) . ' ' . $id;

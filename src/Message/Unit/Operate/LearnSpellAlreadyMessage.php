@@ -10,9 +10,9 @@ use Lemuria\Singleton;
 
 class LearnSpellAlreadyMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::MAGIC;
+	protected Section $section = Section::Magic;
 
 	protected Singleton $spell;
 

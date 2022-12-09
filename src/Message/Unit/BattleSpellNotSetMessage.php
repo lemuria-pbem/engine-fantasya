@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class BattleSpellNotSetMessage extends BattleSpellRemoveMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot remove ' . $this->spell . ' from battle spells.';

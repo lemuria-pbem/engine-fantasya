@@ -8,9 +8,9 @@ use Lemuria\Engine\Message\Section;
 
 class PickPocketLeaveMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' will move on next week.';

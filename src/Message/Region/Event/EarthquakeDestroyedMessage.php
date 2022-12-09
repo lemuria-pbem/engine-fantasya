@@ -9,7 +9,7 @@ use Lemuria\Id;
 
 class EarthquakeDestroyedMessage extends AbstractRegionMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Id $construction;
 

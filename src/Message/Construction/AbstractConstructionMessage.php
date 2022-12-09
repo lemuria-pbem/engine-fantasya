@@ -8,6 +8,6 @@ use Lemuria\Model\Domain;
 abstract class AbstractConstructionMessage extends AbstractMessage
 {
 	public function Report(): Domain {
-		return Domain::CONSTRUCTION;
+		return Domain::Construction;
 	}
 }

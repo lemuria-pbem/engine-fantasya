@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class RawMaterialOnlyMessage extends RawMaterialOutputMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' can only produce ' . $this->output . ' with ' . $this->talent . '.';

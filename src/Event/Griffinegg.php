@@ -36,8 +36,8 @@ final class Griffinegg extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::UNIT) as $unit /* @var Unit $unit */) {
-			if ($unit->Party()->Type() === Type::PLAYER) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Unit) as $unit /* @var Unit $unit */) {
+			if ($unit->Party()->Type() === Type::Player) {
 				if ($unit->Inventory()[$this->egg]->Count()) {
 					if (randChance(self::CHANCE)) {
 						$this->hatchFor($unit);

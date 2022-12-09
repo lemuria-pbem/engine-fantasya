@@ -9,9 +9,9 @@ use Lemuria\Singleton;
 
 class FeeNoneMessage extends AbstractConstructionMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected Singleton $building;
 

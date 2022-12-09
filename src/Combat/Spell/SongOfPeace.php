@@ -23,10 +23,10 @@ class SongOfPeace extends AbstractBattleSpell
 			$calculus    = new Calculus($unit);
 			$level       = $calculus->knowledge(Magic::class)->Level();
 			$gradePoints = $grade * self::POINTS * $level;
-			$gradePoints = $this->castOnCombatants($this->victim[BattleRow::FRONT->value], $gradePoints);
-			$gradePoints = $this->castOnCombatants($this->victim[BattleRow::BACK->value], $gradePoints);
-			$gradePoints = $this->castOnCombatants($this->victim[BattleRow::BYSTANDER->value], $gradePoints);
-			$this->castOnCombatants($this->victim[BattleRow::REFUGEE->value], $gradePoints);
+			$gradePoints = $this->castOnCombatants($this->victim[BattleRow::Front->value], $gradePoints);
+			$gradePoints = $this->castOnCombatants($this->victim[BattleRow::Back->value], $gradePoints);
+			$gradePoints = $this->castOnCombatants($this->victim[BattleRow::Bystander->value], $gradePoints);
+			$this->castOnCombatants($this->victim[BattleRow::Refugee->value], $gradePoints);
 		}
 		return $grade;
 	}

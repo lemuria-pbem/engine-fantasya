@@ -9,9 +9,9 @@ use Lemuria\Id;
 
 class EnterPortFullMessage extends AbstractVesselMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::MOVEMENT;
+	protected Section $section = Section::Movement;
 
 	protected Id $port;
 

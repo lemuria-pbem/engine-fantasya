@@ -9,9 +9,9 @@ use Lemuria\Id;
 
 class AnnouncementToUnitMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::MAIL;
+	protected Section $section = Section::Mail;
 
 	protected Id $target;
 

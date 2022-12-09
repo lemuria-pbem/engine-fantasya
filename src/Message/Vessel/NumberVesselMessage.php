@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class NumberVesselMessage extends AbstractVesselMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Id $oldId;
 

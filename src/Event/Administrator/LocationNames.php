@@ -28,7 +28,7 @@ final class LocationNames extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
 			$landscape = $this->dictionary->get('landscape.' . getClass($region->Landscape()));
 			if ($region->Name() !== $landscape . ' ' . $region->Id()) {
 				Lemuria::Log()->debug('Region ' . $region . ' already has a good name.');

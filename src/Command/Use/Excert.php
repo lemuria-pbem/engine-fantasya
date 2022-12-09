@@ -18,6 +18,6 @@ final class Excert extends UnitCommand implements Operator
 	use OperateTrait;
 
 	protected function run(): void {
-		$this->parseOperate(Practice::APPLY)?->apply();
+		$this->parseOperate(Practice::Apply)?->apply();
 	}
 }

@@ -29,8 +29,8 @@ final class Take extends UnitCommand implements Operator
 			$this->message(TakeNoCompositionMessage::class)->s($this->composition)->p($id);
 			return;
 		}
-		if ($composition->supports(Practice::TAKE)) {
-			$this->getOperate(Practice::TAKE)->take();
+		if ($composition->supports(Practice::Take)) {
+			$this->getOperate(Practice::Take)->take();
 		} else {
 			$this->message(TakeUnsupportedMessage::class)->e($this->unicum)->s($this->unicum->Composition());
 		}

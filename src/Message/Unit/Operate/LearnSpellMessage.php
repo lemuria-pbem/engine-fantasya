@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class LearnSpellMessage extends LearnSpellAlreadyMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' learns the spell ' . $this->spell . '.';

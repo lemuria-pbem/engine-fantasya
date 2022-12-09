@@ -8,7 +8,7 @@ use Lemuria\Item;
 
 class PopulationGrowthMessage extends AbstractRegionMessage
 {
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected Item $peasants;
 

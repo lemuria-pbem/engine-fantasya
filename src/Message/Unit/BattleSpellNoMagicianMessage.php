@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class BattleSpellNoMagicianMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is not a magician and cannot cast any combat spells.';

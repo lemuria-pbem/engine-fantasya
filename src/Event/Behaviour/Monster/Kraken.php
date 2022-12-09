@@ -10,9 +10,9 @@ use Lemuria\Engine\Fantasya\Event\Act\Roam;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Event\Behaviour\AbstractBehaviour;
 use Lemuria\Engine\Fantasya\Event\Reproduction;
-use Lemuria\Engine\Fantasya\Factory\Model\Season;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Calendar\Season;
 use Lemuria\Model\Fantasya\Fleet;
 use Lemuria\Model\Fantasya\Ship\Caravel;
 use Lemuria\Model\Fantasya\Ship\Dragonship;
@@ -40,7 +40,7 @@ class Kraken extends AbstractBehaviour
 	 */
 	public function Reproduction(): Reproduction {
 		$reproduction = parent::Reproduction();
-		if (Lemuria::Calendar()->Season() !== Season::WINTER) {
+		if (Lemuria::Calendar()->Season() !== Season::Winter) {
 			$calculus = new Calculus($this->unit);
 			$kinsmen  = $calculus->getKinsmen()->add($this->unit);
 			if ($kinsmen->Size() >= 2) {

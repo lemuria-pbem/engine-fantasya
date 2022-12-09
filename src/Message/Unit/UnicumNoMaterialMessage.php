@@ -9,9 +9,9 @@ use Lemuria\Singleton;
 
 class UnicumNoMaterialMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected Singleton $composition;
 

@@ -11,7 +11,7 @@ class BestowMessage extends AbstractUnitMessage
 {
 	public final const UNICUM = 'unicum';
 
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Id $unit;
 

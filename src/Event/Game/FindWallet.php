@@ -21,9 +21,9 @@ final class FindWallet extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
-	public const UNIT = 'unit';
+	public final const UNIT = 'unit';
 
-	public const SILVER = 'silver';
+	public final const SILVER = 'silver';
 
 	private Unit $unit;
 

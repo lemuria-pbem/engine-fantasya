@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class CastNoMagicianMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot cast spells, it has no experience in Magic.';

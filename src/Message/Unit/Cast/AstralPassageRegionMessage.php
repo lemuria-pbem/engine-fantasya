@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class AstralPassageRegionMessage extends AbstractCastMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Id $target;
 

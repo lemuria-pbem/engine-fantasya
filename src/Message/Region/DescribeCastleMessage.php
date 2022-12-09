@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class DescribeCastleMessage extends AbstractRegionMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Id $owner;
 

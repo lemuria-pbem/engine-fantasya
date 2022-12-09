@@ -7,5 +7,5 @@ use Lemuria\Engine\Message\Result;
 
 abstract class AbstractApplyMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 }

@@ -8,7 +8,7 @@ use Lemuria\Singleton;
 
 class PotionEffectContinuesMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected Singleton $potion;
 

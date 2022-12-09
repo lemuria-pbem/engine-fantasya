@@ -23,6 +23,6 @@ final class Operate extends UnitCommand implements Activity, Operator
 	protected bool $preventDefault = true;
 
 	protected function run(): void {
-		$this->parseOperate(Practice::APPLY)?->apply();
+		$this->parseOperate(Practice::Apply)?->apply();
 	}
 }

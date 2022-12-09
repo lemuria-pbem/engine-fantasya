@@ -10,7 +10,7 @@ abstract class AbstractContinentEffect extends AbstractEffect
 	private ?Continent $continent = null;
 
 	public function Catalog(): Domain {
-		return Domain::CONTINENT;
+		return Domain::Continent;
 	}
 
 	public function Continent(): Continent {

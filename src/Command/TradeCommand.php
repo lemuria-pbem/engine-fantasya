@@ -63,7 +63,7 @@ abstract class TradeCommand extends UnitCommand
 
 		$isRepeat = $this->unit->Party()->Presettings()->IsRepeat();
 		$trade    = new Trade();
-		$trade->setId(Lemuria::Catalog()->nextId(Domain::TRADE));
+		$trade->setId(Lemuria::Catalog()->nextId(Domain::Trade));
 		return $trade->setGoods($goods)->setPrice($price)->setIsRepeat($isRepeat);
 	}
 

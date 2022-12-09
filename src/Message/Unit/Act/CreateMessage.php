@@ -8,9 +8,9 @@ use Lemuria\Engine\Message\Section;
 
 class CreateMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has been spawned.';

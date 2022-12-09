@@ -8,13 +8,13 @@ use Lemuria\Engine\Message\Section;
 
 class TaxDemandMessage extends AbstractUnitMessage
 {
-	public const COLLECTORS = 'collectors';
+	public final const COLLECTORS = 'collectors';
 
-	public const RATE = 'rate';
+	public final const RATE = 'rate';
 
-	protected Result $result = Result::DEBUG;
+	protected Result $result = Result::Debug;
 
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected int $collectors;
 

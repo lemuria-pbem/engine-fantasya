@@ -8,7 +8,7 @@ use Lemuria\Singleton;
 
 class LoseAllMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Singleton $commodity;
 

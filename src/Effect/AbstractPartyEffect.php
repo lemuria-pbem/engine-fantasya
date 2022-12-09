@@ -10,7 +10,7 @@ abstract class AbstractPartyEffect extends AbstractEffect
 	private ?Party $party = null;
 
 	public function Catalog(): Domain {
-		return Domain::PARTY;
+		return Domain::Party;
 	}
 
 	public function Party(): Party {

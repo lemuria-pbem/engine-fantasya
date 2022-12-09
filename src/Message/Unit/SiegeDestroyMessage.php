@@ -10,9 +10,9 @@ use Lemuria\Id;
 
 class SiegeDestroyMessage extends AbstractRegionMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
-	protected Section $section = Section::BATTLE;
+	protected Section $section = Section::Battle;
 
 	protected Id $construction;
 

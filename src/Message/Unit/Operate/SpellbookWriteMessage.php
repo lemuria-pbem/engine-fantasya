@@ -11,7 +11,7 @@ class SpellbookWriteMessage extends ScrollWriteNothingMessage
 {
 	public final const SPELL = 'spell';
 
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Singleton $spell;
 

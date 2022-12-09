@@ -8,7 +8,7 @@ use Lemuria\Item;
 
 class SupportPayMessage extends AbstractUnitMessage
 {
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected Item $support;
 

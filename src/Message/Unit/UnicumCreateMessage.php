@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class UnicumCreateMessage extends UnicumNoMaterialMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Id $unicum;
 

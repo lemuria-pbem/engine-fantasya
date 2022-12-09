@@ -20,7 +20,7 @@ final class ContinentUpheaval extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::PARTY) as $party /* @var Party $party */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
 			$this->message(ContinentUpheavalMessage::class, $party);
 		}
 	}

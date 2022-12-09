@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class ScrollEmptyMessage extends ScrollWriteNothingMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'The ' . $this->composition . ' ' . $this->id . ' contains no spell to learn.';

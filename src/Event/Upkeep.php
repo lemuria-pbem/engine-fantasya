@@ -84,7 +84,7 @@ final class Upkeep extends AbstractEvent
 
 	private function pay(): void {
 		$unmaintained = new Estate();
-		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
 			$unmaintained->clear();
 			/** @var Construction $construction */
 			foreach ($region->Estate() as $construction) {

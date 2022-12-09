@@ -9,7 +9,7 @@ use Lemuria\Item;
 
 class PotionGiftMessage extends AbstractPartyMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected Id $unit;
 

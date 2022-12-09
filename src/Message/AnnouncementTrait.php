@@ -14,8 +14,8 @@ trait AnnouncementTrait
 	protected string $message;
 
 	public function __construct() {
-		$this->result  = Result::EVENT;
-		$this->section = Section::MAIL;
+		$this->result  = Result::Event;
+		$this->section = Section::Mail;
 	}
 
 	public function Recipient(): string {

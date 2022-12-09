@@ -8,9 +8,9 @@ use Lemuria\Engine\Message\Section;
 
 class RecruitMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected int $size;
 

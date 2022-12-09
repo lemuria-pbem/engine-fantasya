@@ -52,9 +52,9 @@ final class PopulateContinent extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
-	public const CONTINENT = 'continent';
+	public final const CONTINENT = 'continent';
 
-	public const CHANCES = 'changes';
+	public final const CHANCES = 'changes';
 
 	private const LANDSCAPE = [
 		Bear::class => Forest::class,
@@ -125,7 +125,7 @@ final class PopulateContinent extends AbstractEvent
 	}
 
 	protected function initialize(): void {
-		$monsters  = Party::get(Spawn::getPartyId(Type::MONSTER));
+		$monsters  = Party::get(Spawn::getPartyId(Type::Monster));
 		//$zombies   = Party::get(Id::fromId(Spawn::ZOMBIES)); //TODO 8.2
 		$zombies   = $monsters;
 		$continent = Continent::get(new Id($this->getOption(self::CONTINENT, 'int')));

@@ -56,7 +56,7 @@ final class Attack extends UnitCommand
 
 	protected function initialize(): void {
 		parent::initialize();
-		if ($this->unit->BattleRow() <= BattleRow::BYSTANDER) {
+		if ($this->unit->BattleRow() <= BattleRow::Bystander) {
 			$this->message(AttackNotFightingMessage::class);
 			return;
 		}
@@ -139,7 +139,7 @@ final class Attack extends UnitCommand
 	private function addAttackFromMessage(Unit $unit): void {
 		$id    = $unit->Id()->Id();
 		$party = $this->unit->Party();
-		if ($party->Type() === Type::PLAYER) {
+		if ($party->Type() === Type::Player) {
 			if (!self::isAttacked($id, $party->Id()->Id())) {
 				$this->message(AttackFromMessage::class, $unit)->e($party);
 			}
@@ -166,7 +166,7 @@ final class Attack extends UnitCommand
 			$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
 			return false;
 		}
-		$isMonsterCombat = $we->Type() === Type::MONSTER && $party->Type() === Type::MONSTER;
+		$isMonsterCombat = $we->Type() === Type::Monster && $party->Type() === Type::Monster;
 		if (!$isMonsterCombat && !$this->checkVisibility($this->unit, $unit)) {
 			$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
 			return false;

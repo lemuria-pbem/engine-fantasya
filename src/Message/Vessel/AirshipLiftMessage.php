@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class AirshipLiftMessage extends AbstractVesselMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::MOVEMENT;
+	protected Section $section = Section::Movement;
 
 	protected function create(): string {
 		return 'Vessel ' . $this->id . ' lifts up in the air to sail over the land.';

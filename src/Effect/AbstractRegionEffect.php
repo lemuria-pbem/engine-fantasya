@@ -10,7 +10,7 @@ abstract class AbstractRegionEffect extends AbstractEffect
 	private ?Region $region = null;
 
 	public function Catalog(): Domain {
-		return Domain::LOCATION;
+		return Domain::Location;
 	}
 
 	public function Region(): Region {

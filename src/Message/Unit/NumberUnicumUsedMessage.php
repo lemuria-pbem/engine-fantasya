@@ -10,7 +10,7 @@ class NumberUnicumUsedMessage extends AbstractUnitMessage
 {
 	public final const NEW_ID = 'newId';
 
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Id $oldId;
 

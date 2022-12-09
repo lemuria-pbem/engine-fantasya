@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class FarsightUnknownMessage extends AbstractCastMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Id $region;
 

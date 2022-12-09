@@ -110,7 +110,7 @@ class LemuriaOrders implements Orders, Reassignment
 	}
 
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
-		if ($identifiable->Catalog() === Domain::UNIT) {
+		if ($identifiable->Catalog() === Domain::Unit) {
 			$this->replace($oldId->Id(), $identifiable->Id()->Id(), $this->current);
 			$this->replace($oldId->Id(), $identifiable->Id()->Id(), $this->default);
 			$this->replaceInDefaults($oldId, $identifiable->Id());
@@ -118,7 +118,7 @@ class LemuriaOrders implements Orders, Reassignment
 	}
 
 	public function remove(Identifiable $identifiable): void {
-		if ($identifiable->Catalog() === Domain::UNIT) {
+		if ($identifiable->Catalog() === Domain::Unit) {
 			$id = $identifiable->Id()->Id();
 			unset($this->current[$id]);
 			unset($this->default[$id]);

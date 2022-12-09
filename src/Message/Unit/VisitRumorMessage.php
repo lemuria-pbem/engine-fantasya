@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Result;
 
 class VisitRumorMessage extends VisitNoRumorMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected string $rumor;
 

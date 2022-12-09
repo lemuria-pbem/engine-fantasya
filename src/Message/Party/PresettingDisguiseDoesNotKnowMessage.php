@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class PresettingDisguiseDoesNotKnowMessage extends PresettingDisguisePartyMessage
 {
-	protected Result $result = Result::DEBUG;
+	protected Result $result = Result::Debug;
 
 	protected function create(): string {
 		return 'We do not know party ' . $this->party . ' for disguising.';

@@ -8,7 +8,7 @@ use Lemuria\Engine\Message\Result;
 
 class PickPocketCaughtMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected string $thief;
 

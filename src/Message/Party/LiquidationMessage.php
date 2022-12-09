@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class LiquidationMessage extends AbstractPartyMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Id $unit;
 

@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class SignpostDecayMessage extends AbstractRegionMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected string $name;
 

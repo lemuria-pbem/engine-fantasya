@@ -115,12 +115,12 @@ final class Griffinegg extends AllocationCommand implements Activity
 			$unit = $effect->Griffins();
 		} else {
 			$unit = new Unit();
-			$unit->setId(Lemuria::Catalog()->nextId(Domain::UNIT));
+			$unit->setId(Lemuria::Catalog()->nextId(Domain::Unit));
 			$unit->setName($griffins->Count() > 1 ? 'Greife' : 'Greif');
 			/** @var Race $griffin */
 			$griffin = $griffins->Commodity();
 			$effect->setGriffins($unit->setRace($griffin)->setSize($griffins->Count()));
-			$party = Party::get(Spawn::getPartyId(Type::MONSTER));
+			$party = Party::get(Spawn::getPartyId(Type::Monster));
 			$party->People()->add($unit);
 			$region->Residents()->add($unit);
 			$unit->Inventory()->add(new Quantity($this->griffinegg, $eggs));

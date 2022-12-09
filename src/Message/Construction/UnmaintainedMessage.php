@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class UnmaintainedMessage extends AbstractConstructionMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected function create(): string {
 		return 'Construction ' . $this->id . ' cannot be used as it was not maintained.';

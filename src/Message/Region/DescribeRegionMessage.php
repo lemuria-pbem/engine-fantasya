@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class DescribeRegionMessage extends AbstractRegionMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected function create(): string {
 		return 'Region ' . $this->id . ' now has a new description.';

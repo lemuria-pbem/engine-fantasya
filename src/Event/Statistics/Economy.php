@@ -26,8 +26,8 @@ final class Economy extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::PARTY) as $party /* @var Party $party */) {
-			if ($party->Type() === Type::PLAYER) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
+			if ($party->Type() === Type::Player) {
 				$this->placeMetrics(Subject::MaterialPool, $party);
 
 				$census = new Census($party);

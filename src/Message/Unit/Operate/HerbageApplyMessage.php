@@ -7,7 +7,7 @@ use Lemuria\Id;
 
 class HerbageApplyMessage extends HerbageApplyAllMessage
 {
-	public const REGION = 'region';
+	public final const REGION = 'region';
 
 	protected Id $region;
 

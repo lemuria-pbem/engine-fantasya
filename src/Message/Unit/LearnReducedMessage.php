@@ -10,7 +10,7 @@ class LearnReducedMessage extends LearnProgressMessage
 {
 	public final const SHIP = 'ship';
 
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Singleton $ship;
 

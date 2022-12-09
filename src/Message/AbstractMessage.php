@@ -17,9 +17,9 @@ abstract class AbstractMessage implements MessageType
 {
 	use SingletonTrait;
 
-	protected Result $result = Result::DEBUG;
+	protected Result $result = Result::Debug;
 
-	protected Section $section = Section::EVENT;
+	protected Section $section = Section::Event;
 
 	protected Id $id;
 

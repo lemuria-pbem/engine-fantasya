@@ -30,11 +30,11 @@ final class BrokenCarriage extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
-	public const PARTY = 'party';
+	public final const PARTY = 'party';
 
-	public const REGION = 'region';
+	public final const REGION = 'region';
 
-	public const CARGO = 'cargo';
+	public final const CARGO = 'cargo';
 
 	private const NAME = 'Abgerissener Ork';
 
@@ -93,7 +93,7 @@ final class BrokenCarriage extends AbstractEvent
 	private function createOrc(): Unit {
 		$unit = new Unit();
 		$race = self::createRace(Orc::class);
-		$unit->setId(Lemuria::Catalog()->nextId(Domain::UNIT));
+		$unit->setId(Lemuria::Catalog()->nextId(Domain::Unit));
 		$unit->setSize(1)->setRace($race)->setHealth(self::HEALTH)->setDisguise();
 		$unit->setName(self::NAME)->setDescription(self::DESCRIPTION);
 		Party::get(Spawn::getPartyId(Type::NPC))->People()->add($unit);

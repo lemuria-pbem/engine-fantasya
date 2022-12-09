@@ -10,7 +10,7 @@ class AcceptNoFeeReceivedMessage extends AcceptNoFeeMessage
 {
 	public final const UNIT = 'unit';
 
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected Id $unit;
 

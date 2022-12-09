@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class NameMonumentOnceMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::ERROR;
+	protected Section $section = Section::Error;
 
 	protected function create(): string {
 		return 'A monument cannot be renamed.';

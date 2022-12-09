@@ -24,7 +24,7 @@ final class InciteMonster extends AbstractCast
 		$aura    = $this->cast->Aura();
 		$monster = $this->cast->Target();
 		if ($aura > 0 && $monster) {
-			if ($monster->Party()->Type() === Type::MONSTER) {
+			if ($monster->Party()->Type() === Type::Monster) {
 				$enemies = $this->getEnemies($unit, $monster);
 				if (empty($enemies)) {
 					$this->message(InciteMonsterNoEnemiesMessage::class, $unit);

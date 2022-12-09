@@ -8,7 +8,7 @@ use Lemuria\Singleton;
 
 class GrowthMessage extends AbstractRegionMessage
 {
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected int $trees;
 

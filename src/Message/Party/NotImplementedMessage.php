@@ -8,9 +8,9 @@ use Lemuria\Engine\Message\Section;
 
 class NotImplementedMessage extends AbstractPartyMessage
 {
-	protected Result $result = Result::ERROR;
+	protected Result $result = Result::Error;
 
-	protected Section $section = Section::ERROR;
+	protected Section $section = Section::Error;
 
 	protected string $command;
 

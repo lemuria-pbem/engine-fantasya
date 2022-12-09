@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class FounderEffectMessage extends AbstractVesselMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected function create(): string {
 		return 'Vessel ' . $this->id . ' is too heavy and will take damage if excess payload is not thrown overboard.';

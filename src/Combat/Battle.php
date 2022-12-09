@@ -338,7 +338,7 @@ class Battle
 			$unit  = $heirs->random();
 			$party = $unit->Party();
 			$type  = $party->Type();
-			if ($type === Type::PLAYER) {
+			if ($type === Type::Player) {
 				if ($party->Loot()->wants($quantity->Commodity())) {
 					$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
 					Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
@@ -347,7 +347,7 @@ class Battle
 					$this->battlefieldRemains->add($quantity);
 					Lemuria::Log()->debug($unit . ' scorns loot ' . $quantity . ', added to battlefield remains.');
 				}
-			} elseif ($type === Type::MONSTER) {
+			} elseif ($type === Type::Monster) {
 				$race = $unit->Race();
 				if ($race instanceof Monster) {
 					$commodity = $quantity->Commodity();
@@ -367,7 +367,7 @@ class Battle
 		foreach ($armies as $army /* @var Army $army */) {
 			foreach ($army->Trophies() as $quantity /* @var Quantity $quantity */) {
 				$unit = $heirs->random();
-				if ($unit->Party()->Type() === Type::PLAYER) {
+				if ($unit->Party()->Type() === Type::Player) {
 					$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
 					// Lemuria::Log()->debug($unit . ' takes trophies: ' . $quantity);
 					BattleLog::getInstance()->add(new TakeTrophiesMessage($unit, $quantity));
@@ -431,7 +431,7 @@ class Battle
 	private function initMonsters(): void {
 		$score  = Lemuria::Score();
 		$effect = new VanishEffect(State::getInstance());
-		$party  = Party::get(Spawn::getPartyId(Type::MONSTER));
+		$party  = Party::get(Spawn::getPartyId(Type::Monster));
 		foreach ($this->intelligence->getUnits($party) as $monster /* @var Unit $monster */) {
 			$existing = $score->find($effect->setUnit($monster));
 			if ($existing instanceof VanishEffect) {

@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class RoamStayMessage extends RoamMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' must stay in region ' . $this->region . '.';

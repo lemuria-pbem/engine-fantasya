@@ -52,7 +52,7 @@ class Combat
 {
 	use BuilderTrait;
 
-	public const ROW_NAME = [Rank::REFUGEE => 'refugees', Rank::BYSTANDER => 'bystanders', Rank::BACK => 'back', Rank::FRONT => 'front'];
+	public final const ROW_NAME = [Rank::REFUGEE => 'refugees', Rank::BYSTANDER => 'bystanders', Rank::BACK => 'back', Rank::FRONT => 'front'];
 
 	protected const OVERRUN = 3.0;
 
@@ -92,8 +92,8 @@ class Combat
 	public static function getBattleRow(Unit $unit): BattleRow {
 		$battleRow = $unit->BattleRow();
 		return match ($battleRow) {
-			BattleRow::DEFENSIVE                      => BattleRow::BACK,
-			BattleRow::CAREFUL, BattleRow::AGGRESSIVE => BattleRow::FRONT,
+			BattleRow::Defensive                      => BattleRow::Back,
+			BattleRow::Careful, BattleRow::Aggressive => BattleRow::Front,
 			default                                   => $battleRow
 		};
 	}
@@ -399,7 +399,7 @@ class Combat
 			$unit = $combatant->Unit();
 			$size = $combatant->Size();
 			if ($size <= $additional) {
-				$front->add($combatant->setBattleRow(BattleRow::FRONT));
+				$front->add($combatant->setBattleRow(BattleRow::Front));
 				unset($rank[$i]);
 				$additional -= $size;
 				$who         = $isAttacker ? 'Attacker' : 'Defender';
@@ -666,7 +666,7 @@ class Combat
 			foreach ($combatants as $c => $combatant /* @var Combatant $combatant */) {
 				$size               = $combatant->Size();
 				$combatant->hasCast = false;
-				$createZombies      = $combatant->Unit()->Party()->Type() !== Type::MONSTER;
+				$createZombies      = $combatant->Unit()->Party()->Type() !== Type::Monster;
 				foreach ($combatant->fighters as $f => $fighter) {
 					if ($fighter->health <= 0) {
 						if ($fighter->potion instanceof HealingPotion) {

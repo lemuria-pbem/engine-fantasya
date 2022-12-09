@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class LoseEmptyMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Empty unit ' . $this->id . ' cannot be dismissed.';

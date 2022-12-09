@@ -9,9 +9,9 @@ use Lemuria\Id;
 
 class RepeatMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected Id $trade;
 

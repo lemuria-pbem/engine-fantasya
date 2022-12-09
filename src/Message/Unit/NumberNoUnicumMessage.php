@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class NumberNoUnicumMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Id $unicum;
 

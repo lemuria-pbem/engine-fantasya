@@ -29,8 +29,8 @@ final class Devastate extends UnitCommand implements Operator
 			$this->message(DevastateNoCompositionMessage::class)->s($this->composition)->p($id);
 			return;
 		}
-		if ($composition->supports(Practice::DESTROY)) {
-			$this->getOperate(Practice::DESTROY)->destroy();
+		if ($composition->supports(Practice::Destroy)) {
+			$this->getOperate(Practice::Destroy)->destroy();
 		} else {
 			$this->message(DevastateUnsupportedMessage::class)->e($this->unicum)->s($this->unicum->Composition());
 		}

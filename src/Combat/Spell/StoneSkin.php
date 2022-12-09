@@ -24,10 +24,10 @@ class StoneSkin extends AbstractBattleSpell
 			$spell    = $this->grade->Spell()->Difficulty();
 			$fighters = (int)floor($grade * $level / $spell);
 
-			$fighters = $this->featureFighters($this->caster[BattleRow::FRONT->value], $fighters, Feature::StoneSkin);
-			$fighters = $this->featureFighters($this->caster[BattleRow::BACK->value], $fighters, Feature::StoneSkin);
-			$fighters = $this->featureFighters($this->caster[BattleRow::BYSTANDER->value], $fighters, Feature::StoneSkin);
-			$this->featureFighters($this->caster[BattleRow::REFUGEE->value], $fighters, Feature::StoneSkin);
+			$fighters = $this->featureFighters($this->caster[BattleRow::Front->value], $fighters, Feature::StoneSkin);
+			$fighters = $this->featureFighters($this->caster[BattleRow::Back->value], $fighters, Feature::StoneSkin);
+			$fighters = $this->featureFighters($this->caster[BattleRow::Bystander->value], $fighters, Feature::StoneSkin);
+			$this->featureFighters($this->caster[BattleRow::Refugee->value], $fighters, Feature::StoneSkin);
 		}
 		return $grade;
 	}

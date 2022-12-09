@@ -38,10 +38,10 @@ class RustyMist extends AbstractBattleSpell
 	public function cast(Unit $unit): int {
 		$grade = parent::cast($unit);
 		if ($grade > 0) {
-			$this->rustCombatants($this->victim[BattleRow::FRONT->value], $grade);
-			$this->rustCombatants($this->victim[BattleRow::BACK->value], $grade);
-			$this->rustCombatants($this->caster[BattleRow::FRONT->value], $grade);
-			$this->rustCombatants($this->caster[BattleRow::BACK->value], $grade);
+			$this->rustCombatants($this->victim[BattleRow::Front->value], $grade);
+			$this->rustCombatants($this->victim[BattleRow::Back->value], $grade);
+			$this->rustCombatants($this->caster[BattleRow::Front->value], $grade);
+			$this->rustCombatants($this->caster[BattleRow::Back->value], $grade);
 		}
 		return $grade;
 	}

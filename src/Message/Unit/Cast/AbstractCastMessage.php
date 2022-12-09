@@ -8,7 +8,7 @@ use Lemuria\Engine\Message\Section;
 
 abstract class AbstractCastMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
-	protected Section $section = Section::MAGIC;
+	protected Section $section = Section::Magic;
 }

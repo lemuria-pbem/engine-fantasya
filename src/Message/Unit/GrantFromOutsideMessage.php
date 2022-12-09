@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class GrantFromOutsideMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has no command it could grant.';

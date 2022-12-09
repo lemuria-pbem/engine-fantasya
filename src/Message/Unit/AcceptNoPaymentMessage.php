@@ -8,7 +8,7 @@ use Lemuria\Singleton;
 
 class AcceptNoPaymentMessage extends AcceptOfferRemovedMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Singleton $payment;
 

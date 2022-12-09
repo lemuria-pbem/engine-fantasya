@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class SpellbookWriteAlreadyMessage extends SpellbookWriteMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot write the spell ' . $this->spell . ' in the ' . $this->composition . ' ' . $this->unicum . ' a second time.';

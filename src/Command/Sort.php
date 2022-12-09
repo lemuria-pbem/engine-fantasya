@@ -98,7 +98,7 @@ final class Sort extends UnitCommand
 	private function sortAsFirst(): void {
 		$residents = $this->unit->Region()->Residents();
 		if ($residents->count() > 1) {
-			$residents->reorder($this->unit, $residents->getFirst(), Reorder::BEFORE);
+			$residents->reorder($this->unit, $residents->getFirst(), Reorder::Before);
 			$this->message(SortFirstMessage::class);
 		}
 
@@ -107,7 +107,7 @@ final class Sort extends UnitCommand
 			$inhabitants = $construction->Inhabitants();
 			$owner       = $inhabitants->Owner();
 			if ($this->unit !== $owner) {
-				$inhabitants->reorder($this->unit, $owner, Reorder::AFTER);
+				$inhabitants->reorder($this->unit, $owner, Reorder::After);
 				$this->message(SortAfterOwnerMessage::class);
 			}
 		}
@@ -117,7 +117,7 @@ final class Sort extends UnitCommand
 			$passengers = $vessel->Passengers();
 			$captain    = $passengers->Owner();
 			if ($this->unit !== $captain) {
-				$passengers->reorder($this->unit, $captain, Reorder::AFTER);
+				$passengers->reorder($this->unit, $captain, Reorder::After);
 				$this->message(SortAfterCaptainMessage::class);
 			}
 		}
@@ -129,7 +129,7 @@ final class Sort extends UnitCommand
 	private function sortAsLast(): void {
 		$residents = $this->unit->Region()->Residents();
 		if ($residents->count() > 1) {
-			$residents->reorder($this->unit, $residents->getLast(), Reorder::AFTER);
+			$residents->reorder($this->unit, $residents->getLast(), Reorder::After);
 			$this->message(SortLastMessage::class);
 		}
 
@@ -137,7 +137,7 @@ final class Sort extends UnitCommand
 		if ($construction) {
 			$inhabitants = $construction->Inhabitants();
 			if ($this->unit !== $inhabitants->Owner()) {
-				$inhabitants->reorder($this->unit, $inhabitants->getLast(), Reorder::AFTER);
+				$inhabitants->reorder($this->unit, $inhabitants->getLast(), Reorder::After);
 				$this->message(SortLastInConstructionMessage::class);
 			}
 		}
@@ -146,7 +146,7 @@ final class Sort extends UnitCommand
 		if ($vessel) {
 			$passengers = $vessel->Passengers();
 			if ($this->unit !== $passengers->Owner()) {
-				$passengers->reorder($this->unit, $passengers->getLast(), Reorder::AFTER);
+				$passengers->reorder($this->unit, $passengers->getLast(), Reorder::After);
 				$this->message(SortLastInVesselMessage::class);
 			}
 		}
@@ -155,7 +155,7 @@ final class Sort extends UnitCommand
 	private function sortBefore(Unit $unit): void {
 		if ($this->checkIdentity($unit)) {
 			$residents = $this->unit->Region()->Residents();
-			$residents->reorder($this->unit, $unit, Reorder::BEFORE);
+			$residents->reorder($this->unit, $unit, Reorder::Before);
 		}
 		$this->message(SortBeforeMessage::class)->e($unit);
 
@@ -165,10 +165,10 @@ final class Sort extends UnitCommand
 			$owner       = $inhabitants->Owner();
 			if ($this->unit !== $owner) {
 				if ($unit === $owner) {
-					$inhabitants->reorder($this->unit, $owner, Reorder::AFTER);
+					$inhabitants->reorder($this->unit, $owner, Reorder::After);
 					$this->message(SortAfterOwnerMessage::class);
 				} else {
-					$inhabitants->reorder($this->unit, $unit, Reorder::BEFORE);
+					$inhabitants->reorder($this->unit, $unit, Reorder::Before);
 					$this->message(SortBeforeInConstructionMessage::class)->e($unit);
 				}
 			}
@@ -180,10 +180,10 @@ final class Sort extends UnitCommand
 			$captain    = $passengers->Owner();
 			if ($this->unit !== $captain) {
 				if ($unit === $captain) {
-					$passengers->reorder($this->unit, $captain, Reorder::AFTER);
+					$passengers->reorder($this->unit, $captain, Reorder::After);
 					$this->message(SortAfterCaptainMessage::class);
 				} else {
-					$passengers->reorder($this->unit, $unit, Reorder::BEFORE);
+					$passengers->reorder($this->unit, $unit, Reorder::Before);
 					$this->message(SortBeforeInVesselMessage::class)->e($unit);
 				}
 			}
@@ -193,14 +193,14 @@ final class Sort extends UnitCommand
 	private function sortAfter(Unit $unit): void {
 		if ($this->checkIdentity($unit)) {
 			$residents = $this->unit->Region()->Residents();
-			$residents->reorder($this->unit, $unit, Reorder::AFTER);
+			$residents->reorder($this->unit, $unit, Reorder::After);
 			$this->message(SortAfterMessage::class)->e($unit);
 
 			$construction = $this->unit->Construction();
 			if ($construction && $unit->Construction() === $construction) {
 				$inhabitants = $construction->Inhabitants();
 				if ($this->unit !== $inhabitants->Owner()) {
-					$inhabitants->reorder($this->unit, $unit, Reorder::AFTER);
+					$inhabitants->reorder($this->unit, $unit, Reorder::After);
 					$this->message(SortAfterInConstructionMessage::class)->e($unit);
 				}
 			}
@@ -209,7 +209,7 @@ final class Sort extends UnitCommand
 			if ($vessel && $unit->Vessel() === $vessel) {
 				$passengers = $vessel->Passengers();
 				if ($this->unit !== $passengers->Owner()) {
-					$passengers->reorder($this->unit, $unit, Reorder::AFTER);
+					$passengers->reorder($this->unit, $unit, Reorder::After);
 					$this->message(SortAfterInVesselMessage::class)->e($unit);
 				}
 			}
@@ -228,7 +228,7 @@ final class Sort extends UnitCommand
 				$owner       = $inhabitants->Owner();
 				if ($this->unit !== $owner) {
 					if ($unit === $owner) {
-						$inhabitants->reorder($this->unit, $owner, Reorder::AFTER);
+						$inhabitants->reorder($this->unit, $owner, Reorder::After);
 						$this->message(SortAfterOwnerMessage::class);
 					} else {
 						$inhabitants->reorder($this->unit, $unit);
@@ -243,7 +243,7 @@ final class Sort extends UnitCommand
 				$captain    = $passengers->Owner();
 				if ($this->unit !== $captain) {
 					if ($unit === $captain) {
-						$passengers->reorder($this->unit, $captain, Reorder::AFTER);
+						$passengers->reorder($this->unit, $captain, Reorder::After);
 						$this->message(SortAfterCaptainMessage::class);
 					} else {
 						$passengers->reorder($this->unit, $unit);

@@ -9,11 +9,11 @@ use Lemuria\Item;
 
 class BuyMessage extends AbstractUnitMessage
 {
-	public const PAYMENT = 'payment';
+	public final const PAYMENT = 'payment';
 
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected Item $goods;
 

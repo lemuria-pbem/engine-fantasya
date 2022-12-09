@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Result;
 
 class LearnProgressMessage extends LearnNotMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected int $experience;
 

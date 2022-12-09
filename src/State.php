@@ -107,7 +107,7 @@ final class State implements Reassignment
 		$old = $oldId->Id();
 		$new = $identifiable->Id()->Id();
 		switch ($identifiable->Catalog()) {
-			case Domain::UNIT :
+			case Domain::Unit :
 				$this->protocol[$new] = $this->protocol[$old];
 				unset($this->protocol[$old]);
 				if (isset($this->travelRoute[$old])) {
@@ -119,7 +119,7 @@ final class State implements Reassignment
 					unset($this->workload[$old]);
 				}
 				break;
-			case Domain::LOCATION :
+			case Domain::Location :
 				$this->allocation[$new] = $this->allocation[$old];
 				unset($this->allocation[$old]);
 				$this->availability[$new] = $this->availability[$old];
@@ -131,7 +131,7 @@ final class State implements Reassignment
 				$this->intelligence[$new] = $this->intelligence[$old];
 				unset($this->intelligence[$old]);
 				break;
-			case Domain::PARTY :
+			case Domain::Party :
 				if (isset($this->unitMapper[$old])) {
 					$this->unitMapper[$new] = $this->unitMapper[$old];
 					unset($this->unitMapper[$old]);
@@ -144,22 +144,22 @@ final class State implements Reassignment
 	public function remove(Identifiable $identifiable): void {
 		$old = $identifiable->Id()->Id();
 		switch ($identifiable->Catalog()) {
-			case Domain::UNIT :
+			case Domain::Unit :
 				unset($this->protocol[$old]);
 				unset($this->travelRoute[$old]);
 				unset($this->workload[$old]);
 				break;
-			case Domain::LOCATION :
+			case Domain::Location :
 				unset($this->allocation[$old]);
 				unset($this->availability[$old]);
 				unset($this->campaigns[$old]);
 				unset($this->commerce[$old]);
 				unset($this->intelligence[$old]);
 				break;
-			case Domain::PARTY :
+			case Domain::Party :
 				unset($this->unitMapper[$old]);
 				break;
-			case Domain::TRADE :
+			case Domain::Trade :
 				/** @var Trade $identifiable */
 				$this->closedTrades->add($identifiable);
 			default :

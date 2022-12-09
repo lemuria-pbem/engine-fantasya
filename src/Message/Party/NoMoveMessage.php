@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class NoMoveMessage extends AbstractPartyMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'The server has not received orders for party ' . $this->id . ' from you this turn.';

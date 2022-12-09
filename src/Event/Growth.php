@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Factory\Model\Season;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Message\Region\GrowthMessage;
 use Lemuria\Engine\Fantasya\Priority;
@@ -10,6 +9,7 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
+use Lemuria\Model\Calendar\Season;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Wood;
@@ -43,7 +43,7 @@ final class Growth extends AbstractEvent
 	}
 
 	protected function initialize(): void {
-		$this->isSeason = Lemuria::Calendar()->Season() === Season::SPRING;
+		$this->isSeason = Lemuria::Calendar()->Season() === Season::Spring;
 	}
 
 	protected function run(): void {
@@ -51,7 +51,7 @@ final class Growth extends AbstractEvent
 			Lemuria::Log()->debug('We have no tree growth season.');
 		}
 
-		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region/* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
 			$landscape = $region->Landscape();
 			$resources = $region->Resources();
 			$trees     = $resources[$this->tree]->Count();

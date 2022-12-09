@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class UpkeepPayOnlyMessage extends UpkeepPayMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' can only pay ' . $this->upkeep . ' upkeep for construction ' . $this->construction . '.';

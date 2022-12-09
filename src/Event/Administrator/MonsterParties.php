@@ -43,7 +43,7 @@ final class MonsterParties extends AbstractEvent
 	protected function run(): void {
 		foreach (self::IDS as $id => $race) {
 			$id = Id::fromId($id);
-			if (!Lemuria::Catalog()->has($id, Domain::PARTY)) {
+			if (!Lemuria::Catalog()->has($id, Domain::Party)) {
 				Lemuria::Log()->debug('Monster party ' . $id . ' does not exist.');
 				continue;
 			}

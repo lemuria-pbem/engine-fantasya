@@ -10,7 +10,7 @@ use Lemuria\Singleton;
 
 abstract class AbstractOperateMessage extends AbstractUnitMessage
 {
-	protected Section $section = Section::MAGIC;
+	protected Section $section = Section::Magic;
 
 	protected Id $unicum;
 

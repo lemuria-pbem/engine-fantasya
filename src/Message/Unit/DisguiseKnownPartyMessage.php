@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class DisguiseKnownPartyMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Id $party;
 

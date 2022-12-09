@@ -8,7 +8,7 @@ use Lemuria\Item;
 
 class SmashRegainMessage extends AbstractUnitMessage
 {
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected Item $regain;
 

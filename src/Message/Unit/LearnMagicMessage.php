@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Section;
 
 class LearnMagicMessage extends AbstractUnitMessage
 {
-	protected Section $section = Section::STUDY;
+	protected Section $section = Section::Study;
 
 	protected int $aura;
 

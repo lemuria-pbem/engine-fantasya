@@ -8,9 +8,9 @@ use Lemuria\Engine\Message\Section;
 
 class PresettingBattleRowMessage extends AbstractPartyMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::BATTLE;
+	protected Section $section = Section::Battle;
 
 	protected int $position;
 

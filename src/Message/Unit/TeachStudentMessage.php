@@ -9,9 +9,9 @@ use Lemuria\Id;
 
 class TeachStudentMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::STUDY;
+	protected Section $section = Section::Study;
 
 	protected Id $student;
 

@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class FavorableWindsNoMessage extends AbstractCastMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is not on a ship to cast Favorable Winds.';

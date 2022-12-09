@@ -24,7 +24,7 @@ final class Fight extends UnitCommand
 		}
 
 		$this->unit->setBattleRow($battleRow);
-		if (in_array($battleRow, [BattleRow::BYSTANDER, BattleRow::REFUGEE])) {
+		if (in_array($battleRow, [BattleRow::Bystander, BattleRow::Refugee])) {
 			if ($this->unit->IsGuarding()) {
 				$this->unit->setIsGuarding(false);
 				$this->message(FightUnguardMessage::class);

@@ -6,7 +6,7 @@ use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 
 class AcquaintanceTellDisguiseMessage extends AcquaintanceTellMessage
 {
-	public const DISGUISED = 'disguised';
+	public final const DISGUISED = 'disguised';
 
 	protected string $disguised;
 

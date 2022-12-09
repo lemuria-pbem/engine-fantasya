@@ -5,8 +5,8 @@ namespace Lemuria\Engine\Fantasya\Event\Behaviour\Monster;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Event\Behaviour\AbstractBehaviour;
 use Lemuria\Engine\Fantasya\Event\Reproduction;
-use Lemuria\Engine\Fantasya\Factory\Model\Season;
 use Lemuria\Lemuria;
+use Lemuria\Model\Calendar\Season;
 
 class Wolf extends AbstractBehaviour
 {
@@ -26,7 +26,7 @@ class Wolf extends AbstractBehaviour
 		$calendar     = Lemuria::Calendar();
 		$size         = $this->unit->Size();
 
-		if ($calendar->Season() === Season::SPRING && $calendar->Week() === 1) {
+		if ($calendar->Season() === Season::Spring && $calendar->Week() === 1) {
 			if ($size >= self::GROW) {
 				$this->unit->setSize($size + rand(self::GROW_MIN, self::GROW_MAX));
 				Lemuria::Log()->debug($this->unit . ' will reproduce this round.');
@@ -48,7 +48,7 @@ class Wolf extends AbstractBehaviour
 	 * In Winter a group of wolves will attack smaller units.
 	 */
 	public function prepare(): Behaviour {
-		if (!$this->hasRoamEffect() && Lemuria::Calendar()->Season() === Season::WINTER) {
+		if (!$this->hasRoamEffect() && Lemuria::Calendar()->Season() === Season::Winter) {
 			return $this->prey()->attack();
 		}
 		return $this;

@@ -9,9 +9,9 @@ use Lemuria\Id;
 
 class ExploreNothingMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected Id $region;
 

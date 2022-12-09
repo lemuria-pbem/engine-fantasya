@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class FollowNoMoveMessage extends FollowMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' follows unit ' . $this->leader . ' which has not moved.';

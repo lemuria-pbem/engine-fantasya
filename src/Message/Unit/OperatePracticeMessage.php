@@ -9,7 +9,7 @@ class OperatePracticeMessage extends OperateNoCompositionMessage
 {
 	public final const PRACTICE = 'practice';
 
-	protected Result $result = Result::DEBUG;
+	protected Result $result = Result::Debug;
 
 	protected string $practice;
 

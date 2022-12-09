@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class PresettingRepeatMessage extends AbstractPartyMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected function create(): string {
 		return 'New trades will repeat by default.';

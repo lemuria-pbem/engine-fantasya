@@ -6,5 +6,5 @@ use Lemuria\Engine\Message\Result;
 
 class LeaveVesselDebugMessage extends LeaveVesselMessage
 {
-	protected Result $result = Result::DEBUG;
+	protected Result $result = Result::Debug;
 }

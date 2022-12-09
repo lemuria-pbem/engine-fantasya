@@ -8,7 +8,7 @@ use Lemuria\Item;
 
 class UnicumMaterialMessage extends UnicumNoMaterialMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Item $material;
 

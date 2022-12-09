@@ -8,9 +8,9 @@ use Lemuria\Engine\Message\Section;
 
 class WaterOfLifeNoWoodMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::MAGIC;
+	protected Section $section = Section::Magic;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has no wood to grow saplings with Water of Life.';

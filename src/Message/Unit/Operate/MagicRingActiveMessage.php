@@ -11,9 +11,9 @@ use Lemuria\Singleton;
 
 class MagicRingActiveMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::MAGIC;
+	protected Section $section = Section::Magic;
 
 	protected Id $unicum;
 

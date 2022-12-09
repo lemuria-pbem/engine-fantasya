@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class GriffineggAttackedMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
-	protected Section $section = Section::BATTLE;
+	protected Section $section = Section::Battle;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is attacked by the griffins after attempting to steal eggs.';

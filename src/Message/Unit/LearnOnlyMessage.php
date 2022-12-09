@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class LearnOnlyMessage extends LearnSilverMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' can only pay ' . $this->silver . ' silver to learn ' . $this->talent . '.';

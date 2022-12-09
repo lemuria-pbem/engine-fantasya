@@ -21,7 +21,7 @@ final class Overcrowded extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::CONSTRUCTION) as $construction /* @var Construction $construction */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Construction) as $construction /* @var Construction $construction */) {
 			if ($construction->getFreeSpace() > 0) {
 				continue;
 			}

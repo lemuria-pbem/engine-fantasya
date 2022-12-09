@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class OriginUntoldMessage extends AbstractPartyMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Id $party;
 

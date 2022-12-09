@@ -9,7 +9,7 @@ use Lemuria\Singleton;
 
 class ObtainmentMessage extends AbstractPartyMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected Id $unit;
 

@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Section;
 
 class RecruitKnowledgeMessage extends AbstractUnitMessage
 {
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected int $percent;
 

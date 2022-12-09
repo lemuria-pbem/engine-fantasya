@@ -83,7 +83,7 @@ final class Vessel extends AbstractProduct
 						$this->message(VesselBuildMessage::class)->e($vessel)->p($yield);
 					}
 				} else {
-					$id     = Lemuria::Catalog()->nextId(Domain::VESSEL);
+					$id     = Lemuria::Catalog()->nextId(Domain::Vessel);
 					$vessel = new VesselModel();
 					$vessel->setName('Schiff ' . $id)->setId($id);
 					$vessel->Passengers()->add($this->unit);

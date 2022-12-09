@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class ContactMessage extends AbstractUnitMessage
 {
-	protected Section $section = Section::MAIL;
+	protected Section $section = Section::Mail;
 
 	protected Id $unit;
 

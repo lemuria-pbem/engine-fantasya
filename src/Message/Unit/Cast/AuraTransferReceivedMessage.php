@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Result;
 
 class AuraTransferReceivedMessage extends AuraTransferFailedMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected int $aura;
 

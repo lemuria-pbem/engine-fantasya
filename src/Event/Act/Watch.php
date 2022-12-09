@@ -24,7 +24,7 @@ class Watch implements Act
 
 	public function act(): Watch {
 		$this->isGuarding = $this->unit->IsGuarding();
-		if (!$this->isGuarding && $this->unit->BattleRow() >= BattleRow::DEFENSIVE) {
+		if (!$this->isGuarding && $this->unit->BattleRow() >= BattleRow::Defensive) {
 			$this->unit->setIsGuarding(true);
 			$this->message(GuardMessage::class, $this->unit);
 		}

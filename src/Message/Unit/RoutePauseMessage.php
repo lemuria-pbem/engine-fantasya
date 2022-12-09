@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class RoutePauseMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::MOVEMENT;
+	protected Section $section = Section::Movement;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' paused the route this week.';

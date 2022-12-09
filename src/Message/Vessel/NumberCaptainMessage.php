@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class NumberCaptainMessage extends AbstractVesselMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Id $captain;
 

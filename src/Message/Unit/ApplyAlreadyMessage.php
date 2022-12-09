@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class ApplyAlreadyMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::MAGIC;
+	protected Section $section = Section::Magic;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot apply another potion.';

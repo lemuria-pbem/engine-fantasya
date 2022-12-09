@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class BrokenCarriageMessage extends AbstractRegionMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected function create(): string {
 		return 'A ragged orc on his wasted carriage is rumbling across the region, when suddenly he looses control ' .

@@ -787,43 +787,43 @@ class CommandFactory
 	];
 
 	protected array $domains = [
-		'Burg'      => Domain::CONSTRUCTION,
-		'Einheit'   => Domain::UNIT,
-		'Kontinent' => Domain::CONTINENT,
-		'Gebaeude'  => Domain::CONSTRUCTION,
-		'Gebäude'   => Domain::CONSTRUCTION,
-		'Partei'    => Domain::PARTY,
-		'Region'    => Domain::LOCATION,
-		'Schiff'    => Domain::VESSEL
+		'Burg'      => Domain::Construction,
+		'Einheit'   => Domain::Unit,
+		'Kontinent' => Domain::Continent,
+		'Gebaeude'  => Domain::Construction,
+		'Gebäude'   => Domain::Construction,
+		'Partei'    => Domain::Party,
+		'Region'    => Domain::Location,
+		'Schiff'    => Domain::Vessel
 	];
 
 	protected array $directions = [
-		'E'          => Direction::EAST,
-		'N'          => Direction::NORTH,
-		'NE'         => Direction::NORTHEAST,
-		'NW'         => Direction::NORTHWEST,
-		'S'          => Direction::SOUTH,
-		'SE'         => Direction::SOUTHEAST,
-		'SW'         => Direction::SOUTHWEST,
-		'W'          => Direction::WEST,
-		'East'       => Direction::EAST,
-		'NO'         => Direction::NORTHEAST,
-		'Norden'     => Direction::NORTH,
-		'Nordosten'  => Direction::NORTHEAST,
-		'Nordwesten' => Direction::NORTHWEST,
-		'North'      => Direction::NORTH,
-		'Northeast'  => Direction::NORTHEAST,
-		'Northwest'  => Direction::NORTHWEST,
-		'O'          => Direction::EAST,
-		'Osten'      => Direction::EAST,
-		'SO'         => Direction::SOUTHEAST,
-		'South'      => Direction::SOUTH,
-		'Southeast'  => Direction::SOUTHEAST,
-		'Southwest'  => Direction::SOUTHWEST,
-		'Süden'      => Direction::SOUTH,
-		'Südosten'   => Direction::SOUTHEAST,
-		'Südwesten'  => Direction::SOUTHWEST,
-		'Westen'     => Direction::WEST
+		'E'          => Direction::East,
+		'N'          => Direction::North,
+		'NE'         => Direction::Northeast,
+		'NW'         => Direction::Northwest,
+		'S'          => Direction::South,
+		'SE'         => Direction::Southeast,
+		'SW'         => Direction::Southwest,
+		'W'          => Direction::West,
+		'East'       => Direction::East,
+		'NO'         => Direction::Northeast,
+		'Norden'     => Direction::North,
+		'Nordosten'  => Direction::Northeast,
+		'Nordwesten' => Direction::Northwest,
+		'North'      => Direction::North,
+		'Northeast'  => Direction::Northeast,
+		'Northwest'  => Direction::Northwest,
+		'O'          => Direction::East,
+		'Osten'      => Direction::East,
+		'SO'         => Direction::Southeast,
+		'South'      => Direction::South,
+		'Southeast'  => Direction::Southeast,
+		'Southwest'  => Direction::Southwest,
+		'Süden'      => Direction::South,
+		'Südosten'   => Direction::Southeast,
+		'Südwesten'  => Direction::Southwest,
+		'Westen'     => Direction::West
 	];
 
 	protected final const APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Apply\\';
@@ -1071,13 +1071,13 @@ class CommandFactory
 
 	public function battleRow(string $position): BattleRow {
 		return match(strtolower($position)) {
-			'aggressiv'                   => BattleRow::AGGRESSIVE,
-			'defensiv'                    => BattleRow::DEFENSIVE,
-			'fliehe', 'fliehen', 'flucht' => BattleRow::REFUGEE,
-			'hinten'                      => BattleRow::BACK,
-			'nicht'                       => BattleRow::BYSTANDER,
-			'', 'vorn', 'vorne'           => BattleRow::FRONT,
-			'vorsichtig'                  => BattleRow::CAREFUL,
+			'aggressiv'                   => BattleRow::Aggressive,
+			'defensiv'                    => BattleRow::Defensive,
+			'fliehe', 'fliehen', 'flucht' => BattleRow::Refugee,
+			'hinten'                      => BattleRow::Back,
+			'nicht'                       => BattleRow::Bystander,
+			'', 'vorn', 'vorne'           => BattleRow::Front,
+			'vorsichtig'                  => BattleRow::Careful,
 			default                       => throw new UnknownCommandException()
 		};
 	}

@@ -9,9 +9,9 @@ use Lemuria\Id;
 
 class AttackMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::BATTLE;
+	protected Section $section = Section::Battle;
 
 	protected Id $unit;
 

@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class AstralPassageNoConstructionMessage extends AstralPassageRegionMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot find the construction ' . $this->target . '.';

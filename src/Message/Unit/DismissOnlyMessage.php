@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class DismissOnlyMessage extends DismissMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' can only donate ' . $this->gift . ' to the peasants.';

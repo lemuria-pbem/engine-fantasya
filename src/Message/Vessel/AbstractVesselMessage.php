@@ -8,6 +8,6 @@ use Lemuria\Model\Domain;
 abstract class AbstractVesselMessage extends AbstractMessage
 {
 	public function Report(): Domain {
-		return Domain::VESSEL;
+		return Domain::Vessel;
 	}
 }

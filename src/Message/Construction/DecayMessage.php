@@ -7,7 +7,7 @@ use Lemuria\Singleton;
 
 class DecayMessage extends AbstractConstructionMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected Singleton $building;
 

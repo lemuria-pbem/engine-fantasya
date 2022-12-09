@@ -124,9 +124,9 @@ final class Temp extends UnitCommand implements Immediate
 			}
 		}
 
-		if ($id && !Lemuria::Catalog()->has($id, Domain::UNIT)) {
+		if ($id && !Lemuria::Catalog()->has($id, Domain::Unit)) {
 			return $id;
 		}
-		return Lemuria::Catalog()->nextId(Domain::UNIT);
+		return Lemuria::Catalog()->nextId(Domain::Unit);
 	}
 }

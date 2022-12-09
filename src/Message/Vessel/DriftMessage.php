@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Result;
 
 class DriftMessage extends AbstractVesselMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected string $direction;
 

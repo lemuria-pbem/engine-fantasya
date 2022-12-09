@@ -13,7 +13,7 @@ class HorseBlissNoneMessage extends AbstractUnitMessage
 {
 	use BuilderTrait;
 
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Singleton $animal;
 

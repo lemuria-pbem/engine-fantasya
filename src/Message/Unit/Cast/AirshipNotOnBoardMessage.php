@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class AirshipNotOnBoardMessage extends AbstractCastMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' must be a passenger on a vessel to cast Airship.';

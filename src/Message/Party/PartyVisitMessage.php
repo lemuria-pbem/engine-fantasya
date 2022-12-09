@@ -9,7 +9,7 @@ class PartyVisitMessage extends AbstractPartyMessage
 {
 	protected int $regions;
 
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected function create(): string {
 		return 'Party ' . $this->id . ' visits ' . $this->regions . ' regions.';

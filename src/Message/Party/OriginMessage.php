@@ -8,7 +8,7 @@ use Lemuria\Model\Fantasya\Region;
 
 class OriginMessage extends OriginNotVisitedMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected string $name;
 

@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class AirshipCannotLiftMessage extends AbstractCastMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Id $vessel;
 

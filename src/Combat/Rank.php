@@ -2,15 +2,17 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
+use Lemuria\Model\Fantasya\Combat\BattleRow;
+
 class Rank implements \ArrayAccess, \Countable, \Iterator
 {
-	public final const FRONT = 5;
+	public final const FRONT = BattleRow::Front->value;
 
-	public final const BACK = 3;
+	public final const BACK = BattleRow::Back->value;
 
-	public final const BYSTANDER = 1;
+	public final const BYSTANDER = BattleRow::Bystander->value;
 
-	public final const REFUGEE = 0;
+	public final const REFUGEE = BattleRow::Refugee->value;
 
 	/**
 	 * @var Combatant[]

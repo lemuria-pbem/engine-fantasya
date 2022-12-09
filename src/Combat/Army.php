@@ -20,13 +20,13 @@ use Lemuria\Model\Fantasya\Unit;
  */
 class Army
 {
-	public const NEUTRAL = 0;
+	public final const NEUTRAL = 0;
 
-	public const ALLY = 1;
+	public final const ALLY = 1;
 
-	public const DEFENDER = 2;
+	public final const DEFENDER = 2;
 
-	public const ATTACKER = 3;
+	public final const ATTACKER = 3;
 
 	private static int $nextId = 0;
 

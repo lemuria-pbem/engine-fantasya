@@ -45,14 +45,14 @@ class Create implements Act
 	];
 
 	protected const BATTLE_ROW = [
-		''                    => BattleRow::FRONT,
-		AirElemental::class   => BattleRow::AGGRESSIVE,
-		EarthElemental::class => BattleRow::AGGRESSIVE,
-		FireElemental::class  => BattleRow::AGGRESSIVE,
-		Goblin::class         => BattleRow::CAREFUL,
-		Skeleton::class       => BattleRow::AGGRESSIVE,
-		WaterElemental::class => BattleRow::AGGRESSIVE,
-		Zombie::class         => BattleRow::AGGRESSIVE
+		''                    => BattleRow::Front,
+		AirElemental::class   => BattleRow::Aggressive,
+		EarthElemental::class => BattleRow::Aggressive,
+		FireElemental::class  => BattleRow::Aggressive,
+		Goblin::class         => BattleRow::Careful,
+		Skeleton::class       => BattleRow::Aggressive,
+		WaterElemental::class => BattleRow::Aggressive,
+		Zombie::class         => BattleRow::Aggressive
 	];
 
 	protected const IS_SENSING = [
@@ -90,7 +90,7 @@ class Create implements Act
 	public function act(): Create {
 		foreach ($this->gangs as $gang) {
 			$unit = new Unit();
-			$unit->setId(Lemuria::Catalog()->nextId(Domain::UNIT));
+			$unit->setId(Lemuria::Catalog()->nextId(Domain::Unit));
 			$unit->setRace($gang->Race())->setSize($gang->Count());
 			$this->party->People()->add($unit);
 			$this->region->Residents()->add($unit);

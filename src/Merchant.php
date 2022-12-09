@@ -12,9 +12,9 @@ use Lemuria\Model\Fantasya\Unit;
  */
 interface Merchant extends Command
 {
-	public const BUY = true;
+	public final const BUY = true;
 
-	public const SELL = !self::BUY;
+	public final const SELL = !self::BUY;
 
 	/**
 	 * Get the type of trade.

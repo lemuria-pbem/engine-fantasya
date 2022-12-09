@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class GriffineggChanceMessage extends GriffineggOnlyMessage
 {
-	public const CHANCE = 'chance';
+	public final const CHANCE = 'chance';
 
-	protected Section $section = Section::PRODUCTION;
+	protected Section $section = Section::Production;
 
 	protected float $chance;
 

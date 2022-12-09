@@ -9,9 +9,9 @@ use Lemuria\Id;
 
 class ContactNotFoundMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::MAIL;
+	protected Section $section = Section::Mail;
 
 	protected Id $unit;
 

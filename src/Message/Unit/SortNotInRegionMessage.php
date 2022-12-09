@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class SortNotInRegionMessage extends SortAfterMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is not in the same region as unit ' . $this->other . '.';

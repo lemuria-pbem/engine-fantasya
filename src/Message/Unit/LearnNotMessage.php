@@ -9,9 +9,9 @@ use Lemuria\Singleton;
 
 class LearnNotMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::STUDY;
+	protected Section $section = Section::Study;
 
 	protected Singleton $talent;
 

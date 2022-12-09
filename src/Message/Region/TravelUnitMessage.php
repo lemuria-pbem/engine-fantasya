@@ -8,9 +8,9 @@ use Lemuria\Engine\Message\Section;
 
 class TravelUnitMessage extends AbstractRegionMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
-	protected Section $section = Section::MOVEMENT;
+	protected Section $section = Section::Movement;
 
 	protected string $unit;
 

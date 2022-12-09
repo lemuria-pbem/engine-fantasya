@@ -9,7 +9,7 @@ use Lemuria\Item;
 
 class ConstructionLootMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected Id $environment;
 

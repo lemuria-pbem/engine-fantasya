@@ -8,9 +8,9 @@ use Lemuria\Engine\Message\Section;
 
 class TravelVesselMessage extends AbstractRegionMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
-	protected Section $section = Section::MOVEMENT;
+	protected Section $section = Section::Movement;
 
 	protected string $vessel;
 

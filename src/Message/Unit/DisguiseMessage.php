@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class DisguiseMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::SUCCESS;
+	protected Result $result = Result::Success;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' will camouflage.';

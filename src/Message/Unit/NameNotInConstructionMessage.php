@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class NameNotInConstructionMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is not in any construction and thus cannot rename it.';

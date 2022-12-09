@@ -8,9 +8,9 @@ use Lemuria\Id;
 
 class TravelGuardedMessage extends TravelRegionMessage
 {
-	public const GUARD = 'guard';
+	public final const GUARD = 'guard';
 
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected Id $guard;
 

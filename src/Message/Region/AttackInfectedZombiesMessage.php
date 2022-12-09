@@ -9,7 +9,7 @@ use function Lemuria\getClass;
 
 class AttackInfectedZombiesMessage extends AbstractRegionMessage
 {
-	protected Result $result = Result::EVENT;
+	protected Result $result = Result::Event;
 
 	protected int $size;
 

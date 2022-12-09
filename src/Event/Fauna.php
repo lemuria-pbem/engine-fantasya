@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use function Lemuria\randChance;
-use Lemuria\Engine\Fantasya\Factory\Model\Season;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Factory\WorkplacesTrait;
 use Lemuria\Engine\Fantasya\Message\Region\FaunaGriffineggMessage;
@@ -16,6 +15,7 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
+use Lemuria\Model\Calendar\Season;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Camel;
@@ -53,10 +53,10 @@ final class Fauna extends AbstractEvent
 	];
 
 	private const SEASON = [
-		Camel::class    => [Season::FALL   => true, Season::WINTER => true],
-		Elephant::class => [Season::SPRING => true, Season::FALL   => true, Season::WINTER => true],
-		Griffin::class  => [Season::SPRING => true],
-		Horse::class    => [Season::SPRING => true, Season::SUMMER => true]
+		Camel::class    => [Season::Fall->value   => true, Season::Winter->value => true],
+		Elephant::class => [Season::Spring->value => true, Season::Fall->value   => true, Season::Winter->value => true],
+		Griffin::class  => [Season::Spring->value => true],
+		Horse::class    => [Season::Spring->value => true, Season::Summer->value => true]
 	];
 
 	private const BOOST = [Camel::class => 0.0, Elephant::class => 0.0, Griffin::class => 0.0, Horse::class => 4.0];
@@ -71,7 +71,7 @@ final class Fauna extends AbstractEvent
 
 	private Workplaces $workplaces;
 
-	private int $season;
+	private Season $season;
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::AFTER);
@@ -80,7 +80,7 @@ final class Fauna extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::LOCATION) as $region /* @var Region $region */) {
+		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
 			$landscape  = $region->Landscape();
 			$workplaces = $this->getAvailableWorkplaces($region) - $this->getCultivatedWorkplaces($region);
 			$available  = max(0, $workplaces);
@@ -97,7 +97,7 @@ final class Fauna extends AbstractEvent
 				$boostAnimals = $this->hasApplied(HorseBliss::class, $region) * HorseBliss::HORSES;
 				$boostRate    = min(1.0, $boostAnimals / $count);
 				if ($available > 0) {
-					if (isset(self::SEASON[$animal][$this->season])) {
+					if (isset(self::SEASON[$animal][$this->season->value])) {
 						$growth = (int)ceil((1.0 - $boostRate) * $rate * $count + $boost * $boostRate * $rate * $count);
 						if ($growth > 0) {
 							$quantity = new Quantity($commodity, $growth);

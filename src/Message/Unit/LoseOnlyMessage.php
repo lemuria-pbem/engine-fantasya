@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class LoseOnlyMessage extends LoseMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' can throw away ' . $this->quantity . ' only.';

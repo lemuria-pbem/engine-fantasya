@@ -6,7 +6,7 @@ use Lemuria\Engine\Message\Result;
 
 class RecruitLessMessage extends RecruitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' can recruit ' . $this->size . ' peasants only.';

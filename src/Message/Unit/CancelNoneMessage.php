@@ -8,9 +8,9 @@ use Lemuria\Engine\Message\Section;
 
 class CancelNoneMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::ECONOMY;
+	protected Section $section = Section::Economy;
 
 	protected string $trade;
 

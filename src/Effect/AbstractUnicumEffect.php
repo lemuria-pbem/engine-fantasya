@@ -10,7 +10,7 @@ abstract class AbstractUnicumEffect extends AbstractEffect
 	private ?Unicum $unicum = null;
 
 	public function Catalog(): Domain {
-		return Domain::UNICUM;
+		return Domain::Unicum;
 	}
 
 	public function Unicum(): Unicum {

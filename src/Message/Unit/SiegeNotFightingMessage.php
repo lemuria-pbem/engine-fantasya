@@ -7,9 +7,9 @@ use Lemuria\Engine\Message\Section;
 
 class SiegeNotFightingMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::FAILURE;
+	protected Result $result = Result::Failure;
 
-	protected Section $section = Section::BATTLE;
+	protected Section $section = Section::Battle;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' will not participate in any siege.';
