@@ -11,14 +11,14 @@
 		}
 	],
 	"version": "1.2.0",
-	"time": "2022-12-05",
+	"time": "2022-12-09",
 
 	"require": {
 		"php": "~8.2",
 		"ext-json": "~8.2",
 		"ext-mbstring": "~8.2",
-		"lemuria-pbem/lemuria": "~1.2.0|dev-feature/seaworld",
-		"lemuria-pbem/model-fantasya": "~1.2.0|dev-feature/seaworld",
+		"lemuria-pbem/lemuria": "dev-feature/seaworld",
+		"lemuria-pbem/model-fantasya": "dev-feature/seaworld",
 		"monolog/monolog": "~3.2"
 	},
 	"require-dev": {

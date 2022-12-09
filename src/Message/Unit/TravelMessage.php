@@ -4,7 +4,7 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 
 class TravelMessage extends AbstractUnitMessage
@@ -17,7 +17,7 @@ class TravelMessage extends AbstractUnitMessage
 		Capacity::WALK  => ['travels', 'reist']
 	];
 
-	protected string $level = Message::SUCCESS;
+	protected Result $result = Result::SUCCESS;
 
 	protected Section $section = Section::MOVEMENT;
 

@@ -17,7 +17,7 @@ use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Model\World\SortMode;
+use Lemuria\SortMode;
 
 /**
  * Helper methods for report generation.

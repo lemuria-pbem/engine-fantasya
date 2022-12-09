@@ -4,13 +4,13 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Region\AbstractRegionMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 
 class SiegeDestroyMessage extends AbstractRegionMessage
 {
-	protected string $level = Message::EVENT;
+	protected Result $result = Result::EVENT;
 
 	protected Section $section = Section::BATTLE;
 

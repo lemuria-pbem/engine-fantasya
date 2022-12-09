@@ -3,13 +3,20 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 class AssaultHitMessage extends AbstractMessage
 {
-	protected array $simpleParameters = ['attacker', 'damage', 'defender'];
+	private const ATTACKER = 'attacker';
+
+	private const DAMAGE = 'damage';
+
+	private const DEFENDER = 'defender';
+
+	protected array $simpleParameters = [self::ATTACKER, self::DAMAGE, self::DEFENDER];
 
 	public function __construct(protected ?string $attacker = null, protected ?string $defender = null,
-										protected ?int $damage = null) {
+		                        protected ?int $damage = null) {
 	}
 
 	public function getDebug(): string {
@@ -18,14 +25,14 @@ class AssaultHitMessage extends AbstractMessage
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->attacker = $data['attacker'];
-		$this->defender = $data['defender'];
-		$this->damage   = $data['damage'];
+		$this->attacker = $data[self::ATTACKER];
+		$this->defender = $data[self::DEFENDER];
+		$this->damage   = $data[self::DAMAGE];
 		return $this;
 	}
 
 	protected function getParameters(): array {
-		return ['attacker' => $this->attacker, 'defender' => $this->defender, 'damage' => $this->damage];
+		return [self::ATTACKER => $this->attacker, self::DEFENDER => $this->defender, self::DAMAGE => $this->damage];
 	}
 
 	protected function translate(string $template): string {
@@ -34,10 +41,10 @@ class AssaultHitMessage extends AbstractMessage
 		return str_replace('$hitpoint', $hitpoint, $message);
 	}
 
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'attacker', 'string');
-		$this->validate($data, 'defender', 'string');
-		$this->validate($data, 'damage', 'int');
+		$this->validate($data, self::ATTACKER, Validate::String);
+		$this->validate($data, self::DEFENDER, Validate::String);
+		$this->validate($data, self::DAMAGE, Validate::Int);
 	}
 }

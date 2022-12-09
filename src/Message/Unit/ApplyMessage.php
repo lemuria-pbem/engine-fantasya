@@ -3,13 +3,13 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Item;
 
 class ApplyMessage extends AbstractUnitMessage
 {
-	protected string $level = Message::SUCCESS;
+	protected Result $result = Result::SUCCESS;
 
 	protected Section $section = Section::MAGIC;
 

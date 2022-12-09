@@ -2,11 +2,11 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit\Cast;
 
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 
 class RingOfInvisibilityEnchantmentMessage extends AbstractCastMessage
 {
-	protected string $level = Message::SUCCESS;
+	protected Result $result = Result::SUCCESS;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has an enchanted Gold Ring and can create a Ring of Invisibility unicum now.';

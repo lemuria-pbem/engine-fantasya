@@ -11,9 +11,14 @@ use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class VanishEffect extends AbstractUnitEffect
 {
+	private const SUMMONER = 'summoner';
+
+	private const WEEKS = 'weeks';
+
 	private ?int $summoner = null;
 
 	private int $weeks = 1;
@@ -31,16 +36,16 @@ final class VanishEffect extends AbstractUnitEffect
 	}
 
 	public function serialize(): array {
-		$data = parent::serialize();
-		$data['summoner'] = $this->summoner;
-		$data['weeks']    = $this->weeks;
+		$data                 = parent::serialize();
+		$data[self::SUMMONER] = $this->summoner;
+		$data[self::WEEKS]    = $this->weeks;
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->summoner = $data['summoner'];
-		$this->weeks    = $data['weeks'];
+		$this->summoner = $data[self::SUMMONER];
+		$this->weeks    = $data[self::WEEKS];
 		return $this;
 	}
 
@@ -56,13 +61,12 @@ final class VanishEffect extends AbstractUnitEffect
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'summoner', '?int');
-		$this->validate($data, 'weeks', 'int');
+		$this->validate($data, self::SUMMONER, Validate::IntOrNull);
+		$this->validate($data, self::WEEKS, Validate::Int);
 	}
 
 	protected function run(): void {

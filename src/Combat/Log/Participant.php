@@ -5,10 +5,19 @@ namespace Lemuria\Engine\Fantasya\Combat\Log;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
+use Lemuria\Validate;
 
 final class Participant implements \Stringable, Serializable
 {
 	use SerializableTrait;
+
+	private const ID = 'id';
+
+	private const NAME = 'name';
+
+	private const COMBATANTS = 'combatants';
+
+	private const FIGHTERS = 'fighters';
 
 	public int $combatants;
 
@@ -29,22 +38,22 @@ final class Participant implements \Stringable, Serializable
 	}
 
 	public function serialize(): array {
-		return ['id'         => $this->unit->id->Id(), 'name'     => $this->unit->name,
-				'combatants' => $this->combatants,     'fighters' => $this->fighters];
+		return [self::ID         => $this->unit->id->Id(), self::NAME     => $this->unit->name,
+				self::COMBATANTS => $this->combatants,     self::FIGHTERS => $this->fighters];
 	}
 
 	public function unserialize(array $data): Serializable {
 		$this->validateSerializedData($data);
-		$this->unit       = Entity::create($data['id'], $data['name']);
-		$this->combatants = $data['combatants'];
-		$this->fighters   = $data['fighters'];
+		$this->unit       = Entity::create($data[self::ID], $data[self::NAME]);
+		$this->combatants = $data[self::COMBATANTS];
+		$this->fighters   = $data[self::FIGHTERS];
 		return $this;
 	}
 
-	protected function validateSerializedData(array &$data): void {
-		$this->validate($data, 'id', 'int');
-		$this->validate($data, 'name', 'string');
-		$this->validate($data, 'combatants', 'int');
-		$this->validate($data, 'fighters', 'int');
+	protected function validateSerializedData(array $data): void {
+		$this->validate($data, self::ID, Validate::Int);
+		$this->validate($data, self::NAME, Validate::String);
+		$this->validate($data, self::COMBATANTS, Validate::Int);
+		$this->validate($data, self::FIGHTERS, Validate::Int);
 	}
 }

@@ -4,7 +4,7 @@ namespace Lemuria\Engine\Fantasya\Message\Unit\Apply;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AbstractUnitMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Singleton;
@@ -13,7 +13,7 @@ class HorseBlissNoneMessage extends AbstractUnitMessage
 {
 	use BuilderTrait;
 
-	protected string $level = Message::FAILURE;
+	protected Result $result = Result::FAILURE;
 
 	protected Singleton $animal;
 

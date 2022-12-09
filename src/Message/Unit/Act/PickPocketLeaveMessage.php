@@ -3,12 +3,12 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit\Act;
 
 use Lemuria\Engine\Fantasya\Message\Unit\AbstractUnitMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 
 class PickPocketLeaveMessage extends AbstractUnitMessage
 {
-	protected string $level = Message::FAILURE;
+	protected Result $result = Result::FAILURE;
 
 	protected Section $section = Section::PRODUCTION;
 

@@ -18,6 +18,7 @@ use Lemuria\Model\Fantasya\Enchantment as EnchantmentModel;
 use Lemuria\Model\Fantasya\Spell\RingOfInvisibility;
 use Lemuria\Model\Fantasya\Wizardry;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class Enchantment extends AbstractUnitEffect
 {
@@ -31,6 +32,8 @@ final class Enchantment extends AbstractUnitEffect
 		RingOfInvisibility::class => RingOfInvisibilityComposition::class
 	];
 
+	private const ENCHANTMENTS = 'enchantments';
+
 	private Wizardry $enchantments;
 
 	public function __construct(State $state) {
@@ -43,24 +46,23 @@ final class Enchantment extends AbstractUnitEffect
 	}
 
 	public function serialize(): array {
-		$data = parent::serialize();
-		$data['enchantments'] = $this->enchantments->serialize();
+		$data                     = parent::serialize();
+		$data[self::ENCHANTMENTS] = $this->enchantments->serialize();
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->enchantments->unserialize($data['enchantments']);
+		$this->enchantments->unserialize($data[self::ENCHANTMENTS]);
 		return $this;
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'enchantments', 'array');
+		$this->validate($data, self::ENCHANTMENTS, Validate::Array);
 	}
 
 	protected function run(): void {

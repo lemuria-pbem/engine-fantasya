@@ -2,11 +2,11 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Party;
 
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 
 class NoMoveMessage extends AbstractPartyMessage
 {
-	protected string $level = Message::FAILURE;
+	protected Result $result = Result::FAILURE;
 
 	protected function create(): string {
 		return 'The server has not received orders for party ' . $this->id . ' from you this turn.';

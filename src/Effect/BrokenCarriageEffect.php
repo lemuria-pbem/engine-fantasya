@@ -8,9 +8,12 @@ use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class BrokenCarriageEffect extends AbstractPartyEffect
 {
+	private const UNIT = 'unit';
+
 	private ?Unit $unit = null;
 
 	public function __construct(State $state) {
@@ -22,14 +25,14 @@ final class BrokenCarriageEffect extends AbstractPartyEffect
 	}
 
 	public function serialize(): array {
-		$data = parent::serialize();
-		$data['unit'] = $this->unit->Id()->Id();
+		$data             = parent::serialize();
+		$data[self::UNIT] = $this->unit->Id()->Id();
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->unit = Unit::get(new Id($data['unit']));
+		$this->unit = Unit::get(new Id($data[self::UNIT]));
 		return $this;
 	}
 
@@ -39,12 +42,11 @@ final class BrokenCarriageEffect extends AbstractPartyEffect
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'unit', 'int');
+		$this->validate($data, self::UNIT, Validate::Int);
 	}
 
 	protected function run(): void {

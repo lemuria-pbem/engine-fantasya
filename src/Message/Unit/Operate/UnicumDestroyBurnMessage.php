@@ -4,14 +4,14 @@ namespace Lemuria\Engine\Fantasya\Message\Unit\Operate;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AbstractUnitMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 use Lemuria\Singleton;
 
 class UnicumDestroyBurnMessage extends AbstractUnitMessage
 {
-	protected string $level = Message::SUCCESS;
+	protected Result $result = Result::SUCCESS;
 
 	protected Section $section = Section::ECONOMY;
 

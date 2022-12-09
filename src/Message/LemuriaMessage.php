@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message;
 
-use Lemuria\Identifiable;
 use function Lemuria\getClass;
 use Lemuria\Singleton;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait as EngineBuilderTrait;
@@ -11,10 +10,12 @@ use Lemuria\Engine\Fantasya\Message\Exception\ItemNotSetException;
 use Lemuria\Engine\Fantasya\Message\Exception\ParameterNotSetException;
 use Lemuria\Engine\Fantasya\Message\Exception\SingletonNotSetException;
 use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Entity;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
+use Lemuria\Identifiable;
 use Lemuria\Item;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
@@ -22,12 +23,29 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait as ModelBuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
+use Lemuria\Validate;
 
 class LemuriaMessage implements Message
 {
 	use EngineBuilderTrait;
 	use ModelBuilderTrait;
 	use SerializableTrait;
+
+	private const ID = 'id';
+
+	private const TYPE = 'type';
+
+	private const ASSIGNEE = 'assignee';
+
+	private const NEW_ASSIGNEE = 'newAssignee';
+
+	private const ENTITIES = 'entities';
+
+	private const SINGLETONS = 'singletons';
+
+	private const ITEMS = 'items';
+
+	private const PARAMETERS = 'parameters';
 
 	private const ENTITY = 'e';
 
@@ -57,12 +75,12 @@ class LemuriaMessage implements Message
 		return $this->id;
 	}
 
-	public function Report(): Domain {
-		return $this->type->Report();
+	public function Result(): Result {
+		return $this->type->Result();
 	}
 
-	public function Level(): string {
-		return $this->type->Level();
+	public function Report(): Domain {
+		return $this->type->Report();
 	}
 
 	public function Assignee(): Id {
@@ -106,21 +124,21 @@ class LemuriaMessage implements Message
 	 * Get a plain data array of the model's data.
 	 */
 	public function serialize(): array {
-		$data = ['id' => $this->Id()->Id(), 'type' => getClass($this->type), 'assignee' => $this->assignee->Id()];
+		$data = [self::ID => $this->Id()->Id(), self::TYPE => getClass($this->type), self::ASSIGNEE => $this->assignee->Id()];
 		if ($this->newAssignee) {
-			$data['newAssignee'] = $this->newAssignee->Id();
+			$data[self::NEW_ASSIGNEE] = $this->newAssignee->Id();
 		}
 		if ($this->entities) {
-			$data['entities'] = $this->entities;
+			$data[self::ENTITIES] = $this->entities;
 		}
 		if ($this->singletons) {
-			$data['singletons'] = $this->singletons;
+			$data[self::SINGLETONS] = $this->singletons;
 		}
 		if ($this->items) {
-			$data['items'] = $this->items;
+			$data[self::ITEMS] = $this->items;
 		}
 		if ($this->parameters) {
-			$data['parameters'] = $this->parameters;
+			$data[self::PARAMETERS] = $this->parameters;
 		}
 		return $data;
 	}
@@ -130,23 +148,23 @@ class LemuriaMessage implements Message
 	 */
 	public function unserialize(array $data): Serializable {
 		$this->validateSerializedData($data);
-		if (isset($data['newAssignee'])) {
-			$this->newAssignee = new Id($data['newAssignee']);
+		if (isset($data[self::NEW_ASSIGNEE])) {
+			$this->newAssignee = new Id($data[self::NEW_ASSIGNEE]);
 		}
-		if (isset($data['entities'])) {
-			$this->entities = $data['entities'];
+		if (isset($data[self::ENTITIES])) {
+			$this->entities = $data[self::ENTITIES];
 		}
-		if (isset($data['singletons'])) {
-			$this->singletons = $data['singletons'];
+		if (isset($data[self::SINGLETONS])) {
+			$this->singletons = $data[self::SINGLETONS];
 		}
-		if (isset($data['items'])) {
-			$this->items = $data['items'];
+		if (isset($data[self::ITEMS])) {
+			$this->items = $data[self::ITEMS];
 		}
-		if (isset($data['parameters'])) {
-			$this->parameters = $data['parameters'];
+		if (isset($data[self::PARAMETERS])) {
+			$this->parameters = $data[self::PARAMETERS];
 		}
-		$message = self::createMessageType($data['type']);
-		$this->setType($message)->setAssignee(new Id($data['assignee']))->setId(new Id($data['id']));
+		$message = self::createMessageType($data[self::TYPE]);
+		$this->setType($message)->setAssignee(new Id($data[self::ASSIGNEE]))->setId(new Id($data[self::ID]));
 		return $this;
 	}
 
@@ -179,8 +197,8 @@ class LemuriaMessage implements Message
 	public function getEntities(): array {
 		$i        = 0;
 		$entities = [];
-		while (isset($this->entities['e' . ++$i])) {
-			$entities[] = $this->get('e' . $i);
+		while (isset($this->entities[self::ENTITY . ++$i])) {
+			$entities[] = $this->get(self::ENTITY . $i);
 		}
 		return $entities;
 	}
@@ -297,14 +315,14 @@ class LemuriaMessage implements Message
 	 *
 	 * @param array (string=>mixed) $data
 	 */
-	protected function validateSerializedData(array &$data): void {
-		$this->validate($data, 'id', 'int');
-		$this->validate($data, 'type', 'string');
-		$this->validate($data, 'assignee', 'int');
-		$this->validateIfExists($data, 'newAssignee', 'int');
-		$this->validateIfExists($data, 'entities', 'array');
-		$this->validateIfExists($data, 'singletons', 'array');
-		$this->validateIfExists($data, 'items', 'array');
-		$this->validateIfExists($data, 'parameters', 'array');
+	protected function validateSerializedData(array $data): void {
+		$this->validate($data, self::ID, Validate::Int);
+		$this->validate($data, self::TYPE, Validate::String);
+		$this->validate($data, self::ASSIGNEE, Validate::Int);
+		$this->validateIfExists($data, self::NEW_ASSIGNEE, Validate::Int);
+		$this->validateIfExists($data, self::ENTITIES, Validate::Array);
+		$this->validateIfExists($data, self::SINGLETONS, Validate::Array);
+		$this->validateIfExists($data, self::ITEMS, Validate::Array);
+		$this->validateIfExists($data, self::PARAMETERS, Validate::Array);
 	}
 }

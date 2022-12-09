@@ -3,10 +3,13 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 class BattleExhaustionMessage extends AbstractMessage
 {
-	protected array $simpleParameters = ['rounds'];
+	private const ROUNDS = 'rounds';
+
+	protected array $simpleParameters = [self::ROUNDS];
 
 	public function __construct(protected ?int $rounds = null) {
 	}
@@ -17,16 +20,16 @@ class BattleExhaustionMessage extends AbstractMessage
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->rounds = $data['round'];
+		$this->rounds = $data[self::ROUNDS];
 		return $this;
 	}
 
 	protected function getParameters(): array {
-		return ['rounds' => $this->rounds];
+		return [self::ROUNDS => $this->rounds];
 	}
 
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'rounds', 'int');
+		$this->validate($data, self::ROUNDS, Validate::Int);
 	}
 }

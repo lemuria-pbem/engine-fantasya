@@ -16,6 +16,7 @@ use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Location;
 use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
+use Lemuria\Validate;
 
 class BattleLog implements BattleModel
 {
@@ -23,6 +24,18 @@ class BattleLog implements BattleModel
 	use CountableTrait;
 	use IteratorTrait;
 	use SerializableTrait;
+
+	private const REGION = 'region';
+
+	private const COUNTER = 'counter';
+
+	private const PARTIES = 'parties';
+
+	private const REAL = 'real';
+
+	private const DISGUISE = 'disguise';
+
+	private const MESSAGES = 'messages';
 
 	private Region $region;
 
@@ -94,18 +107,21 @@ class BattleLog implements BattleModel
 		foreach ($this->log as $message) {
 			$messages[] = $message->serialize();
 		}
-		return ['region' => $this->region->Id()->Id(), 'counter' => $this->counter, 'parties' => $parties, 'messages' => $messages];
+		return [
+			self::REGION => $this->region->Id()->Id(), self::COUNTER => $this->counter,
+			self::PARTIES => $parties, self::MESSAGES => $messages
+		];
 	}
 
 	public function unserialize(array $data): Serializable {
 		$this->validateSerializedData($data);
-		$this->region  = Region::get(new Id($data['region']));
-		$this->counter = $data['counter'];
-		foreach ($data['parties'] as $id) {
+		$this->region  = Region::get(new Id($data[self::REGION]));
+		$this->counter = $data[self::COUNTER];
+		foreach ($data[self::PARTIES] as $id) {
 			$this->parties[] = $this->initParty($id);
 		}
 		$battleLogMessage = new LemuriaMessage();
-		foreach ($data['messages'] as $row) {
+		foreach ($data[self::MESSAGES] as $row) {
 			$message = $battleLogMessage->unserialize($row);
 			$message->unserialize($row);
 			$this->add($message);
@@ -122,22 +138,22 @@ class BattleLog implements BattleModel
 	/**
 	 * Check that a serialized data array is valid.
 	 *
-	 * @param array (string=>mixed) $data
+	 * @param array
 	 */
-	protected function validateSerializedData(array &$data): void {
-		$this->validate($data, 'region', 'int');
-		$this->validate($data, 'counter', 'int');
-		$this->validate($data, 'parties', 'array');
-		foreach ($data['parties'] as $id) {
+	protected function validateSerializedData(array $data): void {
+		$this->validate($data, self::REGION, Validate::Int);
+		$this->validate($data, self::COUNTER, Validate::Int);
+		$this->validate($data, self::PARTIES, Validate::Array);
+		foreach ($data[self::PARTIES] as $id) {
 			if (is_array($id)) {
-				$this->validate($id, 'real', 'int');
-				$this->validate($id, 'disguise', '?int');
+				$this->validate($id, self::REAL, Validate::Int);
+				$this->validate($id, self::DISGUISE, Validate::IntOrNull);
 			} elseif (!is_int($id)) {
 				throw new UnserializeException('Party ID must be an integer.');
 			}
 		}
-		$this->validate($data, 'messages', 'array');
-		foreach ($data['messages'] as $message) {
+		$this->validate($data, self::MESSAGES, Validate::Array);
+		foreach ($data[self::MESSAGES] as $message) {
 			if (!is_array($message)) {
 				throw new UnserializeException('Message must be an array.');
 			}
@@ -148,8 +164,8 @@ class BattleLog implements BattleModel
 		if (is_int($id)) {
 			return Party::get(new Id($id));
 		}
-		$party    = new DisguisedParty(Party::get(new Id($id['real'])));
-		$disguise = $id['disguise'];
+		$party    = new DisguisedParty(Party::get(new Id($id[self::REAL])));
+		$disguise = $id[self::DISGUISE];
 		if ($disguise) {
 			$party->setDisguise(Party::get(new Id($disguise)));
 		}
@@ -158,7 +174,7 @@ class BattleLog implements BattleModel
 
 	private function serializeParty(Party $party): int|array {
 		if ($party instanceof DisguisedParty) {
-			return ['real' => $party->Real()->Id()->Id(), 'disguise' => $party->Disguise()?->Id()->Id()];
+			return [self::REAL => $party->Real()->Id()->Id(), self::DISGUISE => $party->Disguise()?->Id()->Id()];
 		}
 		return $party->Id()->Id();
 	}

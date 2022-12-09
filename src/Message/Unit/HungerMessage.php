@@ -3,11 +3,11 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 
 class HungerMessage extends AbstractUnitMessage
 {
-	protected string $level = Message::DEBUG;
+	protected Result $result = Result::DEBUG;
 
 	protected float $health;
 

@@ -6,9 +6,12 @@ use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Combat;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 class CombatantWeaponMessage extends CombatantNoWeaponMessage
 {
+	private const WEAPON = 'weapon';
+
 	protected string $weapon;
 
 	public function __construct(?Combatant $combatant = null) {
@@ -20,7 +23,7 @@ class CombatantWeaponMessage extends CombatantNoWeaponMessage
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->weapon = $data['weapon'];
+		$this->weapon = $data[self::WEAPON];
 		return $this;
 	}
 
@@ -30,7 +33,7 @@ class CombatantWeaponMessage extends CombatantNoWeaponMessage
 
 	protected function getParameters(): array {
 		$parameters           = parent::getParameters();
-		$parameters['weapon'] = $this->weapon;
+		$parameters[self::WEAPON] = $this->weapon;
 		return $parameters;
 	}
 
@@ -40,8 +43,8 @@ class CombatantWeaponMessage extends CombatantNoWeaponMessage
 		return str_replace('$weapon', $weapon, $message);
 	}
 
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'weapon', 'string');
+		$this->validate($data, self::WEAPON, Validate::String);
 	}
 }

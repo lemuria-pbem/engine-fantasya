@@ -3,12 +3,12 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit\Cast;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Id;
 
 class AstralPassageRegionMessage extends AbstractCastMessage
 {
-	protected string $level = Message::SUCCESS;
+	protected Result $result = Result::SUCCESS;
 
 	protected Id $target;
 

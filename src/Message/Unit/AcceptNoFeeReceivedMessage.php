@@ -3,14 +3,14 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Id;
 
 class AcceptNoFeeReceivedMessage extends AcceptNoFeeMessage
 {
 	public final const UNIT = 'unit';
 
-	protected string $level = Message::EVENT;
+	protected Result $result = Result::EVENT;
 
 	protected Id $unit;
 

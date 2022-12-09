@@ -2,11 +2,11 @@
 namespace Lemuria\Engine\Fantasya\Message\Region;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 
 class SignpostDecayMessage extends AbstractRegionMessage
 {
-	protected string $level = Message::EVENT;
+	protected Result $result = Result::EVENT;
 
 	protected string $name;
 

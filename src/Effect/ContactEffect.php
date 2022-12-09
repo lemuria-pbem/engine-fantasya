@@ -8,9 +8,12 @@ use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class ContactEffect extends AbstractPartyEffect
 {
+	private const FROM = 'from';
+
 	private People $from;
 
 	public function __construct(State $state) {
@@ -23,24 +26,23 @@ final class ContactEffect extends AbstractPartyEffect
 	}
 
 	public function serialize(): array {
-		$data = parent::serialize();
-		$data['from'] = $this->from->serialize();
+		$data             = parent::serialize();
+		$data[self::FROM] = $this->from->serialize();
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->from->unserialize($data['from']);
+		$this->from->unserialize($data[self::FROM]);
 		return $this;
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'from', 'array');
+		$this->validate($data, self::FROM, Validate::Array);
 	}
 
 	protected function run(): void {

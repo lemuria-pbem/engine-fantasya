@@ -13,10 +13,13 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class RegionLoot extends AbstractRegionEffect
 {
 	use MessageTrait;
+
+	private const ROUNDS = 'rounds';
 
 	private int $rounds = 10;
 
@@ -36,14 +39,14 @@ final class RegionLoot extends AbstractRegionEffect
 	}
 
 	public function serialize(): array {
-		$data           = parent::serialize();
-		$data['rounds'] = $this->rounds;
+		$data               = parent::serialize();
+		$data[self::ROUNDS] = $this->rounds;
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->rounds = $data['rounds'];
+		$this->rounds = $data[self::ROUNDS];
 		return $this;
 	}
 
@@ -53,12 +56,11 @@ final class RegionLoot extends AbstractRegionEffect
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'rounds', 'int');
+		$this->validate($data, self::ROUNDS, Validate::Int);
 	}
 
 	protected function run(): void {

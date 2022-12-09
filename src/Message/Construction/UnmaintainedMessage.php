@@ -2,12 +2,12 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Construction;
 
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 
 class UnmaintainedMessage extends AbstractConstructionMessage
 {
-	protected string $level = Message::FAILURE;
+	protected Result $result = Result::FAILURE;
 
 	protected Section $section = Section::ECONOMY;
 

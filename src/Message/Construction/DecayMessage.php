@@ -2,12 +2,12 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Construction;
 
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Singleton;
 
 class DecayMessage extends AbstractConstructionMessage
 {
-	protected string $level = Message::EVENT;
+	protected Result $result = Result::EVENT;
 
 	protected Singleton $building;
 

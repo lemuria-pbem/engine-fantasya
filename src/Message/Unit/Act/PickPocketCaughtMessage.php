@@ -4,11 +4,11 @@ namespace Lemuria\Engine\Fantasya\Message\Unit\Act;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AbstractUnitMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 
 class PickPocketCaughtMessage extends AbstractUnitMessage
 {
-	protected string $level = Message::EVENT;
+	protected Result $result = Result::EVENT;
 
 	protected string $thief;
 

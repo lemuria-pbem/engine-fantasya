@@ -11,9 +11,12 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Continent;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class Unemployment extends AbstractContinentEffect
 {
+	private const PEASANTS = 'peasants';
+
 	/**
 	 * @var array<int, Unemployment>
 	 */
@@ -47,24 +50,23 @@ final class Unemployment extends AbstractContinentEffect
 	}
 
 	public function serialize(): array {
-		$data = parent::serialize();
-		$data['peasants'] = $this->peasants;
+		$data                 = parent::serialize();
+		$data[self::PEASANTS] = $this->peasants;
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->peasants = $data['peasants'];
+		$this->peasants = $data[self::PEASANTS];
 		return $this;
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'peasants', 'array');
+		$this->validate($data, self::PEASANTS, Validate::Array);
 	}
 
 	protected function run(): void {

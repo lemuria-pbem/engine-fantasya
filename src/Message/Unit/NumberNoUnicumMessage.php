@@ -3,12 +3,12 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Id;
 
 class NumberNoUnicumMessage extends AbstractUnitMessage
 {
-	protected string $level = Message::FAILURE;
+	protected Result $result = Result::FAILURE;
 
 	protected Id $unicum;
 

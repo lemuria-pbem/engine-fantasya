@@ -12,9 +12,12 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class SpyEffect extends AbstractPartyEffect implements Reassignment
 {
+	private const TARGETS = 'targets';
+
 	/**
 	 * @var array(int=>int)
 	 */
@@ -30,14 +33,14 @@ final class SpyEffect extends AbstractPartyEffect implements Reassignment
 	}
 
 	public function serialize(): array {
-		$data            = parent::serialize();
-		$data['targets'] = $this->targets;
+		$data                = parent::serialize();
+		$data[self::TARGETS] = $this->targets;
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->targets = $data['targets'];
+		$this->targets = $data[self::TARGETS];
 		return $this;
 	}
 
@@ -74,12 +77,11 @@ final class SpyEffect extends AbstractPartyEffect implements Reassignment
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'targets', 'array');
+		$this->validate($data, self::TARGETS, Validate::Array);
 	}
 
 	protected function run(): void {

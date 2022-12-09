@@ -2,11 +2,11 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 
 class TravelTooHeavyMessage extends TravelNoMoreMessage
 {
-	protected string $level = Message::FAILURE;
+	protected Result $result = Result::FAILURE;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' is too heavy to move.';

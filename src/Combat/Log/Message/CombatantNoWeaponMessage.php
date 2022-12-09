@@ -5,10 +5,17 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 use Lemuria\Engine\Fantasya\Combat\Combat;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 class CombatantNoWeaponMessage extends AbstractMessage
 {
-	protected array $simpleParameters = ['combatant', 'count'];
+	private const COMBATANT = 'combatant';
+
+	private const COUNT = 'count';
+
+	private const BATTLE_ROW = 'battleRow';
+
+	protected array $simpleParameters = [self::COMBATANT, self::COUNT];
 
 	protected string $combatant;
 
@@ -26,9 +33,9 @@ class CombatantNoWeaponMessage extends AbstractMessage
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->combatant = $data['combatant'];
-		$this->count     = $data['count'];
-		$this->battleRow = $data['battleRow'];
+		$this->combatant = $data[self::COMBATANT];
+		$this->count     = $data[self::COUNT];
+		$this->battleRow = $data[self::BATTLE_ROW];
 		return $this;
 	}
 
@@ -37,7 +44,7 @@ class CombatantNoWeaponMessage extends AbstractMessage
 	}
 
 	protected function getParameters(): array {
-		return ['combatant' => $this->combatant, 'count' => $this->count, 'battleRow' => $this->battleRow];
+		return [self::COMBATANT => $this->combatant, self::COUNT => $this->count, self::BATTLE_ROW => $this->battleRow];
 	}
 
 	protected function translate(string $template): string {
@@ -48,10 +55,10 @@ class CombatantNoWeaponMessage extends AbstractMessage
 		return str_replace('$battleRow', $battleRow, $message);
 	}
 
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'combatant', 'string');
-		$this->validate($data, 'count', 'int');
-		$this->validate($data, 'battleRow', 'int');
+		$this->validate($data, self::COMBATANT, Validate::String);
+		$this->validate($data, self::COUNT, Validate::Int);
+		$this->validate($data, self::BATTLE_ROW, Validate::Int);
 	}
 }

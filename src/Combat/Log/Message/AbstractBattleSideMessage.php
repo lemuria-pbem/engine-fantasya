@@ -4,9 +4,12 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use Lemuria\Engine\Fantasya\Combat\Log\Participant;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 abstract class AbstractBattleSideMessage extends AbstractMessage
 {
+	private const PARTICIPANTS = 'participants';
+
 	/**
 	 * @param Participant[]|null $participants
 	 */
@@ -15,7 +18,7 @@ abstract class AbstractBattleSideMessage extends AbstractMessage
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		foreach ($data['participants'] as $row) {
+		foreach ($data[self::PARTICIPANTS] as $row) {
 			$participant          = new Participant();
 			$this->participants[] = $participant->unserialize($row);
 		}
@@ -27,7 +30,7 @@ abstract class AbstractBattleSideMessage extends AbstractMessage
 		foreach ($this->participants as $participant) {
 			$participants[] = $participant->serialize();
 		}
-		return ['participants' => $participants];
+		return [self::PARTICIPANTS => $participants];
 	}
 
 	protected function translate(string $template): string {
@@ -38,9 +41,9 @@ abstract class AbstractBattleSideMessage extends AbstractMessage
 		return str_replace('$participants', $this->participants(), $message);
 	}
 
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'participants', 'array');
+		$this->validate($data, self::PARTICIPANTS, Validate::Array);
 	}
 
 	private function participants(): string {

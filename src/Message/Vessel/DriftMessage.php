@@ -3,11 +3,11 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Vessel;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 
 class DriftMessage extends AbstractVesselMessage
 {
-	protected string $level = Message::EVENT;
+	protected Result $result = Result::EVENT;
 
 	protected string $direction;
 

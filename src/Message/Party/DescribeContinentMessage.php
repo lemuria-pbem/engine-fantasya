@@ -3,11 +3,11 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Party;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 
 class DescribeContinentMessage extends AbstractPartyMessage
 {
-	protected string $level = Message::SUCCESS;
+	protected Result $result = Result::SUCCESS;
 
 	protected string $continent;
 

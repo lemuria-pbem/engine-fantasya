@@ -3,22 +3,25 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 abstract class AbstractOverrunMessage extends AbstractMessage
 {
-	protected array $simpleParameters = ['additional'];
+	private const ADDITIONAL = 'additional';
+
+	protected array $simpleParameters = [self::ADDITIONAL];
 
 	public function __construct(protected ?int $additional = null) {
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->additional = $data['additional'];
+		$this->additional = $data[self::ADDITIONAL];
 		return $this;
 	}
 
 	protected function getParameters(): array {
-		return ['additional' => $this->additional];
+		return [self::ADDITIONAL => $this->additional];
 	}
 
 	protected function translate(string $template): string {
@@ -30,8 +33,8 @@ abstract class AbstractOverrunMessage extends AbstractMessage
 		return str_replace('$fighter', $fighter, $message);
 	}
 
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'additional', 'int');
+		$this->validate($data, self::ADDITIONAL, Validate::Int);
 	}
 }

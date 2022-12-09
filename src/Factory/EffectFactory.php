@@ -7,10 +7,13 @@ use Lemuria\Engine\Fantasya\Effect\AbstractEffect;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\SerializableTrait;
+use Lemuria\Validate;
 
 class EffectFactory
 {
 	use SerializableTrait;
+
+	private const CLASS = 'class';
 
 	private readonly State $state;
 
@@ -23,7 +26,7 @@ class EffectFactory
 
 	public function create(array $data): Effect {
 		$this->validateSerializedData($data);
-		$class = $this->namespace . $data['class'];
+		$class = $this->namespace . $data[self::CLASS];
 		/** @var Effect $effect */
 		$effect = new $class($this->state);
 		$effect->unserialize($data);
@@ -36,7 +39,7 @@ class EffectFactory
 	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
-		$this->validate($data, 'class', 'string');
+	protected function validateSerializedData(array $data): void {
+		$this->validate($data, self::CLASS, Validate::String);
 	}
 }

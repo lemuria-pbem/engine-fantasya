@@ -2,9 +2,9 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 
 class LeaveConstructionDebugMessage extends LeaveConstructionMessage
 {
-	protected string $level = Message::DEBUG;
+	protected Result $result = Result::DEBUG;
 }

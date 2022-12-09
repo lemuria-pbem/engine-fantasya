@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Talent;
@@ -12,7 +12,7 @@ abstract class AbstractNoExperienceMessage extends AbstractUnitMessage
 {
 	use BuilderTrait;
 
-	protected string $level = Message::FAILURE;
+	protected Result $result = Result::FAILURE;
 
 	protected Section $section = Section::PRODUCTION;
 

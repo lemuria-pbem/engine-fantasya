@@ -6,15 +6,26 @@ use Lemuria\Engine\Fantasya\Combat\Combat;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 abstract class AbstractReinforcementMessage extends AbstractMessage
 {
-	protected array $simpleParameters = ['combatant', 'count', 'unit'];
+	private const COMBATANT = 'combatant';
+
+	private const COUNT = 'count';
+
+	private const UNIT = 'unit';
+
+	private const BATTLE_ROW = 'battleRow';
+
+	private const NAME = 'name';
+
+	protected array $simpleParameters = [self::COMBATANT, self::COUNT, self::UNIT];
 
 	protected string $combatant;
 
 	public function __construct(protected ?Entity $unit = null, ?Combatant $combatant = null,
-		                                protected ?int    $count = null, protected ?int $battleRow = null) {
+		                        protected ?int $count = null, protected ?int $battleRow = null) {
 		if ($combatant) {
 			$this->combatant = $combatant->Id();
 		}
@@ -22,16 +33,18 @@ abstract class AbstractReinforcementMessage extends AbstractMessage
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->unit      = Entity::create($data['unit'], $data['name']);
-		$this->combatant = $data['combatant'];
-		$this->count     = $data['count'];
-		$this->battleRow = $data['battleRow'];
+		$this->unit      = Entity::create($data[self::UNIT], $data[self::NAME]);
+		$this->combatant = $data[self::COMBATANT];
+		$this->count     = $data[self::COUNT];
+		$this->battleRow = $data[self::BATTLE_ROW];
 		return $this;
 	}
 
 	protected function getParameters(): array {
-		return ['unit'  => $this->unit->id->Id(), 'name'      => $this->unit->name, 'combatant' => $this->combatant,
-			    'count' => $this->count,          'battleRow' => $this->battleRow];
+		return [
+			self::UNIT  => $this->unit->id->Id(), self::NAME => $this->unit->name,
+			self::COMBATANT => $this->combatant, self::COUNT => $this->count,
+			self::BATTLE_ROW => $this->battleRow];
 	}
 
 	/**
@@ -45,12 +58,12 @@ abstract class AbstractReinforcementMessage extends AbstractMessage
 		return str_replace('$battleRow', $battleRow, $message);
 	}
 
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'unit', 'int');
-		$this->validate($data, 'name', 'string');
-		$this->validate($data, 'combatant', 'string');
-		$this->validate($data, 'count', 'int');
-		$this->validate($data, 'battleRow', 'int');
+		$this->validate($data, self::UNIT, Validate::Int);
+		$this->validate($data, self::NAME, Validate::String);
+		$this->validate($data, self::COMBATANT, Validate::String);
+		$this->validate($data, self::COUNT, Validate::Int);
+		$this->validate($data, self::BATTLE_ROW, Validate::Int);
 	}
 }

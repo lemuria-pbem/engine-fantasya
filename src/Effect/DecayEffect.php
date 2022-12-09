@@ -13,6 +13,7 @@ use Lemuria\Model\Dictionary;
 use Lemuria\Model\Fantasya\Building\Ruin;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 /**
  * This effect slowly reduces a construction's size until it is converted to a ruin.
@@ -22,6 +23,10 @@ final class DecayEffect extends AbstractConstructionEffect
 	use BuilderTrait;
 
 	public final const MONUMENT = 4 * 2 * 3;
+
+	private const AGE = 'age';
+
+	private const INTERVAL = 'interval';
 
 	private int $age = 0;
 
@@ -40,16 +45,16 @@ final class DecayEffect extends AbstractConstructionEffect
 	}
 
 	public function serialize(): array {
-		$data             = parent::serialize();
-		$data['age']      = $this->age;
-		$data['interval'] = $this->interval;
+		$data                 = parent::serialize();
+		$data[self::AGE]      = $this->age;
+		$data[self::INTERVAL] = $this->interval;
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->age      = $data['age'];
-		$this->interval = $data['interval'];
+		$this->age      = $data[self::AGE];
+		$this->interval = $data[self::INTERVAL];
 		return $this;
 	}
 
@@ -64,13 +69,12 @@ final class DecayEffect extends AbstractConstructionEffect
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'age', 'int');
-		$this->validate($data, 'interval', 'int');
+		$this->validate($data, self::AGE, Validate::Int);
+		$this->validate($data, self::INTERVAL, Validate::Int);
 	}
 
 	protected function run(): void {

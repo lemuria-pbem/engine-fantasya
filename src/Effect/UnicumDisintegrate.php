@@ -8,9 +8,12 @@ use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class UnicumDisintegrate extends AbstractUnicumEffect
 {
+	private const ROUNDS = 'rounds';
+
 	private int $rounds;
 
 	public function __construct(State $state) {
@@ -22,14 +25,14 @@ final class UnicumDisintegrate extends AbstractUnicumEffect
 	}
 
 	public function serialize(): array {
-		$data           = parent::serialize();
-		$data['rounds'] = $this->rounds;
+		$data               = parent::serialize();
+		$data[self::ROUNDS] = $this->rounds;
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->rounds = $data['rounds'];
+		$this->rounds = $data[self::ROUNDS];
 		return $this;
 	}
 
@@ -39,12 +42,11 @@ final class UnicumDisintegrate extends AbstractUnicumEffect
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'rounds', 'int');
+		$this->validate($data, self::ROUNDS, Validate::Int);
 	}
 
 	protected function run(): void {

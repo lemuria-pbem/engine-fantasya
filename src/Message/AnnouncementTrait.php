@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message;
 
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 
 trait AnnouncementTrait
@@ -14,7 +14,7 @@ trait AnnouncementTrait
 	protected string $message;
 
 	public function __construct() {
-		$this->level   = Message::EVENT;
+		$this->result  = Result::EVENT;
 		$this->section = Section::MAIL;
 	}
 

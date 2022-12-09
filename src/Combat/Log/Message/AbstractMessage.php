@@ -10,10 +10,17 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Dictionary;
 use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
+use Lemuria\Validate;
 
 abstract class AbstractMessage implements Message
 {
 	use SerializableTrait;
+
+	private const ID = 'id';
+
+	private const TYPE = 'type';
+
+	private const DEBUG = 'debug';
 
 	protected static ?Dictionary $dictionary = null;
 
@@ -40,19 +47,19 @@ abstract class AbstractMessage implements Message
 	}
 
 	public function serialize(): array {
-		$data = ['id' => $this->Id()->Id(), 'type' => getClass($this)];
+		$data = [self::ID => $this->Id()->Id(), self::TYPE => getClass($this)];
 		foreach ($this->getParameters() as $key => $value) {
 			$data[$key] = $value;
 		}
 		if ($this->isDebug()) {
-			$data['debug'] = $this->getDebug();
+			$data[self::DEBUG] = $this->getDebug();
 		}
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		$this->validateSerializedData($data);
-		$this->id = new Id($data['id']);
+		$this->id = new Id($data[self::ID]);
 		return $this;
 	}
 
@@ -71,8 +78,10 @@ abstract class AbstractMessage implements Message
 		return $message;
 	}
 
-	protected function validateSerializedData(array &$data): void {
-		$this->validate($data, 'id', 'int');
+	protected function validateSerializedData(array $data): void {
+		$this->validate($data, self::ID, Validate::Int);
+		$this->validate($data, self::TYPE, Validate::String);
+		$this->validateIfExists($data, self::DEBUG, Validate::String);
 	}
 
 	abstract protected function getDebug(): string;

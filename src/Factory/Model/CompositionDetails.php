@@ -10,6 +10,7 @@ use Lemuria\Model\Fantasya\Readable;
 use Lemuria\Model\Fantasya\Storage\JsonProvider;
 use Lemuria\Model\Fantasya\Unicum;
 use Lemuria\SerializableTrait;
+use Lemuria\Validate;
 
 class CompositionDetails
 {
@@ -99,7 +100,7 @@ class CompositionDetails
 	}
 
 	protected function validateJson(): void {
-		$this->validate($this->json, self::APPLY, 'string');
-		$this->validate($this->json, self::WRITE, 'string');
+		$this->validate($this->json, self::APPLY, Validate::String);
+		$this->validate($this->json, self::WRITE, Validate::String);
 	}
 }

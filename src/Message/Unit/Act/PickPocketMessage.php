@@ -3,12 +3,12 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit\Act;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Item;
 
 class PickPocketMessage extends PickPocketRevealedMessage
 {
-	protected string $level = Message::SUCCESS;
+	protected Result $result = Result::SUCCESS;
 
 	protected Item $silver;
 

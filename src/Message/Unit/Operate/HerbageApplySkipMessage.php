@@ -3,11 +3,11 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit\Operate;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 
 class HerbageApplySkipMessage extends HerbageApplyMessage
 {
-	protected string $level = Message::FAILURE;
+	protected Result $result = Result::FAILURE;
 
 	protected function create(): string {
 		return 'The herb occurrence in almanac ' . $this->almanac . ' for region ' . $this->region . ' seems to be outdated.';

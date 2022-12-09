@@ -9,9 +9,12 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class FarsightEffect extends AbstractRegionEffect
 {
+	private const PARTIES = 'parties';
+
 	private Gathering $parties;
 
 	/**
@@ -29,14 +32,14 @@ final class FarsightEffect extends AbstractRegionEffect
 	}
 
 	public function serialize(): array {
-		$data            = parent::serialize();
-		$data['parties'] = $this->parties->serialize();
+		$data                = parent::serialize();
+		$data[self::PARTIES] = $this->parties->serialize();
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->parties->unserialize($data['parties']);
+		$this->parties->unserialize($data[self::PARTIES]);
 		return $this;
 	}
 
@@ -57,12 +60,11 @@ final class FarsightEffect extends AbstractRegionEffect
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'parties', 'array');
+		$this->validate($data, self::PARTIES, Validate::Array);
 	}
 
 	protected function run(): void {

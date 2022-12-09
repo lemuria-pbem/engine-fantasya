@@ -3,10 +3,15 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 class AssaultBlockMessage extends AbstractMessage
 {
-	protected array $simpleParameters = ['attacker', 'defender'];
+	private const ATTACKER = 'attacker';
+
+	private const DEFENDER = 'defender';
+
+	protected array $simpleParameters = [self::ATTACKER, self::DEFENDER];
 
 	public function __construct(protected ?string $attacker = null, protected ?string $defender = null) {
 	}
@@ -17,18 +22,18 @@ class AssaultBlockMessage extends AbstractMessage
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->attacker = $data['attacker'];
-		$this->defender = $data['defender'];
+		$this->attacker = $data[self::ATTACKER];
+		$this->defender = $data[self::DEFENDER];
 		return $this;
 	}
 
 	protected function getParameters(): array {
-		return ['attacker' => $this->attacker, 'defender' => $this->defender];
+		return [self::ATTACKER => $this->attacker, self::DEFENDER => $this->defender];
 	}
 
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'attacker', 'string');
-		$this->validate($data, 'defender', 'string');
+		$this->validate($data, self::ATTACKER, Validate::String);
+		$this->validate($data, self::DEFENDER, Validate::String);
 	}
 }

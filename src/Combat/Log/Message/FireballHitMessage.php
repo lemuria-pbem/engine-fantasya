@@ -3,10 +3,15 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 class FireballHitMessage extends AbstractMessage
 {
-	protected array $simpleParameters = ['fighter', 'damage'];
+	private const FIGHTER = 'fighter';
+
+	private const DAMAGE = 'damage';
+
+	protected array $simpleParameters = [self::FIGHTER, self::DAMAGE];
 
 	public function __construct(protected ?string $fighter = null, protected ?int $damage = null) {
 	}
@@ -17,13 +22,13 @@ class FireballHitMessage extends AbstractMessage
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->fighter = $data['fighter'];
-		$this->damage  = $data['damage'];
+		$this->fighter = $data[self::FIGHTER];
+		$this->damage  = $data[self::DAMAGE];
 		return $this;
 	}
 
 	protected function getParameters(): array {
-		return ['fighter' => $this->fighter, 'damage' => $this->damage];
+		return [self::FIGHTER => $this->fighter, self::DAMAGE => $this->damage];
 	}
 
 	protected function translate(string $template): string {
@@ -32,9 +37,9 @@ class FireballHitMessage extends AbstractMessage
 		return str_replace('$hitpoint', $hitpoint, $message);
 	}
 
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'fighter', 'string');
-		$this->validate($data, 'damage', 'int');
+		$this->validate($data, self::FIGHTER, Validate::String);
+		$this->validate($data, self::DAMAGE, Validate::Int);
 	}
 }

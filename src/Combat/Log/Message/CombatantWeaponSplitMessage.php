@@ -4,17 +4,24 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 class CombatantWeaponSplitMessage extends AbstractMessage
 {
-	protected array $simpleParameters = ['combatant', 'count', 'newCombatant'];
+	private const COMBATANT = 'combatant';
+
+	private const COUNT = 'count';
+
+	private const NEW_COMBATANT = 'newCombatant';
+
+	protected array $simpleParameters = [self::COMBATANT, self::COUNT, self::NEW_COMBATANT];
 
 	protected string $combatant;
 
 	protected string $newCombatant;
 
 	public function __construct(?Combatant $combatant = null, protected ?int $count = null,
-										?Combatant $newCombatant = null) {
+		                        ?Combatant $newCombatant = null) {
 		if ($combatant) {
 			$this->combatant = $combatant->Id();
 		}
@@ -29,14 +36,14 @@ class CombatantWeaponSplitMessage extends AbstractMessage
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->combatant    = $data['combatant'];
-		$this->count        = $data['count'];
-		$this->newCombatant = $data['newCombatant'];
+		$this->combatant    = $data[self::COMBATANT];
+		$this->count        = $data[self::COUNT];
+		$this->newCombatant = $data[self::NEW_COMBATANT];
 		return $this;
 	}
 
 	protected function getParameters(): array {
-		return ['combatant' => $this->combatant, 'count' => $this->count, 'newCombatant' => $this->newCombatant];
+		return [self::COMBATANT => $this->combatant, self::COUNT => $this->count, self::NEW_COMBATANT => $this->newCombatant];
 	}
 
 	protected function translate(string $template): string {
@@ -45,10 +52,10 @@ class CombatantWeaponSplitMessage extends AbstractMessage
 		return str_replace('$fighter', $fighter, $message);
 	}
 
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'combatant', 'string');
-		$this->validate($data, 'count', 'int');
-		$this->validate($data, 'newCombatant', 'string');
+		$this->validate($data, self::COMBATANT, Validate::String);
+		$this->validate($data, self::COUNT, Validate::Int);
+		$this->validate($data, self::NEW_COMBATANT, Validate::String);
 	}
 }

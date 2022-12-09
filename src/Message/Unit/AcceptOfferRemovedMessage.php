@@ -3,13 +3,13 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 
 class AcceptOfferRemovedMessage extends AbstractUnitMessage
 {
-	protected string $level = Message::DEBUG;
+	protected Result $result = Result::DEBUG;
 
 	protected Section $section = Section::ECONOMY;
 

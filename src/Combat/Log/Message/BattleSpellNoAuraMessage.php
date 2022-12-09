@@ -7,14 +7,23 @@ use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 class BattleSpellNoAuraMessage extends AbstractMessage
 {
 	use BuilderTrait;
 
+	private const ID = 'id';
+
+	private const UNIT = 'unit';
+
+	private const NAME = 'name';
+
+	private const SPELL = 'spell';
+
 	protected Entity $unit;
 
-	protected array $simpleParameters = ['unit'];
+	protected array $simpleParameters = [self::UNIT];
 
 	public function __construct(?Unit $unit = null, protected ?BattleSpell $spell = null) {
 		if ($unit) {
@@ -28,15 +37,15 @@ class BattleSpellNoAuraMessage extends AbstractMessage
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->unit = Entity::create($data['id'], $data['name']);
+		$this->unit = Entity::create($data[self::ID], $data[self::NAME]);
 		/** @var BattleSpell $spell */
-		$spell       = self::createSpell($data['spell']);
+		$spell       = self::createSpell($data[self::SPELL]);
 		$this->spell = $spell;
 		return $this;
 	}
 
 	protected function getParameters(): array {
-		return ['unit' => $this->unit->id->Id(), 'name' => $this->unit->name, 'spell' => $this->spell];
+		return [self::UNIT => $this->unit->id->Id(), self::NAME => $this->unit->name, self::SPELL => $this->spell];
 	}
 
 	protected function translate(string $template): string {
@@ -45,10 +54,10 @@ class BattleSpellNoAuraMessage extends AbstractMessage
 		return str_replace('$spell', $spell, $message);
 	}
 
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'unit', 'int');
-		$this->validate($data, 'name', 'string');
-		$this->validate($data, 'spell', 'string');
+		$this->validate($data, self::UNIT, Validate::Int);
+		$this->validate($data, self::NAME, Validate::String);
+		$this->validate($data, self::SPELL, Validate::String);
 	}
 }

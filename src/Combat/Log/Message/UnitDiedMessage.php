@@ -5,10 +5,17 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 class UnitDiedMessage extends AbstractMessage
 {
-	protected array $simpleParameters = ['unit'];
+	private const ID = 'id';
+
+	private const UNIT = 'unit';
+
+	private const NAME = 'name';
+
+	protected array $simpleParameters = [self::UNIT];
 
 	protected Entity $unit;
 
@@ -24,17 +31,17 @@ class UnitDiedMessage extends AbstractMessage
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->unit = Entity::create($data['id'], $data['name']);
+		$this->unit = Entity::create($data[self::ID], $data[self::NAME]);
 		return $this;
 	}
 
 		protected function getParameters(): array {
-		return ['unit' => $this->unit->id->Id(), 'name'  => $this->unit->name];
+		return [self::UNIT => $this->unit->id->Id(), self::NAME => $this->unit->name];
 	}
 
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'unit', 'int');
-		$this->validate($data, 'name', 'string');
+		$this->validate($data, self::UNIT, Validate::Int);
+		$this->validate($data, self::NAME, Validate::String);
 	}
 }

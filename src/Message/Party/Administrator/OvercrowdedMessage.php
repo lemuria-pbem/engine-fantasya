@@ -4,13 +4,13 @@ namespace Lemuria\Engine\Fantasya\Message\Party\Administrator;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Party\AbstractPartyMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 
 class OvercrowdedMessage extends AbstractPartyMessage
 {
 	public const REGION = 'region';
 
-	protected string $level = Message::EVENT;
+	protected Result $result = Result::EVENT;
 
 	protected string $construction;
 

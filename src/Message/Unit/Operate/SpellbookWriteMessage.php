@@ -4,14 +4,14 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit\Operate;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Singleton;
 
 class SpellbookWriteMessage extends ScrollWriteNothingMessage
 {
 	public final const SPELL = 'spell';
 
-	protected string $level = Message::SUCCESS;
+	protected Result $result = Result::SUCCESS;
 
 	protected Singleton $spell;
 

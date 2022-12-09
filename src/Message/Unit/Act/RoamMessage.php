@@ -4,13 +4,13 @@ namespace Lemuria\Engine\Fantasya\Message\Unit\Act;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AbstractUnitMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 
 class RoamMessage extends AbstractUnitMessage
 {
-	protected string $level = Message::SUCCESS;
+	protected Result $result = Result::SUCCESS;
 
 	protected Section $section = Section::MOVEMENT;
 

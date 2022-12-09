@@ -11,7 +11,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\World\Atlas;
-use Lemuria\Model\World\SortMode;
+use Lemuria\SortMode;
 
 final class TravelAtlas extends Atlas
 {

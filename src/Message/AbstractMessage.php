@@ -6,7 +6,7 @@ use function Lemuria\getClass;
 use function Lemuria\number;
 use Lemuria\Item;
 use Lemuria\Singleton;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 use Lemuria\Model\Dictionary;
@@ -17,14 +17,14 @@ abstract class AbstractMessage implements MessageType
 {
 	use SingletonTrait;
 
-	protected string $level = Message::DEBUG;
+	protected Result $result = Result::DEBUG;
 
 	protected Section $section = Section::EVENT;
 
 	protected Id $id;
 
-	public function Level(): string {
-		return $this->level;
+	public function Result(): Result {
+		return $this->result;
 	}
 
 	public function Section(): Section {

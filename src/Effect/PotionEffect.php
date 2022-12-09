@@ -13,10 +13,17 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class PotionEffect extends AbstractUnitEffect
 {
 	use BuilderTrait;
+
+	private const POTION = 'potion';
+
+	private const COUNT = 'count';
+
+	private const WEEKS = 'weeks';
 
 	private Potion $potion;
 
@@ -47,20 +54,20 @@ final class PotionEffect extends AbstractUnitEffect
 	}
 
 	public function serialize(): array {
-		$data = parent::serialize();
-		$data['potion'] = getClass($this->potion);
-		$data['count']  = $this->count;
-		$data['weeks']  = $this->weeks;
+		$data               = parent::serialize();
+		$data[self::POTION] = getClass($this->potion);
+		$data[self::COUNT]  = $this->count;
+		$data[self::WEEKS]  = $this->weeks;
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$potion = self::createCommodity($data['potion']);
+		$potion = self::createCommodity($data[self::POTION]);
 		if ($potion instanceof Potion) {
 			$this->potion = $potion;
-			$this->count  = $data['count'];
-			$this->weeks  = $data['weeks'];
+			$this->count  = $data[self::COUNT];
+			$this->weeks  = $data[self::WEEKS];
 			return $this;
 		}
 		throw new LemuriaException('Unknown potion: ' . $potion);
@@ -83,14 +90,13 @@ final class PotionEffect extends AbstractUnitEffect
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'potion', 'string');
-		$this->validate($data, 'count', 'int');
-		$this->validate($data, 'weeks', 'int');
+		$this->validate($data, self::POTION, Validate::String);
+		$this->validate($data, self::COUNT, Validate::Int);
+		$this->validate($data, self::WEEKS, Validate::Int);
 	}
 
 	protected function run(): void {

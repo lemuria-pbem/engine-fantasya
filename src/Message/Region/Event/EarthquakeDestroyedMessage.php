@@ -4,12 +4,12 @@ namespace Lemuria\Engine\Fantasya\Message\Region\Event;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Region\AbstractRegionMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Id;
 
 class EarthquakeDestroyedMessage extends AbstractRegionMessage
 {
-	protected string $level = Message::FAILURE;
+	protected Result $result = Result::FAILURE;
 
 	protected Id $construction;
 

@@ -4,12 +4,12 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Model\Fantasya\Quantity;
 
 class RecruitPaymentMessage extends RecruitMessage
 {
-	protected string $level = Message::DEBUG;
+	protected Result $result = Result::DEBUG;
 
 	protected Quantity $cost;
 

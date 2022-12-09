@@ -13,10 +13,19 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Serializable;
 use Lemuria\SingletonSet;
+use Lemuria\Validate;
 
 final class PotionInfluence extends AbstractRegionEffect
 {
 	use BuilderTrait;
+
+	private const POTIONS = 'potions';
+
+	private const POTION = 'potion';
+
+	private const COUNT = 'count';
+
+	private const WEEKS = 'weeks';
 
 	private array $potions = [];
 
@@ -40,9 +49,9 @@ final class PotionInfluence extends AbstractRegionEffect
 		$potions = [];
 		foreach ($this->potions as $class => $count) {
 			$weeks     = $this->weeks[$class];
-			$potions[] = ['potion' => $class, 'count' => $count, 'weeks' => $weeks];
+			$potions[] = [self::POTION => $class, self::COUNT => $count, self::WEEKS => $weeks];
 		}
-		$data['potions'] = $potions;
+		$data[self::POTIONS] = $potions;
 		return $data;
 	}
 
@@ -51,12 +60,12 @@ final class PotionInfluence extends AbstractRegionEffect
 	 */
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		foreach ($data['potions'] as $potionData) {
-			$class  = $potionData['potion'];
+		foreach ($data[self::POTIONS] as $potionData) {
+			$class  = $potionData[self::POTION];
 			$potion = self::createCommodity($class);
 			if ($potion instanceof Potion) {
-				$this->potions[$class] = $potionData['count'];
-				$this->weeks[$class]   = $potionData['weeks'];
+				$this->potions[$class] = $potionData[self::COUNT];
+				$this->weeks[$class]   = $potionData[self::WEEKS];
 			} else {
 				throw new LemuriaException('Unknown potion: ' . $potion);
 			}
@@ -91,16 +100,15 @@ final class PotionInfluence extends AbstractRegionEffect
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'potions', 'array');
-		foreach ($data['potions'] as $potion) {
-			$this->validate($potion, 'potion', 'string');
-			$this->validate($potion, 'count', 'int');
-			$this->validate($potion, 'weeks', 'int');
+		$this->validate($data, self::POTIONS, Validate::Array);
+		foreach ($data[self::POTIONS] as $potion) {
+			$this->validate($potion, self::POTION, Validate::String);
+			$this->validate($potion, self::COUNT, Validate::Int);
+			$this->validate($potion, self::WEEKS, Validate::Int);
 		}
 	}
 

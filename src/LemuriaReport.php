@@ -16,10 +16,15 @@ use Lemuria\Model\Exception\DuplicateIdException;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
 use Lemuria\SerializableTrait;
+use Lemuria\Validate;
 
 class LemuriaReport implements Reassignment, Report
 {
 	use SerializableTrait;
+
+	private const MESSAGES = 'messages';
+
+	private const REMOVED = 'removed';
 
 	/**
 	 * @var array(int=>array)
@@ -93,12 +98,12 @@ class LemuriaReport implements Reassignment, Report
 		if (!$this->isLoaded) {
 			$report = Lemuria::Game()->getMessages();
 			$this->validateSerializedData($report);
-			foreach ($report['messages'] as $data) {
+			foreach ($report[self::MESSAGES] as $data) {
 				$message = new LemuriaMessage();
 				$message->unserialize($data);
 			}
 
-			$this->removed  = $report['removed'];
+			$this->removed  = $report[self::REMOVED];
 			$this->isLoaded = true;
 		}
 		return $this;
@@ -112,7 +117,7 @@ class LemuriaReport implements Reassignment, Report
 		foreach ($this->message as $message /* @var LemuriaMessage $message */) {
 			$messages[] = $message->serialize();
 		}
-		Lemuria::Game()->setMessages(['messages' => $messages, 'removed' => $this->removed]);
+		Lemuria::Game()->setMessages([self::MESSAGES => $messages, self::REMOVED => $this->removed]);
 		return $this;
 	}
 
@@ -197,9 +202,9 @@ class LemuriaReport implements Reassignment, Report
 	 *
 	 * @param array (string=>mixed) $data
 	 */
-	protected function validateSerializedData(array &$data): void {
-		$this->validate($data, 'messages', 'array');
-		$this->validate($data, 'removed', 'array');
+	protected function validateSerializedData(array $data): void {
+		$this->validate($data, self::MESSAGES, Validate::Array);
+		$this->validate($data, self::REMOVED, Validate::Array);
 	}
 
 	/**

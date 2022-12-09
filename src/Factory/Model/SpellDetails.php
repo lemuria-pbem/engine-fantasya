@@ -11,6 +11,7 @@ use Lemuria\Model\Fantasya\Exception\JsonException;
 use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Storage\JsonProvider;
 use Lemuria\SerializableTrait;
+use Lemuria\Validate;
 
 class SpellDetails
 {
@@ -96,9 +97,9 @@ class SpellDetails
 	}
 
 	protected function validateJson(): void {
-		$this->validate($this->json, self::DESCRIPTION, 'array');
-		$this->validateIfExists($this->json, self::COMPONENTS, 'array');
-		$this->validateIfExists($this->json, self::AURA, 'string');
+		$this->validate($this->json, self::DESCRIPTION, Validate::Array);
+		$this->validateIfExists($this->json, self::COMPONENTS, Validate::Array);
+		$this->validateIfExists($this->json, self::AURA, Validate::String);
 	}
 
 	protected function getParameters(): string {

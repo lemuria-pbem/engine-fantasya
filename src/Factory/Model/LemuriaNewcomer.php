@@ -14,11 +14,28 @@ use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
+use Lemuria\Validate;
 
 class LemuriaNewcomer implements Newcomer, Serializable
 {
 	use BuilderTrait;
 	use SerializableTrait;
+
+	private const UUID = 'uuid';
+
+	private const CREATION = 'creation';
+
+	private const NAME = 'name';
+
+	private const DESCRIPTION = 'description';
+
+	private const RACE = 'race';
+
+	private const LANDSCAPE = 'landscape';
+
+	private const ORIGIN = 'origin';
+
+	private const INVENTORY = 'inventory';
 
 	private string $uuid;
 
@@ -75,24 +92,24 @@ class LemuriaNewcomer implements Newcomer, Serializable
 	}
 
 	public function serialize(): array {
-		return ['uuid'      => $this->uuid,    'creation' => $this->creation,
-			    'name'      => $this->name, 'description' => $this->description,
-			    'race'      => $this->race ? getClass($this->race) : null,
-			    'landscape' => $this->landscape ? getClass($this->landscape) : null,
-			    'origin'    => $this->origin?->Id(),
-			    'inventory' => $this->inventory->serialize()
+		return [self::UUID      => $this->uuid, self::CREATION => $this->creation,
+			    self::NAME      => $this->name, self::DESCRIPTION => $this->description,
+			    self::RACE      => $this->race ? getClass($this->race) : null,
+			    self::LANDSCAPE => $this->landscape ? getClass($this->landscape) : null,
+			    self::ORIGIN    => $this->origin?->Id(),
+			    self::INVENTORY => $this->inventory->serialize()
 		];
 	}
 
 	public function unserialize(array $data): Serializable {
-		$this->uuid        = $data['uuid'];
-		$this->creation    = $data['creation'];
-		$this->name        = $data['name'];
-		$this->description = $data['description'];
-		$this->race        = $data['race'] ? self::createRace($data['race']) : null;
-		$this->landscape   = $data['landscape'] ? self::createLandscape($data['landscape']) : null;
-		$this->origin      = $data['origin'] ? new Id($data['origin']) : null;
-		$this->inventory->unserialize($data['inventory']);
+		$this->uuid        = $data[self::UUID];
+		$this->creation    = $data[self::CREATION];
+		$this->name        = $data[self::NAME];
+		$this->description = $data[self::DESCRIPTION];
+		$this->race        = $data[self::RACE] ? self::createRace($data[self::RACE]) : null;
+		$this->landscape   = $data[self::LANDSCAPE] ? self::createLandscape($data[self::LANDSCAPE]) : null;
+		$this->origin      = $data[self::ORIGIN] ? new Id($data[self::ORIGIN]) : null;
+		$this->inventory->unserialize($data[self::INVENTORY]);
 		return $this;
 	}
 
@@ -121,14 +138,14 @@ class LemuriaNewcomer implements Newcomer, Serializable
 		return $this;
 	}
 
-	protected function validateSerializedData(array &$data): void {
-		$this->validate($data, 'uuid', 'string');
-		$this->validate($data, 'creation', 'int');
-		$this->validate($data, 'name', 'string');
-		$this->validate($data, 'description', 'string');
-		$this->validate($data, 'race', '?string');
-		$this->validate($data, 'landscape', '?string');
-		$this->validate($data, 'origin', '?int');
-		$this->validate($data, 'inventory', 'array');
+	protected function validateSerializedData(array $data): void {
+		$this->validate($data, self::UUID, Validate::String);
+		$this->validate($data, self::CREATION, Validate::Int);
+		$this->validate($data, self::NAME, Validate::String);
+		$this->validate($data, self::DESCRIPTION, Validate::String);
+		$this->validate($data, self::RACE, Validate::StringOrNull);
+		$this->validate($data, self::LANDSCAPE, Validate::StringOrNull);
+		$this->validate($data, self::ORIGIN, Validate::IntOrNull);
+		$this->validate($data, self::INVENTORY, Validate::Array);
 	}
 }

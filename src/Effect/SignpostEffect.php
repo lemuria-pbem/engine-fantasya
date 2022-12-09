@@ -9,10 +9,13 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class SignpostEffect extends AbstractConstructionEffect
 {
 	public const MINIMUM_LIFE = 50;
+
+	private const AGE = 'age';
 
 	private int $age = 0;
 
@@ -25,14 +28,14 @@ final class SignpostEffect extends AbstractConstructionEffect
 	}
 
 	public function serialize(): array {
-		$data        = parent::serialize();
-		$data['age'] = $this->age;
+		$data            = parent::serialize();
+		$data[self::AGE] = $this->age;
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->age = $data['age'];
+		$this->age = $data[self::AGE];
 		return $this;
 	}
 
@@ -42,12 +45,11 @@ final class SignpostEffect extends AbstractConstructionEffect
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'age', 'int');
+		$this->validate($data, self::AGE, Validate::Int);
 	}
 
 	protected function run(): void {

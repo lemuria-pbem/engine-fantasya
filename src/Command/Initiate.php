@@ -63,7 +63,7 @@ use Lemuria\Model\Fantasya\Talent\Trading;
 use Lemuria\Model\Fantasya\Talent\Woodchopping;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\World\LocationPicker;
-use Lemuria\Model\World\SortMode;
+use Lemuria\SortMode;
 
 /**
  * Introduce a Newcomer as a new Party.

@@ -12,9 +12,12 @@ use Lemuria\Model\Fantasya\Treasury;
 use Lemuria\Model\Fantasya\Unicum;
 use Lemuria\Model\Reassignment;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class UnicumRead extends AbstractPartyEffect implements Reassignment
 {
+	private const TREASURY = 'treasury';
+
 	private Treasury $treasury;
 
 	public function __construct(State $state) {
@@ -28,14 +31,14 @@ final class UnicumRead extends AbstractPartyEffect implements Reassignment
 	}
 
 	public function serialize(): array {
-		$data             = parent::serialize();
-		$data['treasury'] = $this->treasury->serialize();
+		$data                 = parent::serialize();
+		$data[self::TREASURY] = $this->treasury->serialize();
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->treasury->unserialize($data['treasury']);
+		$this->treasury->unserialize($data[self::TREASURY]);
 		return $this;
 	}
 
@@ -52,12 +55,11 @@ final class UnicumRead extends AbstractPartyEffect implements Reassignment
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'treasury', 'array');
+		$this->validate($data, self::TREASURY, Validate::Array);
 	}
 
 	protected function run(): void {

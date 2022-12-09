@@ -2,11 +2,11 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit\Act;
 
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 
 class RoamStayMessage extends RoamMessage
 {
-	protected string $level = Message::FAILURE;
+	protected Result $result = Result::FAILURE;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' must stay in region ' . $this->region . '.';

@@ -4,13 +4,13 @@ namespace Lemuria\Engine\Fantasya\Message\Unit\Operate;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AbstractUnitMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Singleton;
 
 class LearnSpellAlreadyMessage extends AbstractUnitMessage
 {
-	protected string $level = Message::FAILURE;
+	protected Result $result = Result::FAILURE;
 
 	protected Section $section = Section::MAGIC;
 

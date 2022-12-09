@@ -8,9 +8,12 @@ use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Knowledge;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class TalentEffect extends AbstractUnitEffect
 {
+	private const MODIFICATIONS = 'modifications';
+
 	private Knowledge $modifications;
 
 	public function __construct(State $state) {
@@ -23,24 +26,23 @@ final class TalentEffect extends AbstractUnitEffect
 	}
 
 	public function serialize(): array {
-		$data = parent::serialize();
-		$data['modifications'] = $this->modifications->serialize();
+		$data                      = parent::serialize();
+		$data[self::MODIFICATIONS] = $this->modifications->serialize();
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->modifications->unserialize($data['modifications']);
+		$this->modifications->unserialize($data[self::MODIFICATIONS]);
 		return $this;
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'modifications', 'array');
+		$this->validate($data, self::MODIFICATIONS, Validate::Array);
 	}
 
 	protected function run(): void {

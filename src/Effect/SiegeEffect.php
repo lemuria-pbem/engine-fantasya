@@ -10,9 +10,12 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class SiegeEffect extends AbstractConstructionEffect
 {
+	private const PERCEPTION = 'perception';
+
 	private int $perception = 0;
 
 	private bool $isActive = true;
@@ -30,14 +33,14 @@ final class SiegeEffect extends AbstractConstructionEffect
 	}
 
 	public function serialize(): array {
-		$data               = parent::serialize();
-		$data['perception'] = $this->perception;
+		$data                   = parent::serialize();
+		$data[self::PERCEPTION] = $this->perception;
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->perception = $data['perception'];
+		$this->perception = $data[self::PERCEPTION];
 		return $this;
 	}
 
@@ -55,12 +58,11 @@ final class SiegeEffect extends AbstractConstructionEffect
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'perception', 'int');
+		$this->validate($data, self::PERCEPTION, Validate::Int);
 	}
 
 	protected function run(): void {

@@ -19,11 +19,16 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Reassignment;
 use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
+use Lemuria\Validate;
 
 abstract class AbstractEffect implements Effect, Reassignment
 {
 	use ActionTrait;
 	use SerializableTrait;
+
+	private const ID = 'id';
+
+	private const CLASS = 'class';
 
 	protected Context $context;
 
@@ -90,26 +95,23 @@ abstract class AbstractEffect implements Effect, Reassignment
 	}
 
 	public function serialize(): array {
-		return ['class' => getClass($this), 'id' => $this->id->Id()];
+		return [self::CLASS => getClass($this), self::ID => $this->id->Id()];
 	}
 
 	public function unserialize(array $data): Serializable {
 		$this->validateSerializedData($data);
-		if ($data['class'] !== getClass($this)) {
+		if ($data[self::CLASS] !== getClass($this)) {
 			throw new LemuriaException('Class name mismatch.', new UnserializeException());
 		}
-		$this->id = new Id($data['id']);
+		$this->id = new Id($data[self::ID]);
 		return $this;
 	}
 
 	/**
-	 * Check that a serialized data array is valid.
-	 *
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
-		$this->validate($data, 'class', 'string');
-		$this->validate($data, 'id', 'int');
+	protected function validateSerializedData(array $data): void {
+		$this->validate($data, self::CLASS, Validate::String);
+		$this->validate($data, self::ID, Validate::Int);
 	}
 }

@@ -11,10 +11,13 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 final class ConstructionLoot extends AbstractConstructionEffect
 {
 	use MessageTrait;
+
+	private const ROUNDS = 'rounds';
 
 	private int $rounds = PHP_INT_MAX;
 
@@ -35,13 +38,13 @@ final class ConstructionLoot extends AbstractConstructionEffect
 
 	public function serialize(): array {
 		$data           = parent::serialize();
-		$data['rounds'] = $this->rounds;
+		$data[self::ROUNDS] = $this->rounds;
 		return $data;
 	}
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->rounds = $data['rounds'];
+		$this->rounds = $data[self::ROUNDS];
 		return $this;
 	}
 
@@ -51,12 +54,11 @@ final class ConstructionLoot extends AbstractConstructionEffect
 	}
 
 	/**
-	 * @param array (string=>mixed) &$data
 	 * @throws UnserializeEntityException
 	 */
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'rounds', 'int');
+		$this->validate($data, self::ROUNDS, Validate::Int);
 	}
 
 	protected function run(): void {

@@ -4,12 +4,15 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Serializable;
+use Lemuria\Validate;
 
 class SongOfPeaceFighterMessage extends SongOfPeaceCombatantMessage
 {
+	private const FIGHTER = 'fighter';
+
 	public function __construct(?Combatant $combatant = null, protected ?int $fighter = null) {
 		parent::__construct($combatant);
-		$this->simpleParameters[] = 'fighter';
+		$this->simpleParameters[] = self::FIGHTER;
 	}
 
 	public function getDebug(): string {
@@ -18,13 +21,13 @@ class SongOfPeaceFighterMessage extends SongOfPeaceCombatantMessage
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->fighter = $data['fighter'];
+		$this->fighter = $data[self::FIGHTER];
 		return $this;
 	}
 
 	protected function getParameters(): array {
 		$parameters = parent::getParameters();
-		$parameters['fighter'] = $this->fighter;
+		$parameters[self::FIGHTER] = $this->fighter;
 		return $parameters;
 	}
 
@@ -34,8 +37,8 @@ class SongOfPeaceFighterMessage extends SongOfPeaceCombatantMessage
 		return str_replace('$leave', $leave, $message);
 	}
 
-	protected function validateSerializedData(array &$data): void {
+	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
-		$this->validate($data, 'fighter', 'int');
+		$this->validate($data, self::FIGHTER, Validate::Int);
 	}
 }

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Region;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 
 class AttackBattleMessage extends AbstractRegionMessage
@@ -12,7 +12,7 @@ class AttackBattleMessage extends AbstractRegionMessage
 
 	public const DEFENDER = 'defender';
 
-	protected string $level = Message::EVENT;
+	protected Result $result = Result::EVENT;
 
 	protected Section $section = Section::BATTLE;
 

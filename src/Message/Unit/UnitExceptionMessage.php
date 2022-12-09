@@ -3,14 +3,14 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 
 class UnitExceptionMessage extends AbstractUnitMessage
 {
 	public const ACTION = 'action';
 
-	protected string $level = Message::ERROR;
+	protected Result $result = Result::ERROR;
 
 	protected Section $section = Section::ERROR;
 
