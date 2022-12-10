@@ -21,6 +21,8 @@ abstract class AbstractMessage implements MessageType
 
 	protected Section $section = Section::EVENT;
 
+	protected Reliability $reliability = Reliability::Determined;
+
 	protected Id $id;
 
 	public function Level(): string {
@@ -29,6 +31,10 @@ abstract class AbstractMessage implements MessageType
 
 	public function Section(): Section {
 		return $this->section;
+	}
+
+	public function Reliability(): Reliability {
+		return $this->reliability;
 	}
 
 	public function render(LemuriaMessage $message): string {

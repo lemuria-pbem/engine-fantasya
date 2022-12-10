@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message;
 
-use Lemuria\Identifiable;
 use function Lemuria\getClass;
 use Lemuria\Singleton;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait as EngineBuilderTrait;
@@ -15,6 +14,7 @@ use Lemuria\Engine\Message\Section;
 use Lemuria\Entity;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
+use Lemuria\Identifiable;
 use Lemuria\Item;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
