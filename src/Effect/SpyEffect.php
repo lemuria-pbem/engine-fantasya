@@ -24,7 +24,7 @@ final class SpyEffect extends AbstractPartyEffect implements Reassignment
 	private array $targets = [];
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 		Lemuria::Catalog()->addReassignment($this);
 	}
 

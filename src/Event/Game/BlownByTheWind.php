@@ -40,7 +40,7 @@ final class BlownByTheWind extends AbstractEvent
 	private Dictionary $dictionary;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 		$this->dictionary = new Dictionary();
 	}
 

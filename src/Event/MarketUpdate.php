@@ -29,7 +29,7 @@ final class MarketUpdate extends AbstractEvent
 	private array $commerce = [];
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 	}
 
 	protected function initialize(): void {

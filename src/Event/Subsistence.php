@@ -37,7 +37,7 @@ final class Subsistence extends AbstractEvent
 	private Commodity $silver;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::MIDDLE);
+		parent::__construct($state, Priority::Middle);
 		$this->workplaces = new Workplaces();
 		$this->peasant    = self::createCommodity(Peasant::class);
 		$this->silver     = self::createCommodity(Silver::class);

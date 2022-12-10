@@ -38,7 +38,7 @@ final class Growth extends AbstractEvent
 	private Commodity $tree;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 		$this->tree = self::createCommodity(Wood::class);
 	}
 

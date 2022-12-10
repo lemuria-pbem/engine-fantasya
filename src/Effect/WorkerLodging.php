@@ -18,7 +18,7 @@ final class WorkerLodging extends AbstractConstructionEffect
 	private array $hasSpace = [];
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 		$this->bookings = new People();
 	}
 

@@ -54,7 +54,7 @@ final class Obtainment extends AbstractEvent
 	private Unit $magician;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 		$this->magic = self::createTalent(Magic::class);
 		foreach (self::SPELL as $difficulty => $class) {
 			$spell = self::createSpell($class);

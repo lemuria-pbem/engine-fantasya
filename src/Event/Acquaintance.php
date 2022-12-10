@@ -41,7 +41,7 @@ final class Acquaintance extends AbstractEvent
 	private Talent $perception;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 		$this->camouflage = self::createTalent(Camouflage::class);
 		$this->perception = self::createTalent(Perception::class);
 	}

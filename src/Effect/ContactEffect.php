@@ -17,7 +17,7 @@ final class ContactEffect extends AbstractPartyEffect
 	private People $from;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 		$this->from = new People();
 	}
 

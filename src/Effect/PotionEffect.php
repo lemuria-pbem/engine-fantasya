@@ -34,7 +34,7 @@ final class PotionEffect extends AbstractUnitEffect
 	private bool $isFresh = false;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 	}
 
 	public function needsAftercare(): bool {

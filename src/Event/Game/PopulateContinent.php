@@ -116,7 +116,7 @@ final class PopulateContinent extends AbstractEvent
 	private array $creates = [];
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 	}
 
 	public function setOptions(array $options): PopulateContinent {

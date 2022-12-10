@@ -101,7 +101,7 @@ final class Regrow extends AbstractEvent
 	private float $rate;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 	}
 
 	protected function initialize(): void {

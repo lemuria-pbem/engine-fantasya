@@ -22,7 +22,7 @@ final class Hunger extends AbstractUnitEffect
 	private float $hunger = 1.0;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::MIDDLE);
+		parent::__construct($state, Priority::Middle);
 	}
 
 	public function Hunger(): float {

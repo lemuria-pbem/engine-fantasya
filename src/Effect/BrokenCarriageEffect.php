@@ -17,7 +17,7 @@ final class BrokenCarriageEffect extends AbstractPartyEffect
 	private ?Unit $unit = null;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 	}
 
 	public function Unit(): ?Unit {

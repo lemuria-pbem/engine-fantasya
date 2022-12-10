@@ -173,9 +173,9 @@ final class CommandPriority
 		}
 
 		$priority = match ($action->Priority()) {
-			Priority::BEFORE => self::B_ACTION,
-			Priority::MIDDLE => self::M_ACTION,
-			Priority::AFTER  => self::A_ACTION
+			Priority::Before => self::B_ACTION,
+			Priority::Middle => self::M_ACTION,
+			Priority::After  => self::A_ACTION
 		};
 
 		return match (true) {

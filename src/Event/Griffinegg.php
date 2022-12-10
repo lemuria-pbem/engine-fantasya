@@ -30,7 +30,7 @@ final class Griffinegg extends AbstractEvent
 	private Commodity $egg;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 		$this->griffin = self::createCommodity(Griffin::class);
 		$this->egg     = self::createCommodity(GriffineggModel::class);
 	}

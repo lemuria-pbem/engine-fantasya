@@ -32,7 +32,7 @@ final class TravelAtlas extends Atlas
 		$outlook = new Outlook($census);
 		foreach ($census->getAtlas() as $id => $region /* @var Region $region */) {
 			$this->add($region);
-			$this->visibility[$id] = Visibility::WITH_UNIT;
+			$this->visibility[$id] = Visibility::WithUnit;
 
 			$panorama = $outlook->getPanorama($region);
 			foreach ($panorama as $neighbour /* @var Region $neighbour */) {
@@ -50,12 +50,12 @@ final class TravelAtlas extends Atlas
 		$chronicle = $this->party->Chronicle();
 		foreach ($chronicle as $id => $region /* @var Region $region */) {
 			if ($chronicle->getVisit($region)->Round() === $round) {
-				$visibility = Visibility::TRAVELLED;
+				$visibility = Visibility::Travelled;
 				if ($this->hasCartography($region)) {
-					$visibility = Visibility::NEIGHBOUR;
+					$visibility = Visibility::Neighbour;
 				}
 				if ($this->hasFarsight($region)) {
-					$visibility = Visibility::FARSIGHT;
+					$visibility = Visibility::Farsight;
 				}
 				if (!isset($this->visibility[$id])) {
 					$this->add($region);
@@ -64,8 +64,8 @@ final class TravelAtlas extends Atlas
 					$this->visibility[$id] = $visibility;
 				}
 
-				if ($visibility === Visibility::TRAVELLED) {
-					$visibility = Visibility::NEIGHBOUR;
+				if ($visibility === Visibility::Travelled) {
+					$visibility = Visibility::Neighbour;
 					foreach (Lemuria::World()->getNeighbours($region) as $neighbour) {
 						$id = $neighbour->Id()->Id();
 						if (!isset($this->visibility[$id])) {
@@ -84,7 +84,7 @@ final class TravelAtlas extends Atlas
 	}
 
 	public function getVisibility(Region $region): Visibility {
-		return $this->visibility[$region->Id()->Id()] ?? Visibility::UNKNOWN;
+		return $this->visibility[$region->Id()->Id()] ?? Visibility::Unknown;
 	}
 
 	public function setVisibility(Region $region, Visibility $visibility): TravelAtlas {

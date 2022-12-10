@@ -25,7 +25,7 @@ use Lemuria\Model\Fantasya\Vessel;
 final class Founder extends AbstractEvent
 {
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 	}
 
 	protected function run(): void {

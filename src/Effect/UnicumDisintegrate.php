@@ -17,7 +17,7 @@ final class UnicumDisintegrate extends AbstractUnicumEffect
 	private int $rounds;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 	}
 
 	public function Rounds(): int {

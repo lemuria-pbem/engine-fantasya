@@ -33,7 +33,7 @@ final class HatchGriffinEgg extends AbstractEvent
 	private Commodity $egg;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 		$this->griffin = self::createCommodity(Griffin::class);
 		$this->egg     = self::createCommodity(Griffinegg::class);
 	}

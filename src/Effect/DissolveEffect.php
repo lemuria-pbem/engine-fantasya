@@ -10,7 +10,7 @@ use Lemuria\Lemuria;
 final class DissolveEffect extends AbstractUnitEffect
 {
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::MIDDLE);
+		parent::__construct($state, Priority::Middle);
 	}
 
 	protected function run(): void {

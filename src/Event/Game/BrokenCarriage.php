@@ -47,7 +47,7 @@ final class BrokenCarriage extends AbstractEvent
 	private Region $region;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 	}
 
 	public function setOptions(array $options): BrokenCarriage {

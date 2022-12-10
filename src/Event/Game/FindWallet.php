@@ -30,7 +30,7 @@ final class FindWallet extends AbstractEvent
 	private Quantity $silver;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 	}
 
 	public function setOptions(array $options): FindWallet {

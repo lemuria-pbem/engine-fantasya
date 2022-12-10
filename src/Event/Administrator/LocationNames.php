@@ -22,7 +22,7 @@ final class LocationNames extends AbstractEvent
 	private Dictionary $dictionary;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 		$this->namer      = Lemuria::Namer();
 		$this->dictionary = new Dictionary();
 	}

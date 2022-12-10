@@ -45,7 +45,7 @@ final class Support extends AbstractEvent
 	private People $hungryUnits;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 		$this->silver      = self::createCommodity(Silver::class);
 		$this->hungryUnits = new People();
 	}

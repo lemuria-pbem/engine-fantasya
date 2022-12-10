@@ -16,7 +16,7 @@ use Lemuria\Model\Fantasya\Party;
 final class ContinentUpheaval extends AbstractEvent
 {
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 	}
 
 	protected function run(): void {

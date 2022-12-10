@@ -47,7 +47,7 @@ final class Upkeep extends AbstractEvent
 	private Estate $overcrowded;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::MIDDLE);
+		parent::__construct($state, Priority::Middle);
 		$this->silver       = self::createCommodity(Silver::class);
 		$this->unmaintained = new Estate();
 		$this->overcrowded  = new Estate();

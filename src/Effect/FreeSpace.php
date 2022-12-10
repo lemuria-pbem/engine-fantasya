@@ -11,7 +11,7 @@ final class FreeSpace extends AbstractConstructionEffect
 	private int $space = 0;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::MIDDLE);
+		parent::__construct($state, Priority::Middle);
 	}
 
 	public function Space(): int {

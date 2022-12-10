@@ -46,7 +46,7 @@ final class TheWildHunt extends AbstractEvent
 	private Unit $unit;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 	}
 
 	public function setOptions(array $options): TheWildHunt {

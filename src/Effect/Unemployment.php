@@ -37,7 +37,7 @@ final class Unemployment extends AbstractContinentEffect
 	}
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 	}
 
 	public function getPeasants(Region $region): ?int {

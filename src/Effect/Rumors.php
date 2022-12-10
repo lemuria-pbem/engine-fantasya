@@ -12,7 +12,7 @@ class Rumors extends AbstractUnitEffect
 	private StringList $rumors;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 		$this->rumors = new StringList();
 	}
 

@@ -15,7 +15,7 @@ use Lemuria\Lemuria;
 final class Administrator extends DelegatedEvent
 {
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 	}
 
 	protected function createDelegates(): void {

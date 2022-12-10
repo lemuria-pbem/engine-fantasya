@@ -16,7 +16,7 @@ use Lemuria\Model\Fantasya\Unit;
 final class Decease extends AbstractEvent
 {
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 	}
 
 	protected function run(): void {

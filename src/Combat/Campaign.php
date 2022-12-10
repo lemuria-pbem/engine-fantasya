@@ -54,7 +54,7 @@ class Campaign
 	public function __construct(private Region $region) {
 		$this->intelligence = new Intelligence($this->region);
 		foreach ($this->intelligence->getParties() as $party) {
-			$this->status[$party->Id()->Id()] = Army::NEUTRAL;
+			$this->status[$party->Id()->Id()] = Stake::Neutral;
 		}
 		Lemuria::Log()->debug('Beginning new campaign in ' . $this->region . '.');
 	}
@@ -156,7 +156,7 @@ class Campaign
 			$unit   = $this->armies[$defId];
 			$battle->addDefender($unit);
 			$id                = $party->Id()->Id();
-			$this->status[$id] = Army::DEFENDER;
+			$this->status[$id] = Stake::Defender;
 			$defenders[$id]    = true;
 			Lemuria::Log()->debug($unit . ' is attacked in battle of defender ' . $party . '.');
 
@@ -169,7 +169,7 @@ class Campaign
 					$battle->addAttacker($unit);
 					$party                  = $this->party($attId);
 					$partyId                = $party->Id()->Id();
-					$this->status[$partyId] = Army::ATTACKER;
+					$this->status[$partyId] = Stake::Attacker;
 					unset($attackersLeft[$attId]);
 					Lemuria::Log()->debug($unit . ' attacks in battle of attacker ' . $party . '.');
 				} else {
@@ -200,10 +200,10 @@ class Campaign
 
 	private function addDefenderAlliedUnits(): void {
 		foreach ($this->status as $alliedId => $neutral) {
-			if ($neutral === Army::NEUTRAL) {
+			if ($neutral === Stake::Neutral) {
 				$ally = Party::get(new Id($alliedId));
 				foreach ($this->status as $partyId => $defender) {
-					if ($defender === Army::DEFENDER) {
+					if ($defender === Stake::Defender) {
 						$party = Party::get(new Id($partyId));
 						if ($ally->Diplomacy()->has(Relation::COMBAT, $party)) {
 							$battle = $this->battle($party);
@@ -213,7 +213,7 @@ class Campaign
 									Lemuria::Log()->debug($unit . ' gets drawn into battle as ally.');
 								}
 							}
-							$this->status[$alliedId] = Army::ALLY;
+							$this->status[$alliedId] = Stake::Ally;
 						}
 					}
 				}

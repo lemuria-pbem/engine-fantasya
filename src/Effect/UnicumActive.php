@@ -15,7 +15,7 @@ final class UnicumActive extends AbstractUnicumEffect
 	use MessageTrait;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 	}
 
 	protected function run(): void {

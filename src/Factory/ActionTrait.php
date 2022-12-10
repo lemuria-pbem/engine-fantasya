@@ -10,7 +10,7 @@ trait ActionTrait
 {
 	use MessageTrait;
 
-	private Priority $priority = Priority::MIDDLE;
+	private Priority $priority = Priority::Middle;
 
 	private bool $isPrepared = false;
 
@@ -27,9 +27,9 @@ trait ActionTrait
 
 	protected function getPriority(): string {
 		return match ($this->priority) {
-			Priority::BEFORE => 'B',
-			Priority::MIDDLE => 'M',
-			Priority::AFTER  => 'A'
+			Priority::Before => 'B',
+			Priority::Middle => 'M',
+			Priority::After  => 'A'
 		};
 	}
 

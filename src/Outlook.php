@@ -150,10 +150,10 @@ final class Outlook
 			if ($neighbour->Landscape() instanceof Ocean) {
 				$directions[] = $direction;
 				if ($hasLighthouse) {
-					$visible->setVisibility($neighbour, Visibility::LIGHTHOUSE);
+					$visible->setVisibility($neighbour, Visibility::Lighthouse);
 				}
 			} else {
-				$visible->setVisibility($neighbour, Visibility::NEIGHBOUR);
+				$visible->setVisibility($neighbour, Visibility::Neighbour);
 			}
 			$visible->add($neighbour);
 		}
@@ -171,7 +171,7 @@ final class Outlook
 					}
 					if ($world->getDistance($region, $neighbour) === $distance) {
 						$visible->add($neighbour);
-						$visible->setVisibility($neighbour, Visibility::LIGHTHOUSE);
+						$visible->setVisibility($neighbour, Visibility::Lighthouse);
 					}
 				}
 				if (!$isOcean) {

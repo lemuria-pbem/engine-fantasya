@@ -13,7 +13,7 @@ use Lemuria\Lemuria;
 final class Aftercare extends AbstractEvent
 {
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 	}
 
 	/** @noinspection PhpConditionAlreadyCheckedInspection */

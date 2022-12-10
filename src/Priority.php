@@ -4,9 +4,9 @@ namespace Lemuria\Engine\Fantasya;
 
 enum Priority
 {
-	case BEFORE;
+	case Before;
 
-	case MIDDLE;
+	case Middle;
 
-	case AFTER;
+	case After;
 }

@@ -33,7 +33,7 @@ final class DecayEffect extends AbstractConstructionEffect
 	private int $interval = 1;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 	}
 
 	public function Age(): int {

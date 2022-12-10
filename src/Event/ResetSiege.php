@@ -15,7 +15,7 @@ use Lemuria\Model\Fantasya\Construction;
 final class ResetSiege extends AbstractEvent
 {
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::MIDDLE);
+		parent::__construct($state, Priority::Middle);
 	}
 
 	protected function run(): void {

@@ -22,7 +22,7 @@ final class Monster extends AbstractEvent
 	private static array $behaviours = [];
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 	}
 
 	protected function run(): void {

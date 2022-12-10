@@ -36,7 +36,7 @@ final class MonsterParties extends AbstractEvent
 	private Talent $perception;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 		$this->perception = self::createTalent(Perception::class);
 	}
 

@@ -4,17 +4,17 @@ namespace Lemuria\Engine\Fantasya\Factory\Model;
 
 enum Visibility : int
 {
-	case UNKNOWN = 0;
+	case Unknown = 0;
 
-	case HISTORIC = 1;
+	case Historic = 1;
 
-	case NEIGHBOUR = 2;
+	case Neighbour = 2;
 
-	case LIGHTHOUSE = 3;
+	case Lighthouse = 3;
 
-	case TRAVELLED = 4;
+	case Travelled = 4;
 
-	case FARSIGHT = 5;
+	case Farsight = 5;
 
-	case WITH_UNIT = 6;
+	case WithUnit = 6;
 }

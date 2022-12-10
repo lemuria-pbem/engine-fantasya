@@ -22,7 +22,7 @@ final class Airship extends AbstractVesselEffect
 	private int $needed = 0;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::MIDDLE);
+		parent::__construct($state, Priority::Middle);
 		$this->mages = new People();
 	}
 

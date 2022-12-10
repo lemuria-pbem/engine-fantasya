@@ -23,7 +23,7 @@ final class FarsightEffect extends AbstractRegionEffect
 	private array $perception = [];
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 		$this->parties = new Gathering();
 	}
 

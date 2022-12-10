@@ -15,7 +15,7 @@ use Lemuria\Lemuria;
 final class Statistics extends DelegatedEvent
 {
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 	}
 
 	protected function createDelegates(): void {

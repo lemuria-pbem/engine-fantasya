@@ -26,7 +26,7 @@ final class RegionLoot extends AbstractRegionEffect
 	private Resources $resources;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 		$this->resources = new Resources();
 	}
 

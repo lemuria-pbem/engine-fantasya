@@ -17,7 +17,7 @@ final class Cartography extends AbstractRegionEffect
 	private Gathering $parties;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 		$this->parties = new Gathering();
 	}
 

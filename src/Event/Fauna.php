@@ -74,7 +74,7 @@ final class Fauna extends AbstractEvent
 	private Season $season;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 		$this->workplaces = new Workplaces();
 		$this->season     = Lemuria::Calendar()->Season();
 	}

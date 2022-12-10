@@ -12,7 +12,7 @@ final class GriffinAttack extends AbstractRegionEffect
 	private ?Unit $griffins = null;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 	}
 
 	public function Griffins(): ?Unit {

@@ -37,7 +37,7 @@ final class Enchantment extends AbstractUnitEffect
 	private Wizardry $enchantments;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::AFTER);
+		parent::__construct($state, Priority::After);
 		$this->enchantments = new Wizardry();
 	}
 

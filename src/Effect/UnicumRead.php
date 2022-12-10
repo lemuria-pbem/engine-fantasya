@@ -21,7 +21,7 @@ final class UnicumRead extends AbstractPartyEffect implements Reassignment
 	private Treasury $treasury;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::BEFORE);
+		parent::__construct($state, Priority::Before);
 		$this->treasury = new Treasury();
 		Lemuria::Catalog()->addReassignment($this);
 	}
