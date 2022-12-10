@@ -3,12 +3,15 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\Reliability;
 use Lemuria\Engine\Message;
 use Lemuria\Id;
 
 class VisitNoRumorMessage extends VisitNoMarketMessage
 {
 	protected string $level = Message::SUCCESS;
+
+	protected Reliability $reliability = Reliability::Unreliable;
 
 	protected Id $unit;
 

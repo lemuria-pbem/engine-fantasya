@@ -3,10 +3,13 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit\Cast;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\Reliability;
 use Lemuria\Id;
 
 class AuraTransferFailedMessage extends AuraTransferImpossibleMessage
 {
+	protected Reliability $reliability = Reliability::Unreliable;
+
 	protected Id $unit;
 
 	protected function create(): string {

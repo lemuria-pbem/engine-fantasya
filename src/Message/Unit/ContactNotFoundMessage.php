@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\Reliability;
 use Lemuria\Engine\Message;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
@@ -12,6 +13,8 @@ class ContactNotFoundMessage extends AbstractUnitMessage
 	protected string $level = Message::FAILURE;
 
 	protected Section $section = Section::MAIL;
+
+	protected Reliability $reliability = Reliability::Unreliable;
 
 	protected Id $unit;
 
