@@ -3,11 +3,14 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit\Cast;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\Reliability;
 use Lemuria\Engine\Message\Result;
 
 class AuraTransferReceivedMessage extends AuraTransferFailedMessage
 {
 	protected Result $result = Result::Event;
+
+	protected Reliability $reliability = Reliability::Determined;
 
 	protected int $aura;
 

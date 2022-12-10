@@ -194,7 +194,7 @@ final class Smash extends UnitCommand implements Activity
 			$this->message(SmashNoRoadToMessage::class)->e($region)->p($direction);
 			return;
 		}
-		if (!$this->context->getTurnOptions()->IsSimulation() && $this->getCheckByAgreement(Relation::GUARD)) {
+		if ($this->context->getTurnOptions()->IsSimulation() || $this->getCheckByAgreement(Relation::GUARD)) {
 			$this->message(SmashRoadGuardedMessage::class)->e($region);
 			return;
 		}

@@ -3,11 +3,14 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\Reliability;
 use Lemuria\Engine\Message\Result;
 
 class VisitRumorMessage extends VisitNoRumorMessage
 {
 	protected Result $result = Result::Event;
+
+	protected Reliability $reliability = Reliability::Determined;
 
 	protected string $rumor;
 

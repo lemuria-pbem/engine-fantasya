@@ -37,12 +37,9 @@ final class Steal extends UnitCommand implements Activity
 
 	private Commodity $silver;
 
-	private bool $isSimulation;
-
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
-		$this->silver       = self::createCommodity(Silver::class);
-		$this->isSimulation = $context->getTurnOptions()->IsSimulation();
+		$this->silver = self::createCommodity(Silver::class);
 	}
 
 	protected function run(): void {
@@ -62,24 +59,27 @@ final class Steal extends UnitCommand implements Activity
 			$this->message(StealOwnUnitMessage::class)->e($unit);
 			return;
 		}
+
+		if ($this->context->getTurnOptions()->IsSimulation()) {
+			$this->message(StealNothingMessage::class)->e($unit);
+		}
+
 		$outlook = new Outlook(new Census($party));
-		if (!$this->isSimulation && $outlook->getApparitions($region)->has($this->unit->Id())) {
+		if ($outlook->getApparitions($region)->has($this->unit->Id())) {
 			$this->message(StealDiscoveredMessage::class)->e($unit);
 			$this->message(StealRevealedMessage::class, $party)->e($region)->e($this->unit, StealRevealedMessage::UNIT);
 			return;
 		}
 
 		$camouflage = $this->calculus()->knowledge(Camouflage::class)->Level();
-		$perception = $this->isSimulation ? 0 : $this->context->getCalculus($unit)->knowledge(Perception::class)->Level();
+		$perception = $this->context->getCalculus($unit)->knowledge(Perception::class)->Level();
 		$silver     = ($camouflage - $perception) * self::SILVER * $this->unit->Size();
 		$inventory  = $unit->Inventory();
-		$available  = $this->isSimulation ? $silver : $inventory[$this->silver]->Count();
+		$available  = $inventory[$this->silver]->Count();
 		$pickings   = min($available, $silver);
 		if ($pickings > 0) {
 			$quantity = new Quantity($this->silver, $pickings);
-			if (!$this->isSimulation) {
-				$inventory->remove($quantity);
-			}
+			$inventory->remove($quantity);
 			$this->unit->Inventory()->add($quantity);
 			if ($available < $silver) {
 				$this->message(StealOnlyMessage::class)->e($unit)->i($quantity);

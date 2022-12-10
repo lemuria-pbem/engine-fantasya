@@ -38,7 +38,7 @@ use Lemuria\Engine\Fantasya\State;
 
 class DefaultProgress implements Progress
 {
-	public const EVENTS = [
+	protected const EVENTS = [
 		// before
 		Administrator::class, Visit::class, Monster::class, Timer::class, MarketFee::class,
 		// middle
@@ -58,7 +58,7 @@ class DefaultProgress implements Progress
 	private int $count;
 
 	public function __construct(State $state) {
-		foreach (self::EVENTS as $event) {
+		foreach ($this->getEvents() as $event) {
 			$this->events[] = new $event($state);
 		}
 		$this->count = count($this->events);
@@ -94,5 +94,12 @@ class DefaultProgress implements Progress
 		$this->events[] = $event;
 		$this->count++;
 		return $this;
+	}
+
+	/**
+	 * @return array<string>
+	 */
+	protected function getEvents(): array {
+		return self::EVENTS;
 	}
 }

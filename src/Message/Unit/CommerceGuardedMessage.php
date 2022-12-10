@@ -3,11 +3,14 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\Reliability;
 use Lemuria\Id;
 
 class CommerceGuardedMessage extends CommerceNotPossibleMessage
 {
 	public final const PARTY = 'party';
+
+	protected Reliability $reliability = Reliability::Unreliable;
 
 	protected Id $party;
 

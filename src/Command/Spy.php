@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Census;
-use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\SpyEffect;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\OneActivityTrait;
@@ -17,7 +16,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\SpyNotHereMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SpyNotRevealedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SpyOwnUnitMessage;
 use Lemuria\Engine\Fantasya\Outlook;
-use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
@@ -44,13 +42,6 @@ final class Spy extends UnitCommand implements Activity
 
 	private const DISCOVER_BONUS = 5;
 
-	private bool $isSimulation;
-
-	public function __construct(Phrase $phrase, Context $context) {
-		parent::__construct($phrase, $context);
-		$this->isSimulation = $context->getTurnOptions()->IsSimulation();
-	}
-
 	protected function run(): void {
 		if ($this->phrase->count() !== 1) {
 			throw new UnknownCommandException($this);
@@ -73,15 +64,21 @@ final class Spy extends UnitCommand implements Activity
 			$this->message(SpyNoChanceMessage::class);
 			return;
 		}
+
+		if ($this->context->getTurnOptions()->IsSimulation()) {
+			$this->message(SpyFailedMessage::class)->e($unit);
+			return;
+		}
+
 		$outlook = new Outlook(new Census($party));
-		if (!$this->isSimulation && $outlook->getApparitions($region)->has($this->unit->Id())) {
+		if ($outlook->getApparitions($region)->has($this->unit->Id())) {
 			$this->message(SpyDiscoveredMessage::class)->e($unit);
 			$this->message(SpyRevealedMessage::class, $party)->e($region)->e($this->unit, SpyRevealedMessage::UNIT);
 			return;
 		}
 
 		$calculus   = $this->context->getCalculus($unit);
-		$camouflage = $this->isSimulation ? 0 : $calculus->knowledge(Camouflage::class)->Level();
+		$camouflage = $calculus->knowledge(Camouflage::class)->Level();
 		$spyLevel   = $espionage - $camouflage;
 		$spySuccess = self::SPY_BASE + $spyLevel * self::SPY_BONUS;
 		if (rand(1, 100) <= $spySuccess) {
@@ -91,7 +88,7 @@ final class Spy extends UnitCommand implements Activity
 			$this->message(SpyFailedMessage::class)->e($unit);
 		}
 
-		$perception      = $this->isSimulation ? 0 : $calculus->knowledge(Perception::class)->Level();
+		$perception      = $calculus->knowledge(Perception::class)->Level();
 		$discoverLevel   = $perception - $espionage;
 		$discoverSuccess = self::DISCOVER_BASE + $discoverLevel * self::DISCOVER_BONUS;
 		if (rand(1, 100) <= $discoverSuccess) {
