@@ -186,9 +186,13 @@ trait TravelTrait
 	 * If it is guarded, check if unit is also allowed to pass or has GUARD relation.
 	 */
 	protected function unitIsAllowedToPass(Region $region, Gathering $guards): Gathering {
-		$remaining = new Gathering();
+		$remaining     = new Gathering();
+		$isSimultation = $this->context->getTurnOptions()->IsSimulation();
 		foreach ($guards as $party /* @var Party $party */) {
 			$remaining->add($party);
+			if ($isSimultation) {
+				continue;
+			}
 			$diplomacy = $party->Diplomacy();
 			if ($diplomacy->has(Relation::PASS, $this->unit)) {
 				if ($this->directions->hasMore()) {
