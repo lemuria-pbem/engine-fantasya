@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use function Lemuria\randElement;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Factory\ActionTrait;
@@ -192,7 +193,7 @@ final class Initiate implements Command
 			return $this->newcomer->Race();
 		}
 		$races = array_keys(self::LANDSCAPES);
-		return self::createRace($races[array_rand($races)]);
+		return self::createRace(randElement($races));
 	}
 
 	private function pickOrigin(Race $race): Region {

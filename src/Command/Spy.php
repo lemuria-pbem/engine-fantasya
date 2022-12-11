@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Effect\SpyEffect;
@@ -81,7 +82,7 @@ final class Spy extends UnitCommand implements Activity
 		$camouflage = $calculus->knowledge(Camouflage::class)->Level();
 		$spyLevel   = $espionage - $camouflage;
 		$spySuccess = self::SPY_BASE + $spyLevel * self::SPY_BONUS;
-		if (rand(1, 100) <= $spySuccess) {
+		if (randInt(1, 100) <= $spySuccess) {
 			$this->addSpyEffect($unit, $spyLevel);
 			$this->message(SpyMessage::class)->e($unit);
 		} else {
@@ -91,7 +92,7 @@ final class Spy extends UnitCommand implements Activity
 		$perception      = $calculus->knowledge(Perception::class)->Level();
 		$discoverLevel   = $perception - $espionage;
 		$discoverSuccess = self::DISCOVER_BASE + $discoverLevel * self::DISCOVER_BONUS;
-		if (rand(1, 100) <= $discoverSuccess) {
+		if (randInt(1, 100) <= $discoverSuccess) {
 			$this->message(SpyNotRevealedMessage::class, $unit);
 		}
 	}

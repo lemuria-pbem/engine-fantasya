@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
+use function Lemuria\randElement;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerWonMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleEndedInDrawMessage;
@@ -265,7 +266,7 @@ class Battle
 				return null;
 			}
 		}
-		$chosen = $candidates[array_rand($candidates)];
+		$chosen = randElement($candidates);
 		return Party::get(new Id($party[$chosen]));
 	}
 

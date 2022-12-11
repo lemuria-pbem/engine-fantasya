@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Message\Region\GrowthMessage;
 use Lemuria\Engine\Fantasya\Priority;
@@ -66,14 +67,14 @@ final class Growth extends AbstractEvent
 				$rate   = $trees < $place ? self::RATE : self::RATE / 10;
 				$growth = (int)ceil($rate * $trees);
 				$random = $growth >= 30 ? 5 : 1;
-				$growth = max(0, rand($growth - $random, $growth + $random));
+				$growth = max(0, randInt($growth - $random, $growth + $random));
 
 				if ($trees < 0.01 * $place) {
 					$neighbourTrees = $this->countNeighbourTrees($region);
 					$moreGrowth     = (int)round(self::NEIGHBOUR * $neighbourTrees);
 					if ($moreGrowth <= 0) {
 						$random = (int)(self::RANDOM * 100);
-						if (rand(0, 100) < $random) {
+						if (randInt(0, 100) < $random) {
 							$moreGrowth++;
 						}
 					}

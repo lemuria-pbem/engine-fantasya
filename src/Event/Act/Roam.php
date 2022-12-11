@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Act;
 
+use function Lemuria\randElement;
 use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
@@ -34,7 +35,7 @@ class Roam implements Act
 			$this->noPossibleRegion($region);
 		} else {
 			$regions = $this->chooseLandscape($regions);
-			$target  = $regions[rand(0, count($regions) - 1)];
+			$target  = randElement($regions);
 			if ($target === $region) {
 				$this->message(RoamHereMessage::class, $this->unit)->e($region);
 			} else {

@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Cast;
 
+use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Effect\VanishEffect;
 use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Event\Behaviour\Monster\Ent as Behaviour;
@@ -24,13 +25,13 @@ final class SummonEnts extends AbstractCast
 	private static function size(int $level): int {
 		$size = 0;
 		for ($i = 0; $i < $level; $i++) {
-			$size += rand(4, 7);
+			$size += randInt(4, 7);
 		}
 		return $size;
 	}
 
 	private static function weeks(): int {
-		return rand(3, 5);
+		return randInt(3, 5);
 	}
 
 	public function cast(): void {

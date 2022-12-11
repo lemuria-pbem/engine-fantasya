@@ -171,7 +171,7 @@ final class Commerce
 		/** @var Luxury $good */
 		$good       = $this->goods[$class]['good'];
 		$demand     = $this->goods[$class]['demand'];
-		$merchants  = $this->randomize(array_keys($demand));
+		$merchants  = Lemuria::Random()->shuffleArray(array_keys($demand));
 		$total      = array_sum($demand);
 		$estimation = $supply->estimate($total);
 		Lemuria::Log()->debug(count($demand) . ' merchants want to trade ' . $total . ' ' . $class . ' (est. cost: ' . $estimation . ').');
@@ -241,17 +241,6 @@ final class Commerce
 		}
 		// Lemuria::Log()->debug('Merchant ' . $merchant . ' has stopped trading.');
 		return false;
-	}
-
-	private function randomize(array $ids): array {
-		$random = [];
-		while (!empty($ids)) {
-			$i = array_rand($ids);
-			$random[] = $ids[$i];
-			unset($ids[$i]);
-			$ids = array_values($ids);
-		}
-		return $random;
 	}
 
 	/**

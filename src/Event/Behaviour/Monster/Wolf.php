@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Behaviour\Monster;
 
+use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Event\Behaviour\AbstractBehaviour;
 use Lemuria\Engine\Fantasya\Event\Reproduction;
@@ -28,7 +29,7 @@ class Wolf extends AbstractBehaviour
 
 		if ($calendar->Season() === Season::Spring && $calendar->Week() === 1) {
 			if ($size >= self::GROW) {
-				$this->unit->setSize($size + rand(self::GROW_MIN, self::GROW_MAX));
+				$this->unit->setSize($size + randInt(self::GROW_MIN, self::GROW_MAX));
 				Lemuria::Log()->debug($this->unit . ' will reproduce this round.');
 			}
 		} else {

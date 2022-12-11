@@ -15,6 +15,7 @@ use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Luxuries;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Offer;
+use function Lemuria\randElement;
 
 class MarketBuilder
 {
@@ -49,8 +50,7 @@ class MarketBuilder
 	}
 
 	protected function initOffer(): Offer {
-		$n     = count(self::LUXURIES);
-		$class = self::LUXURIES[rand(0, $n - 1)];
+		$class = randElement(self::LUXURIES);
 		/** @var Luxury $luxury */
 		$luxury = self::createCommodity($class);
 		return new Offer($luxury, $luxury->Value());

@@ -2,6 +2,10 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Game;
 
+use function Lemuria\randArray;
+use function Lemuria\randElement;
+use function Lemuria\randFloat;
+use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
@@ -140,9 +144,10 @@ final class PopulateContinent extends AbstractEvent
 					$regions[] = $region;
 				}
 			}
-			foreach (array_rand($regions, (int)ceil(count($regions) / $chance)) as $i) {
-				$size            = (int)round((1.0 + self::VARIATION * 2.0 * (lcg_value() - 0.5)) * self::SIZE[$race]);
-				$create          = new Create($party, $regions[$i]);
+			$count = (int)ceil(count($regions) / $chance);
+			foreach (randArray($regions, $count) as $region) {
+				$size            = (int)round((1.0 + self::VARIATION * 2.0 * (randFloat() - 0.5)) * self::SIZE[$race]);
+				$create          = new Create($party, $region);
 				$this->creates[] = $create->add(new Gang($monster, $size));
 			}
 		}
@@ -154,25 +159,24 @@ final class PopulateContinent extends AbstractEvent
 				if ($unit->Race() instanceof Skeleton) {
 					$size      = $unit->Size();
 					$inventory = $unit->Inventory();
-					$weapon    = self::WEAPONS[array_rand(self::WEAPONS)];
-					$weapon    = self::createWeapon($weapon);
+					$weapon    = self::createWeapon(randElement(self::WEAPONS));
 					$skill     = $weapon->getSkill();
 					/** @var Commodity $weapon */
 					$inventory->add(new Quantity($weapon, $size));
-					$experience = $skill->Experience() + Ability::getExperience(rand(0, self::MAX_SKILL));
+					$experience = $skill->Experience() + Ability::getExperience(randInt(0, self::MAX_SKILL));
 					$unit->Knowledge()->add(new Ability($skill->Talent(), $experience));
 
-					$chance = lcg_value();
+					$chance = randFloat();
 					if ($chance <= self::HAS_SHIELD) {
-						$shield = self::SHIELD[array_rand(self::SHIELD)];
+						$shield = randElement(self::SHIELD);
 						$inventory->add(new Quantity(self::createCommodity($shield), $size));
 					} elseif ($chance <= self::HAS_SHIELD + self::HAS_ARMOR) {
-						$armor = self::ARMOR[array_rand(self::ARMOR)];
+						$armor = randElement(self::ARMOR);
 						$inventory->add(new Quantity(self::createCommodity($armor), $size));
 					} else {
-						$armor  = self::ARMOR[array_rand(self::ARMOR)];
+						$armor  = randElement(self::ARMOR);
 						$inventory->add(new Quantity(self::createCommodity($armor), $size));
-						$shield = self::SHIELD[array_rand(self::SHIELD)];
+						$shield = randElement(self::SHIELD);
 						$inventory->add(new Quantity(self::createCommodity($shield), $size));
 					}
 				}

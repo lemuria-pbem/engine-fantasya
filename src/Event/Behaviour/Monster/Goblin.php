@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Behaviour\Monster;
 
+use function Lemuria\randFloat;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Event\Act\Seek;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
@@ -77,7 +78,7 @@ class Goblin extends AbstractBehaviour
 		$relatives = $calculus->getRelatives();
 		if ($kinsmen->count() + $relatives->count() < self::MAX_UNITS - 1) {
 			$total    = $this->unit->Size() + $kinsmen->Size() + $relatives->Size();
-			$variance = 2.0 * self::VARIANCE * lcg_value() - self::VARIANCE;
+			$variance = 2.0 * self::VARIANCE * randFloat() - self::VARIANCE;
 			$goblins  = (int)floor(self::RATE * (1.0 + $variance) * $total);
 			$maximum  = (int)floor(self::MAXIMUM * ($peasants + $units));
 			return min($goblins, $maximum);

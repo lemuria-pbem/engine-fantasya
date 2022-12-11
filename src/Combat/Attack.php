@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
 use function Lemuria\randChance;
+use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultBlockMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultPetrifiedMessage;
@@ -241,7 +242,7 @@ class Attack
 		if ($attSkill > 0) {
 			if ($defSkill > 0) {
 				$sum = $attSkill + $defSkill - 1;
-				$hit = rand(0, $sum);
+				$hit = randInt(0, $sum);
 				// Lemuria::Log()->debug('Attack/Block calculation: A:' . $skill . '-' . $malus . ' B:' . $block . '+' . $bonus . ' hit:' . $hit . '/' . $sum);
 				return $hit < $attSkill;
 			}
@@ -256,7 +257,7 @@ class Attack
 		$damage  = $this->combatant->Weapon()->Damage();
 		$bonus   = self::DAMAGE_BONUS[$weapon::class] ?? 0.0;
 		$b       = $bonus > 0.0 ? (int)floor($bonus * $skill) : 0;
-		$attack  = $damage->Count() * rand(1, $damage->Dice() + $b) + $damage->Addition();
+		$attack  = $damage->Count() * randInt(1, $damage->Dice() + $b) + $damage->Addition();
 		$block  += $this->getBlockValue($shield) + $this->getBlockValue($armor);
 		// Lemuria::Log()->debug('Damage calculation: ' . getClass($weapon) . ':' . $damage . ' bonus:' . $b . ' damage:' . $attack . '-' . $block);
 		return max(0, $attack - $block);
@@ -266,7 +267,7 @@ class Attack
 		if ($protection) {
 			$max = $protection->Block();
 			$min = (int)ceil(self::BLOCK_EFFECT * $max);
-			return rand($min, $max);
+			return randInt($min, $max);
 		}
 		return 0;
 	}

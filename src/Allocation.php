@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use function Lemuria\randKeys;
 use Lemuria\Engine\Fantasya\Exception\AllocationException;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
 use Lemuria\Exception\LemuriaException;
@@ -206,11 +207,9 @@ final class Allocation
 	 * Give one item randomly to a limited number of consumers.
 	 */
 	private function giveRandom(string $class, int $count): void {
-		$consumers = array_keys($this->distribution[$class]['demand']);
+		$consumers = $this->distribution[$class]['demand'];
 		$count     = min($count, count($consumers));
-		$selected  = $count > 1 ? array_rand($consumers, $count) : [array_rand($consumers)];
-		foreach ($selected as $index) {
-			$consumer = $consumers[$index];
+		foreach (randKeys($consumers, $count) as $consumer) {
 			$this->distribution[$class]['allocation'][$consumer]++;
 			$this->distribution[$class]['demand'][$consumer]--;
 			if ($this->distribution[$class]['demand'][$consumer] === 0) {

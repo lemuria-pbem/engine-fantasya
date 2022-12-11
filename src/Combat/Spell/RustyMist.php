@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Spell;
 
+use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\CombatantWeaponDegradedMessage;
@@ -108,9 +109,9 @@ class RustyMist extends AbstractBattleSpell
 
 	private function calculateRusty(int $grade, int $size): int {
 		$factor = match ($grade) {
-			1       => 0.3 + rand(-5, 3) / 100,
-			2       => 0.5 + rand(-10, 5) / 100,
-			default => min(1.0, $grade / ++$grade + rand(-3, 3) / 100)
+			1       => 0.3 + randInt(-5, 3) / 100,
+			2       => 0.5 + randInt(-10, 5) / 100,
+			default => min(1.0, $grade / ++$grade + randInt(-3, 3) / 100)
 		};
 		return (int)round($factor * $size);
 	}

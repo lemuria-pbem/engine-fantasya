@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use function Lemuria\getClass;
+use function Lemuria\randElement;
 use Lemuria\Engine\Fantasya\Message\Region\RegrowMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
@@ -148,7 +149,7 @@ final class Regrow extends AbstractEvent
 
 		if (!$class) {
 			$herbs = $landscape->Herbs();
-			$class = $herbs[array_rand($herbs)]::class;
+			$class = randElement($herbs)::class;
 		}
 
 		/** @var Herb $herb */

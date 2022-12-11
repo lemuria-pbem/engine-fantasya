@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use function Lemuria\randElement;
+use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Factory\NavigationTrait;
 use Lemuria\Engine\Fantasya\Factory\TravelTrait;
 use Lemuria\Engine\Fantasya\Message\Vessel\DriftDamageMessage;
@@ -62,7 +64,7 @@ final class Drift extends AbstractEvent
 				} else {
 					$directions = $neighbours->getDirections();
 				}
-				$direction = $directions[array_rand($directions)];
+				$direction = randElement($directions);
 
 				/** @var Region $driftRegion */
 				$driftRegion = $neighbours[$direction];
@@ -71,7 +73,7 @@ final class Drift extends AbstractEvent
 					$this->moveVessel($driftRegion);
 					$this->message(DriftMessage::class, $vessel)->p($direction->value);
 				} else {
-					$damage = rand(1, 15) / 100;
+					$damage = randInt(1, 15) / 100;
 					$vessel->setCompletion(max(0, $vessel->Completion() - $damage));
 					$this->message(DriftDamageMessage::class, $vessel)->e($driftRegion);
 				}

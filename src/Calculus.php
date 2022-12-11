@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Combat\WeaponSkill;
 use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Teach;
@@ -277,7 +278,7 @@ final class Calculus
 		$count      = $brainpower?->Count();
 		$boost      = $brainpower && $count ? min(1.0, $count * Brainpower::PERSONS / $this->unit->Size()) : 0.0;
 
-		$baseProbability = $boost > 0.0 ? 1.25 : ($isInCollege ? rand(90, 110) / 100 : rand(75, 125) / 100);
+		$baseProbability = $boost > 0.0 ? 1.25 : ($isInCollege ? randInt(90, 110) / 100 : randInt(75, 125) / 100);
 		$baseFactor      = $isInCollege ? 2.0 : 1.0;
 		$probability     = $baseProbability * ($baseFactor + $boost);
 		$progress        = (int)round(Learn::PROGRESS * (min(5.0, $probability + $teachBonus)) * $effectivity);
