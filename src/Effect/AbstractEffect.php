@@ -26,9 +26,9 @@ abstract class AbstractEffect implements Effect, Reassignment
 	use ActionTrait;
 	use SerializableTrait;
 
-	private const ID = 'id';
+	public final const CLASS_KEY = 'class';
 
-	private const CLASS = 'class';
+	private const ID = 'id';
 
 	protected Context $context;
 
@@ -95,12 +95,12 @@ abstract class AbstractEffect implements Effect, Reassignment
 	}
 
 	public function serialize(): array {
-		return [self::CLASS => getClass($this), self::ID => $this->id->Id()];
+		return [self::CLASS_KEY => getClass($this), self::ID => $this->id->Id()];
 	}
 
 	public function unserialize(array $data): Serializable {
 		$this->validateSerializedData($data);
-		if ($data[self::CLASS] !== getClass($this)) {
+		if ($data[self::CLASS_KEY] !== getClass($this)) {
 			throw new LemuriaException('Class name mismatch.', new UnserializeException());
 		}
 		$this->id = new Id($data[self::ID]);
@@ -111,7 +111,7 @@ abstract class AbstractEffect implements Effect, Reassignment
 	 * @throws UnserializeEntityException
 	 */
 	protected function validateSerializedData(array $data): void {
-		$this->validate($data, self::CLASS, Validate::String);
+		$this->validate($data, self::CLASS_KEY, Validate::String);
 		$this->validate($data, self::ID, Validate::Int);
 	}
 }

@@ -13,8 +13,6 @@ class EffectFactory
 {
 	use SerializableTrait;
 
-	private const CLASS = 'class';
-
 	private readonly State $state;
 
 	private readonly string $namespace;
@@ -26,7 +24,7 @@ class EffectFactory
 
 	public function create(array $data): Effect {
 		$this->validateSerializedData($data);
-		$class = $this->namespace . $data[self::CLASS];
+		$class = $this->namespace . $data[AbstractEffect::CLASS_KEY];
 		/** @var Effect $effect */
 		$effect = new $class($this->state);
 		$effect->unserialize($data);
@@ -40,6 +38,6 @@ class EffectFactory
 	 * @throws UnserializeEntityException
 	 */
 	protected function validateSerializedData(array $data): void {
-		$this->validate($data, self::CLASS, Validate::String);
+		$this->validate($data, AbstractEffect::CLASS_KEY, Validate::String);
 	}
 }
