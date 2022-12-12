@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use function Lemuria\isInt;
+use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\BattleSpellExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BattleSpellInvalidMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BattleSpellMessage;
@@ -12,11 +13,10 @@ use Lemuria\Engine\Fantasya\Message\Unit\BattleSpellUnknownMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BattleSpellNoMagicianMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BattleSpellRemoveAllMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BattleSpellRemoveMessage;
+use Lemuria\Exception\LemuriaException;
 use Lemuria\Exception\SingletonException;
 use Lemuria\Model\Fantasya\SpellGrade;
 use Lemuria\Model\Fantasya\BattleSpell as BattleSpellInterface;
-use Lemuria\Model\Fantasya\BattleSpells;
-use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Model\Fantasya\Talent\Magic;
 
 /**
@@ -94,10 +94,9 @@ final class BattleSpell extends UnitCommand
 	private function addBattleSpell(SpellGrade $spell): void {
 		$battleSpells = $this->unit->BattleSpells();
 		if (!$battleSpells) {
-			$battleSpells = new BattleSpells();
+			throw new LemuriaException('This unit cannot have battle spells.');
 		}
 		$battleSpells->add($spell);
-		$this->unit->setBattleSpells($battleSpells);
 		$this->message(BattleSpellMessage::class)->s($spell->Spell());
 	}
 
@@ -106,9 +105,6 @@ final class BattleSpell extends UnitCommand
 		if ($battleSpells && $battleSpells->has($spell)) {
 			$battleSpells->remove($spell);
 			$this->message(BattleSpellRemoveMessage::class)->s($spell);
-			if (count($battleSpells) <= 0) {
-				$this->unit->setBattleSpells(null);
-			}
 		} else {
 			$this->message(BattleSpellNotSetMessage::class)->s($spell);
 		}
@@ -117,7 +113,13 @@ final class BattleSpell extends UnitCommand
 	private function removeAllBattleSpells(): void {
 		$battleSpells = $this->unit->BattleSpells();
 		if ($battleSpells && count($battleSpells) > 0) {
-			$this->unit->setBattleSpells(null);
+			$spells = [];
+			foreach ($battleSpells as $spell) {
+				$spells[] = $spell;
+			}
+			foreach ($spells as $spell) {
+				$battleSpells->remove($spell);
+			}
 			$this->message(BattleSpellRemoveAllMessage::class);
 		} else {
 			$this->message(BattleSpellNoneSetMessage::class);

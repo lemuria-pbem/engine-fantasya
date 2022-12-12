@@ -24,14 +24,17 @@ trait SplitTrait
 		$split->setIsGuarding($unit->IsGuarding())->setIsLooting($unit->IsLooting());
 		if ($unit->Aura()) {
 			$split->setAura($unit->Aura());
-			$battleSpells = $unit->BattleSpells();
-			if ($battleSpells) {
-				$split->setBattleSpells(clone $battleSpells);
-			}
 		}
 		foreach ($unit->Knowledge() as $ability /* @var Ability $ability */) {
 			$split->Knowledge()->add(new Ability($ability->Talent(), $ability->Experience()));
 		}
+		$battleSpells = $unit->BattleSpells();
+		if ($battleSpells) {
+			foreach ($battleSpells as $spell) {
+				$split->BattleSpells()->add($spell);
+			}
+		}
+
 
 		$unit->Party()->People()->add($split);
 		$unit->Region()->Residents()->add($split);
