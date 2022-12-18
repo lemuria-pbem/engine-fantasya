@@ -616,7 +616,7 @@
 		"LoseToUnitMessage": "Die Einheit $id erbt $quantity von der aufgelösten Einheit $from.",
 		"LoseUnicumMessage": "Die Einheit $id wirft {das:$composition} $unicum weg.",
 		"MagicRingActiveMessage": "Der Effekt {des:$composition} $composition $unicum hält weiterhin an.",
-		"MarketFeeBannedMessage": "Die Einheit $id hat die Marktgebühr nicht gezahlt und wird diese Woche keinen Handel treiben.",
+		"MarketFeeBannedMessage": "Die Einheit $unit hat die Marktgebühr nicht gezahlt und wird diese Woche keinen Handel treiben.",
 		"MarketFeeNotPaidMessage": "Die Einheit $id kann die Marktgebühr nicht zahlen und diese Woche keinen Handel treiben.",
 		"MarketFeePaidMessage": "Die Einheit $id zahlt die Marktgebühr von $fee an die Marktaufsicht $unit.",
 		"MarketFeeReceivedMessage": "Die Einheit $id erhält $fee als Marktgebühr von der Einheit $unit.",
