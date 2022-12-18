@@ -753,6 +753,7 @@
 		"ReserveNothingMessage": "Die Einheit $id kann {kein:$commodity} aus dem Materialpool reservieren.",
 		"ReserveOnlyMessage": "Die Einheit $id kann nur $reserve aus dem Materialpool reservieren.",
 		"RetirementMessage": "Du hast heute Deine letzte Einheit verloren und beendest damit das Spiel. Lebe wohl!",
+		"RetirementPartyMessage": "Wie es scheint, hat die Partei $name [$party] diese Welt verlassen.",
 		"RingOfInvisibilityApplyMessage": "Die Einheit $id steckt {das:$composition} $composition $unicum über den Finger und wird unsichtbar.",
 		"RingOfInvisibilityEnchantmentMessage": "Die Einheit $id besitzt einen verzauberten Goldring, aus dem sie jetzt ein Ring der Unsichtbarkeit erschaffen kann.",
 		"RingOfInvisibilityGoldRingMessage": "Die Einheit $id hat keinen Goldring, um Ring der Unsichtbarkeit zu zaubern.",

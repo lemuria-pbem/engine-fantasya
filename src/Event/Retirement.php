@@ -3,12 +3,14 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Message\Party\RetirementMessage;
+use Lemuria\Engine\Fantasya\Message\Party\RetirementPartyMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
+use Lemuria\Model\Fantasya\Relation;
 
 /**
  * Retire parties that have no units left.
@@ -23,7 +25,7 @@ final class Retirement extends AbstractEvent
 		Lemuria::Log()->debug('Running Retirement check.');
 		$parties   = Lemuria::Catalog()->getAll(Domain::PARTY);
 		$all       = count($parties);
-		$active    = 0;
+		$active    = [];
 		$retired   = 0;
 		$nonPlayer = 0;
 		$deceased  = [];
@@ -38,14 +40,14 @@ final class Retirement extends AbstractEvent
 				continue;
 			}
 			if ($party->People()->count() > 0) {
-				$active++;
+				$active[] = $party;
 				continue;
 			}
 			$deceased[] = $party->retire();
 		}
 
 		Lemuria::Log()->debug('This game has ' . $all . ' parties, of which ' . $nonPlayer . ' are non-player parties.');
-		Lemuria::Log()->debug($active . ' parties are active.');
+		Lemuria::Log()->debug(count($active) . ' parties are active.');
 		if (empty($deceased)) {
 			Lemuria::Log()->debug($retired . ' parties have retired before. No new retirements.');
 		} else {
@@ -53,6 +55,22 @@ final class Retirement extends AbstractEvent
 			foreach ($deceased as $party) {
 				Lemuria::Log()->debug('The party ' . $party . ' has no units left and retires now.');
 				$this->message(RetirementMessage::class, $party);
+				foreach ($active as $other) {
+					$relations = [];
+					$diplomacy = $other->Diplomacy();
+					if ($diplomacy->isKnown($party)) {
+						$diplomacy->Acquaintances()->remove($party);
+						foreach ($diplomacy as $relation) {
+							if ($relation->Party() === $party) {
+								$relations[] = $relation;
+							}
+						}
+						foreach ($relations as $relation) {
+							$diplomacy->remove($relation);
+						}
+						$this->message(RetirementPartyMessage::class, $other)->e($party)->p($party->Name());
+					}
+				}
 			}
 		}
 	}
