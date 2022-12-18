@@ -13,7 +13,7 @@ class DescribeCastleMessage extends AbstractRegionMessage
 	protected Id $owner;
 
 	protected function create(): string {
-		return 'Unit ' . $this->owner . ' is not owner of the biggest castle in region '. $this->id . ' and thus cannot describe it.';
+		return 'Unit ' . $this->owner . ' is not in the owning party of the biggest castle in region '. $this->id . ' and thus cannot describe it.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {

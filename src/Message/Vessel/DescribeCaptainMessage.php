@@ -13,7 +13,7 @@ class DescribeCaptainMessage extends AbstractVesselMessage
 	protected Id $captain;
 
 	protected function create(): string {
-		return 'Unit ' . $this->captain . ' is not captain of vessel ' . $this->id . ' and thus cannot describe it.';
+		return "Unit " . $this->captain . " is not in the captain's party of vessel " . $this->id . " and thus cannot describe it.";
 	}
 
 	protected function getData(LemuriaMessage $message): void {

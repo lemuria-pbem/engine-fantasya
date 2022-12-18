@@ -115,7 +115,7 @@ final class Describe extends UnitCommand
 			}
 
 			$owner = $construction->Inhabitants()->Owner();
-			if ($owner && $owner === $this->unit) {
+			if ($owner && $owner->Party() === $this->unit->Party()) {
 				$construction->setDescription($description);
 				$this->message(DescribeConstructionMessage::class)->e($construction);
 				return;
@@ -145,7 +145,7 @@ final class Describe extends UnitCommand
 					}
 				}
 			}
-			if ($castle === $home && $home->Inhabitants()->Owner() === $this->unit) {
+			if ($castle === $home && $home->Inhabitants()->Owner()->Party() === $this->unit->Party()) {
 				$region->setDescription($description);
 				$this->message(DescribeRegionMessage::class)->e($region);
 				return;
@@ -158,7 +158,7 @@ final class Describe extends UnitCommand
 		$vessel = $this->unit->Vessel();
 		if ($vessel) {
 			$captain = $vessel->Passengers()->Owner();
-			if ($captain && $captain === $this->unit) {
+			if ($captain && $captain->Party() === $this->unit->Party()) {
 				$vessel->setDescription($description);
 				$this->message(DescribeVesselMessage::class)->e($vessel);
 				return;
