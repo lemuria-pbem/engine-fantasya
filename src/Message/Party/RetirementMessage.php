@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Section;
 
 class RetirementMessage extends AbstractPartyMessage
 {
-	protected Result $result = Result::Failure;
+	protected Result $result = Result::Event;
 
 	protected Section $section = Section::Economy;
 
