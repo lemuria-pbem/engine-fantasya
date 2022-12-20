@@ -3,12 +3,12 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Party;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Id;
 
 class RetirementPartyMessage extends RetirementMessage
 {
-	protected string $level = Message::EVENT;
+	protected Result $level = Result::Event;
 
 	protected Id $party;
 

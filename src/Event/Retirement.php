@@ -10,7 +10,6 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
-use Lemuria\Model\Fantasya\Relation;
 
 /**
  * Retire parties that have no units left.
