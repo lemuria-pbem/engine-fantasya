@@ -13,7 +13,7 @@ class DescribeOwnerMessage extends AbstractConstructionMessage
 	protected Id $owner;
 
 	protected function create(): string {
-		return 'Unit ' . $this->owner . ' is not owner of construction ' . $this->id . ' and thus cannot describe it.';
+		return 'Unit ' . $this->owner . ' is not the owning party of the construction ' . $this->id . ' and thus cannot describe it.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {

@@ -333,6 +333,11 @@ final class Accept extends UnitCommand
 	}
 
 	private function exchange(Quantity $quantity, Quantity $payment): void {
+		if ($this->trade->Trade() === Trade::DEMAND) {
+			$temp     = $quantity;
+			$quantity = $payment;
+			$payment  = $temp;
+		}
 		$unit     = $this->trade->Unit();
 		$merchant = $unit->Inventory();
 		$customer = $this->unit->Inventory();

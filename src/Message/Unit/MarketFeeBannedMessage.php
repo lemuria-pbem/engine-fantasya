@@ -13,7 +13,7 @@ class MarketFeeBannedMessage extends MarketFeeNotPaidMessage
 	protected Id $unit;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' has not paid the market fee, it will not trade this week.';
+		return 'Unit ' . $this->unit . ' has not paid the market fee, it will not trade this week.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {

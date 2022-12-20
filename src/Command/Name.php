@@ -116,7 +116,7 @@ final class Name extends UnitCommand
 			}
 
 			$owner = $construction->Inhabitants()->Owner();
-			if ($owner && $owner === $this->unit) {
+			if ($owner && $owner->Party() === $this->unit->Party()) {
 				$construction->setName($name);
 				$this->message(NameConstructionMessage::class, $construction)->p($name);
 				return;
@@ -146,7 +146,7 @@ final class Name extends UnitCommand
 					}
 				}
 			}
-			if ($castle === $home && $home->Inhabitants()->Owner() === $this->unit) {
+			if ($castle === $home && $home->Inhabitants()->Owner()->Party() === $this->unit->Party()) {
 				$region->setName($name);
 				$this->message(NameRegionMessage::class, $region)->p($name);
 				return;
@@ -159,7 +159,7 @@ final class Name extends UnitCommand
 		$vessel = $this->unit->Vessel();
 		if ($vessel) {
 			$captain = $vessel->Passengers()->Owner();
-			if ($captain && $captain === $this->unit) {
+			if ($captain && $captain->Party() === $this->unit->Party()) {
 				$vessel->setName($name);
 				$this->message(NameVesselMessage::class, $vessel)->p($name);
 				return;

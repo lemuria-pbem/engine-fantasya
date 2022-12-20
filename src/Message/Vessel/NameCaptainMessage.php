@@ -13,7 +13,7 @@ class NameCaptainMessage extends AbstractVesselMessage
 	protected Id $captain;
 
 	protected function create(): string {
-		return 'Unit ' . $this->captain . ' is not captain of vessel ' . $this->id . ' and thus cannot rename it.';
+		return "Unit " . $this->captain . " is not a member of the captain's party of vessel " . $this->id . " and thus cannot rename it.";
 	}
 
 	protected function getData(LemuriaMessage $message): void {
