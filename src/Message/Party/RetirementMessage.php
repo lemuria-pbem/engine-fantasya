@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Section;
 
 class RetirementMessage extends AbstractPartyMessage
 {
-	protected string $level = Message::FAILURE;
+	protected string $level = Message::EVENT;
 
 	protected Section $section = Section::ECONOMY;
 
