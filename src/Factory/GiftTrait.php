@@ -10,9 +10,12 @@ use Lemuria\Engine\Fantasya\Message\Unit\DismissPeasantsMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DismissOnlyPeasantsMessage;
 use Lemuria\Item;
 use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Container;
 use Lemuria\Model\Fantasya\Heirs;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Unit;
 
 trait GiftTrait
@@ -53,6 +56,28 @@ trait GiftTrait
 		$factory   = $this->context->Factory();
 		$container = $factory->kind($commodity);
 		return $container ?: $factory->commodity($commodity);
+	}
+
+	private function fillResources(int &$resourceCount): Resources {
+		$resources = new Resources();
+		$inventory = $this->unit->Inventory();
+		if ($this->commodity instanceof Everything) {
+			$resources->fill($inventory);
+			$resourceCount = $this->unit->Size();
+		} elseif ($this->commodity instanceof Container) {
+			$this->commodity->setResources($inventory);
+			foreach ($this->commodity->Commodities() as $commodity /* @var Commodity $commodity */) {
+				/** @var Quantity $quantity */
+				$quantity = $inventory[$commodity];
+				$count    = $this->amount === PHP_INT_MAX ? $quantity->Count() : $this->amount;
+				$resources->add(new Quantity($commodity, $count));
+			}
+		} elseif ($this->commodity instanceof Peasant) {
+			$resourceCount = $this->amount === PHP_INT_MAX ? $this->unit->Size() : $this->amount;
+		} else {
+			$resourceCount = $this->amount === PHP_INT_MAX ? $inventory[$this->commodity]->Count() : $this->amount;
+		}
+		return $resources;
 	}
 
 	/**

@@ -27,6 +27,7 @@ use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Container;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Resources;
 
 /**
  * Implementation of command GIB.
@@ -45,26 +46,34 @@ final class Give extends UnitCommand
 	use GiftTrait;
 	use SiegeTrait;
 
-	protected function run(): void {
+	private Resources $resources;
+
+	private int $resourceCount = 0;
+
+	protected function initialize(): void {
+		parent::initialize();
 		$i               = 1;
 		$this->recipient = $this->nextId($i);
-		$count           = $this->phrase->getParameter($i++);
-		$commodity       = $this->phrase->getLine($i);
 		if (!$this->recipient) {
 			throw new InvalidCommandException($this, 'No recipient parameter.');
 		}
+		$count           = $this->phrase->getParameter($i++);
+		$commodity       = $this->phrase->getLine($i);
+		$this->parseObject($count, $commodity);
+		$this->resources = $this->fillResources($this->resourceCount);
+	}
+
+	protected function run(): void {
 		if ($this->recipient->Region() !== $this->unit->Region()) {
 			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
 			return;
 		}
-
-		$this->parseObject($count, $commodity);
 		if ($this->isStoppedBySiege($this->unit, $this->recipient)) {
 			$this->message(GiveSiegeMessage::class)->e($this->recipient);
 			return;
 		}
 		if ($this->commodity instanceof Peasant) {
-			$this->givePersons($this->amount === PHP_INT_MAX ? $this->unit->Size() : $this->amount);
+			$this->givePersons();
 			return;
 		}
 
@@ -78,7 +87,6 @@ final class Give extends UnitCommand
 			}
 			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
 		}
-
 		if (!$isVisible) {
 			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
 			return;
@@ -87,15 +95,14 @@ final class Give extends UnitCommand
 		if ($this->commodity instanceof Everything) {
 			$this->giveEverything();
 			if ($this->phrase->count() === 1) {
-				$this->givePersons($this->unit->Size());
+				$this->givePersons();
 			}
 		} elseif ($this->commodity instanceof Container) {
-			$this->commodity->setResources($this->unit->Inventory());
-			foreach ($this->commodity->Commodities() as $commodity /* @var Commodity $commodity */) {
-				$this->give($commodity, $this->amount);
+			foreach ($this->resources as $quantity /* @var Quantity $quantity */) {
+				$this->give($quantity->Commodity(), $quantity->Count());
 			}
 		} else {
-			$this->give($this->commodity, $this->amount);
+			$this->give($this->commodity, $this->resourceCount);
 		}
 	}
 
@@ -124,11 +131,11 @@ final class Give extends UnitCommand
 	 */
 	private function giveEverything(): void {
 		$inventory = $this->unit->Inventory();
-		foreach ($inventory as $quantity /* @var Quantity $quantity */) {
+		foreach ($this->resources as $quantity /* @var Quantity $quantity */) {
+			$inventory->remove($quantity);
 			$gift = new Quantity($quantity->Commodity(), $quantity->Count());
 			$this->giveOnly($gift);
 		}
-		$inventory->clear();
 	}
 
 	/**
@@ -159,17 +166,17 @@ final class Give extends UnitCommand
 	/**
 	 * Transfer persons to own unit.
 	 */
-	private function givePersons(int $count): void {
+	private function givePersons(): void {
 		if ($this->recipient->Party() !== $this->unit->Party()) {
 			$this->message(GivePersonsToOwnMessage::class);
 			return;
 		}
 		$fromSize = $this->unit->Size();
-		if ($count <= 0 || $fromSize <= 0) {
+		if ($this->resourceCount <= 0 || $fromSize <= 0) {
 			$this->message(GiveNoPersonsMessage::class);
 			return;
 		}
-		$amount = min($count, $fromSize);
+		$amount = min($this->resourceCount, $fromSize);
 		if ($this->recipient->Construction() && !$this->unit->Construction()) {
 			$construction = $this->recipient->Construction();
 			$used         = $construction->Inhabitants()->Size();
@@ -185,7 +192,7 @@ final class Give extends UnitCommand
 		$this->unit->setSize($fromSize - $amount);
 		$this->recipient->setSize($toSize + $amount);
 		$this->mergeKnowledge($toSize, $amount);
-		if ($amount < $count) {
+		if ($amount < $this->resourceCount) {
 			$this->message(GivePersonsOnlyMessage::class)->e($this->recipient)->p($amount);
 		} else {
 			$this->message(GivePersonsMessage::class)->e($this->recipient)->p($amount);
