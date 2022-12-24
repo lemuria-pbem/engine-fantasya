@@ -285,6 +285,7 @@
 		"AnnouncementNoPartyMessage": "Die Einheit $id kann keine Einheit der Partei $target finden, um ihr eine Botschaft zu senden.",
 		"AnnouncementNoUnitMessage": "Die Einheit $id kann die Einheit $target nicht finden, um ihr eine Botschaft zu senden.",
 		"AnnouncementNoVesselMessage": "Die Einheit $id kann das Schiff $target nicht finden, um eine Botschaft zu senden.",
+		"AnnouncementOwnMessage": "Die Einheit $id kann sich nicht selbst eine Botschaft senden.",
 		"AnnouncementPartyMessage": "Wir haben eine Botschaft von der Partei $sender erhalten: \"$message\"",
 		"AnnouncementRegionMessage": "Botschaft von der Partei $sender: \"$message\"",
 		"AnnouncementToConstructionMessage": "Die Einheit $id hat am Gebäude $target eine Botschaft ausgehangen: \"$message\"",

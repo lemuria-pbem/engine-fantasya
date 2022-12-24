@@ -2,17 +2,11 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
-use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
 
-class AnnouncementNoUnitMessage extends AbstractUnitMessage
+class AnnouncementNoUnitMessage extends AnnouncementOwnMessage
 {
-	protected Result $result = Result::Failure;
-
-	protected Section $section = Section::Mail;
-
 	protected Id $target;
 
 	protected function create(): string {

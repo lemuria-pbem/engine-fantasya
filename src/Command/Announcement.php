@@ -13,6 +13,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementNoConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementNoPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementNoUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementNoVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementOwnMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementToConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementToPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementToRegionMessage;
@@ -74,7 +75,9 @@ final class Announcement extends UnitCommand
 	}
 
 	private function sendToUnit(Unit $unit, string $message): void {
-		if ($unit->Region() === $this->unit->Region() && $this->calculus()->canDiscover($unit)) {
+		if ($unit === $this->unit) {
+			$this->message(AnnouncementOwnMessage::class);
+		} elseif ($unit->Region() === $this->unit->Region() && $this->calculus()->canDiscover($unit)) {
 			$calculus  = $this->context->getCalculus($unit);
 			$recipient = (string)$unit;
 			if ($calculus->canDiscover($this->unit)) {
