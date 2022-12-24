@@ -35,7 +35,6 @@ final class Timer extends DelegatedEvent
 			['class' => BrokenCarriage::class, 'options' => [BrokenCarriage::PARTY => 8, BrokenCarriage::REGION => 1617]]
 		],
 		93 => [
-			//['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 84]],
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 193]],
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 875]],
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 4]],
@@ -45,6 +44,10 @@ final class Timer extends DelegatedEvent
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 1291]],
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 1054]],
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 812295]]
+		],
+		94 => [
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 1572]],
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 1573]]
 		],
 		95 => [['class' => HatchGriffinEgg::class]],
 		97 => [['class' => HatchGriffinEgg::class]],
