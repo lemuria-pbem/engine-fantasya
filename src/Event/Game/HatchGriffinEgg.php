@@ -40,6 +40,10 @@ final class HatchGriffinEgg extends AbstractEvent
 
 	protected function initialize(): void {
 		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
+			if ($party->hasRetired()) {
+				continue;
+			}
+
 			foreach ($party->People() as $unit /* @var Unit $unit */) {
 				if ($unit->Inventory()[$this->egg]->Count()) {
 					$this->unit[] = $unit;

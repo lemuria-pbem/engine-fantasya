@@ -21,6 +21,10 @@ final class Decease extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
+			if ($party->hasRetired()) {
+				continue;
+			}
+
 			Lemuria::Log()->debug('Running Decease for Party ' . $party->Id() . '.', ['party' => $party]);
 			$units = $party->People();
 			foreach ($units as $unit /* @var Unit $unit */) {

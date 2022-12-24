@@ -23,7 +23,7 @@ final class Layabout extends AbstractEvent
 	protected function run(): void {
 		$count = 0;
 		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
-			if ($party->Type() === Type::Player) {
+			if ($party->Type() === Type::Player && !$party->hasRetired()) {
 				foreach ($party->People() as $unit /* @var Unit $unit */) {
 					if (!$this->state->getProtocol($unit)->hasActivity()) {
 						$this->message(LayaboutMessage::class, $unit);

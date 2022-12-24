@@ -32,6 +32,10 @@ final class Visit extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
+			if ($party->hasRetired()) {
+				continue;
+			}
+
 			Lemuria::Log()->debug('Running Visit for Party ' . $party->Id() . '.', ['party' => $party]);
 			$census = new Census($party);
 			$atlas  = $census->getAtlas();

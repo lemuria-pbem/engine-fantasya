@@ -27,7 +27,7 @@ final class Education extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
-			if ($party->Type() === Type::Player) {
+			if ($party->Type() === Type::Player && !$party->hasRetired()) {
 				$this->placeMetrics(Subject::Education, $party);
 				$this->placeMetrics(Subject::Experts, $party);
 

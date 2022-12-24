@@ -21,7 +21,9 @@ final class ContinentUpheaval extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
-			$this->message(ContinentUpheavalMessage::class, $party);
+			if (!$party->hasRetired()) {
+				$this->message(ContinentUpheavalMessage::class, $party);
+			}
 		}
 	}
 }
