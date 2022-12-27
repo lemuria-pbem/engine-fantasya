@@ -21,6 +21,7 @@ use Lemuria\Model\Fantasya\Market\Trade;
  *
  * - ANGEBOT|NACHFRAGE <amount> <commodity> <price> [<commodity>]
  * - ANGEBOT|NACHFRAGE <amount>-<amount> <commodity> <price> [<commodity>]
+ * - ANGEBOT|NACHFRAGE * <commodity> <price> [<commodity>]
  * - ANGEBOT|NACHFRAGE <amount> <commodity> <price>-<price> [<commodity>]
  * - ANGEBOT|NACHFRAGE <amount>-<amount> <commodity> <price>-<price> [<commodity>]
  */
@@ -85,7 +86,10 @@ abstract class TradeCommand extends UnitCommand
 		$i       = 1;
 		$c       = 0;
 
-		if (preg_match('/^\d+(-\d+)?$/', $this->phrase->getParameter($i++), $matches) === 1) {
+		$parameter = $this->phrase->getParameter($i++);
+		if ($parameter === '*') {
+			$parts[self::AMOUNT] = [1, Deal::ADAPTING_MAX];
+		} elseif (preg_match('/^\d+(-\d+)?$/', $parameter, $matches) === 1) {
 			$parts[self::AMOUNT] = $this->parseNumber($matches[0]);
 		} else {
 			throw new UnknownCommandException($this);

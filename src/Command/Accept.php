@@ -47,6 +47,7 @@ use Lemuria\Model\Fantasya\Unit;
  * Accept a trade from a unit.
  *
  * - HANDEL <trade>
+ * - HANDEL <trade> <amount> <commodity>
  * - HANDEL <trade> <price> <payment>
  * - HANDEL <trade> <amount> <commodity> <price> <payment>
  */
@@ -307,8 +308,9 @@ final class Accept extends UnitCommand
 	}
 
 	private function checkPieces(): ?Deal {
-		$goods = $this->trade->Goods();
-		if ($this->amount < $goods->Minimum() || $this->amount > $goods->Maximum()) {
+		$goods   = $this->trade->Goods();
+		$maximum = $goods->IsAdapting() ? $this->getAvailableMaximum(): $goods->Maximum();
+		if ($this->amount < $goods->Minimum() || $this->amount > $maximum) {
 			if ($this->trade->Trade() === Trade::OFFER) {
 				$this->message(AcceptOfferAmountMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
 			} else {
@@ -409,6 +411,19 @@ final class Accept extends UnitCommand
 		} else {
 			$this->message(AcceptNoFeeMessage::class)->e($this->trade);
 			$this->message(AcceptNoFeeReceivedMessage::class, $owner)->e($this->trade)->e($this->unit, AcceptNoFeeReceivedMessage::UNIT);
+		}
+	}
+
+	private function getAvailableMaximum(): int {
+		$inventory = $this->trade->Unit()->Inventory();
+		if ($this->trade->Trade() === Trade::OFFER) {
+			$commodity = $this->trade->Goods()->Commodity();
+			return $inventory[$commodity]->Count();
+		} else {
+			$price     = $this->trade->Price();
+			$commodity = $price->Commodity();
+			$ppp       = $price->Maximum();
+			return (int)floor($inventory[$commodity]->Count() / $ppp);
 		}
 	}
 }
