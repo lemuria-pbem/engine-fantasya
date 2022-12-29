@@ -3,7 +3,9 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
+use Lemuria\Engine\Fantasya\Combat\BattlePlan;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleBeginsMessage;
+use Lemuria\Engine\Fantasya\Combat\Place;
 use Lemuria\Engine\Fantasya\Combat\Side;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
@@ -12,7 +14,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\AttackAllyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackCancelMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMonsterMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\AttackInCastleMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackInBuildingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackInvolveMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFightingMessage;
@@ -23,7 +25,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\AttackSelfMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselMessage;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
@@ -70,8 +71,10 @@ final class Attack extends UnitCommand
 				$this->message(AttackNotFoundMessage::class)->p($id);
 				continue;
 			}
-			if ($this->checkUnit($unit)) {
+			$place = $this->getPlace($unit);
+			if ($place !== Place::None) {
 				$this->units[] = $unit;
+				Lemuria::Log()->debug($this->unit . ' will fight against ' . $unit . ' in ' . strtolower($place->name) . '.');
 			}
 		} while ($unit);
 		$this->commitCommand($this);
@@ -148,54 +151,53 @@ final class Attack extends UnitCommand
 		}
 	}
 
-	private function checkUnit(?Unit $unit): bool {
+	private function getPlace(?Unit $unit): Place {
 		if (!$unit) {
-			return false;
+			return Place::None;
 		}
 		if ($unit === $this->unit) {
 			$this->message(AttackSelfMessage::class);
-			return false;
+			return Place::None;
 		}
 		$we    = $this->unit->Party();
 		$party = $unit->Party();
 		if ($party === $we) {
 			$this->message(AttackOwnUnitMessage::class)->p((string)$unit->Id());
-			return false;
+			return Place::None;
 		}
 		if ($unit->Region() !== $this->unit->Region()) {
 			$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
-			return false;
+			return Place::None;
 		}
 		$isMonsterCombat = $we->Type() === Type::Monster && $party->Type() === Type::Monster;
 		if (!$isMonsterCombat && !$this->checkVisibility($this->unit, $unit)) {
 			$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
-			return false;
+			return Place::None;
 		}
 		if ($we->Diplomacy()->has(Relation::COMBAT, $unit)) {
 			$this->message(AttackAllyMessage::class)->p((string)$unit->Id());
-			return false;
+			return Place::None;
 		}
 
-		$construction    = $unit->Construction();
-		$ourConstruction = $this->unit->Construction();
-		if ($construction instanceof Castle && $construction !== $ourConstruction) {
-			$this->message(AttackInCastleMessage::class)->e($unit);
-			return false;
-		}
-		$vessel    = $unit->Vessel();
-		$ourVessel = $this->unit->Vessel();
-		if ($vessel && $vessel !== $ourVessel) {
-			$this->message(AttackOnVesselMessage::class)->e($unit);
-			return false;
-		}
-
-		if (!$construction && !$vessel) {
-			if ($ourConstruction) {
-				$this->message(LeaveConstructionMessage::class)->e($ourConstruction);
-			} elseif ($ourVessel) {
-				$this->message(LeaveVesselMessage::class)->e($ourVessel);
+		$place = BattlePlan::canAttack($this->unit, $unit);
+		if ($place === Place::None) {
+			$construction = $unit->Construction();
+			if ($construction) {
+				$this->message(AttackInBuildingMessage::class)->e($unit)->s($construction->Building());
+			} else {
+				$this->message(AttackOnVesselMessage::class)->e($unit);
+			}
+		} elseif ($place === Place::Region) {
+			$construction = $this->unit->Construction();
+			if ($construction) {
+				$this->message(LeaveConstructionMessage::class)->e($construction);
+			} else {
+				$vessel = $this->unit->Vessel();
+				if ($vessel) {
+					$this->message(LeaveVesselMessage::class)->e($vessel);
+				}
 			}
 		}
-		return true;
+		return $place;
 	}
 }

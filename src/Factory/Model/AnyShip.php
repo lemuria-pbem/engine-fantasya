@@ -34,6 +34,10 @@ final class AnyShip implements Ship
 		return 0;
 	}
 
+	public function Size(): int {
+		return 0;
+	}
+
 	public function Tare(): int {
 		return 0;
 	}

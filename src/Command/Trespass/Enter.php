@@ -17,7 +17,10 @@ use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
 use Lemuria\Id;
+use Lemuria\Model\Fantasya\Building\Canal;
 use Lemuria\Model\Fantasya\Building\Market;
+use Lemuria\Model\Fantasya\Building\Monument;
+use Lemuria\Model\Fantasya\Building\Quay;
 use Lemuria\Model\Fantasya\Building\Ruin;
 use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Construction;
@@ -33,7 +36,7 @@ final class Enter extends UnitCommand
 	use FreeSpaceTrait;
 	use SiegeTrait;
 
-	public final const FORBIDDEN = [Ruin::class, Signpost::class];
+	public final const FORBIDDEN = [Canal::class, Monument::class, Quay::class, Ruin::class, Signpost::class];
 
 	protected function run(): void {
 		if ($this->phrase->count() < 1) {

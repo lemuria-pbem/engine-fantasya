@@ -88,9 +88,9 @@ class Battle
 
 	private Resources $battlefieldRemains;
 
-	private ?Construction $construction ;
+	private Construction|false|null $construction = false;
 
-	private ?Vessel $vessel;
+	private Vessel|false|null $vessel = false;
 
 	public function __construct(private Region $region) {
 		$this->intelligence = new Intelligence($this->region);
@@ -115,6 +115,14 @@ class Battle
 		return $this->getParties($this->defenders);
 	}
 
+	public function Construction(): Construction|false|null {
+		return $this->construction;
+	}
+
+	public function Vessel(): Vessel|false|null {
+		return $this->vessel;
+	}
+
 	public function addAttacker(Unit $unit): Battle {
 		$this->attackers[] = $unit;
 		$id                = $unit->Id()->Id();
@@ -124,8 +132,12 @@ class Battle
 				Lemuria::Log()->debug('Monster ' . $monster . ' supports attacker in battle.');
 			}
 		}
-		$this->construction = $unit->Construction();
-		$this->vessel       = $unit->Vessel();
+		if ($this->construction === false) {
+			$this->construction = $unit->Construction();
+		}
+		if ($this->vessel === false) {
+			$this->vessel = $unit->Vessel();
+		}
 		return $this;
 	}
 
@@ -138,8 +150,14 @@ class Battle
 				Lemuria::Log()->debug('Monster ' . $monster . ' supports defender in battle.');
 			}
 		}
-		$this->construction = $unit->Construction();
-		$this->vessel       = $unit->Vessel();
+		$construction = $unit->Construction();
+		if ($this->construction !== null) {
+			$this->construction = $construction;
+		}
+		$vessel = $unit->Vessel();
+		if ($this->vessel !== null) {
+			$this->vessel = $vessel;
+		}
 		return $this;
 	}
 
