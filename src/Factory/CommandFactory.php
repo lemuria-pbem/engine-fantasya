@@ -670,6 +670,8 @@ class CommandFactory
 		'Traenke'     => Kind::Potion,
 		'Tränke'      => Kind::Potion,
 		'Transporter' => Kind::Transport,
+		'Trophaeen'   => Kind::Trophy,
+		'Trophäen'    => Kind::Trophy,
 		'Waffen'      => Kind::Weapon
 	];
 
