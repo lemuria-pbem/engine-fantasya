@@ -43,7 +43,7 @@ class Guard implements Act
 					$this->message(UnguardMessage::class, $this->unit);
 				}
 			} else {
-				if ($this->unit->BattleRow() >= BattleRow::Defensive && randChance(self::GUARD)) {
+				if ($this->unit->BattleRow()->value >= BattleRow::Defensive->value && randChance(self::GUARD)) {
 					$this->isGuarding = true;
 				}
 			}
