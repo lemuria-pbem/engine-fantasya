@@ -14,7 +14,7 @@
 ^(locale) +[a-zA-Z0-9]+$
 ^(region) +.+$
 
-^(ange|angeb|angebo|angebot) +[0-9-]+ +[a-zäöüß ]+[0-9-]+ +[a-zäöüß ]+$
+^(ange|angeb|angebo|angebot) +([0-9-]+|\*) +[a-zäöüß ]+[0-9-]+ +[a-zäöüß ]+$
 
 ^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren)( +[a-z0-9]{1,6})+$
 
@@ -94,7 +94,7 @@
 ^@?(m|ma|mac|mach|mache|machen) +straße +(no|o|so|sw|w|nw)( +[0-9]+)?$
 ^@?(m|ma|mac|mach|mache|machen) +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
 
-^(nachf|nachfr|nachfra|nachfrag|nachfrage) +[0-9-]+ +[a-zäöüß ]+[0-9-]+ +[a-zäöüß ]+$
+^(nachf|nachfr|nachfra|nachfrag|nachfrage) +([0-9-]+|\*) +[a-zäöüß ]+[0-9-]+ +[a-zäöüß ]+$
 
 ^@?(nam|name|bene|benen|benenn|benenne|benennen)( +(einheit|region|gebäude|gebaeude|burg|schiff|partei))? +.+$
 
@@ -136,7 +136,7 @@
 ^@?(besteh|bestehl|bestehle|bestehlen) +[a-z0-9]{1,6}$
 ^@?(di|die|dieb|diebs|diebst|diebsta|diebstah|diebstahl) +[a-z0-9]{1,6}$
 
-^(steu|steue|steuer|steuern|steuers|steuersa|steuersat|steuersatz) +[0-9]+ +([a-zäöüß ]+)?$
+^(steu|steue|steuer|steuern|steuers|steuersa|steuersat|steuersatz) +[0-9]+( +[a-zäöüß ]+)?$
 ^(steu|steue|steuer|steuern|steuers|steuersa|steuersat|steuersatz) +[0-9]+ *%$
 
 ^@?(tar|tarn|tarne|tarnen|tarnu|tarnun|tarnung)( +([0-9]+|nein|nicht|partei( +[a-z0-9]{1,6})?))?$
