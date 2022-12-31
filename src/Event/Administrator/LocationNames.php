@@ -34,9 +34,10 @@ final class LocationNames extends AbstractEvent
 				Lemuria::Log()->debug('Region ' . $region . ' already has a good name.');
 				continue;
 			}
-			$name = $this->namer->name($region);
+			$oldName = $region->Name();
+			$name    = $this->namer->name($region);
 			$region->setName($name);
-			Lemuria::Log()->debug($region . ' is called ' . $name . ' now.');
+			Lemuria::Log()->debug($oldName . ' is called ' . $name . ' now.');
 		}
 	}
 }
