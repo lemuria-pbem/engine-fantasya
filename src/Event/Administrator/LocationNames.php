@@ -6,6 +6,7 @@ use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Exception\NamerException;
 use Lemuria\Factory\Namer;
 use Lemuria\Lemuria;
 use Lemuria\Model\Dictionary;
@@ -35,9 +36,13 @@ final class LocationNames extends AbstractEvent
 				continue;
 			}
 			$oldName = $region->Name();
-			$name    = $this->namer->name($region);
-			$region->setName($name);
-			Lemuria::Log()->debug($oldName . ' is called ' . $name . ' now.');
+			try {
+				$name = $this->namer->name($region);
+				$region->setName($name);
+				Lemuria::Log()->debug($oldName . ' is called ' . $name . ' now.');
+			} catch (NamerException $e) {
+				Lemuria::Log()->critical('Region ' . $region . ' could not be named.', ['exception' => $e]);
+			}
 		}
 	}
 }
