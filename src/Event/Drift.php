@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use Lemuria\Model\Fantasya\Navigable;
 use function Lemuria\randElement;
 use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Factory\NavigationTrait;
@@ -13,7 +14,6 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Navigation;
@@ -52,7 +52,7 @@ final class Drift extends AbstractEvent
 		foreach (Lemuria::Catalog()->getAll(Domain::Vessel) as $vessel /* @var Vessel $vessel */) {
 			$this->vessel = $vessel;
 			$region       = $vessel->Region();
-			if ($region->Landscape() instanceof Ocean) {
+			if ($region->Landscape() instanceof Navigable) {
 				if ($this->hasSufficientCrew()) {
 					continue;
 				}
@@ -69,7 +69,7 @@ final class Drift extends AbstractEvent
 				/** @var Region $driftRegion */
 				$driftRegion = $neighbours[$direction];
 				$landscape   = $driftRegion->Landscape();
-				if ($landscape instanceof Ocean || $this->canSailTo($driftRegion)) {
+				if ($landscape instanceof Navigable || $this->canSailTo($driftRegion)) {
 					$this->moveVessel($driftRegion);
 					$this->message(DriftMessage::class, $vessel)->p($direction->value);
 				} else {

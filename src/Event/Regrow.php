@@ -39,9 +39,9 @@ use Lemuria\Model\Fantasya\Landscape\Forest;
 use Lemuria\Model\Fantasya\Landscape\Glacier;
 use Lemuria\Model\Fantasya\Landscape\Highland;
 use Lemuria\Model\Fantasya\Landscape\Mountain;
-use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Landscape\Plain;
 use Lemuria\Model\Fantasya\Landscape\Swamp;
+use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Region;
 
 /**
@@ -120,7 +120,7 @@ final class Regrow extends AbstractEvent
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
 			$landscape = $region->Landscape();
-			if ($landscape instanceof Ocean) {
+			if ($landscape instanceof Navigable) {
 				continue;
 			}
 			if (!$region->Herbage()) {

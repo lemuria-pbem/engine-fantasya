@@ -25,7 +25,7 @@ use Lemuria\Model\Fantasya\Aura;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Landscape\Ocean;
+use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Ship\Boat;
 use Lemuria\Model\Fantasya\Ship\Dragonship;
 use Lemuria\Model\Fantasya\Ship\Longboat;
@@ -174,7 +174,7 @@ final class Learn extends UnitCommand implements Activity
 	}
 
 	private function effectivity(): float {
-		if ($this->unit->Region()->Landscape() instanceof Ocean) {
+		if ($this->unit->Region()->Landscape() instanceof Navigable) {
 			$ship = $this->unit->Vessel()?->Ship();
 			if ($ship) {
 				$class = $ship::class;

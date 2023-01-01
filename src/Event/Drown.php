@@ -7,7 +7,7 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
-use Lemuria\Model\Fantasya\Landscape\Ocean;
+use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
@@ -23,7 +23,7 @@ final class Drown extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
-			if ($region->Landscape() instanceof Ocean) {
+			if ($region->Landscape() instanceof Navigable) {
 				foreach ($region->Residents() as $unit /* @var Unit $unit */) {
 					if ($unit->Size() > 0 && $unit->Party()->Type() === Type::Player && !$unit->Vessel()) {
 						$unit->setHealth(0.0);

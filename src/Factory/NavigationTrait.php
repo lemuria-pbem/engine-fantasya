@@ -14,8 +14,8 @@ use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardCancelMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Luxury;
+use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Race\Aquan;
 use Lemuria\Model\Fantasya\Region;
@@ -68,7 +68,7 @@ trait NavigationTrait
 	private function getCoastline(Neighbours $neighbours): Neighbours {
 		$coastlines = new Neighbours();
 		foreach ($neighbours as $direction => $region /* @var Region $region */) {
-			if (!($region->Landscape() instanceof Ocean)) {
+			if (!($region->Landscape() instanceof Navigable)) {
 				$coastlines[$direction] = $region;
 			}
 		}
@@ -118,7 +118,7 @@ trait NavigationTrait
 		$region->Fleet()->remove($this->vessel);
 		$destination->Fleet()->add($this->vessel);
 
-		if ($destination->Landscape() instanceof Ocean) {
+		if ($destination->Landscape() instanceof Navigable) {
 			$this->vessel->setAnchor(Direction::IN_DOCK);
 			$this->vessel->setPort(null);
 		} else {

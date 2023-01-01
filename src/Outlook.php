@@ -10,7 +10,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Lighthouse;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Landscape\Ocean;
+use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
@@ -147,7 +147,7 @@ final class Outlook
 		// Add direct neighbours and collect directions.
 		$directions = [];
 		foreach ($world->getNeighbours($region) as $direction => $neighbour /* @var Region $neighbour */) {
-			if ($neighbour->Landscape() instanceof Ocean) {
+			if ($neighbour->Landscape() instanceof Navigable) {
 				$directions[] = $direction;
 				if ($hasLighthouse) {
 					$visible->setVisibility($neighbour, Visibility::Lighthouse);
@@ -163,18 +163,18 @@ final class Outlook
 		while ($distance++ < $range) {
 			$nextDirections = $directions;
 			foreach ($nextDirections as $i => $direction) {
-				$isOcean = false;
+				$isWater = false;
 				foreach ($world->getPath($region, $direction, $distance) as $way) {
 					$neighbour = array_pop($way);
-					if ($neighbour->Landscape() instanceof Ocean) {
-						$isOcean = true; // Filter out directions that have no ocean as target.
+					if ($neighbour->Landscape() instanceof Navigable) {
+						$isWater = true; // Filter out directions that have no water area as target.
 					}
 					if ($world->getDistance($region, $neighbour) === $distance) {
 						$visible->add($neighbour);
 						$visible->setVisibility($neighbour, Visibility::Lighthouse);
 					}
 				}
-				if (!$isOcean) {
+				if (!$isWater) {
 					unset($directions[$i]);
 				}
 			}

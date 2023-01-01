@@ -21,7 +21,7 @@ use Lemuria\Model\Fantasya\Building\Canal;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gathering;
-use Lemuria\Model\Fantasya\Landscape\Ocean;
+use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
@@ -78,11 +78,11 @@ trait TravelTrait
 					return null;
 				}
 			}
-			if ($landscape instanceof Ocean) {
+			if ($landscape instanceof Navigable) {
 				$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
 				return $neighbour;
 			}
-			if ($region->Landscape() instanceof Ocean) {
+			if ($region->Landscape() instanceof Navigable) {
 				if (!$this->canSailTo($neighbour) && !$this->useAirshipEffect()) {
 					$this->message(TravelLandMessage::class, $this->vessel)->p($direction->value)->s($landscape)->e($neighbour);
 					return null;
@@ -107,7 +107,7 @@ trait TravelTrait
 			return $neighbour;
 		}
 
-		if ($landscape instanceof Ocean) {
+		if ($landscape instanceof Navigable) {
 			$this->message(TravelIntoOceanMessage::class)->p($direction->value);
 			return null;
 		}
@@ -144,9 +144,6 @@ trait TravelTrait
 		$this->hasTravelled = true;
 	}
 
-	/**
-	 * @noinspection PhpConditionAlreadyCheckedInspection
-	 */
 	protected function unitIsStoppedByGuards(Region $region): Gathering {
 		$guards = new Gathering();
 		if ($this->context->getTurnOptions()->IsSimulation()) {
@@ -166,7 +163,7 @@ trait TravelTrait
 				$guardOnVessel = (bool)$guard->Vessel();
 				if ($guardOnVessel === $isOnVessel) {
 					if (!$guardParty->Diplomacy()->has(Relation::GUARD, $this->unit)) {
-						if ($region instanceof Ocean) {
+						if ($region instanceof Navigable) {
 							$guards->add($guardParty);
 						} else {
 							$perception = $this->context->getCalculus($guard)->knowledge(Perception::class)->Level();
@@ -187,10 +184,10 @@ trait TravelTrait
 	 */
 	protected function unitIsAllowedToPass(Region $region, Gathering $guards): Gathering {
 		$remaining     = new Gathering();
-		$isSimultation = $this->context->getTurnOptions()->IsSimulation();
+		$isSimulation = $this->context->getTurnOptions()->IsSimulation();
 		foreach ($guards as $party /* @var Party $party */) {
 			$remaining->add($party);
-			if ($isSimultation) {
+			if ($isSimulation) {
 				continue;
 			}
 			$diplomacy = $party->Diplomacy();
@@ -262,7 +259,7 @@ trait TravelTrait
 				if ($owner && $owner !== $party && !$owner->Diplomacy()->has(Relation::PASS, $this->unit)) {
 					continue;
 				}
-				if ($neighbour->Landscape() instanceof Ocean) {
+				if ($neighbour->Landscape() instanceof Navigable) {
 					return true;
 				}
 			}

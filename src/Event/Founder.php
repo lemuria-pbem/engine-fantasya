@@ -10,7 +10,7 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
-use Lemuria\Model\Fantasya\Landscape\Ocean;
+use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
 
@@ -31,7 +31,7 @@ final class Founder extends AbstractEvent
 	protected function run(): void {
 		foreach (Lemuria::Catalog()->getAll(Domain::Vessel) as $vessel /* @var Vessel $vessel */) {
 			$excessCargo = Lemuria::Score()->find($this->effect($vessel));
-			if ($vessel->Region()->Landscape() instanceof Ocean) {
+			if ($vessel->Region()->Landscape() instanceof Navigable) {
 				$completion = $vessel->Completion();
 				if ($completion <= 0.0) {
 					$this->founder($vessel);

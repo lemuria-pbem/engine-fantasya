@@ -12,7 +12,6 @@ use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
-use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Monster\Bear;
@@ -35,7 +34,6 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\StumpSpear;
 use Lemuria\Model\Fantasya\Continent;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gang;
-use Lemuria\Model\Fantasya\Landscape;
 use Lemuria\Model\Fantasya\Landscape\Forest;
 use Lemuria\Model\Fantasya\Landscape\Highland;
 use Lemuria\Model\Fantasya\Landscape\Mountain;
@@ -61,43 +59,36 @@ final class PopulateContinent extends AbstractEvent
 	public final const CHANCES = 'changes';
 
 	private const LANDSCAPE = [
-		Bear::class => Forest::class,
-		Ent::class => Forest::class,
-		Ghoul::class => Swamp::class,
-		Goblin::class => Plain::class,
+		Bear::class     => Forest::class,
+		Ent::class      => Forest::class,
+		Ghoul::class    => Swamp::class,
+		Goblin::class   => Plain::class,
 		Skeleton::class => Mountain::class,
-		Kraken::class => Ocean::class,
-		Wolf::class => Forest::class,
-		Zombie::class => Highland::class
+		Kraken::class   => Ocean::class,
+		Wolf::class     => Forest::class,
+		Zombie::class   => Highland::class
 	];
 
 	private const SIZE = [
-		Bear::class => 1,
-		Ent::class => 4,
-		Ghoul::class => 8,
-		Goblin::class => 10,
-		Skeleton::class => 8,
-		Kraken::class => 1,
-		Wolf::class => 7,
-		Zombie::class => 6
+		Bear::class     =>  1,
+		Ent::class      =>  4,
+		Ghoul::class    =>  8,
+		Goblin::class   => 10,
+		Skeleton::class =>  8,
+		Kraken::class   =>  1,
+		Wolf::class     =>  7,
+		Zombie::class   =>  6
 	];
 
 	private const CHANCE = [
-		Bear::class => 7,
-		Ent::class => 25,
-		Ghoul::class => 30,
-		Goblin::class => 10,
+		Bear::class     =>  7,
+		Ent::class      => 25,
+		Ghoul::class    => 30,
+		Goblin::class   => 10,
 		Skeleton::class => 50,
-		Kraken::class => 25,
-		Wolf::class => 7,
-		Zombie::class => 40
-	];
-
-	private const LAKE = [
-		2450, 2451, 2519,
-		2504, 2505, 2574, 2575, 2644,
-		3269, 3270,
-		3364, 3365, 3366, 3433, 3434, 3435, 3436, 3502, 3503, 3504, 3505, 3506, 3571, 3572, 3573, 3574, 3575, 3641
+		Kraken::class   => 25,
+		Wolf::class     =>  7,
+		Zombie::class   => 40
 	];
 
 	private const HAS_SHIELD = 0.5;
@@ -140,7 +131,7 @@ final class PopulateContinent extends AbstractEvent
 			$monster     = self::createMonster($race);
 			$environment = self::createLandscape(self::LANDSCAPE[$race]);
 			foreach ($continent->Landmass() as $region /* @var Region $region */) {
-				if ($this->isAppropriate($region, $environment)) {
+				if ($region->Landscape() === $environment) {
 					$regions[] = $region;
 				}
 			}
@@ -182,26 +173,5 @@ final class PopulateContinent extends AbstractEvent
 				}
 			}
 		}
-	}
-
-	private function isAppropriate(Region $region, Landscape $landscape): bool {
-		if ($landscape instanceof Ocean) {
-			if ($this->isLake($region)) {
-				return false;
-			}
-		}
-		return $region->Landscape() === $landscape;
-	}
-
-	private function isLake(Region $region): bool {
-		foreach (Lemuria::World()->getNeighbours($region) as $region /* @var Region $region */) {
-			if ($region->Landscape() instanceof Ocean) {
-				return false;
-			}
-			if (in_array($region->Id()->Id(), self::LAKE)) {
-				return false;
-			}
-		}
-		return true;
 	}
 }

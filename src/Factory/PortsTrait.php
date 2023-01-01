@@ -10,8 +10,8 @@ use Lemuria\Model\Fantasya\Building\Port;
 use Lemuria\Model\Fantasya\Building\Quay;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Landscape\Plain;
+use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Region;
@@ -129,7 +129,7 @@ trait PortsTrait
 
 	protected function canBeSailedTo(Ship $ship): bool {
 		$landscape = $this->region->Landscape();
-		if ($landscape instanceof Plain || $landscape instanceof Ocean) {
+		if ($landscape instanceof Plain || $landscape instanceof Navigable) {
 			return true;
 		}
 		if ($ship instanceof Longboat || $ship instanceof Dragonship) {
