@@ -52,17 +52,17 @@ final class Announcement extends UnitCommand
 					$this->sendToRegion();
 					break;
 				case 'partei' :
-					$id = Id::fromId(strtolower($this->phrase->getParameter($i)));
+					$id = $this->parseId($i);
 					$this->sendToParty(Party::get($id));
 					break;
 				case 'burg' :
 				case 'gebäude' :
 				case 'gebaeude' :
-					$id = Id::fromId(strtolower($this->phrase->getParameter($i)));
+					$id = $this->parseId($i);
 					$this->sendToConstruction(Construction::get($id));
 					break;
 				case 'schiff' :
-					$id = Id::fromId(strtolower($this->phrase->getParameter($i)));
+					$id = $this->parseId($i);
 					$this->sendToVessel(Vessel::get($id));
 					break;
 				default :

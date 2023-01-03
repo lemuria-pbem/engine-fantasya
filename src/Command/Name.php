@@ -172,7 +172,7 @@ final class Name extends UnitCommand
 
 	private function renameUnicum(string $id, string $name): void {
 		$treasury = $this->unit->Treasury();
-		$id       = Id::fromId($id);
+		$id       = $this->toId($id);
 		if ($treasury->has($id)) {
 			/** @var Unicum $unicum */
 			$unicum = $treasury[$id];

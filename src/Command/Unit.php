@@ -35,7 +35,7 @@ final class Unit extends AbstractCommand implements Immediate
 	 * @throws UnitException
 	 */
 	protected function run(): void {
-		$id = Id::fromId($this->phrase->getParameter());
+		$id = $this->parseId();
 		try {
 			$unit = UnitModel::get($id);
 		} catch (NotRegisteredException $e) {

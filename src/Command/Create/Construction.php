@@ -181,7 +181,7 @@ final class Construction extends AbstractProduct
 			$knowledge = $this->unit->Knowledge();
 			$ability   = $knowledge[$building->getCraft()->Talent()];
 			if ($ability->Count() > 0 && $this->phrase->count() === 2) {
-				$id     = Id::fromId($this->phrase->getParameter(2));
+				$id     = $this->parseId(2);
 				$estate = $this->unit->Region()->Estate();
 				if ($estate->has($id)) {
 					/** @var ConstructionModel $construction */

@@ -52,7 +52,7 @@ final class Help extends UnitCommand
 		if ($p === '0') {
 			$party = $this->unit->Party();
 		} else {
-			$partyId = Id::fromId($p);
+			$partyId = $this->toId($p);
 			if ($partyId->Id() === $this->unit->Party()->Id()->Id()) {
 				$this->message(HelpSelfMessage::class);
 				return;

@@ -69,10 +69,10 @@ final class Smash extends UnitCommand implements Activity
 			case 'burg' :
 			case 'gebäude' :
 			case 'gebaeude' :
-				$this->destroyConstruction(Id::fromId($param));
+				$this->destroyConstruction($this->toId($param));
 				break;
 			case 'schiff' :
-				$this->destroyVessel(Id::fromId($param));
+				$this->destroyVessel($this->toId($param));
 				break;
 			case 'straße' :
 			case 'strasse' :
@@ -88,7 +88,7 @@ final class Smash extends UnitCommand implements Activity
 			throw new UnknownCommandException($this);
 		}
 
-		$id     = Id::fromId($this->phrase->getParameter(2));
+		$id     = $this->parseId(2);
 		$estate = $this->unit->Region()->Estate();
 		if ($estate->has($id)) {
 			/** @var Construction $construction */

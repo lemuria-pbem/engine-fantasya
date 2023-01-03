@@ -49,7 +49,7 @@ final class Disguise extends UnitCommand
 					$this->unit->setDisguise(false);
 					$this->message(DisguisePartyNotMessage::class);
 				} else {
-					$partyId = Id::fromId($parameter);
+					$partyId = $this->toId($parameter);
 					try {
 						$party = Party::get($partyId);
 						if (!$this->unit->Party()->Diplomacy()->isKnown($party)) {

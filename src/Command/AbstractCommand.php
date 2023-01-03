@@ -86,12 +86,25 @@ abstract class AbstractCommand implements Command
 	}
 
 	/**
+	 * Parse string into ID.
+	 *
+	 * @throws InvalidIdException
+	 */
+	protected function toId(string $id): Id {
+		try {
+			return Id::fromId(strtolower($id));
+		} catch (IdException $e) {
+			throw new InvalidIdException($id, $e);
+		}
+	}
+
+	/**
 	 * Get ID from phrase parameter.
 	 *
 	 * @throws InvalidIdException
 	 */
 	protected function parseId(int $i = 1): Id {
-		$id = $this->phrase->getParameter($i);
+		$id = strtolower($this->phrase->getParameter($i));
 		try {
 			return Id::fromId($id);
 		} catch (IdException $e) {
@@ -105,7 +118,7 @@ abstract class AbstractCommand implements Command
 	 * @throws CommandException
 	 */
 	protected function nextId(int &$i, ?string &$id = null): ?Unit {
-		$id = $this->phrase->getParameter($i++);
+		$id = strtolower($this->phrase->getParameter($i++));
 		if (!$id) {
 			return null;
 		}

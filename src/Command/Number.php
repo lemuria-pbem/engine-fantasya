@@ -48,11 +48,7 @@ final class Number extends UnitCommand
 			$type = $this->phrase->getParameter();
 			$id   = $this->phrase->getParameter(2);
 		}
-		try {
-			$newId = Id::fromId($id);
-		} catch (IdException $e) {
-			throw new InvalidCommandException($this, 'Invalid ID given.', $e);
-		}
+		$newId = $this->toId($id);
 
 		switch (mb_strtolower($type)) {
 			case 'einheit' :
@@ -153,7 +149,7 @@ final class Number extends UnitCommand
 			$this->message(NumberNoUnicumMessage::class)->p($oldId->Id());
 			return;
 		}
-		$newId = Id::fromId($this->phrase->getParameter(3));
+		$newId = $this->parseId(3);
 		if (Lemuria::Catalog()->has($newId, Domain::Unicum)) {
 			$this->message(NumberUnicumUsedMessage::class)->p($newId->Id());
 			return;

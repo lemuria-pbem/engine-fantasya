@@ -27,7 +27,7 @@ final class Origin extends UnitCommand
 		if ($n === 0) {
 			$this->setToRegion($this->unit->Region());
 		} elseif ($n === 2) {
-			$id = Id::fromId($this->phrase->getParameter(2));
+			$id = $this->parseId(2);
 			switch (strtolower($this->phrase->getParameter())) {
 				case 'partei' :
 					$this->setFromParty($id);

@@ -24,12 +24,7 @@ use Lemuria\Model\Fantasya\Unit;
 final class Visit extends UnitCommand
 {
 	protected function run(): void {
-		try {
-			$id = Id::fromId($this->phrase->getParameter());
-		} catch (IdException $e) {
-			throw new InvalidCommandException($this, previous: $e);
-		}
-
+		$id     = $this->parseId();
 		$region = $this->unit->Region();
 		$units  = $region->Residents();
 		if ($units->has($id)) {

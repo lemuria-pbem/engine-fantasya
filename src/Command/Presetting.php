@@ -127,7 +127,7 @@ final class Presetting extends UnitCommand
 			return;
 		}
 
-		$partyId = Id::fromId($party);
+		$partyId = $this->toId($party);
 		try {
 			$party = Party::get($partyId);
 			if (!$this->party->Diplomacy()->isKnown($party)) {

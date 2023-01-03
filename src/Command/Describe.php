@@ -171,7 +171,7 @@ final class Describe extends UnitCommand
 
 	private function describeUnicum(string $id, string $description): void {
 		$treasury = $this->unit->Treasury();
-		$id       = Id::fromId($id);
+		$id       = $this->toId($id);
 		if ($treasury->has($id)) {
 			/** @var Unicum $unicum */
 			$unicum = $treasury[$id];

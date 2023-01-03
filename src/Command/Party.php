@@ -22,7 +22,7 @@ final class Party extends AbstractCommand implements Immediate
 	}
 
 	protected function run(): void {
-		$id    = Id::fromId($this->phrase->getParameter());
+		$id    = $this->parseId();
 		$party = PartyModel::get($id);
 		$this->context->setParty($party);
 		$this->message(PartyMessage::class);

@@ -221,7 +221,7 @@ final class Accept extends UnitCommand
 		if ($this->phrase->count() <= 0) {
 			throw new InvalidCommandException($this);
 		}
-		$this->id = Id::fromId($this->phrase->getParameter());
+		$this->id = $this->parseId();
 		try {
 			$trade = Trade::get($this->id);
 			foreach ($this->sales as $index => $sales /* @var Sales $sales */) {

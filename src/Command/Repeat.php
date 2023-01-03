@@ -23,7 +23,7 @@ final class Repeat extends UnitCommand
 			throw new InvalidCommandException($this);
 		}
 
-		$id     = Id::fromId($this->phrase->getParameter());
+		$id     = $this->parseId();
 		$trades = $this->unit->Trades();
 		if (!$trades->has($id)) {
 			$this->message(RepeatNoneMessage::class)->p((string)$id);

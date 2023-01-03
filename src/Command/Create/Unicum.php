@@ -74,11 +74,9 @@ final class Unicum extends UnitCommand implements Activity
 		$parameter = $this->phrase->getParameter();
 		try {
 			$this->composition = $this->context->Factory()->composition($parameter);
-			$this->id          = $n === 2 ? Id::fromId($this->phrase->getParameter(2)) : null;
+			$this->id          = $n === 2 ? $this->parseId(2) : null;
 		} catch (UnknownCommandException $e) {
 			throw new InvalidCommandException($this, 'Unknown Composition: ' . $parameter, $e);
-		} catch (IdException $e) {
-			throw new InvalidCommandException($this, 'Invalid ID given.', $e);
 		}
 	}
 

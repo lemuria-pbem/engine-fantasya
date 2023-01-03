@@ -32,7 +32,7 @@ final class Cancel extends UnitCommand
 
 		$catalog = Lemuria::Catalog();
 		foreach ($cancel as $id) {
-			$id = Id::fromId($id);
+			$id = $this->toId($id);
 			if ($trades->has($id)) {
 				$trade = $trades[$id];
 				$trades->offsetUnset($id);

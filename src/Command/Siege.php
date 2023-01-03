@@ -51,7 +51,7 @@ final class Siege extends UnitCommand
 			throw new InvalidCommandException($this);
 		}
 
-		$id     = Id::fromId($this->phrase->getParameter())->Id();
+		$id     = $this->parseId()->Id();
 		$region = $this->unit->Region();
 		foreach ($region->Estate() as $construction /* @var Construction $construction */) {
 			if ($construction->Id()->Id() === $id) {
