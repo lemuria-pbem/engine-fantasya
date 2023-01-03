@@ -15,7 +15,7 @@ class TeachExceptionMessage extends AbstractUnitMessage
 	protected string $error;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' cannot teach. ' . $this->error;
+		return 'Unit ' . $this->id . ' cannot teach: ' . $this->error;
 	}
 
 	protected function getData(LemuriaMessage $message): void {

@@ -5,10 +5,13 @@ namespace Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Exception\Command\InvalidIdException;
+use Lemuria\Engine\Fantasya\Exception\Command\UnitNotFoundException;
 use Lemuria\Engine\Fantasya\Factory\ActionTrait;
 use Lemuria\Engine\Fantasya\Factory\ContextTrait;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
+use Lemuria\Exception\IdException;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
@@ -83,6 +86,20 @@ abstract class AbstractCommand implements Command
 	}
 
 	/**
+	 * Get ID from phrase parameter.
+	 *
+	 * @throws InvalidIdException
+	 */
+	protected function parseId(int $i = 1): Id {
+		$id = $this->phrase->getParameter($i);
+		try {
+			return Id::fromId($id);
+		} catch (IdException $e) {
+			throw new InvalidIdException($id, $e);
+		}
+	}
+
+	/**
 	 * Get Unit from phrase parameter.
 	 *
 	 * @throws CommandException
@@ -101,9 +118,13 @@ abstract class AbstractCommand implements Command
 		}
 
 		try {
-			return Unit::get(Id::fromId($id));
+			$unit = Id::fromId($id);
+			return Unit::get($unit);
+		} catch (IdException $e) {
+			throw new InvalidIdException($id, $e);
 		} catch (NotRegisteredException $e) {
-			throw new CommandException('Unit ' . $id . ' not found.', 0, $e);
+			/** @noinspection PhpUndefinedVariableInspection */
+			throw new UnitNotFoundException($unit, $e);
 		}
 	}
 }

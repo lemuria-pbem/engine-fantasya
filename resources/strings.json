@@ -208,6 +208,10 @@
 		"UNIT": "Einheit",
 		"VESSEL": "Schiff"
 	},
+	"exception": {
+		"InvalidId": "'$id' ist keine gültige Nummer.",
+		"UnitNotFound": "Die Einheit $id wurde nicht gefunden."
+	},
 	"health": {
 		"default": ["gesund", "erschöpft", "verletzt", "schwer verletzt", "dem Tode nah"],
 		"hunger": ["gesund", "hungert", "hungert sehr", "ausgezehrt", "fast verhungert"]
@@ -677,7 +681,7 @@
 		"OriginNotVisitedMessage": "Der Kartenursprung kann nicht auf die Region $region gesetzt werden - wir haben sie noch nicht besucht.",
 		"OriginUntoldMessage": "Der Kartenursprung kann nicht auf die Partei $party gesetzt werden - wir wissen nichts über sie.",
 		"OvercrowdedMessage": "Dein Gebäude $construction in der Region $region ist überbevölkert. Bitte sorge dafür, dass überzählige Personen es verlassen.",
-		"PartyExceptionMessage": "Fehler in den Befehlen: $exception.",
+		"PartyExceptionMessage": "Fehler in den Befehlen: $exception",
 		"PartyInRegionsMessage": "Die Partei $id hat Einheiten in {$regions:Region}.",
 		"PartyMessage": "Runde für Partei $id begonnen.",
 		"PartyVisitMessage": "Die Partei $id besucht {$regions:Region}.",
@@ -873,7 +877,7 @@
 		"TaxPreventMessage": "Unsere Wache hat die Einheit $unit vom Steuereintreiben abgehalten.",
 		"TaxWithoutWeaponMessage": "Die Einheit $id kann keine Waffen verwenden, um das Steuereintreiben zu erzwingen.",
 		"TeachBonusMessage": "Die Einheit $id hat $students Schüler (Bonus: $bonus).",
-		"TeachExceptionMessage": "Die Einheit $id kann nicht lehren. $error",
+		"TeachExceptionMessage": "Die Einheit $id kann nicht lehren: $error",
 		"TeachPartyMessage": "Die Einheit $id kann die Einheit $unit der Partei $party nicht lehren.",
 		"TeachRegionMessage": "Die Einheit $id kann die Einheit $student nicht lehren: Sie ist nicht in der Region.",
 		"TeachSelfMessage": "Die Einheit $id kann sich nicht selbst lehren.",
@@ -928,7 +932,7 @@
 		"UnicumMaterialMessage": "Die Einheit $id benutzt $material, um {ein:$composition} zu erschaffen.",
 		"UnicumNoMaterialMessage": "Die Einheit $id hat nicht genügend Ressourcen, um {ein:$composition} zu erschaffen.",
 		"UnicumNoneMessage": "Die Einheit $id kann {kein:$composition} mehr erschaffen.",
-		"UnitExceptionMessage": "Fehler im Befehl $action: $exception.",
+		"UnitExceptionMessage": "Fehler im Befehl $action: $exception",
 		"UnitMessage": "Wechsel zur Einheit $id.",
 		"UnmaintainedMessage": "Das Gebäude $id kann nicht genutzt werden, weil der Unterhalt nicht bezahlt wurde.",
 		"UnmaintainedOvercrowdedMessage": "Das Gebäude $id ist überfüllt und kann nicht genutzt werden.",

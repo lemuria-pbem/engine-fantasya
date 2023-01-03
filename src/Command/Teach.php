@@ -89,7 +89,7 @@ final class Teach extends UnitCommand implements Activity
 						break;
 					}
 				} catch (CommandException $e) {
-					$this->message(TeachExceptionMessage::class)->p($e->getMessage());
+					$this->message(TeachExceptionMessage::class)->p($e->getTranslation());
 				}
 			}
 		} else {

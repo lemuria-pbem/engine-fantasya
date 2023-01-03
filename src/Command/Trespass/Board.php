@@ -12,7 +12,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\LeaveSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardNotFoundMessage;
-use Lemuria\Id;
 use Lemuria\Model\Fantasya\Vessel;
 
 /**
@@ -28,7 +27,7 @@ final class Board extends UnitCommand
 		if ($this->phrase->count() < 1) {
 			throw new InvalidCommandException($this);
 		}
-		$id = Id::fromId($this->phrase->getParameter(0));
+		$id = $this->parseId();
 
 		$vessel = $this->unit->Vessel();
 		if ($vessel && $vessel->Id()->Id() === $id->Id()) {

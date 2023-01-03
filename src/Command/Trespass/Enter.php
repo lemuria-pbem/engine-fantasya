@@ -16,7 +16,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\EnterTooLargeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
-use Lemuria\Id;
 use Lemuria\Model\Fantasya\Building\Canal;
 use Lemuria\Model\Fantasya\Building\Market;
 use Lemuria\Model\Fantasya\Building\Monument;
@@ -42,7 +41,7 @@ final class Enter extends UnitCommand
 		if ($this->phrase->count() < 1) {
 			throw new InvalidCommandException($this);
 		}
-		$id = Id::fromId($this->phrase->getParameter(0));
+		$id = $this->parseId();
 
 		$construction = $this->unit->Construction();
 		if ($construction && $construction->Id()->Id() === $id->Id()) {

@@ -418,7 +418,9 @@ class LemuriaTurn implements Turn
 			$message     = new LemuriaMessage();
 			$messageType = self::createMessageType(UnitExceptionMessage::class);
 			$message->setAssignee($action->Unit()->Id())->setType($messageType);
-			$message->p($exception->getMessage())->p((string)$action->Phrase(), UnitExceptionMessage::ACTION)->setId($id);
+
+			$translation = $exception instanceof CommandException ? $exception->getTranslation() : $exception->getMessage();
+			$message->p($translation)->p((string)$action->Phrase(), UnitExceptionMessage::ACTION)->setId($id);
 		}
 	}
 
