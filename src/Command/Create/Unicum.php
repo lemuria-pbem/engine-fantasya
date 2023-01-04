@@ -19,7 +19,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\UnicumNoMaterialMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnicumNoneMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Exception\IdException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Dictionary;

@@ -19,7 +19,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\DescribeNotInConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DescribeNotInVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\DescribeCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\DescribeVesselMessage;
-use Lemuria\Id;
 use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Building\Monument;
 use Lemuria\Model\Fantasya\Construction;

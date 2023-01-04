@@ -404,7 +404,8 @@ class LemuriaTurn implements Turn
 		$id          = Lemuria::Report()->nextId();
 		$message     = new LemuriaMessage();
 		$messageType = self::createMessageType(PartyExceptionMessage::class);
-		$message->setAssignee($party->Id())->setType($messageType)->p($exception->getMessage())->setId($id);
+		$translation = $exception instanceof CommandException ? $exception->getTranslation() : $exception->getMessage();
+		$message->setAssignee($party->Id())->setType($messageType)->p($translation)->setId($id);
 	}
 
 	private function addActionException(EngineException $exception, Action $action): void {

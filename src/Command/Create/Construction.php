@@ -22,7 +22,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\ConstructionUnableMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Dictionary;
 use Lemuria\Model\Domain;

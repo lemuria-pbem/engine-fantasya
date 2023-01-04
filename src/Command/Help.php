@@ -13,7 +13,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\HelpRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpRegionNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpSelfMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpUnknownPartyMessage;
-use Lemuria\Id;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Exception\UnknownPartyException;
 use Lemuria\Model\Fantasya\Party;

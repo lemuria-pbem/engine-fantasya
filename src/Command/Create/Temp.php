@@ -1,18 +1,17 @@
 <?php
-/** @noinspection PhpConditionAlreadyCheckedInspection */
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
-use Lemuria\Engine\Fantasya\Command\Exception\TempUnitException;
+use Lemuria\Engine\Fantasya\Command\Exception\TempUnitExistsException;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Context;
-use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Immediate;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TempMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Entity;
 use Lemuria\Exception\IdException;
+use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
@@ -28,9 +27,9 @@ use Lemuria\Model\Fantasya\Unit;
  */
 final class Temp extends UnitCommand implements Immediate
 {
-	private Unit $createdUnit;
+	private ?Unit $createdUnit = null;
 
-	private Unit $creator;
+	private ?Unit $creator = null;
 
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
@@ -43,11 +42,10 @@ final class Temp extends UnitCommand implements Immediate
 		return $this;
 	}
 
-	/** @noinspection PhpPossiblePolymorphicInvocationInspection */
 	protected function run(): void {
 		if ($this->context->UnitMapper()->has($this->getTempNumber())) {
 			$this->context->Parser()->skip();
-			throw new TempUnitException('TEMP unit ' . $this->getTempNumber() . ' is mapped already.');
+			throw new TempUnitExistsException($this->getTempNumber());
 		}
 
 		$party = $this->context->Party();
@@ -55,7 +53,7 @@ final class Temp extends UnitCommand implements Immediate
 		$this->creator     = $this->context->Unit();
 		$this->createdUnit = new Unit();
 		$id                = $this->createId();
-		$this->createdUnit->setId($id)->setName('Einheit ' . $id);
+		$this->createdUnit->setName('Einheit ' . $id)->setId($id);
 		$this->createdUnit->setRace($party->Race());
 
 		$presettings = $party->Presettings();
@@ -75,24 +73,20 @@ final class Temp extends UnitCommand implements Immediate
 
 	/**
 	 * Get creator Unit.
-	 *
-	 * @throws CommandException
 	 */
 	public function getCreator(): Unit {
 		if (!$this->creator) {
-			throw new CommandException('Unit was not yet created.');
+			throw new LemuriaException('Unit was not yet created.');
 		}
 		return $this->creator;
 	}
 
 	/**
 	 * Get created Unit.
-	 *
-	 * @throws CommandException
 	 */
 	public function getUnit(): Unit {
 		if (!$this->createdUnit) {
-			throw new CommandException('Unit was not yet created.');
+			throw new LemuriaException('Unit was not yet created.');
 		}
 		return $this->createdUnit;
 	}

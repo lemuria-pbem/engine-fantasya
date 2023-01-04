@@ -9,7 +9,7 @@ use Lemuria\Engine\Fantasya\Exception\CommandException;
  */
 class TempUnitException extends CommandException
 {
-	public function __construct(string $message, ?CommandException $commandException = null) {
-		parent::__construct($message, 0, $commandException);
+	public function __construct(string $message, ?\Throwable $exception = null) {
+		parent::__construct($message, 0, $exception);
 	}
 }

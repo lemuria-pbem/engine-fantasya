@@ -18,7 +18,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\NumberUnitUsedMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\NumberCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\NumberVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\NumberVesselUsedMessage;
-use Lemuria\Exception\IdException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;

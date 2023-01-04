@@ -10,7 +10,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\DisguiseNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguisePartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguisePartyNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguiseUnknownPartyMessage;
-use Lemuria\Id;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Party;
 

@@ -23,7 +23,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementToVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\AnnouncementVesselMessage;
 use Lemuria\Engine\Fantasya\Outlook;
-use Lemuria\Id;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Unit;

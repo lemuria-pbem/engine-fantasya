@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\Immediate;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Party\PartyMessage;
 use Lemuria\Entity;
-use Lemuria\Id;
 use Lemuria\Model\Fantasya\Party as PartyModel;
 
 /**

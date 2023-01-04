@@ -8,5 +8,9 @@ enum Exception
 
 	case InvalidId;
 
+	case TempIdExists;
+
+	case TempUnitNotMapped;
+
 	case UnitNotFound;
 }

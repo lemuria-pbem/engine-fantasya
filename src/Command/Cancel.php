@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Message\Unit\CancelMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CancelNoneMessage;
-use Lemuria\Id;
 use Lemuria\Lemuria;
 
 /**

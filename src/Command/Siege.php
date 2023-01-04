@@ -15,7 +15,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\SiegeNotOurMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SiegeNotOurselvesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SiegeUnguardMessage;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;

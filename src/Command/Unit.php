@@ -9,7 +9,6 @@ use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnitMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Entity;
-use Lemuria\Id;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Unit as UnitModel;
 

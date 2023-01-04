@@ -3,8 +3,10 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Engine\Fantasya\Command\Create\Temp;
-use Lemuria\Engine\Fantasya\Exception\CommandException;
+use Lemuria\Engine\Fantasya\Command\Exception\TempUnitExistsException;
+use Lemuria\Engine\Fantasya\Command\Exception\TempUnitNotMappedException;
 use Lemuria\Engine\Fantasya\Command\Exception\TempUnitException;
+use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -38,13 +40,13 @@ class UnitMapper
 		$temp = $command->getTempNumber();
 		if ($temp) {
 			if ($this->has($temp)) {
-				throw new TempUnitException('TEMP unit ' . $temp . ' is mapped already.');
+				throw new TempUnitExistsException($temp);
 			}
 			try {
 				$id               = $command->getUnit()->Id()->Id();
 				$this->map[$temp] = $command;
 				$this->temp[$id]  = $temp;
-			} catch (CommandException $e) {
+			} catch (\Throwable $e) {
 				throw new TempUnitException($e->getMessage(), $e);
 			}
 		}
@@ -54,15 +56,15 @@ class UnitMapper
 	/**
 	 * Get newly created Unit by TEMP number.
 	 *
-	 * @throws TempUnitException
+	 * @throws TempUnitNotMappedException
 	 */
 	public function get(string $temp): Temp {
 		$temp = strtolower($temp);
 		if (!$temp) {
-			throw new TempUnitException('Empty TEMP number is not allowed.');
+			throw new LemuriaException('Empty TEMP number is not allowed.');
 		}
 		if (!isset($this->map[$temp])) {
-			throw new TempUnitException('TEMP unit ' . $temp . ' is not mapped.');
+			throw new TempUnitNotMappedException($temp);
 		}
 		return $this->map[$temp];
 	}
