@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Factory\Command\Dummy;
+use Lemuria\Engine\Fantasya\Factory\Command\Simulation;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Capacity;
@@ -73,7 +74,11 @@ class Travel extends UnitCommand implements Activity
 		if ($this->hasTravelled) {
 			parent::commitCommand($this);
 		} else {
-			parent::commitCommand(new Dummy($this->phrase, $this->context));
+			if ($this->context->getTurnOptions()->IsSimulation()) {
+				parent::commitCommand(new Simulation($this->phrase, $this->context));
+			} else {
+				parent::commitCommand(new Dummy($this->phrase, $this->context));
+			}
 		}
 		return $this;
 	}
@@ -159,14 +164,14 @@ class Travel extends UnitCommand implements Activity
 		}
 		$this->setRoadsLeft($movement);
 
-		$route       = [$this->unit->Region()];
-		$regions     = $speed - $this->workload->count();
-		$roadRegions = 2 * $regions;
+		$route             = [$this->unit->Region()];
+		$regions           = $speed - $this->workload->count();
+		$roadRegions       = 2 * $regions;
+		$chronicle         = $this->unit->Party()->Chronicle();
+		$isSimulation      = $this->context->getTurnOptions()->IsSimulation();
+		$simulationStopped = false;
 		$this->message(TravelSpeedMessage::class)->p($regions)->p($weight, TravelSpeedMessage::WEIGHT);
 		try {
-			$isSimulation = $this->context->getTurnOptions()->IsSimulation();
-			$chronicle    = $this->unit->Party()->Chronicle();
-
 			while (($regions > 0 || $roadRegions > 0) && $this->directions->hasMore()) {
 				$next = $this->directions->next();
 				if ($next === Direction::ROUTE_STOP) {
@@ -175,10 +180,10 @@ class Travel extends UnitCommand implements Activity
 
 				$region = $this->canMoveTo($next);
 				if ($isSimulation && !$chronicle->has($region->Id())) {
-					$region      = null;
-					$regions     = 0;
-					$roadRegions = 0;
-					$this->message(TravelSimulationMessage::class);
+					$region            = null;
+					$regions           = 0;
+					$roadRegions       = 0;
+					$simulationStopped = true;
 				}
 				if ($region) {
 					$overRoad = $this->overRoad($this->unit->Region(), $next, $region);
@@ -244,13 +249,22 @@ class Travel extends UnitCommand implements Activity
 			} else {
 				$this->message(TravelMessage::class)->p($movement)->entities($route);
 			}
+			if ($simulationStopped) {
+				$this->message(TravelSimulationMessage::class);
+			}
 		} else {
-			if ($this->vessel) {
-				foreach ($this->vessel->Passengers() as $unit/* @var Unit $unit */) {
-					$this->message(RoutePauseMessage::class, $unit);
+			if ($isSimulation) {
+				if ($simulationStopped) {
+					$this->message(TravelSimulationMessage::class);
 				}
 			} else {
-				$this->message(RoutePauseMessage::class);
+				if ($this->vessel) {
+					foreach ($this->vessel->Passengers() as $unit/* @var Unit $unit */) {
+						$this->message(RoutePauseMessage::class, $unit);
+					}
+				} else {
+					$this->message(RoutePauseMessage::class);
+				}
 			}
 		}
 		$this->newDefault = $this->getNewDefault();
