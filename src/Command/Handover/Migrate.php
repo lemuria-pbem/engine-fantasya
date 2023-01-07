@@ -12,6 +12,7 @@ use Lemuria\Engine\Fantasya\Message\Party\MigrateFromMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateIncompatibleMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateRejectedMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateToMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\MigrateInvisibleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\MigrateNotFoundMessage;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Race\Human;
@@ -44,7 +45,7 @@ final class Migrate extends UnitCommand
 			return;
 		}
 		if (!$this->checkVisibility($this->unit, $this->recipient)) {
-			$this->message(MigrateNotFoundMessage::class)->e($this->recipient);
+			$this->message(MigrateInvisibleMessage::class)->e($this->recipient);
 			return;
 		}
 

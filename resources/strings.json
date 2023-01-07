@@ -635,6 +635,7 @@
 		"MigrateFailedMessage": "Die Einheit $migrant kann sich der Partei $party nicht anschließen, weil diese die Aufnahme verweigert.",
 		"MigrateFromMessage": "Die Einheit $migrant schließt sich der Partei $party an.",
 		"MigrateIncompatibleMessage": "Die Einheit $migrant kann sich der Partei $party nicht anschließen, weil die Rassen unterschiedlich sind.",
+		"MigrateInvisibleFoundMessage": "Die Einheit $id kann nicht migrieren, die Zieleinheit $recipient ist nicht hier.",
 		"MigrateNotFoundMessage": "Die Einheit $id kann nicht migrieren, die Zieleinheit $recipient ist nicht hier.",
 		"MigrateRejectedMessage": "Die Einheit $migrant hat versucht, sich der Partei $party anzuschließen.",
 		"MigrateToMessage": "Wir haben die Einheit $migrant in unsere Partei aufgenommen.",

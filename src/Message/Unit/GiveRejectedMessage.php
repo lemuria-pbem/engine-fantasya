@@ -4,13 +4,10 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Factory\Model\Everything;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Fantasya\Message\Reliability;
 use Lemuria\Item;
 
-class GiveRejectedMessage extends GiveFailedMessage
+class GiveRejectedMessage extends GiveNotFoundMessage
 {
-	protected Reliability $reliability = Reliability::Determined;
-
 	protected Item $gift;
 
 	protected function create(): string {
