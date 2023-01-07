@@ -44,7 +44,8 @@ final class Participant implements \Stringable, Serializable
 
 	public function unserialize(array $data): Serializable {
 		$this->validateSerializedData($data);
-		$this->unit       = Entity::create($data[self::ID], $data[self::NAME]);
+		$this->unit = new Entity();
+		$this->unit->unserialize($data);
 		$this->combatants = $data[self::COMBATANTS];
 		$this->fighters   = $data[self::FIGHTERS];
 		return $this;
