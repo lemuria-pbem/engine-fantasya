@@ -18,16 +18,23 @@ use Lemuria\Model\Fantasya\Vessel;
  * A unit enters a vessel using the Board command.
  *
  * - BESTEIGEN <Vessel>
+ * - BESTEIGEN Schiff <Vessel>
  */
 final class Board extends UnitCommand
 {
 	use SiegeTrait;
 
 	protected function run(): void {
-		if ($this->phrase->count() < 1) {
+		$n = $this->phrase->count();
+		if ($n < 1 || $n > 2) {
 			throw new InvalidCommandException($this);
 		}
-		$id = $this->parseId();
+		if ($n === 2) {
+			if (strtolower($this->phrase->getParameter()) !== 'schiff') {
+				throw new InvalidCommandException($this);
+			}
+		}
+		$id = $this->parseId($n);
 
 		$vessel = $this->unit->Vessel();
 		if ($vessel && $vessel->Id()->Id() === $id->Id()) {

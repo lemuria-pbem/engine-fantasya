@@ -29,6 +29,7 @@ use Lemuria\Model\Fantasya\Relation;
  * A unit enters a construction using the Enter command.
  *
  * - BETRETEN <Construction>
+ * - BETRETEN Burg|Gebaeude|Gebäude <Construction>
  */
 final class Enter extends UnitCommand
 {
@@ -38,10 +39,17 @@ final class Enter extends UnitCommand
 	public final const FORBIDDEN = [Canal::class, Monument::class, Quay::class, Ruin::class, Signpost::class];
 
 	protected function run(): void {
-		if ($this->phrase->count() < 1) {
+		$n = $this->phrase->count();
+		if ($n < 1 || $n > 2) {
 			throw new InvalidCommandException($this);
 		}
-		$id = $this->parseId();
+		if ($n === 2) {
+			$what = mb_strtolower($this->phrase->getParameter());
+			if (!in_array($what, ['burg', 'gebaeude', 'gebäude'])) {
+				throw new InvalidCommandException($this);
+			}
+		}
+		$id = $this->parseId($n);
 
 		$construction = $this->unit->Construction();
 		if ($construction && $construction->Id()->Id() === $id->Id()) {

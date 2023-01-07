@@ -27,7 +27,7 @@
 
 ^@?(besc|besch|beschr|beschre|beschrei|beschreib|beschreibu|beschreibun|beschreibung|beschreibe|beschreiben|te|tex|text)( +(einheit|region|gebaeude|gebäude|burg|schiff|partei))? .+$
 
-^@?(bestei|besteig|besteige|besteigen) +[a-z0-9]{1,6}$
+^@?(bestei|besteig|besteige|besteigen)( +schiff)? +[a-z0-9]{1,6}$
 
 ^@?(besu|besuc|besuch|besuche|besuchen) +[a-z0-9]{1,6}$
 
