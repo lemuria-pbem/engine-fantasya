@@ -2,26 +2,31 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log;
 
-use Lemuria\Engine\Fantasya\Factory\BuilderTrait;
+use Lemuria\Exception\UnserializeException;
 use Lemuria\SerializableTrait;
 use Lemuria\Validate;
 
 class LemuriaMessage
 {
-	use BuilderTrait;
 	use SerializableTrait;
+
+	private const NAMESPACE = __NAMESPACE__ . '\\Message\\';
 
 	private const TYPE = 'type';
 
 	public function unserialize(array $data): Message {
 		$this->validateSerializedData($data);
-		return self::createBattleLogMessage($data[self::TYPE]);
+		$class = self::NAMESPACE . $data[self::TYPE];
+		if (class_exists($class)) {
+			return new $class();
+		}
+		throw new UnserializeException('Unknown battle log message class: ' . $data[self::TYPE]);
 	}
 
 	/**
 	 * Check that a serialized data array is valid.
 	 *
-	 * @param array (string=>mixed) $data
+	 * @param array<string, mixed> $data
 	 */
 	protected function validateSerializedData(array $data): void {
 		$this->validate($data, self::TYPE, Validate::String);

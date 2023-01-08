@@ -4,9 +4,8 @@ namespace Lemuria\Engine\Fantasya\Combat\Log;
 
 use Lemuria\Id;
 use Lemuria\Serializable;
-use Lemuria\Singleton;
 
-interface Message extends \Stringable, Serializable, Singleton
+interface Message extends \Stringable, Serializable
 {
 	public function Id(): Id;
 }
