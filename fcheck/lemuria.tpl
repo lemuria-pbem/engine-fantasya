@@ -20,7 +20,7 @@
 
 ^(ba|ban|bann|banne|banner) +.*$
 
-^(bee|been|beend|beende|beenden)( +[a-z0-9]{1,6})?$
+^(bee|been|beend|beende|beenden)( +[a-z0-9]{1,6})*$
 
 ^@?(benu|benut|benutz|benutze|benutzen)( +[0-9]+)? +(bauernlieb|berserkerblut|elixier der macht|gehirnschmalz|goliathwasser|heiltrank|pferdeglück|pferdeglueck|schaffenstrunk|siebenmeilentee|trank der wahrheit|wasser des lebens|wundsalbe)$
 ^@?(benu|benut|benutz|benutze|benutzen)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$

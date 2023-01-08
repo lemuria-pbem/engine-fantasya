@@ -11,14 +11,14 @@
 		}
 	],
 	"version": "1.2.2",
-	"time": "2023-01-08",
+	"time": "2023-01-11",
 
 	"require": {
 		"php": "~8.2",
 		"ext-json": "~8.2",
 		"ext-mbstring": "~8.2",
-		"lemuria-pbem/lemuria": "dev-master",
-		"lemuria-pbem/model-fantasya": "dev-master",
+		"lemuria-pbem/lemuria": "~1.2.0|dev-master",
+		"lemuria-pbem/model-fantasya": "~1.2.0|dev-master",
 		"monolog/monolog": "~3.2"
 	},
 	"require-dev": {
