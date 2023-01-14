@@ -10,7 +10,6 @@ use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
-use Lemuria\Model\Fantasya\Extension\Trades;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Market\Trade;
 use Lemuria\Model\Fantasya\Party;
@@ -30,7 +29,10 @@ final class State implements Reassignment
 
 	private readonly Casts $casts;
 
-	private readonly Trades $closedTrades;
+	/**
+	 * @var array(int=>Trade)
+	 */
+	private array $closedTrades = [];
 
 	/**
 	 * @var array(int=>UnitMapper)
@@ -99,8 +101,7 @@ final class State implements Reassignment
 	}
 
 	public function __construct() {
-		$this->casts        = new Casts();
-		$this->closedTrades = new Trades();
+		$this->casts = new Casts();
 	}
 
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
@@ -161,7 +162,7 @@ final class State implements Reassignment
 				break;
 			case Domain::Trade :
 				/** @var Trade $identifiable */
-				$this->closedTrades->add($identifiable);
+				$this->closedTrades[$identifiable->Id()->Id()] = $identifiable;
 			default :
 		}
 	}
@@ -181,7 +182,7 @@ final class State implements Reassignment
 		return $this->casts;
 	}
 
-	public function getClosedTrades(): Trades {
+	public function getClosedTrades(): array {
 		return $this->closedTrades;
 	}
 

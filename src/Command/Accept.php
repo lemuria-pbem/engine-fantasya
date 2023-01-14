@@ -88,7 +88,6 @@ final class Accept extends UnitCommand
 				$this->sales[]  = new Sales($construction);
 			}
 		}
-		$this->parseTrade();
 	}
 
 	protected function run(): void {
@@ -96,10 +95,10 @@ final class Accept extends UnitCommand
 			$this->message(AcceptNoMarketMessage::class);
 			return;
 		}
+
+		$this->parseTrade();
 		if (!$this->trade) {
-			$closedTrades = $this->context->getClosedTrades();
-			/** @var Trade $closed */
-			$closed = $closedTrades->has($this->id) ? $closedTrades->offsetGet($this->id) : null;
+			$closed = $this->context->getClosedTrades()[$this->id->Id()] ?? null;
 			if ($closed) {
 				if ($closed->Trade() === Trade::OFFER) {
 					$this->message(AcceptOfferAlreadyMessage::class)->p((string)$this->id);
@@ -111,6 +110,7 @@ final class Accept extends UnitCommand
 			$this->message(AcceptNoTradeMessage::class)->p((string)$this->id);
 			return;
 		}
+
 		if ($this->status === SalesModel::FORBIDDEN) {
 			$this->message(AcceptForbiddenTradeMessage::class)->e($this->trade);
 		} elseif ($this->status === SalesModel::UNSATISFIABLE && !$this->context->getTurnOptions()->IsSimulation()) {
