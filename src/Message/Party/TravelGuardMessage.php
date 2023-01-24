@@ -13,7 +13,7 @@ class TravelGuardMessage extends AbstractPartyMessage
 
 	protected Result $result = Result::Event;
 
-	protected Section $section = Section::Movement;
+	protected Section $section = Section::Guard;
 
 	protected Id $region;
 
