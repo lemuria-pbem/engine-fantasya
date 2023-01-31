@@ -536,8 +536,8 @@ final class Calculus
 					case Pegasus::class :
 						if ($max) {
 							$talent += $count;
-						} elseif ($half > $size) {
-							$talent += $half - $size;
+						} else {
+							$talent += $half;
 						}
 						break;
 					case Camel::class :
@@ -557,7 +557,7 @@ final class Calculus
 			}
 		}
 		if ($carriage) {
-			$talent = max($talent, $carriage * 2);
+			$talent = max($talent, $max ? $carriage * 2 : $carriage);
 		}
 		return $talent;
 	}
