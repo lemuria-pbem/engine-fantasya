@@ -529,17 +529,9 @@ final class Calculus
 			if ($item) {
 				$transport = $item->getObject();
 				$count     = $item->Count();
-				$half      = (int)ceil($count / 2);
 				switch ($transport::class) {
 					case Horse::class :
 						$count = max($count, $carriage * 2);
-					case Pegasus::class :
-						if ($max) {
-							$talent += $count;
-						} else {
-							$talent += $half;
-						}
-						break;
 					case Camel::class :
 						if ($max) {
 							$talent += $count;
@@ -550,6 +542,9 @@ final class Calculus
 					case Elephant::class :
 					case WarElephant::class :
 						$talent += $count * 2;
+						break;
+					case Pegasus::class :
+						$talent += $count * 3;
 						break;
 					case Griffin::class :
 						$talent += $count * 6;
