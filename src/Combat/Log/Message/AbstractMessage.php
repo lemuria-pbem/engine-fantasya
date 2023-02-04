@@ -25,7 +25,7 @@ abstract class AbstractMessage implements Message
 	protected static ?Dictionary $dictionary = null;
 
 	/**
-	 * @var string[]
+	 * @var array<string>
 	 */
 	protected array $simpleParameters = [];
 

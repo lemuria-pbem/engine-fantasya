@@ -12,7 +12,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\MarketFeeReceivedMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Extension\Market;
@@ -32,7 +31,7 @@ final class MarketFee extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Construction) as $construction /* @var Construction $construction */) {
+		foreach (Construction::all() as $construction) {
 			$extensions = $construction->Extensions();
 			$market     = $extensions[Market::class] ?? null;
 			if ($market instanceof Market) {
@@ -41,7 +40,7 @@ final class MarketFee extends AbstractEvent
 					$inhabitants = $construction->Inhabitants();
 					$owner       = $inhabitants->Owner();
 					$nonPayers   = [];
-					foreach ($inhabitants as $unit /* @var Unit $unit */) {
+					foreach ($inhabitants as $unit) {
 						if ($unit !== $owner) {
 							if (!$this->pay($unit, $fee->Commodity(), $fee->Count(), $owner)) {
 								$nonPayers[] = $unit;

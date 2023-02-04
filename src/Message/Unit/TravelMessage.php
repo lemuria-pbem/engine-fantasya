@@ -2,19 +2,19 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
-use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
+use Lemuria\Engine\Fantasya\Travel\Movement;
 
 class TravelMessage extends AbstractUnitMessage
 {
 	protected const MOVES = [
-		Capacity::DRIVE => ['drives', 'fährt'],
-		Capacity::FLY   => ['flies', 'fliegt'],
-		Capacity::RIDE  => ['rides', 'reitet'],
-		Capacity::SHIP  => ['sails', 'segelt'],
-		Capacity::WALK  => ['travels', 'reist']
+		Movement::Drive->name => 'drives',
+		Movement::Fly->name   => 'flies',
+		Movement::Ride->name  => 'rides',
+		Movement::Ship->name  => 'sails',
+		Movement::Walk->name  => 'travels'
 	];
 
 	protected Result $result = Result::Success;
@@ -31,7 +31,7 @@ class TravelMessage extends AbstractUnitMessage
 		$to   = array_pop($via);
 		$v    = count($via);
 
-		$message = 'Unit ' . $this->id . ' ' . self::MOVES[$this->move][0] . ' from region ' . $from;
+		$message = 'Unit ' . $this->id . ' ' . self::MOVES[$this->move] . ' from region ' . $from;
 		if ($v) {
 			if ($v === 1) {
 				$message .= ' via region '. $via[0];
@@ -56,7 +56,7 @@ class TravelMessage extends AbstractUnitMessage
 
 	protected function getTranslation(string $name): string {
 		if ($name === 'move') {
-			return self::MOVES[$this->move][1];
+			return $this->translateKey('movement.' . $this->move);
 		}
 		if ($name === 'route') {
 			$via   = $this->route;

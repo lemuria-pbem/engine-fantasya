@@ -14,7 +14,6 @@ use Lemuria\Model\Fantasya\Commodity\Monster\Wolf;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\People;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * A seeking monster tries to spot a random outdoor player unit in the region.
@@ -43,7 +42,7 @@ class Seek implements Act
 		$calculus = new Calculus($this->unit);
 		$races    = self::MONSTER[$this->unit->Race()::class] ?? [];
 		$region   = $this->unit->Region();
-		foreach ($region->Residents() as $unit /* @var Unit $unit */) {
+		foreach ($region->Residents() as $unit) {
 			if ($unit->Party()->Type() === Type::Monster) {
 				if (in_array($unit->Race()::class, $races) && $unit->Size() > 0) {
 					$this->enemy->add($unit);

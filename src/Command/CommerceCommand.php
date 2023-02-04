@@ -83,7 +83,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	 * This method should return the foreign parties that prevent executing the
 	 * command.
 	 *
-	 * @return Party[]
+	 * @return array<Party>
 	 */
 	public function checkBeforeCommerce(): array {
 		if ($this->lastCheck === null) {
@@ -135,7 +135,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	/**
 	 * Do the check before allocation.
 	 *
-	 * @return Party[]
+	 * @return array<Party>
 	 */
 	protected function getCheckBeforeCommerce(): array {
 		return $this->getCheckByAgreement(Relation::TRADE);
@@ -207,7 +207,6 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	protected function goods(): Quantity {
 		$this->traded->rewind();
 		if ($this->traded->valid()) {
-			/** @var Quantity $quantity */
 			$quantity = $this->traded->current();
 		} else {
 			$quantity = new Quantity($this->commodity, 0);

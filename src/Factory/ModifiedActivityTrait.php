@@ -12,7 +12,7 @@ trait ModifiedActivityTrait
 	private ?UnitCommand $newDefault = null;
 
 	/**
-	 * @return Command[]
+	 * @return array<Command>
 	 */
 	public function getNewDefaults(): array {
 		if ($this->preventDefault) {

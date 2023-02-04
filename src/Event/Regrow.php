@@ -9,7 +9,6 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Calendar\Season;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Herb;
 use Lemuria\Model\Fantasya\Commodity\Herb\Bubblemorel;
 use Lemuria\Model\Fantasya\Commodity\Herb\Bugleweed;
@@ -118,7 +117,7 @@ final class Regrow extends AbstractEvent
 	 * @noinspection PhpConditionAlreadyCheckedInspection
 	 */
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
+		foreach (Region::all() as $region) {
 			$landscape = $region->Landscape();
 			if ($landscape instanceof Navigable) {
 				continue;
@@ -185,7 +184,7 @@ final class Regrow extends AbstractEvent
 
 	private function getNeighbourLandscapes(Region $region): array {
 		$neighbours = [];
-		foreach (Lemuria::World()->getNeighbours($region) as $neighbour /* @var Region $neighbour */) {
+		foreach (Lemuria::World()->getNeighbours($region) as $neighbour) {
 			$landscape = $neighbour->Landscape();
 			$neighbours[$landscape::class] = true;
 		}

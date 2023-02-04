@@ -18,7 +18,7 @@ final class FarsightEffect extends AbstractRegionEffect
 	private Gathering $parties;
 
 	/**
-	 * @var array(int=>int)
+	 * @var array<int, int>
 	 */
 	private array $perception = [];
 

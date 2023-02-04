@@ -10,8 +10,6 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\People;
-use Lemuria\Model\Fantasya\Unicum;
-use Lemuria\Model\Fantasya\Unit;
 
 final class Airship extends AbstractVesselEffect
 {
@@ -38,7 +36,7 @@ final class Airship extends AbstractVesselEffect
 		$this->calculateNeeded();
 		$this->castSpell('keep the vessel floating');
 		if ($this->needed > 0) {
-			foreach ($this->Mages() as $unit /* @var Unit $unit */) {
+			foreach ($this->Mages() as $unit) {
 				$this->message(AirshipCannotContinueMessage::class, $unit)->e($this->Vessel());
 			}
 			return false;
@@ -56,10 +54,10 @@ final class Airship extends AbstractVesselEffect
 	private function calculateNeeded(): void {
 		$vessel = $this->Vessel();
 		$weight = $vessel->Ship()->Tare();
-		foreach ($vessel->Passengers() as $unit /* @var Unit $unit */) {
+		foreach ($vessel->Passengers() as $unit) {
 			$weight += $unit->Weight();
 		}
-		foreach ($vessel->Treasury() as $unicum /* @var Unicum $unicum */) {
+		foreach ($vessel->Treasury() as $unicum) {
 			$weight += $unicum->Composition()->Weight();
 		}
 		$this->needed = (int)ceil($weight / self::WEIGHT);
@@ -69,7 +67,7 @@ final class Airship extends AbstractVesselEffect
 		$this->calculateNeeded();
 		$this->castSpell('lift up the vessel');
 		if ($this->needed > 0) {
-			foreach ($this->Mages() as $unit /* @var Unit $unit */) {
+			foreach ($this->Mages() as $unit) {
 				$this->message(AirshipCannotLiftMessage::class, $unit)->e($this->Vessel());
 			}
 			return false;
@@ -79,7 +77,7 @@ final class Airship extends AbstractVesselEffect
 	}
 
 	private function castSpell(string $debug): void {
-		foreach ($this->mages as $unit /* @var Unit $unit */) {
+		foreach ($this->mages as $unit) {
 			if ($this->needed <= 0) {
 				break;
 			}

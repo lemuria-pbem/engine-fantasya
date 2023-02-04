@@ -14,7 +14,7 @@ class Observables extends Resources
 	}
 
 	public function __construct(Resources $resources) {
-		foreach ($resources as $quantity /* @var Quantity $quantity */) {
+		foreach ($resources as $quantity) {
 			$commodity = $quantity->Commodity();
 			if (self::isObservable($commodity)) {
 				$this->add(new Quantity($commodity, $quantity->Count()));

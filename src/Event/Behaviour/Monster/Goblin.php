@@ -10,7 +10,6 @@ use Lemuria\Engine\Fantasya\Event\Behaviour\AbstractBehaviour;
 use Lemuria\Engine\Fantasya\Event\Reproduction;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
-use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
 
 class Goblin extends AbstractBehaviour
@@ -68,7 +67,7 @@ class Goblin extends AbstractBehaviour
 		$neighbours = Lemuria::World()->getNeighbours($region);
 		$peasants   = $region->Resources()[Peasant::class]->Count();
 		$units      = $region->Residents()->Size();
-		foreach ($neighbours as $neighbour /* @var Region $neighbour */) {
+		foreach ($neighbours as $neighbour) {
 			$peasants += $neighbour->Resources()[Peasant::class]->Count();
 			$units    += $neighbour->Residents()->Size();
 		}

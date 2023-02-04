@@ -11,7 +11,7 @@ use Lemuria\Id;
 class UnicumMapper
 {
 	/**
-	 * @var array(string=>Id)
+	 * @var array<string, Id>
 	 */
 	private array $map = [];
 

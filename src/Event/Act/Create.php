@@ -69,12 +69,12 @@ class Create implements Act
 	];
 
 	/**
-	 * @var Gang[]
+	 * @var array<Gang>
 	 */
 	protected array $gangs = [];
 
 	/**
-	 * @var Unit[]
+	 * @var array<Unit>
 	 */
 	protected array $units = [];
 

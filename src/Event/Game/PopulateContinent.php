@@ -43,8 +43,6 @@ use Lemuria\Model\Fantasya\Landscape\Swamp;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Quantity;
-use Lemuria\Model\Fantasya\Region;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * This event populates a whole continent with monsters.
@@ -106,7 +104,7 @@ final class PopulateContinent extends AbstractEvent
 	private const VARIATION = 0.33;
 
 	/**
-	 * @var Create[]
+	 * @var array<Create>
 	 */
 	private array $creates = [];
 
@@ -130,7 +128,7 @@ final class PopulateContinent extends AbstractEvent
 			$regions     = [];
 			$monster     = self::createMonster($race);
 			$environment = self::createLandscape(self::LANDSCAPE[$race]);
-			foreach ($continent->Landmass() as $region /* @var Region $region */) {
+			foreach ($continent->Landmass() as $region) {
 				if ($region->Landscape() === $environment) {
 					$regions[] = $region;
 				}
@@ -146,7 +144,7 @@ final class PopulateContinent extends AbstractEvent
 
 	protected function run(): void {
 		foreach ($this->creates as $create) {
-			foreach ($create->act()->getUnits() as $unit /* @var Unit $unit */) {
+			foreach ($create->act()->getUnits() as $unit) {
 				if ($unit->Race() instanceof Skeleton) {
 					$size      = $unit->Size();
 					$inventory = $unit->Inventory();

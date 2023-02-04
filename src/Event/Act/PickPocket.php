@@ -17,7 +17,6 @@ use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Quantity;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * A monster steals some silver from an enemy unit's pocket.
@@ -46,7 +45,6 @@ class PickPocket implements Act
 		$allPicks   = 0;
 
 		while (!$this->enemy->isEmpty() && $triesLeft-- > 0) {
-			/** @var Unit $enemy */
 			$enemy = $this->enemy->random();
 			$this->enemy->remove($enemy);
 			if ($enemy->Construction()) {

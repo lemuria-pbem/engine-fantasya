@@ -14,22 +14,22 @@ use Lemuria\Model\Fantasya\Unit;
 final class ActivityProtocol
 {
 	/**
-	 * @var Activity[]
+	 * @var array<Activity>
 	 */
 	private array $activities = [];
 
 	/**
-	 * @var Command[]
+	 * @var array<Command>
 	 */
 	private array $defaults = [];
 
 	/**
-	 * @var Activity[]
+	 * @var array<Activity>
 	 */
 	private array $defaultActivities = [];
 
 	/**
-	 * @var Comment[]
+	 * @var array<Comment>
 	 */
 	private array $comments = [];
 

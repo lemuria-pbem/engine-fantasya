@@ -12,40 +12,25 @@ use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\Factory\LodgingTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Item;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\College;
-use Lemuria\Model\Fantasya\Commodity\Camel;
-use Lemuria\Model\Fantasya\Commodity\Carriage;
-use Lemuria\Model\Fantasya\Commodity\Elephant;
-use Lemuria\Model\Fantasya\Commodity\Griffin;
-use Lemuria\Model\Fantasya\Commodity\Horse;
-use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
-use Lemuria\Model\Fantasya\Commodity\Potion\GoliathWater;
-use Lemuria\Model\Fantasya\Commodity\Potion\SevenLeagueTea;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
-use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
-use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\DoubleAbility;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Modification;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\Quantity;
-use Lemuria\Model\Fantasya\Race\Troll;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Perception;
-use Lemuria\Model\Fantasya\Talent\Riding;
 use Lemuria\Model\Fantasya\Talent\Stamina;
 use Lemuria\Model\Fantasya\Talent\Stoning;
-use Lemuria\Model\Fantasya\Transport;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -59,7 +44,7 @@ final class Calculus
 	private ?Learn $student = null;
 
 	/**
-	 * @var array(int=>Teach)
+	 * @var array<int, Teach>
 	 */
 	private array $teachers = [];
 
@@ -97,103 +82,10 @@ final class Calculus
 	/**
 	 * Get teachers.
 	 *
-	 * @return array(int=>Teach)
+	 * @return array<int, Teach>
 	 */
 	public function getTeachers(): array {
 		return $this->teachers;
-	}
-
-	/**
-	 * Calculate the capacity for travelling.
-	 *
-	 * @return Capacity
-	 */
-	public function capacity(): Capacity {
-		$vessel = $this->unit->Vessel();
-		if ($vessel) {
-			return Capacity::forVessel($vessel);
-		}
-
-		$race         = $this->unit->Race();
-		$size         = $this->unit->Size();
-		$racePayload  = $race->Payload();
-		$boostSize    = $this->hasApplied(GoliathWater::class)?->Count() * GoliathWater::PERSONS;
-		$payloadBoost = min($size, $boostSize);
-		$payload      = $size * $racePayload + $payloadBoost * ($this->payload(Horse::class) - $racePayload);
-		$inventory    = $this->unit->Inventory();
-		$horse        = $inventory[Horse::class] ?? null;
-		$camel        = $inventory[Camel::class] ?? null;
-		$elephant     = $inventory[Elephant::class] ?? null;
-		$warElephant  = $inventory[WarElephant::class] ?? null;
-		$griffin      = $inventory[Griffin::class] ?? null;
-		$pegasus      = $inventory[Pegasus::class] ?? null;
-
-		$carriage = $inventory[Carriage::class] ?? null;
-		$catapult = $inventory[Catapult::class] ?? null;
-		$caCount  = $carriage?->Count() + $catapult?->Count();
-		$weight   = $this->weight($this->unit->Weight(), [$carriage, $catapult, $horse, $camel, $elephant, $warElephant, $griffin, $pegasus]);
-
-		$ride       = $this->transport($carriage) + $this->transport($catapult);
-		$ride      += $this->transport($camel) + $this->transport($elephant) + $this->transport($warElephant);
-		$ride      += $this->transport($horse, $caCount * 2);
-		$fly        = $this->transport($griffin) + $this->transport($pegasus);
-		$rideFly    = $ride + $fly;
-		$walk       = $payload + $rideFly;
-		$riding     = $size * $this->knowledge(Riding::class)->Level();
-		$boostSize  = $this->hasApplied(SevenLeagueTea::class)?->Count() * SevenLeagueTea::PERSONS;
-		$speedBoost = ($boostSize >= $size ? 2 : 1) * $race->Speed();
-
-		if ($caCount > 0) {
-			$cars        = (int)$carriage?->Count();
-			$speed       = $this->speed([$carriage, $catapult, $horse, $camel, $elephant, $warElephant, $griffin, $pegasus]);
-			$animals     = [$horse, $camel, $elephant, $warElephant, $griffin, $pegasus];
-			$talentDrive = $this->talent($animals, $size, true, $cars);
-			$horseCount  = $horse?->Count();
-			if ($riding >= $talentDrive && $horseCount >= 2 * $caCount && $weight <= $rideFly && !$catapult) {
-				return new Capacity($walk, $rideFly, Capacity::DRIVE, $weight, $speed, $talentDrive, $speedBoost);
-			}
-			$talentWalk = $this->talent($animals, $size, false, $cars);
-			if ($horseCount >= 2 * $caCount && $riding >= $talentWalk) {
-				$weight -= $size * $race->Weight();
-				return new Capacity($walk, $rideFly, Capacity::WALK, $weight, 1, $talentWalk, $speedBoost);
-			}
-			if ($race instanceof Troll) {
-				$needed = 2 * $caCount;
-				if ($size >= $needed) {
-					$riding     = $needed * $this->knowledge(Riding::class)->Level();
-					$talentWalk = $this->talent($animals, $size - $needed) + $riding;
-					$weight    -= $size * $race->Weight();
-					return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speedBoost, $talentWalk);
-				}
-			}
-			$walk   = $this->transport($camel) + $this->transport($elephant) + $this->transport($warElephant)+ $this->transport($horse);
-			$walk  += $this->transport($griffin) + $this->transport($pegasus) + $payload;
-			$weight = $this->unit->Weight() - $size * $race->Weight();
-			return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speedBoost, $talentDrive);
-		}
-		if ($fly > 0 && !$horse && !$camel && !$elephant && !$warElephant) {
-			$animals    = [$griffin, $pegasus];
-			$speed      = $this->speed($animals);
-			$talentFly  = $this->talent($animals, $size, true);
-			$talentWalk = $this->talent($animals, $size);
-			if ($riding >= $talentFly) {
-				return new Capacity($walk, $fly, Capacity::FLY, $weight, $speed, [$talentFly, $talentWalk], $speedBoost);
-			}
-		}
-		if ($rideFly > 0 && $weight <= $rideFly) {
-			$speed      = $this->speed([$horse, $camel, $elephant, $warElephant]);
-			$animals    = [$horse, $camel, $elephant, $warElephant, $griffin, $pegasus];
-			$talentRide = $this->talent($animals, $size, true);
-			$talentWalk = $this->talent($animals, $size);
-			if ($riding >= $talentRide) {
-				return new Capacity($walk, $rideFly, Capacity::RIDE, $weight, $speed, [$talentRide, $talentWalk], $speedBoost);
-			}
-		}
-		$weight -= $size * $race->Weight();
-		$speed   = $this->speed([$horse, $camel, $elephant, $warElephant], $race->Speed());
-		$animals = [$horse, $camel, $elephant, $warElephant, $griffin, $pegasus];
-		$talent  = $this->talent($animals, $size);
-		return new Capacity($walk, $rideFly, Capacity::WALK, $weight, $speed, $talent, $speedBoost);
 	}
 
 	/**
@@ -258,7 +150,7 @@ final class Calculus
 	public function progress(Talent $talent, float $effectivity = 1.0): Ability {
 		$isInCollege = ($this->unit->Construction() instanceof College) && $this->isInMaintainedConstruction();
 		$teachBonus  = 0.0;
-		foreach ($this->teachers as $teach /* @var Teach $teach */) {
+		foreach ($this->teachers as $teach) {
 			if ($isInCollege) {
 				$teacher   = $teach->Unit();
 				$inCollege = $teacher->Construction() instanceof College;
@@ -295,7 +187,7 @@ final class Calculus
 		$order   = [];
 		$melee   = 0;
 		$distant = 0;
-		foreach ($this->unit->Knowledge() as $ability /* @var Ability $ability */) {
+		foreach ($this->unit->Knowledge() as $ability) {
 			if (WeaponSkill::isSkill($ability)) {
 				$skill       = $this->knowledge($ability->Talent());
 				$experience  = $skill->Experience();
@@ -327,21 +219,21 @@ final class Calculus
 	}
 
 	/**
-	 * @return Distribution[]
+	 * @return array<Distribution>
 	 */
 	public function inventoryDistribution(): array {
 		$maxSize   = $this->unit->Size();
 		$inventory = $this->unit->Inventory();
 		if ($maxSize <= 1 || $inventory->isEmpty()) {
 			$distribution = new Distribution();
-			foreach ($inventory as $quantity /* @var Quantity $quantity */) {
+			foreach ($inventory as $quantity) {
 				$distribution->add(new Quantity($quantity->Commodity(), $quantity->Count()));
 			}
 			return [$distribution->setSize($maxSize)];
 		}
 
 		$amount = [];
-		foreach ($inventory as $quantity /* @var Quantity $quantity */) {
+		foreach ($inventory as $quantity) {
 			$count = $quantity->Count();
 			if (!isset($amount[$count])) {
 				$amount[$count] = [];
@@ -358,7 +250,7 @@ final class Calculus
 			$rest         = $size - $take * $maxSize;
 			$distribution = new Distribution();
 			$newAmount    = $rest > 0 ? [$rest => []] : [];
-			foreach (current($amount) as $quantity /* @var Quantity $quantity */) {
+			foreach (current($amount) as $quantity /** @var Quantity $quantity */) {
 				$commodity = $quantity->Commodity();
 				if ($rest > 0) {
 					$newAmount[$rest][] = new Quantity($commodity, $rest);
@@ -376,7 +268,7 @@ final class Calculus
 				if ($rest > 0 && !isset($newAmount[$rest])) {
 					$newAmount[$rest] = [];
 				}
-				foreach ($quantities as $quantity /* @var Quantity $quantity */) {
+				foreach ($quantities as $quantity /** @var Quantity $quantity */) {
 					$commodity = $quantity->Commodity();
 					if ($rest > 0) {
 						$newAmount[$rest][] = new Quantity($commodity, $rest);
@@ -451,7 +343,7 @@ final class Calculus
 	public function canEnter(Region $region, Building $building): bool {
 		$party      = $this->unit->Party();
 		$diplomacy  = $party->Diplomacy();
-		foreach ($region->Estate() as $construction /* @var Construction $construction */) {
+		foreach ($region->Estate() as $construction) {
 			if ($construction->Building() === $building) {
 				if ($construction->Size() >= $building->UsefulSize()) {
 					$inhabitants = $construction->Inhabitants();
@@ -471,7 +363,7 @@ final class Calculus
 		$region  = $this->unit->Region();
 		$party   = $this->unit->Party();
 		$race    = $this->unit->Race();
-		foreach ($region->Residents() as $unit /* @var Unit $unit */) {
+		foreach ($region->Residents() as $unit) {
 			if ($unit !== $this->unit && $unit->Party() === $party && $unit->Race() === $race) {
 				$kinsmen->add($unit);
 			}
@@ -483,84 +375,14 @@ final class Calculus
 		$kinsmen = new People();
 		$party   = $this->unit->Party();
 		$race    = $this->unit->Race();
-		foreach (Lemuria::World()->getNeighbours($this->unit->Region()) as $region /* @var Region $region */) {
-			foreach ($region->Residents() as $unit /* @var Unit $unit */) {
+		foreach (Lemuria::World()->getNeighbours($this->unit->Region()) as $region) {
+			foreach ($region->Residents() as $unit) {
 				if ($unit !== $this->unit && $unit->Party() === $party && $unit->Race() === $race) {
 					$kinsmen->add($unit);
 				}
 			}
 		}
 		return $kinsmen;
-	}
-
-	private function transport(?Item $quantity, int $reduceBy = 0): int {
-		$transport = $quantity?->getObject();
-		if ($transport instanceof Transport) {
-			return max($quantity->Count() - $reduceBy, 0) * $transport->Payload();
-		}
-		return 0;
-	}
-
-	private function weight(int $total, array $goods): int {
-		foreach ($goods as $quantity /* @var Quantity $quantity */) {
-			if ($quantity) {
-				$total -= $quantity->Weight();
-			}
-		}
-		return $total;
-	}
-
-	private function speed(array $transports, int $speed = PHP_INT_MAX): int {
-		foreach ($transports as $item /* @var Item $item */) {
-			$transport = $item?->getObject();
-			if ($transport instanceof Transport) {
-				$speed = min($speed, $transport->Speed());
-			}
-		}
-		return $speed < PHP_INT_MAX ? $speed : $this->unit->Race()->Speed();
-	}
-
-	/**
-	 * @noinspection PhpMissingBreakStatementInspection
-	 */
-	private function talent(array $transports, int $size, bool $max = false, int $carriage = 0): int {
-		$talent = 0;
-		foreach ($transports as $item /* @var Item $item */) {
-			if ($item) {
-				$transport = $item->getObject();
-				$count     = $item->Count();
-				switch ($transport::class) {
-					case Horse::class :
-						$count = max($count, $carriage * 2);
-					case Camel::class :
-						if ($max) {
-							$talent += $count;
-						} elseif ($count > $size) {
-							$talent += $count - $size;
-						}
-						break;
-					case Elephant::class :
-					case WarElephant::class :
-						$talent += $count * 2;
-						break;
-					case Pegasus::class :
-						$talent += $count * 3;
-						break;
-					case Griffin::class :
-						$talent += $count * 6;
-				}
-			}
-		}
-		if ($carriage) {
-			$talent = max($talent, $max ? $carriage * 2 : $carriage);
-		}
-		return $talent;
-	}
-
-	private function payload(string $class): int {
-		/** @var Transport $transport */
-		$transport = self::createCommodity($class);
-		return $transport->Payload();
 	}
 
 	private function talentEffect(Talent $talent): ?Modification {

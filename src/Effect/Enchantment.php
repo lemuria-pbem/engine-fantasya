@@ -14,7 +14,6 @@ use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Dictionary;
 use Lemuria\Model\Fantasya\Composition\RingOfInvisibility as RingOfInvisibilityComposition;
-use Lemuria\Model\Fantasya\Enchantment as EnchantmentModel;
 use Lemuria\Model\Fantasya\Spell\RingOfInvisibility;
 use Lemuria\Model\Fantasya\Wizardry;
 use Lemuria\Serializable;
@@ -75,7 +74,7 @@ final class Enchantment extends AbstractUnitEffect
 			$unit       = $this->Unit();
 			Lemuria::Log()->debug('Unit ' . $unit . ' has ' . $this->enchantments->count() . ' pending enchantments.');
 
-			foreach ($this->enchantments as $enchantment /* @var EnchantmentModel $enchantment */) {
+			foreach ($this->enchantments as $enchantment) {
 				$spell   = $enchantment->Spell()::class;
 				$message = self::MESSAGE[$spell] ?? null;
 				if ($message) {

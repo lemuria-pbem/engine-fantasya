@@ -192,7 +192,7 @@ class LemuriaMessage implements Message
 	}
 
 	/**
-	 * @return Entity[]
+	 * @return array<Entity>
 	 */
 	public function getEntities(): array {
 		$i        = 0;
@@ -256,7 +256,7 @@ class LemuriaMessage implements Message
 	/**
 	 * Set a number of entities.
 	 *
-	 * @param Entity[] $entities
+	 * @param array<Entity> $entities
 	 * @return LemuriaMessage
 	 */
 	public function entities(array $entities): LemuriaMessage {

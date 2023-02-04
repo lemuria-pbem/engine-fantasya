@@ -12,19 +12,14 @@ use Lemuria\Engine\Fantasya\Outlook;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
-use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
-use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
-use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Model\Fantasya\Vessel;
 
 /**
  * Units of parties get in contact to each other (if they are not disguising) and tell basic information about their
@@ -47,17 +42,17 @@ final class Acquaintance extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
+		foreach (Party::all() as $party) {
 			if ($party->Type() !== Type::Player || $party->hasRetired()) {
 				continue;
 			}
 
 			$census  = new Census($party);
 			$outlook = new Outlook($census);
-			foreach ($census->getAtlas() as $region /* @var Region $region */) {
+			foreach ($census->getAtlas() as $region) {
 				// First collect own units with their (maybe disguised) party.
 				$ids = [];
-				foreach ($census->getPeople($region) as $unit /* @var Unit $unit */) {
+				foreach ($census->getPeople($region) as $unit) {
 					$id = $census->getParty($unit)?->Id()->Id();
 					if ($id) {
 						if ($unit->IsHiding()) {
@@ -71,17 +66,17 @@ final class Acquaintance extends AbstractEvent
 					}
 				}
 				// Then collect foreign units for telling of information later.
-				foreach ($region->Estate() as $construction /* @var Construction $construction */) {
-					foreach ($construction->Inhabitants() as $unit /* @var Unit $unit */) {
+				foreach ($region->Estate() as $construction) {
+					foreach ($construction->Inhabitants() as $unit) {
 						$this->addToNetwork($ids, $unit, $census);
 					}
 				}
-				foreach ($region->Fleet() as $vessel /* @var Vessel $vessel */) {
-					foreach ($vessel->Passengers() as $unit /* @var Unit $unit */) {
+				foreach ($region->Fleet() as $vessel) {
+					foreach ($vessel->Passengers() as $unit) {
 						$this->addToNetwork($ids, $unit, $census);
 					}
 				}
-				foreach ($outlook->getApparitions($region) as $unit /* @var Unit $unit*/) {
+				foreach ($outlook->getApparitions($region) as $unit) {
 					$this->addToNetwork($ids, $unit, $census);
 				}
 			}
@@ -131,7 +126,7 @@ final class Acquaintance extends AbstractEvent
 	}
 
 	/**
-	 * @param array(int=>array) $ids
+	 * @param array<int, array> $ids
 	 */
 	private function addToNetwork(array $ids, Unit $unit, Census $census): void {
 		if ($unit->Party() === $census->Party()) {

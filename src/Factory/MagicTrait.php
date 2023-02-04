@@ -14,7 +14,7 @@ trait MagicTrait
 		if ($construction?->Building() instanceof Magespire) {
 			$size = $construction->Size();
 			$sum  = 0;
-			foreach ($construction->Inhabitants() as $inhabitant /* @var Unit $inhabitant */) {
+			foreach ($construction->Inhabitants() as $inhabitant) {
 				$calculus = new Calculus($inhabitant);
 				$sum     += $calculus->knowledge(Magic::class)->Level();
 			}

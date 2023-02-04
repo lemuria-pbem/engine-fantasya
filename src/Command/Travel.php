@@ -9,12 +9,9 @@ use Lemuria\Engine\Fantasya\Factory\Command\Dummy;
 use Lemuria\Engine\Fantasya\Factory\Command\Simulation;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Activity;
-use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
-use Lemuria\Engine\Fantasya\Factory\NavigationTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
-use Lemuria\Engine\Fantasya\Factory\TravelTrait;
 use Lemuria\Engine\Fantasya\Message\Party\TravelAllowedMessage;
 use Lemuria\Engine\Fantasya\Message\Party\TravelGuardMessage;
 use Lemuria\Engine\Fantasya\Message\Region\TravelAllowedRegionMessage;
@@ -37,13 +34,15 @@ use Lemuria\Engine\Fantasya\Message\Unit\TravelTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelShipTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\Travel\Movement;
+use Lemuria\Engine\Fantasya\Travel\NavigationTrait;
+use Lemuria\Engine\Fantasya\Travel\TravelTrait;
+use Lemuria\Engine\Fantasya\Travel\Voyage;
 use Lemuria\Model\Fantasya\Spell\FavorableWinds;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Navigation;
 use Lemuria\Model\Fantasya\Talent\Riding;
-use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
-use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\World\Direction;
 
 /**
@@ -103,9 +102,10 @@ class Travel extends UnitCommand implements Activity
 	protected function initialize(): void {
 		parent::initialize();
 		$this->context->resetResourcePools();
-		$this->vessel   = $this->unit->Vessel();
-		$this->capacity = $this->calculus()->capacity();
-		$this->workload->setMaximum(min($this->workload->Maximum(), $this->capacity->Speed()));
+		$this->vessel = $this->unit->Vessel();
+		$voyage       = new Voyage($this->calculus());
+		$this->trip   = $voyage->trip();
+		$this->workload->setMaximum(min($this->workload->Maximum(), $this->trip->Speed()));
 		$this->initDirections();
 	}
 
@@ -118,11 +118,11 @@ class Travel extends UnitCommand implements Activity
 			return;
 		}
 
-		$movement = $this->capacity->Movement();
-		$speed    = $this->capacity->Speed();
-		$weight   = $this->capacity->Weight();
-		if ($movement === Capacity::SHIP) {
-			if ($weight > $this->capacity->Ride()) {
+		$movement = $this->trip->Movement();
+		$speed    = $this->trip->Speed();
+		$weight   = $this->trip->Weight();
+		if ($movement === Movement::Ship) {
+			if ($weight > $this->trip->Ride()) {
 				$this->message(TravelShipTooHeavyMessage::class, $this->vessel);
 				return;
 			}
@@ -146,18 +146,18 @@ class Travel extends UnitCommand implements Activity
 			}
 		} else {
 			$riding = $this->Unit()->Size() * $this->calculus()->knowledge($this->riding)->Level();
-			if ($weight > $this->capacity->Ride() || $riding < $this->capacity->Talent()) {
-				if ($weight > $this->capacity->Walk()) {
+			if ($weight > $this->trip->Ride() || $riding < $this->trip->Talent()) {
+				if ($weight > $this->trip->Walk()) {
 					$this->message(TravelTooHeavyMessage::class);
 					return;
 				}
-				if ($riding < $this->capacity->WalkingTalent()) {
+				if ($riding < $this->trip->WalkingTalent()) {
 					$this->message(TravelNoRidingMessage::class);
 					return;
 				}
-				if ($movement !== Capacity::WALK) {
-					$movement = Capacity::WALK;
-					$speed    = $this->capacity->WalkSpeed();
+				if ($movement !== Movement::Walk) {
+					$movement = Movement::Walk;
+					$speed    = $this->trip->WalkSpeed();
 					$this->workload->setMaximum(min($this->workload->Maximum(), $speed));
 				}
 			}
@@ -215,7 +215,7 @@ class Travel extends UnitCommand implements Activity
 							$this->workload->add($regions);
 							$regions = 0;
 							// Guard message to the guards and the stopped unit.
-							foreach ($notPassGuards as $party /* @var Party $party */) {
+							foreach ($notPassGuards as $party) {
 								$this->message(TravelGuardMessage::class, $party)->e($region)->e($this->unit, TravelGuardMessage::UNIT);
 								if ($party->Type() === Type::Monster) {
 									$this->message(TravelIntoMonsterMessage::class)->e($region);
@@ -227,7 +227,7 @@ class Travel extends UnitCommand implements Activity
 						}
 						if ($this->directions->hasMore()) {
 							// Pass message to the region and the passed unit.
-							foreach ($guards as $party /* @var Party $party */) {
+							foreach ($guards as $party) {
 								if (!$notPassGuards->has($party->Id())) {
 									$this->message(TravelPassMessage::class)->e($region);
 									$this->message(TravelAllowedMessage::class, $party)->e($region)->e($this->unit, TravelGuardMessage::UNIT);
@@ -243,11 +243,11 @@ class Travel extends UnitCommand implements Activity
 
 		if (count($route) > 1) {
 			if ($this->vessel) {
-				foreach ($this->vessel->Passengers() as $unit/* @var Unit $unit */) {
-					$this->message(TravelMessage::class, $unit)->p($movement)->entities($route);
+				foreach ($this->vessel->Passengers() as $unit) {
+					$this->message(TravelMessage::class, $unit)->p($movement->name)->entities($route);
 				}
 			} else {
-				$this->message(TravelMessage::class)->p($movement)->entities($route);
+				$this->message(TravelMessage::class)->p($movement->name)->entities($route);
 			}
 			if ($simulationStopped) {
 				$this->message(TravelSimulationMessage::class);
@@ -259,7 +259,7 @@ class Travel extends UnitCommand implements Activity
 				}
 			} else {
 				if ($this->vessel) {
-					foreach ($this->vessel->Passengers() as $unit/* @var Unit $unit */) {
+					foreach ($this->vessel->Passengers() as $unit) {
 						$this->message(RoutePauseMessage::class, $unit);
 					}
 				} else {

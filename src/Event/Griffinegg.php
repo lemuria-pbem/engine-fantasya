@@ -6,8 +6,6 @@ use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Message\Party\HatchGriffinEggMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg as GriffineggModel;
@@ -36,7 +34,7 @@ final class Griffinegg extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Unit) as $unit /* @var Unit $unit */) {
+		foreach (Unit::all() as $unit) {
 			if ($unit->Party()->Type() === Type::Player) {
 				if ($unit->Inventory()[$this->egg]->Count()) {
 					if (randChance(self::CHANCE)) {

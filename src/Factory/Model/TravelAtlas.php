@@ -10,13 +10,14 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Location;
 use Lemuria\Model\World\Atlas;
 use Lemuria\SortMode;
 
 final class TravelAtlas extends Atlas
 {
 	/**
-	 * @var array(int=>Visibility)
+	 * @var array<int, Visibility>
 	 */
 	private array $visibility = [];
 
@@ -30,12 +31,12 @@ final class TravelAtlas extends Atlas
 
 		$census  = new Census($this->party);
 		$outlook = new Outlook($census);
-		foreach ($census->getAtlas() as $id => $region /* @var Region $region */) {
+		foreach ($census->getAtlas() as $id => $region) {
 			$this->add($region);
 			$this->visibility[$id] = Visibility::WithUnit;
 
 			$panorama = $outlook->getPanorama($region);
-			foreach ($panorama as $neighbour /* @var Region $neighbour */) {
+			foreach ($panorama as $neighbour) {
 				$id         = $neighbour->Id()->Id();
 				$visibility = $panorama->getVisibility($neighbour);
 				if (!isset($this->visibility[$id])) {
@@ -48,7 +49,7 @@ final class TravelAtlas extends Atlas
 		}
 
 		$chronicle = $this->party->Chronicle();
-		foreach ($chronicle as $id => $region /* @var Region $region */) {
+		foreach ($chronicle as $id => $region) {
 			if ($chronicle->getVisit($region)->Round() === $round) {
 				$visibility = Visibility::Travelled;
 				if ($this->hasCartography($region)) {
@@ -83,16 +84,16 @@ final class TravelAtlas extends Atlas
 		return $this;
 	}
 
-	public function getVisibility(Region $region): Visibility {
+	public function getVisibility(Location $region): Visibility {
 		return $this->visibility[$region->Id()->Id()] ?? Visibility::Unknown;
 	}
 
-	public function setVisibility(Region $region, Visibility $visibility): TravelAtlas {
+	public function setVisibility(Location $region, Visibility $visibility): TravelAtlas {
 		$this->visibility[$region->Id()->Id()] = $visibility;
 		return $this;
 	}
 
-	private function hasFarsight(Region $region): bool {
+	private function hasFarsight(Location $region): bool {
 		$effect = new FarsightEffect(State::getInstance());
 		$effect = Lemuria::Score()->find($effect->setRegion($region));
 		if ($effect instanceof FarsightEffect) {

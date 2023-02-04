@@ -8,13 +8,13 @@ use Lemuria\Engine\Fantasya\Command;
 class DefaultResolver
 {
 	/**
-	 * @param Command[] $defaults
+	 * @param array<Command> $defaults
 	 */
 	public function __construct(protected array $defaults) {
 	}
 
 	/**
-	 * @return Command[]
+	 * @return array<Command>
 	 */
 	public function resolve(): array {
 		$first = 0;

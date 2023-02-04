@@ -6,8 +6,6 @@ use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Message\Party\HatchGriffinEggMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg;
@@ -24,7 +22,7 @@ final class HatchGriffinEgg extends AbstractEvent
 	use BuilderTrait;
 
 	/**
-	 * @var Unit[]
+	 * @var array<Unit>
 	 */
 	private array $unit = [];
 
@@ -39,12 +37,12 @@ final class HatchGriffinEgg extends AbstractEvent
 	}
 
 	protected function initialize(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
+		foreach (Party::all() as $party) {
 			if ($party->hasRetired()) {
 				continue;
 			}
 
-			foreach ($party->People() as $unit /* @var Unit $unit */) {
+			foreach ($party->People() as $unit) {
 				if ($unit->Inventory()[$this->egg]->Count()) {
 					$this->unit[] = $unit;
 					break;

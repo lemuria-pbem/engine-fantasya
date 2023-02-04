@@ -25,7 +25,7 @@ trait SplitTrait
 		if ($unit->Aura()) {
 			$split->setAura($unit->Aura());
 		}
-		foreach ($unit->Knowledge() as $ability /* @var Ability $ability */) {
+		foreach ($unit->Knowledge() as $ability) {
 			$split->Knowledge()->add(new Ability($ability->Talent(), $ability->Experience()));
 		}
 		$battleSpells = $unit->BattleSpells();
@@ -48,7 +48,7 @@ trait SplitTrait
 		$inventory = $unit->Inventory();
 		$total     = 0;
 		$goods     = [];
-		foreach ($inventory as $quantity /* @var Quantity $quantity */) {
+		foreach ($inventory as $quantity) {
 			$weight = $quantity->Commodity()->Weight();
 			if (!isset($goods[$weight])) {
 				$goods[$weight] = [];
@@ -62,7 +62,7 @@ trait SplitTrait
 		$distribute = [];
 		if ($total > $maxPayload) {
 			foreach ($goods as $weight => $items) {
-				foreach ($items as $quantity /* @var Quantity $quantity */) {
+				foreach ($items as $quantity /** @var Quantity $quantity */) {
 					if ($weight > $payload) {
 						$inventory->remove(new Quantity($quantity->Commodity(), $quantity->Count()));
 						$excess->add(new Quantity($quantity->Commodity(), $quantity->Count()));

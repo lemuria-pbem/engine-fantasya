@@ -21,8 +21,6 @@ use Lemuria\Engine\Fantasya\Message\Vessel\NameCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\NameVesselMessage;
 use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Building\Monument;
-use Lemuria\Model\Fantasya\Construction;
-use Lemuria\Model\Fantasya\Unicum;
 
 /**
  * The Name command is used to set the name of a unit, an unicum it possesses or the construction, region or vessel it
@@ -137,8 +135,8 @@ final class Name extends UnitCommand
 
 		$home = $this->unit->Construction();
 		if ($home) {
-			$castle = null; /* @var Construction $castle */
-			foreach ($estate as $construction /* @var Construction $construction */) {
+			$castle = null;
+			foreach ($estate as $construction) {
 				if ($construction->Building() instanceof Castle) {
 					if (!$castle || $construction->Size() >= $castle->Size()) {
 						$castle = $construction;
@@ -173,7 +171,6 @@ final class Name extends UnitCommand
 		$treasury = $this->unit->Treasury();
 		$id       = $this->toId($id);
 		if ($treasury->has($id)) {
-			/** @var Unicum $unicum */
 			$unicum = $treasury[$id];
 			$unicum->setName($name);
 			$this->message(NameUnicumMessage::class)->e($unicum)->p($name);

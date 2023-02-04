@@ -6,7 +6,6 @@ use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Message\Region\Event\EarthquakeDestroyedMessage;
 use Lemuria\Engine\Fantasya\Message\Region\Event\EarthquakeMessage;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Talent\Magic;
 
@@ -25,7 +24,7 @@ final class Earthquake extends AbstractCast
 		$unit->Aura()->consume($aura);
 		$this->message(EarthquakeMessage::class, $region);
 
-		foreach ($region->Estate() as $construction /* @var Construction $construction */) {
+		foreach ($region->Estate() as $construction) {
 			$size   = $construction->Size();
 			$points = (int)round($damage * $size);
 			$size  -= $points;

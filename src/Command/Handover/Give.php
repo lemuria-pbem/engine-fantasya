@@ -98,7 +98,7 @@ final class Give extends UnitCommand
 				$this->givePersons();
 			}
 		} elseif ($this->commodity instanceof Container) {
-			foreach ($this->resources as $quantity /* @var Quantity $quantity */) {
+			foreach ($this->resources as $quantity) {
 				$this->give($quantity->Commodity(), $quantity->Count());
 			}
 		} else {
@@ -131,7 +131,7 @@ final class Give extends UnitCommand
 	 */
 	private function giveEverything(): void {
 		$inventory = $this->unit->Inventory();
-		foreach ($this->resources as $quantity /* @var Quantity $quantity */) {
+		foreach ($this->resources as $quantity) {
 			$inventory->remove($quantity);
 			$gift = new Quantity($quantity->Commodity(), $quantity->Count());
 			$this->giveOnly($gift);
@@ -202,10 +202,10 @@ final class Give extends UnitCommand
 
 	private function mergeKnowledge(int $old, int $new): void {
 		$talents = [];
-		foreach ($this->recipient->Knowledge() as $class => $ability /* @var Ability $ability */) {
+		foreach ($this->recipient->Knowledge() as $class => $ability) {
 			$talents[$class] = $old * $ability->Experience();
 		}
-		foreach ($this->unit->Knowledge() as $class => $ability /* @var Ability $ability */) {
+		foreach ($this->unit->Knowledge() as $class => $ability) {
 			if (isset($talents[$class])) {
 				$talents[$class] += $new * $ability->Experience();
 			} else {

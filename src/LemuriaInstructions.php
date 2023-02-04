@@ -9,7 +9,7 @@ use Lemuria\StringList;
 class LemuriaInstructions extends StringList
 {
 	/**
-	 * @var array(int=>UnitCommand)
+	 * @var array<int, UnitCommand>
 	 */
 	private array $commands = [];
 
@@ -45,7 +45,6 @@ class LemuriaInstructions extends StringList
 		$newId = $newId ? ' ' . $newId : '';
 		$n     = count($this->commands);
 		for ($i = $n - 1; $i >= 0; $i--) {
-			/** @var UnitCommand $command */
 			$command = $this->commands[$i];
 			if ($command) {
 				switch ($command::class) {

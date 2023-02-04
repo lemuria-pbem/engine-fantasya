@@ -15,7 +15,6 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Potion\PeasantJoy;
@@ -58,7 +57,7 @@ final class Population extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
+		foreach (Region::all() as $region) {
 			$resources = $region->Resources();
 			$peasants  = $resources[$this->peasant]->Count();
 			if ($peasants <= 0) {
@@ -148,7 +147,7 @@ final class Population extends AbstractEvent
 
 	private function getMigrantDistribution(Neighbours $neighbours): array {
 		$distribution = [];
-		foreach ($neighbours as $direction => $neighbour /* @var Region $neighbour */) {
+		foreach ($neighbours as $direction => $neighbour) {
 			if ($neighbour->Landscape()->Workplaces() <= 0) {
 				continue;
 			}

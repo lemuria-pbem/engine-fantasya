@@ -49,7 +49,7 @@ final class MonsterParties extends AbstractEvent
 			}
 			$party = Party::get($id);
 			$this->setToMonster($party, $race);
-			foreach ($party->People() as $unit /* @var Unit $unit */) {
+			foreach ($party->People() as $unit) {
 				$this->setPerception($unit);
 			}
 		}

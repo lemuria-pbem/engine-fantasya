@@ -31,7 +31,7 @@ class Army
 	private Resources $trophies;
 
 	/**
-	 * @var Combatant[]
+	 * @var array<Combatant>
 	 */
 	private array $combatants = [];
 
@@ -48,7 +48,7 @@ class Army
 	}
 
 	/**
-	 * @return Combatant[]
+	 * @return array<Combatant>
 	 */
 	public function Combatants(): array {
 		return $this->combatants;
@@ -75,7 +75,7 @@ class Army
 	}
 
 	/**
-	 * @return Combatant[]
+	 * @return array<Combatant>
 	 */
 	public function getCombatants(Unit $unit): array {
 		$combatants = [];

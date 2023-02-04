@@ -13,7 +13,7 @@ final class WorkerLodging extends AbstractConstructionEffect
 	private People $bookings;
 
 	/**
-	 * @var array(int=>bool)
+	 * @var array<int, bool>
 	 */
 	private array $hasSpace = [];
 

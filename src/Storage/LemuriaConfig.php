@@ -35,9 +35,6 @@ use Lemuria\Model\World;
 use Lemuria\Model\World\HexagonalMap;
 use Lemuria\Registry;
 
-/**
- * @\ArrayAccess<string, mixed>
- */
 abstract class LemuriaConfig implements \ArrayAccess, Config
 {
 	public final const ROUND = 'round';

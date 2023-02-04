@@ -20,7 +20,7 @@ interface Activity
 	/**
 	 * Get the new default commands.
 	 *
-	 * @return Command[]
+	 * @return array<Command>
 	 */
 	public function getNewDefaults(): array;
 

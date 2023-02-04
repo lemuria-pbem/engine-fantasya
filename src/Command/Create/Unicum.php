@@ -26,7 +26,6 @@ use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Composition;
 use Lemuria\Model\Fantasya\Enchantment;
 use Lemuria\Model\Fantasya\MagicRing;
-use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unicum as UnicumModel;
 
 /**
@@ -91,7 +90,7 @@ final class Unicum extends UnitCommand implements Activity
 		if (!$this->hasMagicRingEnchantment()) {
 			$material = $this->composition->getMaterial();
 			if (!$material->isEmpty()) {
-				foreach ($material as $quantity/* @var Quantity $quantity */) {
+				foreach ($material as $quantity) {
 					$reserved = $this->collectQuantity($this->unit, $quantity->Commodity(), $quantity->Count());
 					if ($reserved->Count() < $quantity->Count()) {
 						$this->message(UnicumNoMaterialMessage::class)->s($this->composition);
@@ -99,7 +98,7 @@ final class Unicum extends UnitCommand implements Activity
 					}
 				}
 				$inventory = $this->unit->Inventory();
-				foreach ($material as $quantity/* @var Quantity $quantity */) {
+				foreach ($material as $quantity) {
 					$inventory->remove($quantity);
 					$this->message(UnicumMaterialMessage::class)->s($this->composition)->i($quantity);
 				}

@@ -30,7 +30,7 @@ class ResourcePool
 	protected readonly People $units;
 
 	/**
-	 * @var array(int=>Resources)
+	 * @var array<int, Resources>
 	 */
 	protected array $reservations = [];
 
@@ -39,7 +39,7 @@ class ResourcePool
 		$this->region = $unit->Region();
 		$intelligence = new Intelligence($this->region);
 		$this->units  = new People();
-		foreach ($intelligence->getUnits($this->party) as $unit /* @var Unit $unit */) {
+		foreach ($intelligence->getUnits($this->party) as $unit) {
 			if (!$context->isTravelling($unit)) {
 				$this->units->add($unit);
 				$this->reservations[$unit->Id()->Id()] = new Resources();
@@ -64,7 +64,7 @@ class ResourcePool
 		$inventory = $unit->Inventory();
 		$addition  = new Quantity($commodity, 0);
 
-		foreach ($this->units as $next/* @var Unit $next */) {
+		foreach ($this->units as $next) {
 			if ($next === $unit) {
 				continue;
 			}
@@ -74,7 +74,7 @@ class ResourcePool
 
 			$nextId           = $next->Id();
 			$nextInventory    = $next->Inventory();
-			$nextReservations = $this->reservations[$nextId->Id()]; /* @var Resources $nextReservations */
+			$nextReservations = $this->reservations[$nextId->Id()];
 			$nextQuantity     = $nextInventory->offsetGet($commodity);
 			$nextCount        = $nextQuantity->Count();
 			$nextReserved     = $nextReservations->offsetGet($commodity)->Count();
@@ -117,10 +117,9 @@ class ResourcePool
 
 		$inventory    = $unit->Inventory();
 		$reservations = $this->reservations[$id->Id()];
-		/* @var Resources $reservations */
-		$ownCount  = $inventory->offsetGet($commodity)->Count();
-		$reserved  = $reservations->offsetGet($commodity)->Count();
-		$available = $ownCount - $reserved;
+		$ownCount     = $inventory->offsetGet($commodity)->Count();
+		$reserved     = $reservations->offsetGet($commodity)->Count();
+		$available    = $ownCount - $reserved;
 		if ($available >= $demand) {
 			$reservations->add($quantity);
 			Lemuria::Log()->debug('Unit ' . $id . ' can cover demand of ' . $quantity . '.');
@@ -136,7 +135,7 @@ class ResourcePool
 		}
 		$addition = new Quantity($commodity, 0);
 
-		foreach ($this->units as $next/* @var Unit $next */) {
+		foreach ($this->units as $next) {
 			if ($next === $unit) {
 				continue;
 			}
@@ -146,7 +145,7 @@ class ResourcePool
 
 			$nextId           = $next->Id();
 			$nextInventory    = $next->Inventory();
-			$nextReservations = $this->reservations[$nextId->Id()]; /* @var Resources $nextReservations */
+			$nextReservations = $this->reservations[$nextId->Id()];
 			$nextQuantity     = $nextInventory->offsetGet($commodity);
 			$nextCount        = $nextQuantity->Count();
 			$nextReserved     = $nextReservations->offsetGet($commodity)->Count();
@@ -185,14 +184,14 @@ class ResourcePool
 			throw new LemuriaException('Unit ' . $unit . ' is not a pool member.');
 		}
 		$inventory    = $unit->Inventory();
-		$reservations = $this->reservations[$id->Id()]; /* @var Resources $reservations */
+		$reservations = $this->reservations[$id->Id()];
 		$reservations->clear();
-		foreach ($inventory as $quantity /* @var Quantity $quantity */) {
+		foreach ($inventory as $quantity) {
 			$reservations->add($quantity);
 		}
 		$nextQuantities = new Resources();
 
-		foreach ($this->units as $next/* @var Unit $next */) {
+		foreach ($this->units as $next) {
 			if ($next === $unit) {
 				continue;
 			}
@@ -202,9 +201,9 @@ class ResourcePool
 
 			$nextId           = $next->Id();
 			$nextInventory    = $next->Inventory();
-			$nextReservations = $this->reservations[$nextId->Id()]; /* @var Resources $nextReservations */
+			$nextReservations = $this->reservations[$nextId->Id()];
 			$nextQuantities->clear();
-			foreach ($nextInventory as $quantity /* @var Quantity $quantity */) {
+			foreach ($nextInventory as $quantity) {
 				$commodity = $quantity->Commodity();
 				$count     = $quantity->Count();
 				$reserved  = $nextReservations->offsetGet($commodity)->Count();
@@ -214,7 +213,7 @@ class ResourcePool
 					$nextQuantities->add($quantity);
 				}
 			}
-			foreach ($nextQuantities as $quantity /* @var Quantity $quantity */) {
+			foreach ($nextQuantities as $quantity) {
 				$nextInventory->remove($quantity);
 				$inventory->add($quantity);
 				$reservations->add($quantity);

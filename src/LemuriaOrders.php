@@ -26,12 +26,12 @@ class LemuriaOrders implements Orders, Reassignment
 	private const ORDERS = 'orders';
 
 	/**
-	 * @var array(int=>array)
+	 * @var array<int, array>
 	 */
 	private array $current = [];
 
 	/**
-	 * @var array(int=>array)
+	 * @var array<int, array>
 	 */
 	private array $default = [];
 
@@ -92,11 +92,11 @@ class LemuriaOrders implements Orders, Reassignment
 		$current = [];
 		$default = [];
 		ksort($this->current);
-		foreach ($this->current as $id => $instructions /* @var Instructions $instructions */) {
+		foreach ($this->current as $id => $instructions /** @var Instructions $instructions */) {
 			$current[] = [self::ID => $id, self::ORDERS => $instructions->serialize()];
 		}
 		ksort($this->default);
-		foreach ($this->default as $id => $instructions /* @var Instructions $instructions */) {
+		foreach ($this->default as $id => $instructions /** @var Instructions $instructions */) {
 			$default[] = [self::ID => $id, self::ORDERS => $instructions->serialize()];
 		}
 		Lemuria::Game()->setOrders([self::CURRENT => $current, self::DEFAULT => $default]);
@@ -157,7 +157,7 @@ class LemuriaOrders implements Orders, Reassignment
 	private function replaceInDefaults(Id $old, ?Id $new = null): void {
 		$oldId = (string)$old;
 		$newId = $new ? (string)$new : null;
-		foreach ($this->default as $instructions /* @var LemuriaInstructions $instructions */) {
+		foreach ($this->default as $instructions /** @var LemuriaInstructions $instructions */) {
 			$instructions->replace($oldId, $newId);
 		}
 	}

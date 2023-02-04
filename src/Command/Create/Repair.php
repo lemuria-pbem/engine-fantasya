@@ -30,7 +30,7 @@ final class Repair extends AbstractProduct
 		if ($production > 0) {
 			$count = $this->job->Count();
 			$yield = min($production, $count);
-			foreach ($repairable->getMaterial() as $quantity /* @var Quantity $quantity */) {
+			foreach ($repairable->getMaterial() as $quantity) {
 				$count       = (int)ceil($this->consumption * $yield * $quantity->Count());
 				$consumption = new Quantity($quantity->Commodity(), $count);
 				$this->unit->Inventory()->remove($consumption);

@@ -33,7 +33,7 @@ class LemuriaLog implements Log
 	}
 
 	/**
-	 * @return HandlerInterface[]
+	 * @return array<HandlerInterface>
 	 */
 	protected function getHandlers(): array {
 		$handlers = [];

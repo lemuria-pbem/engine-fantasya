@@ -301,7 +301,7 @@ class CommandFactory
 	use BuilderTrait;
 
 	/**
-	 * @var array(string=>mixed)
+	 * @var array<string, mixed>
 	 */
 	protected array $verbs = [
 		'//'           => 'KOMMENTAR',
@@ -450,7 +450,7 @@ class CommandFactory
 	];
 
 	/**
-	 * @var array(string=>string)
+	 * @var array<string, string>
 	 */
 	protected array $buildings = [
 		'Akademie'          => College::class,
@@ -494,7 +494,7 @@ class CommandFactory
 	];
 
 	/**
-	 * @var array(string=>string)
+	 * @var array<string, string>
 	 */
 	protected array $commodities = [
 		'Alraunen'                   => Mandrake::class,
@@ -653,7 +653,7 @@ class CommandFactory
 	];
 
 	/**
-	 * @var array(string=>Kind)
+	 * @var array<string, Kind>
 	 */
 	protected array $kind = [
 		'Baumaterial' => Kind::Material,
@@ -676,7 +676,7 @@ class CommandFactory
 	];
 
 	/**
-	 * @var array(string=>string)
+	 * @var array<string, string>
 	 */
 	protected array $compositions = [
 		'Kraeuteralmanach'        => HerbAlmanac::class,
@@ -687,7 +687,7 @@ class CommandFactory
 	];
 
 	/**
-	 * @var array(string=>string)
+	 * @var array<string, string>
 	 */
 	protected array $spells = [
 		'Adlerauge'               => EagleEye::class,
@@ -720,7 +720,7 @@ class CommandFactory
 	];
 
 	/**
-	 * @var array(string=>string)
+	 * @var array<string, string>
 	 */
 	protected array $ships = [
 		'Boot'          => Boat::class,
@@ -733,7 +733,7 @@ class CommandFactory
 	];
 
 	/**
-	 * @var array(string=>string)
+	 * @var array<string, string>
 	 */
 	protected array $talents = [
 		'Alchemie'          => Alchemy::class,

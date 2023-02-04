@@ -51,7 +51,7 @@ final class InciteMonster extends AbstractCast
 		$outlook   = new Outlook(new Census($ourParty));
 		$targets   = new Outlook(new Census($monster->Party()));
 		$enemies   = $targets->getApparitions($region);
-		foreach ($outlook->getApparitions($region) as $enemy /* @var Unit $enemy */) {
+		foreach ($outlook->getApparitions($region) as $enemy) {
 			if ($enemy->Party() === $ourParty) {
 				continue;
 			}

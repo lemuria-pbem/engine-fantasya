@@ -34,7 +34,6 @@ use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Commodity;
-use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Exception\SalesException;
 use Lemuria\Model\Fantasya\Extension\Market;
 use Lemuria\Model\Fantasya\Market\Deal;
@@ -79,7 +78,7 @@ final class Accept extends UnitCommand
 
 	protected function initialize(): void {
 		parent::initialize();
-		foreach ($this->unit->Region()->Estate() as $construction /* @var Construction $construction */) {
+		foreach ($this->unit->Region()->Estate() as $construction) {
 			$extensions = $construction->Extensions();
 			if ($extensions->offsetExists(Market::class)) {
 				/** @var Market $market */
@@ -224,7 +223,7 @@ final class Accept extends UnitCommand
 		$this->id = $this->parseId();
 		try {
 			$trade = Trade::get($this->id);
-			foreach ($this->sales as $index => $sales /* @var Sales $sales */) {
+			foreach ($this->sales as $index => $sales /** @var Sales $sales */) {
 				if ($sales->has($trade)) {
 					$this->index  = $index;
 					$this->status = $sales->getStatus($trade);

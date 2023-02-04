@@ -6,7 +6,6 @@ use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
-use Lemuria\Engine\Fantasya\Factory\MoveTrait;
 use Lemuria\Engine\Fantasya\Factory\SplitTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\TeleportationErrorMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\TeleportationForeignMessage;
@@ -15,12 +14,12 @@ use Lemuria\Engine\Fantasya\Message\Unit\Cast\TeleportationMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseToUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeleportationMoveMessage;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Engine\Fantasya\Travel\MoveTrait;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
-use Lemuria\Model\Fantasya\Unicum;
 use Lemuria\Model\Fantasya\Unit;
 
 final class Teleportation extends AbstractCast
@@ -86,14 +85,14 @@ final class Teleportation extends AbstractCast
 
 	private function getWeightOfTreasury(Unit $unit): int {
 		$weight = 0;
-		foreach ($unit->Treasury() as $unicum /* @var Unicum $unicum */) {
+		foreach ($unit->Treasury() as $unicum) {
 			$weight += $unicum->Composition()->Weight();
 		}
 		return $weight;
 	}
 
 	/**
-	 * @param Distribution[] $distributions
+	 * @param array<Distribution> $distributions
 	 */
 	private function distributeInventory(Unit $target, Unit $remaining, array $distributions): void {
 		$from          = $target->Size();
@@ -103,7 +102,7 @@ final class Teleportation extends AbstractCast
 			$size = $distribution->Size();
 			if ($size > $from) {
 				$move = $size - $from;
-				foreach ($distribution as $quantity /* @var Quantity $quantity */) {
+				foreach ($distribution as $quantity) {
 					$moved = new Quantity($quantity->Commodity(), $move * $quantity->Count());
 					$fromInventory->remove($moved);
 					$restInventory->add(new Quantity($quantity->Commodity(), $moved->Count()));
@@ -122,7 +121,7 @@ final class Teleportation extends AbstractCast
 			if (!$heirs->count()) {
 				$heirs = $intelligence->getHeirs($unit, false);
 			}
-			foreach ($resources as $quantity /* @var Quantity $quantity */) {
+			foreach ($resources as $quantity) {
 				$heir = $this->giftToRandom($heirs, $quantity);
 				if ($heir) {
 					$this->message(LoseToUnitMessage::class, $heir)->i($quantity)->e($unit);

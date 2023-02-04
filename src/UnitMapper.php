@@ -15,12 +15,12 @@ use Lemuria\Model\Fantasya\Unit;
 class UnitMapper
 {
 	/**
-	 * @var array(string=>Temp)
+	 * @var array<string, Temp>
 	 */
 	private array $map = [];
 
 	/**
-	 * @var array(int=>string)
+	 * @var array<int, string>
 	 */
 	private array $temp = [];
 

@@ -2,16 +2,13 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Effect\ExcessCargo;
 use Lemuria\Engine\Fantasya\Message\Vessel\FounderEffectMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\FounderMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Navigable;
-use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
 
 /**
@@ -29,7 +26,7 @@ final class Founder extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Vessel) as $vessel /* @var Vessel $vessel */) {
+		foreach (Vessel::all() as $vessel) {
 			$excessCargo = Lemuria::Score()->find($this->effect($vessel));
 			if ($vessel->Region()->Landscape() instanceof Navigable) {
 				$completion = $vessel->Completion();
@@ -40,8 +37,7 @@ final class Founder extends AbstractEvent
 					}
 					$this->message(FounderMessage::class, $vessel)->e($vessel->Region());
 				} else {
-					$capacity = Capacity::forVessel($vessel);
-					if ($capacity->Weight() > $vessel->Ship()->Payload()) {
+					if ($vessel->Passengers()->Weight() > $vessel->Ship()->Payload()) {
 						if (!$excessCargo) {
 							Lemuria::Score()->add($this->effect($vessel));
 							$this->message(FounderEffectMessage::class, $vessel);
@@ -60,7 +56,7 @@ final class Founder extends AbstractEvent
 
 	private function founder(Vessel $vessel): void {
 		$passengers = $vessel->Passengers();
-		foreach (clone $passengers as $unit /* @var Unit $unit */) {
+		foreach (clone $passengers as $unit) {
 			$unit->Inventory()->clear();
 			$unit->setSize(0);
 			$passengers->remove($unit);

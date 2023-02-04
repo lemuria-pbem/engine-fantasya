@@ -13,10 +13,8 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\People;
-use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -34,7 +32,7 @@ final class Liquidation extends AbstractEvent
 
 	protected function run(): void {
 		$liquidate = new People();
-		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
+		foreach (Party::all() as $party) {
 			if ($party->hasRetired()) {
 				continue;
 			}
@@ -42,7 +40,7 @@ final class Liquidation extends AbstractEvent
 			Lemuria::Log()->debug('Running Liquidation for Party ' . $party->Id() . '.', ['party' => $party]);
 			$units = $party->People();
 			$liquidate->clear();
-			foreach ($units as $unit /* @var Unit $unit */) {
+			foreach ($units as $unit) {
 				if ($unit->Size() > 0) {
 					$this->placeMetrics(Subject::Talents, $unit);
 				} else {
@@ -57,7 +55,7 @@ final class Liquidation extends AbstractEvent
 					}
 				}
 			}
-			foreach ($liquidate as $unit /* @var Unit $unit */) {
+			foreach ($liquidate as $unit) {
 				Lemuria::Catalog()->reassign($unit);
 				$unit->Construction()?->Inhabitants()?->remove($unit);
 				$unit->Vessel()?->Passengers()?->remove($unit);
@@ -76,7 +74,7 @@ final class Liquidation extends AbstractEvent
 		$heir  = $heirs->get();
 		if ($heir) {
 			$inventory = $heir->Inventory();
-			foreach ($goods as $quantity/* @var Quantity $quantity */) {
+			foreach ($goods as $quantity) {
 				$inventory->add($quantity);
 			}
 			$this->message(LiquidationHeirMessage::class, $heir)->e($unit);
@@ -87,7 +85,7 @@ final class Liquidation extends AbstractEvent
 
 	private function giftToOther(Resources $goods, Unit $unit, Party $party): bool {
 		$heirs = $this->context->getIntelligence($unit->Region())->getHeirs($unit, false);
-        foreach ($goods as $quantity /* @var Quantity $quantity */) {
+        foreach ($goods as $quantity) {
             $heir = $this->giftToRandom($heirs, $quantity);
             if (!$heir) {
                 return false;

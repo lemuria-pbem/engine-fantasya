@@ -10,7 +10,6 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Offer;
@@ -24,7 +23,7 @@ final class MarketUpdate extends AbstractEvent
 	use StatisticsTrait;
 
 	/**
-	 * @var array(string=>true)
+	 * @var array<string, true>
 	 */
 	private array $commerce = [];
 
@@ -61,7 +60,7 @@ final class MarketUpdate extends AbstractEvent
 
 	protected function run(): void {
 		Lemuria::Log()->debug('Moving prices in all regions with a market.');
-		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
+		foreach (Region::all() as $region) {
 			if ($this->hasMarket($region)) {
 				$luxuries = $region->Luxuries();
 				if ($luxuries) {

@@ -28,7 +28,7 @@ trait UnitTrait
 	 * If region is guarded by other parties and there are no specific agreements, this unit may only produce if it is
 	 * not in a building and has better camouflage than all the blocking guards' perception.
 	 *
-	 * @return Party[]
+	 * @return array<Party>
 	 */
 	protected function getCheckByAgreement(int $agreement): array {
 		$guardParties = [];
@@ -40,7 +40,7 @@ trait UnitTrait
 			$camouflage = $this->calculus()->knowledge(Camouflage::class)->Level();
 		}
 
-		foreach ($intelligence->getGuards() as $guard /* @var Unit $guard */) {
+		foreach ($intelligence->getGuards() as $guard) {
 			$guardParty = $guard->Party();
 			if ($guardParty !== $party) {
 				if ($this->context->getTurnOptions()->IsSimulation()) {

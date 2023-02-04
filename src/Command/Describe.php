@@ -21,8 +21,6 @@ use Lemuria\Engine\Fantasya\Message\Vessel\DescribeCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\DescribeVesselMessage;
 use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Building\Monument;
-use Lemuria\Model\Fantasya\Construction;
-use Lemuria\Model\Fantasya\Unicum;
 
 /**
  * The Describe command is used to set the description of a unit, an unicum it possesses or the construction, region or
@@ -136,8 +134,8 @@ final class Describe extends UnitCommand
 
 		$home = $this->unit->Construction();
 		if ($home) {
-			$castle = null; /* @var Construction $castle */
-			foreach ($estate as $construction /* @var Construction $construction */) {
+			$castle = null;
+			foreach ($estate as $construction) {
 				if ($construction->Building() instanceof Castle) {
 					if (!$castle || $construction->Size() >= $castle->Size()) {
 						$castle = $construction;
@@ -172,7 +170,6 @@ final class Describe extends UnitCommand
 		$treasury = $this->unit->Treasury();
 		$id       = $this->toId($id);
 		if ($treasury->has($id)) {
-			/** @var Unicum $unicum */
 			$unicum = $treasury[$id];
 			$unicum->setDescription($description);
 			$this->message(DescribeUnicumMessage::class)->e($unicum);

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
-use Lemuria\Engine\Fantasya\Factory\PortsTrait;
+use Lemuria\Engine\Fantasya\Travel\PortsTrait;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Ship;
 use Lemuria\Model\Fantasya\Unit;

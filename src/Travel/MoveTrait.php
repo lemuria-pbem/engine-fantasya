@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Fantasya\Factory;
+namespace Lemuria\Engine\Fantasya\Travel;
 
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNewOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\LeaveNoOwnerMessage;

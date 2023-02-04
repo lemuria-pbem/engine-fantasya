@@ -10,7 +10,6 @@ use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Model\Fantasya\People;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * A monster attacks an enemy unit.
@@ -25,7 +24,7 @@ class Attack implements Act
 	public function act(): Attack {
 		if (!$this->enemy->isEmpty()) {
 			$ids     = [];
-			foreach ($this->enemy as $unit /* @var Unit $unit */) {
+			foreach ($this->enemy as $unit) {
 				$ids[] = (string)$unit->Id();
 			}
 			$state   = State::getInstance();

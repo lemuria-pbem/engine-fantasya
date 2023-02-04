@@ -34,19 +34,19 @@ class Combatant
 	use BuilderTrait;
 
 	/**
-	 * @var Fighter[]
+	 * @var array<Fighter>
 	 */
 	public array $fighters;
 
 	/**
-	 * @var Fighter[]
+	 * @var array<Fighter>
 	 */
 	public array $refugees = [];
 
 	public bool $hasCast = false;
 
 	/**
-	 * @var array(int=>int)
+	 * @var array<int, int>
 	 */
 	protected static array $ids = [];
 
@@ -67,7 +67,7 @@ class Combatant
 	private Attack $attack;
 
 	/**
-	 * @var int[]
+	 * @var array<int>
 	 */
 	private array $fighterIndex;
 
@@ -227,11 +227,11 @@ class Combatant
 		}
 
 		$newDistribution = new Distribution();
-		foreach ($this->distribution as $quantity /* @var Quantity $quantity */) {
+		foreach ($this->distribution as $quantity) {
 			$count = (int)round($size * $quantity->Count() / $this->Size());
 			$newDistribution->add(new Quantity($quantity->Commodity(), $count));
 		}
-		foreach ($newDistribution as $quantity /* @var Quantity $quantity */) {
+		foreach ($newDistribution as $quantity) {
 			$this->distribution->remove(new Quantity($quantity->Commodity(), $quantity->Count()));
 		}
 		$this->distribution->setSize($this->Size() - $size);
@@ -310,7 +310,7 @@ class Combatant
 		if (!isset(WeaponSkill::WEAPONS[$talent])) {
 			throw new LemuriaException('WeaponSkill does not define weapons for ' . $talent . '.');
 		}
-		foreach (WeaponSkill::WEAPONS[$talent] as $weapon /* @var Weapon $weapon */) {
+		foreach (WeaponSkill::WEAPONS[$talent] as $weapon) {
 			if ($this->distribution->offsetExists($weapon)) {
 				$this->weapon = self::createWeapon($weapon);
 				return true;

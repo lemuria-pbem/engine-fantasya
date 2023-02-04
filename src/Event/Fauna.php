@@ -16,7 +16,6 @@ use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
 use Lemuria\Model\Calendar\Season;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
@@ -80,7 +79,7 @@ final class Fauna extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
+		foreach (Region::all() as $region) {
 			$landscape  = $region->Landscape();
 			$workplaces = $this->getAvailableWorkplaces($region) - $this->getCultivatedWorkplaces($region);
 			$available  = max(0, $workplaces);
@@ -149,7 +148,7 @@ final class Fauna extends AbstractEvent
 
 	private function getMigrantDistribution(Neighbours $neighbours, array $rates): array {
 		$distribution = [];
-		foreach ($neighbours as $direction => $neighbour /* @var Region $neighbour */) {
+		foreach ($neighbours as $direction => $neighbour) {
 			$landscape = $neighbour->Landscape();
 			$class     = get_class($landscape);
 			$rate      = $rates[$class] ?? 0.0;

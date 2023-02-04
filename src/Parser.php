@@ -12,7 +12,7 @@ use Lemuria\Lemuria;
 class Parser
 {
 	/**
-	 * @var Phrase[]
+	 * @var array<Phrase>
 	 */
 	protected array $phrases = [];
 

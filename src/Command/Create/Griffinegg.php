@@ -87,7 +87,6 @@ final class Griffinegg extends AllocationCommand implements Activity
 	protected function run(): void {
 		parent::run();
 		$this->resources->rewind();
-		/** @var Quantity $quantity */
 		$quantity = $this->resources->current();
 		$eggs     = $quantity->Count();
 		$this->unit->Inventory()->add($quantity);
@@ -107,8 +106,7 @@ final class Griffinegg extends AllocationCommand implements Activity
 	private function attack(int $eggs): void {
 		$region    = $this->unit->Region();
 		$resources = $region->Resources();
-		/** @var Quantity $griffins */
-		$griffins = $resources[Griffin::class];
+		$griffins  = $resources[Griffin::class];
 
 		$effect = $this->getEffect($region);
 		if ($effect->Griffins()) {

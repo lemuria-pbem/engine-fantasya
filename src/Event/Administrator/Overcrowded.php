@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\Message\Party\Administrator\OvercrowdedMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Talent\Constructing;
 
@@ -21,7 +20,7 @@ final class Overcrowded extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Construction) as $construction /* @var Construction $construction */) {
+		foreach (Construction::all() as $construction) {
 			if ($construction->getFreeSpace() > 0) {
 				continue;
 			}

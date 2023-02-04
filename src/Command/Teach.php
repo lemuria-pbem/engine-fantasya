@@ -38,7 +38,7 @@ final class Teach extends UnitCommand implements Activity
 	private const MAX_STUDENTS = 10;
 
 	/**
-	 * @var array(int=>Learn)
+	 * @var array<int, Learn>
 	 */
 	private array $students = [];
 
@@ -58,7 +58,7 @@ final class Teach extends UnitCommand implements Activity
 			$id = $student->Unit()->Id()->Id();
 			unset($this->students[$id]);
 			$ids = [];
-			foreach ($this->students as $student /* @var Learn $student */) {
+			foreach ($this->students as $student) {
 				$ids[] = $student->Unit()->Id();
 			}
 			$this->createNewDefault($ids);
@@ -94,7 +94,7 @@ final class Teach extends UnitCommand implements Activity
 			}
 		} else {
 			// Add all units in region as possible students.
-			foreach ($this->unit->Region()->Residents() as $unit /* @var Unit $unit */) {
+			foreach ($this->unit->Region()->Residents() as $unit) {
 				$this->size += $this->teach($unit);
 				$ids[]       = $unit->Id();
 			}
@@ -204,7 +204,7 @@ final class Teach extends UnitCommand implements Activity
 	 */
 	private function calculateBonuses(): void {
 		$people = 0;
-		foreach ($this->students as $learn /* @var Learn $learn */) {
+		foreach ($this->students as $learn) {
 			$people += $learn->Unit()->Size();
 		}
 		$maxStudents = $this->unit->Size() * self::MAX_STUDENTS;

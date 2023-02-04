@@ -69,7 +69,7 @@ final class Vessel extends AbstractProduct
 			$production       = min($this->capability, $reserve);
 			if ($production > 0) {
 				$yield = min($production, $demand);
-				foreach ($ship->getMaterial() as $quantity/* @var Quantity $quantity */) {
+				foreach ($ship->getMaterial() as $quantity) {
 					$count       = (int)ceil($this->consumption * $yield * $quantity->Count());
 					$consumption = new Quantity($quantity->Commodity(), $count);
 					$this->unit->Inventory()->remove($consumption);

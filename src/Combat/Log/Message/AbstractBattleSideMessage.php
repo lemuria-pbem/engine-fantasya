@@ -11,7 +11,7 @@ abstract class AbstractBattleSideMessage extends AbstractMessage
 	private const PARTICIPANTS = 'participants';
 
 	/**
-	 * @param Participant[]|null $participants
+	 * @param array<Participant>|null $participants
 	 */
 	public function __construct(protected ?array $participants = []) {
 	}

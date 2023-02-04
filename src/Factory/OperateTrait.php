@@ -32,7 +32,6 @@ trait OperateTrait
 		if ($this->phrase->count() === 1) {
 			$id = Id::fromId($this->phrase->getParameter());
 			if ($treasury->has($id)) {
-				/** @var Unicum $unicum */
 				$unicum = $treasury[$id];
 				return $unicum->Composition();
 			}
@@ -40,7 +39,6 @@ trait OperateTrait
 			$composition = $this->context->Factory()->composition($this->phrase->getParameter());
 			$id          = Id::fromId($this->phrase->getParameter(2));
 			if ($treasury->has($id)) {
-				/** @var Unicum $unicum */
 				$unicum = $treasury[$id];
 				if ($composition === $unicum->Composition()) {
 					return $composition;
@@ -64,7 +62,6 @@ trait OperateTrait
 		if ($this->phrase->count() === 1 + $offset) {
 			$id = Id::fromId($this->phrase->getParameter(1 + $offset));
 			if ($treasury->has($id)) {
-				/** @var Unicum $unicum */
 				$unicum = $treasury[$id];
 			}
 			$this->argumentIndex = $offset + 2;
@@ -72,7 +69,6 @@ trait OperateTrait
 			$composition = $this->context->Factory()->composition($this->phrase->getParameter(1 + $offset));
 			$id          = Id::fromId($this->phrase->getParameter(2 + $offset));
 			if ($treasury->has($id)) {
-				/** @var Unicum $unicum */
 				$unicum = $treasury[$id];
 				if ($composition !== $unicum->Composition()) {
 					$this->message(OperateNoCompositionMessage::class)->s($composition)->p((string)$id);

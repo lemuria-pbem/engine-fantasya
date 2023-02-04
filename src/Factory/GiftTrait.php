@@ -66,8 +66,7 @@ trait GiftTrait
 			$resourceCount = $this->unit->Size();
 		} elseif ($this->commodity instanceof Container) {
 			$this->commodity->setResources($inventory);
-			foreach ($this->commodity->Commodities() as $commodity /* @var Commodity $commodity */) {
-				/** @var Quantity $quantity */
+			foreach ($this->commodity->Commodities() as $commodity /** @var Commodity $commodity */) {
 				$quantity = $inventory[$commodity];
 				$count    = $this->amount === PHP_INT_MAX ? $quantity->Count() : $this->amount;
 				$resources->add(new Quantity($commodity, $count));

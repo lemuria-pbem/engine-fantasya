@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\PreyMessage;
 use Lemuria\Model\Fantasya\Party\Type;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * A hunting monster watches for the smallest unit in the region to attack.
@@ -23,7 +22,7 @@ class Prey extends Seek
 		$region   = $this->unit->Region();
 		$smallest = PHP_INT_MAX;
 		$prey     = null;
-		foreach ($region->Residents() as $unit /* @var Unit $unit */) {
+		foreach ($region->Residents() as $unit) {
 			if ($unit->Party()->Type() === Type::Monster) {
 				continue;
 			}

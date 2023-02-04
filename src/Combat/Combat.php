@@ -63,22 +63,22 @@ class Combat
 	protected Ranks $defender;
 
 	/**
-	 * @var array(int=>bool)
+	 * @var array<int, bool>
 	 */
 	protected array $isAttacker = [];
 
 	/**
-	 * @var array(int=>Army)
+	 * @var array<int, Army>
 	 */
 	protected array $armies = [];
 
 	/**
-	 * @var Participant[]
+	 * @var array<Participant>
 	 */
 	protected array $attackParticipants = [];
 
 	/**
-	 * @var Participant[]
+	 * @var array<Participant>
 	 */
 	protected array $defendParticipants = [];
 
@@ -127,15 +127,14 @@ class Combat
 	}
 
 	/**
-	 * @return array(int=>Army)
+	 * @return array<int, Army>
 	 */
 	public function getAttackers(): array {
 		$armies = [];
 		foreach ($this->isAttacker as $id => $isAttacker) {
 			if ($isAttacker) {
-				/** @var Army $army */
 				$army = $this->armies[$id];
-				foreach ($army->Units() as $unit /* @var Unit $unit */) {
+				foreach ($army->Units() as $unit) {
 					$combatants = $army->getCombatants($unit);
 					foreach ($combatants as $combatant) {
 						$this->attacker->add($combatant);
@@ -149,15 +148,14 @@ class Combat
 	}
 
 	/**
-	 * @return array(int=>Army)
+	 * @return array<int, Army>
 	 */
 	public function getDefenders(): array {
 		$armies = [];
 		foreach ($this->isAttacker as $id => $isAttacker) {
 			if (!$isAttacker) {
-				/** @var Army $army */
 				$army = $this->armies[$id];
-				foreach ($army->Units() as $unit /* @var Unit $unit */) {
+				foreach ($army->Units() as $unit) {
 					$combatants = $army->getCombatants($unit);
 					foreach ($combatants as $combatant) {
 						$this->defender->add($combatant);
@@ -174,13 +172,13 @@ class Combat
 		$log = BattleLog::getInstance();
 		$log->add(new AttackerSideMessage($this->attackParticipants));
 		foreach ($this->attacker as $rank) {
-			foreach ($rank as $combatant /* @var Combatant $combatant */) {
+			foreach ($rank as $combatant) {
 				$log->add($this->getCombatantMessage($combatant));
 			}
 		}
 		$log->add(new DefenderSideMessage($this->defendParticipants));
 		foreach ($this->defender as $rank) {
-			foreach ($rank as $combatant /* @var Combatant $combatant */) {
+			foreach ($rank as $combatant) {
 				$log->add($this->getCombatantMessage($combatant));
 			}
 		}
@@ -275,11 +273,10 @@ class Combat
 			$id      = $combatant->Unit()->Party()->Id()->Id();
 			$effects = isset($this->isAttacker[$id]) ? $this->attacker->Effects() : $this->defender->Effects();
 			if ($effects->offsetExists($spell)) {
-				/** @var CombatEffect $effect */
-				$effect = $effects[$spell];
-				return $effect;
+				return $effects[$spell];
 			}
 		}
+
 		/** @var CombatEffect $effect */
 		$effect = $this->effects[$spell] ?? null;
 		return $effect;
@@ -296,7 +293,7 @@ class Combat
 
 	protected function addPreparationSpells(Casts $casts, Ranks $caster, Ranks $victim): void {
 		foreach ([Rank::FRONT, Rank::BACK] as $row) {
-			foreach ($caster[$row] as $combatant /* @var Combatant $combatant */) {
+			foreach ($caster[$row] as $combatant) {
 				$unit = $combatant->Unit();
 				if ($unit->BattleSpells()?->Preparation()) {
 					$grade = new BattleSpellGrade($unit->BattleSpells()->Preparation(), $this);
@@ -326,7 +323,7 @@ class Combat
 		$attacker = [];
 		foreach ($this->attacker as $row => $combatants) {
 			$count = 0;
-			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
+			foreach ($combatants as $combatant) {
 				$count += $combatant->Size();
 			}
 			$attacker[] = self::ROW_NAME[$row] . ':' . $count;
@@ -334,7 +331,7 @@ class Combat
 		$defender = [];
 		foreach ($this->defender as $row => $combatants) {
 			$count = 0;
-			foreach ($combatants as $combatant /* @var Combatant $combatant */) {
+			foreach ($combatants as $combatant) {
 				$count += $combatant->Size();
 			}
 			$defender[] = self::ROW_NAME[$row] . ':' . $count;
@@ -503,7 +500,7 @@ class Combat
 			$this->unsetExpiredCombatSpells($this->defender->Effects());
 		} else {
 			$removal = [];
-			foreach ($effects as $effect /* @var CombatEffect $effect */) {
+			foreach ($effects as $effect /** @var CombatEffect $effect */) {
 				$duration = $effect->Duration() - 1;
 				if ($duration > 0) {
 					$effect->setDuration($duration);
@@ -541,17 +538,17 @@ class Combat
 	}
 
 	/**
-	 * @return Unit[]
+	 * @return array<Unit>
 	 */
 	protected function prepareCombatSpells(Ranks $caster): array {
 		$units = [];
-		foreach ($caster[Rank::FRONT] as $combatant /* @var Combatant $combatant */) {
+		foreach ($caster[Rank::FRONT] as $combatant) {
 			$unit = $combatant->Unit();
 			if ($unit->BattleSpells()?->Combat()) {
 				$units[$unit->Id()->Id()] = $unit;
 			}
 		}
-		foreach ($caster[Rank::BACK] as $combatant /* @var Combatant $combatant */) {
+		foreach ($caster[Rank::BACK] as $combatant) {
 			$unit = $combatant->Unit();
 			if ($unit->BattleSpells()?->Combat()) {
 				$units[$unit->Id()->Id()] = $unit;
@@ -561,7 +558,7 @@ class Combat
 	}
 
 	/**
-	 * @param Unit[] $units
+	 * @param array<Unit> $units
 	 */
 	protected function castCombatSpell(array $units, Ranks $caster, Ranks $victim): void {
 		foreach ($units as $unit) {
@@ -662,8 +659,8 @@ class Combat
 	 * @noinspection PhpStatementHasEmptyBodyInspection
 	 */
 	protected function removeTheDead(Ranks $ranks): void {
-		foreach ($ranks as $combatants /* @var Rank $combatants */) {
-			foreach ($combatants as $c => $combatant /* @var Combatant $combatant */) {
+		foreach ($ranks as $combatants) {
+			foreach ($combatants as $c => $combatant) {
 				$size               = $combatant->Size();
 				$combatant->hasCast = false;
 				$createZombies      = $combatant->Unit()->Party()->Type() !== Type::Monster;
@@ -695,7 +692,7 @@ class Combat
 						$army->Trophies()->add(new Quantity($trophy, $deceased));
 					}
 					$inventory = $unit->Inventory();
-					foreach ($combatant->Distribution()->lose($deceased) as $quantity /* @var Quantity $quantity*/) {
+					foreach ($combatant->Distribution()->lose($deceased) as $quantity) {
 						$inventory->remove($quantity);
 						$army->Loss()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
 						// Lemuria::Log()->debug('Unit ' . $unit . ' loses ' . $quantity . '.');

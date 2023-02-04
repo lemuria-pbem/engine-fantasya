@@ -6,7 +6,6 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\RepeatMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RepeatNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RepeatNotMessage;
-use Lemuria\Model\Fantasya\Market\Trade;
 
 /**
  * Set or unset the repeat option a market trade.
@@ -39,7 +38,6 @@ final class Repeat extends UnitCommand
 			}
 		}
 
-		/** @var Trade $trade */
 		$trade = $trades[$id];
 		$trade->setIsRepeat($isRepeat);
 		if ($isRepeat) {

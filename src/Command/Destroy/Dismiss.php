@@ -71,7 +71,7 @@ final class Dismiss extends UnitCommand
 			$this->dismissPeasants();
 		} elseif ($this->commodity instanceof Container) {
 			$this->commodity->setResources($this->unit->Inventory());
-			foreach ($this->commodity->Commodities() as $commodity /* @var Commodity $commodity */) {
+			foreach ($this->commodity->Commodities() as $commodity /** @var Commodity $commodity */) {
 				$this->dismiss($commodity);
 			}
 		} else {

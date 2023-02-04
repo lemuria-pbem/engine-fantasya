@@ -12,7 +12,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\BreedingGrowthMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Animal;
 use Lemuria\Model\Fantasya\Building\AbstractBreeding;
 use Lemuria\Model\Fantasya\Commodity\Potion\HorseBliss;
@@ -23,7 +22,6 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\RawMaterial;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Horsetaming;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Animals grow or migrate to neighbour regions.
@@ -46,7 +44,7 @@ final class Breeding extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Construction) as $construction /* @var Construction $construction */) {
+		foreach (Construction::all() as $construction) {
 			$building = $construction->Building();
 			if ($building instanceof AbstractBreeding) {
 				$animal   = $building->Animal();
@@ -76,7 +74,7 @@ final class Breeding extends AbstractEvent
 
 	private function countStock(Construction $construction, Animal $animal): int {
 		$stock = 0;
-		foreach ($construction->Inhabitants() as $unit /* @var Unit $unit */) {
+		foreach ($construction->Inhabitants() as $unit) {
 			$inventory = $unit->Inventory();
 			$stock    += $inventory[$animal]->Count();
 		}
@@ -85,7 +83,7 @@ final class Breeding extends AbstractEvent
 
 	private function calculateProduction(Construction $construction, int $cost): int {
 		$production = 0;
-		foreach ($construction->Inhabitants() as $unit /* @var Unit $unit */) {
+		foreach ($construction->Inhabitants() as $unit) {
 			$level = $this->getProductivity($this->horsetaming)->Level();
 			if ($level >= $cost) {
 				$size        = $unit->Size();

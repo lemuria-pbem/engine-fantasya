@@ -52,7 +52,7 @@ final class Siege extends UnitCommand
 
 		$id     = $this->parseId()->Id();
 		$region = $this->unit->Region();
-		foreach ($region->Estate() as $construction /* @var Construction $construction */) {
+		foreach ($region->Estate() as $construction) {
 			if ($construction->Id()->Id() === $id) {
 				$this->construction = $construction;
 				break;
@@ -97,13 +97,13 @@ final class Siege extends UnitCommand
 		if ($besiegers->count()) {
 			$effect = $this->createEffect();
 		}
-		foreach ($this->construction->Inhabitants() as $unit /* @var Unit $unit */) {
+		foreach ($this->construction->Inhabitants() as $unit) {
 			if ($unit->IsGuarding()) {
 				$unit->setIsGuarding(false);
 				$this->message(SiegeUnguardMessage::class, $unit);
 			}
 		}
-		foreach ($besiegers as $unit /* @var Unit $unit */) {
+		foreach ($besiegers as $unit) {
 			/** @noinspection PhpUndefinedVariableInspection */
 			$effect->renew($unit);
 			$this->message(SiegeMessage::class, $unit)->e($this->construction);

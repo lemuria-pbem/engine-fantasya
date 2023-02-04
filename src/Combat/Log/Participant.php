@@ -24,7 +24,7 @@ final class Participant implements \Stringable, Serializable
 	public int $fighters = 0;
 
 	/**
-	 * @param Combatant[] $combatants
+	 * @param array<Combatant> $combatants
 	 */
 	public function __construct(public ?Entity $unit = null, array $combatants = []) {
 		$this->combatants = count($combatants);

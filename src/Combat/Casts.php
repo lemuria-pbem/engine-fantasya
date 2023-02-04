@@ -10,7 +10,7 @@ use Lemuria\Lemuria;
 class Casts
 {
 	/**
-	 * @var array(int=>array)
+	 * @var array<int, array>
 	 */
 	protected array $casts = [];
 
@@ -26,7 +26,7 @@ class Casts
 		ksort($this->casts);
 		foreach ($this->casts as $order => $casts) {
 			Lemuria::Log()->debug('Casting battle spells of order ' . $order . '.');
-			foreach ($casts as $cast /* @var Cast $cast */) {
+			foreach ($casts as $cast /** @var Cast $cast */) {
 				Lemuria::Log()->debug('Casting ' . $cast . '.');
 				try {
 					$cast->cast();

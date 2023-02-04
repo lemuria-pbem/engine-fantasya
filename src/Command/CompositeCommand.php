@@ -13,14 +13,14 @@ class CompositeCommand extends UnitCommand
 	protected array $commands;
 
 	/**
-	 * @return Command[]
+	 * @return array<Command>
 	 */
 	public function getCommands(): array {
 		return $this->commands;
 	}
 
 	/**
-	 * @param Command[] $commands
+	 * @param array<Command> $commands
 	 */
 	public function setCommands(array $commands): Command {
 		foreach ($commands as $command) {

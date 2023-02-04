@@ -39,7 +39,7 @@ trait ActTrait
 			$regions[getClass($landscape)] = [];
 		}
 		$region = $this->unit->Region();
-		foreach (Lemuria::World()->getNeighbours($region) as $neighbour /* @var Region $neighbour */) {
+		foreach (Lemuria::World()->getNeighbours($region) as $neighbour) {
 			$landscape = getClass($neighbour->Landscape());
 			if (isset($regions[$landscape])) {
 				$regions[$landscape][] = $neighbour;

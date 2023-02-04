@@ -27,17 +27,17 @@ class LemuriaReport implements Reassignment, Report
 	private const REMOVED = 'removed';
 
 	/**
-	 * @var array(int=>array)
+	 * @var array<int, array>
 	 */
 	private array $report;
 
 	/**
-	 * @var LemuriaMessage[]
+	 * @var array<LemuriaMessage>
 	 */
 	private array $message;
 
 	/**
-	 * @var array(int=>array)
+	 * @var array<int, array>
 	 */
 	private array $removed;
 
@@ -69,7 +69,7 @@ class LemuriaReport implements Reassignment, Report
 	/**
 	 * Get all messages of an entity.
 	 *
-	 * @return Message[]
+	 * @return array<Message>
 	 */
 	public function getAll(Identifiable $entity): array {
 		$messages = [];
@@ -114,7 +114,7 @@ class LemuriaReport implements Reassignment, Report
 	 */
 	public function save(): Report {
 		$messages = [];
-		foreach ($this->message as $message /* @var LemuriaMessage $message */) {
+		foreach ($this->message as $message) {
 			$messages[] = $message->serialize();
 		}
 		Lemuria::Game()->setMessages([self::MESSAGES => $messages, self::REMOVED => $this->removed]);

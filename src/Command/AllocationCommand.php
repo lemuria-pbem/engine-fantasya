@@ -56,7 +56,7 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	 * This method should return the foreign parties that prevent executing the
 	 * command.
 	 *
-	 * @return Party[]
+	 * @return array<Party>
 	 */
 	public function checkBeforeAllocation(): array {
 		if ($this->lastCheck === null) {
@@ -117,16 +117,13 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 			$commodity = self::createCommodity($class);
 			return new Quantity($commodity, 0);
 		}
-
-		/** @var Quantity $quantity */
-		$quantity = $this->resources[$class];
-		return $quantity;
+		return $this->resources[$class];
 	}
 
 	/**
 	 * Do the check before allocation.
 	 *
-	 * @return Party[]
+	 * @return array<Party>
 	 */
 	protected function getCheckBeforeAllocation(): array {
 		return [];

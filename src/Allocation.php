@@ -30,32 +30,32 @@ final class Allocation
 	private readonly CommandPriority $priority;
 
 	/**
-	 * @var array(int=>Consumer)
+	 * @var array<int, Consumer>
 	 */
 	private array $consumers = [];
 
 	/**
-	 * @var array(int=>bool)
+	 * @var array<int, bool>
 	 */
 	private array $consumersLeft = [];
 
 	/**
-	 * @var array(int=>array)
+	 * @var array<int, array>
 	 */
 	private array $rounds = [];
 
 	/**
-	 * @var array(int=>Resources)
+	 * @var array<int, Resources>
 	 */
 	private array $allocations = [];
 
 	/**
-	 * @var array(string=>Quantity)
+	 * @var array<string, Quantity>
 	 */
 	private array $resources = [];
 
 	/**
-	 * @var array(string=>array)
+	 * @var array<string, array>
 	 */
 	private array $distribution;
 
@@ -132,10 +132,9 @@ final class Allocation
 	private function analyze(int $round): void {
 		$this->distribution = [];
 		foreach ($this->rounds[$round] as $id) {
-			/* @var Consumer $consumer */
 			$consumer = $this->consumers[$id];
 			$quota    = $consumer->getQuota();
-			foreach ($consumer->getDemand() as $class => $quantity /* @var Quantity $quantity */) {
+			foreach ($consumer->getDemand() as $class => $quantity) {
 				$demand = $quantity->Count();
 				if (!isset($this->distribution[$class])) {
 					$this->distribution[$class] = ['total' => 0, 'quota' => $quota, 'demand' => [], 'allocation' => []];
@@ -225,7 +224,6 @@ final class Allocation
 		foreach ($this->distribution as $class => $distribution) {
 			$commodity = self::createCommodity($class);
 			foreach ($distribution['allocation'] as $id => $count) {
-				/* @var Resources $resources */
 				$resources = $this->allocations[$id];
 				$resources->add(new Quantity($commodity, $count));
 			}
@@ -241,11 +239,10 @@ final class Allocation
 			throw new AllocationException($consumer, $this->Region());
 		}
 
-		/* @var Resources $allocation */
 		$allocation = $this->allocations[$id];
 		$consumer->allocate($allocation);
 		unset($this->allocations[$id]);
-		foreach ($allocation as $quantity /* @var Quantity $quantity */) {
+		foreach ($allocation as $quantity) {
 			$this->availability->remove($quantity);
 		}
 	}
@@ -271,7 +268,7 @@ final class Allocation
 		if (!isset($this->resources[$class])) {
 			throw new LemuriaException('Reserve of commodity ' . $class . ' not found.');
 		}
-		/* @var Quantity $quantity */
+
 		$quantity = $this->resources[$class];
 		if ($count < 0 || $count > $quantity->Count()) {
 			throw new LemuriaException('Invalid reduce count given for reserve update.');
@@ -285,7 +282,7 @@ final class Allocation
 	 */
 	private function debugDemand(Consumer $consumer): string {
 		$demand = [];
-		foreach ($consumer->getDemand() as $quantity /* @var Quantity $quantity */) {
+		foreach ($consumer->getDemand() as $quantity) {
 			$demand[] = (string)$quantity;
 		}
 		return implode(',', $demand);

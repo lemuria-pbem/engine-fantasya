@@ -60,29 +60,29 @@ class Battle
 	public int $counter;
 
 	/**
-	 * @var Unit[]
+	 * @var array<Unit>
 	 */
 	private array $attackers = [];
 
 	/**
-	 * @var array(int=>Army)
+	 * @var array<int, Army>
 	 */
 	private array $attackArmies = [];
 
 	/**
-	 * @var Unit[]
+	 * @var array<Unit>
 	 */
 	private array $defenders = [];
 
 	/**
-	 * @var array(int=>Army)
+	 * @var array<int, Army>
 	 */
 	private array $defendArmies = [];
 
 	private Intelligence $intelligence;
 
 	/**
-	 * @var array(int=>Unit)
+	 * @var array<int, Unit>
 	 */
 	private array $monsters = [];
 
@@ -127,7 +127,7 @@ class Battle
 		$this->attackers[] = $unit;
 		$id                = $unit->Id()->Id();
 		if (isset($this->monsters[$id])) {
-			foreach ($this->monsters[$id] as $monster /* @var Unit $monster */) {
+			foreach ($this->monsters[$id] as $monster /** @var Unit $monster */) {
 				$this->attackers[] = $monster;
 				Lemuria::Log()->debug('Monster ' . $monster . ' supports attacker in battle.');
 			}
@@ -145,7 +145,7 @@ class Battle
 		$this->defenders[] = $unit;
 		$id                = $unit->Id()->Id();
 		if (isset($this->monsters[$id])) {
-			foreach ($this->monsters[$id] as $monster /* @var Unit $monster */) {
+			foreach ($this->monsters[$id] as $monster /** @var Unit $monster */) {
 				$this->defenders[] = $monster;
 				Lemuria::Log()->debug('Monster ' . $monster . ' supports defender in battle.');
 			}
@@ -217,11 +217,12 @@ class Battle
 	}
 
 	/**
+	 * @param array<Unit> $units
 	 * @return array<Party>
 	 */
 	protected function getParties(array $units): array {
 		$parties = [];
-		foreach ($units as $unit /* @var Unit $unit */) {
+		foreach ($units as $unit) {
 			$disguise = $unit->Disguise();
 			if ($disguise) {
 				$party = new DisguisedParty($unit->Party());
@@ -342,18 +343,21 @@ class Battle
 		return $this;
 	}
 
+	/**
+	 * @param array<Army> $armies
+	 */
 	protected function collectLoot(array $armies, int $rounds): Resources {
 		$loot = new WearResources();
 		$wear = min(self::WEAR, $rounds ** 2 / self::WEAR_DIVISOR);
 		$loot->setWear($wear);
-		foreach ($armies as $army /* @var Army $army */) {
+		foreach ($armies as $army) {
 			$loot->fill($army->Loss());
 		}
 		return $loot;
 	}
 
 	protected function giveLootToHeirs(Heirs $heirs, Resources $loot): void {
-		foreach ($loot as $quantity /* @var Quantity $quantity */) {
+		foreach ($loot as $quantity) {
 			$unit  = $heirs->random();
 			$party = $unit->Party();
 			$type  = $party->Type();
@@ -382,9 +386,12 @@ class Battle
 		}
 	}
 
+	/**
+	 * @param array<Army> $armies
+	 */
 	protected function takeTrophies(Heirs $heirs, array $armies): void {
-		foreach ($armies as $army /* @var Army $army */) {
-			foreach ($army->Trophies() as $quantity /* @var Quantity $quantity */) {
+		foreach ($armies as $army) {
+			foreach ($army->Trophies() as $quantity) {
 				$unit = $heirs->random();
 				if ($unit->Party()->Type() === Type::Player) {
 					$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
@@ -396,10 +403,10 @@ class Battle
 	}
 
 	protected function treatInjuredUnits(): void {
-		foreach ($this->attackArmies as $army /* @var Army $army */) {
+		foreach ($this->attackArmies as $army) {
 			$this->treatUnitsOfArmy($army);
 		}
-		foreach ($this->defendArmies as $army /* @var Army $army */) {
+		foreach ($this->defendArmies as $army) {
 			$this->treatUnitsOfArmy($army);
 		}
 	}
@@ -451,7 +458,7 @@ class Battle
 		$score  = Lemuria::Score();
 		$effect = new VanishEffect(State::getInstance());
 		$party  = Party::get(Spawn::getPartyId(Type::Monster));
-		foreach ($this->intelligence->getUnits($party) as $monster /* @var Unit $monster */) {
+		foreach ($this->intelligence->getUnits($party) as $monster) {
 			$existing = $score->find($effect->setUnit($monster));
 			if ($existing instanceof VanishEffect) {
 				$unit = $existing->Summoner();
@@ -504,7 +511,7 @@ class Battle
 			} else {
 				Lemuria::Score()->add($effect);
 			}
-			foreach ($this->battlefieldRemains as $quantity /* @var Quantity $quantity */) {
+			foreach ($this->battlefieldRemains as $quantity) {
 				$effect->Resources()->add($quantity);
 				Lemuria::Log()->debug('Adding ' . $quantity . ' to battlefield remains.');
 			}

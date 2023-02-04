@@ -9,7 +9,7 @@ class Ranks implements \ArrayAccess, \Countable, \Iterator
 	public final const BATTLE_ROWS = [Rank::REFUGEE, Rank::BYSTANDER, Rank::BACK, Rank::FRONT];
 
 	/**
-	 * @var Rank[]
+	 * @var array<Rank>
 	 */
 	protected array $ranks;
 

@@ -8,7 +8,6 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Serializable;
 use Lemuria\Validate;
@@ -66,7 +65,7 @@ final class VesselLoot extends AbstractVesselEffect
 		$captain   = $vessel->Passengers()->Owner();
 		$inventory = $captain?->Inventory();
 		if ($inventory) {
-			foreach ($this->resources as $quantity /* @var Quantity $quantity */) {
+			foreach ($this->resources as $quantity) {
 				$inventory->add($quantity);
 				$this->message(VesselLootMessage::class, $captain)->e($vessel)->i($quantity);
 			}

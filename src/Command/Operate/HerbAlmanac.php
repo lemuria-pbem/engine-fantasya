@@ -48,7 +48,7 @@ final class HerbAlmanac extends AbstractOperate
 				return;
 			}
 			$this->message(HerbageApplyAllMessage::class, $this->unit)->e($unicum);
-			foreach ($herbalBook as $region /* @var Region $region */) {
+			foreach ($herbalBook as $region) {
 				$this->addHerbage($almanac, $region, $herbalBook, $chronicle);
 			}
 		}
@@ -74,7 +74,7 @@ final class HerbAlmanac extends AbstractOperate
 				$this->message(HerbageWriteEmptyMessage::class, $this->unit);
 				return;
 			}
-			foreach ($herbalBook as $region /* @var Region $region */) {
+			foreach ($herbalBook as $region) {
 				$this->writeHerbage($almanac, $region, $herbalBook);
 			}
 			$this->message(HerbageWriteAllMessage::class, $this->unit)->e($this->operator->Unicum());

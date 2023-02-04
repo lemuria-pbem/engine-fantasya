@@ -46,7 +46,7 @@ class LemuriaTurn implements Turn
 	protected readonly CommandPriority $priority;
 
 	/**
-	 * @var array(int=>array)
+	 * @var array<int, array>
 	 */
 	protected array $queue = [];
 
@@ -196,7 +196,7 @@ class LemuriaTurn implements Turn
 			$actions               = $this->queue[$priority];
 			Lemuria::Log()->debug('Queue ' . $priority . ' has ' . count($actions) . ' actions.');
 
-			foreach ($actions as $action /* @var Action $action */) {
+			foreach ($actions as $action /** @var Action $action */) {
 				try {
 					$action->prepare();
 				} catch (ActionException $e) {
@@ -208,7 +208,7 @@ class LemuriaTurn implements Turn
 				}
 			}
 
-			foreach ($actions as $action /* @var Action $action */) {
+			foreach ($actions as $action /** @var Action $action */) {
 				try {
 					if ($action->isPrepared()) {
 						$action->execute();
@@ -253,7 +253,7 @@ class LemuriaTurn implements Turn
 	 * Add effects from Score.
 	 */
 	public function addScore(Score $score): LemuriaTurn {
-		foreach ($score as $effect /* @var Effect $effect */) {
+		foreach ($score as $effect /** @var Effect $effect */) {
 			$this->addEffect($effect);
 		}
 		return $this;
@@ -348,7 +348,7 @@ class LemuriaTurn implements Turn
 		$context = new Context($this->state);
 		Lemuria::Catalog()->addReassignment($context);
 		$context->setParty($party);
-		foreach ($party->People() as $unit /* @var Unit $unit */) {
+		foreach ($party->People() as $unit) {
 			$command = $this->getDefaultActivity($unit, $context->setUnit($unit));
 			if ($command) {
 				$this->enqueue($command);

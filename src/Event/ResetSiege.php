@@ -6,7 +6,6 @@ use Lemuria\Engine\Fantasya\Effect\SiegeEffect;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Construction;
 
 /**
@@ -20,7 +19,7 @@ final class ResetSiege extends AbstractEvent
 
 	protected function run(): void {
 		$siege = new SiegeEffect($this->state);
-		foreach (Lemuria::Catalog()->getAll(Domain::Construction) as $construction /* @var Construction $construction */) {
+		foreach (Construction::all() as $construction) {
 			$effect = Lemuria::Score()->find($siege->setConstruction($construction));
 			if ($effect instanceof SiegeEffect) {
 				$effect->reset();

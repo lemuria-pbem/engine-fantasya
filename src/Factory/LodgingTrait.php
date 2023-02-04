@@ -18,7 +18,7 @@ trait LodgingTrait
 		$party      = $this->unit->Party();
 		$diplomacy  = $party->Diplomacy();
 		$dependency = $this->unit->Construction()->Building()->Dependency();
-		foreach ($this->unit->Region()->Estate()->getIterator() as $construction /* @var Construction $construction */) {
+		foreach ($this->unit->Region()->Estate()->getIterator() as $construction) {
 			if ($construction->Building() === $dependency) {
 				$inhabitants = $construction->Inhabitants();
 				$owner       = $inhabitants->Owner();
@@ -45,7 +45,7 @@ trait LodgingTrait
 		$dependency = $this->unit->Construction()->Building()->Dependency();
 		$lodge      = null;
 		$space      = 0;
-		foreach ($this->unit->Region()->Estate() as $construction /* @var Construction $construction */) {
+		foreach ($this->unit->Region()->Estate() as $construction) {
 			if ($construction->Building() === $dependency) {
 				$inhabitants = $construction->Inhabitants();
 				$owner       = $inhabitants->Owner();

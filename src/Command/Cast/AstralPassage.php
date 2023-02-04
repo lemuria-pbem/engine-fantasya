@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Cast;
 
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
-use Lemuria\Engine\Fantasya\Factory\MoveTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\AstralPassageAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\AstralPassageConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\AstralPassageNoConstructionMessage;
@@ -11,6 +10,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\Cast\AstralPassageNoRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\AstralPassageNoVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\AstralPassageRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\AstralPassageVesselMessage;
+use Lemuria\Engine\Fantasya\Travel\MoveTrait;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;

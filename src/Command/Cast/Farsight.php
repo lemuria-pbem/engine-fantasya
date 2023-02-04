@@ -10,7 +10,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\Cast\FarsightTooFarMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\FarsightUnknownMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Modification;
 use Lemuria\Model\Fantasya\Region;
@@ -60,8 +59,7 @@ final class Farsight extends AbstractCast
 			$effect = $existing;
 		}
 
-		$perception = self::createTalent(Perception::class);
-		/** @var Ability $ability */
+		$perception   = self::createTalent(Perception::class);
 		$ability      = $unit->Knowledge()->offsetGet($perception);
 		$modification = $unit->Race()->Modifications()->offsetGet($perception);
 		if ($modification instanceof Modification) {

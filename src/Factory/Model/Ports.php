@@ -3,13 +3,13 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
-use Lemuria\Engine\Fantasya\Factory\PortsTrait;
 use Lemuria\Engine\Fantasya\Message\Vessel\EnterAlliedPortMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\EnterFriendlyPortMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\EnterPortDeniedMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\EnterPortFullMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\EnterUnguardedPortMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\EnterUnmaintainedPortMessage;
+use Lemuria\Engine\Fantasya\Travel\PortsTrait;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Vessel;

@@ -17,7 +17,6 @@ use Lemuria\Model\Fantasya\Building\Dockyard;
 use Lemuria\Model\Fantasya\Building\Saddlery;
 use Lemuria\Model\Fantasya\Building\Workshop;
 use Lemuria\Model\Fantasya\Artifact;
-use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Requirement;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Alchemy;
@@ -118,7 +117,7 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 
 		$reserves   = $this->unit->Inventory();
 		$production = PHP_INT_MAX;
-		foreach ($resources as $quantity /* @var Quantity $quantity */) {
+		foreach ($resources as $quantity) {
 			$commodity    = $quantity->Commodity();
 			$resourceNeed = $this->consumption * $quantity->Count() / $this->efficiency;
 			$capaNeeded   = (int)ceil($this->capability * $resourceNeed);

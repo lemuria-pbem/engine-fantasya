@@ -77,7 +77,7 @@ trait SiegeTrait
 			$party      = $this->unit->Party();
 			$ownerParty = $owner->Party();
 			if ($ownerParty !== $party) {
-				foreach ($inhabitants as $unit /* @var Unit $unit */) {
+				foreach ($inhabitants as $unit) {
 					if ($unit->Party() === $party) {
 						return true;
 					}

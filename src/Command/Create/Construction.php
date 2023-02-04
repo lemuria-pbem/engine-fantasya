@@ -83,7 +83,7 @@ final class Construction extends AbstractProduct
 		$production       = min($this->capability, $reserve);
 		if ($production > 0) {
 			$yield = min($production, $demand);
-			foreach ($building->getMaterial() as $quantity /* @var Quantity $quantity */) {
+			foreach ($building->getMaterial() as $quantity) {
 				$count       = (int)ceil($this->consumption * $yield * $quantity->Count());
 				$consumption = new Quantity($quantity->Commodity(), $count);
 				$this->unit->Inventory()->remove($consumption);
@@ -142,7 +142,7 @@ final class Construction extends AbstractProduct
 				$isCastle = false;
 				$minSize  = 0;
 			}
-			foreach ($this->unit->Region()->Estate() as $construction /* @var ConstructionModel $construction */) {
+			foreach ($this->unit->Region()->Estate() as $construction) {
 				if ($isCastle) {
 					if ($construction->Building() instanceof Castle && $construction->Size() >= $minSize) {
 						if ($construction->Inhabitants()->Owner()?->Party() === $this->unit->Party()) {
@@ -183,7 +183,6 @@ final class Construction extends AbstractProduct
 				$id     = $this->parseId(2);
 				$estate = $this->unit->Region()->Estate();
 				if ($estate->has($id)) {
-					/** @var ConstructionModel $construction */
 					$construction = $estate[$id];
 					$building     = $construction->Building();
 					if (!in_array($building::class, Enter::FORBIDDEN)) {

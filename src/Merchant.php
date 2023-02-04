@@ -42,7 +42,7 @@ interface Merchant extends Command
 	 * This method should return the foreign parties that prevent executing the
 	 * command.
 	 *
-	 * @return Party[]
+	 * @return array<Party>
 	 */
 	public function checkBeforeCommerce(): array;
 

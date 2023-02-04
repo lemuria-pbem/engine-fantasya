@@ -21,7 +21,6 @@ use Lemuria\Engine\Fantasya\Message\Vessel\NumberVesselUsedMessage;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
-use Lemuria\Model\Fantasya\Unicum;
 
 /**
  * The Number command is used to set the ID of a unit, its party, a construction or vessel it controls, or an unicum it
@@ -153,7 +152,6 @@ final class Number extends UnitCommand
 			$this->message(NumberUnicumUsedMessage::class)->p($newId->Id());
 			return;
 		}
-		/** @var Unicum $unicum */
 		$unicum      = $treasury[$oldId->Id()];
 		$composition = $unicum->Composition();
 		Lemuria::Catalog()->reassign($unicum->replaceId($newId), $oldId);

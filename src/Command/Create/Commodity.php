@@ -44,12 +44,12 @@ final class Commodity extends AbstractProduct
 		if ($production > 0) {
 			$jobCount = $this->job->Count();
 			$yield    = min($production, $jobCount);
-			foreach ($artifact->getMaterial() as $quantity /* @var Quantity $quantity */) {
+			foreach ($artifact->getMaterial() as $quantity) {
 				$count       = (int)ceil($this->consumption * $yield * $quantity->Count() / $this->efficiency);
 				$consumption = new Quantity($quantity->Commodity(), $count);
 				$this->unit->Inventory()->remove($consumption);
 			}
-			/* @var CommodityModel $commodity */
+			/** @var CommodityModel $commodity */
 			$commodity = $artifact;
 			if (!$commodity instanceof CommodityModel) {
 				throw new LemuriaException('Artifact ' . $artifact . ' is not a Commodity.');

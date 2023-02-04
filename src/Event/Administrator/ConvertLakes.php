@@ -6,7 +6,6 @@ use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Landscape\Lake;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
@@ -34,7 +33,7 @@ final class ConvertLakes extends AbstractEvent
 	protected function run(): void {
 		$lake  = self::createLandscape(Lake::class);
 		$ocean = self::createLandscape(Ocean::class);
-		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
+		foreach (Region::all() as $region) {
 			if ($region->Landscape() === $ocean) {
 				$id = $region->Id();
 				$l  = self::BIG_LAKES[$id->Id()] ?? 0;
@@ -52,7 +51,7 @@ final class ConvertLakes extends AbstractEvent
 	}
 
 	private function isLake(Region $region): bool {
-		foreach (Lemuria::World()->getNeighbours($region) as $region /* @var Region $region */) {
+		foreach (Lemuria::World()->getNeighbours($region) as $region) {
 			if ($region->Landscape() instanceof Ocean) {
 				return false;
 			}

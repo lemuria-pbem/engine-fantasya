@@ -31,7 +31,7 @@ final class Forbid extends RegulateCommand
 					$this->message(ForbidAllMessage::class);
 				}
 			} else {
-				foreach ($this->commodities as $commodity /* @var Commodity $commodity */) {
+				foreach ($this->commodities as $commodity /** @var Commodity $commodity */) {
 					$this->tradeables->ban($commodity);
 					if ($commodity instanceof Container) {
 						$this->message(ForbidKindMessage::class)->s($commodity);

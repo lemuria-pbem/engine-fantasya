@@ -33,7 +33,7 @@ class MarketBuilder
 		$offer    = $luxuries->Offer();
 		$luxury   = $luxuries->Offer()->Commodity();
 		$offer->setPrice($luxury->Value());
-		foreach ($luxuries as $demand /* @var Offer $demand */) {
+		foreach ($luxuries as $demand) {
 			$luxury = $demand->Commodity();
 			$demand->setPrice(self::INITIAL_PRICE_FACTOR * $luxury->Value());
 		}

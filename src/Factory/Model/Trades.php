@@ -55,7 +55,7 @@ class Trades implements \Countable
 		$this->available  = [];
 		$this->impossible = [];
 		$this->forbidden  = [];
-		foreach ($unit->Trades()->sort() as $trade /* @var Trade $trade */) {
+		foreach ($unit->Trades()->sort() as $trade) {
 			$id = $trade->Id()->Id();
 			if ($this->sales) {
 				if ($this->hasPaid) {

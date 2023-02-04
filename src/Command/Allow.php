@@ -30,7 +30,7 @@ final class Allow extends RegulateCommand
 					$this->message(AllowAllMessage::class);
 				}
 			} else {
-				foreach ($this->commodities as $commodity /* @var Commodity $commodity */) {
+				foreach ($this->commodities as $commodity /** @var Commodity $commodity */) {
 					$this->tradeables->allow($commodity);
 					if ($commodity instanceof Container) {
 						$this->message(AllowKindMessage::class)->s($commodity);

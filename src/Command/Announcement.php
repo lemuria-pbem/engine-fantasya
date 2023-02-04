@@ -94,7 +94,7 @@ final class Announcement extends UnitCommand
 
 	private function sendToParty(Party $party): void {
 		$outlook = new Outlook(new Census($this->unit->Party()));
-		foreach ($outlook->getApparitions($this->unit->Region()) as $unit /* @var Unit $unit */) {
+		foreach ($outlook->getApparitions($this->unit->Region()) as $unit ) {
 			if ($unit->Party() === $party) {
 				$message   = $this->getMessage();
 				$sender    = (string)$this->unit->Party();

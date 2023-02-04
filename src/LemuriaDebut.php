@@ -11,7 +11,7 @@ use Lemuria\Lemuria;
 class LemuriaDebut implements Debut
 {
 	/**
-	 * @var array(string=>LemuriaNewcomer)
+	 * @var array<string, LemuriaNewcomer>
 	 */
 	private array $newcomers = [];
 
@@ -34,7 +34,7 @@ class LemuriaDebut implements Debut
 	/**
 	 * Get all newcomers.
 	 *
-	 * @return Newcomer[]
+	 * @return array<Newcomer>
 	 */
 	public function getAll(): array {
 		return $this->newcomers;
@@ -78,7 +78,7 @@ class LemuriaDebut implements Debut
 	 */
 	public function save(): Debut {
 		$data = [];
-		foreach ($this->newcomers as $newcomer /* @var LemuriaNewcomer $newcomer */) {
+		foreach ($this->newcomers as $newcomer) {
 			$data[] = $newcomer->serialize();
 		}
 		Lemuria::Game()->setNewcomers($data);

@@ -17,7 +17,6 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Construction;
@@ -25,7 +24,6 @@ use Lemuria\Model\Fantasya\Estate;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Intelligence;
-use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
@@ -65,11 +63,11 @@ final class Upkeep extends AbstractEvent
 		} else {
 			Lemuria::Log()->debug('All parties have maintained their estate.');
 		}
-		foreach ($this->overcrowded as $construction /* @var Construction $construction */) {
+		foreach ($this->overcrowded as $construction) {
 			$this->message(UnmaintainedOvercrowdedMessage::class, $construction);
 			Lemuria::Score()->add($this->effect($construction));
 		}
-		foreach ($this->unmaintained as $construction /* @var Construction $construction */) {
+		foreach ($this->unmaintained as $construction) {
 			$owner   = $construction->Inhabitants()->Owner();
 			$missing = $this->payCharity($construction);
 			if ($missing > 0.0) {
@@ -84,9 +82,8 @@ final class Upkeep extends AbstractEvent
 
 	private function pay(): void {
 		$unmaintained = new Estate();
-		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
+		foreach (Region::all() as $region) {
 			$unmaintained->clear();
-			/** @var Construction $construction */
 			foreach ($region->Estate() as $construction) {
 				if ($this->isOvercrowded($construction)) {
 					$this->overcrowded->add($construction);
@@ -184,7 +181,7 @@ final class Upkeep extends AbstractEvent
 		$owner   = $construction->Inhabitants()->Owner();
 		$we      = $owner->Party();
 		$bailOut = new Gathering();
-		foreach ($this->context->getIntelligence($construction->Region())->getParties() as $party /* @var Party $party */) {
+		foreach ($this->context->getIntelligence($construction->Region())->getParties() as $party) {
 			if ($party !== $we && $party->Diplomacy()->has(Relation::SILVER, $owner)) {
 				$bailOut->add($party);
 			}
@@ -193,11 +190,9 @@ final class Upkeep extends AbstractEvent
 	}
 
 	private function nextBailOut(Intelligence $intelligence, Gathering $bailOut): ?Unit {
-		/** @var Party $party */
 		$party = $bailOut->random();
 		$units = $intelligence->getUnits($party);
-		/** @var Unit $help */
-		$help = $units->random();
+		$help  = $units->random();
 		$bailOut->remove($party);
 		return $help;
 	}

@@ -33,7 +33,6 @@ use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Requirement;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Roadmaking;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Implementation of command ZERSTÖREN for constructions and vessels.
@@ -91,7 +90,6 @@ final class Smash extends UnitCommand implements Activity
 		$id     = $this->parseId(2);
 		$estate = $this->unit->Region()->Estate();
 		if ($estate->has($id)) {
-			/** @var Construction $construction */
 			$construction = $estate[$id];
 			if ($construction->Inhabitants()->isEmpty()) {
 				return $construction;
@@ -114,7 +112,7 @@ final class Smash extends UnitCommand implements Activity
 			$this->message(SmashNotConstructionMessageOwnerMessage::class)->e($construction);
 			return;
 		}
-		foreach (clone $inhabitants as $unit /* @var Unit $unit */) {
+		foreach (clone $inhabitants as $unit) {
 			if ($unit !== $this->unit) {
 				$inhabitants->remove($unit);
 				$this->message(SmashLeaveConstructionMessage::class, $unit)->e($construction);
@@ -152,7 +150,7 @@ final class Smash extends UnitCommand implements Activity
 			$this->message(SmashNotVesselOwnerMessage::class)->e($vessel);
 			return;
 		}
-		foreach (clone $passengers as $unit /* @var Unit $unit */) {
+		foreach (clone $passengers as $unit) {
 			if ($unit !== $this->unit) {
 				$passengers->remove($unit);
 				$this->message(SmashLeaveVesselMessage::class, $unit)->e($vessel);
@@ -224,7 +222,7 @@ final class Smash extends UnitCommand implements Activity
 		$capability = $level > 1 ? $this->unit->Size() * $level : $this->unit->Size();
 		$capability = $this->reduceByWorkload($capability);
 		$damage     = min($capability, $size);
-		foreach ($material as $quantity /* @var Quantity $quantity */) {
+		foreach ($material as $quantity) {
 			$regain = new Quantity($quantity->Commodity(), $damage * $quantity->Count());
 			$this->unit->Inventory()->add($regain);
 			$this->message(SmashRegainMessage::class)->i($regain);

@@ -5,12 +5,9 @@ namespace Lemuria\Engine\Fantasya\Event;
 use Lemuria\Engine\Fantasya\Message\Unit\DrownMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Region;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Units on open sea will drown.
@@ -22,9 +19,9 @@ final class Drown extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
+		foreach (Region::all() as $region) {
 			if ($region->Landscape() instanceof Navigable) {
-				foreach ($region->Residents() as $unit /* @var Unit $unit */) {
+				foreach ($region->Residents() as $unit) {
 					if ($unit->Size() > 0 && $unit->Party()->Type() === Type::Player && !$unit->Vessel()) {
 						$unit->setHealth(0.0);
 						$unit->setSize(0);

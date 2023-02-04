@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
@@ -47,7 +46,7 @@ final class Obtainment extends AbstractEvent
 	private Talent $magic;
 
 	/**
-	 * @var array(int=>Spell)
+	 * @var array<int, Spell>
 	 */
 	private array $spell = [];
 
@@ -67,7 +66,7 @@ final class Obtainment extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
+		foreach (Party::all() as $party) {
 			if ($party->Type() !== Type::Player || $party->hasRetired()) {
 				continue;
 			}
@@ -78,7 +77,7 @@ final class Obtainment extends AbstractEvent
 			}
 			$spells    = array_fill(1, $magic, true);
 			$spellBook = $party->SpellBook();
-			foreach ($spellBook as $spell /* @var Spell $spell */) {
+			foreach ($spellBook as $spell) {
 				$level = $spell->Difficulty();
 				unset($spells[$level]);
 			}
@@ -97,12 +96,11 @@ final class Obtainment extends AbstractEvent
 
 	private function getMagicLevel(Party $party): int {
 		$level = 0;
-		foreach ($party->People() as $unit /* @var Unit $unit */) {
+		foreach ($party->People() as $unit) {
 			$ability = $this->context->getCalculus($unit)->knowledge($this->magic);
 			$magic   = $ability->Level();
 			if ($magic > $level) {
-				$level = $magic;
-				/* @var Unit $unit */
+				$level          = $magic;
 				$this->magician = $unit;
 			}
 		}

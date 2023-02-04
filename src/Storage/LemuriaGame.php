@@ -35,7 +35,7 @@ class LemuriaGame extends JsonGame
 	}
 
 	/**
-	 * @return array(string=>string)
+	 * @return array<string, string>
 	 */
 	protected function getLoadStorage(): array {
 		$round = $this->config[LemuriaConfig::ROUND];
@@ -44,7 +44,7 @@ class LemuriaGame extends JsonGame
 	}
 
 	/**
-	 * @return array(string=>string)
+	 * @return array<string, string>
 	 */
 	protected function getSaveStorage(): array {
 		$round = $this->config[LemuriaConfig::ROUND] + 1;
@@ -53,7 +53,7 @@ class LemuriaGame extends JsonGame
 	}
 
 	/**
-	 * @return array(string=>string)
+	 * @return array<string, string>
 	 */
 	protected function addStringsStorage(array $storage): array {
 		$storage[self::STRINGS_FILE] = new JsonProvider(self::STRINGS_DIR);

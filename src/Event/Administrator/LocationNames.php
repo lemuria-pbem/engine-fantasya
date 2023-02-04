@@ -10,7 +10,6 @@ use Lemuria\Exception\NamerException;
 use Lemuria\Factory\Namer;
 use Lemuria\Lemuria;
 use Lemuria\Model\Dictionary;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Region;
 
 /**
@@ -29,7 +28,7 @@ final class LocationNames extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
+		foreach (Region::all() as $region) {
 			$landscape = $this->dictionary->get('landscape.' . getClass($region->Landscape()));
 			if ($region->Name() !== $landscape . ' ' . $region->Id()) {
 				Lemuria::Log()->debug('Region ' . $region . ' already has a good name.');

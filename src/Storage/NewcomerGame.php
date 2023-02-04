@@ -16,7 +16,7 @@ class NewcomerGame extends LemuriaGame
 	}
 
 	/**
-	 * @return array(string=>string)
+	 * @return array<string, string>
 	 */
 	protected function getSaveStorage(): array {
 		$round = $this->config[LemuriaConfig::ROUND];

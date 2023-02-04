@@ -8,7 +8,7 @@ namespace Lemuria\Engine\Fantasya;
 class Phrase implements \Countable, \Stringable
 {
 	/**
-	 * @var array(string)
+	 * @var array<string>
 	 */
 	protected array $parts = [];
 

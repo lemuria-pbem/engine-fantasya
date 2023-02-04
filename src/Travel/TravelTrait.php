@@ -1,11 +1,12 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Fantasya\Factory;
+namespace Lemuria\Engine\Fantasya\Travel;
 
-use Lemuria\Engine\Fantasya\Capacity;
 use Lemuria\Engine\Fantasya\Effect\Airship;
 use Lemuria\Engine\Fantasya\Effect\SneakPastEffect;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
+use Lemuria\Engine\Fantasya\Factory\ContextTrait;
+use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Message\Region\TravelUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelCanalMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoChaosMessage;
@@ -18,16 +19,13 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Canal;
-use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Navigable;
-use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Perception;
-use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
 use Lemuria\Model\World\Direction;
 
@@ -39,7 +37,7 @@ trait TravelTrait
 
 	private ?Vessel $vessel = null;
 
-	private Capacity $capacity;
+	private Trip $trip;
 
 	private Workload $workload;
 
@@ -62,7 +60,7 @@ trait TravelTrait
 		}
 		$landscape = $neighbour->Landscape();
 
-		if ($this->capacity->Movement() === Capacity::SHIP) {
+		if ($this->trip->Movement() === Movement::Ship) {
 			$anchor = $this->vessel->Anchor();
 			if ($anchor !== Direction::IN_DOCK) {
 				if ($direction !== $anchor) {
@@ -102,7 +100,7 @@ trait TravelTrait
 			return null;
 		}
 
-		if ($this->capacity->Movement() === Capacity::FLY) {
+		if ($this->trip->Movement() === Movement::Fly) {
 			$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
 			return $neighbour;
 		}
@@ -115,10 +113,10 @@ trait TravelTrait
 		return $neighbour;
 	}
 
-	protected function setRoadsLeft(string $movement): void {
+	protected function setRoadsLeft(Movement $movement): void {
 		$this->roadsLeft = match ($movement) {
-			Capacity::RIDE => 3,
-			Capacity::WALK => 2,
+			Movement::Ride => 3,
+			Movement::Walk => 2,
 			default        => 0
 		};
 	}
@@ -157,7 +155,7 @@ trait TravelTrait
 		$isOnVessel   = (bool)$this->unit->Vessel();
 		$intelligence = $this->context->getIntelligence($region);
 		$camouflage   = $this->calculus()->knowledge(Camouflage::class)->Level();
-		foreach ($intelligence->getGuards() as $guard /* @var Unit $guard */) {
+		foreach ($intelligence->getGuards() as $guard) {
 			$guardParty = $guard->Party();
 			if ($guardParty !== $this->unit->Party()) {
 				$guardOnVessel = (bool)$guard->Vessel();
@@ -185,7 +183,7 @@ trait TravelTrait
 	protected function unitIsAllowedToPass(Region $region, Gathering $guards): Gathering {
 		$remaining     = new Gathering();
 		$isSimulation = $this->context->getTurnOptions()->IsSimulation();
-		foreach ($guards as $party /* @var Party $party */) {
+		foreach ($guards as $party) {
 			$remaining->add($party);
 			if ($isSimulation) {
 				continue;
@@ -201,7 +199,7 @@ trait TravelTrait
 							$remaining->remove($party);
 						} else {
 							$allowToPass = true;
-							foreach ($nextGuards as $guard/* @var Unit $guard */) {
+							foreach ($nextGuards as $guard) {
 								if ($guard->Party() === $party) {
 									if (!$diplomacy->has(Relation::GUARD, $this->unit, $neighbour) && !$diplomacy->has(Relation::PASS, $this->unit, $neighbour)) {
 										$allowToPass = false;
@@ -253,7 +251,7 @@ trait TravelTrait
 	protected function canUseCanal(Region $neighbour): bool {
 		$party    = $this->unit->Party();
 		$building = self::createBuilding(Canal::class);
-		foreach ($this->unit->Region()->Estate() as $construction /* @var Construction $construction */) {
+		foreach ($this->unit->Region()->Estate() as $construction) {
 			if ($construction->Building() === $building) {
 				$owner = $construction->Inhabitants()->Owner()?->Party();
 				if ($owner && $owner !== $party && !$owner->Diplomacy()->has(Relation::PASS, $this->unit)) {

@@ -974,6 +974,13 @@
 		"WriteNoUnicumMessage": "Die Einheit $id hat diesen Gegenstand nicht.",
 		"WriteUnsupportedMessage": "Die Einheit $id kann {das:$composition} $unicum nicht beschreiben."
 	},
+	"movement": {
+		"Drive": "fährt",
+		"Fly": "fliegt",
+		"Ride": "reitet",
+		"Ship": "segelt",
+		"Walk": "reist"
+	},
 	"observable": {
 		"Camel": ["Kamel", "Kamelen"],
 		"Carriage": ["Wagen", "Wagen"],

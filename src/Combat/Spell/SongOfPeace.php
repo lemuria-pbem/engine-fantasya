@@ -32,7 +32,7 @@ class SongOfPeace extends AbstractBattleSpell
 	}
 
 	/**
-	 * @param Combatant[] $combatants
+	 * @param array<Combatant> $combatants
 	 */
 	protected function castOnCombatants(Rank $combatants, int $gradePoints): int {
 		foreach ($combatants as $i => $combatant) {

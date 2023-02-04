@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\Apply\HorseBlissNoneMessage;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Potion\HorseBliss as Potion;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Unit;
 
 final class HorseBlissBreed extends AbstractConstructionApply
 {
@@ -17,7 +16,7 @@ final class HorseBlissBreed extends AbstractConstructionApply
 	protected function calculateAmount(): int {
 		$horses = 0;
 		$horse  = self::createCommodity(Horse::class);
-		foreach ($this->apply->Unit()->Construction()->Inhabitants() as $unit /* @var Unit $unit */) {
+		foreach ($this->apply->Unit()->Construction()->Inhabitants() as $unit) {
 			$inventory = $unit->Inventory();
 			$horses += $inventory[$horse]->Count();
 		}

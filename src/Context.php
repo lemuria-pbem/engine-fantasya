@@ -33,17 +33,17 @@ final class Context implements Reassignment
 	private ?Unit $unit = null;
 
 	/**
-	 * @var array(int=>Calculus)
+	 * @var array<int, Calculus>
 	 */
 	private array $calculus = [];
 
 	/**
-	 * @var array(int=>ResourcePool)
+	 * @var array<int, ResourcePool>
 	 */
 	private array $resourcePool = [];
 
 	/**
-	 * @var array(int=>Besieger)
+	 * @var array<int, Besieger>
 	 */
 	private array $sieges = [];
 

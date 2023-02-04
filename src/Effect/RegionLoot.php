@@ -11,7 +11,6 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
-use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Serializable;
 use Lemuria\Validate;
 
@@ -68,10 +67,10 @@ final class RegionLoot extends AbstractRegionEffect
 		$residents  = $region->Residents();
 		$candidates = new People();
 		$removed    = new Resources();
-		foreach ($this->resources as $quantity /* @var Quantity $quantity */) {
+		foreach ($this->resources as $quantity) {
 			$commodity = $quantity->Commodity();
 			$candidates->clear();
-			foreach ($residents as $unit /* @var Unit $unit */) {
+			foreach ($residents as $unit) {
 				if ($unit->Party()->Loot()->wants($commodity)) {
 					$candidates->add($unit);
 				}
@@ -83,7 +82,7 @@ final class RegionLoot extends AbstractRegionEffect
 				$this->message(RegionLootMessage::class, $unit)->e($region)->i($quantity);
 			}
 		}
-		foreach ($removed as $quantity /* @var Quantity $quantity */) {
+		foreach ($removed as $quantity) {
 			$this->resources->remove($quantity);
 		}
 

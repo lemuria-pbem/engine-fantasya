@@ -8,7 +8,6 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Serializable;
 use Lemuria\Validate;
@@ -66,7 +65,7 @@ final class ConstructionLoot extends AbstractConstructionEffect
 		$owner        = $construction->Inhabitants()->Owner();
 		$inventory    = $owner?->Inventory();
 		if ($inventory) {
-			foreach ($this->resources as $quantity /* @var Quantity $quantity */) {
+			foreach ($this->resources as $quantity) {
 				$inventory->add($quantity);
 				$this->message(ConstructionLootMessage::class, $owner)->e($construction)->i($quantity);
 			}

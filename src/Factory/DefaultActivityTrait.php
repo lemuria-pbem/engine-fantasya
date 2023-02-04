@@ -20,7 +20,7 @@ trait DefaultActivityTrait
 	/**
 	 * Get the new default commands.
 	 *
-	 * @return Command[]
+	 * @return array<Command>
 	 */
 	public function getNewDefaults(): array {
 		return $this->preventDefault ? [] : [$this];

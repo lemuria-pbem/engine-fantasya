@@ -15,13 +15,11 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Intelligence;
-use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Quantity;
@@ -62,7 +60,7 @@ final class Support extends AbstractEvent
 		} else {
 			Lemuria::Log()->debug('All parties have paid their support.');
 		}
-		foreach ($this->hungryUnits as $unit /* @var Unit $unit */) {
+		foreach ($this->hungryUnits as $unit) {
 			$hunger = $this->payCharity($unit);
 			if ($hunger > 0.0) {
 				if ($hunger >= 1.0) {
@@ -79,9 +77,9 @@ final class Support extends AbstractEvent
 
 	private function pay(): void {
 		$hungry = new People();
-		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
+		foreach (Region::all() as $region) {
 			$intelligence = $this->context->getIntelligence($region);
-			foreach ($intelligence->getParties() as $party /* @var Party $party */) {
+			foreach ($intelligence->getParties() as $party) {
 				if ($party->Type() !== Type::Player) {
 					continue;
 				}
@@ -183,7 +181,7 @@ final class Support extends AbstractEvent
 	private function findBailOut(Unit $unit): Gathering {
 		$we      = $unit->Party();
 		$bailOut = new Gathering();
-		foreach ($this->context->getIntelligence($unit->Region())->getParties() as $party /* @var Party $party */) {
+		foreach ($this->context->getIntelligence($unit->Region())->getParties() as $party) {
 			if ($party !== $we && $party->Diplomacy()->has(Relation::SILVER, $unit)) {
 				$bailOut->add($party);
 			}
@@ -192,11 +190,9 @@ final class Support extends AbstractEvent
 	}
 
 	private function nextBailOut(Intelligence $intelligence, Gathering $bailOut): ?Unit {
-		/** @var Party $party */
 		$party = $bailOut->random();
 		$units = $intelligence->getUnits($party);
-		/** @var Unit $help */
-		$help = $units->random();
+		$help  = $units->random();
 		$bailOut->remove($party);
 		return $help;
 	}

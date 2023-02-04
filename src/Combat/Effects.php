@@ -6,10 +6,11 @@ use Lemuria\Item;
 use Lemuria\ItemSet;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\BattleSpell;
+use Lemuria\Singleton;
 
 /**
- * @\ArrayAccess <Item|Singleton|string, CombatEffect>
- * @\Iterator <string, CombatEffect>
+ * @method CombatEffect offsetGet(Item|Singleton|string $offset)
+ * @method CombatEffect current()
  */
 class Effects extends ItemSet
 {

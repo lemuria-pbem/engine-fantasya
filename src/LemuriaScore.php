@@ -18,12 +18,12 @@ class LemuriaScore implements Score
 	private readonly EffectFactory $factory;
 
 	/**
-	 * @var array(int=>array)
+	 * @var array<int, array>
 	 */
 	private array $effects = [];
 
 	/**
-	 * @var Effect[]
+	 * @var array<Effect>
 	 */
 	private array $aftercare = [];
 
@@ -84,6 +84,8 @@ class LemuriaScore implements Score
 
 	/**
 	 * Search for an existing Effect.
+	 *
+	 * @param Effect $effect
 	 */
 	public function find(Identifiable $effect): ?Effect {
 		if ($effect instanceof Effect) {
@@ -96,7 +98,7 @@ class LemuriaScore implements Score
 	}
 
 	/**
-	 * @return Identifiable[]
+	 * @return array<Identifiable>
 	 */
 	public function findAll(Identifiable $entity): array {
 		$namespace = $entity->Catalog()->value;
@@ -164,7 +166,7 @@ class LemuriaScore implements Score
 	}
 
 	/**
-	 * @return Effect[]
+	 * @return array<Effect>
 	 */
 	public function getAftercareEffects(): array {
 		return $this->aftercare;

@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\Message\Party\RetirementPartyMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 
@@ -22,14 +21,14 @@ final class Retirement extends AbstractEvent
 
 	protected function run(): void {
 		Lemuria::Log()->debug('Running Retirement check.');
-		$parties   = Lemuria::Catalog()->getAll(Domain::Party);
+		$parties   = Party::all();
 		$all       = count($parties);
 		$active    = [];
 		$retired   = 0;
 		$nonPlayer = 0;
 		$deceased  = [];
 
-		foreach ($parties as $party /* @var Party $party */) {
+		foreach ($parties as $party) {
 			if ($party->Type() !== Type::Player) {
 				$nonPlayer++;
 				continue;

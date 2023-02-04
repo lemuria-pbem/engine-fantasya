@@ -1,10 +1,11 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Fantasya\Factory;
+namespace Lemuria\Engine\Fantasya\Travel;
 
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Effect\FavorableWinds;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
+use Lemuria\Engine\Fantasya\Factory\ContextTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Ports;
 use Lemuria\Engine\Fantasya\Message\Region\TravelAirshipMessage;
 use Lemuria\Engine\Fantasya\Message\Region\TravelVesselMessage;
@@ -38,7 +39,7 @@ trait NavigationTrait
 
 	private function navigationTalent(): int {
 		$talent = 0;
-		foreach ($this->vessel->Passengers() as $unit /* @var Unit $unit */) {
+		foreach ($this->vessel->Passengers() as $unit) {
 			$talent += $unit->Size() * $this->context->getCalculus($unit)->knowledge(Navigation::class)->Level();
 		}
 		return $talent;
@@ -67,7 +68,7 @@ trait NavigationTrait
 
 	private function getCoastline(Neighbours $neighbours): Neighbours {
 		$coastlines = new Neighbours();
-		foreach ($neighbours as $direction => $region /* @var Region $region */) {
+		foreach ($neighbours as $direction => $region) {
 			if (!($region->Landscape() instanceof Navigable)) {
 				$coastlines[$direction] = $region;
 			}
@@ -97,7 +98,7 @@ trait NavigationTrait
 		$captain    = $passengers->Owner();
 		if ($captain->Race() instanceof Aquan) {
 			$points = 0;
-			foreach ($passengers as $unit /* @var Unit $unit */) {
+			foreach ($passengers as $unit) {
 				if ($unit->Race() instanceof Aquan) {
 					$level   = $this->context->getCalculus($unit)->knowledge(Navigation::class)->Level();
 					$points += $unit->Size() * $level;
@@ -131,7 +132,7 @@ trait NavigationTrait
 			}
 		}
 
-		foreach ($this->vessel->Passengers() as $unit /* @var Unit $unit */) {
+		foreach ($this->vessel->Passengers() as $unit) {
 			if ($unit->IsGuarding()) {
 				$unit->setIsGuarding(false);
 				$this->message(TravelGuardCancelMessage::class, $unit);
@@ -161,10 +162,10 @@ trait NavigationTrait
 			$masterInventory = $master->Inventory();
 			$calculus        = new Calculus($master);
 			$perception      = $calculus->knowledge(Perception::class)->Level();
-			foreach ($this->vessel->Passengers() as $unit /* @var Unit $unit */) {
+			foreach ($this->vessel->Passengers() as $unit) {
 				$duty      = [];
 				$inventory = $unit->Inventory();
-				foreach ($inventory as $quantity /* @var Quantity $quantity */) {
+				foreach ($inventory as $quantity) {
 					$commodity = $quantity->Commodity();
 					if ($commodity instanceof Luxury) {
 						$count = (int)round(Ports::DUTY * $quantity->Count());

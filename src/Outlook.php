@@ -8,7 +8,6 @@ use Lemuria\Engine\Fantasya\Factory\Model\TravelAtlas;
 use Lemuria\Engine\Fantasya\Factory\Model\Visibility;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Lighthouse;
-use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\People;
@@ -16,7 +15,6 @@ use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Perception;
-use Lemuria\Model\Fantasya\Unit;
 use Lemuria\SortMode;
 
 /**
@@ -55,7 +53,7 @@ final class Outlook
 	public function getApparitions(Region $region): People {
 		$perception = self::createTalent(Perception::class);
 		$level      = PHP_INT_MIN;
-		foreach ($this->census->getPeople($region) as $unit /* @var Unit $unit */) {
+		foreach ($this->census->getPeople($region) as $unit) {
 			$calculus = new Calculus($unit);
 			$level    = max($level, $calculus->knowledge($perception)->Level());
 			$level    = max($level, $this->getFarsightPerception($region));
@@ -64,7 +62,7 @@ final class Outlook
 		$units      = new People();
 		$party      = $this->census->Party();
 		$camouflage = self::createTalent(Camouflage::class);
-		foreach ($region->Residents() as $unit /* @var Unit $unit */) {
+		foreach ($region->Residents() as $unit) {
 			if (!$unit->Construction() && !$unit->Vessel()) {
 				if ($unit->Party() === $party || !$unit->IsHiding() || $unit->IsGuarding()) {
 					$units->add($unit);
@@ -95,7 +93,7 @@ final class Outlook
 	public function getContacts(Region $region): People {
 		$perception = self::createTalent(Perception::class);
 		$level      = PHP_INT_MIN;
-		foreach ($this->census->getPeople($region) as $unit /* @var Unit $unit */) {
+		foreach ($this->census->getPeople($region) as $unit) {
 			$calculus = new Calculus($unit);
 			$level    = max($level, $calculus->knowledge($perception)->Level());
 		}
@@ -103,7 +101,7 @@ final class Outlook
 		$units      = new People();
 		$party      = $this->census->Party();
 		$camouflage = self::createTalent(Camouflage::class);
-		foreach ($region->Residents() as $unit /* @var Unit $unit */) {
+		foreach ($region->Residents() as $unit) {
 			if ($unit->Construction()) {
 				$units->add($unit);
 			} elseif ($unit->Vessel()) {
@@ -146,7 +144,7 @@ final class Outlook
 
 		// Add direct neighbours and collect directions.
 		$directions = [];
-		foreach ($world->getNeighbours($region) as $direction => $neighbour /* @var Region $neighbour */) {
+		foreach ($world->getNeighbours($region) as $direction => $neighbour) {
 			if ($neighbour->Landscape() instanceof Navigable) {
 				$directions[] = $direction;
 				if ($hasLighthouse) {
@@ -191,10 +189,10 @@ final class Outlook
 	protected function getVisibilityRange(Region $region): int {
 		$range = 0;
 		$party = $this->Census()->Party();
-		foreach ($region->Estate() as $construction /* @var Construction $construction */) {
+		foreach ($region->Estate() as $construction) {
 			if ($construction->Building() instanceof Lighthouse) {
 				$lRange = (int)floor(log10($construction->Size())) + 1;
-				foreach ($construction->Inhabitants() as $unit /* @var Unit $unit */) {
+				foreach ($construction->Inhabitants() as $unit) {
 					if ($unit->Party() === $party) {
 						$calculus   = new Calculus($unit);
 						$perception = $calculus->knowledge(Perception::class)->Level();

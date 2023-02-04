@@ -6,12 +6,10 @@ use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity\Monster\Kraken;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Landscape\Lake;
 use Lemuria\Model\Fantasya\Region;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * This event converts the landscape of lakes to the new Lake.
@@ -27,11 +25,11 @@ final class MisplacedMonsters extends AbstractEvent
 	protected function run(): void {
 		$lake = self::createLandscape(Lake::class);
 		$kraken = self::createMonster(Kraken::class);
-		foreach (Lemuria::Catalog()->getAll(Domain::Location) as $region /* @var Region $region */) {
+		foreach (Region::all() as $region) {
 			if ($region->Landscape() === $lake) {
 				$krakens   = [];
 				$residents = $region->Residents();
-				foreach ($residents as $unit /* @var Unit $unit */) {
+				foreach ($residents as $unit) {
 					if ($unit->Race() === $kraken) {
 						$krakens[] = $unit;
 					}

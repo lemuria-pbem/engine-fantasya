@@ -9,7 +9,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\VisitNoUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VisitRumorMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Extension\Market;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -26,14 +25,12 @@ final class Visit extends UnitCommand
 		$units  = $region->Residents();
 		if ($units->has($id)) {
 			$hasMarket = false;
-			foreach ($region->Estate() as $construction /* @var Construction $construction */) {
+			foreach ($region->Estate() as $construction) {
 				$extensions = $construction->Extensions();
 				if ($extensions->offsetExists(Market::class)) {
 					$hasMarket = true;
 					if ($construction->Inhabitants()->has($id)) {
-						/** @var Unit $unit */
-						$unit = $units[$id];
-						$this->visit($unit);
+						$this->visit($units[$id]);
 						return;
 					}
 				}

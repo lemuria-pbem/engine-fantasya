@@ -20,7 +20,6 @@ use Lemuria\Model\Fantasya\Ship\Galleon;
 use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Ship\Trireme;
 use Lemuria\Model\Fantasya\Talent\Navigation;
-use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
 
 class Kraken extends AbstractBehaviour
@@ -74,7 +73,7 @@ class Kraken extends AbstractBehaviour
 		if ($this->roam instanceof Roam && !$this->roam->HasMoved()) {
 			$big   = new Fleet();
 			$small = new Fleet();
-			foreach ($this->unit->Region()->Fleet() as $vessel /* @var Vessel $vessel */) {
+			foreach ($this->unit->Region()->Fleet() as $vessel) {
 				switch ($vessel->Ship()::class) {
 					case Galleon::class :
 					case Caravel::class :
@@ -100,12 +99,12 @@ class Kraken extends AbstractBehaviour
 	}
 
 	protected function getVictim(Fleet $big, Fleet $small): ?Vessel {
-		foreach ($big as $vessel /* @var Vessel $vessel */) {
+		foreach ($big as $vessel) {
 			if (randChance(self::CURIOSITY_BIG)) {
 				return $vessel;
 			}
 		}
-		foreach ($small as $vessel /* @var Vessel $vessel */) {
+		foreach ($small as $vessel) {
 			if (randChance(self::CURIOSITY_SMALL)) {
 				return $vessel;
 			}
@@ -140,7 +139,7 @@ class Kraken extends AbstractBehaviour
 		$sailing       = $ship->Crew();
 		$navigation    = self::createTalent(Navigation::class);
 		$knowledge     = 0;
-		foreach ($vessel->Passengers() as $unit /* @var Unit $unit */) {
+		foreach ($vessel->Passengers() as $unit) {
 			$calculus = new Calculus($unit);
 			$knowledge += $unit->Size() * $calculus->knowledge($navigation)->Level();
 		}

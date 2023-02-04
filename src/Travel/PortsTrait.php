@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace Lemuria\Engine\Fantasya\Factory;
+namespace Lemuria\Engine\Fantasya\Travel;
 
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
@@ -19,34 +19,33 @@ use Lemuria\Model\Fantasya\Ship;
 use Lemuria\Model\Fantasya\Ship\Dragonship;
 use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Model\Fantasya\Vessel;
 
 trait PortsTrait
 {
 	use BuilderTrait;
 
 	/**
-	 * @var Construction[]
+	 * @var array<Construction>
 	 */
 	protected array $friendly = [];
 
 	/**
-	 * @var Construction[]
+	 * @var array<Construction>
 	 */
 	protected array $allied = [];
 
 	/**
-	 * @var Construction[]
+	 * @var array<Construction>
 	 */
 	protected array $unmaintained = [];
 
 	/**
-	 * @var Construction[]
+	 * @var array<Construction>
 	 */
 	protected array $unguarded = [];
 
 	/**
-	 * @var Construction[]
+	 * @var array<Construction>
 	 */
 	protected array $foreign = [];
 
@@ -57,7 +56,7 @@ trait PortsTrait
 	protected readonly Region $region;
 
 	/**
-	 * @var array(int=>int)
+	 * @var array<int, int>
 	 */
 	protected array $used = [];
 
@@ -65,12 +64,12 @@ trait PortsTrait
 		$this->unit   = $unit;
 		$this->party  = $unit->Party();
 		$this->region = $region;
-		foreach ($region->Estate() as $construction /* @var Construction $construction */) {
+		foreach ($region->Estate() as $construction) {
 			if ($construction->Building() instanceof Port) {
 				$this->add($construction);
 			}
 		}
-		foreach ($region->Fleet() as $vessel /* @var Vessel $vessel */) {
+		foreach ($region->Fleet() as $vessel) {
 			$port = $vessel->Port()?->Id()->Id();
 			if ($port) {
 				if (!isset($this->used[$port])) {
@@ -93,7 +92,7 @@ trait PortsTrait
 			} else {
 				$isGuarded = false;
 				if (!State::getInstance()->getTurnOptions()->IsSimulation()) {
-					foreach ($port->Inhabitants() as $unit /* @var Unit $unit */) {
+					foreach ($port->Inhabitants() as $unit) {
 						if ($unit->IsGuarding()) {
 							$isGuarded = true;
 							break;

@@ -82,7 +82,7 @@ final class Lose extends UnitCommand implements Operator
 			$this->dismissPeasants();
 		} elseif ($this->commodity instanceof Container) {
 			$this->commodity->setResources($this->unit->Inventory());
-			foreach ($this->commodity->Commodities() as $commodity /* @var Commodity $commodity */) {
+			foreach ($this->commodity->Commodities() as $commodity /** @var Commodity $commodity */) {
 				$this->lose($commodity);
 			}
 		} else {
@@ -141,7 +141,6 @@ final class Lose extends UnitCommand implements Operator
 						$composition = $factory->composition($first);
 						$id          = Id::fromId($second);
 						if ($treasury->has($id)) {
-							/** @var Unicum $unicum */
 							$unicum = $treasury[$id];
 							if ($unicum->Composition() !== $composition) {
 								$unicum = null;
@@ -151,7 +150,6 @@ final class Lose extends UnitCommand implements Operator
 				} else {
 					$id = Id::fromId($first);
 					if ($treasury->has($id)) {
-						/** @var Unicum $unicum */
 						$unicum = $treasury[$id];
 					}
 				}

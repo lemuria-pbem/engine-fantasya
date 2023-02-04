@@ -15,7 +15,7 @@ class Rank implements \ArrayAccess, \Countable, \Iterator
 	public final const REFUGEE = BattleRow::Refugee->value;
 
 	/**
-	 * @var Combatant[]
+	 * @var array<Combatant>
 	 */
 	protected array $combatants = [];
 
@@ -49,7 +49,6 @@ class Rank implements \ArrayAccess, \Countable, \Iterator
 
 	/**
 	 * @param int $offset
-	 * @return Combatant
 	 */
 	public function offsetGet(mixed $offset): Combatant {
 		return $this->combatants[$offset];
@@ -63,6 +62,9 @@ class Rank implements \ArrayAccess, \Countable, \Iterator
 		$this->combatants[$offset] = $value;
 	}
 
+	/**
+	 * @param int $offset
+	 */
 	public function offsetUnset(mixed $offset): void {
 		unset($this->combatants[$offset]);
 		$this->combatants = array_values($this->combatants);

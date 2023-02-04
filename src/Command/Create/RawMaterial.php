@@ -87,7 +87,6 @@ class RawMaterial extends AllocationCommand implements Activity
 			$this->runForEmptyDemand($talent, $resource);
 		} else {
 			$this->resources->rewind();
-			/* @var Quantity $quantity */
 			$quantity = $this->resources->current();
 			if ($this->hasLodging) {
 				$quantity->multiply(2);
@@ -107,7 +106,7 @@ class RawMaterial extends AllocationCommand implements Activity
 	 * If region is guarded by other parties and there are no RESOURCES relations, this unit may only produce if it is
 	 * not in a building and has better camouflage than all the blocking guards' perception.
 	 *
-	 * @return Party[]
+	 * @return array<Party>
 	 */
 	protected function getCheckBeforeAllocation(): array {
 		return $this->getCheckByAgreement(Relation::RESOURCES);

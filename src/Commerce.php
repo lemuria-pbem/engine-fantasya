@@ -25,27 +25,27 @@ final class Commerce
 	private readonly CommandPriority $priority;
 
 	/**
-	 * @var array(int=>Merchant)
+	 * @var array<int, Merchant>
 	 */
 	private array $merchants = [];
 
 	/**
-	 * @var array(int=>bool)
+	 * @var array<int, bool>
 	 */
 	private array $merchantsLeft = [];
 
 	/**
-	 * @var array(string=>array)
+	 * @var array<string, array>
 	 */
 	private array $goods = [];
 
 	/**
-	 * @var array(string=>Supply)
+	 * @var array<string, Supply>
 	 */
 	private array $supplies = [];
 
 	/**
-	 * @var array(int=>array)
+	 * @var array<int, array>
 	 */
 	private array $rounds = [];
 
@@ -118,7 +118,7 @@ final class Commerce
 	}
 
 	/**
-	 * @return Supply[]
+	 * @return array<Supply>
 	 */
 	public function getSupplies(): array {
 		return $this->supplies;
@@ -141,9 +141,8 @@ final class Commerce
 	 */
 	private function analyze(int $round): void {
 		foreach ($this->rounds[$round] as $id) {
-			/** @var Merchant $merchant */
 			$merchant = $this->merchants[$id];
-			foreach ($merchant->getGoods() as $class => $quantity /* @var Quantity $quantity */) {
+			foreach ($merchant->getGoods() as $class => $quantity) {
 				$luxury = $quantity->Commodity();
 				if ($luxury instanceof Luxury) {
 					$demand = $quantity->Count();
@@ -177,7 +176,6 @@ final class Commerce
 		Lemuria::Log()->debug(count($demand) . ' merchants want to trade ' . $total . ' ' . $class . ' (est. cost: ' . $estimation . ').');
 		Lemuria::Log()->debug('The peasants will trade up to ' . $supply->count() . ' ' . $class . '.');
 		foreach ($demand as $id => $count) {
-			/** @var Merchant $merchant */
 			$merchant = $this->merchants[$id];
 			$merchant->costEstimation((int)ceil($count / $total * $estimation));
 		}
@@ -192,8 +190,7 @@ final class Commerce
 				$price  = $supply->ask();
 				$isOpen = true;
 			}
-			$id = $merchants[$i];
-			/** @var Merchant $merchant */
+			$id       = $merchants[$i];
 			$merchant = $this->merchants[$id];
 			if (!$merchant->Type() === Merchant::SELL && $this->regionSilver < $price) {
 				Lemuria::Log()->debug('The peasants have no more silver to buy luxuries.');
@@ -243,12 +240,8 @@ final class Commerce
 		return false;
 	}
 
-	/**
-	 * Call merchants' finish method.
-	 */
 	private function finish(int $round): void {
 		foreach ($this->rounds[$round] as $id) {
-			/** @var Merchant $merchant */
 			$merchant = $this->merchants[$id];
 			$merchant->finish();
 		}

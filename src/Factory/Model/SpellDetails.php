@@ -55,14 +55,14 @@ class SpellDetails
 	}
 
 	/**
-	 * @return string{]
+	 * @return array<string>
 	 */
 	public function Description(): array {
 		return $this->json[self::DESCRIPTION];
 	}
 
 	/**
-	 * @return string[]
+	 * @return array<string>
 	 */
 	public function Components(): array {
 		return $this->json[self::COMPONENTS] ?? [];

@@ -6,11 +6,9 @@ use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Monster as MonsterModel;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * This event prepares the monsters' behaviour.
@@ -27,9 +25,9 @@ final class Monster extends AbstractEvent
 
 	protected function run(): void {
 		$count = 0;
-		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
+		foreach (Party::all() as $party) {
 			if ($party->Type() === Type::Monster) {
-				foreach ($party->People() as $unit /* @var Unit $unit */) {
+				foreach ($party->People() as $unit) {
 					if ($unit->Size() > 0) {
 						$race = $unit->Race();
 						if ($race instanceof MonsterModel) {

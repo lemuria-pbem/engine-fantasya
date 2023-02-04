@@ -42,12 +42,12 @@ class BattleLog implements BattleModel
 	private int $counter;
 
 	/**
-	 * @var Party[]
+	 * @var array<Party>
 	 */
 	private array $parties = [];
 
 	/**
-	 * @var Message[]
+	 * @var array<Message>
 	 */
 	protected array $log = [];
 
@@ -84,7 +84,7 @@ class BattleLog implements BattleModel
 	}
 
 	/**
-	 * @return Party[]
+	 * @return array<Party>
 	 */
 	public function Participants(): array {
 		return $this->parties;

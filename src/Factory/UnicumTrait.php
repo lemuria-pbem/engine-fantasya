@@ -82,9 +82,7 @@ trait UnicumTrait
 		$id       = Id::fromId($id);
 		$treasury = $this->unit->Treasury();
 		if ($treasury->has($id)) {
-			/** @var Unicum $unicum */
-			$unicum = $treasury[$id];
-			return $unicum;
+			return $treasury[$id];
 		}
 		return null;
 	}
@@ -93,21 +91,15 @@ trait UnicumTrait
 		$id       = Id::fromId($id);
 		$treasury = $this->unit->Construction()?->Treasury();
 		if ($treasury && $treasury->has($id)) {
-			/** @var Unicum $unicum */
-			$unicum = $treasury[$id];
-			return $unicum;
+			return $treasury[$id];
 		}
 		$treasury = $this->unit->Vessel()?->Treasury();
 		if ($treasury && $treasury->has($id)) {
-			/** @var Unicum $unicum */
-			$unicum = $treasury[$id];
-			return $unicum;
+			return $treasury[$id];
 		}
 		$treasury = $this->unit->Region()->Treasury();
 		if ($treasury->has($id)) {
-			/** @var Unicum $unicum */
-			$unicum = $treasury[$id];
-			return $unicum;
+			return $treasury[$id];
 		}
 		return null;
 	}

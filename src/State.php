@@ -30,62 +30,62 @@ final class State implements Reassignment
 	private readonly Casts $casts;
 
 	/**
-	 * @var array(int=>Trade)
+	 * @var array<int, Trade>
 	 */
 	private array $closedTrades = [];
 
 	/**
-	 * @var array(int=>UnitMapper)
+	 * @var array<int, UnitMapper>
 	 */
 	private array $unitMapper = [];
 
 	/**
-	 * @var array(int=>UnicumMapper)
+	 * @var array<int, UnicumMapper>
 	 */
 	private array $unicumMapper = [];
 
 	/**
-	 * @var array(int=>Availability)
+	 * @var array<int, Availability>
 	 */
 	private array $availability = [];
 
 	/**
-	 * @var array(int=>Allocation)
+	 * @var array<int, Allocation>
 	 */
 	private array $allocation = [];
 
 	/**
-	 * @var array(int=>Commerce)
+	 * @var array<int, Commerce>
 	 */
 	private array $commerce = [];
 
 	/**
-	 * @var array(int=>Intelligence)
+	 * @var array<int, Intelligence>
 	 */
 	private array $intelligence = [];
 
 	/**
-	 * @var array(int=>ActivityProtocol)
+	 * @var array<int, ActivityProtocol>
 	 */
 	private array $protocol = [];
 
 	/**
-	 * @var array(int=>Workload)
+	 * @var array<int, Workload>
 	 */
 	private array $workload = [];
 
 	/**
-	 * @var array(int=>DirectionList)
+	 * @var array<int, DirectionList>
 	 */
 	private array $travelRoute = [];
 
 	/**
-	 * @var array(int=>Campaign)
+	 * @var array<int, Campaign>
 	 */
 	private array $campaigns = [];
 
 	/**
-	 * @var Behaviour[]
+	 * @var array<Behaviour>
 	 */
 	private array $monsters = [];
 
@@ -294,21 +294,21 @@ final class State implements Reassignment
 	}
 
 	/**
-	 * @return Commerce[]
+	 * @return array<Commerce>
 	 */
 	public function getAllCommerces(): array {
 		return array_values($this->commerce);
 	}
 
 	/**
-	 * @return Behaviour[]
+	 * @return array<Behaviour>
 	 */
 	public function getAllMonsters(): array {
 		return $this->monsters;
 	}
 
 	/**
-	 * @return ActivityProtocol[]
+	 * @return array<ActivityProtocol>
 	 */
 	public function getAllProtocols(): array {
 		return $this->protocol;

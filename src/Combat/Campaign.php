@@ -67,7 +67,7 @@ class Campaign
 	}
 
 	/**
-	 * @return Battle[]
+	 * @return array<Battle>
 	 */
 	public function Battles(): array {
 		return $this->battles ?? [];
@@ -116,7 +116,7 @@ class Campaign
 	}
 
 	/**
-	 * @return array(int=>true)
+	 * @return array<int, true>
 	 */
 	private function createDefenderBattles(): array {
 		$defenders     = [];
@@ -156,7 +156,7 @@ class Campaign
 			$party = Party::get(new Id($partyId));
 			if ($party->Type() === Type::Player) {
 				$battle = $this->battle($party);
-				foreach ($this->intelligence->getUnits($party) as $unit /* @var Unit $unit */) {
+				foreach ($this->intelligence->getUnits($party) as $unit) {
 					if ($unit->BattleRow() >= BattleRow::Defensive->value) {
 						$id = $unit->Id()->Id();
 						if (!isset($this->defenders[$id])) {
@@ -178,7 +178,7 @@ class Campaign
 						$party = Party::get(new Id($partyId));
 						if ($ally->Diplomacy()->has(Relation::COMBAT, $party)) {
 							$battle = $this->battle($party);
-							foreach ($this->intelligence->getUnits($ally) as $unit /* @var Unit $unit */) {
+							foreach ($this->intelligence->getUnits($ally) as $unit) {
 								if ($unit->BattleRow() >= BattleRow::Defensive->value) {
 									$battle->addDefender($unit);
 									Lemuria::Log()->debug($unit . ' gets drawn into battle as ally.');

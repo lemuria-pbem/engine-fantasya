@@ -13,17 +13,17 @@ use Lemuria\Model\Location;
 class LemuriaHostilities implements Hostilities
 {
 	/**
-	 * @var array(int=>array)
+	 * @var array<int, array>
 	 */
 	private array $regionParty = [];
 
 	/**
-	 * @var array(int=>array)
+	 * @var array<int, array>
 	 */
 	private array $party = [];
 
 	/**
-	 * @var BattleLog[]
+	 * @var array<BattleLog>
 	 */
 	private array $logs = [];
 
@@ -40,7 +40,7 @@ class LemuriaHostilities implements Hostilities
 	/**
 	 * Search for all battles in a location.
 	 *
-	 * @return Battle[]
+	 * @return array<Battle>
 	 */
 	public function findAll(Location $location): array {
 		$id = $location->Id()->Id();
@@ -59,7 +59,7 @@ class LemuriaHostilities implements Hostilities
 	/**
 	 * Search for all battles where a specific entity is engaged.
 	 *
-	 * @return Battle[]
+	 * @return array<Battle>
 	 */
 	public function findFor(Identifiable $entity): array {
 		$id = $entity->Id()->Id();

@@ -19,7 +19,7 @@ final class SpyEffect extends AbstractPartyEffect implements Reassignment
 	private const TARGETS = 'targets';
 
 	/**
-	 * @var array(int=>int)
+	 * @var array<int, int>
 	 */
 	private array $targets = [];
 

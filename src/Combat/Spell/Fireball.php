@@ -42,7 +42,7 @@ class Fireball extends AbstractBattleSpell
 	}
 
 	/**
-	 * @param Combatant[] $combatants
+	 * @param array<Combatant> $combatants
 	 */
 	protected function castOnCombatants(Rank $combatants, int $damage, int $victims): int {
 		foreach ($combatants as $combatant) {

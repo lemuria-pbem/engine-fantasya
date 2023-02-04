@@ -157,7 +157,7 @@ final class Initiate implements Command
 		$unit->setId($id);
 		$unit->setSize(1)->setName('Einheit ' . $id)->setDescription('')->setRace($race);
 		if ($this->newcomer->Inventory()->count()) {
-			foreach ($this->newcomer->Inventory() as $item/* @var Quantity $item */) {
+			foreach ($this->newcomer->Inventory() as $item) {
 				$unit->Inventory()->add($item);
 			}
 		} else {

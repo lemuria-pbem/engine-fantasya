@@ -6,8 +6,6 @@ use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Message\Party\ContinentUpheavalMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Party;
 
 /**
@@ -20,7 +18,7 @@ final class ContinentUpheaval extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Party) as $party /* @var Party $party */) {
+		foreach (Party::all() as $party) {
 			if (!$party->hasRetired()) {
 				$this->message(ContinentUpheavalMessage::class, $party);
 			}

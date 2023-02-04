@@ -68,7 +68,7 @@ final class Entertain extends AllocationCommand implements Activity
 	/**
 	 * Do the check before allocation.
 	 *
-	 * @return Party[]
+	 * @return array<Party>
 	 */
 	protected function getCheckBeforeAllocation(): array {
 		return $this->getCheckByAgreement(Relation::EARN);

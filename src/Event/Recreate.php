@@ -9,7 +9,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\RecreateHealthMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building\Tavern;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party\Type;
@@ -27,7 +26,7 @@ final class Recreate extends AbstractEvent
 	}
 
 	protected function run(): void {
-		foreach (Lemuria::Catalog()->getAll(Domain::Unit) as $unit /* @var Unit $unit */) {
+		foreach (Unit::all() as $unit) {
 			$type = $unit->Party()->Type();
 			switch ($type) {
 				case Type::Player :

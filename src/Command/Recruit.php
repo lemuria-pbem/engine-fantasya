@@ -144,7 +144,7 @@ final class Recruit extends AllocationCommand
 	private function reduceKnowledge(int $oldSize, int $newSize): void {
 		if ($oldSize > 0) {
 			$percent = $oldSize / $newSize;
-			foreach ($this->unit->Knowledge() as $ability/* @var Ability $ability */) {
+			foreach ($this->unit->Knowledge() as $ability) {
 				$experience    = $ability->Experience();
 				$newExperience = (int)round($percent * $experience);
 				$ability->removeItem(new Ability($ability->Talent(), $experience - $newExperience));
@@ -164,7 +164,6 @@ final class Recruit extends AllocationCommand
 	private function setMinimumExperience(Talent $talent, int $minimum): void {
 		$knowledge = $this->unit->Knowledge();
 		if (isset($knowledge[$talent])) {
-			/** @var Ability $ability */
 			$ability    = $knowledge[$talent];
 			$experience = $ability->Experience();
 			if ($experience < $minimum) {
