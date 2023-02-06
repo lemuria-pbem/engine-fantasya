@@ -11,6 +11,13 @@ use Lemuria\Engine\Fantasya\Effect\TalentEffect;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\Factory\LodgingTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
+use Lemuria\Engine\Fantasya\Travel\Conveyance;
+use Lemuria\Engine\Fantasya\Travel\Trip;
+use Lemuria\Engine\Fantasya\Travel\Trip\Caravan;
+use Lemuria\Engine\Fantasya\Travel\Trip\Cruise;
+use Lemuria\Engine\Fantasya\Travel\Trip\Drive;
+use Lemuria\Engine\Fantasya\Travel\Trip\Flight;
+use Lemuria\Engine\Fantasya\Travel\Trip\Ride;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
@@ -29,6 +36,7 @@ use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Perception;
+use Lemuria\Model\Fantasya\Talent\Riding;
 use Lemuria\Model\Fantasya\Talent\Stamina;
 use Lemuria\Model\Fantasya\Talent\Stoning;
 use Lemuria\Model\Fantasya\Unit;
@@ -383,6 +391,36 @@ final class Calculus
 			}
 		}
 		return $kinsmen;
+	}
+
+	public function getTrip(): Trip {
+		if ($this->unit->Vessel()) {
+			return new Cruise($this);
+		}
+
+		$conveyance = new Conveyance($this->unit);
+		if ($conveyance->Griffin()) {
+			return new Flight($this, $conveyance);
+		}
+		if ($conveyance->Carriage() || $conveyance->Catapult()) {
+			return new Drive($this, $conveyance);
+		}
+
+		$size   = $this->unit->Size();
+		$weight = $size * $this->unit->Race()->Weight() + $conveyance->getPayload();
+		$riding = $size * $this->knowledge(Riding::class)->Level();
+		$riders = $conveyance->Horse() + $conveyance->Camel() + $conveyance->Elephant() + $conveyance->WarElephant();
+		if ($conveyance->Pegasus() && !$riders) {
+			$flight = new Flight($this, $conveyance);
+			if ($weight <= $flight->Capacity() && $riding >= $flight->Knowledge()) {
+				return $flight;
+			}
+		}
+		$ride = new Ride($this, $conveyance);
+		if ($weight <= $ride->Capacity() && $riding >= $ride->Knowledge()) {
+			return $ride;
+		}
+		return new Caravan($this, $conveyance);
 	}
 
 	private function talentEffect(Talent $talent): ?Modification {

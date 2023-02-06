@@ -37,7 +37,6 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\Travel\Movement;
 use Lemuria\Engine\Fantasya\Travel\NavigationTrait;
 use Lemuria\Engine\Fantasya\Travel\TravelTrait;
-use Lemuria\Engine\Fantasya\Travel\Voyage;
 use Lemuria\Model\Fantasya\Spell\FavorableWinds;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Navigation;
@@ -103,8 +102,7 @@ class Travel extends UnitCommand implements Activity
 		parent::initialize();
 		$this->context->resetResourcePools();
 		$this->vessel = $this->unit->Vessel();
-		$voyage       = new Voyage($this->calculus());
-		$this->trip   = $voyage->trip();
+		$this->trip   = $this->calculus()->getTrip();
 		$this->workload->setMaximum(min($this->workload->Maximum(), $this->trip->Speed()));
 		$this->initDirections();
 	}
@@ -122,7 +120,7 @@ class Travel extends UnitCommand implements Activity
 		$speed    = $this->trip->Speed();
 		$weight   = $this->trip->Weight();
 		if ($movement === Movement::Ship) {
-			if ($weight > $this->trip->Ride()) {
+			if ($weight > $this->trip->Capacity()) {
 				$this->message(TravelShipTooHeavyMessage::class, $this->vessel);
 				return;
 			}
@@ -146,18 +144,18 @@ class Travel extends UnitCommand implements Activity
 			}
 		} else {
 			$riding = $this->Unit()->Size() * $this->calculus()->knowledge($this->riding)->Level();
-			if ($weight > $this->trip->Ride() || $riding < $this->trip->Talent()) {
-				if ($weight > $this->trip->Walk()) {
+			if ($weight > $this->trip->Capacity() || $riding < $this->trip->Knowledge()) {
+				if ($weight > $this->trip->Capacity()) {
 					$this->message(TravelTooHeavyMessage::class);
 					return;
 				}
-				if ($riding < $this->trip->WalkingTalent()) {
+				if ($riding < $this->trip->Knowledge()) {
 					$this->message(TravelNoRidingMessage::class);
 					return;
 				}
 				if ($movement !== Movement::Walk) {
 					$movement = Movement::Walk;
-					$speed    = $this->trip->WalkSpeed();
+					$speed    = $this->trip->Speed();
 					$this->workload->setMaximum(min($this->workload->Maximum(), $speed));
 				}
 			}
