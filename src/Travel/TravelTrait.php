@@ -49,6 +49,8 @@ trait TravelTrait
 
 	private bool $airshipped = false;
 
+	private array $neighbourDirections = [];
+
 	protected function canMoveTo(Direction $direction): ?Region {
 		$this->airshipped = false;
 		$region = $this->unit->Region();
@@ -64,6 +66,10 @@ trait TravelTrait
 			$anchor = $this->vessel->Anchor();
 			if ($anchor !== Direction::IN_DOCK) {
 				if ($direction !== $anchor) {
+					if ($this->canLeavePort($direction, $neighbour)) {
+						//TODO
+						return $neighbour;
+					}
 					if ($this->canUseCanal($neighbour)) {
 						$this->message(TravelCanalMessage::class)->e($region);
 						return $neighbour;
@@ -248,6 +254,15 @@ trait TravelTrait
 		return false;
 	}
 
+	protected function canLeavePort(Direction $direction, Region $neighbour): bool {
+		if ($this->vessel->Port() && $neighbour->Landscape() instanceof Navigable) {
+			$this->initNeighbourDirections();
+			$directions = $this->neighbourDirections[$this->vessel->Anchor()->value];
+			return $direction === $directions[0] || $direction === $directions[1];
+		}
+		return false;
+	}
+
 	protected function canUseCanal(Region $neighbour): bool {
 		$party    = $this->unit->Party();
 		$building = self::createBuilding(Canal::class);
@@ -263,6 +278,25 @@ trait TravelTrait
 			}
 		}
 		return false;
+	}
+
+	private function initNeighbourDirections(): void {
+		if (empty($this->neighbourDirections)) {
+			$map        = Lemuria::World();
+			$directions = [];
+			foreach (Direction::cases() as $direction) {
+				if ($map->isDirection($direction)) {
+					$directions[] = $direction;
+				}
+			}
+			$l = count($directions) - 1;
+			$this->neighbourDirections[$directions[0]->value][] = $directions[$l];
+			for ($i = 1; $i <= $l; $i++) {
+				$this->neighbourDirections[$directions[$i - 1]->value][] = $directions[$i];
+				$this->neighbourDirections[$directions[$i]->value][] = $directions[$i - 1];
+			}
+			$this->neighbourDirections[$directions[$l]->value][] = $directions[0];
+		}
 	}
 
 	private function createTravelEffect(): void {

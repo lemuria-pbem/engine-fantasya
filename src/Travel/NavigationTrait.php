@@ -77,10 +77,6 @@ trait NavigationTrait
 	}
 
 	private function canSailTo(Region $region): bool {
-		$ship = $this->vessel->Ship();
-		if ($ship instanceof Boat) {
-			return true;
-		}
 		$ports = new Ports($this->vessel, $region);
 		$port  = $ports->Port();
 		if ($port) {
@@ -88,6 +84,9 @@ trait NavigationTrait
 			return true;
 		}
 		if ($ports->IsDenied()) {
+			if ($this->vessel->Ship() instanceof Boat) {
+				return true;
+			}
 			return false;
 		}
 		return $ports->CanLand();
