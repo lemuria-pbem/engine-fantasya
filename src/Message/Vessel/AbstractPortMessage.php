@@ -9,7 +9,7 @@ use Lemuria\Id;
 
 abstract class AbstractPortMessage extends AbstractVesselMessage
 {
-	protected Result $result = Result::Success;
+	protected Result $result = Result::Event;
 
 	protected Section $section = Section::Movement;
 
