@@ -10,10 +10,12 @@ use Lemuria\Engine\Fantasya\Factory\Model\Ports;
 use Lemuria\Engine\Fantasya\Message\Region\TravelAirshipMessage;
 use Lemuria\Engine\Fantasya\Message\Region\TravelVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterPortDutyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EnterPortDutyPaidMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterPortSmuggleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardCancelMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Extension\Duty;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Navigable;
@@ -154,8 +156,12 @@ trait NavigationTrait
 	}
 
 	private function payDutyToHarbourMaster(): void {
-		$master = $this->vessel->Port()->Inhabitants()->Owner();
-		if ($master) {
+		$port   = $this->vessel->Port();
+		$master = $port->Inhabitants()->Owner();
+		/** @var Duty $extension */
+		$extension = $port->Extensions()->offsetGet(Duty::class);
+		$rate      = $extension->Duty();
+		if ($master && $rate > 0.0) {
 			$party           = $master->Party();
 			$diplomacy       = $party->Diplomacy();
 			$masterInventory = $master->Inventory();
@@ -167,7 +173,7 @@ trait NavigationTrait
 				foreach ($inventory as $quantity) {
 					$commodity = $quantity->Commodity();
 					if ($commodity instanceof Luxury) {
-						$count = (int)round(Ports::DUTY * $quantity->Count());
+						$count = (int)round($rate * $quantity->Count());
 						if ($count > 0) {
 							$duty[] = new Quantity($commodity, $count);
 						}
@@ -186,6 +192,7 @@ trait NavigationTrait
 								$quantity = new Quantity($quantity->Commodity(), $quantity->Count());
 								$masterInventory->add($quantity);
 								$this->message(EnterPortDutyMessage::class, $unit)->i($quantity);
+								$this->message(EnterPortDutyPaidMessage::class, $master)->e($unit)->i($quantity);
 							}
 						}
 					}

@@ -4,27 +4,24 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message\Result;
-use Lemuria\Engine\Message\Section;
 use Lemuria\Item;
 
-class EnterPortDutyMessage extends AbstractUnitMessage
+class TravelCanalPaidMessage extends TravelTooHeavyMessage
 {
 	protected Result $result = Result::Event;
 
-	protected Section $section = Section::Economy;
-
-	protected Item $duty;
+	protected Item $fee;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' has to pay ' . $this->duty . ' for duty to the harbour master.';
+		return 'Unit ' . $this->id . ' pays ' . $this->fee . ' as canal fee.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->duty = $message->getQuantity();
+		$this->fee = $message->getQuantity();
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->item($name, 'duty') ?? parent::getTranslation($name);
+		return $this->item($name, 'fee') ?? parent::getTranslation($name);
 	}
 }

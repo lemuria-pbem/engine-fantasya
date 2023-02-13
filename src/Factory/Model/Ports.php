@@ -19,8 +19,6 @@ class Ports
 	use MessageTrait;
 	use PortsTrait;
 
-	public final const DUTY = 0.1;
-
 	public function __construct(protected readonly Vessel $vessel, Region $region) {
 		$this->init($vessel->Passengers()->Owner(), $region);
 	}

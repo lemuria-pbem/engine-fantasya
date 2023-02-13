@@ -12,6 +12,6 @@ class FeeNotOwnerMessage extends AbstractUnitMessage
 	protected Section $section = Section::Economy;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' is not the market owner anc cannot set the fee.';
+		return 'Unit ' . $this->id . ' is not the market owner and cannot set the fee.';
 	}
 }

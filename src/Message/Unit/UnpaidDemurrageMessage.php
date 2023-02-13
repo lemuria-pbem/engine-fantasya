@@ -3,22 +3,22 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Singleton;
+use Lemuria\Item;
 
-class FeeNotApplicableMessage extends FeeNotOwnerMessage
+class UnpaidDemurrageMessage extends TravelSimulationMessage
 {
-	protected Singleton $building;
+	protected Item $fee;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' cannot set a fee for a ' . $this->building . '.';
+		return 'Unit ' . $this->id . ' cannot pay outstanding demurrage ' . $this->fee . '.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->building = $message->getSingleton();
+		$this->fee = $message->getQuantity();
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->building($name, 'building') ?? parent::getTranslation($name);
+		return $this->item($name, 'fee') ?? parent::getTranslation($name);
 	}
 }

@@ -5,23 +5,34 @@ namespace Lemuria\Engine\Fantasya\Travel;
 use Lemuria\Engine\Fantasya\Effect\Airship;
 use Lemuria\Engine\Fantasya\Effect\SneakPastEffect;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
+use Lemuria\Engine\Fantasya\Effect\Unmaintained;
+use Lemuria\Engine\Fantasya\Effect\UnpaidDemurrage;
+use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\ContextTrait;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Message\Region\TravelUnitMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelCanalFeeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelCanalMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelCanalPaidMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoChaosMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoOceanMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNeighbourMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelUnpaidCanalMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelUnpaidDemurrageMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelAnchorMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelLandMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelOverLandMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\TravelPortDirectionMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Canal;
+use Lemuria\Model\Fantasya\Construction;
+use Lemuria\Model\Fantasya\Extension\Fee;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Navigable;
+use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
@@ -32,6 +43,7 @@ use Lemuria\Model\World\Direction;
 trait TravelTrait
 {
 	use BuilderTrait;
+	use CollectTrait;
 	use ContextTrait;
 	use MoveTrait;
 
@@ -67,7 +79,7 @@ trait TravelTrait
 			if ($anchor !== Direction::IN_DOCK) {
 				if ($direction !== $anchor) {
 					if ($this->canLeavePort($direction, $neighbour)) {
-						//TODO
+						$this->message(TravelPortDirectionMessage::class, $this->vessel)->p($direction->value);
 						return $neighbour;
 					}
 					if ($this->canUseCanal($neighbour)) {
@@ -256,6 +268,11 @@ trait TravelTrait
 
 	protected function canLeavePort(Direction $direction, Region $neighbour): bool {
 		if ($this->vessel->Port() && $neighbour->Landscape() instanceof Navigable) {
+			$effect = new UnpaidDemurrage(State::getInstance());
+			if (Lemuria::Score()->find($effect->setVessel($this->vessel))) {
+				$this->message(TravelUnpaidDemurrageMessage::class)->p($direction->value);
+				return false;
+			}
 			$this->initNeighbourDirections();
 			$directions = $this->neighbourDirections[$this->vessel->Anchor()->value];
 			return $direction === $directions[0] || $direction === $directions[1];
@@ -268,12 +285,18 @@ trait TravelTrait
 		$building = self::createBuilding(Canal::class);
 		foreach ($this->unit->Region()->Estate() as $construction) {
 			if ($construction->Building() === $building) {
+				$effect = new Unmaintained(State::getInstance());
+				if (Lemuria::Score()->find($effect->setConstruction($construction))) {
+					continue;
+				}
 				$owner = $construction->Inhabitants()->Owner()?->Party();
-				if ($owner && $owner !== $party && !$owner->Diplomacy()->has(Relation::PASS, $this->unit)) {
+				if ($owner && $owner !== $party && ($this->context->getTurnOptions()->IsSimulation() || !$owner->Diplomacy()->has(Relation::PASS, $this->unit))) {
 					continue;
 				}
 				if ($neighbour->Landscape() instanceof Navigable) {
-					return true;
+					if ($this->payCanalFee($construction)) {
+						return true;
+					}
 				}
 			}
 		}
@@ -297,6 +320,30 @@ trait TravelTrait
 			}
 			$this->neighbourDirections[$directions[$l]->value][] = $directions[0];
 		}
+	}
+
+	private function payCanalFee(Construction $construction): bool {
+		$extensions = $construction->Extensions();
+		/** @var Fee $fee */
+		$fee         = $extensions[Fee::class];
+		$quantity    = $fee->Fee();
+		$feePerPoint = $quantity?->Count();
+		if ($feePerPoint > 0) {
+			$commodity =$quantity->Commodity();
+			$captain   = $this->vessel->Passengers()->Owner();
+			$totalFee  = $this->vessel->Ship()->Captain() * $feePerPoint;
+			$payment   = $this->collectQuantity($captain, $commodity, $totalFee);
+			if ($payment->Count() < $totalFee) {
+				$this->message(TravelUnpaidCanalMessage::class, $this->vessel->Passengers()->Owner());
+				return false;
+			}
+			$captain->Inventory()->remove($payment);
+			$master = $construction->Inhabitants()->Owner();
+			$master->Inventory()->add(new Quantity($commodity, $totalFee));
+			$this->message(TravelCanalPaidMessage::class, $captain)->i($payment);
+			$this->message(TravelCanalFeeMessage::class, $master)->e($captain)->i($payment);
+		}
+		return true;
 	}
 
 	private function createTravelEffect(): void {

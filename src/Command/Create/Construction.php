@@ -30,10 +30,14 @@ use Lemuria\Model\Fantasya\Building\AbstractCastle;
 use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Building\Market;
 use Lemuria\Model\Fantasya\Building\Monument;
+use Lemuria\Model\Fantasya\Building\Port;
+use Lemuria\Model\Fantasya\Building\Quay;
 use Lemuria\Model\Fantasya\Building\Ruin;
 use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Construction as ConstructionModel;
+use Lemuria\Model\Fantasya\Extension\Duty;
+use Lemuria\Model\Fantasya\Extension\Fee;
 use Lemuria\Model\Fantasya\Extension\Market as MarketExtension;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Requirement;
@@ -50,6 +54,12 @@ use Lemuria\Model\Fantasya\Requirement;
  */
 final class Construction extends AbstractProduct
 {
+	private const EXTENSIONS = [
+		Market::class => [MarketExtension::class],
+		Port::class   => [Fee::class, Duty::class],
+		Quay::class   => [Fee::class]
+	];
+
 	private int $size;
 
 	private bool $hasMarket = false;
@@ -293,11 +303,12 @@ final class Construction extends AbstractProduct
 	}
 
 	private function addConstructionExtensions(ConstructionModel $construction): void {
-		$building = $construction->Building();
-		if ($building instanceof Market) {
-			$extensions = $construction->Extensions();
-			if (!$extensions->offsetExists(MarketExtension::class)) {
-				$extensions->add(new MarketExtension());
+		$extensions      = $construction->Extensions();
+		$building        = $construction->Building();
+		$extensionsToAdd = self::EXTENSIONS[$building::class] ?? [];
+		foreach ($extensionsToAdd as $class) {
+			if (!$extensions->offsetExists($class)) {
+				$extensions->add(new $class());
 			}
 		}
 	}
