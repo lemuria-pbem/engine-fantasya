@@ -184,7 +184,7 @@ trait NavigationTrait
 					if ($passengerParty !== $party && !$diplomacy->has(Relation::TRADE, $unit)) {
 						$calculus   = new Calculus($unit);
 						$camouflage = $calculus->knowledge(Camouflage::class)->Level();
-						if ($camouflage > $perception) {
+						if ($unit->IsHiding() && $camouflage > $perception) {
 							$this->message(EnterPortSmuggleMessage::class, $unit);
 						} else {
 							foreach ($duty as $quantity) {
