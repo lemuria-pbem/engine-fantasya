@@ -36,7 +36,7 @@ final class Enter extends UnitCommand
 	use FreeSpaceTrait;
 	use SiegeTrait;
 
-	public final const FORBIDDEN = [Canal::class, Monument::class, Quay::class, Ruin::class, Signpost::class];
+	public final const FORBIDDEN = [Monument::class, Ruin::class, Signpost::class];
 
 	protected function run(): void {
 		$n = $this->phrase->count();

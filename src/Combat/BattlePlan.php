@@ -33,7 +33,10 @@ class BattlePlan
 		$place = $defender->Construction();
 		if ($place) {
 			$from = $attacker->Construction();
-			if (!in_array($place->Building()::class, self::ATTACK_REGION) && $place !== $from) {
+			if (!in_array($place->Building()::class, self::ATTACK_REGION)) {
+				if ($place === $from) {
+					return Place::Building;
+				}
 				return Place::None;
 			}
 		} else {

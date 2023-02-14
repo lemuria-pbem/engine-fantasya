@@ -16,14 +16,14 @@ use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMonsterMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackInBuildingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackInvolveMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackLeaveConstructionCombatMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackLeaveVesselCombatMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFightingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFoundMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackOnVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackOwnUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackSelfMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Party\Type;
@@ -189,11 +189,11 @@ final class Attack extends UnitCommand
 		} elseif ($place === Place::Region) {
 			$construction = $this->unit->Construction();
 			if ($construction) {
-				$this->message(LeaveConstructionMessage::class)->e($construction);
+				$this->message(AttackLeaveConstructionCombatMessage::class)->e($construction);
 			} else {
 				$vessel = $this->unit->Vessel();
 				if ($vessel) {
-					$this->message(LeaveVesselMessage::class)->e($vessel);
+					$this->message(AttackLeaveVesselCombatMessage::class)->e($vessel);
 				}
 			}
 		}

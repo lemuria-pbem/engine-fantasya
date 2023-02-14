@@ -3,15 +3,20 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Trespass;
 
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Effect\UnpaidDemurrage;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardDeniedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\BoardUnpaidDemurrageMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardNotFoundMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselUnpaidDemurrageMessage;
+use Lemuria\Engine\Fantasya\State;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Vessel;
 
 /**
@@ -52,22 +57,31 @@ final class Board extends UnitCommand
 			return;
 		}
 
-		if ($vessel) {
-			$vessel->Passengers()->remove($this->unit);
-			$this->message(LeaveVesselDebugMessage::class)->e($vessel);
+		$effect = new UnpaidDemurrage(State::getInstance());
+		if (Lemuria::Score()->find($effect->setVessel($newVessel))) {
+			$this->message(BoardUnpaidDemurrageMessage::class)->e($newVessel);
 		} else {
-			$construction = $this->unit->Construction();
-			if ($construction) {
-				if ($this->initSiege($construction)->canEnterOrLeave($this->unit)) {
-					$construction->Inhabitants()->remove($this->unit);
-					$this->message(LeaveConstructionDebugMessage::class)->e($construction);
-				} else {
-					$this->message(LeaveSiegeMessage::class);
+			if ($vessel) {
+				if (Lemuria::Score()->find($effect->setVessel($vessel))) {
+					$this->message(LeaveVesselUnpaidDemurrageMessage::class)->e($vessel);
 					return;
 				}
+				$vessel->Passengers()->remove($this->unit);
+				$this->message(LeaveVesselDebugMessage::class)->e($vessel);
+			} else {
+				$construction = $this->unit->Construction();
+				if ($construction) {
+					if ($this->initSiege($construction)->canEnterOrLeave($this->unit)) {
+						$construction->Inhabitants()->remove($this->unit);
+						$this->message(LeaveConstructionDebugMessage::class)->e($construction);
+					} else {
+						$this->message(LeaveSiegeMessage::class);
+						return;
+					}
+				}
 			}
+			$newVessel->Passengers()->add($this->unit);
+			$this->message(BoardMessage::class)->e($newVessel);
 		}
-		$newVessel->Passengers()->add($this->unit);
-		$this->message(BoardMessage::class)->e($newVessel);
 	}
 }
