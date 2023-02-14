@@ -936,6 +936,7 @@
 		"TravelSpeedMessage": "Die Einheit $id kann sich {$speed:Region} bewegen (Gewicht: $weight).",
 		"TravelTooHeavyMessage": "Die Einheit $id ist zu schwer, um sich zu bewegen.",
 		"TravelUnitMessage": "Die Einheit $unit ist durch die Region $id gereist.",
+		"TravelUnmaintainedPortMessage": "Die Einheit $id kann den Hafen nicht in Richtung $direction verlassen, weil er außer Betrieb ist.",
 		"TravelUnpaidCanalMessage": "Die Einheit $id kann die Kanalgebühr nicht bezahlen.",
 		"TravelUnpaidDemurrageMessage": "Die Einheit $id kann den Hafen nicht in Richtung $direction verlassen, weil die Liegegebühr nicht bezahlt wurde.",
 		"TravelVesselMessage": "Das Schiff $vessel ist durch die Region $id gereist.",

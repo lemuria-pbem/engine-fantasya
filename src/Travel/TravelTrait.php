@@ -268,6 +268,11 @@ trait TravelTrait
 
 	protected function canLeavePort(Direction $direction, Region $neighbour): bool {
 		if ($this->vessel->Port() && $neighbour->Landscape() instanceof Navigable) {
+			$effect = new Unmaintained(State::getInstance());
+			if (Lemuria::Score()->find($effect->setConstruction($this->vessel->Port()))) {
+				$this->message()->p($direction->value);
+				return false;
+			}
 			$effect = new UnpaidDemurrage(State::getInstance());
 			if (Lemuria::Score()->find($effect->setVessel($this->vessel))) {
 				$this->message(TravelUnpaidDemurrageMessage::class)->p($direction->value);
