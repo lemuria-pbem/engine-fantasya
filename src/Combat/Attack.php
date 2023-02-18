@@ -18,10 +18,18 @@ use Lemuria\Model\Fantasya\Commodity\Protection\Armor;
 use Lemuria\Model\Fantasya\Commodity\Protection\Ironshield;
 use Lemuria\Model\Fantasya\Commodity\Protection\LeatherArmor;
 use Lemuria\Model\Fantasya\Commodity\Protection\Mail;
+use Lemuria\Model\Fantasya\Commodity\Protection\Repairable\DentedArmor;
+use Lemuria\Model\Fantasya\Commodity\Protection\Repairable\DentedIronshield;
+use Lemuria\Model\Fantasya\Commodity\Protection\Repairable\RustyMail;
+use Lemuria\Model\Fantasya\Commodity\Protection\Repairable\SplitWoodshield;
+use Lemuria\Model\Fantasya\Commodity\Protection\Repairable\TatteredLeatherArmor;
 use Lemuria\Model\Fantasya\Commodity\Protection\Woodshield;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\SkewedCatapult;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\UngirtBow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\UngirtCrossbow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Spear;
 use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
@@ -44,13 +52,20 @@ class Attack
 
 	protected const BLOCK_BONUS = [
 		Ironshield::class => 2,
-		Woodshield::class => 1
+		Woodshield::class => 1,
+
+		DentedIronshield::class => 1,
+		SplitWoodshield::class  => 0
 	];
 
 	protected const ATTACK_MALUS = [
 		Armor::class        => 2,
 		LeatherArmor::class => 0,
-		Mail::class         => 1
+		Mail::class         => 1,
+
+		DentedArmor::class          => 2,
+		TatteredLeatherArmor::class => 0,
+		RustyMail::class            => 1
 	];
 
 	protected const ATTACK_FAILURE = [
@@ -62,7 +77,11 @@ class Attack
 	protected const WIND_EFFECT = [
 		Bow::class      => 1.0,
 		Catapult::class => 0.2,
-		Crossbow::class => 0.5
+		Crossbow::class => 0.5,
+
+		UngirtBow::class      => 2.0,
+		SkewedCatapult::class => 0.4,
+		UngirtCrossbow::class => 1.0
 	];
 
 	protected const FLIGHT = [1.0, 0.9, 0.9, 0.9, 0.2, 0.2, 0.0];
@@ -193,7 +212,7 @@ class Attack
 			if ($this->isSuccessful($skill, $block, $armor, $shield, $hasBonus)) {
 				// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' hits enemy ' . $defender->getId($fD, true) . '.');
 				if ($defFighter->hasFeature(Feature::GazeOfTheBasilisk)) {
-					if (!in_array($attWeapon, [Warhammer::class, Catapult::class])) {
+					if (!in_array($attWeapon, self::BASILISK_WEAPON)) {
 						//Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' cannot hurt ' . $defender->getId($fD, true) . ' who is protected by Gaze of the Basilisk.');
 						BattleLog::getInstance()->add(new AssaultPetrifiedMessage($this->combatant->getId($fA, true), $defender->getId($fD)));
 						return null;
