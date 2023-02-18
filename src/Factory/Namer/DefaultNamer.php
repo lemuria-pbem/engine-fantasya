@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Namer;
 
 use function Lemuria\getClass;
+use Lemuria\Entity;
 use Lemuria\Exception\NamerException;
 use Lemuria\Factory\Namer;
 use Lemuria\Identifiable;
@@ -24,13 +25,17 @@ class DefaultNamer implements Namer
 	/**
 	 * @throws NamerException
 	 */
-	public function name(Domain|Identifiable $entity): string {
+	public function name(Domain|Identifiable|Entity $entity): string {
 		$domain = strtolower($entity instanceof Identifiable ? $entity->Catalog()->name : $entity->name);
 		try {
-			return $this->$domain($entity);
+			$name = $this->$domain($entity);
 		} catch (\Throwable $e) {
 			throw new NamerException($e->getMessage(), previous: $e);
 		}
+		if ($entity instanceof Entity) {
+			$entity->setName($name);
+		}
+		return $name;
 	}
 
 	protected static function dictionary(): Dictionary {
