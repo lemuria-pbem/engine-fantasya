@@ -158,7 +158,7 @@ class Campaign
 				foreach ($this->intelligence->getUnits($party) as $unit) {
 					if ($unit->BattleRow() >= BattleRow::Defensive->value) {
 						$id = $unit->Id()->Id();
-						if (!isset($this->defenders[$id])) {
+						if (!isset($this->defenders[$id]) && $this->canDefend($unit)) {
 							$battle = $this->battle($unit);
 							$battle->addDefender($unit);
 							Lemuria::Log()->debug($unit . ' gets drawn into battle as defender.');
@@ -178,7 +178,7 @@ class Campaign
 						$party = Party::get(new Id($partyId));
 						if ($ally->Diplomacy()->has(Relation::COMBAT, $party)) {
 							foreach ($this->intelligence->getUnits($ally) as $unit) {
-								if ($unit->BattleRow() >= BattleRow::Defensive->value) {
+								if ($unit->BattleRow() >= BattleRow::Defensive->value && $this->canDefend($unit)) {
 									$battle = $this->battle($unit);
 									$battle->addDefender($unit);
 									Lemuria::Log()->debug($unit . ' gets drawn into battle as ally.');
@@ -270,5 +270,13 @@ class Campaign
 			Lemuria::Log()->debug('Allied party ' . $party . ' enters battle #' . $battleId . ' in ' . $this->region . '.');
 		}
 		return $battle;
+	}
+
+	protected function canDefend(Unit $unit): bool {
+		$party = $unit->Party()->Id()->Id();
+		if (!isset($this->partyBattle[$party])) {
+			throw new \InvalidArgumentException();
+		}
+		return $this->partyBattle[$party]->canDefend($unit);
 	}
 }

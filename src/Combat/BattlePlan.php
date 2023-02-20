@@ -28,6 +28,12 @@ class BattlePlan
 		$this->battles = &$battles;
 	}
 
+	public function canDefend(Unit $unit): bool {
+		$battlePlace = new BattlePlace($unit);
+		$place       = (string)$battlePlace;
+		return isset($this->places[$place]);
+	}
+
 	public function getBattleId(Unit $unit): int {
 		$battlePlace = new BattlePlace($unit);
 		$place       = (string)$battlePlace;
@@ -38,7 +44,7 @@ class BattlePlan
 		$id                   = count($this->battles);
 		$battle               = new Battle($battlePlace);
 		$this->battles[]      = $battle;
-		$this->places[$place] = $battle;
+		$this->places[$place] = $id;
 		return $id;
 	}
 
