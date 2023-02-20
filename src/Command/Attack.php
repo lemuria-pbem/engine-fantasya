@@ -89,7 +89,7 @@ final class Attack extends UnitCommand
 		if ($campaign->mount()) {
 			$i = 0;
 			foreach ($campaign->Battles() as $battle) {
-				Lemuria::Log()->debug('Beginning battle ' . ++$i . ' in region ' . $battle->Region() . '.');
+				Lemuria::Log()->debug('Beginning battle ' . ++$i . ' in region ' . $battle->Place()->Region() . '.');
 				$attacker = [];
 				foreach ($battle->Attacker() as $party) {
 					$attacker[] = $party->Name();
