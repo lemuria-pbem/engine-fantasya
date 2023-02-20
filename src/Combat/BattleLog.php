@@ -64,7 +64,7 @@ class BattleLog implements BattleModel
 
 	public function __construct(private ?Battle $battle = null) {
 		if ($battle) {
-			$this->region  = $battle->Region();
+			$this->region  = $battle->Place()->Region();
 			$this->counter = $battle->counter;
 			foreach ($battle->Attacker() as $party) {
 				$this->parties[] = $party;

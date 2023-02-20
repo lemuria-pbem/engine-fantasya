@@ -15,36 +15,45 @@ class BattlePlan
 	protected const ATTACK_REGION = [Canal::class, Monument::class, Quay::class, Ruin::class, Signpost::class, Site::class];
 
 	/**
+	 * @var array<int
+	 */
+	protected array $battles;
+
+	/**
 	 * @var array<string, int>
 	 */
-	protected array $battles = [];
+	protected array $places = [];
 
-	public function __construct(?int $battle = null) {
-		if (is_int($battle)) {
-			$this->battles[Place::Region->name] = $battle;
-		}
+	public function __construct(array &$battles) {
+		$this->battles = &$battles;
 	}
 
-	public function getBattle(Place $place): int {
-		return $this->battles[$place->name];
+	public function canDefend(Unit $unit): bool {
+		$battlePlace = new BattlePlace($unit);
+		$place       = (string)$battlePlace;
+		return isset($this->places[$place]);
+	}
+
+	public function getBattleId(Unit $unit): int {
+		$battlePlace = new BattlePlace($unit);
+		$place       = (string)$battlePlace;
+		if (isset($this->places[$place])) {
+			return $this->places[$place];
+		}
+
+		$id                   = count($this->battles);
+		$battle               = new Battle($battlePlace);
+		$this->battles[]      = $battle;
+		$this->places[$place] = $id;
+		return $id;
 	}
 
 	public static function canAttack(Unit $attacker, Unit $defender): Place {
-		$place = $defender->Construction();
-		if ($place) {
-			$from = $attacker->Construction();
-			if (!in_array($place->Building()::class, self::ATTACK_REGION)) {
-				if ($place === $from) {
-					return Place::Building;
-				}
-				return Place::None;
-			}
-		} else {
-			$vessel = $defender->Vessel();
-			if ($vessel) {
-				return $vessel === $attacker->Vessel() ? Place::Ship : Place::None;
-			}
+		$place = new BattlePlace($defender);
+		if ($place->Place() === Place::Region) {
+			return Place::Region;
 		}
-		return Place::Region;
+		$from = new BattlePlace($attacker);
+		return $from->__toString() === $place->__toString() ? $place->Place() : Place::None;
 	}
 }

@@ -122,9 +122,9 @@ class Campaign
 		$defenders     = [];
 		$attackersLeft = array_fill_keys(array_keys($this->attackers), true);
 		foreach ($this->defenders as $defId => $attackers) {
-			$party  = $this->party($defId);
-			$battle = $this->battle($party);
-			$unit   = $this->armies[$defId];
+			$unit   = $this->unit($defId);
+			$party  = $unit->Party();
+			$battle = $this->battle($unit);
 			$battle->addDefender($unit);
 			$id                = $party->Id()->Id();
 			$this->status[$id] = Stake::Defender;
@@ -135,10 +135,10 @@ class Campaign
 				if (!isset($this->attackers[$attId])) {
 					throw new LemuriaException('Attacker ' . $attId . ' not found.');
 				}
-				$unit = $this->armies[$attId];
+				$unit = $this->unit($attId);
 				if (isset($attackersLeft[$attId])) {
 					$battle->addAttacker($unit);
-					$party                  = $this->party($attId);
+					$party                  = $unit->Party();
 					$partyId                = $party->Id()->Id();
 					$this->status[$partyId] = Stake::Attacker;
 					unset($attackersLeft[$attId]);
@@ -155,11 +155,11 @@ class Campaign
 		foreach ($defenders as $partyId) {
 			$party = Party::get(new Id($partyId));
 			if ($party->Type() === Type::Player) {
-				$battle = $this->battle($party);
 				foreach ($this->intelligence->getUnits($party) as $unit) {
 					if ($unit->BattleRow() >= BattleRow::Defensive->value) {
 						$id = $unit->Id()->Id();
-						if (!isset($this->defenders[$id])) {
+						if (!isset($this->defenders[$id]) && $this->canDefend($unit)) {
+							$battle = $this->battle($unit);
 							$battle->addDefender($unit);
 							Lemuria::Log()->debug($unit . ' gets drawn into battle as defender.');
 						}
@@ -177,9 +177,9 @@ class Campaign
 					if ($defender === Stake::Defender) {
 						$party = Party::get(new Id($partyId));
 						if ($ally->Diplomacy()->has(Relation::COMBAT, $party)) {
-							$battle = $this->battle($party);
 							foreach ($this->intelligence->getUnits($ally) as $unit) {
-								if ($unit->BattleRow() >= BattleRow::Defensive->value) {
+								if ($unit->BattleRow() >= BattleRow::Defensive->value && $this->canDefend($unit)) {
+									$battle = $this->battle($unit);
 									$battle->addDefender($unit);
 									Lemuria::Log()->debug($unit . ' gets drawn into battle as ally.');
 								}
@@ -194,65 +194,89 @@ class Campaign
 
 	private function mergeAttackerBattles(): void {
 		foreach ($this->attackers as $defenders) {
-			$battles = [];
+			$battlePlaces = [];
 			foreach ($defenders as $defId) {
-				$party            = $this->party($defId)->Id()->Id();
-				$battle           = $this->partyBattle[$party]->getBattle(Place::Region);
-				$battles[$battle] = true;
+				$unit                            = $this->unit($defId);
+				$party                           = $unit->Party()->Id()->Id();
+				$battleId                        = $this->partyBattle[$party]->getBattleId($unit);
+				$battle                          = $this->battles[$battleId];
+				$place                           = $battle->Place()->__toString();
+				$battlePlaces[$place][$battleId] = true;
 			}
-			$battles = array_keys($battles);
-			$count   = count($battles);
-			if ($count >= 2) {
-				$all   = implode(',', $battles);
-				$first = $battles[0];
-				Lemuria::Log()->debug('Merging ' . $count . ' battles #' . $all . ' into #' . $first . ' for common attacker.');
-			}
-			while (count($battles) > 1) {
-				$second = array_pop($battles);
-				$first  = array_pop($battles);
-				/** @var Battle $firstBattle */
-				$firstBattle = $this->battles[$first];
-				/** @var Battle $secondBattle */
-				$secondBattle = $this->battles[$second];
-				$firstBattle->merge($secondBattle);
-				unset($this->battles[$second]);
-				$battles[] = $first;
-			}
-			if (count($this->battles) <= 1) {
-				break;
+
+			foreach ($battlePlaces as $battles) {
+				$battles = array_keys($battles);
+				$count   = count($battles);
+				if ($count >= 2) {
+					$all   = implode(',', $battles);
+					$first = $battles[0];
+					Lemuria::Log()->debug('Merging ' . $count . ' battles #' . $all . ' into #' . $first . ' for common attacker.');
+				}
+				while (count($battles) > 1) {
+					$second = array_pop($battles);
+					$first  = array_pop($battles);
+					/** @var Battle $firstBattle */
+					$firstBattle = $this->battles[$first];
+					/** @var Battle $secondBattle */
+					$secondBattle = $this->battles[$second];
+					$firstBattle->merge($secondBattle);
+					unset($this->battles[$second]);
+					$battles[] = $first;
+				}
+				if (count($this->battles) <= 1) {
+					break;
+				}
 			}
 		}
 	}
 
-	protected function party(int $id): Party {
+	protected function unit(int $id): Unit {
 		if (isset($this->armies[$id])) {
-			$unit = $this->armies[$id];
-			return $unit->Party();
+			return $this->armies[$id];
 		}
 		throw new \InvalidArgumentException();
 	}
 
-	protected function battle(Party $party): Battle {
-		$id = $party->Id()->Id();
+	protected function battle(Unit $unit): Battle {
+		$party  = $unit->Party();
+		$id     = $party->Id()->Id();
+		$isNew  = false;
+		$isAlly = false;
 		if (isset($this->partyBattle[$id])) {
-			return $this->battles[$this->partyBattle[$id]->getBattle(Place::Region)];
-		}
-
-		foreach ($this->partyBattle as $partyId => $battlePlan) {
-			$otherParty = Party::get(new Id($partyId));
-			if ($otherParty->Diplomacy()->has(Relation::COMBAT, $party)) {
-				$this->partyBattle[$id] = $battlePlan;
-				$battleId               = $battlePlan->getBattle(Place::Region);
-				Lemuria::Log()->debug('Allied party ' . $party . ' enters battle #' . $battleId . ' in ' . $this->region . '.');
-				return $this->battles[$battleId];
+			$battlePlan = $this->partyBattle[$id];
+		} else {
+			$battlePlan = null;
+			foreach ($this->partyBattle as $partyId => $plan) {
+				$otherParty = Party::get(new Id($partyId));
+				if ($otherParty->Diplomacy()->has(Relation::COMBAT, $party)) {
+					$this->partyBattle[$id] = $plan;
+					$battlePlan             = $plan;
+					$isAlly                 = true;
+					break;
+				}
 			}
 		}
+		if (!$battlePlan) {
+			$battlePlan             = new BattlePlan($this->battles);
+			$this->partyBattle[$id] = $battlePlan;
+			$isNew                  = true;
+		}
 
-		$battle                 = new Battle($this->region);
-		$battleId               = count($this->battles);
-		$this->partyBattle[$id] = new BattlePlan($battleId);
-		$this->battles[]        = $battle;
-		Lemuria::Log()->debug('New battle #' . $battleId . ' in ' . $this->region . ' started for defender ' . $party . '.');
+		$battleId = $battlePlan->getBattleId($unit);
+		$battle   = $this->battles[$battleId];
+		if ($isNew) {
+			Lemuria::Log()->debug('New battle #' . $battleId . ' in ' . $this->region . ' started for defender ' . $party . '.');
+		} elseif ($isAlly) {
+			Lemuria::Log()->debug('Allied party ' . $party . ' enters battle #' . $battleId . ' in ' . $this->region . '.');
+		}
 		return $battle;
+	}
+
+	protected function canDefend(Unit $unit): bool {
+		$party = $unit->Party()->Id()->Id();
+		if (!isset($this->partyBattle[$party])) {
+			throw new \InvalidArgumentException();
+		}
+		return $this->partyBattle[$party]->canDefend($unit);
 	}
 }

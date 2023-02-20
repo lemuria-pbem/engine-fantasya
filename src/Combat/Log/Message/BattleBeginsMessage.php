@@ -31,7 +31,7 @@ class BattleBeginsMessage extends AbstractMessage
 
 	public function __construct(Battle $battle = null) {
 		if ($battle) {
-			$this->region = new Entity($battle->Region());
+			$this->region = new Entity($battle->Place()->Region());
 			foreach ($battle->Attacker() as $party) {
 				$this->attackers[] = new Entity($party);
 			}

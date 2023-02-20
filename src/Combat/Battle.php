@@ -37,7 +37,6 @@ use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Quantity;
-use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Tactics;
 use Lemuria\Model\Fantasya\Unit;
@@ -92,13 +91,13 @@ class Battle
 
 	private Vessel|false|null $vessel = false;
 
-	public function __construct(private Region $region) {
-		$this->intelligence = new Intelligence($this->region);
+	public function __construct(private BattlePlace $place) {
+		$this->intelligence = new Intelligence($place->Region());
 		$this->initMonsters();
 	}
 
-	public function Region(): Region {
-		return $this->region;
+	public function Place(): BattlePlace {
+		return $this->place;
 	}
 
 	/**
@@ -504,7 +503,7 @@ class Battle
 				$existing = Lemuria::Score()->find($effect->setVessel($this->vessel));
 			} else {
 				$effect   = new RegionLoot(State::getInstance());
-				$existing = Lemuria::Score()->find($effect->setRegion($this->region));
+				$existing = Lemuria::Score()->find($effect->setRegion($this->place->Region()));
 			}
 			if ($existing) {
 				$effect = $existing;
@@ -522,13 +521,14 @@ class Battle
 	private function createNewZombies(Combat $combat): Battle {
 		$size = $combat->getNewZombies();
 		if ($size > 0) {
-			$region = $this->region->Id()->Id();
+			$region = $this->place->Region();
+			$id     = $region->Id()->Id();
 			$state  = State::getInstance();
 			$spawn  = new Spawn($state);
 			$state->injectIntoTurn($spawn->setOptions([
-				Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => $region, Spawn::SIZE => $size, Spawn::RACE => Zombie::class
+				Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => $id, Spawn::SIZE => $size, Spawn::RACE => Zombie::class
 			]));
-			$this->message(AttackInfectedZombiesMessage::class, $this->region)->p($size)->s(self::createRace(Zombie::class));
+			$this->message(AttackInfectedZombiesMessage::class, $region)->p($size)->s(self::createRace(Zombie::class));
 		}
 		return $this;
 	}
