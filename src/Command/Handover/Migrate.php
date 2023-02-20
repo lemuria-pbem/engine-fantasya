@@ -11,6 +11,7 @@ use Lemuria\Engine\Fantasya\Message\Party\MigrateFailedMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateFromMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateIncompatibleMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateRejectedMessage;
+use Lemuria\Engine\Fantasya\Message\Party\MigrateSameMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateToMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\MigrateInvisibleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\MigrateNotFoundMessage;
@@ -51,7 +52,9 @@ final class Migrate extends UnitCommand
 
 		$from = $this->unit->Party();
 		$to   = $this->recipient->Party();
-		if ($to->Race() === $this->unit->Race() || $to->Race() === self::createRace(Human::class)) {
+		if ($to === $from) {
+			$this->message(MigrateSameMessage::class, $from)->e($this->unit);
+		} elseif ($to->Race() === $this->unit->Race() || $to->Race() === self::createRace(Human::class)) {
 			if ($this->checkPermission()) {
 				$from->People()->remove($this->unit);
 				$to->People()->add($this->unit);
