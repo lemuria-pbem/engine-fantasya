@@ -652,6 +652,7 @@
 		"MigrateInvisibleMessage": "Die Einheit $id kann nicht migrieren, die Zieleinheit $recipient ist nicht hier.",
 		"MigrateNotFoundMessage": "Die Einheit $id kann nicht migrieren, die Zieleinheit $recipient ist nicht hier.",
 		"MigrateRejectedMessage": "Die Einheit $migrant hat versucht, sich der Partei $party anzuschließen.",
+		"MigrateSameMessage": "Die Einheit $migrant gehört bereits zu unserer Partei.",
 		"MigrateToMessage": "Wir haben die Einheit $migrant in unsere Partei aufgenommen.",
 		"MineUnmaintainedMessage": "Die Einheit $id kann kein Eisen in einem stillgelegten Bergwerk produzieren.",
 		"MineUnusableMessage": "Die Einheit $id kann kein Eisen im Bergwerk produzieren, es fehlen Unterkünfte in einer Mine.",
