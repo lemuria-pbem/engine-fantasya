@@ -17,6 +17,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TravelCanalPaidMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoChaosMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoOceanMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelNeighbourMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelUnmaintainedPortMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelUnpaidCanalMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelUnpaidDemurrageMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelAnchorMessage;
@@ -270,7 +271,7 @@ trait TravelTrait
 		if ($this->vessel->Port() && $neighbour->Landscape() instanceof Navigable) {
 			$effect = new Unmaintained(State::getInstance());
 			if (Lemuria::Score()->find($effect->setConstruction($this->vessel->Port()))) {
-				$this->message()->p($direction->value);
+				$this->message(TravelUnmaintainedPortMessage::class)->p($direction->value);
 				return false;
 			}
 			$effect = new UnpaidDemurrage(State::getInstance());
