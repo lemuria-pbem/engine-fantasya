@@ -16,6 +16,7 @@ use Lemuria\Model\Fantasya\Commodity\Protection\Armor;
 use Lemuria\Model\Fantasya\Commodity\Protection\Ironshield;
 use Lemuria\Model\Fantasya\Commodity\Protection\Mail;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Claymore;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
 use Lemuria\Model\Fantasya\Factory\RepairableCatalog;
 use Lemuria\Model\Fantasya\Quantity;
@@ -25,7 +26,7 @@ use Lemuria\Model\Fantasya\Unit;
 class RustyMist extends AbstractBattleSpell
 {
 	protected final const AFFECTED = [
-		Battleaxe::class => true, Sword::class => true,
+		Battleaxe::class => true, Claymore::class, Sword::class => true,
 		Armor::class => true, Ironshield::class => true, Mail::class => true
 	];
 

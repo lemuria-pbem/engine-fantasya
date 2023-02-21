@@ -3,9 +3,13 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
 use Lemuria\Model\Fantasya\Ability;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Claymore;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Halberd;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\BentHalberd;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\FounderingWarElephant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\LooseWarhammer;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustyBattleaxe;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustyClaymore;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustySword;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\SkewedCatapult;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\StumpSpear;
@@ -42,14 +46,17 @@ class WeaponSkill
 	public const WEAPONS = [
 		Archery::class       => [Bow::class, UngirtBow::class],
 		Bladefighting::class => [
-			Battleaxe::class, Warhammer::class, Sword::class,
-			RustyBattleaxe::class, LooseWarhammer::class, RustySword::class
+			Battleaxe::class, Claymore::class, Warhammer::class, Sword::class,
+			RustyBattleaxe::class, RustyClaymore::class, LooseWarhammer::class, RustySword::class
 		],
 		Catapulting::class   => [Catapult::class, SkewedCatapult::class],
 		Crossbowing::class   => [Crossbow::class, UngirtCrossbow::class],
 		Fistfight::class     => [Fists::class],
 		Riding::class        => [WarElephant::class, FounderingWarElephant::class],
-		Spearfighting::class => [Spear::class, StumpSpear::class],
+		Spearfighting::class => [
+			Halberd::class, Spear::class,
+			BentHalberd::class, StumpSpear::class
+		],
 		Stoning::class       => [Dingbats::class]
 	];
 

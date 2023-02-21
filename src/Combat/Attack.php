@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
+use Lemuria\Model\Fantasya\Commodity\Weapon\Halberd;
 use function Lemuria\randChance;
 use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Calculus;
@@ -69,7 +70,7 @@ class Attack
 	];
 
 	protected const ATTACK_FAILURE = [
-		WarElephant::class => [Spear::class]
+		WarElephant::class => [Halberd::class, Spear::class]
 	];
 
 	protected const BASILISK_WEAPON = [Warhammer::class, Catapult::class];

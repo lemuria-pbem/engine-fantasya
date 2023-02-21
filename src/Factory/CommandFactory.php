@@ -199,10 +199,14 @@ use Lemuria\Model\Fantasya\Commodity\Trophy\WolfSkin;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Claymore;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Halberd;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\BentHalberd;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\FounderingWarElephant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\LooseWarhammer;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustyBattleaxe;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustyClaymore;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustySword;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\SkewedCatapult;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\StumpSpear;
@@ -525,6 +529,7 @@ class CommandFactory
 		'Gehirnschmalze'             => Brainpower::class,
 		'Gespaltene holzschilde'     => SplitWoodshield::class,
 		'Gespaltener holzschild'     => SplitWoodshield::class,
+		'Gespaltenes holzschild'     => SplitWoodshield::class,
 		'Gewuerze'                   => Spice::class,
 		'Gewürze'                    => Spice::class,
 		'Gold'                       => Gold::class,
@@ -546,6 +551,7 @@ class CommandFactory
 		'Gurgelkräuter'              => Bugleweed::class,
 		'Heiltrank'                  => HealingPotion::class,
 		'Heiltränke'                 => HealingPotion::class,
+		'Hellebarden'                => Halberd::class,
 		'Hoelzer'                    => Wood::class,
 		'Holz'                       => Wood::class,
 		'Holzschilde'                => Woodshield::class,
@@ -593,6 +599,10 @@ class CommandFactory
 		'Rostige streitaexte'        => RustyBattleaxe::class,
 		'Rostige streitaxt'          => RustyBattleaxe::class,
 		'Rostige streitäxte'         => RustyBattleaxe::class,
+		'Rostige zweihaender'        => RustyClaymore::class,
+		'Rostige zweihänder'         => RustyClaymore::class,
+		'Rostiger zweihaender'       => RustyClaymore::class,
+		'Rostiger zweihänder'        => RustyClaymore::class,
 		'Rostiges kettenhemd'        => RustyMail::class,
 		'Rostiges schwert'           => RustySword::class,
 		'Sandfaeulen'                => Sandreeker::class,
@@ -629,7 +639,9 @@ class CommandFactory
 		'Verbeulte eisenschilde'     => DentedIronshield::class,
 		'Verbeulte ruestungen'       => DentedArmor::class,
 		'Verbeulte rüstungen'        => DentedArmor::class,
+		'Verbeulter eisenschild'     => DentedIronshield::class,
 		'Verbeultes eisenschild'     => DentedIronshield::class,
+		'Verbogene Hellebarden'      => BentHalberd::class,
 		'Wagen'                      => Carriage::class,
 		'Wagenwracks'                => CarriageWreck::class,
 		'Waesser des lebens'         => WaterOfLife::class,
@@ -649,7 +661,8 @@ class CommandFactory
 		'Würzige wagemute'           => TangyTemerity::class,
 		'Würziger wagemut'           => TangyTemerity::class,
 		'Zerrissene lederrüstungen'  => TatteredLeatherArmor::class,
-		'Zerrissene lederruestungen' => TatteredLeatherArmor::class
+		'Zerrissene lederruestungen' => TatteredLeatherArmor::class,
+		'Zweihänder'                 => Claymore::class
 	];
 
 	/**

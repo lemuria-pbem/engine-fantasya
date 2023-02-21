@@ -25,6 +25,10 @@ use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Stoning;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Weapon;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Claymore;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Halberd;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\BentHalberd;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustyClaymore;
 
 /**
  * Combatants are groups of persons from a unit that fight with the same equipment.
@@ -32,6 +36,11 @@ use Lemuria\Model\Fantasya\Weapon;
 class Combatant
 {
 	use BuilderTrait;
+
+	protected final const TWO_HANDED = [
+		Claymore::class    => true, Halberd::class       => true,
+		BentHalberd::class => true, RustyClaymore::class => true
+	];
 
 	/**
 	 * @var array<Fighter>
@@ -320,9 +329,10 @@ class Combatant
 	}
 
 	protected function initShieldAndArmor(): void {
+		$hasFreeHand = !($this->weapon && isset(self::TWO_HANDED[$this->weapon::class]));
 		foreach ($this->distribution as $item) {
 			$protection = $item->getObject();
-			if ($protection instanceof Shield) {
+			if ($hasFreeHand && $protection instanceof Shield) {
 				if (!$this->shield || $protection->Block() > $this->shield->Block()) {
 					$this->shield = $protection;
 				}
