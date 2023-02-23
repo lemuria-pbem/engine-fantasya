@@ -90,6 +90,10 @@ final class Recruit extends AllocationCommand
 	 * Do the check before allocation.
 	 */
 	protected function getCheckBeforeAllocation(): array {
+		$creator = $this->context->UnitMapper()->getCreator($this->unit);
+		if ($creator) {
+			return $this->getCheckByAgreementForUnit($creator, Relation::RESOURCES);
+		}
 		return $this->getCheckByAgreement(Relation::RESOURCES);
 	}
 

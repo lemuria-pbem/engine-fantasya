@@ -25,6 +25,11 @@ class UnitMapper
 	private array $temp = [];
 
 	/**
+	 * @var array<int, Unit>
+	 */
+	private array $creator = [];
+
+	/**
 	 * Check if temp unit is already mapped.
 	 */
 	public function has(string $tempNumber): bool {
@@ -43,9 +48,10 @@ class UnitMapper
 				throw new TempUnitExistsException($temp);
 			}
 			try {
-				$id               = $command->getUnit()->Id()->Id();
-				$this->map[$temp] = $command;
-				$this->temp[$id]  = $temp;
+				$id                 = $command->getUnit()->Id()->Id();
+				$this->map[$temp]   = $command;
+				$this->temp[$id]    = $temp;
+				$this->creator[$id] = $command->getCreator();
 			} catch (\Throwable $e) {
 				throw new TempUnitException($e->getMessage(), $e);
 			}
@@ -80,5 +86,13 @@ class UnitMapper
 			throw new TempUnitException('Unit ' . $unit->Id() . ' not found.');
 		}
 		return $this->map[$this->temp[$id]];
+	}
+
+	/**
+	 * Find the creator of a temp unit.
+	 */
+	public function getCreator(Unit $unit): ?Unit {
+		$id = $unit->Id()->Id();
+		return $this->creator[$id] ?? null;
 	}
 }

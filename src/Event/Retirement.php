@@ -64,7 +64,7 @@ final class Retirement extends AbstractEvent
 							}
 						}
 						foreach ($relations as $relation) {
-							$diplomacy->remove($relation);
+							$diplomacy->delete($relation);
 						}
 						$this->message(RetirementPartyMessage::class, $other)->e($party)->p($party->Name());
 					}
