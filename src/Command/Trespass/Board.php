@@ -84,4 +84,8 @@ final class Board extends UnitCommand
 			$this->message(BoardMessage::class)->e($newVessel);
 		}
 	}
+
+	protected function checkSize(): bool {
+		return true;
+	}
 }
