@@ -32,4 +32,8 @@ class Cruise extends AbstractTrip
 	protected function calculateKnowledge(): void {
 		$this->knowledge = $this->vessel->Ship()->Captain();
 	}
+
+	protected function calculateWeight(): void {
+		$this->weight = $this->vessel->Passengers()->Weight();
+	}
 }
