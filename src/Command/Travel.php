@@ -32,6 +32,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TravelSimulationMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelSpeedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelRegionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelVesselTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\TravelShipTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\Travel\Movement;
@@ -121,6 +122,7 @@ class Travel extends UnitCommand implements Activity
 		$weight   = $this->trip->Weight();
 		if ($movement === Movement::Ship) {
 			if ($weight > $this->trip->Capacity()) {
+				$this->message(TravelVesselTooHeavyMessage::class)->e($this->vessel);
 				$this->message(TravelShipTooHeavyMessage::class, $this->vessel);
 				return;
 			}
