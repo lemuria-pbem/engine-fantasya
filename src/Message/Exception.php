@@ -8,6 +8,8 @@ enum Exception
 
 	case InvalidId;
 
+	case PartyAlreadySet;
+
 	case TempIdExists;
 
 	case TempUnitNotMapped;

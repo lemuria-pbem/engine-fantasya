@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Engine\Fantasya\Combat\Besieger;
 use Lemuria\Engine\Fantasya\Combat\Campaign;
+use Lemuria\Engine\Fantasya\Exception\Command\PartyAlreadySetException;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Factory\CommandFactory;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
@@ -227,7 +228,7 @@ final class Context implements Reassignment
 	 */
 	public function setParty(Party $party): Context {
 		if ($this->party) {
-			throw new CommandParserException('Party has been set already.');
+			throw new PartyAlreadySetException();
 		}
 		$this->party = $party;
 		return $this;

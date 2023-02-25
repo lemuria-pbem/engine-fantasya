@@ -222,6 +222,7 @@
 	},
 	"exception": {
 		"InvalidId": "'$id' ist keine gültige Nummer.",
+		"PartyAlreadySet": "Der Partei-Befehl kann nur einmal ausgeführt werden.",
 		"TempIdExists": "Die Einheit TEMP $temp wurde bereits erstellt.",
 		"TempUnitNotMapped": "Die Einheit TEMP $temp existiert nicht.",
 		"UnitNotFound": "Die Einheit $id wurde nicht gefunden."
