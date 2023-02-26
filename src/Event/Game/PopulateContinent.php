@@ -54,7 +54,11 @@ final class PopulateContinent extends AbstractEvent
 
 	public final const CONTINENT = 'continent';
 
-	public final const CHANCES = 'changes';
+	public final const CHANCES = 'chances';
+
+	public final const SIZES = 'sizes';
+
+	public final const VARIATION = 'variation';
 
 	private const LANDSCAPE = [
 		Bear::class     => Forest::class,
@@ -82,10 +86,10 @@ final class PopulateContinent extends AbstractEvent
 		Bear::class     =>  7,
 		Ent::class      => 25,
 		Ghoul::class    => 30,
-		Goblin::class   => 10,
+		Goblin::class   => 15,
 		Skeleton::class => 50,
 		Kraken::class   => 25,
-		Wolf::class     =>  7,
+		Wolf::class     => 10,
 		Zombie::class   => 40
 	];
 
@@ -101,7 +105,7 @@ final class PopulateContinent extends AbstractEvent
 
 	private const MAX_SKILL = 5;
 
-	private const VARIATION = 0.33;
+	private const VARIATION_VALUE = 0.33;
 
 	/**
 	 * @var array<Create>
@@ -119,15 +123,17 @@ final class PopulateContinent extends AbstractEvent
 
 	protected function initialize(): void {
 		$monsters  = Party::get(Spawn::getPartyId(Type::Monster));
-		//$zombies   = Party::get(Id::fromId(Spawn::ZOMBIES)); //TODO 8.2
-		$zombies   = $monsters;
+		$zombies   = Party::get(Id::fromId(Spawn::ZOMBIES));
 		$continent = Continent::get(new Id($this->getOption(self::CONTINENT, 'int')));
 		$chances   = $this->hasOption(self::CHANCES) ? $this->getOption(self::CHANCES, 'array') : self::CHANCE;
+		$sizes     = $this->hasOption(self::SIZES) ? $this->getOption(self::SIZES, 'array') : self::SIZES;
+		$variation = $this->hasOption(self::VARIATION) ? $this->getOption(self::VARIATION, 'number') : self::VARIATION_VALUE;
 		foreach ($chances as $race => $chance) {
 			$party       = $race === Zombie::class ? $zombies : $monsters;
 			$regions     = [];
 			$monster     = self::createMonster($race);
 			$environment = self::createLandscape(self::LANDSCAPE[$race]);
+			$raceSize    = $sizes[$race] ?? self::SIZE[$race];
 			foreach ($continent->Landmass() as $region) {
 				if ($region->Landscape() === $environment) {
 					$regions[] = $region;
@@ -135,7 +141,7 @@ final class PopulateContinent extends AbstractEvent
 			}
 			$count = (int)ceil(count($regions) / $chance);
 			foreach (randArray($regions, $count) as $region) {
-				$size            = (int)round((1.0 + self::VARIATION * 2.0 * (randFloat() - 0.5)) * self::SIZE[$race]);
+				$size            = (int)round((1.0 + $variation * 2.0 * (randFloat() - 0.5)) * $raceSize);
 				$create          = new Create($party, $region);
 				$this->creates[] = $create->add(new Gang($monster, $size));
 			}
