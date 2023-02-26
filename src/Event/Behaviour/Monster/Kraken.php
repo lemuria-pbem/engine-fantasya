@@ -75,13 +75,13 @@ class Kraken extends AbstractBehaviour
 			$small = new Fleet();
 			foreach ($this->unit->Region()->Fleet() as $vessel) {
 				switch ($vessel->Ship()::class) {
-					case Galleon::class :
 					case Caravel::class :
+					case Galleon::class :
+					case Trireme::class :
 						$big->add($vessel);
 						break;
 					case Dragonship::class :
 					case Longboat::class :
-					case Trireme::class :
 						$small->add($vessel);
 						break;
 				}
