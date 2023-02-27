@@ -24,6 +24,10 @@ class Goblin extends AbstractBehaviour
 
 	protected const MAX_UNITS = 3;
 
+	protected const SCATTER_UNITS = 3;
+
+	protected const SCATTER_PERSONS = 31;
+
 	protected Reproduction $reproduction;
 
 	public function __construct(Unit $unit) {
@@ -60,6 +64,11 @@ class Goblin extends AbstractBehaviour
 			}
 		}
 		return $this->pickPocketOrRoam();
+	}
+
+	public function finish(): Behaviour {
+		parent::finish();
+		return $this->scatter(self::SCATTER_UNITS, self::SCATTER_PERSONS);
 	}
 
 	protected function calculateReproductionSize(): int {

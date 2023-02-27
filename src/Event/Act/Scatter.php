@@ -67,7 +67,7 @@ class Scatter implements Act
 	protected function checkPersons(): bool {
 		if ($this->persons !== null) {
 			$this->initGathering();
-			return $this->gathering->Size() >= $this->persons && $this->gathering->getFirst() === $this->unit;
+			return $this->gathering->count() > 1 && $this->gathering->Size() >= $this->persons && $this->gathering->getFirst() === $this->unit;
 		}
 		return false;
 	}
