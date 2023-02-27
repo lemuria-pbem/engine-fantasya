@@ -13,6 +13,7 @@ use Lemuria\Engine\Fantasya\Event\Act\Home;
 use Lemuria\Engine\Fantasya\Event\Act\PickPocket;
 use Lemuria\Engine\Fantasya\Event\Act\Prey;
 use Lemuria\Engine\Fantasya\Event\Act\Roam;
+use Lemuria\Engine\Fantasya\Event\Act\Scatter;
 use Lemuria\Engine\Fantasya\Event\Act\Seek;
 use Lemuria\Engine\Fantasya\Event\Act\Watch;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
@@ -169,6 +170,12 @@ abstract class AbstractBehaviour implements Behaviour
 			return $this->roam(true);
 		}
 		return $this->roam();
+	}
+
+	protected function scatter(int $minUnits = 2, int $minPersons = PHP_INT_MAX): AbstractBehaviour {
+		$scatter = new Scatter($this);
+		$scatter->setUnits($minUnits)->setPersons($minPersons)->act();
+		return $this;
 	}
 
 	protected function attackOnWatch(): AbstractBehaviour {

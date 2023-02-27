@@ -808,6 +808,7 @@
 		"RumorMessage": "Die Einheit $id erzählt ein Gerücht: $rumor",
 		"SawmillUnmaintainedMessage": "Die Einheit $id kann kein Holz in einem stillgelegten Sägewerk produzieren.",
 		"SawmillUnusableMessage": "Die Einheit $id kann kein Holz im Sägewerk produzieren, es fehlen Unterkünfte in einer Holzfällerhütte.",
+		"ScatterMessage": "Die Einheit $id wird die Region in der nächsten Runde verlassen.",
 		"ScrollEmptyMessage": "Die Einheit $id kann keinen Zauberspruch auf {der:$composition} $unicum entdecken.",
 		"ScrollWriteNothingMessage": "Die Einheit $id kann nichts auf die bereits beschriebene $composition $unicum schreiben.",
 		"ScrollWriteMessage": "Die Einheit $id beschreibt {das:$composition} $unicum mit dem Zauberspruch $spell.",
