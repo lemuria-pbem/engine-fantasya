@@ -940,6 +940,7 @@ class CommandFactory
 	}
 
 	public function isComposition(string $composition): bool {
+		$composition = str_replace('~', ' ', $composition);
 		return is_string($this->getCandidate($composition, $this->compositions, true));
 	}
 
@@ -961,6 +962,7 @@ class CommandFactory
 	 * @throws UnknownCommandException
 	 */
 	public function resource(string $artifact): Singleton {
+		$artifact  = str_replace('~', ' ', $artifact);
 		$commodity = $this->getCandidate($artifact, $this->commodities);
 		if ($commodity) {
 			$commodity = self::createCommodity($commodity);
@@ -1002,6 +1004,7 @@ class CommandFactory
 	 * @throws UnknownCommandException
 	 */
 	public function commodity(string $commodity): Commodity {
+		$commodity      = str_replace('~', ' ', $commodity);
 		$commodityClass = $this->identifySingleton($commodity, $this->commodities);
 		return self::createCommodity($commodityClass);
 	}
@@ -1023,6 +1026,7 @@ class CommandFactory
 	 * @throws UnknownCommandException
 	 */
 	public function composition(string $composition): Composition {
+		$composition      = str_replace('~', ' ', $composition);
 		$compositionClass = $this->identifySingleton($composition, $this->compositions);
 		return self::createComposition($compositionClass);
 	}
@@ -1033,6 +1037,7 @@ class CommandFactory
 	 * @throws UnknownCommandException
 	 */
 	public function spell(string $spell): Spell {
+		$spell      = str_replace('~', ' ', $spell);
 		$spellClass = $this->identifySingleton($spell, $this->spells);
 		return self::createSpell($spellClass);
 	}
