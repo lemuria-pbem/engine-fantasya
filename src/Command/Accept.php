@@ -25,6 +25,8 @@ use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferAmountMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferPriceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferRemovedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferReserveMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferUnableMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptSoldMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptUnsatisfiableTradeMessage;
 use Lemuria\Exception\ItemException;
@@ -307,16 +309,30 @@ final class Accept extends UnitCommand
 	}
 
 	private function checkPieces(): ?Deal {
+		$unit    = $this->trade->Unit();
 		$goods   = $this->trade->Goods();
 		$maximum = $goods->IsAdapting() ? $this->getAvailableMaximum(): $goods->Maximum();
 		if ($this->amount < $goods->Minimum() || $this->amount > $maximum) {
 			if ($this->trade->Trade() === Trade::OFFER) {
-				$this->message(AcceptOfferAmountMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+				$this->message(AcceptOfferAmountMessage::class)->e($this->trade)->e($unit, AcceptOfferAmountMessage::UNIT);
 			} else {
-				$this->message(AcceptDemandAmountMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+				$this->message(AcceptDemandAmountMessage::class)->e($this->trade)->e($unit, AcceptOfferAmountMessage::UNIT);
 			}
 			return null;
 		}
+
+		if ($this->trade->Trade() === Trade::OFFER) {
+			$commodity = $goods->Commodity();
+			$inventory = $unit->Inventory();
+			$reserve   = $inventory[$commodity];
+			if ($reserve->Count() < $this->amount) {
+				$demand = new Quantity($commodity, $this->amount);
+				$this->message(AcceptOfferReserveMessage::class)->e($this->trade)->s($commodity)->e($unit, AcceptOfferAmountMessage::UNIT);
+				$this->message(AcceptOfferUnableMessage::class, $unit)->e($this->trade)->i($demand)->e($this->unit, AcceptOfferAmountMessage::UNIT);
+				return null;
+			}
+		}
+
 		return $goods;
 	}
 
