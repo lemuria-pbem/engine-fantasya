@@ -21,6 +21,7 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg as GriffineggModel;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -59,22 +60,23 @@ final class Griffinegg extends AllocationCommand implements Activity
 	protected function initialize(): void {
 		if ($this->demand > 0) {
 			$resources = $this->unit->Region()->Resources();
-			$eggs      = $resources[$this->griffinegg]->Count();
-			if ($eggs > 0) {
-				if ($this->demand > $eggs) {
-					$this->message(GriffineggOnlyMessage::class)->p($eggs);
+			$eggs      = $resources[$this->griffinegg];
+			$eggCount  = $resources[$this->griffinegg]->Count();
+			if ($eggCount > 0) {
+				if ($this->demand > $eggCount) {
+					$this->message(GriffineggOnlyMessage::class)->i($eggs);
 				}
-				$this->demand = min($this->demand, $eggs);
+				$this->demand = min($this->demand, $eggCount);
 				$chance       = 1.0;
 				$personRate   = $resources[Griffin::class]->Count() / $this->unit->Size();
 				if ($personRate > 0) {
 					$camouflage = $this->calculus()->knowledge(Camouflage::class)->Level();
 					$chance     = $camouflage > 0 ? $this->demand * $personRate / $camouflage : 0.0;
 				}
-				$this->message(GriffineggChanceMessage::class)->p($eggs)->p($chance, GriffineggChanceMessage::CHANCE);
-				if (!randChance($chance)) {
+				$this->message(GriffineggChanceMessage::class)->i($eggs)->p($chance, GriffineggChanceMessage::CHANCE);
+				if (randChance($chance)) {
 					$this->demand = 0;
-					$this->attack($eggs);
+					$this->attack($eggCount);
 					$this->message(GriffineggAttackedMessage::class);
 				}
 			} else {
@@ -86,20 +88,22 @@ final class Griffinegg extends AllocationCommand implements Activity
 
 	protected function run(): void {
 		parent::run();
-		$this->resources->rewind();
-		$quantity = $this->resources->current();
-		$eggs     = $quantity->Count();
-		$this->unit->Inventory()->add($quantity);
-		if ($eggs < $this->demand) {
-			$this->message(GriffineggStealOnlyMessage::class)->p($eggs);
-		} else {
-			$this->message(GriffineggStealMessage::class)->p($eggs);
+		if ($this->demand > 0) {
+			$this->resources->rewind();
+			$quantity = $this->resources->current();
+			$eggs     = $quantity->Count();
+			$this->unit->Inventory()->add($quantity);
+			if ($eggs < $this->demand) {
+				$this->message(GriffineggStealOnlyMessage::class)->i($quantity);
+			} else {
+				$this->message(GriffineggStealMessage::class)->i($quantity);
+			}
 		}
 	}
 
 	protected function createDemand(): void {
 		if ($this->demand > 0) {
-			$this->resources[] = new Quantity($this->griffinegg, $this->demand);
+			$this->resources->add(new Quantity($this->griffinegg, $this->demand));
 		}
 	}
 
@@ -117,12 +121,13 @@ final class Griffinegg extends AllocationCommand implements Activity
 			$unit->setName($griffins->Count() > 1 ? 'Greife' : 'Greif');
 			/** @var Race $griffin */
 			$griffin = $griffins->Commodity();
-			$effect->setGriffins($unit->setRace($griffin)->setSize($griffins->Count()));
+			$effect->setGriffins($unit->setRace($griffin)->setSize($griffins->Count())->setBattleRow(BattleRow::Aggressive));
 			$party = Party::get(Spawn::getPartyId(Type::Monster));
 			$party->People()->add($unit);
 			$region->Residents()->add($unit);
 			$unit->Inventory()->add(new Quantity($this->griffinegg, $eggs));
 		}
+		State::getInstance()->injectIntoTurn($effect);
 
 		$id     = $this->unit->Id();
 		$attack = new AttackCommand(new Phrase('ATTACKIEREN ' . $id), $this->context);

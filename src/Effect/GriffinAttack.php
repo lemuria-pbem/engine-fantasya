@@ -26,9 +26,9 @@ final class GriffinAttack extends AbstractRegionEffect
 
 	protected function run(): void {
 		if ($this->griffins) {
+			Lemuria::Catalog()->reassign($this->griffins);
 			$this->griffins->Region()->Residents()->remove($this->griffins);
 			$this->griffins->Party()->People()->remove($this->griffins);
-			Lemuria::Catalog()->reassign($this->griffins);
 			Lemuria::Catalog()->remove($this->griffins);
 		}
 		Lemuria::Score()->remove($this);
