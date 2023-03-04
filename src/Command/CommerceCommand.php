@@ -32,6 +32,8 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	use CommerceActivityTrait;
 	use SiegeTrait;
 
+	private const ALL = ['alle', 'alles'];
+
 	protected Resources $goods;
 
 	protected int $threshold;
@@ -162,7 +164,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 			$luxury       = $this->phrase->getParameter();
 		} elseif ($n === 2) {
 			$parameter = $this->phrase->getParameter();
-			if (in_array(strtolower($parameter), ['alle', 'alles'])) {
+			if (in_array(strtolower($parameter), self::ALL)) {
 				$demand       = $this->getMaximum();
 				$this->demand = PHP_INT_MAX;
 			} else {
