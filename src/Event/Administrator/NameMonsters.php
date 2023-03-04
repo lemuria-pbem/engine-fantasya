@@ -12,6 +12,9 @@ use Lemuria\Id;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 
+/**
+ * This event fixes empty names of monsters.
+ */
 final class NameMonsters extends AbstractEvent
 {
 	private const PARTY = 'm';

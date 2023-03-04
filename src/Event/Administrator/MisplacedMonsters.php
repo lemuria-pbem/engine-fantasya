@@ -12,7 +12,7 @@ use Lemuria\Model\Fantasya\Landscape\Lake;
 use Lemuria\Model\Fantasya\Region;
 
 /**
- * This event converts the landscape of lakes to the new Lake.
+ * This event removes monsters from regions that should not be at that landscape.
  */
 final class MisplacedMonsters extends AbstractEvent
 {

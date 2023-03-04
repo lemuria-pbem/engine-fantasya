@@ -13,7 +13,7 @@ use Lemuria\Model\Dictionary;
 use Lemuria\Model\Fantasya\Region;
 
 /**
- * This event searches for overcrowded constructions.
+ * This event is a one-time fix for regions that have no individual name.
  */
 final class LocationNames extends AbstractEvent
 {

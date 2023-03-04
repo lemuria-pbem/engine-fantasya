@@ -20,6 +20,12 @@ use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
 
+/**
+ * This event is a one-time fix for monster parties and monster units:
+ *
+ * - Fix party race.
+ * - Add perception talent.
+ */
 final class MonsterParties extends AbstractEvent
 {
 	use BuilderTrait;
