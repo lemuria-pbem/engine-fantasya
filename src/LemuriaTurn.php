@@ -348,7 +348,7 @@ class LemuriaTurn implements Turn
 		$context = new Context($this->state);
 		Lemuria::Catalog()->addReassignment($context);
 		$context->setParty($party);
-		foreach ($party->People() as $unit) {
+		foreach ($party->People()->getClone() as $unit) {
 			$command = $this->getDefaultActivity($unit, $context->setUnit($unit));
 			if ($command) {
 				$this->enqueue($command);

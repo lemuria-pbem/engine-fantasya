@@ -27,7 +27,7 @@ final class Monster extends AbstractEvent
 		$count = 0;
 		foreach (Party::all() as $party) {
 			if ($party->Type() === Type::Monster) {
-				foreach ($party->People() as $unit) {
+				foreach ($party->People()->getClone() as $unit) {
 					if ($unit->Size() > 0) {
 						$race = $unit->Race();
 						if ($race instanceof MonsterModel) {
