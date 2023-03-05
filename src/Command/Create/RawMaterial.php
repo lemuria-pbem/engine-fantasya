@@ -176,8 +176,12 @@ class RawMaterial extends AllocationCommand implements Activity
 	}
 
 	private function createMultipleDemand(int $factor = 1): void {
-		$talent           = $this->getRequiredTalent();
-		$this->knowledge  = $this->getProductivity($talent);
+		$talent          = $this->getRequiredTalent();
+		$this->knowledge = $this->getProductivity($talent);
+		if ($this->knowledge->Level() < $talent->Level()) {
+			$this->knowledge = new Ability($this->knowledge->Talent(), 0);
+		}
+
 		$size             = $this->unit->Size();
 		$production       = (int)floor($this->potionBoost($size) * $size * $this->knowledge->Level() / $talent->Level());
 		$this->production = $this->reduceByWorkload($production);
