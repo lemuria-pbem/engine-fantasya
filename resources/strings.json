@@ -289,6 +289,7 @@
 		"AcceptOfferReserveMessage": "Die Einheit $unit hat nicht mehr die gewünschte Menge an $commodity für das Angebot mit der Nummer $trade übrig.",
 		"AcceptOfferUnableMessage": "Die Einheit $unit wollte $demand des Angebots mit der Nummer $trade kaufen, aber unser Vorrat hat nicht ausgereicht.",
 		"AcceptSoldMessage": "Die Einheit $id verkauft $quantity für $payment an die Einheit $unit.",
+		"AcceptTradeUnableMessage": "Die Einheit $customer wollte den Handel mit der Nummer $trade abschließen, aber wir konnten nicht liefern.",
 		"AcceptUnsatisfiableTradeMessage": "Der Händler $merchant kann das Handelsangebot mit der Nummer $trade nicht mehr liefern.",
 		"AcquaintanceMessage": "Wir haben zum ersten Mal ein Mitglied der Partei $party getroffen.",
 		"AcquaintanceTellMessage": "Wir haben diplomatische Beziehungen zur Partei $party aufgenommen und der Einheit $unit von unserem Volk erzählt.",

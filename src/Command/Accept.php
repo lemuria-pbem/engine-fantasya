@@ -28,6 +28,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferRemovedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferReserveMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferUnableMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptSoldMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AcceptTradeUnableMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptUnsatisfiableTradeMessage;
 use Lemuria\Exception\ItemException;
 use Lemuria\Exception\ItemSetException;
@@ -117,6 +118,7 @@ final class Accept extends UnitCommand
 		} elseif ($this->status === SalesModel::UNSATISFIABLE && !$this->context->getTurnOptions()->IsSimulation()) {
 			$merchant = $this->trade->Unit();
 			$this->message(AcceptUnsatisfiableTradeMessage::class, $this->unit)->e($this->trade)->e($merchant, AcceptUnsatisfiableTradeMessage::MERCHANT);
+			$this->message(AcceptTradeUnableMessage::class, $merchant)->e($this->trade)->e($this->unit, AcceptTradeUnableMessage::CUSTOMER);
 		} else {
 			$this->parseParameters();
 			if ($this->trade->Goods()->IsVariable()) {
