@@ -1046,7 +1046,7 @@ class CommandFactory
 	 * Check if a direction is route stop.
 	 */
 	public function isRouteStop(string $direction): bool {
-		return str_starts_with('pause', strtolower($direction));
+		return str_starts_with(strtolower($direction), 'pause');
 	}
 
 	/**
