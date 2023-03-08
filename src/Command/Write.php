@@ -4,12 +4,16 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Factory\OperatorActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Factory\UnicumTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\WriteNoCompositionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\WriteNoUnicumMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\WriteUnsupportedMessage;
+use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Composition;
 use Lemuria\Model\Fantasya\Practice;
+use Lemuria\Model\Reassignment;
 
 /**
  * This command is used to write to an Unicum.
@@ -17,9 +21,10 @@ use Lemuria\Model\Fantasya\Practice;
  * - SCHREIBEN <Unicum> ...
  * - SCHREIBEN <composition> <Unicum> ...
  */
-final class Write extends UnitCommand implements Activity, Operator
+final class Write extends UnitCommand implements Activity, Operator, Reassignment
 {
 	use OperatorActivityTrait;
+	use ReassignTrait;
 	use UnicumTrait;
 
 	protected bool $preventDefault = true;
@@ -45,5 +50,13 @@ final class Write extends UnitCommand implements Activity, Operator
 		} else {
 			$this->message(WriteUnsupportedMessage::class)->e($this->unicum)->s($this->unicum->Composition());
 		}
+	}
+
+	protected function checkReassignmentDomain(Domain $domain): bool {
+		return $domain === Domain::Unicum;
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->getReassignPhraseForParameter($this->argumentIndex - 1, $old, $new);
 	}
 }

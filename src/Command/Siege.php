@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Effect\SiegeEffect;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\SiegeDamageMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SiegeDestroyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SiegeLeaveMessage;
@@ -16,21 +17,24 @@ use Lemuria\Engine\Fantasya\Message\Unit\SiegeNotOurselvesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SiegeUnguardMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Talent\Catapulting;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Reassignment;
 
 /**
  * Siege constructions.
  *
  * - BELAGERN <construction>
  */
-final class Siege extends UnitCommand
+final class Siege extends UnitCommand implements Reassignment
 {
 	use BuilderTrait;
+	use ReassignTrait;
 
 	private ?Construction $construction = null;
 
@@ -119,6 +123,10 @@ final class Siege extends UnitCommand
 			$this->context->getSiege($this->construction)->Besiegers()->add($this->unit);
 			parent::commitCommand($command);
 		}
+	}
+
+	protected function checkReassignmentDomain(Domain $domain): bool {
+		return $domain === Domain::Construction;
 	}
 
 	private function useCatapults(Unit $unit): void {

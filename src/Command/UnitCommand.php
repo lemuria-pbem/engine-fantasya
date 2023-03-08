@@ -14,6 +14,7 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Entity;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Reassignment;
 
 /**
  * Base class for all unit commands.
@@ -56,6 +57,9 @@ abstract class UnitCommand extends AbstractCommand
 		parent::execute();
 		if ($this instanceof Activity) {
 			$this->context->getProtocol($this->unit)->addNewDefaults($this);
+			if ($this instanceof Reassignment) {
+				Lemuria::Catalog()->addReassignment($this);
+			}
 		}
 		return $this;
 	}

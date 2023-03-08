@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Combat\Place;
 use Lemuria\Engine\Fantasya\Combat\Side;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Region\AttackBattleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackAllyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackCancelMessage;
@@ -29,15 +30,17 @@ use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Reassignment;
 
 /**
  * Attacks units.
  *
  * - ATTACKIEREN <Unit>...
  */
-final class Attack extends UnitCommand
+final class Attack extends UnitCommand implements Reassignment
 {
 	use CamouflageTrait;
+	use ReassignTrait;
 
 	/**
 	 * @var array<int, array>

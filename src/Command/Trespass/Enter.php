@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command\Trespass;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\FreeSpaceTrait;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterDeniedMessage;
@@ -16,12 +17,15 @@ use Lemuria\Engine\Fantasya\Message\Unit\EnterTooLargeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
+use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building\Market;
 use Lemuria\Model\Fantasya\Building\Monument;
 use Lemuria\Model\Fantasya\Building\Ruin;
 use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Reassignment;
 
 /**
  * A unit enters a construction using the Enter command.
@@ -29,9 +33,10 @@ use Lemuria\Model\Fantasya\Relation;
  * - BETRETEN <Construction>
  * - BETRETEN Burg|Gebaeude|Gebäude <Construction>
  */
-final class Enter extends UnitCommand
+final class Enter extends UnitCommand implements Reassignment
 {
 	use FreeSpaceTrait;
+	use ReassignTrait;
 	use SiegeTrait;
 
 	public final const FORBIDDEN = [Monument::class, Ruin::class, Signpost::class];
@@ -102,5 +107,13 @@ final class Enter extends UnitCommand
 
 	protected function checkSize(): bool {
 		return true;
+	}
+
+	protected function checkReassignmentDomain(Domain $domain): bool {
+		return $domain === Domain::Construction;
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->getReassignPhraseForParameter($this->phrase->count(), $old, $new);
 	}
 }

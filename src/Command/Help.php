@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyMessage;
@@ -13,10 +14,13 @@ use Lemuria\Engine\Fantasya\Message\Unit\HelpRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpRegionNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpSelfMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpUnknownPartyMessage;
+use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Exception\UnknownPartyException;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Reassignment;
 
 /**
  * This command is used to set diplomatic relations.
@@ -38,8 +42,10 @@ use Lemuria\Model\Fantasya\Relation;
  * - HELFEN 0|<Party> Tarne|Tarnen|Tarnung [Nicht|Region] [Region|Nicht]
  * - HELFEN 0|<Party> Versorge|Versorgen|Versorgung [Nicht|Region] [Region|Nicht]
  */
-final class Help extends UnitCommand
+final class Help extends UnitCommand implements Reassignment
 {
+	use ReassignTrait;
+
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n < 2) {
@@ -94,6 +100,14 @@ final class Help extends UnitCommand
 
 	protected function checkSize(): bool {
 		return true;
+	}
+
+	protected function checkReassignmentDomain(Domain $domain): bool {
+		return $domain === Domain::Party;
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->getReassignPhraseForParameter(1, $old, $new);
 	}
 
 	private function getAgreement(string $agreement): ?int {

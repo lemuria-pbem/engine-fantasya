@@ -7,12 +7,14 @@ use Lemuria\Engine\Fantasya\Effect\ContactEffect;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\ContactTrait;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\ContactMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ContactNotFoundMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Reassignment;
 
 /**
  * This command is used to set temporary diplomatic relations that allow a unit to earn silver, produce resources,
@@ -20,9 +22,10 @@ use Lemuria\Model\Fantasya\Unit;
  *
  * - KONTAKTIEREN <Unit> [<Unit> ...]
  */
-final class Contact extends UnitCommand
+final class Contact extends UnitCommand implements Reassignment
 {
 	use ContactTrait;
+	use ReassignTrait;
 
 	protected function run(): void {
 		$n = $this->phrase->count();

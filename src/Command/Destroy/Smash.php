@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashDamageConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SmashDamageVesselMessage;
@@ -26,6 +27,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\SmashRoadGuardedMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Id;
 use Lemuria\Lemuria;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity\Stone;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Quantity;
@@ -33,6 +35,7 @@ use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Requirement;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Roadmaking;
+use Lemuria\Model\Reassignment;
 
 /**
  * Implementation of command ZERSTÖREN for constructions and vessels.
@@ -44,9 +47,10 @@ use Lemuria\Model\Fantasya\Talent\Roadmaking;
  * - ZERSTÖREN Schiff <vessel>
  * - ZERSTÖREN Straße|Strasse <direction>
  */
-final class Smash extends UnitCommand implements Activity
+final class Smash extends UnitCommand implements Activity, Reassignment
 {
 	use ModifiedActivityTrait;
+	use ReassignTrait;
 	use WorkloadTrait;
 
 	private ?Construction $fromOutside;
@@ -80,6 +84,18 @@ final class Smash extends UnitCommand implements Activity
 			default :
 				throw new UnknownCommandException($this);
 		}
+	}
+
+	protected function checkReassignmentDomain(Domain $domain): bool {
+		return match (mb_strtolower($this->phrase->getParameter())) {
+			'burg', 'gebäude', 'gebaeude' => $domain === Domain::Construction,
+			'schiff'                      => $domain === Domain::Vessel,
+			default                       => false,
+		};
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->getReassignPhraseForParameter($this->phrase->count(), $old, $new);
 	}
 
 	private function prepareSmashFromOutside(): ?Construction {

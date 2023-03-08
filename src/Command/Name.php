@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Construction\NameConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\NameOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Party\NameContinentMessage;
@@ -19,8 +20,11 @@ use Lemuria\Engine\Fantasya\Message\Unit\NameNotInConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameNotInVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\NameCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\NameVesselMessage;
+use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Building\Monument;
+use Lemuria\Model\Reassignment;
 
 /**
  * The Name command is used to set the name of a unit, an unicum it possesses or the construction, region or vessel it
@@ -34,8 +38,12 @@ use Lemuria\Model\Fantasya\Building\Monument;
  * - NAME Kontinent|Insel <Name>
  * - NAME Gegenstand <ID> <Name>
  */
-final class Name extends UnitCommand
+final class Name extends UnitCommand implements Reassignment
 {
+	use ReassignTrait;
+
+	private const UNICUM = 'gegenstand';
+
 	public static function trimName(string $name): string {
 		$name = ltrim($name, "\"'`^°!$%&/()=?{[]}\\+~#<>|,.-;:_ ");
 		return rtrim($name, "\"'`^°§$&/(={[]}\\~#<>|,-;:_ ");
@@ -76,7 +84,7 @@ final class Name extends UnitCommand
 			case 'insel' :
 				$this->setContinentName($name);
 				break;
-			case 'gegenstand' :
+			case self::UNICUM :
 				if ($n < 3) {
 					throw new InvalidCommandException('No name given.');
 				}
@@ -89,6 +97,17 @@ final class Name extends UnitCommand
 
 	protected function checkSize(): bool {
 		return true;
+	}
+
+	protected function checkReassignmentDomain(Domain $domain): bool {
+		return $domain === Domain::Unicum;
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		if (strtolower($this->phrase->getParameter()) === self::UNICUM) {
+			return $this->getReassignPhraseForParameter(2, $old, $new);
+		}
+		return null;
 	}
 
 	private function renameParty(string $name): void {

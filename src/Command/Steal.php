@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\OneActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Party\StealRevealedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\StealDiscoveredMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\StealMessage;
@@ -22,16 +23,18 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Perception;
+use Lemuria\Model\Reassignment;
 
 /**
  * Implementation of STEHLEN (steal).
  *
  * - STEHLEN <unit>
  */
-final class Steal extends UnitCommand implements Activity
+final class Steal extends UnitCommand implements Activity, Reassignment
 {
 	use BuilderTrait;
 	use OneActivityTrait;
+	use ReassignTrait;
 
 	private const SILVER = 50;
 
@@ -89,5 +92,9 @@ final class Steal extends UnitCommand implements Activity
 		} else {
 			$this->message(StealNothingMessage::class)->e($unit);
 		}
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->getReassignPhraseForParameter(1, $old, $new);
 	}
 }

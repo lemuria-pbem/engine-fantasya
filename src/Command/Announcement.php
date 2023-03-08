@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Announcement as Announce;
 use Lemuria\Engine\Fantasya\Message\Construction\AnnouncementConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Party\AnnouncementPartyMessage;
@@ -23,10 +24,13 @@ use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementToVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AnnouncementUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\AnnouncementVesselMessage;
 use Lemuria\Engine\Fantasya\Outlook;
+use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
+use Lemuria\Model\Reassignment;
 
 /**
  * Send a message to a unit, a party or all units in a region, construction or vessel.
@@ -37,8 +41,12 @@ use Lemuria\Model\Fantasya\Vessel;
  * - BOTSCHAFT Schiff <vessel> <text>
  * - BOTSCHAFT Region <text>
  */
-final class Announcement extends UnitCommand
+final class Announcement extends UnitCommand implements Reassignment
 {
+	use ReassignTrait;
+
+	private int $reassignParameter;
+
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n >= 2) {
@@ -71,6 +79,33 @@ final class Announcement extends UnitCommand
 		} else {
 			throw new UnknownCommandException($this);
 		}
+	}
+
+	protected function checkReassignmentDomain(Domain $domain): bool {
+		$n = $this->phrase->count();
+		if ($n >= 2) {
+			$this->reassignParameter = 2;
+			switch (mb_strtolower($this->phrase->getParameter())) {
+				case 'einheit' :
+					return $domain === Domain::Unit;
+				case 'partei' :
+					return $domain === Domain::Party;
+				case 'burg' :
+				case 'gebäude' :
+				case 'gebaeude' :
+					return $domain === Domain::Construction;
+				case 'schiff' :
+					return $domain === Domain::Vessel;
+				default :
+					$this->reassignParameter = 1;
+					return $domain === Domain::Unit;
+			}
+		}
+		return false;
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->getReassignPhraseForParameter($this->reassignParameter, $old, $new);
 	}
 
 	private function sendToUnit(Unit $unit, string $message): void {

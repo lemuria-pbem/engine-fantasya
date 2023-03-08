@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\ContactTrait;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Everything;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveNoInventoryMessage;
@@ -22,12 +23,14 @@ use Lemuria\Engine\Fantasya\Message\Unit\GiveReceivedFromForeignMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveReceivedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveRejectedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveSiegeMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Container;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Reassignment;
 
 /**
  * Implementation of command GIB.
@@ -40,10 +43,11 @@ use Lemuria\Model\Fantasya\Resources;
  * - GIB <Unit> Alles <commodity>
  * - GIB <Unit> <amount> <commodity>
  */
-final class Give extends UnitCommand
+final class Give extends UnitCommand implements Reassignment
 {
 	use ContactTrait;
 	use GiftTrait;
+	use ReassignTrait;
 	use SiegeTrait;
 
 	private Resources $resources;
@@ -108,6 +112,10 @@ final class Give extends UnitCommand
 
 	protected function checkSize(): bool {
 		return true;
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->getReassignPhraseForParameter(1, $old, $new);
 	}
 
 	/**

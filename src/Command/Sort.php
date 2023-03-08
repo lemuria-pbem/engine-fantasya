@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\SortAfterCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortAfterInVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortAfterMessage;
@@ -21,7 +22,9 @@ use Lemuria\Engine\Fantasya\Message\Unit\SortLastMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortNotInRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortWithForeignerMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SortWithItselfMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Reassignment;
 use Lemuria\Reorder;
 
 /**
@@ -33,8 +36,10 @@ use Lemuria\Reorder;
  * - SORTIEREN Hinter|Nach <Unit>
  * - SORTIEREN Austausch|Austauschen|Auswechseln|Mit|Tausch|Tausche|Tauschen|Wechsel|Wechseln <Unit>
  */
-final class Sort extends UnitCommand
+final class Sort extends UnitCommand implements Reassignment
 {
+	use ReassignTrait;
+
 	protected function run(): void {
 		$with = null;
 		$n    = $this->phrase->count();
@@ -90,6 +95,10 @@ final class Sort extends UnitCommand
 			default :
 				throw new InvalidCommandException($this, 'Invalid type "' . $type . '".');
 		}
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->phrase->count() > 1 ? $this->getReassignPhraseForParameter(2, $old, $new) : null;
 	}
 
 	/**
