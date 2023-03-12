@@ -38,7 +38,7 @@ final class Siege extends UnitCommand
 
 	protected function initialize(): void {
 		parent::initialize();
-		if ($this->unit->BattleRow() <= BattleRow::Bystander) {
+		if ($this->unit->BattleRow()->value <= BattleRow::Bystander->value) {
 			$this->message(SiegeNotFightingMessage::class);
 			return;
 		}

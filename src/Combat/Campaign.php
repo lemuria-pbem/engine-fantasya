@@ -156,7 +156,7 @@ class Campaign
 			$party = Party::get(new Id($partyId));
 			if ($party->Type() === Type::Player) {
 				foreach ($this->intelligence->getUnits($party) as $unit) {
-					if ($unit->BattleRow() >= BattleRow::Defensive->value) {
+					if ($unit->BattleRow()->value >= BattleRow::Defensive->value) {
 						$id = $unit->Id()->Id();
 						if (!isset($this->defenders[$id]) && $this->canDefend($unit)) {
 							$battle = $this->battle($unit);
@@ -178,7 +178,7 @@ class Campaign
 						$party = Party::get(new Id($partyId));
 						if ($ally->Diplomacy()->has(Relation::COMBAT, $party)) {
 							foreach ($this->intelligence->getUnits($ally) as $unit) {
-								if ($unit->BattleRow() >= BattleRow::Defensive->value && $this->canDefend($unit)) {
+								if ($unit->BattleRow()->value >= BattleRow::Defensive->value && $this->canDefend($unit)) {
 									$battle = $this->battle($unit);
 									$battle->addDefender($unit);
 									Lemuria::Log()->debug($unit . ' gets drawn into battle as ally.');
