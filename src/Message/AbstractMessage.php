@@ -112,16 +112,19 @@ abstract class AbstractMessage implements MessageType
 		return $this->getTranslatedName($property, $name, 'composition', $index);
 	}
 
-	protected function item(string $property, string $name): ?string {
+	protected function item(string $property, string $name, ?int $index = null): ?string {
 		if ($property === $name) {
 			$commodity = $this->$name->Commodity();
 			if ($commodity instanceof Container) {
-				return $this->translateKey('kind.' . $commodity->Type()->name);
+				return $this->translateKey('kind.' . $commodity->Type()->name, $index);
 			}
 
 			$resource = getClass($commodity);
 			$count    = $this->$name->Count();
-			$item     = $this->translateKey('resource.' . $resource, $count > 1 ? 1 : 0);
+			if ($index === null) {
+				$index = $count > 1 ? 1 : 0;
+			}
+			$item = $this->translateKey('resource.' . $resource, $index);
 			if ($item) {
 				return $count < PHP_INT_MAX ? number($count) . ' ' . $item : $item;
 			}

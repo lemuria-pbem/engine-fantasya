@@ -12,6 +12,7 @@ use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Message\Unit\GriffineggAttackedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GriffineggAttackerMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GriffineggChanceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GriffineggNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GriffineggOnlyMessage;
@@ -21,6 +22,7 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
+use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg as GriffineggModel;
@@ -31,6 +33,7 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Race;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
+use Lemuria\Model\Fantasya\Talent\Tactics;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -44,6 +47,8 @@ final class Griffinegg extends AllocationCommand implements Activity
 {
 	use BuilderTrait;
 	use DefaultActivityTrait;
+
+	private const TACTICS = 4;
 
 	private GriffineggModel $griffinegg;
 
@@ -125,7 +130,9 @@ final class Griffinegg extends AllocationCommand implements Activity
 			$party = Party::get(Spawn::getPartyId(Type::Monster));
 			$party->People()->add($unit);
 			$region->Residents()->add($unit);
+			$unit->Knowledge()->add(new Ability(self::createTalent(Tactics::class), Ability::getExperience(self::TACTICS)));
 			$unit->Inventory()->add(new Quantity($this->griffinegg, $eggs));
+			$this->message(GriffineggAttackerMessage::class, $unit)->e($region)->i($griffins);
 		}
 		State::getInstance()->injectIntoTurn($effect);
 
