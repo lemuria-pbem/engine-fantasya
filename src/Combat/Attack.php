@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use Lemuria\Model\Fantasya\Commodity\Weapon\Halberd;
 use function Lemuria\randChance;
 use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Calculus;
@@ -28,6 +27,7 @@ use Lemuria\Model\Fantasya\Commodity\Protection\Woodshield;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Halberd;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\SkewedCatapult;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\UngirtBow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\UngirtCrossbow;
@@ -91,8 +91,6 @@ class Attack
 
 	protected const INFECTION = 0.3;
 
-	protected int $round = 0;
-
 	private float $flight;
 
 	private static ?BattleSpell $gustOfWind = null;
@@ -143,18 +141,15 @@ class Attack
 		$weapon      = $this->combatant->Weapon();
 		$weaponSkill = $this->combatant->WeaponSkill();
 		$interval    = $weapon->Interval();
-		if ($attacker->quickening > 0) {
+		$quickening  = $attacker->useQuickening();
+		if ($quickening > 0) {
 			$interval = min(1, (int)ceil($interval / 2)); // Reduce interval for quickened fighters by half.
 			if (!$weaponSkill->isSiege()) {
 				$attacks = 2; // Allow two attacks for quickened fighters that have a normal weapon.
 			}
-			$keepChance = $attacker->quickening / ($this->round + 1);
-			if (!randChance($keepChance)) {
-				$attacker->quickening = 0; // Stop Quickening after minimum duration with increasing chance.
-			}
 		}
 
-		if ($this->round++ % $interval > 0) {
+		if ($attacker->round % $interval > 0) {
 			// Lemuria::Log()->debug('Fighter ' . $this->combatant->getId($fA, true) . ' is not ready yet.');
 			return null;
 		}

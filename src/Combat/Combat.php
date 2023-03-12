@@ -652,6 +652,7 @@ class Combat
 			$charge->setDefender($fD);
 		}
 
+		$attacker->addRound();
 		return $charge->Damage();
 	}
 

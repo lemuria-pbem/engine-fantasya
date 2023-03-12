@@ -108,4 +108,13 @@ class Rank implements \ArrayAccess, \Countable, \Iterator
 	public function add(Combatant $combatant): void {
 		$this->combatants[] = $combatant;
 	}
+
+	public function addRound(): Rank {
+		foreach ($this->combatants as $combatant) {
+			foreach ($combatant->fighters as $fighter) {
+				$fighter->addRound();
+			}
+		}
+		return $this;
+	}
 }
