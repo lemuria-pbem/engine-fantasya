@@ -85,6 +85,7 @@ final class Griffinegg extends AllocationCommand implements Activity
 					$this->message(GriffineggAttackedMessage::class);
 				}
 			} else {
+				$this->demand = 0;
 				$this->message(GriffineggNoneMessage::class);
 			}
 		}
