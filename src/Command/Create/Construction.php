@@ -11,6 +11,7 @@ use Lemuria\Engine\Fantasya\Factory\MarketBuilder;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyBuilding;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyCastle;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
+use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionBuildMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionCreateMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionDependencyMessage;
@@ -20,6 +21,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\ConstructionOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionResourcesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionUnableMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
@@ -54,6 +56,8 @@ use Lemuria\Model\Fantasya\Requirement;
  */
 final class Construction extends AbstractProduct
 {
+	use ModifiedActivityTrait;
+
 	private const EXTENSIONS = [
 		Market::class => [MarketExtension::class],
 		Port::class   => [Fee::class, Duty::class],
@@ -122,6 +126,7 @@ final class Construction extends AbstractProduct
 				}
 			}
 			$this->addToWorkload($yield);
+			$this->newDefault = new Construction(new Phrase('MACHEN Gebäude'), $this->context, $this->job);
 			$this->initializeMarket($construction);
 			$this->addConstructionExtensions($construction);
 			$this->addConstructionEffects($construction);

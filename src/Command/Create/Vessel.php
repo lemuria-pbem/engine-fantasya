@@ -99,7 +99,7 @@ final class Vessel extends AbstractProduct
 					$this->message(VesselFinishedMessage::class, $vessel);
 					$this->preventDefault();
 				} else {
-					$this->newDefault = new Vessel(new Phrase('MACHEN Schiff ' . $vessel->Id()), $this->context, $this->job);
+					$this->newDefault = new Vessel(new Phrase('MACHEN Schiff'), $this->context, $this->job);
 				}
 			} else {
 				if ($this->capability > 0) {
