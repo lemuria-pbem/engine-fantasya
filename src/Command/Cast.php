@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\ActionException;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Factory\SpellParser;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Message\Unit\CastBattleSpellMessage;
@@ -12,6 +13,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\CastMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastNoAuraMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastNoMagicianMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CastOnlyMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Construction;
@@ -20,6 +22,7 @@ use Lemuria\Model\Fantasya\Spell;
 use Lemuria\Model\Fantasya\Talent\Magic;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
+use Lemuria\Model\Reassignment;
 
 /**
  * Cast a spell.
@@ -29,8 +32,10 @@ use Lemuria\Model\Fantasya\Vessel;
  * - ZAUBERN <spell> <additional parameters>
  * - ZAUBERN <spell> <level> <additional parameters>
  */
-final class Cast extends UnitCommand
+final class Cast extends UnitCommand implements Reassignment
 {
+	use ReassignTrait;
+
 	private Spell $spell;
 
 	private int $level;
@@ -48,6 +53,8 @@ final class Cast extends UnitCommand
 	private ?DirectionList $directions;
 
 	private ?ActionException $exception = null;
+
+	private int $reassignParameter;
 
 	public function Context(): Context {
 		return $this->context;
@@ -146,6 +153,21 @@ final class Cast extends UnitCommand
 		if ($this->exception) {
 			throw $this->exception;
 		}
+	}
+
+	protected function checkReassignmentDomain(Domain $domain): bool {
+		$parser     = new SpellParser($this->context, $this->phrase);
+		$spell      = $this->context->Factory()->spell($parser->Spell());
+		$cast       = $this->context->Factory()->castSpell($spell, $this);
+		$castDomain = $cast->getReassignmentDomain();
+		if ($castDomain) {
+			$this->reassignParameter = $cast->getReassignmentParameter();
+		}
+		return $domain === $castDomain;
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->getReassignPhraseForParameter($this->reassignParameter, $old, $new);
 	}
 
 	private function getMaxLevel(): int {
