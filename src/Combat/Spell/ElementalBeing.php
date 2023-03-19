@@ -9,7 +9,6 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\SummonBeingMessage;
 use Lemuria\Engine\Fantasya\Effect\DissolveEffect;
 use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
-use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
@@ -17,6 +16,7 @@ use Lemuria\Model\Fantasya\Commodity\Monster\AirElemental;
 use Lemuria\Model\Fantasya\Commodity\Monster\EarthElemental;
 use Lemuria\Model\Fantasya\Commodity\Monster\FireElemental;
 use Lemuria\Model\Fantasya\Commodity\Monster\WaterElemental;
+use Lemuria\Model\Fantasya\Distribution;
 use Lemuria\Model\Fantasya\Gang;
 use Lemuria\Model\Fantasya\Unit;
 

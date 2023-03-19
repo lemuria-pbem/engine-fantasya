@@ -9,9 +9,8 @@ use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Effect\PotionEffect;
 use Lemuria\Engine\Fantasya\Effect\TalentEffect;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
-use Lemuria\Engine\Fantasya\Factory\InventoryDistribution;
+use Lemuria\Engine\Fantasya\Factory\GearDistribution;
 use Lemuria\Engine\Fantasya\Factory\LodgingTrait;
-use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Engine\Fantasya\Travel\Conveyance;
 use Lemuria\Engine\Fantasya\Travel\Trip;
 use Lemuria\Engine\Fantasya\Travel\Trip\Caravan;
@@ -25,8 +24,10 @@ use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\College;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
+use Lemuria\Model\Fantasya\Distribution;
 use Lemuria\Model\Fantasya\DoubleAbility;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Factory\InventoryDistribution;
 use Lemuria\Model\Fantasya\Modification;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Potion;
@@ -190,7 +191,7 @@ final class Calculus
 	}
 
 	/**
-	 * Calculate available fighting abilities for the unit's talents and inventory.
+	 * Calculate available fighting abilities.
 	 *
 	 * @return WeaponSkill[]
 	 */
@@ -233,9 +234,17 @@ final class Calculus
 	/**
 	 * @return array<Distribution>
 	 */
+	public function gearDistribution(): array {
+		$distribution = new GearDistribution($this);
+		return $distribution->distribute()->get();
+	}
+
+	/**
+	 * @return array<Distribution>
+	 */
 	public function inventoryDistribution(): array {
 		$distribution = new InventoryDistribution($this->unit);
-		return $distribution->distribute()->getDistributions();
+		return $distribution->distribute()->get();
 	}
 
 	/**

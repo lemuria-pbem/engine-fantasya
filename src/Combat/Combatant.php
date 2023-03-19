@@ -5,7 +5,6 @@ namespace Lemuria\Engine\Fantasya\Combat;
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultHitMessage;
-use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Armature;
@@ -13,6 +12,7 @@ use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Dingbats;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Fists;
+use Lemuria\Model\Fantasya\Distribution;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
@@ -25,10 +25,6 @@ use Lemuria\Model\Fantasya\Talent\Fistfight;
 use Lemuria\Model\Fantasya\Talent\Stoning;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Weapon;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Claymore;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Halberd;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\BentHalberd;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustyClaymore;
 
 /**
  * Combatants are groups of persons from a unit that fight with the same equipment.
@@ -36,11 +32,6 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustyClaymore;
 class Combatant
 {
 	use BuilderTrait;
-
-	protected final const TWO_HANDED = [
-		Claymore::class    => true, Halberd::class       => true,
-		BentHalberd::class => true, RustyClaymore::class => true
-	];
 
 	/**
 	 * @var array<Fighter>
@@ -329,7 +320,7 @@ class Combatant
 	}
 
 	protected function initShieldAndArmor(): void {
-		$hasFreeHand = !($this->weapon && isset(self::TWO_HANDED[$this->weapon::class]));
+		$hasFreeHand = !($this->weapon && isset(Attack::TWO_HANDED[$this->weapon::class]));
 		foreach ($this->distribution as $item) {
 			$protection = $item->getObject();
 			if ($hasFreeHand && $protection instanceof Shield) {

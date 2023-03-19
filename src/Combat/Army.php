@@ -93,18 +93,26 @@ class Army
 		}
 
 		$this->units->add($unit);
-		$calculus  = new Calculus($unit);
-		$battleRow = Combat::getBattleRow($unit);
-		$potion    = $this->getPotionEffect($calculus);
-		$remaining = $potion ? $this->getPotionFighters($potion) : 0;
-		foreach ($calculus->inventoryDistribution() as $distribution) {
+		$calculus   = new Calculus($unit);
+		$battleRow  = Combat::getBattleRow($unit);
+		$combatants = [];
+		foreach ($calculus->gearDistribution() as $distribution) {
 			$combatant = new Combatant($this, $unit);
 			$combatant->setBattleRow($battleRow)->setDistribution($distribution);
-			$this->combatants[] = $combatant;
-			if ($potion) {
+			$combatants[] = $combatant;
+		}
+
+		$potion = $this->getPotionEffect($calculus);
+		if ($potion) {
+			$remaining = $this->getPotionFighters($potion);
+			foreach ($combatants as $combatant) {
 				$this->applyPotionEffect($calculus, $combatant, $potion, $remaining);
 			}
 		}
+		foreach ($combatants as $combatant) {
+			$this->combatants[] = $combatant;
+		}
+
 		// Lemuria::Log()->debug('Army ' . $this->id . ': Unit ' . $unit . ' (size: ' . $unit->Size() . ') forms ' . count($this->combatants) . ' combatants.');
 		return $this;
 	}

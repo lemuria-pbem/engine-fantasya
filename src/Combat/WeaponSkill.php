@@ -46,7 +46,7 @@ class WeaponSkill
 	public const WEAPONS = [
 		Archery::class       => [Bow::class, UngirtBow::class],
 		Bladefighting::class => [
-			Battleaxe::class, Claymore::class, Warhammer::class, Sword::class,
+			Claymore::class, Battleaxe::class, Warhammer::class, Sword::class,
 			RustyBattleaxe::class, RustyClaymore::class, LooseWarhammer::class, RustySword::class
 		],
 		Catapulting::class   => [Catapult::class, SkewedCatapult::class],
