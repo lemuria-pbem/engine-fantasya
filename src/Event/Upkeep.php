@@ -198,8 +198,7 @@ final class Upkeep extends AbstractEvent
 	}
 
 	private function isOvercrowded(Construction $construction): bool {
-		$neededSize = $construction->Inhabitants()->Size() * $construction->Building()->UsefulSize();
-		return $construction->Size() < $neededSize;
+		return $construction->Size() < $construction->Inhabitants()->Size();
 	}
 
 	private function effect(Construction $construction): Unmaintained {
