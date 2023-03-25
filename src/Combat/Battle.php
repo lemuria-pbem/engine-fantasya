@@ -26,7 +26,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\AttackBoardAfterCombatMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackEnterAfterCombatMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackUnguardMessage;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Construction;
@@ -38,7 +37,6 @@ use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
-use Lemuria\Model\Fantasya\Talent\Tactics;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
 use Lemuria\Model\Fantasya\WearResources;
@@ -241,51 +239,17 @@ class Battle
 	 * @noinspection DuplicatedCode
 	 */
 	protected function getBestTacticsParty(): ?Party {
-		$tactics    = [];
-		$isAttacker = [];
-		foreach ($this->attackers as $unit) {
-			$party = $unit->Party()->Id()->Id();
-			if (!isset($tactics[$party])) {
-				$tactics[$party]    = 0;
-				$isAttacker[$party] = true;
-			}
-			$calculus         = new Calculus($unit);
-			$level            = $calculus->knowledge(Tactics::class)->Level();
-			$tactics[$party] += $unit->Size() * $level ** 3;
-		}
-		foreach ($this->defenders as $unit) {
-			$party = $unit->Party()->Id()->Id();
-			if (!isset($tactics[$party])) {
-				$tactics[$party]    = 0;
-				$isAttacker[$party] = false;
-			}
-			$calculus         = new Calculus($unit);
-			$level            = $calculus->knowledge(Tactics::class)->Level();
-			$tactics[$party] += $unit->Size() * $level ** 3;
-		}
-
-		$n = count($tactics);
+		$tactics = new TacticsData();
+		$n       = $tactics->add($this->attackers, true)->add($this->defenders, false)->count();
 		if ($n <= 0) {
 			return null;
 		}
-
-		arsort($tactics);
-		$candidates = [0];
-		$party      = array_keys($tactics);
-		$talent     = array_values($tactics);
-		for ($i = 1; $i < $n; $i++) {
-			if ($talent[$i] < $talent[0]) {
-				break;
-			}
-			$candidates[] = $i;
+		$candidates = $tactics->getBestTacticsCandidates();
+		if (empty($candidates)) {
+			return null;
 		}
-		foreach ($candidates as $i) {
-			if ($isAttacker[$party[$i]] !== $isAttacker[$party[0]]) {
-				return null;
-			}
-		}
-		$chosen = randElement($candidates);
-		return Party::get(new Id($party[$chosen]));
+		$id = randElement($candidates);
+		return Party::get($id);
 	}
 
 	protected function embattleForCombat(Context $context): Combat {
