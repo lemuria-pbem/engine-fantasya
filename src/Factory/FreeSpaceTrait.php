@@ -20,10 +20,24 @@ trait FreeSpaceTrait
 		return $this->getFreeSpace($construction) < $unit->Size();
 	}
 
+	protected function useAdditionalSpace(Construction $construction, Unit $unit): void {
+		$size   = $unit->Size();
+		$space  = $construction->getFreeSpace();
+		$needed = $size - $space;
+		if ($needed > 0) {
+			$this->getFreeSpaceEffect($construction)->removeSpace($needed);
+		}
+	}
+
 	private function getAdditionalSpace(Construction $construction): int {
+		$effect = $this->getFreeSpaceEffect($construction);
+		return $effect ? $effect->Space() : 0;
+	}
+
+	private function getFreeSpaceEffect(Construction $construction): ?FreeSpace {
 		$effect = new FreeSpace(State::getInstance());
 		$effect->setConstruction($construction);
 		$effect = Lemuria::Score()->find($effect);
-		return $effect instanceof FreeSpace ? $effect->Space() : 0;
+		return $effect instanceof FreeSpace ? $effect : null;
 	}
 }

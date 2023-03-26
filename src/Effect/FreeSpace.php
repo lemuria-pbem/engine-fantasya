@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Effect;
 
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 
 final class FreeSpace extends AbstractConstructionEffect
@@ -20,6 +21,14 @@ final class FreeSpace extends AbstractConstructionEffect
 
 	public function addSpace(int $space): FreeSpace {
 		$this->space += $space;
+		return $this;
+	}
+
+	public function removeSpace(int $space): FreeSpace {
+		if ($space > $this->space) {
+			throw new LemuriaException('Cannot remove more space than is available.');
+		}
+		$this->space -= $space;
 		return $this;
 	}
 

@@ -95,6 +95,7 @@ final class Enter extends UnitCommand
 				$this->message(LeaveVesselDebugMessage::class)->e($vessel);
 			}
 		}
+		$this->useAdditionalSpace($newConstruction, $this->unit);
 		$newConstruction->Inhabitants()->add($this->unit);
 		$this->message(EnterMessage::class)->e($newConstruction);
 	}
