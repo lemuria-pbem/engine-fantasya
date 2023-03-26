@@ -105,7 +105,8 @@ final class Teach extends UnitCommand implements Activity
 
 	protected function run(): void {
 		$this->calculateBonuses();
-		$this->message(TeachBonusMessage::class)->p($this->size, TeachBonusMessage::STUDENTS)->p(round($this->bonus, 3), TeachBonusMessage::BONUS);
+		$bonus = round($this->bonus ** 2, 3);
+		$this->message(TeachBonusMessage::class)->p($this->size, TeachBonusMessage::STUDENTS)->p($bonus, TeachBonusMessage::BONUS);
 	}
 
 	protected function commitCommand(UnitCommand $command): void {
@@ -208,7 +209,7 @@ final class Teach extends UnitCommand implements Activity
 			$people += $learn->Unit()->Size();
 		}
 		$maxStudents = $this->unit->Size() * self::MAX_STUDENTS;
-		$this->bonus = $people > 0 ? min($maxStudents / $people, 1.0) ** 2 : 1.0;
+		$this->bonus = $people > 0 ? min($maxStudents / $people, 1.0) : 1.0;
 	}
 
 	private function createNewDefault(array $ids): void {

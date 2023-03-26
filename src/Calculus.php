@@ -156,8 +156,9 @@ final class Calculus
 	 * Get learning progress.
 	 */
 	public function progress(Talent $talent, float $effectivity = 1.0): Ability {
-		$isInCollege = ($this->unit->Construction() instanceof College) && $this->isInMaintainedConstruction();
-		$teachBonus  = 0.0;
+		$isInCollege  = ($this->unit->Construction() instanceof College) && $this->isInMaintainedConstruction();
+		$regularBonus = 0.0;
+		$collegeBonus = 0.0;
 		foreach ($this->teachers as $teach) {
 			if ($isInCollege) {
 				$teacher   = $teach->Unit();
@@ -165,14 +166,16 @@ final class Calculus
 				if ($inCollege) {
 					$calculus = new Calculus($teacher);
 					if ($calculus->isInMaintainedConstruction()) {
-						$teachBonus += 2.0 * $teach->getBonus();
+						$collegeBonus += $teach->getBonus();
 					}
 				}
 			} else {
-				$teachBonus += $teach->getBonus();
+				$regularBonus += $teach->getBonus();
 			}
 		}
-		$teachBonus = min($isInCollege ? 2.0 : 1.0, $teachBonus);
+		$regularBonus = min(1.0, $regularBonus ** 2);
+		$collegeBonus = 2.0 * min(1.0, $collegeBonus ** 2);
+		$teachBonus   = max($regularBonus, $collegeBonus);
 
 		$brainpower = $this->hasApplied(Brainpower::class);
 		$count      = $brainpower?->Count();
