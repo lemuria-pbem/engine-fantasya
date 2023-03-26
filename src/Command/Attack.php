@@ -58,6 +58,7 @@ final class Attack extends UnitCommand
 		parent::initialize();
 		if ($this->unit->BattleRow()->value <= BattleRow::Bystander->value) {
 			$this->message(AttackNotFightingMessage::class);
+			parent::commitCommand($this);
 			return;
 		}
 
