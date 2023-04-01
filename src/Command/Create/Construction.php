@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
 use function Lemuria\getClass;
+use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command\Trespass\Enter;
 use Lemuria\Engine\Fantasya\Effect\DecayEffect;
 use Lemuria\Engine\Fantasya\Effect\SignpostEffect;
@@ -71,6 +72,10 @@ final class Construction extends AbstractProduct
 	private bool $hasMarket = false;
 
 	private ?ConstructionModel $fromOutside;
+
+	public function allows(Activity $activity): bool {
+		return $this->job->Count() !== PHP_INT_MAX && getClass($activity) === getClass($this);
+	}
 
 	protected function initialize(): void {
 		$this->fromOutside = $this->prepareBuildingFromOutside();
