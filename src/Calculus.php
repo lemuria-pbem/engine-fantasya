@@ -156,7 +156,8 @@ final class Calculus
 	 * Get learning progress.
 	 */
 	public function progress(Talent $talent, float $effectivity = 1.0): Ability {
-		$isInCollege  = ($this->unit->Construction() instanceof College) && $this->isInMaintainedConstruction();
+		$building     = $this->unit->Construction()?->Building();
+		$isInCollege  = ($building instanceof College) && $this->isInMaintainedConstruction();
 		$regularBonus = 0.0;
 		$collegeBonus = 0.0;
 		foreach ($this->teachers as $teach) {
