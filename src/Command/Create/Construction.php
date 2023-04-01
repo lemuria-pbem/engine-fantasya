@@ -53,6 +53,8 @@ use Lemuria\Model\Fantasya\Requirement;
  * - MACHEN Burg|Gebäude|Gebaeude <size>
  * - MACHEN <Building>
  * - MACHEN <Building> <size>
+ * - MACHEN Gebäude <ID>
+ * - MACHEN Gebäude <ID> <size>
  */
 final class Construction extends AbstractProduct
 {
@@ -194,7 +196,7 @@ final class Construction extends AbstractProduct
 		if ($building::class === AnyBuilding::class) {
 			$knowledge = $this->unit->Knowledge();
 			$ability   = $knowledge[$building->getCraft()->Talent()];
-			if ($ability->Count() > 0 && $this->phrase->count() === 2) {
+			if ($ability->Count() > 0 && $this->phrase->count() >= 2) {
 				$id     = $this->parseId(2);
 				$estate = $this->unit->Region()->Estate();
 				if ($estate->has($id)) {
@@ -230,7 +232,8 @@ final class Construction extends AbstractProduct
 			}
 			if ($this->fromOutside) {
 				if (!$this->unit->Construction() && $this->fromOutside->Inhabitants()->isEmpty()) {
-					$this->job = new Job($this->fromOutside->Building(), $this->job->Count());
+					$demand    = $this->phrase->count() === 2 ? PHP_INT_MAX : $this->job->Count();
+					$this->job = new Job($this->fromOutside->Building(), $demand);
 					$this->fromOutside->Inhabitants()->add($this->unit);
 					return;
 				}
