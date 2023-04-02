@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Effect\PotionEffect;
 use Lemuria\Engine\Fantasya\Effect\TalentEffect;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
+use Lemuria\Engine\Fantasya\Factory\InventoryDistribution;
 use Lemuria\Engine\Fantasya\Factory\LodgingTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Engine\Fantasya\Travel\Conveyance;
@@ -29,7 +30,6 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Modification;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Potion;
-use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent;
@@ -234,73 +234,8 @@ final class Calculus
 	 * @return array<Distribution>
 	 */
 	public function inventoryDistribution(): array {
-		$maxSize   = $this->unit->Size();
-		$inventory = $this->unit->Inventory();
-		if ($maxSize <= 1 || $inventory->isEmpty()) {
-			$distribution = new Distribution();
-			foreach ($inventory as $quantity) {
-				$distribution->add(new Quantity($quantity->Commodity(), $quantity->Count()));
-			}
-			return [$distribution->setSize($maxSize)];
-		}
-
-		$amount = [];
-		foreach ($inventory as $quantity) {
-			$count = $quantity->Count();
-			if (!isset($amount[$count])) {
-				$amount[$count] = [];
-			}
-			$amount[$count][] = new Quantity($quantity->Commodity(), $count);
-		}
-		ksort($amount);
-
-		$distributions = [];
-		while ($maxSize > 0 && !empty($amount)) {
-			reset($amount);
-			$size         = key($amount);
-			$take         = $size > $maxSize ? (int)floor($size / $maxSize) : 1;
-			$rest         = $size - $take * $maxSize;
-			$distribution = new Distribution();
-			$newAmount    = $rest > 0 ? [$rest => []] : [];
-			foreach (current($amount) as $quantity /** @var Quantity $quantity */) {
-				$commodity = $quantity->Commodity();
-				if ($rest > 0) {
-					$newAmount[$rest][] = new Quantity($commodity, $rest);
-				}
-				$distribution->add(new Quantity($commodity, $take));
-			}
-			unset($amount[$size]);
-			if ($rest > 0) {
-				$size = $maxSize;
-			}
-
-			foreach ($amount as $next => $quantities) {
-				$take = $next > $maxSize ? (int)floor($next / $maxSize) : 1;
-				$rest = $next - $take * $size;
-				if ($rest > 0 && !isset($newAmount[$rest])) {
-					$newAmount[$rest] = [];
-				}
-				foreach ($quantities as $quantity /** @var Quantity $quantity */) {
-					$commodity = $quantity->Commodity();
-					if ($rest > 0) {
-						$newAmount[$rest][] = new Quantity($commodity, $rest);
-					}
-					$distribution->add(new Quantity($commodity, $take));
-				}
-			}
-
-			$size            = min($maxSize, $size);
-			$distributions[] = $distribution->setSize($size);
-			$maxSize        -= $size;
-			$amount          = $newAmount;
-		}
-
-		if ($maxSize > 0) {
-			$distribution    = new Distribution();
-			$distributions[] = $distribution->setSize($maxSize);
-		}
-
-		return $distributions;
+		$distribution = new InventoryDistribution($this->unit);
+		return $distribution->distribute()->getDistributions();
 	}
 
 	/**
