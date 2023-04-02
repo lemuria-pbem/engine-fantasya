@@ -19,6 +19,8 @@ final class Hunger extends AbstractUnitEffect
 
 	private const FEED_THRESHOLD = 0.5;
 
+	private const HEALTH_THRESHOLD = 0.9;
+
 	private float $hunger = 1.0;
 
 	public function __construct(State $state) {
@@ -31,35 +33,41 @@ final class Hunger extends AbstractUnitEffect
 
 	public function setHunger(float $hunger): Hunger {
 		$this->hunger = $hunger;
-		$this->run();
+		if ($this->Unit()->Health() >= self::HEALTH_THRESHOLD) {
+			$this->setNewHealth();
+		}
 		return $this;
 	}
 
 	protected function run(): void {
 		$unit = $this->Unit();
-		if ($this->canBeFed($unit)) {
-			return;
+		$feed = $this->canBeFed($unit);
+		if ($feed < self::FEED_THRESHOLD) {
+			$this->setNewHealth(1.0 - $feed);
 		}
-
-		$calculus     = new Calculus($unit);
-		$hitpoints    = $calculus->hitpoints();
-		$hunger       = $calculus->hunger($unit, $this->hunger);
-		$newHitpoints = $unit->Health() * $hitpoints - $hunger;
-		$health       = max(0.0, round($newHitpoints / $hitpoints, 2));
-		$unit->setHealth($health);
-		Lemuria::Log()->debug('Unit ' . $unit . ' takes ' . $hunger . ' damage from hunger.');
-		$this->message(HungerMessage::class, $unit)->p($health);
 	}
 
-	private function canBeFed(Unit $unit): bool {
+	private function canBeFed(Unit $unit): float {
 		$size = $unit->Size();
 		if ($size <= 0) {
-			return true;
+			return 1.0;
 		}
 
 		$needed  = $size * Support::SILVER;
 		$feed    = new Quantity(self::createCommodity(Silver::class), $needed);
 		$support = $this->context->getResourcePool($unit)->reserve($unit, $feed);
-		return $support->Count() / $needed >= self::FEED_THRESHOLD;
+		return $support->Count() / $needed;
+	}
+
+	private function setNewHealth(float $factor = 1.0): void {
+		$unit         = $this->Unit();
+		$calculus     = new Calculus($unit);
+		$hitpoints    = $calculus->hitpoints();
+		$hunger       = $factor * $calculus->hunger($unit, $this->hunger);
+		$newHitpoints = $unit->Health() * $hitpoints - $hunger;
+		$health       = max(0.0, round($newHitpoints / $hitpoints, 2));
+		$unit->setHealth($health);
+		Lemuria::Log()->debug('Unit ' . $unit . ' takes ' . $hunger . ' damage from hunger.');
+		$this->message(HungerMessage::class, $unit)->p($health);
 	}
 }
