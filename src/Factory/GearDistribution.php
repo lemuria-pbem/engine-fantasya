@@ -6,11 +6,9 @@ use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\WeaponSkill;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
-use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Distribution;
 use Lemuria\Model\Fantasya\Factory\InventoryDistribution;
 use Lemuria\Model\Fantasya\Quantity;
-use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent;
 
 class GearDistribution extends InventoryDistribution
@@ -25,9 +23,7 @@ class GearDistribution extends InventoryDistribution
 	 */
 	protected array $weaponSkill = [];
 
-	protected Resources $inventory;
-
-	public function __construct(protected Calculus $calculus) {
+	public function __construct(private readonly Calculus $calculus) {
 		parent::__construct($this->calculus->Unit());
 	}
 
@@ -117,17 +113,6 @@ class GearDistribution extends InventoryDistribution
 		}
 	}
 
-	protected function distributeInventory(): void {
-		$size = $this->unit->Size();
-		foreach ($this->inventory as $quantity) {
-			$total   = $quantity->Count();
-			$portion = (int)floor($total / $size);
-			$this->giveToEverybody($quantity->Commodity(), $portion);
-			$rest = $total % $size;
-			$this->giveOnlyOne($quantity->Commodity(), $rest);
-		}
-	}
-
 	private function canDistributeInventory(): bool {
 		if (empty($this->bestSkill)) {
 			return true;
@@ -140,56 +125,5 @@ class GearDistribution extends InventoryDistribution
 			}
 		}
 		return false;
-	}
-
-	private function cloneInventory(): void {
-		$this->inventory = new Resources();
-		foreach ($this->unit->Inventory() as $quantity) {
-			$this->inventory->add(new Quantity($quantity->Commodity(), $quantity->Count()));
-		}
-	}
-
-	private function giveToEverybody(Commodity $commodity, int $count): void {
-		if ($count > 0) {
-			foreach ($this->distributions as $distribution) {
-				$distribution->add(new Quantity($commodity, $count));
-			}
-		}
-	}
-
-	private function giveOnlyOne(Commodity $commodity, int $amount): void {
-		$i = 0;
-		while ($amount > 0) {
-			$distribution = $this->distributions[$i++];
-			$size         = $distribution->Size();
-			if ($amount < $size) {
-				$newDistribution = $this->splitNewDistribution($distribution, $amount);
-				$this->insertNewDistribution($newDistribution, $i);
-				$distribution->add(new Quantity($commodity, 1));
-				break;
-			}
-			$distribution->add(new Quantity($commodity, 1));
-			$amount -= $size;
-		}
-	}
-
-	private function splitNewDistribution(Distribution $distribution, int $keepSize): Distribution {
-		$newDistribution = new Distribution();
-		$newSize         = $distribution->Size() - $keepSize;
-		$distribution->setSize($keepSize);
-		$newDistribution->setSize($newSize);
-		foreach ($distribution as $quantity) {
-			$newDistribution->add(new Quantity($quantity->Commodity(), $quantity->Count()));
-		}
-		return $newDistribution;
-	}
-
-	private function insertNewDistribution(Distribution $newDistribution, int $index): void {
-		if ($index < count($this->distributions)) {
-			$rest                = array_splice($this->distributions, $index);
-			$this->distributions = array_merge($this->distributions, [$newDistribution], $rest);
-		} else {
-			$this->distributions[] = $newDistribution;
-		}
 	}
 }

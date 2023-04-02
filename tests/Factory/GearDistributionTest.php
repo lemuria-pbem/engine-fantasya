@@ -77,19 +77,22 @@ class GearDistributionTest extends ModelTest
 	 * @test
 	 * @depends distribute
 	 */
-	public function get(GearDistribution $gearDistribution): void {
-		$distributions = $gearDistribution->get();
+	public function getDistributions(GearDistribution $gearDistribution): void {
+		$distributions = $gearDistribution->getDistributions();
 
 		$this->assertArray($distributions, 3, Distribution::class);
 
+		$unitSize  = 0;
 		$resources = new Resources();
 		foreach ($distributions as $distribution) {
-			$size = $distribution->Size();
+			$size      = $distribution->Size();
+			$unitSize += $size;
 			foreach ($distribution as $quantity) {
 				$resources->add(new Quantity($quantity->Commodity(), $size * $quantity->Count()));
 			}
 		}
 
+		$this->assertSame($this->unit->Size(), $unitSize);
 		$this->assertItemSet(self::INVENTORY, $resources);
 	}
 }
