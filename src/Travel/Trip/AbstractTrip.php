@@ -6,8 +6,6 @@ use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Travel\Conveyance;
 use Lemuria\Engine\Fantasya\Travel\Movement;
 use Lemuria\Engine\Fantasya\Travel\Trip;
-use Lemuria\Model\Fantasya\Commodity\Horse;
-use Lemuria\Model\Fantasya\Commodity\Potion\GoliathWater;
 use Lemuria\Model\Fantasya\Commodity\Potion\SevenLeagueTea;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
@@ -96,15 +94,6 @@ abstract class AbstractTrip implements Trip
 		return empty($speed) ? self::MIN_SPEED : min($speed);
 	}
 
-	protected function getPayloadBoost(): int {
-		$boostSize = $this->calculus->hasApplied(GoliathWater::class)?->Count() * GoliathWater::PERSONS;
-		if ($boostSize > 0) {
-			$payloadBoost = min($this->calculus->Unit()->Size(), $boostSize);
-			return $payloadBoost * $this->getHorsePayload();
-		}
-		return 0;
-	}
-
 	protected function getUnitSpeed(): int {
 		$unit      = $this->calculus->Unit();
 		$size      = $unit->Size();
@@ -113,11 +102,5 @@ abstract class AbstractTrip implements Trip
 			return 2 * $unit->Race()->Speed();
 		}
 		return $unit->Race()->Speed();
-	}
-
-	private function getHorsePayload(): int {
-		/** @var Horse $horse */
-		$horse = self::createCommodity(Horse::class);
-		return $horse->Payload();
 	}
 }
