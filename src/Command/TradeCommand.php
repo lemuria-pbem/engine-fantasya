@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
+use Lemuria\Engine\Fantasya\Factory\TradeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\TradeForbiddenCommodityMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TradeForbiddenPaymentMessage;
 use Lemuria\Engine\Fantasya\Phrase;
@@ -11,7 +12,6 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
-use Lemuria\Model\Fantasya\Extension\Market;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Market\Deal;
 use Lemuria\Model\Fantasya\Market\Trade;
@@ -28,6 +28,7 @@ use Lemuria\Model\Fantasya\Market\Trade;
 abstract class TradeCommand extends UnitCommand
 {
 	use BuilderTrait;
+	use TradeTrait;
 
 	protected final const AMOUNT = 0;
 
@@ -68,17 +69,6 @@ abstract class TradeCommand extends UnitCommand
 		return $trade->setGoods($goods)->setPrice($price)->setIsRepeat($isRepeat);
 	}
 
-	protected function getMarket(): ?Market {
-		$extensions = $this->unit->Construction()?->Extensions();
-		if ($extensions && $extensions->offsetExists(Market::class)) {
-			$market = $extensions[Market::class];
-			if ($market instanceof Market) {
-				return $market;
-			}
-		}
-		return null;
-	}
-
 	protected function parseParts(): array {
 		$factory = $this->context->Factory();
 		$parts   = [self::AMOUNT => null, self::COMMODITY => [], self::PRICE => null, self::PAYMENT => null];
@@ -112,19 +102,5 @@ abstract class TradeCommand extends UnitCommand
 
 		$parts[self::PAYMENT] = $i <= $n ? $factory->commodity($this->phrase->getLine($i)) : $this->silver;
 		return $parts;
-	}
-
-	protected function parseNumber(string $amount): array|int {
-		if (strpos($amount, '-') > 0) {
-			$number = explode('-', $amount);
-			$min    = (int)$number[0];
-			$max    = (int)$number[1];
-			return match (true) {
-				$min < $max => [$min, $max],
-				$min > $max => [$max, $min],
-				default => $min
-			};
-		}
-		return (int)$amount;
 	}
 }
