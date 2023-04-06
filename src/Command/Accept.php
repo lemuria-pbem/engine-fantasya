@@ -49,6 +49,8 @@ use Lemuria\Model\Fantasya\Unit;
  * Accept a trade from a unit.
  *
  * - HANDEL <trade>
+ * - HANDEL <trade> *|Alle|Alles
+ * - HANDEL <trade> <amount>
  * - HANDEL <trade> <amount> <commodity>
  * - HANDEL <trade> <price> <payment>
  * - HANDEL <trade> <amount> <commodity> <price> <payment>
@@ -244,11 +246,15 @@ final class Accept extends UnitCommand
 		$n     = $this->phrase->count();
 
 		if ($n > 1) {
-			$parameter = $this->phrase->getParameter(2);
-			$number    = (int)$parameter;
-			if ((string)$number !== $parameter) {
-				throw new InvalidCommandException($this);
+			$parameter = strtolower($this->phrase->getParameter(2));
+
+			// HANDEL <trade> *|Alle|Alles|<amount>
+			if ($n === 2) {
+				$this->parseAmountOnly($goods, $price, $parameter);
+				return;
 			}
+
+			$number    = $this->parsePositiveAmount($parameter);
 			$i         = 3;
 			$commodity = $this->parseCommodity($i, $n);
 
@@ -308,6 +314,27 @@ final class Accept extends UnitCommand
 		}
 		$commodity = $this->phrase->getLine($i, $index - 1);
 		return $this->context->Factory()->commodity($commodity);
+	}
+
+	private function parseAmountOnly(Deal $goods, Deal $price, string $parameter): void {
+		$number = in_array($parameter, ['*', 'alle', 'alles']) ? 0 : $this->parsePositiveAmount($parameter);
+		if ($goods->IsVariable() && !$price->IsVariable()) {
+			$this->amount = $number === 0 ? $goods->Maximum() : $number;
+			return;
+		}
+		if (!$goods->IsVariable() && $price->IsVariable()) {
+			$this->price = $number === 0 ? $price->Maximum() : $number;
+			return;
+		}
+		throw new InvalidCommandException($this);
+	}
+
+	private function parsePositiveAmount(string $parameter): int {
+		$number = (int)$parameter;
+		if ((string)$number !== $parameter) {
+			throw new InvalidCommandException($this);
+		}
+		return $number;
 	}
 
 	private function checkPieces(): ?Deal {
