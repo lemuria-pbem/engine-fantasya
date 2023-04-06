@@ -13,6 +13,7 @@ use Lemuria\Engine\Fantasya\Factory\Model\AnyBuilding;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyCastle;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\ConstructionAnyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionBuildMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionCreateMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionDependencyMessage;
@@ -88,6 +89,11 @@ final class Construction extends AbstractProduct
 	}
 
 	protected function run(): void {
+		if ($this->job->getObject() instanceof AnyBuilding && !$this->unit->Construction()) {
+			$this->message(ConstructionAnyMessage::class);
+			return;
+		}
+
 		$building = $this->getBuilding();
 		if (!$this->checkDependency($building)) {
 			$dependency = $building->Dependency();
@@ -240,10 +246,8 @@ final class Construction extends AbstractProduct
 					$demand    = $this->phrase->count() === 2 ? PHP_INT_MAX : $this->job->Count();
 					$this->job = new Job($this->fromOutside->Building(), $demand);
 					$this->fromOutside->Inhabitants()->add($this->unit);
-					return;
 				}
 			}
-			throw new InvalidCommandException($this);
 		}
 	}
 

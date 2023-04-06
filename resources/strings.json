@@ -406,6 +406,7 @@
 		"CommodityOnlyMessage": "Die Einheit $id kann nur $output mit $talent produzieren.",
 		"CommodityResourcesMessage": "Die Einheit $id hat kein Material, um $artifact zu produzieren.",
 		"CommodityUnmaintainedMessage": "Die Einheit $id kann keine $artifact in {stillgelegt:$building} produzieren.",
+		"ConstructionAnyMessage": "Die Einheit $id ist in keinem Gebäude, das weitergebaut werden könnte.",
 		"ConstructionBuildMessage": "Die Einheit $id baut {$size:Größenpunkt} am Gebäude $construction.",
 		"ConstructionCreateMessage": "Die Einheit $id hat kein Baumaterial für {ein:$building}.",
 		"ConstructionDependencyMessage": "Die Einheit $id kann {kein:$building} bauen - die Partei besitzt {kein:$dependency}.",

@@ -4,14 +4,11 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message\Result;
-use Lemuria\Engine\Message\Section;
 use Lemuria\Singleton;
 
-class ConstructionMessage extends AbstractUnitMessage
+class ConstructionMessage extends ConstructionAnyMessage
 {
 	protected Result $result = Result::Success;
-
-	protected Section $section = Section::Production;
 
 	protected Singleton $building;
 
