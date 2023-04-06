@@ -51,6 +51,7 @@ use Lemuria\Model\Fantasya\Unit;
  * - HANDEL <trade>
  * - HANDEL <trade> *|Alle|Alles
  * - HANDEL <trade> <amount>
+ * - HANDEL <trade> <min>-<max>
  * - HANDEL <trade> <amount> <commodity>
  * - HANDEL <trade> <price> <payment>
  * - HANDEL <trade> <amount> <commodity> <price> <payment>
@@ -78,6 +79,8 @@ final class Accept extends UnitCommand
 	protected ?int $status = null;
 
 	protected ?int $amount = null;
+
+	protected ?array $range = null;
 
 	protected ?int $price = null;
 
@@ -159,7 +162,7 @@ final class Accept extends UnitCommand
 			throw new InvalidCommandException($this);
 		}
 
-		$goods = $this->checkPieces();
+		$goods = $this->range ? $this->checkRange() : $this->checkPieces();
 		if ($goods) {
 			$price   = $this->trade->Price();
 			$payment = $this->collectPayment($price->Commodity(), $this->amount * $price->Amount());
@@ -248,7 +251,7 @@ final class Accept extends UnitCommand
 		if ($n > 1) {
 			$parameter = strtolower($this->phrase->getParameter(2));
 
-			// HANDEL <trade> *|Alle|Alles|<amount>
+			// HANDEL <trade> *|Alle|Alles|<amount>|<min>-<max>
 			if ($n === 2) {
 				$this->parseAmountOnly($goods, $price, $parameter);
 				return;
@@ -317,13 +320,26 @@ final class Accept extends UnitCommand
 	}
 
 	private function parseAmountOnly(Deal $goods, Deal $price, string $parameter): void {
-		$number = in_array($parameter, ['*', 'alle', 'alles']) ? 0 : $this->parsePositiveAmount($parameter);
+		if (in_array($parameter, ['*', 'alle', 'alles'])) {
+			$number = '*';
+		} elseif (preg_match('/^([0-9]+)-([0-9]+)$/', $parameter, $range) === 1 && $this->parseRange($range)) {
+			$number = '-';
+		} else {
+			$number = $this->parsePositiveAmount($parameter);
+		}
 		if ($goods->IsVariable() && !$price->IsVariable()) {
-			$this->amount = $number === 0 ? $goods->Maximum() : $number;
+			if ($number === '*') {
+				$this->amount = $goods->Maximum();
+				$this->range  = [$goods->Minimum(), $this->amount];
+			} elseif ($number === '-') {
+				$this->amount = $this->range[0];
+			} else {
+				$this->amount = $number;
+			}
 			return;
 		}
 		if (!$goods->IsVariable() && $price->IsVariable()) {
-			$this->price = $number === 0 ? $price->Maximum() : $number;
+			$this->price = $number === '*' ? $price->Maximum() : $number;
 			return;
 		}
 		throw new InvalidCommandException($this);
@@ -331,10 +347,20 @@ final class Accept extends UnitCommand
 
 	private function parsePositiveAmount(string $parameter): int {
 		$number = (int)$parameter;
-		if ((string)$number !== $parameter) {
+		if ((string)$number !== $parameter || $number <= 0) {
 			throw new InvalidCommandException($this);
 		}
 		return $number;
+	}
+
+	private function parseRange(array $range): bool {
+		$min = (int)$range[1];
+		$max = (int)$range[2];
+		if ($min > 0 && $max > 0 && $max !== $min) {
+			$this->range = $max > $min ? [$min, $max] : [$max, $min];
+			return true;
+		}
+		return false;
 	}
 
 	private function checkPieces(): ?Deal {
@@ -356,6 +382,38 @@ final class Accept extends UnitCommand
 			$reserve   = $inventory[$commodity];
 			if ($reserve->Count() < $this->amount) {
 				$demand = new Quantity($commodity, $this->amount);
+				$this->message(AcceptOfferReserveMessage::class)->e($this->trade)->s($commodity)->e($unit, AcceptOfferAmountMessage::UNIT);
+				$this->message(AcceptOfferUnableMessage::class, $unit)->e($this->trade)->i($demand)->e($this->unit, AcceptOfferAmountMessage::UNIT);
+				return null;
+			}
+		}
+
+		return $goods;
+	}
+
+	private function checkRange(): ?Deal {
+		$unit    = $this->trade->Unit();
+		$goods   = $this->trade->Goods();
+		$minimum = $goods->Minimum();
+		$maximum = $goods->IsAdapting() ? $this->getAvailableMaximum(): $goods->Maximum();
+		$range   = [max($this->range[0], $minimum), min($this->range[1], $maximum)];
+		if ($range[0] > $range[1]) {
+			if ($this->trade->Trade() === Trade::OFFER) {
+				$this->message(AcceptOfferAmountMessage::class)->e($this->trade)->e($unit, AcceptOfferAmountMessage::UNIT);
+			} else {
+				$this->message(AcceptDemandAmountMessage::class)->e($this->trade)->e($unit, AcceptOfferAmountMessage::UNIT);
+			}
+			return null;
+		}
+
+		if ($this->trade->Trade() === Trade::OFFER) {
+			$commodity    = $goods->Commodity();
+			$inventory    = $unit->Inventory();
+			$reserve      = $inventory[$commodity]->Count();
+			$this->amount = min($range[1], $reserve);
+			if ($this->amount < $range[0]) {
+				$this->amount = $range[0];
+				$demand       = new Quantity($commodity, $this->amount);
 				$this->message(AcceptOfferReserveMessage::class)->e($this->trade)->s($commodity)->e($unit, AcceptOfferAmountMessage::UNIT);
 				$this->message(AcceptOfferUnableMessage::class, $unit)->e($this->trade)->i($demand)->e($this->unit, AcceptOfferAmountMessage::UNIT);
 				return null;
