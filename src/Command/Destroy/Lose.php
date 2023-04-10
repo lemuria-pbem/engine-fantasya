@@ -94,7 +94,7 @@ final class Lose extends UnitCommand implements Operator, Reassignment
 		return $this->hasUnicum() ? $this->getReassignPhraseForParameter($this->phrase->count(), $old, $new) : null;
 	}
 
-	private function parsePhrase(string &$count, string &$commodity, ?Unicum &$unicum): void {
+	private function parsePhrase(?string &$count, ?string &$commodity, ?Unicum &$unicum): void {
 		$p = 1;
 		$count = $this->phrase->getParameter($p++);
 		if ($this->phrase->getVerb() === 'GIB') {

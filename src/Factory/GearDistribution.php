@@ -33,7 +33,7 @@ class GearDistribution extends InventoryDistribution
 			parent::distribute();
 		} else {
 			$this->cloneInventory();
-			$this->createDistributions();
+			$this->createGearDistributions();
 			$this->distributeInventory();
 		}
 		return $this;
@@ -82,7 +82,7 @@ class GearDistribution extends InventoryDistribution
 		return $weapons;
 	}
 
-	protected function createDistributions(): void {
+	protected function createGearDistributions(): void {
 		$this->distributions = [];
 		$size                = $this->unit->Size();
 		foreach ($this->bestSkill as $skill) {
