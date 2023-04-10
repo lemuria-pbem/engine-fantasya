@@ -25,6 +25,6 @@ class TravelNeighbourMessage extends TravelRegionMessage
 		if ($name === 'landscape') {
 			return $this->landscape($name, 'landscape');
 		}
-		return $this->direction($name, 'direction') ?? parent::getTranslation($name);
+		return $this->direction($name) ?? parent::getTranslation($name);
 	}
 }

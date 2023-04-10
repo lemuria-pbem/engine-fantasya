@@ -16,4 +16,8 @@ class TravelUnpaidDemurrageMessage extends TravelSimulationMessage
 		parent::getData($message);
 		$this->direction = $message->getParameter();
 	}
+
+	protected function getTranslation(string $name): string {
+		return $this->direction($name) ?? parent::getTranslation($name);
+	}
 }
