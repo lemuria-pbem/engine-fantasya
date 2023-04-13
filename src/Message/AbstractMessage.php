@@ -53,6 +53,10 @@ abstract class AbstractMessage implements MessageType
 		if ($translation === null) {
 			return null;
 		}
+		while (preg_match('|{g/([a-z]+):([^:]+):\$([a-zA-Z]+)}|', $translation, $matches) === 1) {
+			$match       = $matches[0];
+			$translation = str_replace($match, $this->replaceGrammar(Casus::from($matches[1]), $matches[2], $matches[3]), $translation);
+		}
 		while (preg_match('/({[^:]+:\$[a-zA-Z]+})+/', $translation, $matches) === 1) {
 			$match = $matches[1];
 			$translation = str_replace($match, $this->replacePrefix($match), $translation);
@@ -207,6 +211,31 @@ abstract class AbstractMessage implements MessageType
 			return $parts[0] . ' ' . $this->translateKey('replace.' . $key, $variable->Count() === 1 ? 0 : 1);
 		}
 		return $parts[0] . ' ' . '{' . $parts[1] . '}';
+	}
+
+	private function replaceGrammar(Casus $casus, string $search, string $name): string {
+		$variable = $this->$name;
+		if ($variable instanceof Singleton) {
+			$singleton = getClass($variable);
+		} else {
+			$singleton = (string)$variable;
+		}
+		$index = $casus->index();
+
+		$dictionary = new Dictionary();
+		$grammar    = $dictionary->raw('grammar.' . $search);
+		$numerus    = $grammar['numerus'];
+
+		$singleton  = $dictionary->raw('singleton.' . $singleton);
+		$genus      = $singleton[0];
+		$numeri     = $singleton[$index + 1];
+		if (is_int($numeri)) {
+			$numeri = $singleton[$numeri];
+		}
+
+		$replace   = $grammar[$genus][$index];
+		$singleton = $numeri[$numerus];
+		return $replace . ' ' . $singleton;
 	}
 
 	private function replace(string $match): string {
