@@ -38,6 +38,8 @@ final class Recruit extends AllocationCommand
 	use CollectTrait;
 	use StatisticsTrait;
 
+	private const KNOWLEDGE = [Orc::class => [Bladefighting::class => 1, Spearfighting::class => 1]];
+
 	private int $demand;
 
 	private int $size;
@@ -146,35 +148,28 @@ final class Recruit extends AllocationCommand
 	}
 
 	private function reduceKnowledge(int $oldSize, int $newSize): void {
+		$race    = $this->unit->Race()::class;
+		$minimum = self::KNOWLEDGE[$race] ?? [];
+
 		if ($oldSize > 0) {
 			$percent = $oldSize / $newSize;
 			foreach ($this->unit->Knowledge() as $ability) {
-				$experience    = $ability->Experience();
-				$newExperience = (int)round($percent * $experience);
-				$ability->removeItem(new Ability($ability->Talent(), $experience - $newExperience));
+				$talent = $ability->Talent();
+				if (isset($minimum[$talent::class])) {
+					$oldExperience = $ability->Experience();
+					$newExperience = Ability::getExperience($minimum[$talent::class]);
+					$added         = $newSize - $oldSize;
+					$experience    = (int)floor(($oldSize * $oldExperience + $added * $newExperience) / $newSize);
+					$ability->removeItem(new Ability($talent, $oldExperience - $experience));
+				} else {
+					$experience    = $ability->Experience();
+					$newExperience = (int)round($percent * $experience);
+					$ability->removeItem(new Ability($ability->Talent(), $experience - $newExperience));
+				}
 			}
 			$this->message(RecruitKnowledgeMessage::class)->p((int)round(100.0 * $percent));
 		} else {
 			$this->unit->Knowledge()->clear();
-		}
-
-		if ($this->unit->Race() instanceof Orc) {
-			$minimum = Ability::getExperience(1);
-			$this->setMinimumExperience(self::createTalent(Bladefighting::class), $minimum);
-			$this->setMinimumExperience(self::createTalent(Spearfighting::class), $minimum);
-		}
-	}
-
-	private function setMinimumExperience(Talent $talent, int $minimum): void {
-		$knowledge = $this->unit->Knowledge();
-		if (isset($knowledge[$talent])) {
-			$ability    = $knowledge[$talent];
-			$experience = $ability->Experience();
-			if ($experience < $minimum) {
-				$ability->addItem(new Ability($talent, $experience - $minimum));
-			}
-		} else {
-			$knowledge->add(new Ability($talent, $minimum));
 		}
 	}
 }
