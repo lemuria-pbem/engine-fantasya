@@ -233,9 +233,14 @@ abstract class AbstractMessage implements MessageType
 			$numeri = $singleton[$numeri];
 		}
 
-		$replace   = $grammar[$genus][$index];
-		$singleton = $numeri[$numerus];
-		return $replace . ' ' . $singleton;
+		$replace     = $grammar[$genus][$index];
+		$replacement = $numeri[$numerus];
+		if (is_int($replacement)) {
+			$c           = (int)($replacement / 2) + 1;
+			$n           = $replacement % 2;
+			$replacement = $singleton[$c][$n];
+		}
+		return $replace . ' ' . $replacement;
 	}
 
 	private function replace(string $match): string {
