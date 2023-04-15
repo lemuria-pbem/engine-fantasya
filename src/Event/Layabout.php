@@ -24,6 +24,9 @@ final class Layabout extends AbstractEvent
 			if ($party->Type() === Type::Player && !$party->hasRetired()) {
 				foreach ($party->People() as $unit) {
 					if (!$this->state->getProtocol($unit)->hasActivity()) {
+						if ($this->context->getTurnOptions()->IsSimulation() && $unit->Size() <= 0) {
+							continue;
+						}
 						$this->message(LayaboutMessage::class, $unit);
 						$count++;
 					}
