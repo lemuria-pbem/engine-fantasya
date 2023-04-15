@@ -81,7 +81,7 @@ final class Fauna extends AbstractEvent
 	protected function run(): void {
 		foreach (Region::all() as $region) {
 			$landscape  = $region->Landscape();
-			$workplaces = $this->getAvailableWorkplaces($region) - $this->getCultivatedWorkplaces($region);
+			$workplaces = $this->getAvailableWorkplaces($region);
 			$available  = max(0, $workplaces);
 			$resources  = $region->Resources();
 			foreach (self::ANIMAL as $animal) {
