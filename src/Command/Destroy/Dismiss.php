@@ -38,13 +38,13 @@ use Lemuria\Model\Fantasya\Quantity;
  * - ENTLASSEN <amount> <commodity>
  * - ENTLASSEN <amount> Person|Personen
  *
- * - GIB Bauern
- * - GIB Bauern Alles
- * - GIB Bauern <commodity>
- * - GIB Bauern Person|Personen
- * - GIB Bauern Alles <commodity>
- * - GIB Bauern <amount> <commodity>
- * - GIB Bauern <amount> Person|Personen
+ * - GIB Bauern|Region
+ * - GIB Bauern|Region Alles
+ * - GIB Bauern|Region <commodity>
+ * - GIB Bauern|Region Person|Personen
+ * - GIB Bauern|Region Alles <commodity>
+ * - GIB Bauern|Region <amount> <commodity>
+ * - GIB Bauern|Region <amount> Person|Personen
  */
 final class Dismiss extends UnitCommand
 {
@@ -55,7 +55,7 @@ final class Dismiss extends UnitCommand
 		$p = 1;
 		$count = $this->phrase->getParameter($p++);
 		if ($this->phrase->getVerb() === 'GIB') {
-			if (strtolower($count) !== 'bauern') {
+			if (!in_array(strtolower($count), ['bauern', 'region'])) {
 				throw new UnknownCommandException($this);
 			}
 			$count = $this->phrase->getParameter($p++);

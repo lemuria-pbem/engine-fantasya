@@ -36,13 +36,13 @@ use Lemuria\Model\Domain;
  * - GEBEN <Unit> Einheit
  *
  * Dismiss (Alias: ENTLASSEN)
- * - GEBEN Bauern
- * - GEBEN Bauern Alles|Einheit
- * - GEBEN Bauern <commodity>
- * - GEBEN Bauern Person|Personen
- * - GEBEN Bauern Alles <commodity>
- * - GEBEN Bauern <amount> <commodity>
- * - GEBEN Bauern <amount> Person|Personen
+ * - GEBEN Bauern|Region
+ * - GEBEN Bauern|Region Alles|Einheit
+ * - GEBEN Bauern|Region <commodity>
+ * - GEBEN Bauern|Region Person|Personen
+ * - GEBEN Bauern|Region Alles <commodity>
+ * - GEBEN Bauern|Region <amount> <commodity>
+ * - GEBEN Bauern|Region <amount> Person|Personen
  *
  * Lose (Alias: VERLIEREN)
  * - GEBEN 0
@@ -86,9 +86,9 @@ final class Handover extends DelegatedCommand
 		}
 
 		$command = match (strtolower($this->phrase->getParameter())) {
-			'bauern' => Dismiss::class,
-			'0'      => Lose::class,
-			default  => null
+			'bauern', 'region' => Dismiss::class,
+			'0'                => Lose::class,
+			default            => null
 		};
 		if ($command) {
 			return new $command($this->phrase, $this->context);
