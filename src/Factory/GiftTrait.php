@@ -138,7 +138,7 @@ trait GiftTrait
 
 	private function giftToRandomUnit(Item $quantity): ?Unit {
 		if ($quantity instanceof Quantity) {
-			$heirs = $this->context->getIntelligence($this->unit->Region())->getHeirs($this->unit, false);
+			$heirs = $this->context->getIntelligence($this->unit->Region())->getLooters($this->unit, $quantity->Commodity());
 			return $this->giftToRandom($heirs, $quantity);
 		}
 		return null;
