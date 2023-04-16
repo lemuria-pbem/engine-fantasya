@@ -9,7 +9,10 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
+use Lemuria\Model\Fantasya\Commodity\Griffin;
+use Lemuria\Model\Fantasya\Commodity\Griffinegg;
 use Lemuria\Model\Fantasya\Commodity\Horse;
+use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
@@ -24,7 +27,8 @@ final class Allocation
 	use BuilderTrait;
 
 	public const POOL_COMMODITIES = [
-		Silver::class => true, Camel::class => true, Elephant::class => true, Horse::class => true
+		Silver::class => true, Griffinegg::class => true,
+		Camel::class  => true, Elephant::class   => true, Griffin::class => true, Horse::class => true, Pegasus::class => true
 	];
 
 	private readonly CommandPriority $priority;
