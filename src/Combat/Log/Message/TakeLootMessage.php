@@ -29,6 +29,7 @@ class TakeLootMessage extends AbstractMessage
 	protected Entity $unit;
 
 	public function __construct(?Unit $unit = null, protected ?Quantity $loot = null) {
+		parent::__construct();
 		if ($unit) {
 			$this->unit = new Entity($unit);
 		}
@@ -56,7 +57,7 @@ class TakeLootMessage extends AbstractMessage
 		$message   = parent::translate($template);
 		$commodity = getClass($this->loot->Commodity());
 		$count     = $this->loot->Count();
-		$item      = parent::dictionary()->get('resource.' . $commodity, $count > 1 ? 1 : 0);
+		$item      = $this->translateSingleton($commodity, $count > 1 ? 1 : 0);
 		$loot      = $count . ' ' . $item;
 		return str_replace('$loot', $loot, $message);
 	}

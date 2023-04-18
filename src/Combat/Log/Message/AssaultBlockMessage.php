@@ -14,6 +14,7 @@ class AssaultBlockMessage extends AbstractMessage
 	protected array $simpleParameters = [self::ATTACKER, self::DEFENDER];
 
 	public function __construct(protected ?string $attacker = null, protected ?string $defender = null) {
+		parent::__construct();
 	}
 
 	public function getDebug(): string {

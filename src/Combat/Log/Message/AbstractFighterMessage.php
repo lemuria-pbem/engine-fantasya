@@ -12,6 +12,7 @@ abstract class AbstractFighterMessage extends AbstractMessage
 	protected array $simpleParameters = [self::FIGHTER];
 
 	public function __construct(protected ?string $fighter = null) {
+		parent::__construct();
 	}
 
 	public function unserialize(array $data): Serializable {

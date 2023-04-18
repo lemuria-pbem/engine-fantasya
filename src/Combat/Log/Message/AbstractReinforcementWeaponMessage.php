@@ -36,7 +36,7 @@ abstract class AbstractReinforcementWeaponMessage extends AbstractReinforcementM
 
 	protected function translate(string $template): string {
 		$message = parent::translate($template);
-		$weapon  = parent::dictionary()->get('combat.weapon.' . $this->weapon, $this->count > 1 ? 1 : 0);
+		$weapon  = $this->translateSingleton($this->weapon, $this->count > 1 ? 1 : 0);
 		return str_replace('$weapon', $weapon, $message);
 	}
 

@@ -15,6 +15,7 @@ class SongOfPeaceCombatantMessage extends AbstractMessage
 	protected string $combatant;
 
 	public function __construct(?Combatant $combatant = null) {
+		parent::__construct();
 		if ($combatant) {
 			$this->combatant = $combatant->Id();
 		}

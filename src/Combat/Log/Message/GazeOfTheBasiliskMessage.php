@@ -12,6 +12,7 @@ class GazeOfTheBasiliskMessage extends AbstractMessage
 	protected array $simpleParameters = [self::ATTACKER];
 
 	public function __construct(protected ?string $attacker = null) {
+		parent::__construct();
 	}
 
 	public function getDebug(): string {

@@ -12,6 +12,7 @@ class CombatRoundMessage extends AbstractMessage
 	protected array $simpleParameters = [self::ROUND];
 
 	public function __construct(protected ?int $round = null) {
+		parent::__construct();
 	}
 
 	public function getDebug(): string {

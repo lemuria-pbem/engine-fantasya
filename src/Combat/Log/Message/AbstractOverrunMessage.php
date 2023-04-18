@@ -12,6 +12,7 @@ abstract class AbstractOverrunMessage extends AbstractMessage
 	protected array $simpleParameters = [self::ADDITIONAL];
 
 	public function __construct(protected ?int $additional = null) {
+		parent::__construct();
 	}
 
 	public function unserialize(array $data): Serializable {
@@ -27,9 +28,9 @@ abstract class AbstractOverrunMessage extends AbstractMessage
 	protected function translate(string $template): string {
 		$message = parent::translate($template);
 		$index   = $this->additional > 1 ? 1 : 0;
-		$will    = parent::dictionary()->get('combat.will', $index);
+		$will    = $this->dictionary->get('combat.will', $index);
 		$message = str_replace('$will', $will, $message);
-		$fighter = parent::dictionary()->get('combat.fighter', $index);
+		$fighter = $this->dictionary->get('combat.fighter', $index);
 		return str_replace('$fighter', $fighter, $message);
 	}
 

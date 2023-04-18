@@ -6,16 +6,19 @@ use function Lemuria\getClass;
 use function Lemuria\number;
 use Lemuria\Item;
 use Lemuria\Singleton;
+use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
 use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
-use Lemuria\Model\Dictionary;
 use Lemuria\Model\Fantasya\Container;
 use Lemuria\SingletonTrait;
 
 abstract class AbstractMessage implements MessageType
 {
+	use GrammarTrait;
 	use SingletonTrait;
+
+	protected final const NOT_VARIABLE = ['dictionary' => true, 'level' => true];
 
 	protected Result $result = Result::Debug;
 
@@ -76,8 +79,8 @@ abstract class AbstractMessage implements MessageType
 	}
 
 	protected function translateKey(string $keyPath, ?int $index = null): ?string {
-		$dictionary  = new Dictionary();
-		$translation = $dictionary->get($keyPath, $index);
+		$this->initDictionary();
+		$translation = $this->dictionary->get($keyPath, $index);
 		if ($index !== null) {
 			$keyPath .= '.' . $index;
 		}
@@ -89,7 +92,7 @@ abstract class AbstractMessage implements MessageType
 		$reflection = new \ReflectionClass($this);
 		foreach ($reflection->getProperties() as $property) {
 			$name = $property->getName();
-			if ($name !== 'level') {
+			if (!isset(self::NOT_VARIABLE[$name])) {
 				$properties[] = $name;
 			}
 		}
@@ -115,16 +118,12 @@ abstract class AbstractMessage implements MessageType
 				return $this->translateKey('kind.' . $commodity->Type()->name, $index);
 			}
 
-			$resource = getClass($commodity);
-			$count    = $this->$name->Count();
+			$count = $this->$name->Count();
 			if ($index === null) {
 				$index = $count > 1 ? 1 : 0;
 			}
 
-			$dictionary = new Dictionary();
-			$singleton  = $dictionary->raw('singleton.' . $resource);
-			$casus      = Casus::Accusative->index();
-			$item       = $singleton[$casus][$index];
+			$item = $this->translateSingleton($commodity, $index);
 			if ($item) {
 				return $count < PHP_INT_MAX ? number($count) . ' ' . $item : $item;
 			}
@@ -133,7 +132,7 @@ abstract class AbstractMessage implements MessageType
 	}
 
 	protected function landscape(string $property, string $name): ?string {
-		return $this->getTranslatedName($property, $name, 'landscape');
+		return $this->getTranslatedSingleton($property, $name);
 	}
 
 	protected function talent(string $property, string $name): ?string {
@@ -176,21 +175,13 @@ abstract class AbstractMessage implements MessageType
 
 	private function getTranslatedSingleton(string $property, string $name, int $index = 0): ?string {
 		if ($property === $name) {
-			$dictionary = new Dictionary();
-			$class      = getClass($this->$name->Commodity());
-			$singleton  = $dictionary->raw('singleton.' . $class);
-			$casus      = Casus::Accusative->index() + 1;
-			$numeri     = $singleton[$casus];
-			if (is_int($numeri)) {
-				$numeri = $singleton[$numeri];
-			}
-			$numerus = $numeri[$index];
-			if (is_int($numerus)) {
-				$c       = (int)($numerus / 2) + 1;
-				$n       = $numerus % 2;
-				$numerus = $singleton[$c][$n];
-			}
-			return $numerus;
+			$value     = $this->$name ?? null;
+			$singleton = match (true) {
+				$value instanceof Item      => $value->getObject(),
+				$value instanceof Singleton => $value,
+				default                     => (string)$value
+			};
+			return $this->translateSingleton($singleton, $index);
 		}
 		return null;
 	}
@@ -227,33 +218,11 @@ abstract class AbstractMessage implements MessageType
 	}
 
 	private function replaceGrammar(Casus $casus, string $search, string $name): string {
-		$variable = $this->$name;
-		if ($variable instanceof Singleton) {
-			$singleton = getClass($variable);
-		} else {
-			$singleton = (string)$variable;
+		$singleton = $this->$name;
+		if (!($singleton instanceof Singleton)) {
+			$singleton = (string)$singleton;
 		}
-		$index = $casus->index();
-
-		$dictionary = new Dictionary();
-		$grammar    = $dictionary->raw('grammar.' . $search);
-		$numerus    = $grammar['numerus'];
-
-		$singleton  = $dictionary->raw('singleton.' . $singleton);
-		$genus      = $singleton[0];
-		$numeri     = $singleton[$index + 1];
-		if (is_int($numeri)) {
-			$numeri = $singleton[$numeri];
-		}
-
-		$replace     = $grammar[$genus][$index];
-		$replacement = $numeri[$numerus];
-		if (is_int($replacement)) {
-			$c           = (int)($replacement / 2) + 1;
-			$n           = $replacement % 2;
-			$replacement = $singleton[$c][$n];
-		}
-		return $replace . ' ' . $replacement;
+		return $this->combineGrammar($singleton, $search, $casus);
 	}
 
 	private function replace(string $match): string {

@@ -14,6 +14,7 @@ class ShockwaveHitMessage extends AbstractMessage
 	protected array $simpleParameters = [self::COMBATANT, self::COUNT];
 
 	public function __construct(protected ?string $combatant = null, protected ?int $count = null) {
+		parent::__construct();
 	}
 
 	public function getDebug(): string {
@@ -33,9 +34,9 @@ class ShockwaveHitMessage extends AbstractMessage
 
 	protected function translate(string $template): string {
 		$message = parent::translate($template);
-		$fighter = parent::dictionary()->get('combat.fighter', $this->count > 1 ? 1 : 0);
+		$fighter = $this->dictionary->get('combat.fighter', $this->count > 1 ? 1 : 0);
 		$message = str_replace('$fighter', $fighter, $message);
-		$will = parent::dictionary()->get('combat.will', $this->count > 1 ? 1 : 0);
+		$will = $this->dictionary->get('combat.will', $this->count > 1 ? 1 : 0);
 		return str_replace('$will', $will, $message);
 	}
 

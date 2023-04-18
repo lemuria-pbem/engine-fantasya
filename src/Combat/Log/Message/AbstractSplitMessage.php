@@ -32,6 +32,7 @@ abstract class AbstractSplitMessage extends AbstractMessage
 
 	public function __construct(protected ?Entity $unit = null, ?Combatant $from = null, ?Combatant $to = null,
 		                        protected ?int $count = null, protected ?int $battleRow = null) {
+		parent::__construct();
 		if ($from) {
 			$this->from = $from->Id();
 		}
@@ -62,9 +63,9 @@ abstract class AbstractSplitMessage extends AbstractMessage
 	 */
 	protected function translate(string $template): string {
 		$message   = parent::translate($template);
-		$fighter   = parent::dictionary()->get('combat.fighter', $this->count > 1 ? 1 : 0);
+		$fighter   = $this->dictionary->get('combat.fighter', $this->count > 1 ? 1 : 0);
 		$message   = str_replace('$fighter', $fighter, $message);
-		$battleRow = parent::dictionary()->get('combat.battleRow.' . Combat::ROW_NAME[$this->battleRow]);
+		$battleRow = $this->dictionary->get('combat.battleRow.' . Combat::ROW_NAME[$this->battleRow]);
 		return str_replace('$battleRow', $battleRow, $message);
 	}
 

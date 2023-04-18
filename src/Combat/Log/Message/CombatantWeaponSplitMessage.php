@@ -22,6 +22,7 @@ class CombatantWeaponSplitMessage extends AbstractMessage
 
 	public function __construct(?Combatant $combatant = null, protected ?int $count = null,
 		                        ?Combatant $newCombatant = null) {
+		parent::__construct();
 		if ($combatant) {
 			$this->combatant = $combatant->Id();
 		}
@@ -48,7 +49,7 @@ class CombatantWeaponSplitMessage extends AbstractMessage
 
 	protected function translate(string $template): string {
 		$message   = parent::translate($template);
-		$fighter   = parent::dictionary()->get('combat.fighter', $this->count > 1 ? 1 : 0);
+		$fighter   = $this->dictionary->get('combat.fighter', $this->count > 1 ? 1 : 0);
 		return str_replace('$fighter', $fighter, $message);
 	}
 
