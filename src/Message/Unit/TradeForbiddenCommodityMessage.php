@@ -25,6 +25,6 @@ class TradeForbiddenCommodityMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'commodity', 1) ?? parent::getTranslation($name);
+		return $this->singleton($name, 'commodity', 1) ?? parent::getTranslation($name);
 	}
 }

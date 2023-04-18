@@ -25,6 +25,6 @@ class VesselMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->ship($name, 'ship') ?? parent::getTranslation($name);
+		return $this->singleton($name, 'ship') ?? parent::getTranslation($name);
 	}
 }

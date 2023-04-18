@@ -25,6 +25,6 @@ class RawMaterialResourcesMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'material') ?? parent::getTranslation($name);
+		return $this->singleton($name, 'material') ?? parent::getTranslation($name);
 	}
 }

@@ -104,16 +104,8 @@ abstract class AbstractMessage implements MessageType
 		return (string)$translation;
 	}
 
-	protected function building(string $property, string $name): ?string {
-		return $this->getTranslatedName($property, $name, 'building');
-	}
-
-	protected function commodity(string $property, string $name, int $index = 0): ?string {
-		return $this->getTranslatedName($property, $name, 'resource', $index);
-	}
-
-	protected function composition(string $property, string $name, int $index = 0): ?string {
-		return $this->getTranslatedName($property, $name, 'composition', $index);
+	protected function singleton(string $property, string $name, int $index = 0): ?string {
+		return $this->getTranslatedSingleton($property, $name, $index);
 	}
 
 	protected function item(string $property, string $name, ?int $index = null): ?string {
@@ -128,7 +120,11 @@ abstract class AbstractMessage implements MessageType
 			if ($index === null) {
 				$index = $count > 1 ? 1 : 0;
 			}
-			$item = $this->translateKey('resource.' . $resource, $index);
+
+			$dictionary = new Dictionary();
+			$singleton  = $dictionary->raw('singleton.' . $resource);
+			$casus      = Casus::Accusative->index();
+			$item       = $singleton[$casus][$index];
 			if ($item) {
 				return $count < PHP_INT_MAX ? number($count) . ' ' . $item : $item;
 			}
@@ -138,10 +134,6 @@ abstract class AbstractMessage implements MessageType
 
 	protected function landscape(string $property, string $name): ?string {
 		return $this->getTranslatedName($property, $name, 'landscape');
-	}
-
-	protected function ship(string $property, string $name): ?string {
-		return $this->getTranslatedName($property, $name, 'ship');
 	}
 
 	protected function talent(string $property, string $name): ?string {
@@ -178,6 +170,27 @@ abstract class AbstractMessage implements MessageType
 			if ($class) {
 				return $class;
 			}
+		}
+		return null;
+	}
+
+	private function getTranslatedSingleton(string $property, string $name, int $index = 0): ?string {
+		if ($property === $name) {
+			$dictionary = new Dictionary();
+			$class      = getClass($this->$name->Commodity());
+			$singleton  = $dictionary->raw('singleton.' . $class);
+			$casus      = Casus::Accusative->index() + 1;
+			$numeri     = $singleton[$casus];
+			if (is_int($numeri)) {
+				$numeri = $singleton[$numeri];
+			}
+			$numerus = $numeri[$index];
+			if (is_int($numerus)) {
+				$c       = (int)($numerus / 2) + 1;
+				$n       = $numerus % 2;
+				$numerus = $singleton[$c][$n];
+			}
+			return $numerus;
 		}
 		return null;
 	}

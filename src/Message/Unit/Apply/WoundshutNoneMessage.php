@@ -30,6 +30,6 @@ class WoundshutNoneMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'woundshut') ?? parent::getTranslation($name);
+		return $this->singleton($name, 'woundshut') ?? parent::getTranslation($name);
 	}
 }

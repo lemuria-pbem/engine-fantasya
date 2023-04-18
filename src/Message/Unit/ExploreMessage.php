@@ -23,7 +23,7 @@ class ExploreMessage extends ExploreNothingMessage
 
 	protected function getTranslation(string $name): string {
 		if ($name === 'herb') {
-			return $this->commodity($name, 'herb', 1);
+			return $this->singleton($name, 'herb', 1);
 		}
 		if ($name === 'occurrence') {
 			return $this->translateKey('amount.' . $this->occurrence);

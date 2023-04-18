@@ -25,6 +25,6 @@ class BreedingFullMessage extends AbstractConstructionMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'animal', 1) ?? parent::getTranslation($name);
+		return $this->singleton($name, 'animal', 1) ?? parent::getTranslation($name);
 	}
 }

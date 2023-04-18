@@ -22,6 +22,6 @@ class AcceptNoPaymentMessage extends AcceptOfferRemovedMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'payment', 1)?? parent::getTranslation($name);
+		return $this->singleton($name, 'payment', 1)?? parent::getTranslation($name);
 	}
 }

@@ -21,6 +21,6 @@ class CommodityUnmaintainedMessage extends CommodityResourcesMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->building($name, self::BUILDING) ?? parent::getTranslation($name);
+		return $this->singleton($name, self::BUILDING) ?? parent::getTranslation($name);
 	}
 }

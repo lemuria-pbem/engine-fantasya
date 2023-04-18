@@ -24,6 +24,6 @@ class LearnReducedMessage extends LearnProgressMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->ship($name, self::SHIP) ?? parent::getTranslation($name);
+		return $this->singleton($name, self::SHIP) ?? parent::getTranslation($name);
 	}
 }

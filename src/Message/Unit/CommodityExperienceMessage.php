@@ -36,7 +36,7 @@ class CommodityExperienceMessage extends AbstractUnitMessage
 		if ($talent) {
 			return $talent;
 		}
-		$artifact = $this->commodity($name, 'artifact');
+		$artifact = $this->singleton($name, 'artifact');
 		if ($artifact) {
 			return $artifact;
 		}

@@ -22,6 +22,6 @@ class LoseAllMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'commodity') ?? parent::getTranslation($name);
+		return $this->singleton($name, 'commodity') ?? parent::getTranslation($name);
 	}
 }
