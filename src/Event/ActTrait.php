@@ -74,9 +74,6 @@ trait ActTrait
 
 	protected function chooseRandomNeighbour(): ?Region {
 		$neighbours = Lemuria::World()->getNeighbours($this->unit->Region());
-		if (empty($neighbours)) {
-			return null;
-		}
 		$directions = $neighbours->getDirections();
 		return $neighbours[randElement($directions)];
 	}

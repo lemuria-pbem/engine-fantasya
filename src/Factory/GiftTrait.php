@@ -22,7 +22,7 @@ trait GiftTrait
 {
 	use UnitTrait;
 
-	private const ALL = ['alle', 'alles'];
+	private const EVERYTHING = ['alle', 'alles'];
 
 	private int $amount;
 
@@ -31,7 +31,7 @@ trait GiftTrait
 	private ?Unit $recipient;
 
 	private function parseObject(string $count, string $commodity): void {
-		if ($count === '' || in_array(strtolower($count), self::ALL)) {
+		if ($count === '' || in_array(strtolower($count), self::EVERYTHING)) {
 			$this->amount = PHP_INT_MAX; // <COMMAND> Alles [<commodity>]
 		} else {
 			$this->amount = (int)$count; // <COMMAND> <amount> <commodity>

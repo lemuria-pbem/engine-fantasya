@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
-use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
+use Lemuria\Model\Fantasya\Distribution;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Quantity;

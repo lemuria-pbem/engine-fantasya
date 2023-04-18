@@ -501,7 +501,7 @@ final class Accept extends UnitCommand
 		$this->message(AcceptSoldMessage::class)->e($trade)->e($merchant, $unit)->i($quantity)->i($payment, $pay);
 	}
 
-	private function payFee(Unit $unit, Quantity $payment, float $rate) {
+	private function payFee(Unit $unit, Quantity $payment, float $rate): void {
 		$fee   = (int)round($rate * $payment->Count());
 		$owner = $this->unit->Construction()->Inhabitants()->Owner();
 		if ($fee > 0) {

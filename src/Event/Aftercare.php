@@ -16,7 +16,6 @@ final class Aftercare extends AbstractEvent
 		parent::__construct($state, Priority::After);
 	}
 
-	/** @noinspection PhpConditionAlreadyCheckedInspection */
 	protected function run(): void {
 		$score = Lemuria::Score();
 		if ($score instanceof LemuriaScore) {
