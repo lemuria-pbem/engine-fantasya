@@ -45,6 +45,11 @@ final class Attack extends UnitCommand
 	private static array $attackers = [];
 
 	/**
+	 * @var array<int, true>
+	 */
+	private static array $leavers = [];
+
+	/**
 	 * @var array<Unit>
 	 */
 	private array $units = [];
@@ -188,13 +193,18 @@ final class Attack extends UnitCommand
 				$this->message(AttackOnVesselMessage::class)->e($unit);
 			}
 		} elseif ($place === Place::Region) {
-			$construction = $this->unit->Construction();
-			if ($construction) {
-				$this->message(AttackLeaveConstructionCombatMessage::class)->e($construction);
-			} else {
-				$vessel = $this->unit->Vessel();
-				if ($vessel) {
-					$this->message(AttackLeaveVesselCombatMessage::class)->e($vessel);
+			$id = $this->unit->Id()->Id();
+			if (!isset(self::$leavers[$id])) {
+				$construction = $this->unit->Construction();
+				if ($construction) {
+					self::$leavers[$id] = true;
+					$this->message(AttackLeaveConstructionCombatMessage::class)->e($construction);
+				} else {
+					$vessel = $this->unit->Vessel();
+					if ($vessel) {
+						self::$leavers[$id] = true;
+						$this->message(AttackLeaveVesselCombatMessage::class)->e($vessel);
+					}
 				}
 			}
 		}
