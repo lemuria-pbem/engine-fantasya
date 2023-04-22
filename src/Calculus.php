@@ -189,7 +189,7 @@ final class Calculus
 		foreach ($this->teachers as $teach) {
 			if ($isInCollege) {
 				$teacher   = $teach->Unit();
-				$inCollege = $teacher->Construction() instanceof College;
+				$inCollege = $teacher->Construction()?->Building() instanceof College;
 				if ($inCollege) {
 					$calculus = new Calculus($teacher);
 					if ($calculus->isInMaintainedConstruction()) {
