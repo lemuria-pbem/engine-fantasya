@@ -111,6 +111,7 @@ use Lemuria\Model\Fantasya\Building\Magespire;
 use Lemuria\Model\Fantasya\Building\Market;
 use Lemuria\Model\Fantasya\Building\Megapolis;
 use Lemuria\Model\Fantasya\Building\Mine;
+use Lemuria\Model\Fantasya\Building\Monument;
 use Lemuria\Model\Fantasya\Building\Palace;
 use Lemuria\Model\Fantasya\Building\Pit;
 use Lemuria\Model\Fantasya\Building\Port;
@@ -483,6 +484,7 @@ class CommandFactory
 		'Markt'             => Market::class,
 		'Megapolis'         => Megapolis::class,
 		'Mine'              => Pit::class,
+		'Monument'          => Monument::class,
 		'Palast'            => Palace::class,
 		'Pferdezucht'       => HorseBreeding::class,
 		'Sägewerk'          => Sawmill::class,
