@@ -38,6 +38,7 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\Travel\Movement;
 use Lemuria\Engine\Fantasya\Travel\NavigationTrait;
 use Lemuria\Engine\Fantasya\Travel\TravelTrait;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Spell\FavorableWinds;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Navigation;
@@ -276,6 +277,7 @@ class Travel extends UnitCommand implements Activity
 	protected function commitCommand(UnitCommand $command): void {
 		$protocol = $this->context->getProtocol($this->unit);
 		if ($protocol->hasActivity($this)) {
+			Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
 			throw new ActivityException($command);
 		}
 	}

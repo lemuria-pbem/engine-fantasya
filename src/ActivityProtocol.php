@@ -54,16 +54,14 @@ final class ActivityProtocol
 	 * Add a command to the protocol.
 	 */
 	public function commit(UnitCommand $command): bool {
+		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
 		if ($command instanceof Activity) {
 			if ($this->isAllowed($command)) {
-				Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
-				$this->activities[]                                = $command;
+				$this->activities[] = $command;
 				return true;
 			}
 			return false;
 		}
-
-		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
 		return true;
 	}
 
