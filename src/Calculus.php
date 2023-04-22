@@ -127,6 +127,10 @@ final class Calculus
 		if ($this->unit->Size() > 0) {
 			$ability = $this->unit->Knowledge()->offsetGet($talent);
 			if ($ability instanceof Ability) {
+				if ($ability->Level() <= 0) {
+					return $ability;
+				}
+
 				$race         = $this->unit->Race();
 				$modification = $race->Modifications()->offsetGet($talent);
 				if ($modification instanceof Modification) {
