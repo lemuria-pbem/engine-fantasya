@@ -56,9 +56,14 @@ abstract class AbstractMessage implements MessageType
 		if ($translation === null) {
 			return null;
 		}
-		while (preg_match('|{g/([a-z]+):([^:]+):\$([a-zA-Z]+)}|', $translation, $matches) === 1) {
-			$match       = $matches[0];
-			$translation = str_replace($match, $this->replaceGrammar(Casus::from($matches[1]), $matches[2], $matches[3]), $translation);
+		while (preg_match('|{([gr])/([a-z]+):([^:]+):\$([a-zA-Z]+)}|', $translation, $matches) === 1) {
+			$match = $matches[0];
+			$casus = Casus::from($matches[2]);
+			if ($matches[1] === 'g') {
+				$translation = str_replace($match, $this->replaceGrammar($casus, $matches[3], $matches[4]), $translation);
+			} else {
+				$translation = str_replace($match, $this->replaceGrammarSingleton($casus, $matches[3], $matches[4]), $translation);
+			}
 		}
 		while (preg_match('/({[^:]+:\$[a-zA-Z]+})+/', $translation, $matches) === 1) {
 			$match = $matches[1];
@@ -223,6 +228,14 @@ abstract class AbstractMessage implements MessageType
 			$singleton = (string)$singleton;
 		}
 		return $this->combineGrammar($singleton, $search, $casus);
+	}
+
+	private function replaceGrammarSingleton(Casus $casus, string $search, string $name): string {
+		$singleton = $this->$name;
+		if (!($singleton instanceof Singleton)) {
+			$singleton = (string)$singleton;
+		}
+		return $this->replaceSingleton($singleton, $search, $casus);
 	}
 
 	private function replace(string $match): string {

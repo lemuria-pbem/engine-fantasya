@@ -891,7 +891,7 @@
 		"UnguardMessage": "Die Einheit $id bewacht nicht länger die Region.",
 		"UnguardNotGuardingMessage": "Die Einheit $id bewacht die Region nicht.",
 		"UnicumCreateMessage": "Die Einheit $id erschafft {g/akk:ein:$composition} mit der Nummer $unicum.",
-		"UnicumDestroyBurnMessage": "Die Einheit $unit zündet {g/akk:das:$composition} $unicum an und verbrennt {es:$composition} zu Asche.",
+		"UnicumDestroyBurnMessage": "Die Einheit $unit zündet {g/akk:das:$composition} $unicum an und verbrennt {r/akk:es:$composition} zu Asche.",
 		"UnicumMaterialMessage": "Die Einheit $id benutzt $material, um {g/akk:ein:$composition} zu erschaffen.",
 		"UnicumNoMaterialMessage": "Die Einheit $id hat nicht genügend Ressourcen, um {g/akk:ein:$composition} zu erschaffen.",
 		"UnicumNoneMessage": "Die Einheit $id kann {g/akk:kein:$composition} mehr erschaffen.",
@@ -978,12 +978,6 @@
 			"Monument": "am"
 		},
 		"Aurapunkt": ["Aurapunkt", "Aurapunkte"],
-		"es": {
-			"HerbAlmanac": "er",
-			"RingOfInvisibility": "er",
-			"Scroll": "sie",
-			"Spellbook": "es"
-		},
 		"ist": ["ist", "sind"],
 		"percent": "$p %",
 		"price": {
@@ -1123,6 +1117,7 @@
 		"CamelBreeding": ["f", ["Kamelzucht", "Kamelzuchten"], 1, 1, 1],
 		"Canal": ["m", ["Kanal", "Kanäle"], ["Kanals", 1], [0, "Kanälen"], 1],
 		"Caravel": ["f", ["Karavelle", "Karavellen"], 1, 1, 1],
+		"Carcass": ["m", ["Kadaver", 0], ["Kadavers", 0], [0, "Kadavern"], [0, 0]],
 		"Carnassial": ["m", ["Reißzahn", "Reißzähne"], ["Reißzahnes", 1], ["Reißzahne", "Reißzähnen"], 1],
 		"Carriage": ["m", ["Wagen", 0], ["Wagens", 0], [0, 0], 1],
 		"CarriageWreck": ["n", ["Wagenwrack", "Wagenwracks"], [1, 1], [0, 1], 1],
@@ -1328,6 +1323,15 @@
 			"n": ["zum", "zum", "zum", "zum"],
 			"p": ["zum", "zum", "zum", "zum"],
 			"q": ["zum", "zum", "zum", "zum"]
+		},
+		"replace": {
+			"es": {
+				"m": ["er", "sein", "ihm", "ihn"],
+				"f": ["sie", "ihr", "ihr", "sie"],
+				"n": ["es", "sein", "ihm", "es"],
+				"p": ["er", "sein", "ihm", "ihn"],
+				"q": ["es", "sein", "ihm", "es"]
+			}
 		}
 	}
 }

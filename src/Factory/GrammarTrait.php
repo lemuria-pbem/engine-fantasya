@@ -30,6 +30,19 @@ trait GrammarTrait
 	/**
 	 * @throws KeyPathException
 	 */
+	protected function replaceSingleton(Singleton|string $class, string $replace, Casus $casus = Casus::Accusative): string {
+		$this->initDictionary();
+
+		$singletonGrammar = $this->dictionary->raw('singleton.' . $class);
+		$genus            = $singletonGrammar[0];
+		$grammar          = $this->dictionary->raw('grammar.replace.' . $replace . '.' . $genus);
+		$index            = $casus->index();
+		return $grammar[$index];
+	}
+
+	/**
+	 * @throws KeyPathException
+	 */
 	protected function translateGrammar(Singleton|string $class, Casus $casus, int $numerus = 0): string {
 		$this->initDictionary();
 		$singleton  = $this->dictionary->raw('singleton.' . getClass($class));
@@ -52,12 +65,12 @@ trait GrammarTrait
 	protected function combineGrammar(Singleton|string $singleton, string $grammar, Casus $casus = Casus::Accusative): string {
 		$this->initDictionary();
 
-		$singletonGrammay = $this->dictionary->raw('singleton.' . $singleton);
-		$genus            = $singletonGrammay[0];
+		$singletonGrammar = $this->dictionary->raw('singleton.' . $singleton);
+		$genus            = $singletonGrammar[0];
 		$index            = $casus->index();
 
-		$grammar   = $this->dictionary->raw('grammar.' . $grammar);
-		$numerus   = $grammar['numerus'];
+		$grammar = $this->dictionary->raw('grammar.' . $grammar);
+		$numerus = $grammar['numerus'];
 
 		$replace     = $grammar[$genus][$index];
 		$replacement = $this->translateGrammar($singleton, $casus, $numerus);
