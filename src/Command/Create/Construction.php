@@ -8,11 +8,13 @@ use Lemuria\Engine\Fantasya\Command\Trespass\Enter;
 use Lemuria\Engine\Fantasya\Effect\DecayEffect;
 use Lemuria\Engine\Fantasya\Effect\SignpostEffect;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
 use Lemuria\Engine\Fantasya\Factory\MarketBuilder;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyBuilding;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyCastle;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionAnyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionBuildMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionCreateMessage;
@@ -60,6 +62,7 @@ use Lemuria\Model\Fantasya\Requirement;
  */
 final class Construction extends AbstractProduct
 {
+	use GrammarTrait;
 	use ModifiedActivityTrait;
 
 	private const EXTENSIONS = [
@@ -126,8 +129,8 @@ final class Construction extends AbstractProduct
 			} else {
 				$id           = Lemuria::Catalog()->nextId(Domain::Construction);
 				$construction = new ConstructionModel();
-				$dictionary   = new Dictionary();
-				$name         = $dictionary->get('building.' . getClass($building)) . ' ' . $id;
+				$this->initDictionary();
+				$name = $this->translateSingleton($building, casus: Casus::Nominative) . ' ' . $id;
 				$construction->setName($name)->setId($id);
 				$construction->Inhabitants()->add($this->unit);
 				$this->unit->Region()->Estate()->add($construction);
