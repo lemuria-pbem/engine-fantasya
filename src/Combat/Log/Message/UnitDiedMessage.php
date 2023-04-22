@@ -20,6 +20,7 @@ class UnitDiedMessage extends AbstractMessage
 	protected Entity $unit;
 
 	public function __construct(?Unit $unit = null) {
+		parent::__construct();
 		if ($unit) {
 			$this->unit = new Entity($unit);
 		}

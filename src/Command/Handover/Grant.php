@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Handover;
 
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantFromInsideMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantFromOutsideMessage;
@@ -12,6 +13,8 @@ use Lemuria\Engine\Fantasya\Message\Unit\GrantNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantNotInsideMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantNotOnBoardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantTakeoverMessage;
+use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Reassignment;
 
 /**
  * A unit who is owner of a construction or vessel grants another unit inside the command over it.
@@ -22,8 +25,10 @@ use Lemuria\Engine\Fantasya\Message\Unit\GrantTakeoverMessage;
  *
  * @noinspection DuplicatedCode
 */
-final class Grant extends UnitCommand
+final class Grant extends UnitCommand implements Reassignment
 {
+	use ReassignTrait;
+
 	protected function run(): void {
 		if ($this->phrase->count() <= 0) {
 			$this->takeOver();
@@ -75,6 +80,10 @@ final class Grant extends UnitCommand
 		}
 
 		$this->message(GrantFromOutsideMessage::class);
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->getReassignPhraseForParameter(1, $old, $new);
 	}
 
 	/**

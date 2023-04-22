@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command\Trespass;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Effect\UnpaidDemurrage;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardDeniedMessage;
@@ -15,9 +16,12 @@ use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardNotFoundMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselUnpaidDemurrageMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Vessel;
+use Lemuria\Model\Reassignment;
 
 /**
  * A unit enters a vessel using the Board command.
@@ -25,8 +29,9 @@ use Lemuria\Model\Fantasya\Vessel;
  * - BESTEIGEN <Vessel>
  * - BESTEIGEN Schiff <Vessel>
  */
-final class Board extends UnitCommand
+final class Board extends UnitCommand implements Reassignment
 {
+	use ReassignTrait;
 	use SiegeTrait;
 
 	protected function run(): void {
@@ -87,5 +92,13 @@ final class Board extends UnitCommand
 
 	protected function checkSize(): bool {
 		return true;
+	}
+
+	protected function checkReassignmentDomain(Domain $domain): bool {
+		return $domain === Domain::Vessel;
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->getReassignPhraseForParameter($this->phrase->count(), $old, $new);
 	}
 }

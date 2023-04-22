@@ -25,6 +25,6 @@ class CommodityResourcesMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'artifact', 1) ?? parent::getTranslation($name);
+		return $this->singleton($name, 'artifact', 1) ?? parent::getTranslation($name);
 	}
 }

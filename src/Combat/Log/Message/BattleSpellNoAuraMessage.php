@@ -26,6 +26,7 @@ class BattleSpellNoAuraMessage extends AbstractMessage
 	protected array $simpleParameters = [self::UNIT];
 
 	public function __construct(?Unit $unit = null, protected ?BattleSpell $spell = null) {
+		parent::__construct();
 		if ($unit) {
 			$this->unit = new Entity($unit);
 		}
@@ -50,7 +51,7 @@ class BattleSpellNoAuraMessage extends AbstractMessage
 
 	protected function translate(string $template): string {
 		$message = parent::translate($template);
-		$spell   = parent::dictionary()->get('spell', $this->spell);
+		$spell   = $this->dictionary->get('spell', $this->spell);
 		return str_replace('$spell', $spell, $message);
 	}
 

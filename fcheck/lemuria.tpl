@@ -62,6 +62,8 @@
 ^@?(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6}( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6}$
+^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +(\*|alle|alles))$
+^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9-]+$
 ^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9]+[a-zäöüß ]+$
 ^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9]+[a-zäöüß ]+ [0-9]+[a-zäöüß ]+$
 
@@ -86,13 +88,15 @@
 ^@?(les|lese|lesen|li|lie|lies)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 ^@?(unters|untersu|untersuc|untersuch|untersuche|untersuchen)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
-^@?(m|ma|mac|mach|mache|machen) +(temp) +[a-z0-9]{1,6}$
-^@?(m|ma|mac|mach|mache|machen) +[a-zäöüß]+$
-^@?(m|ma|mac|mach|mache|machen) +[0-9]+ +[a-zäöüß]+$
-^@?(m|ma|mac|mach|mache|machen) +(schiff|boot|drachenschiff|galeone|karavelle|langboot|trireme)( +[0-9]+)?$
-^@?(m|ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|akropolis|alchemistenküche|bergwerk|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|kamelzucht|kanal|leuchtturm|leuchttürme|magierturm|markt|minen|mine|monument|monumente|pferdezucht|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steingrube|steuerturm|taverne|wegweiser|werkstatt)(( +[0-9]+)|( +[a-z0-9]{1,6}))?$
-^@?(m|ma|mac|mach|mache|machen) +straße +(no|o|so|sw|w|nw)( +[0-9]+)?$
-^@?(m|ma|mac|mach|mache|machen) +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
+^@?(ma|mac|mach|mache|machen) +(temp) +[a-z0-9]{1,6}$
+^@?(ma|mac|mach|mache|machen) +[a-zäöüß]+$
+^@?(ma|mac|mach|mache|machen) +[0-9]+ +[a-zäöüß]+$
+^@?(ma|mac|mach|mache|machen) +(schiff|boot|drachenschiff|galeone|karavelle|langboot|trireme)( +[0-9]+)?$
+^@?(ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|akropolis|alchemistenküche|bergwerk|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|kamelzucht|kanal|leuchtturm|leuchttürme|magierturm|markt|minen|mine|monument|monumente|pferdezucht|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steingrube|steuerturm|taverne|wegweiser|werkstatt)(( +[0-9]+)|( +[a-z0-9]{1,6}))?$
+^@?(ma|mac|mach|mache|machen) +straße +(no|o|so|sw|w|nw)( +[0-9]+)?$
+^@?(ma|mac|mach|mache|machen) +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
+
+^(me|men|meng|menge) +[a-z0-9]{1,6} +([0-9-]+|\*) +[a-zäöüß ]+$
 
 ^(nachf|nachfr|nachfra|nachfrag|nachfrage) +([0-9-]+|\*) +[a-zäöüß ]+[0-9-]+ +[a-zäöüß ]+$
 
@@ -105,10 +109,12 @@
 
 ^@?(nu|num|numm|numme|nummer|i|id)( +(einheit|gebaeude|gebäude|burg|schiff|partei))? +[a-z0-9]{1,6}$
 
-^(p|pa|par|part|parte|partei) +[a-z0-9]{1,6}( +.*)?$
+^(pa|par|part|parte|partei) +[a-z0-9]{1,6}( +.*)?$
 ^(ere|eres|eress|eresse|eressea) +[a-z0-9]{1,6}( +.*)?$
-^(f|fa|fan|fant|fanta|fantas|fantasy|fantasya) +[a-z0-9]{1,6}( +.*)?$
+^(fa|fan|fant|fanta|fantas|fantasy|fantasya) +[a-z0-9]{1,6}( +.*)?$
 ^(lem|lemu|lemur|lemuri|lemuria) +[a-z0-9]{1,6}( +.*)?$
+
+^(pr|pre|prei|preis) +[a-z0-9]{1,6} +([0-9-]+|\*) +[a-zäöüß ]+$
 
 ^@?(rei|reis|reise|reisen|nac|nach)( +(e|ne|no|nw|o|so|sw|w|east|nordosten|nordwesten|northeast|northwest|osten|suedosten|suedwesten|southeast|southwest|westen|west))+$
 
@@ -173,6 +179,7 @@
 ^(d|de|def|defa|defau|defaul|default) +[0-9]+/+[0-9]+ +[a-z].+$
 
 ^(w|wi|wie|wied|wiede|wieder|wiederh|wiederho|wiederhol|wiederhole|wiederholen) +[a-z0-9]{1,6}( +nicht)?$
+^(w|wi|wie|wied|wiede|wieder|wiederh|wiederho|wiederhol|wiederhole|wiederholen)( +(alle|alles|nicht|nichts)?$
 
 ^@?(za|zau|zaub|zaube|zauber|zaubere|zaubern) +(adlerauge|astraler weg|aufruhr verursachen|auratransfer|blick des greifen|erdbeben|erwecke baumhirten|fernsicht|g(ue|ü)nstige winde|lautloser schatten|luftschiff|monster aufhetzen|ring der unsichtbarkeit|tagtraum|teleportation|wunderdoktor)( +[0-9]+)?$
 

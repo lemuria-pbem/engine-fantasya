@@ -22,6 +22,6 @@ class PotionEffectContinuesMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'potion') ?? parent::getTranslation($name);
+		return $this->singleton($name, 'potion') ?? parent::getTranslation($name);
 	}
 }

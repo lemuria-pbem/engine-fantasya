@@ -12,6 +12,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\Cast\AstralPassageRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\AstralPassageVesselMessage;
 use Lemuria\Engine\Fantasya\Travel\MoveTrait;
 use Lemuria\Exception\LemuriaException;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Region;
@@ -22,6 +23,19 @@ final class AstralPassage extends AbstractCast
 	use BuilderTrait;
 	use MessageTrait;
 	use MoveTrait;
+
+	public function getReassignmentDomain(): ?Domain {
+		$region       = $this->cast->Region();
+		$construction = $this->cast->Construction();
+		$vessel       = $this->cast->Vessel();
+		if ($construction && !$region && !$vessel) {
+			return Domain::Construction;
+		}
+		if ($vessel && !$region && !$construction) {
+			return Domain::Vessel;
+		}
+		return null;
+	}
 
 	public function cast(): void {
 		$region       = $this->cast->Region();

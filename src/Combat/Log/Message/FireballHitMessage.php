@@ -14,6 +14,7 @@ class FireballHitMessage extends AbstractMessage
 	protected array $simpleParameters = [self::FIGHTER, self::DAMAGE];
 
 	public function __construct(protected ?string $fighter = null, protected ?int $damage = null) {
+		parent::__construct();
 	}
 
 	public function getDebug(): string {
@@ -33,7 +34,7 @@ class FireballHitMessage extends AbstractMessage
 
 	protected function translate(string $template): string {
 		$message  = parent::translate($template);
-		$hitpoint = parent::dictionary()->get('combat.hitpoint', $this->damage > 1 ? 1 : 0);
+		$hitpoint = $this->dictionary->get('combat.hitpoint', $this->damage > 1 ? 1 : 0);
 		return str_replace('$hitpoint', $hitpoint, $message);
 	}
 

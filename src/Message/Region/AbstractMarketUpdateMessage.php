@@ -28,7 +28,7 @@ abstract class AbstractMarketUpdateMessage extends AbstractRegionMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'luxury') ?? parent::getTranslation($name);
+		return $this->singleton($name, 'luxury') ?? parent::getTranslation($name);
 	}
 
 	abstract protected function change(): string;

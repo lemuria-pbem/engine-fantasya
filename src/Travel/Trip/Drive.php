@@ -73,8 +73,7 @@ class Drive extends AbstractTrip
 					$size = 0;
 				}
 			}
-			$this->capacity += $size * $race->Payload();
-			$this->capacity += $this->getPayloadBoost();
+			$this->capacity += $this->calculus->payload($size);
 		}
 	}
 

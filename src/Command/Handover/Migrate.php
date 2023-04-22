@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\ContactTrait;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateFailedMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateFromMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateIncompatibleMessage;
@@ -15,8 +16,10 @@ use Lemuria\Engine\Fantasya\Message\Party\MigrateSameMessage;
 use Lemuria\Engine\Fantasya\Message\Party\MigrateToMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\MigrateInvisibleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\MigrateNotFoundMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Race\Human;
+use Lemuria\Model\Reassignment;
 
 /**
  * Implementation of command GIB.
@@ -25,11 +28,12 @@ use Lemuria\Model\Fantasya\Race\Human;
  *
  * - GIB <Unit> Einheit
  */
-final class Migrate extends UnitCommand
+final class Migrate extends UnitCommand implements Reassignment
 {
 	use BuilderTrait;
 	use ContactTrait;
 	use GiftTrait;
+	use ReassignTrait;
 
 	protected function run(): void {
 		$i               = 1;
@@ -67,5 +71,9 @@ final class Migrate extends UnitCommand
 		} else {
 			$this->message(MigrateIncompatibleMessage::class, $from)->e($this->unit)->e($to, MigrateFromMessage::PARTY);
 		}
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->getReassignPhraseForParameter(1, $old, $new);
 	}
 }

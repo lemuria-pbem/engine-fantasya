@@ -23,6 +23,6 @@ abstract class AbstractOperateMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->composition($name, 'composition') ?? parent::getTranslation($name);
+		return $this->singleton($name, 'composition') ?? parent::getTranslation($name);
 	}
 }

@@ -17,6 +17,7 @@ class AssaultHitMessage extends AbstractMessage
 
 	public function __construct(protected ?string $attacker = null, protected ?string $defender = null,
 		                        protected ?int $damage = null) {
+		parent::__construct();
 	}
 
 	public function getDebug(): string {
@@ -37,7 +38,7 @@ class AssaultHitMessage extends AbstractMessage
 
 	protected function translate(string $template): string {
 		$message  = parent::translate($template);
-		$hitpoint = parent::dictionary()->get('combat.hitpoint', $this->damage > 1 ? 1 : 0);
+		$hitpoint = $this->dictionary->get('combat.hitpoint', $this->damage > 1 ? 1 : 0);
 		return str_replace('$hitpoint', $hitpoint, $message);
 	}
 

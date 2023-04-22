@@ -19,6 +19,6 @@ class FeeNotApplicableMessage extends FeeNotOwnerMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->building($name, 'building') ?? parent::getTranslation($name);
+		return $this->singleton($name, 'building') ?? parent::getTranslation($name);
 	}
 }

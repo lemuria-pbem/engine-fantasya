@@ -4,16 +4,17 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Log\Message;
+use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
 use Lemuria\Lemuria;
-use Lemuria\Model\Dictionary;
 use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
 use Lemuria\Validate;
 
 abstract class AbstractMessage implements Message
 {
+	use GrammarTrait;
 	use SerializableTrait;
 
 	private const ID = 'id';
@@ -21,8 +22,6 @@ abstract class AbstractMessage implements Message
 	private const TYPE = 'type';
 
 	private const DEBUG = 'debug';
-
-	protected static ?Dictionary $dictionary = null;
 
 	/**
 	 * @var array<string>
@@ -40,9 +39,13 @@ abstract class AbstractMessage implements Message
 		return $this->id;
 	}
 
+	public function __construct() {
+		$this->initDictionary();
+	}
+
 	public function __toString(): string {
 		$key     = 'combat.message.' . getClass($this);
-		$message = self::dictionary()->get($key);
+		$message = $this->dictionary->get($key);
 		return $message === $key ? $this->getDebug() : $this->translate($message);
 	}
 
@@ -61,13 +64,6 @@ abstract class AbstractMessage implements Message
 		$this->validateSerializedData($data);
 		$this->id = new Id($data[self::ID]);
 		return $this;
-	}
-
-	protected static function dictionary(): Dictionary {
-		if (!self::$dictionary) {
-			self::$dictionary = new Dictionary();
-		}
-		return self::$dictionary;
 	}
 
 	protected function translate(string $template): string {

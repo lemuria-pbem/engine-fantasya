@@ -19,6 +19,6 @@ class ApplyNoneMessage extends ApplyAlreadyMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'potion') ?? parent::getTranslation($name);
+		return $this->singleton($name, 'potion') ?? parent::getTranslation($name);
 	}
 }

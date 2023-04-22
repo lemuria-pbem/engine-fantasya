@@ -24,6 +24,7 @@ class CombatantNoWeaponMessage extends AbstractMessage
 	protected int $battleRow;
 
 	public function __construct(?Combatant $combatant = null) {
+		parent::__construct();
 		if ($combatant) {
 			$this->combatant = $combatant->Id();
 			$this->count     = $combatant->Size();
@@ -49,9 +50,9 @@ class CombatantNoWeaponMessage extends AbstractMessage
 
 	protected function translate(string $template): string {
 		$message   = parent::translate($template);
-		$fighter   = parent::dictionary()->get('combat.fighter', $this->count > 1 ? 1 : 0);
+		$fighter   = $this->dictionary->get('combat.fighter', $this->count > 1 ? 1 : 0);
 		$message   = str_replace('$fighter', $fighter, $message);
-		$battleRow = parent::dictionary()->get('battleRow.' . $this->battleRow);
+		$battleRow = $this->dictionary->get('battleRow.' . $this->battleRow);
 		return str_replace('$battleRow', $battleRow, $message);
 	}
 

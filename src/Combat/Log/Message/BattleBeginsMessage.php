@@ -30,6 +30,7 @@ class BattleBeginsMessage extends AbstractMessage
 	protected array $defenders = [];
 
 	public function __construct(Battle $battle = null) {
+		parent::__construct();
 		if ($battle) {
 			$this->region = new Entity($battle->Place()->Region());
 			foreach ($battle->Attacker() as $party) {
@@ -76,11 +77,11 @@ class BattleBeginsMessage extends AbstractMessage
 
 	protected function translate(string $template): string {
 		$message = parent::translate($template);
-		$aParty  = parent::dictionary()->get('combat.party', count($this->attackers) > 1 ? 1 : 0);
+		$aParty  = $this->dictionary->get('combat.party', count($this->attackers) > 1 ? 1 : 0);
 		$message = str_replace('$aParty', $aParty, $message);
 		$message = str_replace('$attacker', $this->entities($this->attackers), $message);
-		$attack  = parent::dictionary()->get('combat.attack', count($this->attackers) > 1 ? 1 : 0);
-		$dParty  = parent::dictionary()->get('combat.party', count($this->defenders) > 1 ? 1 : 0);
+		$attack  = $this->dictionary->get('combat.attack', count($this->attackers) > 1 ? 1 : 0);
+		$dParty  = $this->dictionary->get('combat.party', count($this->defenders) > 1 ? 1 : 0);
 		$message = str_replace('$dParty', $dParty, $message);
 		$message = str_replace('$attack', $attack, $message);
 		return str_replace('$defender', $this->entities($this->defenders), $message);
@@ -100,7 +101,7 @@ class BattleBeginsMessage extends AbstractMessage
 		}
 		if (count($entities) > 1) {
 			$last = array_pop($entities);
-			$and  = parent::dictionary()->get('combat.and');
+			$and  = $this->dictionary->get('combat.and');
 			return implode(', ', $entities) . ' ' . $and . ' ' . $last;
 		}
 		return $entities[0];

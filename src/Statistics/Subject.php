@@ -32,6 +32,8 @@ enum Subject
 
 	case People;
 
+	case PeopleForce;
+
 	case Population;
 
 	case Prosperity;
@@ -53,6 +55,8 @@ enum Subject
 	case Unemployment;
 
 	case Units;
+
+	case UnitForce;
 
 	case Wealth;
 

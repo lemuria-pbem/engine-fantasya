@@ -33,7 +33,7 @@ class SongOfPeaceFighterMessage extends SongOfPeaceCombatantMessage
 
 	protected function translate(string $template): string {
 		$message = parent::translate($template);
-		$leave   = parent::dictionary()->get('combat.leave', $this->fighter === 1 ? 0 : 1);
+		$leave   = $this->dictionary->get('combat.leave', $this->fighter === 1 ? 0 : 1);
 		return str_replace('$leave', $leave, $message);
 	}
 

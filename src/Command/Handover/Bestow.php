@@ -8,9 +8,13 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\ContactTrait;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Factory\OperateTrait;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\BestowRejectedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveFailedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GiveNotFoundMessage;
+use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Domain;
+use Lemuria\Model\Reassignment;
 
 /**
  * Implementation of command GEBEN for unica.
@@ -20,11 +24,14 @@ use Lemuria\Engine\Fantasya\Message\Unit\GiveNotFoundMessage;
  * - GEBEN <Unit> <Unicum>
  * - GEBEN <Unit> <composition> <Unicum>
  */
-final class Bestow extends UnitCommand implements Operator
+final class Bestow extends UnitCommand implements Operator, Reassignment
 {
 	use ContactTrait;
 	use GiftTrait;
 	use OperateTrait;
+	use ReassignTrait;
+
+	private int $reassignParameter;
 
 	protected function run(): void {
 		$i               = 1;
@@ -52,5 +59,22 @@ final class Bestow extends UnitCommand implements Operator
 		}
 
 		$this->parseBestow()?->give($this->recipient);
+	}
+
+	protected function checkReassignmentDomain(Domain $domain): bool {
+		switch ($domain) {
+			case Domain::Unit :
+				$this->reassignParameter = 1;
+				return true;
+			case Domain::Unicum :
+				$this->reassignParameter = $this->phrase->count();
+				return true;
+			default :
+				return false;
+		}
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->getReassignPhraseForParameter($this->reassignParameter, $old, $new);
 	}
 }

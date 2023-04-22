@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
 use Lemuria\Engine\Fantasya\Command\Accept;
 use Lemuria\Engine\Fantasya\Command\Allow;
+use Lemuria\Engine\Fantasya\Command\Amount;
 use Lemuria\Engine\Fantasya\Command\Announcement;
 use Lemuria\Engine\Fantasya\Command\Apply\AbstractApply;
 use Lemuria\Engine\Fantasya\Command\Apply\HorseBlissBreed;
@@ -54,6 +55,7 @@ use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Command\Origin;
 use Lemuria\Engine\Fantasya\Command\Party;
 use Lemuria\Engine\Fantasya\Command\Presetting;
+use Lemuria\Engine\Fantasya\Command\Price;
 use Lemuria\Engine\Fantasya\Command\Read;
 use Lemuria\Engine\Fantasya\Command\Recruit;
 use Lemuria\Engine\Fantasya\Command\Repeat;
@@ -218,6 +220,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Composition;
+use Lemuria\Model\Fantasya\Composition\Carcass;
 use Lemuria\Model\Fantasya\Composition\HerbAlmanac;
 use Lemuria\Model\Fantasya\Composition\RingOfInvisibility;
 use Lemuria\Model\Fantasya\Composition\Scroll;
@@ -371,6 +374,7 @@ class CommandFactory
 		'LESEN'        => true,
 		'LIES'         => 'LESEN',
 		'MACHEN'       => true,
+		'MENGE'        => true,
 		'NACH'         => 'REISEN',
 		'NACHFRAGE'    => true,
 		'NÄCHSTER'     => true,
@@ -380,6 +384,7 @@ class CommandFactory
 		'NIMM'         => 'NEHMEN',
 		'NUMMER'       => true,
 		'PARTEI'       => true,
+		'PREIS'        => true,
 		'REISEN'       => true,
 		'REKRUTEN'     => 'REKRUTIEREN',
 		'REKRUTIEREN'  => true,
@@ -692,6 +697,7 @@ class CommandFactory
 	 * @var array<string, string>
 	 */
 	protected array $compositions = [
+		'Kadaver'                 => Carcass::class,
 		'Kraeuteralmanach'        => HerbAlmanac::class,
 		'Kräuteralmanach'         => HerbAlmanac::class,
 		'Ring der Unsichtbarkeit' => RingOfInvisibility::class,
@@ -900,6 +906,7 @@ class CommandFactory
 				'LERNEN'       => Learn::class,
 				'LESEN'        => Read::class,
 				'MACHEN'       => Create::class,
+				'MENGE'        => Amount::class,
 				'NACHFRAGE'    => Demand::class,
 				'NAME'         => Name::class,
 				'NÄCHSTER'     => Next::class,
@@ -908,6 +915,7 @@ class CommandFactory
 				'NULL'         => NullCommand::class,
 				'NUMMER'       => Number::class,
 				'PARTEI'       => Party::class,
+				'PREIS'        => Price::class,
 				'REISEN'       => Travel::class,
 				'REKRUTIEREN'  => Recruit::class,
 				'RESERVIEREN'  => Reserve::class,

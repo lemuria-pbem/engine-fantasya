@@ -26,8 +26,11 @@ use Lemuria\Model\Fantasya\Commodity\Protection\Repairable\TatteredLeatherArmor;
 use Lemuria\Model\Fantasya\Commodity\Protection\Woodshield;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Bow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Claymore;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Halberd;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\BentHalberd;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustyClaymore;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\SkewedCatapult;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\UngirtBow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\UngirtCrossbow;
@@ -46,6 +49,11 @@ use Lemuria\Model\Fantasya\Weapon;
 class Attack
 {
 	use BuilderTrait;
+
+	public final const TWO_HANDED = [
+		Claymore::class    => true, Halberd::class       => true,
+		BentHalberd::class => true, RustyClaymore::class => true
+	];
 
 	protected const DAMAGE_BONUS = [
 		Bow::class => 0.5

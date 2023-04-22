@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachBonusMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachExceptionMessage;
@@ -20,6 +21,7 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Reassignment;
 
 /**
  * Implementation of command LEHREN (teach other units).
@@ -29,10 +31,11 @@ use Lemuria\Model\Fantasya\Unit;
  * - LEHREN
  * - LEHREN <Unit>...
  */
-final class Teach extends UnitCommand implements Activity
+final class Teach extends UnitCommand implements Activity, Reassignment
 {
 	use CamouflageTrait;
 	use ModifiedActivityTrait;
+	use ReassignTrait;
 	use SiegeTrait;
 
 	private const MAX_STUDENTS = 10;
@@ -63,6 +66,7 @@ final class Teach extends UnitCommand implements Activity
 			}
 			$this->createNewDefault($ids);
 			$this->context->getProtocol($this->unit)->replaceDefaults($this);
+			Lemuria::Catalog()->addReassignment($this);
 		}
 	}
 

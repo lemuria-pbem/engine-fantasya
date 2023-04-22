@@ -6,16 +6,19 @@ use function Lemuria\getClass;
 use function Lemuria\number;
 use Lemuria\Item;
 use Lemuria\Singleton;
+use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
 use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Id;
-use Lemuria\Model\Dictionary;
 use Lemuria\Model\Fantasya\Container;
 use Lemuria\SingletonTrait;
 
 abstract class AbstractMessage implements MessageType
 {
+	use GrammarTrait;
 	use SingletonTrait;
+
+	protected final const NOT_VARIABLE = ['dictionary' => true, 'level' => true];
 
 	protected Result $result = Result::Debug;
 
@@ -53,6 +56,10 @@ abstract class AbstractMessage implements MessageType
 		if ($translation === null) {
 			return null;
 		}
+		while (preg_match('|{g/([a-z]+):([^:]+):\$([a-zA-Z]+)}|', $translation, $matches) === 1) {
+			$match       = $matches[0];
+			$translation = str_replace($match, $this->replaceGrammar(Casus::from($matches[1]), $matches[2], $matches[3]), $translation);
+		}
 		while (preg_match('/({[^:]+:\$[a-zA-Z]+})+/', $translation, $matches) === 1) {
 			$match = $matches[1];
 			$translation = str_replace($match, $this->replacePrefix($match), $translation);
@@ -72,8 +79,8 @@ abstract class AbstractMessage implements MessageType
 	}
 
 	protected function translateKey(string $keyPath, ?int $index = null): ?string {
-		$dictionary  = new Dictionary();
-		$translation = $dictionary->get($keyPath, $index);
+		$this->initDictionary();
+		$translation = $this->dictionary->get($keyPath, $index);
 		if ($index !== null) {
 			$keyPath .= '.' . $index;
 		}
@@ -85,7 +92,7 @@ abstract class AbstractMessage implements MessageType
 		$reflection = new \ReflectionClass($this);
 		foreach ($reflection->getProperties() as $property) {
 			$name = $property->getName();
-			if ($name !== 'level') {
+			if (!isset(self::NOT_VARIABLE[$name])) {
 				$properties[] = $name;
 			}
 		}
@@ -100,16 +107,8 @@ abstract class AbstractMessage implements MessageType
 		return (string)$translation;
 	}
 
-	protected function building(string $property, string $name): ?string {
-		return $this->getTranslatedName($property, $name, 'building');
-	}
-
-	protected function commodity(string $property, string $name, int $index = 0): ?string {
-		return $this->getTranslatedName($property, $name, 'resource', $index);
-	}
-
-	protected function composition(string $property, string $name, int $index = 0): ?string {
-		return $this->getTranslatedName($property, $name, 'composition', $index);
+	protected function singleton(string $property, string $name, int $index = 0): ?string {
+		return $this->getTranslatedSingleton($property, $name, $index);
 	}
 
 	protected function item(string $property, string $name, ?int $index = null): ?string {
@@ -119,12 +118,12 @@ abstract class AbstractMessage implements MessageType
 				return $this->translateKey('kind.' . $commodity->Type()->name, $index);
 			}
 
-			$resource = getClass($commodity);
-			$count    = $this->$name->Count();
+			$count = $this->$name->Count();
 			if ($index === null) {
 				$index = $count > 1 ? 1 : 0;
 			}
-			$item = $this->translateKey('resource.' . $resource, $index);
+
+			$item = $this->translateSingleton($commodity, $index);
 			if ($item) {
 				return $count < PHP_INT_MAX ? number($count) . ' ' . $item : $item;
 			}
@@ -133,11 +132,7 @@ abstract class AbstractMessage implements MessageType
 	}
 
 	protected function landscape(string $property, string $name): ?string {
-		return $this->getTranslatedName($property, $name, 'landscape');
-	}
-
-	protected function ship(string $property, string $name): ?string {
-		return $this->getTranslatedName($property, $name, 'ship');
+		return $this->getTranslatedSingleton($property, $name);
 	}
 
 	protected function talent(string $property, string $name): ?string {
@@ -178,6 +173,19 @@ abstract class AbstractMessage implements MessageType
 		return null;
 	}
 
+	private function getTranslatedSingleton(string $property, string $name, int $index = 0): ?string {
+		if ($property === $name) {
+			$value     = $this->$name ?? null;
+			$singleton = match (true) {
+				$value instanceof Item      => $value->getObject(),
+				$value instanceof Singleton => $value,
+				default                     => (string)$value
+			};
+			return $this->translateSingleton($singleton, $index);
+		}
+		return null;
+	}
+
 	private function replacePrefix(string $match): string {
 		$parts    = explode(':', substr($match, 1, strlen($match) - 2));
 		$key      = $parts[0];
@@ -207,6 +215,14 @@ abstract class AbstractMessage implements MessageType
 			return $parts[0] . ' ' . $this->translateKey('replace.' . $key, $variable->Count() === 1 ? 0 : 1);
 		}
 		return $parts[0] . ' ' . '{' . $parts[1] . '}';
+	}
+
+	private function replaceGrammar(Casus $casus, string $search, string $name): string {
+		$singleton = $this->$name;
+		if (!($singleton instanceof Singleton)) {
+			$singleton = (string)$singleton;
+		}
+		return $this->combineGrammar($singleton, $search, $casus);
 	}
 
 	private function replace(string $match): string {

@@ -4,18 +4,22 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowNoMoveMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Reassignment;
 
 /**
  * Implementation of command FOLGEN (follow other unit).
  *
  * - FOLGEN <unit>
  */
-final class Follow extends Travel
+final class Follow extends Travel implements Reassignment
 {
 	use DefaultActivityTrait;
+	use ReassignTrait;
 
 	private ?Unit $leader;
 
@@ -26,6 +30,10 @@ final class Follow extends Travel
 			return;
 		}
 		$this->message(FollowNoMoveMessage::class)->e($this->leader);
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->getReassignPhraseForParameter(1, $old, $new);
 	}
 
 	protected function initDirections(): void {

@@ -32,7 +32,7 @@ class RawMaterialExperienceMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		$material = $this->commodity($name, 'material');
+		$material = $this->singleton($name, 'material');
 		if ($material) {
 			return $material;
 		}

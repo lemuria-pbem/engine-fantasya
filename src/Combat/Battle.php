@@ -235,9 +235,6 @@ class Battle
 		return $parties;
 	}
 
-	/**
-	 * @noinspection DuplicatedCode
-	 */
 	protected function getBestTacticsParty(): ?Party {
 		$tactics = new TacticsData();
 		$n       = $tactics->add($this->attackers, true)->add($this->defenders, false)->count();

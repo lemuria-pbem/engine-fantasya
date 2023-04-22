@@ -12,6 +12,7 @@ class BattleExhaustionMessage extends AbstractMessage
 	protected array $simpleParameters = [self::ROUNDS];
 
 	public function __construct(protected ?int $rounds = null) {
+		parent::__construct();
 	}
 
 	public function getDebug(): string {

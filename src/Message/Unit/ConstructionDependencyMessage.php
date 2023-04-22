@@ -28,10 +28,10 @@ class ConstructionDependencyMessage extends AbstractUnitMessage
 
 	protected function getTranslation(string $name): string {
 		if ($name === 'building') {
-			return $this->building($name, 'building');
+			return $this->singleton($name, 'building');
 		}
 		if ($name === self::DEPENDENCY) {
-			return $this->building($name, self::DEPENDENCY);
+			return $this->singleton($name, self::DEPENDENCY);
 		}
 		return parent::getTranslation($name);
 	}

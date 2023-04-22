@@ -22,6 +22,6 @@ class GiveNoInventoryMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'gift') ?? parent::getTranslation($name);
+		return $this->singleton($name, 'gift') ?? parent::getTranslation($name);
 	}
 }

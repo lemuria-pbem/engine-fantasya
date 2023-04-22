@@ -72,50 +72,50 @@ final class CommandPriority
 		'EFFECT_MIDDLE'    => 50,
 		'EVENT_MIDDLE'     => 51,
 		'Siege'            => 52,
-		//53
-		'Smash'            => 54,
-		//55
-		'Teach'            => 56,
-		'Learn'            => 57,
+		'Smash'            => 53,
+		//54
+		'Teach'            => 55,
+		'Learn'            => 56,
+		'Operate'          => 57,
 		//58
-		'Operate'          => 59,
+		'Spy'              => 59,
 		//60
-		'Spy'              => 61,
-		//62
-		'Sell'             => 63,
-		'Buy'              => 64,
-		//65
-		'Construction'     => 66,
-		'Vessel'           => 67,
-		"Road"             => 68,
-		'Commodity'        => 69,
-		'Herb'             => 70,
-		'RawMaterial'      => 71,
+		'Sell'             => 61,
+		'Buy'              => 62,
+		//63
+		'Construction'     => 64,
+		'Vessel'           => 65,
+		"Road"             => 66,
+		'Commodity'        => 67,
+		'Herb'             => 68,
+		'RawMaterial'      => 69,
+		//70
+		'Unknown'          => 71,
 		//72
-		'Unknown'          => 73,
-		//74
-		'Tax'              => 75,
-        'Entertain'        => 76,
-		'Steal'            => 77,
-		//78
-		'Explore'          => 79,
-		//80
-		'Unicum'           => 81,
-		'Write'            => 82,
-		'Devastate'        => 83,
-		//84
-		'Travel'           => 85,
-		'Route'            => 86,
-		'Follow'           => 87,
-		//88
-		'Offer'            => 89,
-		'Demand'           => 90,
-		//91
-		'Guard'            => 92,
-		'Sort'             => 93,
-		'Number'           => 94,
-		'Comment'          => 95,
-		'Migrate'          => 96,
+		'Tax'              => 73,
+        'Entertain'        => 74,
+		'Steal'            => 75,
+		'Explore'          => 76,
+		//77
+		'Unicum'           => 78,
+		'Write'            => 79,
+		'Devastate'        => 80,
+		//81
+		'Travel'           => 82,
+		'Route'            => 83,
+		'Follow'           => 84,
+		//85
+		'Offer'            => 86,
+		'Demand'           => 87,
+		'Amount'           => 88,
+		'Price'            => 89,
+		//90
+		'Guard'            => 91,
+		'Sort'             => 92,
+		'Number'           => 93,
+		'Comment'          => 94,
+		'Migrate'          => 95,
+		//96
 		'Initiate'         => 97,
 		'EFFECT_AFTER'     => 98,
 		'EVENT_AFTER'      => 99

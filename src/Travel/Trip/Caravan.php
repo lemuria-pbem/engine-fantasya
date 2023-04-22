@@ -24,10 +24,7 @@ class Caravan extends AbstractTrip
 	}
 
 	protected function calculateCapacity(): void {
-		$unit            = $this->calculus->Unit();
-		$this->capacity  = $unit->Size() * $unit->Race()->Payload();
-		$this->capacity += $this->getPayloadBoost();
-
+		$this->capacity = $this->calculus->payload();
 		$this->addCapacity($this->conveyance->getQuantity(Camel::class));
 		$this->addCapacity($this->conveyance->getQuantity(Elephant::class));
 		$this->addCapacity($this->conveyance->getQuantity(Horse::class));

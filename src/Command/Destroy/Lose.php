@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Everything;
 use Lemuria\Engine\Fantasya\Factory\OperateTrait;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseEmptyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseEverythingMessage;
@@ -15,14 +16,17 @@ use Lemuria\Engine\Fantasya\Message\Unit\LoseSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseToNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseToUnitMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\IdException;
 use Lemuria\Id;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Container;
 use Lemuria\Model\Fantasya\Practice;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unicum;
+use Lemuria\Model\Reassignment;
 
 /**
  * Implementation of command VERLIEREN.
@@ -48,24 +52,16 @@ use Lemuria\Model\Fantasya\Unicum;
  * - GIB 0 <amount> Person|Personen
  * - GIB 0 <composition> <Unicum>
  */
-final class Lose extends UnitCommand implements Operator
+final class Lose extends UnitCommand implements Operator, Reassignment
 {
 	use GiftTrait;
 	use OperateTrait;
+	use ReassignTrait;
 	use SiegeTrait;
 
 	protected function run(): void {
-		$p = 1;
-		$count = $this->phrase->getParameter($p++);
-		if ($this->phrase->getVerb() === 'GIB') {
-			if (strtolower($count) !== '0') {
-				throw new UnknownCommandException($this);
-			}
-			$count = $this->phrase->getParameter($p++);
-		}
-		$commodity = $this->phrase->getLine($p);
+		$this->parsePhrase($count, $commodity, $unicum);
 
-		$unicum = $this->parseUnicum($count, $commodity);
 		if ($unicum) {
 			$this->unicum = $unicum;
 			$this->createOperate($unicum, Practice::Lose, $this)->lose();
@@ -90,7 +86,37 @@ final class Lose extends UnitCommand implements Operator
 		}
 	}
 
-	protected function loseEverything(): void {
+	protected function checkReassignmentDomain(Domain $domain): bool {
+		return $domain === Domain::Unicum;
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->hasUnicum() ? $this->getReassignPhraseForParameter($this->phrase->count(), $old, $new) : null;
+	}
+
+	private function parsePhrase(?string &$count, ?string &$commodity, ?Unicum &$unicum): void {
+		$p = 1;
+		$count = $this->phrase->getParameter($p++);
+		if ($this->phrase->getVerb() === 'GIB') {
+			if (strtolower($count) !== '0') {
+				throw new UnknownCommandException($this);
+			}
+			$count = $this->phrase->getParameter($p++);
+		}
+		$commodity = $this->phrase->getLine($p);
+		$unicum    = $this->parseUnicum($count, $commodity);
+	}
+
+	private function hasUnicum(): bool {
+		try {
+			$this->parsePhrase($count, $commodity, $unicum);
+			return $unicum instanceof Unicum;
+		} catch (UnknownCommandException) {
+			return false;
+		}
+	}
+
+	private function loseEverything(): void {
 		$inventory = $this->unit->Inventory();
 		$i         = $inventory->count();
 		if ($i > 0) {
@@ -120,7 +146,7 @@ final class Lose extends UnitCommand implements Operator
 		}
 	}
 
-	protected function lose(Commodity $commodity): void {
+	private function lose(Commodity $commodity): void {
 		$quantity = new Quantity($commodity, $this->amount);
 		$unit     = $this->giftToRandomUnit($quantity);
 		if ($unit) {
@@ -130,7 +156,7 @@ final class Lose extends UnitCommand implements Operator
 		}
 	}
 
-	protected function parseUnicum(string $first, string $second): ?Unicum {
+	private function parseUnicum(string $first, string $second): ?Unicum {
 		$unicum = null;
 		try {
 			$treasury = $this->unit->Treasury();

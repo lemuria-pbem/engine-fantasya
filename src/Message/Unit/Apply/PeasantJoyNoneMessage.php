@@ -27,6 +27,6 @@ class PeasantJoyNoneMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'peasant') ?? parent::getTranslation($name);
+		return $this->singleton($name, 'peasant') ?? parent::getTranslation($name);
 	}
 }

@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguiseDoesNotKnowMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguiseKnownPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguiseMessage;
@@ -10,8 +11,11 @@ use Lemuria\Engine\Fantasya\Message\Unit\DisguiseNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguisePartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguisePartyNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DisguiseUnknownPartyMessage;
+use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Reassignment;
 
 /**
  * This command lets a unit set its camouflage level and allows it to disguise as unit from foreign party or hide its
@@ -22,8 +26,10 @@ use Lemuria\Model\Fantasya\Party;
  * - TARNEN Partei [0|<Party>]
  * - TARNEN Partei Nein|Nicht
  */
-final class Disguise extends UnitCommand
+final class Disguise extends UnitCommand implements Reassignment
 {
+	use ReassignTrait;
+
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n <= 0) {
@@ -81,5 +87,16 @@ final class Disguise extends UnitCommand
 
 	protected function checkSize(): bool {
 		return true;
+	}
+
+	protected function checkReassignmentDomain(Domain $domain): bool {
+		if ($this->phrase->count() >= 2 && strtolower($this->phrase->getParameter()) === 'partei') {
+			return $domain === Domain::Party;
+		}
+		return false;
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		return $this->getReassignPhraseForParameter(2, $old, $new);
 	}
 }

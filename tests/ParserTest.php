@@ -57,7 +57,7 @@ class ParserTest extends Test
 		return $parser;
 	}
 
-	public function hasMoreReturnsFalse(Parser $parser) {
+	public function hasMoreReturnsFalse(Parser $parser): void {
 		$this->assertFalse($parser->hasMore());
 	}
 }

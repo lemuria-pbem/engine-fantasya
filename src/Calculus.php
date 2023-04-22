@@ -9,10 +9,10 @@ use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Effect\PotionEffect;
 use Lemuria\Engine\Fantasya\Effect\TalentEffect;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
-use Lemuria\Engine\Fantasya\Factory\InventoryDistribution;
+use Lemuria\Engine\Fantasya\Factory\GearDistribution;
 use Lemuria\Engine\Fantasya\Factory\LodgingTrait;
-use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Engine\Fantasya\Travel\Conveyance;
+use Lemuria\Engine\Fantasya\Travel\StaminaBonus;
 use Lemuria\Engine\Fantasya\Travel\Trip;
 use Lemuria\Engine\Fantasya\Travel\Trip\Caravan;
 use Lemuria\Engine\Fantasya\Travel\Trip\Cruise;
@@ -24,9 +24,13 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\College;
+use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
+use Lemuria\Model\Fantasya\Commodity\Potion\GoliathWater;
+use Lemuria\Model\Fantasya\Distribution;
 use Lemuria\Model\Fantasya\DoubleAbility;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Factory\InventoryDistribution;
 use Lemuria\Model\Fantasya\Modification;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Potion;
@@ -48,6 +52,10 @@ final class Calculus
 {
 	use BuilderTrait;
 	use LodgingTrait;
+
+	private static ?int $horsePayload = null;
+
+	private static ?Talent $stamina = null;
 
 	private ?Learn $student = null;
 
@@ -153,6 +161,20 @@ final class Calculus
 	}
 
 	/**
+	 * Get payload, including all bonuses and maluses.
+	 */
+	public function payload(int $size = 0): int {
+		if ($size <= 0) {
+			$size = $this->unit->Size();
+		}
+		$payload = $this->unit->Race()->Payload();
+		$stamina = $this->knowledge($this->stamina())->Level();
+		$factor  = 1.0 + StaminaBonus::factor($stamina);
+		$boost   = $this->getPayloadBoost();
+		return $size * (int)round($factor * $payload, -1) + $boost;
+	}
+
+	/**
 	 * Get learning progress.
 	 */
 	public function progress(Talent $talent, float $effectivity = 1.0): Ability {
@@ -190,7 +212,7 @@ final class Calculus
 	}
 
 	/**
-	 * Calculate available fighting abilities for the unit's talents and inventory.
+	 * Calculate available fighting abilities.
 	 *
 	 * @return WeaponSkill[]
 	 */
@@ -228,6 +250,14 @@ final class Calculus
 			$weaponSkills[] = $skills[$i];
 		}
 		return $weaponSkills;
+	}
+
+	/**
+	 * @return array<Distribution>
+	 */
+	public function gearDistribution(): array {
+		$distribution = new GearDistribution($this);
+		return $distribution->distribute()->getDistributions();
 	}
 
 	/**
@@ -372,5 +402,30 @@ final class Calculus
 			}
 		}
 		return null;
+	}
+
+	private function getPayloadBoost(): int {
+		$boostSize = $this->hasApplied(GoliathWater::class)?->Count() * GoliathWater::PERSONS;
+		if ($boostSize > 0) {
+			$payloadBoost = min($this->unit->Size(), $boostSize);
+			return $payloadBoost * $this->getHorsePayload();
+		}
+		return 0;
+	}
+
+	private function getHorsePayload(): int {
+		if (self::$horsePayload === null) {
+			/** @var Horse $horse */
+			$horse              = self::createCommodity(Horse::class);
+			self::$horsePayload = $horse->Payload();
+		}
+		return self::$horsePayload;
+	}
+
+	private function stamina(): Talent {
+		if (!self::$stamina) {
+			self::$stamina = self::createTalent(Stamina::class);
+		}
+		return self::$stamina;
 	}
 }

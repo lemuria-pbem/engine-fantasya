@@ -14,6 +14,7 @@ abstract class AbstractBattleSideMessage extends AbstractMessage
 	 * @param array<Participant>|null $participants
 	 */
 	public function __construct(protected ?array $participants = []) {
+		parent::__construct();
 	}
 
 	public function unserialize(array $data): Serializable {
@@ -36,7 +37,7 @@ abstract class AbstractBattleSideMessage extends AbstractMessage
 	protected function translate(string $template): string {
 		$message = parent::translate($template);
 		$count   = count($this->participants);
-		$stand   = parent::dictionary()->get('combat.stand', $count > 1 ? 1 : 0);
+		$stand   = $this->dictionary->get('combat.stand', $count > 1 ? 1 : 0);
 		$message = str_replace('$stand', $stand, $message);
 		return str_replace('$participants', $this->participants(), $message);
 	}
@@ -49,19 +50,19 @@ abstract class AbstractBattleSideMessage extends AbstractMessage
 	private function participants(): string {
 		$participants = [];
 		foreach ($this->participants as $participant) {
-			$part           = parent::dictionary()->get('combat.participant');
+			$part           = $this->dictionary->get('combat.participant');
 			$part           = str_replace('$unit', (string)$participant->unit, $part);
 			$part           = str_replace('$fCount', (string)$participant->fighters, $part);
-			$fighter        = parent::dictionary()->get('combat.fighterIn', $participant->fighters > 1 ? 1 : 0);
+			$fighter        = $this->dictionary->get('combat.fighterIn', $participant->fighters > 1 ? 1 : 0);
 			$part           = str_replace('$fighterIn', $fighter, $part);
 			$part           = str_replace('$cCount', (string)$participant->combatants, $part);
-			$combatant      = parent::dictionary()->get('combat.combatant', $participant->combatants > 1 ? 1 : 0);
+			$combatant      = $this->dictionary->get('combat.combatant', $participant->combatants > 1 ? 1 : 0);
 			$part           = str_replace('$combatant', $combatant, $part);
 			$participants[] = $part;
 		}
 		if (count($participants) > 1) {
 			$last = array_pop($participants);
-			$and  = parent::dictionary()->get('combat.and');
+			$and  = $this->dictionary->get('combat.and');
 			return implode(', ', $participants) . ' ' . $and . ' ' . $last;
 		}
 		return $participants[0];

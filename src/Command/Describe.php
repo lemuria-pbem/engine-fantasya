@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Construction\DescribeConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\DescribeOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Party\DescribeContinentMessage;
@@ -19,8 +20,11 @@ use Lemuria\Engine\Fantasya\Message\Unit\DescribeNotInConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DescribeNotInVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\DescribeCaptainMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\DescribeVesselMessage;
+use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Building\Monument;
+use Lemuria\Model\Reassignment;
 
 /**
  * The Describe command is used to set the description of a unit, an unicum it possesses or the construction, region or
@@ -34,8 +38,12 @@ use Lemuria\Model\Fantasya\Building\Monument;
  * - BESCHREIBUNG Kontinent|Insel <Beschreibung>
  * - BESCHREIBUNG Gegenstand <ID> <Beschreibung>
  */
-final class Describe extends UnitCommand
+final class Describe extends UnitCommand implements Reassignment
 {
+	use ReassignTrait;
+
+	private const UNICUM = 'gegenstand';
+
 	public static function trimDescription(string $description): string {
 		return trim($description, "\"'`^°§$%&/()={[]}\\+*~#<>|,-;:_ ");
 	}
@@ -75,7 +83,7 @@ final class Describe extends UnitCommand
 			case 'insel' :
 				$this->setContinentDescription($description);
 				break;
-			case 'gegenstand' :
+			case self::UNICUM :
 				if ($n < 3) {
 					throw new InvalidCommandException('No description given.');
 				}
@@ -88,6 +96,17 @@ final class Describe extends UnitCommand
 
 	protected function checkSize(): bool {
 		return true;
+	}
+
+	protected function checkReassignmentDomain(Domain $domain): bool {
+		return $domain === Domain::Unicum;
+	}
+
+	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+		if (strtolower($this->phrase->getParameter()) === self::UNICUM) {
+			return $this->getReassignPhraseForParameter(2, $old, $new);
+		}
+		return null;
 	}
 
 	private function describeParty(string $description): void {

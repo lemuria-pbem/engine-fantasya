@@ -27,6 +27,6 @@ class HorseBlissNoneMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->commodity($name, 'animal') ?? parent::getTranslation($name);
+		return $this->singleton($name, 'animal') ?? parent::getTranslation($name);
 	}
 }

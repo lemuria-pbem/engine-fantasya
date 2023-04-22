@@ -5,7 +5,6 @@ namespace Lemuria\Engine\Fantasya\Command\Cast;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Factory\GiftTrait;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
-use Lemuria\Engine\Fantasya\Factory\Model\Distribution;
 use Lemuria\Engine\Fantasya\Factory\SplitTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\TeleportationErrorMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\TeleportationForeignMessage;
@@ -16,6 +15,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TeleportationMoveMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Travel\MoveTrait;
 use Lemuria\Exception\LemuriaException;
+use Lemuria\Model\Fantasya\Distribution;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
@@ -40,8 +40,8 @@ final class Teleportation extends AbstractCast
 
 		if ($level > 0) {
 			if ($target->Party() === $unit->Party()) {
-				$race       = $target->Race();
-				$payload    = $race->Payload();
+				$calculus   = new Calculus($target);
+				$payload    = $calculus->payload(1);
 				$treasury   = $this->getWeightOfTreasury($target);
 				$maxPayload = $level * $payload;
 				if ($treasury > $maxPayload) {
@@ -57,7 +57,7 @@ final class Teleportation extends AbstractCast
 					$remaining     = $this->splitUnit($target, $level);
 					$this->distributeInventory($target, $remaining, $distributions);
 				}
-				$weight    = $race->Weight() + $payload;
+				$weight    = $target->Race()->Weight() + $payload;
 				$maxWeight = $level * $weight;
 				if ($target->Weight() > $maxWeight) {
 					$excess = $this->removeExcessPayload($target, $maxPayload - $treasury);

@@ -9,7 +9,6 @@ class RawMaterialNoDemandMessage extends RawMaterialResourcesMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		//TODO 1.3: Add accusative singular in commodity translations.
-		return $this->commodity($name, 'material') ?? parent::getTranslation($name);
+		return $this->singleton($name, 'material') ?? parent::getTranslation($name);
 	}
 }

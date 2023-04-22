@@ -29,7 +29,7 @@ class DutyMessage extends AbstractConstructionMessage
 
 	protected function getTranslation(string $name): string {
 		if ($name === 'building') {
-			$this->building($name, 'building');
+			$this->singleton($name, 'building');
 		}
 		return $this->percent($name, 'duty') ?? parent::getTranslation($name);
 	}

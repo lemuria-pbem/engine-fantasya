@@ -26,7 +26,7 @@ class RegrowMessage extends AbstractRegionMessage
 
 	protected function getTranslation(string $name): string {
 		if ($name === 'herb') {
-			return $this->commodity($name, 'herb');
+			return $this->singleton($name, 'herb');
 		}
 		if ($name === 'occurrence') {
 			return $this->number($name, 'occurrence');

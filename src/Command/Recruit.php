@@ -21,7 +21,6 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Race\Orc;
 use Lemuria\Model\Fantasya\Relation;
-use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Bladefighting;
 use Lemuria\Model\Fantasya\Talent\Spearfighting;
 
