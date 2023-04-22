@@ -1248,7 +1248,7 @@
 		"TangyTemerity": ["m", ["Würzige Wagemut", "Würzigen Wagemute"], ["Würzigen Wagemutes", 1], ["Würzigen Wagemute", "Würzigen Wagemute"], ["Würzigen Wagemut", 1]],
 		"TatteredLeatherArmor": ["f", ["Zerrissene Lederrüstung", "Zerrissenen Lederrüstungen"], ["Zerrissenen Lederrüstung", "Zerrissenen Lederrüstungen"], 2, [0, "Zerrissene Lederrüstungen"]],
 		"Tavern": ["f", ["Taverne", "Tavernen"], 1, 1, 1],
-		"Tower": ["m", ["Turn", "Türme"], ["Turms", 1], ["Turme", "Türmen"], 1],
+		"Tower": ["m", ["Turm", "Türme"], ["Turms", 1], ["Turme", "Türmen"], 1],
 		"Trireme": ["f", ["Trireme", "Triremen"], 1, 1, 1],
 		"Troll": ["m", ["Troll", "Trolle"], ["Trolls", 1], [0, "Trollen"], 1],
 		"UngirtBow": ["m", ["Schlaffe Bogen", "Schlaffen Bögen"], ["Schlaffen Bogens", 1], ["Schlaffen Bogen", 1], ["Schlaffen Bogen", 1]],
