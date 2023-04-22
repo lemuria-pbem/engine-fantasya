@@ -307,6 +307,10 @@
 		"BuyOnlyMessage": "Die Einheit $id kann nur $goods für $payment von den Bauern erwerben.",
 		"CancelMessage": "Die Einheit $id beendet das Angebot oder Gesuch $trade.",
 		"CancelNoneMessage": "Es gibt kein Angebot oder Gesuch mit der Nummer $trade, das beendet werden könnte.",
+		"CarcassMessage": "Die Einheit $id nimmt $item {g/dat:vom:$composition} $unicum an sich.",
+		"CarcassNothingMessage": "Die Einheit $id kann {g/dat:im:$composition} $unicum nichts brauchbares finden.",
+		"CarcassNotMessage": "Die Einheit $id kann {g/akk:kein:$item} {g/dat:im:$composition} $unicum finden.",
+		"CarcassOnlyMessage": "Die Einheit $id kann nur $item {g/dat:im:$composition} $unicum finden.",
 		"CastBattleSpellMessage": "Der Zauberspruch $spell kann nur als Kampfzauber eingesetzt werden.",
 		"CastExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in Magie, um $spell zu zaubern.",
 		"CastMessage": "Die Einheit $id zaubert $spell.",
@@ -633,6 +637,10 @@
 		"PartyMessage": "Runde für Partei $id begonnen.",
 		"PartyVisitMessage": "Die Partei $id besucht {$regions:Region}.",
 		"PeasantJoyNoneMessage": "Es gibt {g/akk:kein:$peasant} in der Region, um Bauernglück anzuwenden.",
+		"PerishWashedAshoreMessage": "Am Strand der Region $id wird ein Kadaver an Land gespült.",
+		"PerishMemberMessage": "In der Einheit $id verendet ein Mitglied.",
+		"PerishMessage": "Die Einheit $id wird bald verenden.",
+		"PerishOneMessage": "Die Einheit $id ({g/nom:ein:$race} der Einheit $unit) bleibt zurück und wird bald verenden.",
 		"PickPocketCaughtMessage": "Wir haben die Einheit $thief beim Taschendiebstahl erwischt.",
 		"PickPocketLeaveMessage": "Die Einheit $id wird in der nächsten Woche weiterziehen.",
 		"PickPocketMessage": "Die Einheit $id hat $silver aus den Taschen der Einheit $enemy entwendet.",
@@ -890,6 +898,7 @@
 		"UnemploymentMessage": "{$recruits:Rekrut ist} in der Region $id verfügbar.",
 		"UnguardMessage": "Die Einheit $id bewacht nicht länger die Region.",
 		"UnguardNotGuardingMessage": "Die Einheit $id bewacht die Region nicht.",
+		"UnicumCannotMessage": "Die Einheit $id kann {g/akk:kein:$composition} erschaffen.",
 		"UnicumCreateMessage": "Die Einheit $id erschafft {g/akk:ein:$composition} mit der Nummer $unicum.",
 		"UnicumDestroyBurnMessage": "Die Einheit $unit zündet {g/akk:das:$composition} $unicum an und verbrennt {r/akk:es:$composition} zu Asche.",
 		"UnicumMaterialMessage": "Die Einheit $id benutzt $material, um {g/akk:ein:$composition} zu erschaffen.",
@@ -1197,7 +1206,7 @@
 		"NonPlayerCharacter": ["m", ["Nichtspielercharakter", "Nichtspielercharaktere"], ["Nichtspielercharakters", 1], [0, "Nichtspielercharakteren"], 1],
 		"Ocean": ["m", ["Ozean", "Ozeane"], ["Ozeans", 1], [0, "Ozeanen"], 1],
 		"Oil": ["n", ["Öl", "Öle"], ["Öls", 1], [1, "Ölen"], 1],
-		"Olibanum": ["p", ["Weihrauch", 0], ["Weihrauchs", 2], ["Weihrauche", 4], 1],
+		"Olibanum": ["p", ["Weihrauch", 0], ["Weihrauchs", 2], ["Weihrauche", 4], [0, 0]],
 		"Orc": ["m", ["Ork", "Orks"], ["Orken", 1], [2, 1], 1],
 		"Owlsgaze": ["n", ["Eulenauge", "Eulenaugen"], ["Eulenauges", 1], ["Eulenauge", 1], 1],
 		"Palace": ["n", ["Schloss", "Schlösser"], ["Schlosses", 1], [0, "Schlössern"], 1],
@@ -1292,6 +1301,14 @@
 			"m": ["ein stillgelegter", "eines stillgelegten", "einem stillgelegten", "einen stillgelegten"],
 			"n": ["ein stillgelegtes", "eines stillgelegten", "einem stillgelegten", "ein stillgelegtes"]
 		},
+		"im": {
+			"numerus": 0,
+			"f": ["in der", "in der", "in der", "in der"],
+			"m": ["im", "im", "im", "im"],
+			"n": ["im", "im", "im", "im"],
+			"p": ["im", "im", "im", "im"],
+			"q": ["im", "im", "im", "im"]
+		},
 		"kein": {
 			"numerus": 0,
 			"f": ["keine", "keiner", "keiner", "keine"],
@@ -1315,6 +1332,14 @@
 			"n": ["die", "der", "den", "die"],
 			"p": ["der", "des", "dem", "den"],
 			"q": ["die", "der", "den", "die"]
+		},
+		"vom": {
+			"numerus": 0,
+			"f": ["von der", "von der", "von der", "von der"],
+			"m": ["vom", "vom", "vom", "vom"],
+			"n": ["vom", "vom", "vom", "vom"],
+			"p": ["vom", "vom", "vom", "vom"],
+			"q": ["vom", "vom", "vom", "vom"]
 		},
 		"zum": {
 			"numerus": 0,

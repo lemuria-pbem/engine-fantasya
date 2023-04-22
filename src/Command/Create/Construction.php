@@ -29,7 +29,6 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
-use Lemuria\Model\Dictionary;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\AbstractCastle;

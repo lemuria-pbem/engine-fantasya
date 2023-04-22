@@ -34,6 +34,8 @@ class Kraken extends AbstractBehaviour
 
 	protected const MAX_PROVOKE = 0.9;
 
+	protected const PERISH = 0.01;
+
 	/**
 	 * Two or more krakens in the same region reproduce if there are no other krakens in the neighbour regions.
 	 */
@@ -65,7 +67,7 @@ class Kraken extends AbstractBehaviour
 	}
 
 	public function conduct(): Behaviour {
-		return $this->reproduceAndLeaveOrRoam();
+		return $this->perishByChance(self::PERISH)->reproduceAndLeaveOrRoam();
 	}
 
 	public function finish(): Behaviour {

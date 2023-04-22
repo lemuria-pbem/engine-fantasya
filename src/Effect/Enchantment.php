@@ -2,17 +2,17 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
-use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\RingOfInvisibilityEnchantmentMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
-use Lemuria\Model\Dictionary;
 use Lemuria\Model\Fantasya\Composition\RingOfInvisibility as RingOfInvisibilityComposition;
 use Lemuria\Model\Fantasya\Spell\RingOfInvisibility;
 use Lemuria\Model\Fantasya\Wizardry;
@@ -21,6 +21,7 @@ use Lemuria\Validate;
 
 final class Enchantment extends AbstractUnitEffect
 {
+	use GrammarTrait;
 	use MessageTrait;
 
 	private const MESSAGE = [
@@ -68,10 +69,9 @@ final class Enchantment extends AbstractUnitEffect
 		if ($this->enchantments->isEmpty()) {
 			Lemuria::Score()->remove($this);
 		} else {
-			$context    = new Context(State::getInstance());
-			$factory    = $context->Factory();
-			$dictionary = new Dictionary();
-			$unit       = $this->Unit();
+			$context = new Context(State::getInstance());
+			$factory = $context->Factory();
+			$unit    = $this->Unit();
 			Lemuria::Log()->debug('Unit ' . $unit . ' has ' . $this->enchantments->count() . ' pending enchantments.');
 
 			foreach ($this->enchantments as $enchantment) {
@@ -82,7 +82,7 @@ final class Enchantment extends AbstractUnitEffect
 				}
 				$create = self::CREATE[$spell] ?? null;
 				if ($create) {
-					$composition = $dictionary->get('composition.' . getClass($create));
+					$composition = $this->translateSingleton($create, casus: Casus::Nominative);
 					/** @var UnitCommand $command */
 					$command = $factory->create(new Phrase('ERSCHAFFEN ' . $composition))->getDelegate();
 					$context->getProtocol($unit)->addDefault($command);

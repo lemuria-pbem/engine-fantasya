@@ -2,13 +2,12 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Namer;
 
-use function Lemuria\getClass;
+use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
 use Lemuria\Entity;
 use Lemuria\Exception\NamerException;
 use Lemuria\Factory\Namer;
 use Lemuria\Identifiable;
 use Lemuria\Model\Domain;
-use Lemuria\Model\Dictionary;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Continent;
 use Lemuria\Model\Fantasya\Party;
@@ -17,10 +16,11 @@ use Lemuria\Model\Fantasya\Market\Trade;
 use Lemuria\Model\Fantasya\Unicum;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
+use Lemuria\Singleton;
 
 class DefaultNamer implements Namer
 {
-	protected static ?Dictionary $dictionary = null;
+	use GrammarTrait;
 
 	/**
 	 * @throws NamerException
@@ -38,19 +38,8 @@ class DefaultNamer implements Namer
 		return $name;
 	}
 
-	protected static function dictionary(): Dictionary {
-		if (!self::$dictionary) {
-			self::$dictionary = new Dictionary();
-		}
-		return self::$dictionary;
-	}
-	protected static function translate(string $key, Identifiable $entity): string {
-		return self::dictionary()->get($key) . ' ' . $entity->Id();
-	}
-
 	protected function construction(Construction $construction): string {
-		$building = getClass($construction->Building());
-		return self::translate('building.' . $building, $construction);
+		return $this->translate($construction->Building(), $construction);
 	}
 
 	protected function continent(Continent $continent): string {
@@ -58,8 +47,7 @@ class DefaultNamer implements Namer
 	}
 
 	protected function location(Region $region): string {
-		$landscape = getClass($region->Landscape());
-		return self::translate('landscape.' . $landscape, $region);
+		return $this->translate($region->Landscape(), $region);
 	}
 
 	protected function party(Party $party): string {
@@ -71,8 +59,7 @@ class DefaultNamer implements Namer
 	}
 
 	protected function unicum(Unicum $unicum): string {
-		$composition = getClass($unicum->Composition());
-		return self::translate('composition.' . $composition, $unicum);
+		return $this->translate($unicum->Composition(), $unicum);
 	}
 
 	protected function unit(Unit $unit): string {
@@ -80,7 +67,10 @@ class DefaultNamer implements Namer
 	}
 
 	protected function vessel(Vessel $vessel): string {
-		$ship = getClass($vessel->Ship());
-		return self::translate('ship.' . $ship, $vessel);
+		return $this->translate($vessel->Ship(), $vessel);
+	}
+
+	protected function translate(Singleton $singleton, Identifiable $entity): string {
+		return $this->translateSingleton($singleton) . ' ' . $entity->Id();
 	}
 }

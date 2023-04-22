@@ -36,6 +36,8 @@ class Goblin extends AbstractBehaviour
 
 	protected const GLOBAL_RATE = 0.33;
 
+	protected const PERISH = 0.02;
+
 	protected static ?int $globalMaximum = null;
 
 	protected Reproduction $reproduction;
@@ -63,6 +65,7 @@ class Goblin extends AbstractBehaviour
 	}
 
 	public function conduct(): Behaviour {
+		$this->perishByChance(self::PERISH);
 		if ($this->act instanceof Seek) {
 			if ($this->act->Enemy()->isEmpty()) {
 				$calendar = Lemuria::Calendar();

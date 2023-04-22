@@ -85,8 +85,8 @@
 
 ^@?(ler|lern|lerne|lernen) +(alchemie|armbrustschießen|armbrustschiessen|ausdauer|bergbau|bogenbau|bogenschießen|bogenschiessen|burgenbau|handel|handeln|hiebwaffen|holzfaellen|holzfällen|juwelierkunst|juwelierskunst|katapultbedienung|katapultschießen|katapultschiessen|kräuterkunde|kraeuterkunde|magie|navigation|navigieren|pferdedressur|reiten|ruestungsbau|rüstungsbau|schiffbau|segeln|speerkämpfen|speerkaempfen|speerkampf|spionage|spionieren|stangenwaffen|steinbau|steuereintreiben|steuereintreibung|strassenbau|straßenbau|taktik|tarnen|tarnung|unterhalten|unterhaltung|waffenbauen|waffenbau|wagenbau|wahrnehmen|wahrnehmung)$
 
-^@?(les|lese|lesen|li|lie|lies)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
-^@?(unters|untersu|untersuc|untersuch|untersuche|untersuchen)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(les|lese|lesen|li|lie|lies)( +(kadaver|kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(unters|untersu|untersuc|untersuch|untersuche|untersuchen)( +(kadaver|kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^@?(ma|mac|mach|mache|machen) +(temp) +[a-z0-9]{1,6}$
 ^@?(ma|mac|mach|mache|machen) +[a-zäöüß]+$
@@ -104,8 +104,8 @@
 
 ^(nä|näc|näch|nächs|nächst|nächste|nächster|nae|naec|naech|naechs|naechst|naechste|naechster)$
 
-^@?(ne|neh|nehm|nehme|nehmen)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
-^@?(ni|nim|nimm)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(ne|neh|nehm|nehme|nehmen)( +(kadaver|kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}.*$
+^@?(ni|nim|nimm)( +(kadaver|kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}.*$
 
 ^@?(nu|num|numm|numme|nummer|i|id)( +(einheit|gebaeude|gebäude|burg|schiff|partei))? +[a-z0-9]{1,6}$
 
@@ -161,7 +161,7 @@
 
 ^@?(verli|verlie|verlier|verliere|verlieren) +.*$
 
-^@?(vern|verni|vernic|vernich|vernicht|vernichte|vernichten)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(vern|verni|vernic|vernich|vernicht|vernichte|vernichten)( +(kadaver|kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^(vorg|vorga|vorgab|vorgabe) +kämpfen +(aggressiv|defensiv|fliehe|fliehen|flucht|hinten|nicht|vorn|vorne|vorsichtig)?$
 ^(vorg|vorga|vorgab|vorgabe) +tarnen( +nicht)?$

@@ -10,6 +10,7 @@ use Lemuria\Engine\Fantasya\Event\Act\Attack;
 use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Event\Act\Guard;
 use Lemuria\Engine\Fantasya\Event\Act\Home;
+use Lemuria\Engine\Fantasya\Event\Act\Perish;
 use Lemuria\Engine\Fantasya\Event\Act\PickPocket;
 use Lemuria\Engine\Fantasya\Event\Act\Prey;
 use Lemuria\Engine\Fantasya\Event\Act\Roam;
@@ -36,6 +37,8 @@ abstract class AbstractBehaviour implements Behaviour
 	protected ?Act $act = null;
 
 	protected ?Act $roam = null;
+
+	protected ?Act $perish = null;
 
 	public function __construct(protected Unit $unit) {
 	}
@@ -67,30 +70,38 @@ abstract class AbstractBehaviour implements Behaviour
 	}
 
 	protected function guard(): AbstractBehaviour {
-		$guard       = new Guard($this);
-		$this->guard = $guard->act();
+		if (!$this->perish) {
+			$guard       = new Guard($this);
+			$this->guard = $guard->act();
+		}
 		return $this;
 	}
 
 	protected function watch(): AbstractBehaviour {
-		$watch       = new Watch($this);
-		$this->guard = $watch->act();
+		if (!$this->perish) {
+			$watch       = new Watch($this);
+			$this->guard = $watch->act();
+		}
 		return $this;
 	}
 
 	protected function seek(): AbstractBehaviour {
-		$seek      = new Seek($this);
-		$this->act = $seek->act();
+		if (!$this->perish) {
+			$seek      = new Seek($this);
+			$this->act = $seek->act();
+		}
 		return $this;
 	}
 	protected function prey(): AbstractBehaviour {
-		$prey      = new Prey($this);
-		$this->act = $prey->act();
+		if (!$this->perish) {
+			$prey      = new Prey($this);
+			$this->act = $prey->act();
+		}
 		return $this;
 	}
 
 	protected function roam(bool $leave = false): AbstractBehaviour {
-		if ($this->unit->Size() > 0) {
+		if (!$this->perish && $this->unit->Size() > 0) {
 			$this->roam = new Roam($this);
 			$this->roam->setLeave($leave)->act();
 		}
@@ -98,7 +109,7 @@ abstract class AbstractBehaviour implements Behaviour
 	}
 
 	protected function home(): AbstractBehaviour {
-		if ($this->unit->Size() > 0) {
+		if (!$this->perish && $this->unit->Size() > 0) {
 			$home = new Home($this);
 			$home->act();
 		}
@@ -107,7 +118,7 @@ abstract class AbstractBehaviour implements Behaviour
 	}
 
 	protected function attack(): AbstractBehaviour {
-		if ($this->act instanceof Seek) {
+		if (!$this->perish && $this->act instanceof Seek) {
 			$enemy = $this->act->Enemy();
 			if (!$enemy->isEmpty()) {
 				$attack = new Attack($this);
@@ -128,7 +139,7 @@ abstract class AbstractBehaviour implements Behaviour
 
 	protected function roamOrAttack(): AbstractBehaviour {
 		if (!$this->hasRoamEffect()) {
-			if ($this->act instanceof Seek) {
+			if (!$this->perish && $this->act instanceof Seek) {
 				$enemy = $this->act->Enemy();
 				if (!$enemy->isEmpty()) {
 					return $this;
@@ -140,7 +151,7 @@ abstract class AbstractBehaviour implements Behaviour
 
 	protected function pickPocketOrRoam(): AbstractBehaviour {
 		$forceRoam = $this->hasRoamEffect();
-		if (!$forceRoam) {
+		if (!$this->perish && !$forceRoam) {
 			if ($this->act instanceof Seek) {
 				$enemy = $this->act->Enemy();
 				if (!$enemy->isEmpty()) {
@@ -155,7 +166,7 @@ abstract class AbstractBehaviour implements Behaviour
 
 	protected function reproduce(): AbstractBehaviour {
 		$reproduction = $this->Reproduction();
-		if (randChance($reproduction->Chance())) {
+		if (!$this->perish && randChance($reproduction->Chance())) {
 			$create = new Create($this->unit->Party(), $this->unit->Region());
 			$create->add($reproduction->Gang())->act();
 		}
@@ -164,7 +175,7 @@ abstract class AbstractBehaviour implements Behaviour
 
 	protected function reproduceAndLeaveOrRoam(): AbstractBehaviour {
 		$reproduction = $this->Reproduction();
-		if (randChance($reproduction->Chance())) {
+		if (!$this->perish && randChance($reproduction->Chance())) {
 			$create = new Create($this->unit->Party(), $this->unit->Region());
 			$create->add($reproduction->Gang())->act();
 			return $this->roam(true);
@@ -173,14 +184,27 @@ abstract class AbstractBehaviour implements Behaviour
 	}
 
 	protected function scatter(int $minUnits = 2, int $minPersons = PHP_INT_MAX): AbstractBehaviour {
-		$scatter = new Scatter($this);
-		$scatter->setUnits($minUnits)->setPersons($minPersons)->act();
+		if (!$this->perish) {
+			$scatter = new Scatter($this);
+			$scatter->setUnits($minUnits)->setPersons($minPersons)->act();
+		}
 		return $this;
 	}
 
 	protected function attackOnWatch(): AbstractBehaviour {
 		if ($this->guard instanceof Watch && $this->guard->IsGuarding()) {
 			return $this->attack();
+		}
+		return $this;
+	}
+
+	protected function perishByChance(float $chance): AbstractBehaviour {
+		if (randChance($chance)) {
+			$perish = new Perish($this);
+			$perish->act();
+			if ($this->unit->Health() <= 0.0) {
+				$this->perish = $perish;
+			}
 		}
 		return $this;
 	}

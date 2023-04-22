@@ -3,7 +3,8 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
 use function Lemuria\getClass;
-use Lemuria\Model\Dictionary;
+use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Model\Fantasya\Composition;
 use Lemuria\Model\Fantasya\Exception\JsonException;
 use Lemuria\Model\Fantasya\Readable;
@@ -14,17 +15,18 @@ use Lemuria\Validate;
 
 class CompositionDetails
 {
+	use GrammarTrait;
 	use SerializableTrait;
 
 	protected final const DESCRIPTION = 'description';
 
 	protected final const APPLY = 'apply';
 
+	protected final const TAKE = 'take';
+
 	protected final const WRITE = 'write';
 
 	protected static ?JsonProvider $provider = null;
-
-	protected static ?Dictionary $dictionary = null;
 
 	protected readonly string $file;
 
@@ -37,9 +39,6 @@ class CompositionDetails
 		if (!self::$provider) {
 			self::$provider = new JsonProvider(__DIR__ . '/../../../resources/composition');
 		}
-		if (!self::$dictionary) {
-			self::$dictionary = new Dictionary();
-		}
 		$this->file = getClass($this->Composition()) . '.json';
 		$this->json = self::$provider->read($this->file);
 		$this->validateJson();
@@ -50,7 +49,7 @@ class CompositionDetails
 	}
 
 	public function Name(): string {
-		return self::$dictionary->get('composition', $this->Composition());
+		return $this->translateSingleton($this->Composition(), casus: Casus::Nominative);
 	}
 
 	/**
@@ -87,7 +86,12 @@ class CompositionDetails
 	}
 
 	public function TakeCommand(): string {
-		return 'NEHMEN [' . $this->Name() . '] Nummer';
+		$command = 'NEHMEN [' . $this->Name() . '] Nummer';
+		$take    = $this->json[self::TAKE];
+		if (strlen($take) > 0) {
+			$command .= ' ' . $take;
+		}
+		return $command;
 	}
 
 	public function WriteCommand(): string {

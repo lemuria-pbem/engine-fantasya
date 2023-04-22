@@ -17,6 +17,8 @@ class Bear extends AbstractBehaviour
 
 	protected const REPRODUCTION = 1;
 
+	protected const PERISH = 0.01;
+
 	/**
 	 * In Summer a group of bears splits into individuals. If there are exactly two bears in a region, they reproduce.
 	 */
@@ -43,6 +45,6 @@ class Bear extends AbstractBehaviour
 	}
 
 	public function conduct(): Behaviour {
-		return $this->reproduceAndLeaveOrRoam();
+		return $this->perishByChance(self::PERISH)->reproduceAndLeaveOrRoam();
 	}
 }

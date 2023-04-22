@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
-use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Context;
@@ -11,8 +10,11 @@ use Lemuria\Engine\Fantasya\Effect\UnicumRead;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
+use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
 use Lemuria\Engine\Fantasya\Factory\OperatorActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
+use Lemuria\Engine\Fantasya\Message\Casus;
+use Lemuria\Engine\Fantasya\Message\Unit\UnicumCannotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnicumCreateMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnicumMaterialMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnicumNoMaterialMessage;
@@ -21,12 +23,13 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
 use Lemuria\Lemuria;
-use Lemuria\Model\Dictionary;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Composition;
 use Lemuria\Model\Fantasya\Enchantment;
 use Lemuria\Model\Fantasya\MagicRing;
+use Lemuria\Model\Fantasya\Practice;
 use Lemuria\Model\Fantasya\Unicum as UnicumModel;
+
 
 /**
  * This command creates a new Unicum.
@@ -37,6 +40,7 @@ use Lemuria\Model\Fantasya\Unicum as UnicumModel;
 final class Unicum extends UnitCommand implements Activity
 {
 	use CollectTrait;
+	use GrammarTrait;
 	use OperatorActivityTrait;
 	use WorkloadTrait;
 
@@ -46,12 +50,9 @@ final class Unicum extends UnitCommand implements Activity
 
 	private ?Id $id = null;
 
-	private readonly Dictionary $dictionary;
-
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		$this->initWorkload();
-		$this->dictionary = new Dictionary();
 	}
 
 	public function getUnicumId(): string {
@@ -79,6 +80,11 @@ final class Unicum extends UnitCommand implements Activity
 	}
 
 	protected function run(): void {
+		if (!$this->composition->supports(Practice::Create)) {
+			$this->message(UnicumCannotMessage::class)->s($this->composition);
+			return;
+		}
+
 		$requirement   = $this->composition->getCraft();
 		$maxProduction = $this->unit->Size() * $this->getProductivity($requirement)->Level();
 		$production    = $this->reduceByWorkload($maxProduction);
@@ -108,7 +114,7 @@ final class Unicum extends UnitCommand implements Activity
 		$unicum = new UnicumModel();
 		$id     = $this->createId();
 		$unicum->setId($id);
-		$unicum->setName($this->dictionary->get('composition.' . getClass($this->composition)) . ' ' . $id);
+		$unicum->setName($this->translateSingleton($this->composition, casus: Casus::Nominative) . ' ' . $id);
 		$unicum->setComposition($this->composition);
 		$this->addToWorkload(1);
 		$this->unit->Treasury()->add($unicum);

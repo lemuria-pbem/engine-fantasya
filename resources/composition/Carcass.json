@@ -1,0 +1,8 @@
+{
+	"description": [
+		"In der Wildnis kann man manchmal die Kadaver von verendeten Tieren finden. Oder ein einsamer Wanderer hauchte am Schauplatz eines Überfalls sein Leben aus.",
+		"Eine Untersuchung des Kadavers zeigt, ob es noch irgendwelche Dinge bei der unglücklichen Kreatur zu finden gibt, die mitgenommen werden können.",
+		"Ein verwesender Kadaver verschwindet nach einigen Wochen, wenn er nicht vorher vernichtet wird."
+	],
+	"take": "[[Anzahl] Gegenstand]"
+}
