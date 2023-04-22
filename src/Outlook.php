@@ -32,20 +32,6 @@ final class Outlook
 	}
 
 	/**
-	 * @deprecated Use getApparitions() instead.
-	 */
-	public function Apparitions(Region $region): People {
-		return $this->getApparitions($region);
-	}
-
-	/**
-	 * @deprecated Use getPanorama() instead.
-	 */
-	public function Panorama(Region $region): TravelAtlas {
-		return $this->getPanorama($region);
-	}
-
-	/**
 	 * Find units in a region that are not camouflaged.
 	 *
 	 * @noinspection DuplicatedCode
