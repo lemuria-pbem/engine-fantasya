@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Region;
 
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Singleton;
@@ -26,7 +27,7 @@ class RegrowMessage extends AbstractRegionMessage
 
 	protected function getTranslation(string $name): string {
 		if ($name === 'herb') {
-			return $this->singleton($name, 'herb');
+			return $this->translateSingleton($this->herb, 1, Casus::Dative);
 		}
 		if ($name === 'occurrence') {
 			return $this->number($name, 'occurrence');
