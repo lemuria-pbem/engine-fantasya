@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Serializable;
 use Lemuria\Validate;
 
@@ -15,7 +16,7 @@ abstract class AbstractReinforcementWeaponMessage extends AbstractReinforcementM
 	protected string $weapon;
 
 	public function __construct(protected ?Entity $unit = null, ?Combatant $combatant = null,
-		                                protected ?int    $count = null, protected ?int $battleRow = null) {
+		                        protected ?int    $count = null, protected ?int $battleRow = null) {
 		parent::__construct($unit, $combatant, $count, $battleRow);
 		if ($combatant) {
 			$this->weapon = getClass($combatant->Weapon());
@@ -36,7 +37,7 @@ abstract class AbstractReinforcementWeaponMessage extends AbstractReinforcementM
 
 	protected function translate(string $template): string {
 		$message = parent::translate($template);
-		$weapon  = $this->translateSingleton($this->weapon, $this->count > 1 ? 1 : 0);
+		$weapon  = $this->translateSingleton($this->weapon, $this->count > 1 ? 1 : 0, Casus::Dative);
 		return str_replace('$weapon', $weapon, $message);
 	}
 

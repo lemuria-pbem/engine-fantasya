@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Combat;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Serializable;
 use Lemuria\Validate;
 
@@ -39,7 +40,7 @@ class CombatantWeaponMessage extends CombatantNoWeaponMessage
 
 	protected function translate(string $template): string {
 		$message = parent::translate($template);
-		$weapon  = $this->translateSingleton($this->weapon, $this->count > 1 ? 1 : 0);
+		$weapon  = $this->translateSingleton($this->weapon, $this->count > 1 ? 1 : 0, Casus::Dative);
 		return str_replace('$weapon', $weapon, $message);
 	}
 
