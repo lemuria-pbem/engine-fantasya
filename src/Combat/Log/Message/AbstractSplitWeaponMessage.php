@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Serializable;
 use Lemuria\Validate;
 
@@ -36,7 +37,7 @@ abstract class AbstractSplitWeaponMessage extends AbstractSplitMessage
 
 	protected function translate(string $template): string {
 		$message = parent::translate($template);
-		$weapon  = $this->translateSingleton($this->weapon, $this->count > 1 ? 1 : 0);
+		$weapon  = $this->translateSingleton($this->weapon, $this->count > 1 ? 1 : 0, Casus::Accusative);
 		return str_replace('$weapon', $weapon, $message);
 	}
 

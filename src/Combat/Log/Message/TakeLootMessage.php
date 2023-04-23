@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
@@ -57,7 +58,7 @@ class TakeLootMessage extends AbstractMessage
 		$message   = parent::translate($template);
 		$commodity = getClass($this->loot->Commodity());
 		$count     = $this->loot->Count();
-		$item      = $this->translateSingleton($commodity, $count > 1 ? 1 : 0);
+		$item      = $this->translateSingleton($commodity, $count > 1 ? 1 : 0, Casus::Accusative);
 		$loot      = $count . ' ' . $item;
 		return str_replace('$loot', $loot, $message);
 	}

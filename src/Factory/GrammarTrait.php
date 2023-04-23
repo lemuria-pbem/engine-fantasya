@@ -16,21 +16,21 @@ trait GrammarTrait
 	/**
 	 * @throws KeyPathException
 	 */
-	protected function translateItem(Item $item, Casus $casus = Casus::Accusative): string {
+	protected function translateItem(Item $item, Casus $casus = Casus::Adjective): string {
 		return $this->translateGrammar($item->getObject(), $casus, $item->Count() === 1 ? 0 : 1);
 	}
 
 	/**
 	 * @throws KeyPathException
 	 */
-	protected function translateSingleton(Singleton|string $class, int $numerus = 0, Casus $casus = Casus::Accusative): string {
+	protected function translateSingleton(Singleton|string $class, int $numerus = 0, Casus $casus = Casus::Adjective): string {
 		return $this->translateGrammar($class, $casus, $numerus);
 	}
 
 	/**
 	 * @throws KeyPathException
 	 */
-	protected function replaceSingleton(Singleton|string $class, string $replace, Casus $casus = Casus::Accusative): string {
+	protected function replaceSingleton(Singleton|string $class, string $replace, Casus $casus = Casus::Adjective): string {
 		$this->initDictionary();
 
 		$singletonGrammar = $this->dictionary->raw('singleton.' . $class);

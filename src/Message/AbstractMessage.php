@@ -128,7 +128,7 @@ abstract class AbstractMessage implements MessageType
 				$index = $count > 1 ? 1 : 0;
 			}
 
-			$item = $this->translateSingleton($commodity, $index);
+			$item = $this->translateSingleton($commodity, $index, Casus::Accusative);
 			if ($item) {
 				return $count < PHP_INT_MAX ? number($count) . ' ' . $item : $item;
 			}
@@ -186,7 +186,7 @@ abstract class AbstractMessage implements MessageType
 				$value instanceof Singleton => $value,
 				default                     => (string)$value
 			};
-			return $this->translateSingleton($singleton, $index);
+			return $this->translateSingleton($singleton, $index, Casus::Accusative);
 		}
 		return null;
 	}
