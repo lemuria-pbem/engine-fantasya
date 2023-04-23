@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
 use function Lemuria\randElement;
+use Lemuria\Engine\Fantasya\Command\Operate\Carcass as Operate;
 use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Casus;
@@ -11,8 +12,6 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
-use Lemuria\Model\Fantasya\Commodity\Griffin;
-use Lemuria\Model\Fantasya\Commodity\Monster\Bear;
 use Lemuria\Model\Fantasya\Composition\Carcass;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
@@ -27,8 +26,6 @@ final class PerishEffect extends AbstractUnitEffect
 	use BuilderTrait;
 	use GrammarTrait;
 	use MessageTrait;
-
-	private const TROPHY = [Bear::class => true, Griffin::class => true];
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);
@@ -76,7 +73,7 @@ final class PerishEffect extends AbstractUnitEffect
 		$inventory->fill($unit->Inventory());
 		if ($race instanceof Monster) {
 			$trophy = $race->Trophy();
-			if ($trophy && isset(self::TROPHY[$trophy::class])) {
+			if ($trophy && isset(Operate::WITH_TROPHY[$trophy::class])) {
 				$inventory->add(new Quantity($trophy));
 			}
 		}
@@ -85,6 +82,10 @@ final class PerishEffect extends AbstractUnitEffect
 			    . $this->combineGrammar($race, 'ein', Casus::Genitive);
 		$unicum = new Unicum();
 		$unicum->setId(Lemuria::Catalog()->nextId(Domain::Unicum));
-		return $unicum->setComposition($carcass)->setName($name);
+		$unicum->setComposition($carcass)->setName($name);
+
+		$effect = new UnicumDisintegrate(State::getInstance());
+		Lemuria::Score()->add($effect->setUnicum($unicum)->setRounds(Operate::DISINTEGRATE));
+		return $unicum;
 	}
 }

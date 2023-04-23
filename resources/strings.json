@@ -436,6 +436,7 @@
 		"FaunaHungerMessage": "In der Region $id {verhungert:$animals}.",
 		"FaunaMigrantsMessage": "{$animals:verlässt} die Region $id.",
 		"FaunaNewMessage": "{$animals:wandert} in die Region $id ein.",
+		"FaunaPerishMessage": "In der Region $id verendet {g/nom:ein:$animal}.",
 		"FavorableWindsMessage": "Beständige Winde helfen uns, schneller voranzukommen und weiter zu segeln.",
 		"FavorableWindsNoMessage": "Die Einheit $id befindet sich nicht auf einem Schiff und kann Günstige Winde nicht zaubern.",
 		"FeeNoneMessage": "Die Steuern für {g/akk:das:$building} $building $id wurden aufgehoben.",

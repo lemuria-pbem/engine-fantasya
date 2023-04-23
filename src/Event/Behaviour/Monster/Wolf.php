@@ -19,7 +19,7 @@ class Wolf extends AbstractBehaviour
 
 	protected const GROW_MAX = 3;
 
-	protected const PERISH = 0.02;
+	protected const PERISH = 0.01;
 
 	/**
 	 * In Spring a group of wolves reproduces. If at any time there are more than ten wolves in the group, they split.

@@ -3,19 +3,26 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use function Lemuria\randChance;
+use Lemuria\Engine\Fantasya\Command\Operate\Carcass as Operate;
+use Lemuria\Engine\Fantasya\Effect\UnicumDisintegrate;
+use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Factory\WorkplacesTrait;
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\Region\FaunaGriffineggMessage;
 use Lemuria\Engine\Fantasya\Message\Region\FaunaGrowthMessage;
 use Lemuria\Engine\Fantasya\Message\Region\FaunaHungerMessage;
 use Lemuria\Engine\Fantasya\Message\Region\FaunaMigrantsMessage;
 use Lemuria\Engine\Fantasya\Message\Region\FaunaNewMessage;
+use Lemuria\Engine\Fantasya\Message\Region\FaunaPerishMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
 use Lemuria\Model\Calendar\Season;
+use Lemuria\Model\Domain;
+use Lemuria\Model\Fantasya\Animal;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
@@ -23,6 +30,7 @@ use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Potion\HorseBliss;
+use Lemuria\Model\Fantasya\Composition\Carcass;
 use Lemuria\Model\Fantasya\Landscape\Desert;
 use Lemuria\Model\Fantasya\Landscape\Forest;
 use Lemuria\Model\Fantasya\Landscape\Glacier;
@@ -30,8 +38,11 @@ use Lemuria\Model\Fantasya\Landscape\Highland;
 use Lemuria\Model\Fantasya\Landscape\Mountain;
 use Lemuria\Model\Fantasya\Landscape\Plain;
 use Lemuria\Model\Fantasya\Landscape\Swamp;
+use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Fantasya\Unicum;
 use Lemuria\Model\Neighbours;
 
 /**
@@ -39,6 +50,7 @@ use Lemuria\Model\Neighbours;
  */
 final class Fauna extends AbstractEvent
 {
+	use GrammarTrait;
 	use StatisticsTrait;
 	use WorkplacesTrait;
 
@@ -67,6 +79,10 @@ final class Fauna extends AbstractEvent
 	private const HUNGER = 0.1;
 
 	private const EGG_PROBABILITY = 0.25;
+
+	private const PERISH_BASE = 150;
+
+	private const PERISH_CHANCE = 0.01;
 
 	private Workplaces $workplaces;
 
@@ -139,6 +155,19 @@ final class Fauna extends AbstractEvent
 							$resources->remove($quantity);
 							$this->message(FaunaHungerMessage::class, $region)->i($quantity);
 						}
+					}
+				}
+
+				/** @var Animal $commodity */
+				if (isset($hunger)) {
+					$region->Treasury()->add($this->createCarcass($commodity));
+				} else {
+					$living = $count - ($migrants ?? 0);
+					$chance = ($living / self::PERISH_BASE) * self::PERISH_CHANCE;
+					if (randChance($chance)) {
+						$resources->remove(new Quantity($commodity));
+						$region->Treasury()->add($this->createCarcass($commodity));
+						$this->message(FaunaPerishMessage::class, $region)->s($commodity);
 					}
 				}
 			}
@@ -218,5 +247,35 @@ final class Fauna extends AbstractEvent
 				break;
 			}
 		}
+	}
+
+	private function createCarcass(Animal $animal): Unicum {
+		$unicum = new Unicum();
+		$unicum->setId(Lemuria::Catalog()->nextId(Domain::Unicum));
+
+		/** @var Carcass $carcass */
+		$carcass = self::createComposition(Carcass::class);
+		$carcass->setCreature($animal);
+		$carcass->setInventory($this->createCarcassInventory($animal));
+		$unicum->setComposition($carcass);
+
+		$name = $this->translateSingleton($carcass, casus: Casus::Nominative) . ' '
+		      . $this->combineGrammar($animal, 'ein', Casus::Genitive);
+		$unicum->setName($name);
+
+		$effect = new UnicumDisintegrate(State::getInstance());
+		Lemuria::Score()->add($effect->setUnicum($unicum)->setRounds(Operate::DISINTEGRATE));
+		return $unicum;
+	}
+
+	private function createCarcassInventory(Animal $animal): Resources {
+		$inventory = new Resources();
+		if ($animal instanceof Monster) {
+			$trophy = $animal->Trophy();
+			if ($trophy && isset(Operate::WITH_TROPHY[$trophy::class])) {
+				$inventory->add(new Quantity($trophy));
+			}
+		}
+		return $inventory;
 	}
 }

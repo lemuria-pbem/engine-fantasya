@@ -36,7 +36,7 @@ class Goblin extends AbstractBehaviour
 
 	protected const GLOBAL_RATE = 0.33;
 
-	protected const PERISH = 0.02;
+	protected const PERISH = 0.01;
 
 	protected static ?int $globalMaximum = null;
 

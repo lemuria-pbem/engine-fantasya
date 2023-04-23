@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Act;
 
+use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Effect\PerishEffect;
 use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
@@ -14,7 +15,10 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
+use Lemuria\Model\Fantasya\Distribution;
+use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
+use function Lemuria\randElement;
 
 /**
  * Old, ill or wounded individuals may perish and create a Cadaver unicum.
@@ -49,9 +53,22 @@ class Perish implements Act
 		$unit->setRace($race)->setSize(1)->setHealth(0.0)->setBattleRow(BattleRow::Refugee);
 		$party->People()->add($unit);
 		$region->Residents()->add($unit);
-
 		$namer = new RaceNamer();
 		$namer->name($unit);
+
+		$calculus      = new Calculus($this->unit);
+		$distributions = $calculus->inventoryDistribution();
+		if (!empty($distributions)) {
+			/** @var Distribution $distribution */
+			$distribution = randElement($distributions);
+			$from         = $this->unit->Inventory();
+			$to           = $unit->Inventory();
+			foreach ($distribution as $quantity) {
+				$from->remove($quantity);
+				$to->add(new Quantity($quantity->Commodity(), $quantity->Count()));
+			}
+		}
+
 		$this->message(PerishMemberMessage::class, $this->unit);
 		$this->message(PerishOneMessage::class, $unit)->s($race)->e($this->unit);
 

@@ -7,6 +7,8 @@ use Lemuria\Engine\Fantasya\Message\Unit\Operate\CarcassMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\CarcassNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\CarcassNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\CarcassOnlyMessage;
+use Lemuria\Model\Fantasya\Commodity\Griffin;
+use Lemuria\Model\Fantasya\Commodity\Monster\Bear;
 use Lemuria\Model\Fantasya\Composition\Carcass as CarcassModel;
 use Lemuria\Model\Fantasya\Quantity;
 
@@ -14,7 +16,9 @@ final class Carcass extends AbstractOperate
 {
 	use BurnTrait;
 
-	private const DISINTEGRATE = 6;
+	public final const DISINTEGRATE = 6;
+
+	public final const WITH_TROPHY = [Bear::class => true, Griffin::class => true];
 
 	public function take(): void {
 		$unicum  = $this->operator->Unicum();
