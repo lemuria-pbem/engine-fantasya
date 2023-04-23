@@ -12,7 +12,12 @@ enum Casus : string
 
 	private const ACCUSATIVE = 'akk';
 
-	private const INDEX = [self::NOMINATIVE => 0, self::GENITIVE => 1, self::DATIVE => 2, self::ACCUSATIVE => 3];
+	private const ADJECTIVE = 'adj';
+
+	private const INDEX = [
+		self::NOMINATIVE => 0, self::GENITIVE => 1, self::DATIVE => 2, self::ACCUSATIVE => 3,
+		self::ADJECTIVE  => 4
+	];
 
 	case Nominative = self::NOMINATIVE;
 
@@ -21,6 +26,8 @@ enum Casus : string
 	case Dative = self::DATIVE;
 
 	case Accusative = self::ACCUSATIVE;
+
+	case Adjective = self::ADJECTIVE;
 
 	public function index(): int {
 		return self::INDEX[$this->value];
