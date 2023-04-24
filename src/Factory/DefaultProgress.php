@@ -41,7 +41,7 @@ class DefaultProgress implements Progress
 {
 	protected const EVENTS = [
 		// before
-		Administrator::class, Visit::class, Monster::class, Timer::class, MarketFee::class, PortFee::class,
+		Administrator::class, Timer::class, Visit::class, Monster::class, MarketFee::class, PortFee::class,
 		// middle
 		ResetSiege::class, Conduct::class, Upkeep::class, Subsistence::class, Drift::class, Breeding::class,
 		// after

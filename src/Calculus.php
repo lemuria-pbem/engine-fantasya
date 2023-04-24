@@ -6,6 +6,7 @@ use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Combat\WeaponSkill;
 use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Teach;
+use Lemuria\Engine\Fantasya\Effect\Contagion;
 use Lemuria\Engine\Fantasya\Effect\PotionEffect;
 use Lemuria\Engine\Fantasya\Effect\TalentEffect;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
@@ -129,6 +130,9 @@ final class Calculus
 			if ($ability instanceof Ability) {
 				if ($ability->Level() <= 0) {
 					return $ability;
+				}
+				if ($this->contagionEffect()?->Units()->has($this->unit->Id())) {
+					return new Ability($talent, 0);
 				}
 
 				$race         = $this->unit->Race();
@@ -406,6 +410,12 @@ final class Calculus
 			}
 		}
 		return null;
+	}
+
+	private function contagionEffect(): ?Contagion {
+		$effect = new Contagion(State::getInstance());
+		$effect = Lemuria::Score()->find($effect->setRegion($this->unit->Region()));
+		return $effect instanceof Contagion ? $effect : null;
 	}
 
 	private function getPayloadBoost(): int {

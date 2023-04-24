@@ -4,10 +4,12 @@ namespace Lemuria\Engine\Fantasya\Event\Behaviour\Monster;
 
 use function Lemuria\randFloat;
 use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Effect\Contagion;
 use Lemuria\Engine\Fantasya\Event\Act\Seek;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Event\Behaviour\AbstractBehaviour;
 use Lemuria\Engine\Fantasya\Event\Reproduction;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Monster\Goblin as Model;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
@@ -58,7 +60,7 @@ class Goblin extends AbstractBehaviour
 	}
 
 	public function prepare(): Behaviour {
-		if ($this->hasRoamEffect()) {
+		if ($this->hasContagionEffect() || $this->hasRoamEffect()) {
 			return $this;
 		}
 		return $this->seek();
@@ -79,12 +81,18 @@ class Goblin extends AbstractBehaviour
 				}
 			}
 		}
-		return $this->pickPocketOrRoam();
+		if (!$this->hasContagionEffect()) {
+			return $this->pickPocketOrRoam();
+		}
+		return $this;
 	}
 
 	public function finish(): Behaviour {
-		parent::finish();
-		return $this->scatter(self::SCATTER_UNITS, self::SCATTER_PERSONS);
+		if (!$this->hasContagionEffect()) {
+			parent::finish();
+			return $this->scatter(self::SCATTER_UNITS, self::SCATTER_PERSONS);
+		}
+		return $this;
 	}
 
 	protected function initGlobalMaximum(): void {
@@ -130,5 +138,14 @@ class Goblin extends AbstractBehaviour
 			}
 		}
 		return 0;
+	}
+
+	private function hasContagionEffect(): bool {
+		$effect = new Contagion(State::getInstance());
+		$effect = Lemuria::Score()->find($effect->setRegion($this->unit->Region()));
+		if ($effect instanceof Contagion) {
+			return $effect->Units()->has($this->unit->Id());
+		}
+		return false;
 	}
 }

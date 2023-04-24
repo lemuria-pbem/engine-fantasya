@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Event\Game\BrokenCarriage;
+use Lemuria\Engine\Fantasya\Event\Game\GoblinPlague;
 use Lemuria\Engine\Fantasya\Event\Game\PopulateContinent;
 use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Event\Game\TheWildHunt;
@@ -23,6 +24,9 @@ final class Timer extends DelegatedEvent
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 2, PopulateContinent::CHANCES => [Wolf::class => 7]]],
 			['class' => BrokenCarriage::class, 'options' => [BrokenCarriage::PARTY => 8, BrokenCarriage::REGION => 1617]],
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 1573]]
+		],
+		111 => [
+			['class' => GoblinPlague::class, 'options' => [GoblinPlague::REGION => 61, GoblinPlague::DURATION => 2]]
 		]
 	];
 
