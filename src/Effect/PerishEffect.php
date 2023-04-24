@@ -73,7 +73,7 @@ final class PerishEffect extends AbstractUnitEffect
 		$inventory->fill($unit->Inventory());
 		if ($race instanceof Monster) {
 			$trophy = $race->Trophy();
-			if ($trophy && isset(Operate::WITH_TROPHY[$trophy::class])) {
+			if ($trophy && isset(Operate::WITH_TROPHY[$race::class])) {
 				$inventory->add(new Quantity($trophy));
 			}
 		}

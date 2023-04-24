@@ -78,6 +78,27 @@ trait UnicumTrait
 		}
 	}
 
+	private function findUnicumWithArguments(): string {
+		$id     = $this->phrase->getParameter();
+		$unicum = $this->searchUnicum($id);
+		if ($unicum) {
+			$this->unicum        = $unicum;
+			$this->composition   = $unicum->Composition();
+			$this->argumentIndex = 2;
+		} else {
+			$id     = $this->phrase->getParameter(2);
+			$unicum = $this->searchUnicum($id);
+			if ($unicum) {
+				$this->unicum        = $unicum;
+				$this->composition   = $unicum->Composition();
+				$this->argumentIndex = 3;
+			} else {
+				throw new InvalidCommandException($this);
+			}
+		}
+		return $id;
+	}
+
 	private function getUnicum(string $id): ?Unicum {
 		$id       = Id::fromId($id);
 		$treasury = $this->unit->Treasury();

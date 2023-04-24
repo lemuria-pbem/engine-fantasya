@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\ReadNoUnicumMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ReadUnsupportedMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Domain;
+use Lemuria\Model\Fantasya\Ownable;
 use Lemuria\Model\Fantasya\Practice;
 use Lemuria\Model\Reassignment;
 
@@ -28,8 +29,11 @@ final class Read extends UnitCommand implements Operator, Reassignment
 	protected function run(): void {
 		$id = $this->parseUnicum();
 		if (!$this->unicum) {
-			$this->message(ReadNoUnicumMessage::class)->p($id);
-			return;
+			$id = $this->findUnicum();
+			if ($this->composition instanceof Ownable) {
+				$this->message(ReadNoUnicumMessage::class)->p($id);
+				return;
+			}
 		}
 		$composition = $this->unicum->Composition();
 		if ($composition !== $this->composition) {

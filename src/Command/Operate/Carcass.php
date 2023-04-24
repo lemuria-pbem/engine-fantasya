@@ -51,9 +51,9 @@ final class Carcass extends AbstractOperate
 		}
 
 		foreach ($take as $item) {
-			$loot->remove($item);
 			$count = $item->Count();
 			$taken = new Quantity($item->Commodity(), $count);
+			$loot->remove($item);
 			$inventory->add($taken);
 			if ($quantity && $wanted > $count) {
 				$this->message(CarcassOnlyMessage::class, $this->unit)->s($carcass)->e($unicum)->i($taken);

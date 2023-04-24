@@ -104,7 +104,8 @@ class CompositionDetails
 	}
 
 	protected function validateJson(): void {
-		$this->validate($this->json, self::APPLY, Validate::String);
-		$this->validate($this->json, self::WRITE, Validate::String);
+		$this->validateIfExists($this->json, self::APPLY, Validate::String);
+		$this->validateIfExists($this->json, self::TAKE, Validate::String);
+		$this->validateIfExists($this->json, self::WRITE, Validate::String);
 	}
 }
