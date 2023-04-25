@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Event\Game\BrokenCarriage;
+use Lemuria\Engine\Fantasya\Event\Game\FindWallet;
 use Lemuria\Engine\Fantasya\Event\Game\GoblinPlague;
 use Lemuria\Engine\Fantasya\Event\Game\PopulateContinent;
 use Lemuria\Engine\Fantasya\Event\Game\Spawn;
@@ -26,6 +27,8 @@ final class Timer extends DelegatedEvent
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 1573]]
 		],
 		111 => [
+			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 1669, FindWallet::SILVER => 400]],
+			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 4411, FindWallet::SILVER => 250]],
 			['class' => GoblinPlague::class, 'options' => [GoblinPlague::REGION => 61, GoblinPlague::DURATION => 2]]
 		]
 	];

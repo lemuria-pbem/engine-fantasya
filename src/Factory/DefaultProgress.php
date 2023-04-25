@@ -14,6 +14,7 @@ use Lemuria\Engine\Fantasya\Event\Drown;
 use Lemuria\Engine\Fantasya\Event\Fauna;
 use Lemuria\Engine\Fantasya\Event\Finish;
 use Lemuria\Engine\Fantasya\Event\Founder;
+use Lemuria\Engine\Fantasya\Event\Game;
 use Lemuria\Engine\Fantasya\Event\Griffinegg;
 use Lemuria\Engine\Fantasya\Event\Growth;
 use Lemuria\Engine\Fantasya\Event\Layabout;
@@ -41,7 +42,7 @@ class DefaultProgress implements Progress
 {
 	protected const EVENTS = [
 		// before
-		Administrator::class, Timer::class, Visit::class, Monster::class, MarketFee::class, PortFee::class,
+		Administrator::class, Timer::class, Game::class, Visit::class, Monster::class, MarketFee::class, PortFee::class,
 		// middle
 		ResetSiege::class, Conduct::class, Upkeep::class, Subsistence::class, Drift::class, Breeding::class,
 		// after
