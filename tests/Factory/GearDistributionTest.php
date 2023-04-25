@@ -15,10 +15,10 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Landscape\Plain;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Race\Human;
-use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Archery;
 use Lemuria\Model\Fantasya\Talent\Bladefighting;
+use Lemuria\Tests\Model\Fantasya\Mock\RegionMock;
 use Lemuria\Tests\Model\Fantasya\Mock\UnitMock;
 use Lemuria\Tests\Model\Fantasya\ModelTest;
 
@@ -45,7 +45,7 @@ class GearDistributionTest extends ModelTest
 			$this->unit->Inventory()->add(new Quantity(self::createCommodity($commodity), $count));
 		}
 
-		$region = new Region();
+		$region = new RegionMock();
 		$region->setLandscape(self::createLandscape(Plain::class));
 		$this->unit->setRegion($region);
 
