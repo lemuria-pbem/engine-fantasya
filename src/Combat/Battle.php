@@ -322,8 +322,9 @@ class Battle
 			$party = $unit->Party();
 			$type  = $party->Type();
 			if ($type === Type::Player) {
-				if ($party->Loot()->wants($quantity->Commodity())) {
-					$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
+				$commodity = $quantity->Commodity();
+				if ($party->Loot()->wants($commodity)) {
+					$unit->Inventory()->add(new Quantity($commodity, $quantity->Count()));
 					Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
 					BattleLog::getInstance()->add(new TakeLootMessage($unit, $quantity));
 				} else {
@@ -339,7 +340,8 @@ class Battle
 						Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
 						BattleLog::getInstance()->add(new TakeLootMessage($unit, $quantity));
 					} else {
-						Lemuria::Log()->debug($unit . ' scorns loot ' . $quantity);
+						$this->battlefieldRemains->add($quantity);
+						Lemuria::Log()->debug($unit . ' scorns loot ' . $quantity . ', added to battlefield remains.');
 					}
 				}
 			}
@@ -470,6 +472,7 @@ class Battle
 				$effect = $existing;
 			} else {
 				Lemuria::Score()->add($effect);
+				State::getInstance()->injectIntoTurn($effect);
 			}
 			foreach ($this->battlefieldRemains as $quantity) {
 				$effect->Resources()->add($quantity);
