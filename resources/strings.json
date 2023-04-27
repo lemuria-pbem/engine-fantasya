@@ -1255,7 +1255,7 @@
 		"StumpSpear": ["m", ["Stumpfe Speer", "Stumpfen Speere"], ["Stumpfen Speeres", 1], ["Stumpfen Speere", "Stumpfen Speeren"], ["Stumpfen Speer", 1], ["Stumpfer Speer", "Stumpfe Speere"]],
 		"Swamp": ["m", ["Sumpf", "Sümpfe"], ["Sumpfes", 1], [0, "Sümpfen"], 1, 1],
 		"Sword": ["n", ["Schwert", "Schwerter"], ["Schwertes", 1], ["Schwerte", "Schwertern"], 1, 1],
-		"TangyTemerity": ["m", ["Würzige Wagemut", "Würzigen Wagemute"], ["Würzigen Wagemutes", 1], ["Würzigen Wagemute", "Würzigen Wagemute"], ["Würzigen Wagemut", 1], ["Würziger Wagemut", "Würzige Wagemute"]],
+		"TangyTemerity": ["m", ["Würzige Wagemut", "Würzigen Wagemute"], ["Würzigen Wagemutes", 1], ["Würzigen Wagemute", "Würzigen Wagemuten"], ["Würzigen Wagemut", 1], ["Würziger Wagemut", "Würzige Wagemute"]],
 		"TatteredLeatherArmor": ["f", ["Zerrissene Lederrüstung", "Zerrissenen Lederrüstungen"], ["Zerrissenen Lederrüstung", "Zerrissenen Lederrüstungen"], 2, [0, "Zerrissene Lederrüstungen"], [0, 7]],
 		"Tavern": ["f", ["Taverne", "Tavernen"], 1, 1, 1, 1],
 		"Tower": ["m", ["Turm", "Türme"], ["Turms", 1], ["Turme", "Türmen"], 1, 1],
