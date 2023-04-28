@@ -8,8 +8,11 @@ use Lemuria\Engine\Fantasya\Message\Unit\EntertainGuardedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EntertainMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EntertainNoDemandMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EntertainNoExperienceMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EntertainNoPeasantsMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\EntertainNoSilverMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EntertainOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Party\EntertainPreventMessage;
+use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Relation;
@@ -58,7 +61,15 @@ final class Entertain extends AllocationCommand implements Activity
 		} else {
 			$this->unit->Inventory()->add($quantity);
 			if ($quantity->Count() < $this->fee || $this->demand > $this->fee) {
-				$this->message(EntertainOnlyMessage::class)->i($quantity);
+				if (!$this->hasRegionResources(self::createCommodity(Silver::class))) {
+					if (!$this->hasRegionResources(self::createCommodity(Peasant::class))) {
+						$this->message(EntertainNoPeasantsMessage::class)->e($this->unit->Region());
+					} else {
+						$this->message(EntertainNoSilverMessage::class)->e($this->unit->Region());
+					}
+				} else {
+					$this->message(EntertainOnlyMessage::class)->i($quantity);
+				}
 			} else {
 				$this->message(EntertainMessage::class)->i($quantity);
 			}

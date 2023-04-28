@@ -11,8 +11,11 @@ use Lemuria\Engine\Fantasya\Message\Unit\TaxMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxNoCollectorsMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxNoDemandMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxNoExperienceMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TaxNoPeasantsMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TaxNoSilverMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxWithoutWeaponMessage;
+use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Relation;
@@ -55,7 +58,15 @@ final class Tax extends AllocationCommand implements Activity
 					}
 				} elseif ($this->collectors > 0) {
 					$silver = self::createCommodity(Silver::class);
-					$this->message(TaxOnlyMessage::class)->i(new Quantity($silver, 0));
+					if (!$this->hasRegionResources($silver)) {
+						if (!$this->hasRegionResources(self::createCommodity(Peasant::class))) {
+							$this->message(TaxNoPeasantsMessage::class)->e($this->unit->Region());
+						} else {
+							$this->message(TaxNoSilverMessage::class)->e($this->unit->Region());
+						}
+					} else {
+						$this->message(TaxOnlyMessage::class)->i(new Quantity($silver, 0));
+					}
 				} else {
 					$this->message(TaxWithoutWeaponMessage::class);
 				}

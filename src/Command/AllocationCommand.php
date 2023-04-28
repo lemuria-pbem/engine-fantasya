@@ -10,6 +10,7 @@ use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\AllocationSiegeMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
@@ -110,15 +111,9 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	}
 
 	/**
-	 * Get a resource.
+	 * Determine the demand.
 	 */
-	protected function getResource(string $class): Quantity {
-		if (!isset($this->resources[$class])) {
-			$commodity = self::createCommodity($class);
-			return new Quantity($commodity, 0);
-		}
-		return $this->resources[$class];
-	}
+	abstract protected function createDemand(): void;
 
 	/**
 	 * Do the check before allocation.
@@ -130,7 +125,18 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	}
 
 	/**
-	 * Determine the demand.
+	 * Get a resource.
 	 */
-	abstract protected function createDemand(): void;
+	protected function getResource(string $class): Quantity {
+		if (!isset($this->resources[$class])) {
+			$commodity = self::createCommodity($class);
+			return new Quantity($commodity, 0);
+		}
+		return $this->resources[$class];
+	}
+
+	protected function hasRegionResources(Commodity $commodity): bool {
+		$resources = $this->unit->Region()->Resources();
+		return $resources[$commodity]->Count() > 0;
+	}
 }
