@@ -20,6 +20,7 @@ final class Timer extends DelegatedEvent
 		111 => [
 			['class' => Spawn::class, 'options' => [Spawn::TYPE => Type::Monster, Spawn::REGION => 3877, Spawn::SIZE => 32, Spawn::RACE => Zombie::class]],
 			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 1669, FindWallet::SILVER => 400]],
+			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 2158, FindWallet::SILVER => 180]],
 			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 4411, FindWallet::SILVER => 250]],
 			['class' => GoblinPlague::class, 'options' => [GoblinPlague::REGION => 61, GoblinPlague::DURATION => 2]]
 		]
