@@ -116,7 +116,7 @@ abstract class AbstractMessage implements MessageType
 		return $this->getTranslatedSingleton($property, $name, $index);
 	}
 
-	protected function item(string $property, string $name, ?int $index = null): ?string {
+	protected function item(string $property, string $name, ?int $index = null, Casus $casus = Casus::Accusative): ?string {
 		if ($property === $name) {
 			$commodity = $this->$name->Commodity();
 			if ($commodity instanceof Container) {
@@ -128,7 +128,7 @@ abstract class AbstractMessage implements MessageType
 				$index = $count > 1 ? 1 : 0;
 			}
 
-			$item = $this->translateSingleton($commodity, $index, Casus::Accusative);
+			$item = $this->translateSingleton($commodity, $index, $casus);
 			if ($item) {
 				return $count < PHP_INT_MAX ? number($count) . ' ' . $item : $item;
 			}

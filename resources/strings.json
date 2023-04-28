@@ -1252,7 +1252,7 @@
 		"Spear": ["m", ["Speer", "Speere"], ["Speeres", 1], ["Speere", "Speeren"], 1, 1],
 		"Spellbook": ["n", ["Zauberbuch", "Zauberbücher"], ["Zauberbuches", 1], [0, "Zauberbüchern"], 1, 1],
 		"Spice": ["n", ["Gewürz", "Gewürze"], ["Gewürzes", 1], ["Gewürze", "Gewürzen"], 1, 1],
-		"SpiderIvy": ["m", ["Grüne Spinnerich", "Grünen Spinneriche"], ["Grünen Spinneriches", 1], ["Grünen Spinnerich", "Grünen Spinnerichen"], 1, ["Grüner Spinnerich", "Grüne Spinneriche"]],
+		"SpiderIvy": ["m", ["Grüne Spinnerich", "Grünen Spinneriche"], ["Grünen Spinneriches", 1], ["Grünen Spinnerich", "Grünen Spinnerichen"], [4, 1], ["Grüner Spinnerich", "Grüne Spinneriche"]],
 		"SplitWoodshield": ["m", ["Gespaltene Holzschild", "Gespaltenen Holzschilde"], ["Gespaltenen Holzschildes", 1], [1, "Gespaltenen Holzschilden"], ["Gespaltenen Holzschild", 1], ["Gespaltener Holzschild", "Gespaltene Holzschilde"]],
 		"Stone": ["m", ["Stein", "Steine"], ["Steines", 1], ["Steine", "Steinen"], 1, 1],
 		"Stronghold": ["f", ["Festung", "Festungen"], 1, 1, 1, 1],
@@ -1332,8 +1332,8 @@
 			"f": ["keine", "keiner", "keinen", "keine"],
 			"m": ["keine", "keiner", "keinen", "keine"],
 			"n": ["keine", "keiner", "keinen", "keine"],
-			"p": ["keine", "keiner", "keinen", "keine"],
-			"q": ["keine", "keiner", "keinen", "keine"]
+			"p": ["keinen", "keines", "keinem", "keinen"],
+			"q": ["kein", "keines", "keinem", "kein"]
 		},
 		"plural": {
 			"numerus": 1,
