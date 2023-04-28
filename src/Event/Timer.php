@@ -9,7 +9,6 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
-use Lemuria\Model\Fantasya\Party\Type;
 
 /**
  * The Timer event adds other events at predefined rounds.
@@ -18,7 +17,8 @@ final class Timer extends DelegatedEvent
 {
 	private const SCHEDULE = [
 		111 => [
-			['class' => Spawn::class, 'options' => [Spawn::TYPE => Type::Monster, Spawn::REGION => 3877, Spawn::SIZE => 32, Spawn::RACE => Zombie::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => 2359, Spawn::SIZE => 27, Spawn::RACE => Zombie::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => 3877, Spawn::SIZE => 32, Spawn::RACE => Zombie::class]],
 			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 1669, FindWallet::SILVER => 400]],
 			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 2158, FindWallet::SILVER => 180]],
 			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 4411, FindWallet::SILVER => 250]],
