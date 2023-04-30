@@ -215,6 +215,7 @@ class Travel extends UnitCommand implements Activity
 						if ($notPassGuards->count() > 0) {
 							$this->workload->add($regions);
 							$regions = 0;
+							$roadRegions = 0;
 							// Guard message to the guards and the stopped unit.
 							foreach ($notPassGuards as $party) {
 								$this->message(TravelGuardMessage::class, $party)->e($region)->e($this->unit, TravelGuardMessage::UNIT);
