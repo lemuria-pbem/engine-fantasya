@@ -74,7 +74,7 @@ class Supply implements \Countable
 	 */
 	public function estimate(int $count): int {
 		$count = min($count, $this->count());
-		$step  = (int)floor($this->step);
+		$step  = max(1, (int)floor($this->step));
 		$steps = (int)floor($count / $step);
 		$rest  = $count % $step;
 		$value = $this->luxury->Value();
