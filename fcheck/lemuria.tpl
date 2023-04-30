@@ -62,9 +62,9 @@
 ^@?(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6}( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6}$
-^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +(\*|alle|alles))$
+^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +(\*|alle|alles)$
 ^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9-]+$
-^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9]+[a-zäöüß ]+$
+^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9-]+[a-zäöüß ]+$
 ^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9]+[a-zäöüß ]+ [0-9]+[a-zäöüß ]+$
 
 ^@?(he|hel|helf|helfe|helfen|hi|hil|hilf|hilfe) +[a-z0-9]{1,6} +[a-z]+( +(region|nicht|region +nicht|nicht +region))?$

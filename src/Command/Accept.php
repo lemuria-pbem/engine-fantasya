@@ -52,6 +52,7 @@ use Lemuria\Model\Fantasya\Unit;
  * - HANDEL <trade> *|Alle|Alles
  * - HANDEL <trade> <amount>
  * - HANDEL <trade> <min>-<max>
+ * - HANDEL <trade> <min>-<max> <commodity>
  * - HANDEL <trade> <amount> <commodity>
  * - HANDEL <trade> <price> <payment>
  * - HANDEL <trade> <amount> <commodity> <price> <payment>
@@ -251,19 +252,16 @@ final class Accept extends UnitCommand
 		if ($n > 1) {
 			$parameter = strtolower($this->phrase->getParameter(2));
 
-			// HANDEL <trade> *|Alle|Alles|<amount>|<min>-<max>
+			$this->parseAmountOnly($goods, $price, $parameter);
 			if ($n === 2) {
-				$this->parseAmountOnly($goods, $price, $parameter);
+				// HANDEL <trade> *|Alle|Alles|<amount>|<min>-<max>
 				return;
 			}
 
-			$number    = $this->parsePositiveAmount($parameter);
 			$i         = 3;
 			$commodity = $this->parseCommodity($i, $n);
-
 			if ($i < $n) {
 				if ($i + 1 < $n) {
-					$this->amount = $number;
 					if ($commodity !== $goods->Commodity()) {
 						throw new InvalidCommandException($this);
 					}
@@ -291,13 +289,11 @@ final class Accept extends UnitCommand
 						throw new InvalidCommandException($this);
 					}
 					if ($commodity === $goods->Commodity()) {
-						$this->amount = $number;
 						return;
 					}
 				}
 				if ($price->IsVariable()) {
 					if ($commodity === $price->Commodity()) {
-						$this->price = $number;
 						return;
 					}
 				}
