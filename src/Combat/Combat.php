@@ -87,6 +87,11 @@ class Combat
 	 */
 	protected Effects $effects;
 
+	/**
+	 * @var array(bool, int)
+	 */
+	protected array $lastReinforcements = [false => PHP_INT_MAX, true => PHP_INT_MAX];
+
 	protected int $newZombies = 0;
 
 	public static function getBattleRow(Unit $unit): BattleRow {
@@ -346,19 +351,15 @@ class Combat
 			$ratio = $defenders > 0 ? $attackers / $defenders : PHP_INT_MAX;
 			if ($ratio > self::OVERRUN) {
 				$additional = (int)ceil($attackers / self::OVERRUN) - $defenders;
-				BattleLog::getInstance()->add(new DefenderOverrunMessage($additional));
 				$this->arrangeRows($additional, $this->defender, false);
 			} elseif ($ratio < 1.0 / self::OVERRUN) {
 				$additional = (int)ceil($defenders / self::OVERRUN) - $attackers;
-				BattleLog::getInstance()->add(new AttackerOverrunMessage($additional));
 				$this->arrangeRows($additional, $this->attacker, true);
 			} else {
 				return true;
 			}
 		} else {
-			BattleLog::getInstance()->add(new AttackerOverrunMessage(1));
 			$this->arrangeRows(1, $this->attacker, true);
-			BattleLog::getInstance()->add(new DefenderOverrunMessage(1));
 			$this->arrangeRows(1, $this->defender, false);
 		}
 		$this->logSideDistribution();
@@ -366,6 +367,7 @@ class Combat
 	}
 
 	protected function arrangeRows(int $additional, Ranks $side, $isAttacker): void {
+		$needed = $additional;
 		if ($additional > 0) {
 			$additional = $this->arrangeFromRow($side, $isAttacker, Rank::BACK, $additional);
 		}
@@ -375,11 +377,22 @@ class Combat
 		if ($additional > 0) {
 			$additional = $this->arrangeFromRow($side, $isAttacker, Rank::REFUGEE, $additional);
 		}
-		if ($additional > 0) {
+
+		$reinforcements                        = $needed - $additional;
+		$lastReinforcements                    = $this->lastReinforcements[$isAttacker];
+		$this->lastReinforcements[$isAttacker] = $reinforcements;
+		if ($reinforcements <= 0 && $lastReinforcements > 0) {
 			if ($isAttacker) {
-				BattleLog::getInstance()->add(new AttackerNoReinforcementMessage());
+				BattleLog::getInstance()->add(new AttackerOverrunMessage($needed));
 			} else {
-				BattleLog::getInstance()->add(new DefenderNoReinforcementMessage());
+				BattleLog::getInstance()->add(new DefenderOverrunMessage($needed));
+			}
+			if ($additional > 0) {
+				if ($isAttacker) {
+					BattleLog::getInstance()->add(new AttackerNoReinforcementMessage());
+				} else {
+					BattleLog::getInstance()->add(new DefenderNoReinforcementMessage());
+				}
 			}
 		}
 	}
