@@ -37,7 +37,7 @@ class UnitExceptionMessage extends AbstractUnitMessage
 				return str_replace('Unknown item', 'unbekannte Ressource', $this->exception);
 			}
 			if (preg_match('/^Unit ([0-9a-z]+) cannot have more than one activity.$/', $this->exception, $matches) === 1) {
-				return 'Die Einheit ' . $matches[1] . ' hat bereits einen langen Befehl ausgeführt';
+				return 'Die Einheit ' . $matches[1] . ' hat bereits einen langen Befehl ausgeführt.';
 			}
 		}
 		return parent::getTranslation($name);

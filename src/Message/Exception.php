@@ -6,6 +6,8 @@ enum Exception
 {
 	case None;
 
+	case InvalidCommand;
+
 	case InvalidId;
 
 	case PartyAlreadySet;
