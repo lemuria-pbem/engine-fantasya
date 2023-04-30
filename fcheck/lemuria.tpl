@@ -17,6 +17,8 @@
 ^(ange|angeb|angebo|angebot) +([0-9-]+|\*) +[a-zäöüß ]+[0-9-]+ +[a-zäöüß ]+$
 
 ^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren)( +[a-z0-9]{1,6})+$
+^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren) +partei( +[a-z0-9]{1,6})+$
+^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren) +monster$
 
 ^(ba|ban|bann|banne|banner) +.*$
 

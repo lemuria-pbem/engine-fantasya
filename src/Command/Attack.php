@@ -2,15 +2,18 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
 use Lemuria\Engine\Fantasya\Combat\BattlePlan;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleBeginsMessage;
 use Lemuria\Engine\Fantasya\Combat\Place;
 use Lemuria\Engine\Fantasya\Combat\Side;
+use Lemuria\Engine\Fantasya\Exception\Command\InvalidIdException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Region\AttackBattleMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackAlliedPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackAllyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackCancelMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMessage;
@@ -23,19 +26,28 @@ use Lemuria\Engine\Fantasya\Message\Unit\AttackMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFightingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFoundMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackOnVesselMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackOwnPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackOwnUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackSelfMessage;
+use Lemuria\Engine\Fantasya\Outlook;
+use Lemuria\Exception\IdException;
+use Lemuria\Id;
 use Lemuria\Lemuria;
+use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
+use Lemuria\Model\Fantasya\Gathering;
+use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
 
 /**
- * Attacks units.
+ * Attacks other units.
  *
- * - ATTACKIEREN <Unit>...
+ * - ATTACKIEREN Monster
+ * - ATTACKIEREN <unit>...
+ * - ATTACKIEREN Partei <party>...
  */
 final class Attack extends UnitCommand implements Reassignment
 {
@@ -70,21 +82,15 @@ final class Attack extends UnitCommand implements Reassignment
 			return;
 		}
 
-		$i = 1;
-		do {
-			$unit = null;
-			try {
-				$unit = $this->nextId($i, $id);
-			} catch (CommandException) {
-				$this->message(AttackNotFoundMessage::class)->p($id);
-				continue;
-			}
-			$place = $this->getPlace($unit);
-			if ($place !== Place::None) {
-				$this->units[] = $unit;
-				Lemuria::Log()->debug($this->unit . ' will fight against ' . $unit . ' in ' . strtolower($place->name) . '.');
-			}
-		} while ($unit);
+		$n         = $this->phrase->count();
+		$parameter = strtolower($this->phrase->getParameter());
+		if ($n === 1 && $parameter === 'monster') {
+			$this->addAttackedMonsters();
+		} elseif ($n >= 2 && $parameter === 'partei') {
+			$this->parseAttackedParties();
+		} else {
+			$this->parseAttackedUnits();
+		}
 		$this->commitCommand($this);
 	}
 
@@ -139,6 +145,75 @@ final class Attack extends UnitCommand implements Reassignment
 		}
 	}
 
+	private function addAttackedMonsters(): void {
+		$we      = $this->unit->Party();
+		$outlook = new Outlook(new Census($we));
+		foreach ($outlook->getApparitions($this->unit->Region()) as $unit) {
+			$party = $this->getApparentParty($unit);
+			if ($party->Type() === Type::Monster && $party !== $we) {
+				$this->addAttackedUnit($unit);
+			}
+		}
+	}
+
+	private function parseAttackedParties(): void {
+		$parties = new Gathering();
+		$we      = $this->unit->Party();
+		$n       = $this->phrase->count();
+		for ($i = 2; $i <= $n; $i++) {
+			try {
+				$id    = Id::fromId($this->phrase->getParameter($i));
+				$party = Party::get($id);
+				if ($party === $we) {
+					$this->message(AttackOwnPartyMessage::class);
+					continue;
+				}
+				if ($we->Diplomacy()->has(Relation::COMBAT, $party)) {
+					$this->message(AttackAlliedPartyMessage::class)->p((string)$party->Id());
+				} else {
+					$parties->add($party);
+				}
+			} catch (IdException $e) {
+				throw new InvalidIdException($this->phrase->getParameter($i), $e);
+			} catch (NotRegisteredException) {
+				Lemuria::Log()->debug('Party ' . $we . ' tried to attack non-existing party ' . $id . '.');
+			}
+		}
+
+		$outlook = new Outlook(new Census($we));
+		foreach ($outlook->getApparitions($this->unit->Region()) as $unit) {
+			$party = $this->getApparentParty($unit);
+			if ($parties->has($party->Id())) {
+				$this->addAttackedUnit($unit);
+			}
+		}
+	}
+
+	private function parseAttackedUnits(): void {
+		$i = 1;
+		$n = $this->phrase->count();
+		while ($i <= $n) {
+			$unit = null;
+			try {
+				$unit = $this->nextId($i, $id);
+			} catch (CommandException) {
+			}
+			if ($unit) {
+				$this->addAttackedUnit($unit);
+			} else {
+				$this->message(AttackNotFoundMessage::class)->p($id);
+			}
+		};
+	}
+
+	private function addAttackedUnit(Unit $unit): void {
+		$place = $this->getPlace($unit);
+		if ($place !== Place::None) {
+			$this->units[] = $unit;
+			Lemuria::Log()->debug($this->unit . ' will fight against ' . $unit . ' in ' . strtolower($place->name) . '.');
+		}
+	}
+
 	private static function isAttacked(int $id, int $from = 0): bool {
 		if (isset(self::$attackers[$id][$from])) {
 			return true;
@@ -168,7 +243,7 @@ final class Attack extends UnitCommand implements Reassignment
 			return Place::None;
 		}
 		$we    = $this->unit->Party();
-		$party = $unit->Party();
+		$party = $this->getApparentParty($unit);
 		if ($party === $we) {
 			$this->message(AttackOwnUnitMessage::class)->p((string)$unit->Id());
 			return Place::None;
@@ -212,5 +287,13 @@ final class Attack extends UnitCommand implements Reassignment
 			}
 		}
 		return $place;
+	}
+
+	private function getApparentParty(Unit $unit): ?Party {
+		$party = $unit->Disguise();
+		if ($party === $this->unit->Party()) {
+			return null;
+		}
+		return $party === false ? $unit->Party() : $party;
 	}
 }
