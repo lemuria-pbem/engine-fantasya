@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Factory\CommandFactory;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\Workload;
+use Lemuria\Engine\Fantasya\Turn\Options;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
@@ -201,7 +202,7 @@ final class Context implements Reassignment
 	/**
 	 * Get the turn options.
 	 */
-	public function getTurnOptions(): TurnOptions {
+	public function getTurnOptions(): Options {
 		return $this->state->getTurnOptions();
 	}
 

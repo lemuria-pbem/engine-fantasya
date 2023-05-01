@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Combat\Campaign;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\Workload;
+use Lemuria\Engine\Fantasya\Turn\Options;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
@@ -25,7 +26,7 @@ final class State implements Reassignment
 
 	private readonly LemuriaTurn $turn;
 
-	private ?TurnOptions $turnOptions = null;
+	private ?Options $turnOptions = null;
 
 	private readonly Casts $casts;
 
@@ -171,9 +172,9 @@ final class State implements Reassignment
 		return $this->turn->getCurrentPriority();
 	}
 
-	public function getTurnOptions(): TurnOptions {
+	public function getTurnOptions(): Options {
 		if (!$this->turnOptions) {
-			$this->turnOptions = new TurnOptions();
+			$this->turnOptions = new Options();
 		}
 		return $this->turnOptions;
 	}
@@ -314,7 +315,7 @@ final class State implements Reassignment
 		return $this->protocol;
 	}
 
-	public function setTurnOptions(TurnOptions $options): void {
+	public function setTurnOptions(Options $options): void {
 		$this->turnOptions = $options;
 	}
 

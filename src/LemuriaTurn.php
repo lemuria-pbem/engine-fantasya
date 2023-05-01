@@ -18,6 +18,7 @@ use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Party\NoMoveMessage;
 use Lemuria\Engine\Fantasya\Message\Party\PartyExceptionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnitExceptionMessage;
+use Lemuria\Engine\Fantasya\Turn\Options;
 use Lemuria\Engine\Move;
 use Lemuria\Engine\Newcomer;
 use Lemuria\Engine\Score;
@@ -57,7 +58,7 @@ class LemuriaTurn implements Turn
 	/**
 	 * Initialize turn.
 	 */
-	public function __construct(?TurnOptions $options = null) {
+	public function __construct(?Options $options = null) {
 		$this->state = State::getInstance($this);
 		if ($options) {
 			$this->state->setTurnOptions($options);
@@ -138,7 +139,12 @@ class LemuriaTurn implements Turn
 	 * Inject an action into the running turn.
 	 */
 	public function inject(Action $action): void {
-		if ($this->priority->getPriority($action) <= $this->currentPriority) {
+		$priority = $this->priority->getPriority($action);
+		if (!$this->state->getTurnOptions()->CherryPicker()->pickPriority($priority)) {
+			Lemuria::Log()->critical('Injecting action ' . $action . ' rejected by cherry picker.');
+			return;
+		}
+		if ($priority <= $this->currentPriority) {
 			throw new LemuriaException('Cannot inject action into this running evaluation.');
 		}
 		$this->enqueue($action);
@@ -183,12 +189,19 @@ class LemuriaTurn implements Turn
 		Lemuria::Orders()->clear();
 
 		Lemuria::Log()->debug('Shuffling all queues.');
-		$priorities = array_keys($this->queue);
+		$priorities   = array_keys($this->queue);
+		$cherryPicker = $this->state->getTurnOptions()->CherryPicker();
 		foreach ($priorities as $priority) {
-			if ($this->priority->canShuffle($priority)) {
-				$this->shuffle($priority);
+			if ($cherryPicker->pickPriority($priority)) {
+				if ($this->priority->canShuffle($priority)) {
+					$this->shuffle($priority);
+				}
+			} else {
+				Lemuria::Log()->critical('Queue priority ' . $priority . ' removed by cherry picker.');
+				unset($this->queue[$priority]);
 			}
 		}
+		$priorities = array_keys($this->queue);
 
 		Lemuria::Log()->debug('Executing queued actions.', ['queues' => count($this->queue)]);
 		foreach ($priorities as $priority) {
