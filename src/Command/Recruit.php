@@ -168,7 +168,11 @@ final class Recruit extends AllocationCommand
 			}
 			$this->message(RecruitKnowledgeMessage::class)->p((int)round(100.0 * $percent));
 		} else {
-			$this->unit->Knowledge()->clear();
+			$knowledge = $this->unit->Knowledge();
+			$knowledge->clear();
+			foreach ($minimum as $talent => $level) {
+				$knowledge->add(new Ability(self::createTalent($talent), Ability::getExperience($level)));
+			}
 		}
 	}
 }
