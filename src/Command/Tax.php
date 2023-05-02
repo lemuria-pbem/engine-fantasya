@@ -3,6 +3,8 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Combat\Army;
+use Lemuria\Engine\Fantasya\Combat\Combat;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Message\Party\TaxPreventMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxDemandMessage;
@@ -116,11 +118,13 @@ final class Tax extends AllocationCommand implements Activity
 	}
 
 	private function getNumberOfTaxCollectors(): int {
-		foreach ($this->calculus()->weaponSkill() as $skill) {
-			if ($skill->isGuard()) {
-				return $this->unit->Size();
+		$size = 0;
+		$army = new Army($this->unit->Party(), new Combat($this->context));
+		foreach ($army->add($this->unit)->Combatants() as $combatant) {
+			if ($combatant->Weapon() && $combatant->WeaponSkill()->isGuard()) {
+				$size += $combatant->Size();
 			}
 		}
-		return 0;
+		return $size;
 	}
 }
