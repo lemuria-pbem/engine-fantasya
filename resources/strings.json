@@ -847,6 +847,7 @@
 		"TaxNoExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent.",
 		"TaxNoPeasantsMessage": "In der Region $region gibt es keinen einzigen Bauern, der besteuert werden könnte.",
 		"TaxNoSilverMessage": "Die armen Bauern in der Region $region können kein einziges Silberstück an Steuern aufbringen.",
+		"TaxNotFightingMessage": "Die Einheit $id kann keine Steuern eintreiben, wenn sie nicht kämpft.",
 		"TaxOnlyMessage": "Die Einheit kann nur $income mit $talent verdienen.",
 		"TaxPreventMessage": "Unsere Wache hat die Einheit $unit vom Steuereintreiben abgehalten.",
 		"TaxWithoutWeaponMessage": "Die Einheit $id kann keine Waffen verwenden, um das Steuereintreiben zu erzwingen.",

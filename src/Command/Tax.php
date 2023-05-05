@@ -15,8 +15,10 @@ use Lemuria\Engine\Fantasya\Message\Unit\TaxNoDemandMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxNoExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxNoPeasantsMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxNoSilverMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TaxNotFightingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxWithoutWeaponMessage;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
@@ -70,7 +72,11 @@ final class Tax extends AllocationCommand implements Activity
 						$this->message(TaxOnlyMessage::class)->i(new Quantity($silver, 0));
 					}
 				} else {
-					$this->message(TaxWithoutWeaponMessage::class);
+					if ($this->unit->BattleRow()->value <= BattleRow::Bystander->value) {
+						$this->message(TaxNotFightingMessage::class);
+					} else {
+						$this->message(TaxWithoutWeaponMessage::class);
+					}
 				}
 			}
 		} else {
