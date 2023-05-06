@@ -125,7 +125,7 @@ final class Name extends UnitCommand implements Reassignment
 		$construction = $this->unit->Construction();
 		if ($construction) {
 			if ($construction->Building() instanceof Monument) {
-				if ($name !== 'Monument ' . $construction->Id()) {
+				if ($name === 'Monument ' . $construction->Id()) {
 					$this->message(NameMonumentOnceMessage::class);
 					return;
 				}
