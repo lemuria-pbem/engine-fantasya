@@ -531,6 +531,7 @@
 		"HerbageWriteRegionMessage": "Die Einheit $id vermerkt das Kräutervorkommen in der Region $region im Almanach $almanac.",
 		"HerbageWriteUnknownMessage": "Wir können das Kräutervorkommen der unbekannten Region $region nicht aufschreiben.",
 		"HerbUnknownMessage": "Die Einheit $id kann in der Region $region keine Kräuter pflücken - die Gegend muss zuerst erforscht werden.",
+		"HibernateMessage": "Die Einheit $id hält jetzt Winterschlaf.",
 		"HomeMessage": "Die Einheit $id gelangt auf der Suche nach einer Heimat in die Region $region.",
 		"HomeNowhereMessage": "Die Einheit $id verzweifelt, weil sie niemals eine Heimat finden wird.",
 		"HorseBlissNoneMessage": "Es gibt hier {g/akk:kein:$animal}, um Pferdeglück anzuwenden.",

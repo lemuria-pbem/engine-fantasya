@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\Act\Attack;
 use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Event\Act\Guard;
+use Lemuria\Engine\Fantasya\Event\Act\Hibernate;
 use Lemuria\Engine\Fantasya\Event\Act\Home;
 use Lemuria\Engine\Fantasya\Event\Act\Perish;
 use Lemuria\Engine\Fantasya\Event\Act\PickPocket;
@@ -40,6 +41,8 @@ abstract class AbstractBehaviour implements Behaviour
 
 	protected ?Act $perish = null;
 
+	protected ?Act $hibernate = null;
+
 	public function __construct(protected Unit $unit) {
 	}
 
@@ -66,6 +69,12 @@ abstract class AbstractBehaviour implements Behaviour
 				$this->message(GuardMessage::class, $this->unit);
 			}
 		}
+		return $this;
+	}
+
+	protected function hibernate(): Behaviour {
+		$this->hibernate = new Hibernate($this);
+		$this->hibernate->act();
 		return $this;
 	}
 

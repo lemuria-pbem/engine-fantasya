@@ -4,17 +4,21 @@ namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Engine\Fantasya\Effect\ContactEffect;
 use Lemuria\Engine\Fantasya\Effect\FarsightEffect;
+use Lemuria\Engine\Fantasya\Effect\HibernateEffect;
+use Lemuria\Engine\Fantasya\Effect\TravelEffect;
 use Lemuria\Engine\Fantasya\Factory\Model\TravelAtlas;
 use Lemuria\Engine\Fantasya\Factory\Model\Visibility;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Lighthouse;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Navigable;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Perception;
+use Lemuria\Model\Fantasya\Unit;
 use Lemuria\SortMode;
 
 /**
@@ -50,7 +54,12 @@ final class Outlook
 		$camouflage = self::createTalent(Camouflage::class);
 		foreach ($region->Residents() as $unit) {
 			if (!$unit->Construction() && !$unit->Vessel()) {
-				if ($unit->Party() === $party || !$unit->IsHiding() || $unit->IsGuarding()) {
+				$other = $unit->Party();
+				if ($other === $party) {
+					$units->add($unit);
+				} elseif ($other->Type() === Type::Monster && $this->isHibernating($unit)) {
+					continue;
+				} elseif (!$unit->IsHiding() || $unit->IsGuarding()) {
 					$units->add($unit);
 				} elseif ($unit->Party()->Diplomacy()->has(Relation::PERCEPTION, $this->census->Party())) {
 					$units->add($unit);
@@ -109,6 +118,23 @@ final class Outlook
 						}
 					}
 				}
+			}
+		}
+		return $units;
+	}
+
+	/**
+	 * Find units in a region that has been travelled.
+	 */
+	public function getTravelled(Region $region): People {
+		$units = new People();
+		foreach ($region->Residents() as $unit) {
+			if (!$unit->IsHiding() && !$unit->Construction() && !$unit->Vessel() && !$this->hasTravelled($unit)) {
+				$party = $unit->Party();
+				if ($party !== $this->census->Party() && $party->Type() === Type::Monster && $this->isHibernating($unit)) {
+					continue;
+				}
+				$units->add($unit);
 			}
 		}
 		return $units;
@@ -195,5 +221,15 @@ final class Outlook
 		$effect   = new FarsightEffect(State::getInstance());
 		$existing = Lemuria::Score()->find($effect->setRegion($region));
 		return $existing instanceof FarsightEffect ? $existing->getPerception($this->Census()->Party()) : 0;
+	}
+
+	private function isHibernating(Unit $unit): bool {
+		$effect = new HibernateEffect(State::getInstance());
+		return Lemuria::Score()->find($effect->setUnit($unit)) instanceof HibernateEffect;
+	}
+
+	private function hasTravelled(Unit $unit): bool {
+		$effect = new TravelEffect(State::getInstance());
+		return Lemuria::Score()->find($effect->setUnit($unit)) instanceof TravelEffect;
 	}
 }

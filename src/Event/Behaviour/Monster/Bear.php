@@ -44,7 +44,18 @@ class Bear extends AbstractBehaviour
 		return $reproduction;
 	}
 
+	public function prepare(): Behaviour {
+		if (Lemuria::Calendar()->Season() === Season::Winter) {
+			$this->hibernate();
+		}
+		return $this;
+	}
+
 	public function conduct(): Behaviour {
-		return $this->perishByChance(self::PERISH)->reproduceAndLeaveOrRoam();
+		$this->perishByChance(self::PERISH);
+		if ($this->hibernate) {
+			return $this;
+		}
+		return $this->reproduceAndLeaveOrRoam();
 	}
 }
