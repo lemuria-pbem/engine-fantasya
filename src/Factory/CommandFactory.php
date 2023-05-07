@@ -168,6 +168,14 @@ use Lemuria\Model\Fantasya\Commodity\Luxury\Oil;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Olibanum;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Silk;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Spice;
+use Lemuria\Model\Fantasya\Commodity\Monster\Bear;
+use Lemuria\Model\Fantasya\Commodity\Monster\Ent;
+use Lemuria\Model\Fantasya\Commodity\Monster\Ghoul;
+use Lemuria\Model\Fantasya\Commodity\Monster\Goblin;
+use Lemuria\Model\Fantasya\Commodity\Monster\Kraken;
+use Lemuria\Model\Fantasya\Commodity\Monster\Skeleton;
+use Lemuria\Model\Fantasya\Commodity\Monster\Wolf;
+use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Potion\BerserkBlood;
@@ -230,6 +238,14 @@ use Lemuria\Model\Fantasya\Container;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Kind;
 use Lemuria\Model\Fantasya\Potion;
+use Lemuria\Model\Fantasya\Race;
+use Lemuria\Model\Fantasya\Race\Aquan;
+use Lemuria\Model\Fantasya\Race\Dwarf;
+use Lemuria\Model\Fantasya\Race\Elf;
+use Lemuria\Model\Fantasya\Race\Halfling;
+use Lemuria\Model\Fantasya\Race\Human;
+use Lemuria\Model\Fantasya\Race\Orc;
+use Lemuria\Model\Fantasya\Race\Troll;
 use Lemuria\Model\Fantasya\RawMaterial;
 use Lemuria\Model\Fantasya\Ship;
 use Lemuria\Model\Fantasya\Ship\Boat;
@@ -710,6 +726,44 @@ class CommandFactory
 	/**
 	 * @var array<string, string>
 	 */
+	protected array $races = [
+		'Aquaner'    => Aquan::class,
+		'Baer'       => Bear::class,
+		'Baeren'     => Bear::class,
+		'Bär'        => Bear::class,
+		'Bären'      => Bear::class,
+		'Baumhirten' => Ent::class,
+		'Baumhirte'  => Ent::class,
+		'Elf'        => Elf::class,
+		'Elfen'      => Elf::class,
+		'Ghoul'      => Ghoul::class,
+		'Ghoule'     => Ghoul::class,
+		'Halbling'   => Halfling::class,
+		'Halblinge'  => Halfling::class,
+		'Kobold'     => Goblin::class,
+		'Kobolde'    => Goblin::class,
+		'Krake'      => Kraken::class,
+		'Kraken'     => Kraken::class,
+		'Mensch'     => Human::class,
+		'Menschen'   => Human::class,
+		'Ork'        => Orc::class,
+		'Orks'       => Orc::class,
+		'Skelett'    => Skeleton::class,
+		'Skelette'   => Skeleton::class,
+		'Troll'      => Troll::class,
+		'Trolle'     => Troll::class,
+		'Wolf'       => Wolf::class,
+		'Woelfe'     => Wolf::class,
+		'Wölfe'      => Wolf::class,
+		'Zombie'     => Zombie::class,
+		'Zombies'    => Zombie::class,
+		'Zwerg'      => Dwarf::class,
+		'Zwerge'     => Dwarf::class
+	];
+
+	/**
+	 * @var array<string, string>
+	 */
 	protected array $spells = [
 		'Adlerauge'               => EagleEye::class,
 		'Astrales chaos'          => AstralChaos::class,
@@ -1146,6 +1200,11 @@ class CommandFactory
 			return new $class($this->context, $operator);
 		}
 		throw new LemuriaException('Operating composition ' . $composition . ' is not implemented.');
+	}
+
+	public function parseRace(string $name): ?Race {
+		$candidate = $this->getCandidate($name, $this->races, true);
+		return $candidate ? self::createRace($candidate) : null;
 	}
 
 	/**

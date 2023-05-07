@@ -18,7 +18,7 @@
 
 ^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren)( +[a-z0-9]{1,6})+$
 ^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren) +partei( +[a-z0-9]{1,6})+$
-^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren) +monster$
+^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren) +(aquaner|baer|baeren|bär|bären|baumhirten?|elf|elfen|ghoule?|halblinge?|kobolde?|kraken?|mensch|menschen|monster|orks?|skelette?|trolle?|wolf|woelfe|wölfe|zombies?|zwerge?)$
 
 ^(ba|ban|bann|banne|banner) +.*$
 

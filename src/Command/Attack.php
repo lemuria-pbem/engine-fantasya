@@ -46,6 +46,7 @@ use Lemuria\Model\Reassignment;
  * Attacks other units.
  *
  * - ATTACKIEREN Monster
+ * - ATTACKIEREN <race>
  * - ATTACKIEREN <unit>...
  * - ATTACKIEREN Partei <party>...
  */
@@ -84,8 +85,12 @@ final class Attack extends UnitCommand implements Reassignment
 
 		$n         = $this->phrase->count();
 		$parameter = strtolower($this->phrase->getParameter());
-		if ($n === 1 && $parameter === 'monster') {
-			$this->addAttackedMonsters();
+		if ($n === 1) {
+			if ($parameter === 'monster') {
+				$this->addAttackedMonsters();
+			} elseif (!$this->addAttackedRace($parameter)) {
+				$this->parseAttackedUnits();
+			}
 		} elseif ($n >= 2 && $parameter === 'partei') {
 			$this->parseAttackedParties();
 		} else {
@@ -154,6 +159,22 @@ final class Attack extends UnitCommand implements Reassignment
 				$this->addAttackedUnit($unit);
 			}
 		}
+	}
+
+	private function addAttackedRace(string $parameter): bool {
+		$race = $this->context->Factory()->parseRace($parameter);
+		if (!$race) {
+			return false;
+		}
+
+		$we      = $this->unit->Party();
+		$outlook = new Outlook(new Census($we));
+		foreach ($outlook->getApparitions($this->unit->Region()) as $unit) {
+			if ($unit->Race() === $race && $unit->Party() !== $we) {
+				$this->addAttackedUnit($unit);
+			}
+		}
+		return true;
 	}
 
 	private function parseAttackedParties(): void {
