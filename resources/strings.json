@@ -103,6 +103,7 @@
 			"ShockwaveHitMessage": "$count $fighter der Abteilung $combatant $will von einer Schockwelle abgelenkt.",
 			"SongOfPeaceCombatantMessage": "Die Abteilung $combatant verlässt friedlich das Schlachtfeld.",
 			"SongOfPeaceFighterMessage": "$fighter Kämpfer der Abteilung $combatant $leave friedlich das Schlachtfeld.",
+			"TacticsRoundMessage": "Taktikrunde",
 			"TakeLootMessage": "Die Einheit $unit erbeutet $loot.",
 			"TakeTrophiesMessage": "Die Einheit $unit sammelt $loot als Trophäe des Sieges über den Feind.",
 			"TriedToFleeFromBattleMessage": "Die Abteilung $combatant hat erfolglos versucht, sich aus der Schlacht zurückzuziehen.",

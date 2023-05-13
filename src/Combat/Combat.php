@@ -32,6 +32,7 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\FighterIsDeadMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\FighterSavedMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\FleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\ManagedToFleeFromBattleMessage;
+use Lemuria\Engine\Fantasya\Combat\Log\Message\TacticsRoundMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\TriedToFleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Participant;
 use Lemuria\Engine\Fantasya\Context;
@@ -211,23 +212,29 @@ class Combat
 	}
 
 	public function tacticsRound(Party $party): Combat {
+		BattleLog::getInstance()->add(new TacticsRoundMessage());
+		if ($this->isAttacker[$party->Id()->Id()]) {
+			BattleLog::getInstance()->add(new AttackerTacticsRoundMessage());
+		} else {
+			BattleLog::getInstance()->add(new DefenderTacticsRoundMessage());
+		}
+
 		$this->everybodyTryToFlee();
 		if ($this->arrangeBattleRows()) {
 			$this->fleeFromBattle($this->attacker[Rank::REFUGEE], 'Attacker', true);
 			$this->fleeFromBattle($this->defender[Rank::REFUGEE], 'Defender', true);
 			if ($this->isAttacker[$party->Id()->Id()]) {
 				Lemuria::Log()->debug('Attacker gets first strike in tactics round.');
-				BattleLog::getInstance()->add(new AttackerTacticsRoundMessage());
 				$this->attack($this->attacker, $this->defender, 'Attacker');
 			} else {
 				Lemuria::Log()->debug('Defender gets first strike in tactics round.');
-				BattleLog::getInstance()->add(new DefenderTacticsRoundMessage());
 				$this->attack($this->defender, $this->attacker, 'Defender');
 			}
 		} else {
-			Lemuria::Log()->debug('Everyone has fled before the battle could begin.');
 			BattleLog::getInstance()->add(new EveryoneHasFledMessage());
+			Lemuria::Log()->debug('Everyone has fled before the battle could begin.');
 		}
+
 		return $this;
 	}
 
