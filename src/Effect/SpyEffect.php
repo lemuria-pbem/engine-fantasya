@@ -45,6 +45,7 @@ final class SpyEffect extends AbstractPartyEffect implements Reassignment
 	}
 
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
+		parent::reassign($oldId, $identifiable);
 		if ($identifiable instanceof Unit) {
 			$id = $oldId->Id();
 			if (isset($this->targets[$id])) {
@@ -55,6 +56,7 @@ final class SpyEffect extends AbstractPartyEffect implements Reassignment
 	}
 
 	public function remove(Identifiable $identifiable): void {
+		parent::remove($identifiable);
 		if ($identifiable instanceof Unit) {
 			$id = $identifiable->Id()->Id();
 			unset($this->targets[$id]);

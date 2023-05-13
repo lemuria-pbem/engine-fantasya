@@ -86,7 +86,8 @@ abstract class AbstractOperate
 		$unicum      = $this->operator->Unicum();
 		$composition = $unicum->Composition();
 		if ($composition->supports(Practice::Destroy)) {
-			$this->unit->Treasury()->remove($unicum);
+			Lemuria::Catalog()->reassign($unicum);
+			$unicum->Collector()->Treasury()->remove($unicum);
 			Lemuria::Catalog()->remove($unicum);
 			$this->destroyMessage();
 			return;

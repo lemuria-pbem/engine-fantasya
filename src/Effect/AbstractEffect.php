@@ -34,13 +34,20 @@ abstract class AbstractEffect implements Effect, Reassignment
 
 	private Id $id;
 
+	private bool $canExecute = true;
+
 	public function __construct(protected State $state, Priority $priority) {
 		$this->context = new Context($state);
 		$this->setPriority($priority);
+		Lemuria::Catalog()->addReassignment($this);
 	}
 
 	public function Id(): Id {
 		return $this->id;
+	}
+
+	public function isPrepared(): bool {
+		return $this->isPrepared && $this->canExecute;
 	}
 
 	public function needsAftercare(): bool {
@@ -56,6 +63,7 @@ abstract class AbstractEffect implements Effect, Reassignment
 
 	public function remove(Identifiable $identifiable): void {
 		if ($identifiable->Catalog() === $this->Catalog() && $this->id->Id() === $identifiable->Id()->Id()) {
+			$this->canExecute = false;
 			Lemuria::Score()->remove($this);
 		}
 	}

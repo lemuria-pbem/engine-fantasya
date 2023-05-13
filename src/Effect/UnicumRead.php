@@ -10,11 +10,10 @@ use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Treasury;
 use Lemuria\Model\Fantasya\Unicum;
-use Lemuria\Model\Reassignment;
 use Lemuria\Serializable;
 use Lemuria\Validate;
 
-final class UnicumRead extends AbstractPartyEffect implements Reassignment
+final class UnicumRead extends AbstractPartyEffect
 {
 	private const TREASURY = 'treasury';
 
@@ -23,7 +22,6 @@ final class UnicumRead extends AbstractPartyEffect implements Reassignment
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::Before);
 		$this->treasury = new Treasury();
-		Lemuria::Catalog()->addReassignment($this);
 	}
 
 	public function Treasury(): Treasury {
@@ -43,12 +41,14 @@ final class UnicumRead extends AbstractPartyEffect implements Reassignment
 	}
 
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
+		parent::reassign($oldId, $identifiable);
 		if ($this->treasury->has($oldId)) {
 			$this->treasury->replace($oldId, $identifiable->Id());
 		}
 	}
 
 	public function remove(Identifiable $identifiable): void {
+		parent::remove($identifiable);
 		if ($identifiable instanceof Unicum && $this->treasury->has($identifiable->Id())) {
 			$this->treasury->remove($identifiable);
 		}

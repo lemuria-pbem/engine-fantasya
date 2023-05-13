@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\DevastateNoUnicumMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\DevastateUnsupportedMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Domain;
+use Lemuria\Model\Fantasya\Ownable;
 use Lemuria\Model\Fantasya\Practice;
 use Lemuria\Model\Reassignment;
 
@@ -26,8 +27,11 @@ final class Devastate extends UnitCommand implements Operator, Reassignment
 	protected function run(): void {
 		$id = $this->parseUnicum();
 		if (!$this->unicum) {
-			$this->message(DevastateNoUnicumMessage::class)->p($id);
-			return;
+			$id = $this->findUnicum();
+			if ($this->composition instanceof Ownable) {
+				$this->message(DevastateNoUnicumMessage::class)->p($id);
+				return;
+			}
 		}
 		$composition = $this->unicum->Composition();
 		if ($composition !== $this->composition) {
