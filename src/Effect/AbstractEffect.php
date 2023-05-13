@@ -65,6 +65,7 @@ abstract class AbstractEffect implements Effect, Reassignment
 		if ($identifiable->Catalog() === $this->Catalog() && $this->id->Id() === $identifiable->Id()->Id()) {
 			$this->canExecute = false;
 			Lemuria::Score()->remove($this);
+			Lemuria::Log()->debug('Effect ' . $this . ' has been removed.');
 		}
 	}
 

@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\UnicumDisintegrate;
 use Lemuria\Engine\Fantasya\Effect\UnicumRead;
+use Lemuria\Engine\Fantasya\Effect\UnicumRemoval;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Party\ReadMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BestowMessage;
@@ -18,6 +19,7 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Practice;
 use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Unicum;
 use Lemuria\Model\Fantasya\Unit;
 
 abstract class AbstractOperate
@@ -88,7 +90,7 @@ abstract class AbstractOperate
 		if ($composition->supports(Practice::Destroy)) {
 			Lemuria::Catalog()->reassign($unicum);
 			$unicum->Collector()->Treasury()->remove($unicum);
-			Lemuria::Catalog()->remove($unicum);
+			$this->addRemovalEffect($unicum);
 			$this->destroyMessage();
 			return;
 		}
@@ -154,5 +156,12 @@ abstract class AbstractOperate
 		}
 		Lemuria::Score()->add($effect);
 		return $effect;
+	}
+
+	private function addRemovalEffect(Unicum $unicum): void {
+		$effect = new UnicumRemoval(State::getInstance());
+		if (!Lemuria::Score()->find($effect->setUnicum($unicum))) {
+			Lemuria::Score()->add($effect);
+		}
 	}
 }

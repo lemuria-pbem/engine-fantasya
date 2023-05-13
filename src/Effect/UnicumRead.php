@@ -9,7 +9,6 @@ use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Treasury;
-use Lemuria\Model\Fantasya\Unicum;
 use Lemuria\Serializable;
 use Lemuria\Validate;
 
@@ -44,13 +43,6 @@ final class UnicumRead extends AbstractPartyEffect
 		parent::reassign($oldId, $identifiable);
 		if ($this->treasury->has($oldId)) {
 			$this->treasury->replace($oldId, $identifiable->Id());
-		}
-	}
-
-	public function remove(Identifiable $identifiable): void {
-		parent::remove($identifiable);
-		if ($identifiable instanceof Unicum && $this->treasury->has($identifiable->Id())) {
-			$this->treasury->remove($identifiable);
 		}
 	}
 

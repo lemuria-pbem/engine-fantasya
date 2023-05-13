@@ -56,10 +56,17 @@ final class UnicumDisintegrate extends AbstractUnicumEffect
 			Lemuria::Score()->remove($this);
 			Lemuria::Log()->debug('Disintegrate effect of ' . $unicum . ' has been removed.');
 		} elseif ($this->rounds-- <= 0) {
+			$unicum->Collector()->Treasury()->remove($unicum);
 			Lemuria::Score()->remove($this);
-			$collector->Treasury()->remove($unicum);
-			Lemuria::Catalog()->remove($unicum);
+			$this->addRemoveEffect();
 			Lemuria::Log()->debug('Unicum ' . $unicum . ' in ' . $collector . ' has been disintegrated.');
+		}
+	}
+
+	private function addRemoveEffect(): void {
+		$effect = new UnicumRemoval($this->state);
+		if (!Lemuria::Score()->find($effect->setUnicum($this->Unicum()))) {
+			Lemuria::Score()->add($effect);
 		}
 	}
 }
