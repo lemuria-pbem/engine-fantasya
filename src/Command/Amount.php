@@ -20,9 +20,11 @@ final class Amount extends AmountPriceCommand
 {
 	protected function run(): void {
 		$trade = $this->parseTrade();
-		$deal  = $this->parseDeal($trade->Goods()->Commodity());
-		$trade->setGoods($deal);
-		$this->message(AmountMessage::class)->e($trade);
+		if ($trade) {
+			$deal = $this->parseDeal($trade->Goods()->Commodity());
+			$trade->setGoods($deal);
+			$this->message(AmountMessage::class)->e($trade);
+		}
 	}
 
 	protected function addForbiddenMessage(Commodity $commodity): void {
