@@ -3,9 +3,11 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
 use Lemuria\Engine\Fantasya\Availability;
+use Lemuria\Engine\Fantasya\Command\Explore;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\Model\Herb as HerbModel;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
+use Lemuria\Engine\Fantasya\Message\Unit\ExploreMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HerbUnknownMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
@@ -14,6 +16,7 @@ use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Herb\Elvendear;
 use Lemuria\Model\Fantasya\Herb as HerbInterface;
 use Lemuria\Model\Fantasya\Herbage;
+use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Herballore;
 
@@ -63,6 +66,20 @@ final class Herb extends RawMaterial
 	protected function runForEmptyDemand(Talent $talent, Commodity $resource): void {
 		if ($this->herbage) {
 			parent::runForEmptyDemand($talent, $resource);
+		}
+	}
+
+	protected function productionDone(Quantity $quantity): void {
+		parent::productionDone($quantity);
+		if ($this->context->getTurnOptions()->IsSimulation()) {
+			return;
+		}
+
+		$region  = $this->unit->Region();
+		$herbage = $region->Herbage();
+		if ($herbage) {
+			$this->unit->Party()->HerbalBook()->record($region, $herbage);
+			$this->message(ExploreMessage::class)->e($region)->s($herbage->Herb())->p(Explore::occurrence($herbage));
 		}
 	}
 }

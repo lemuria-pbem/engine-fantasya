@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
@@ -29,7 +30,7 @@ class RawMaterialOutputMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		$output = $this->item($name, 'output');
+		$output = $this->item($name, 'output', casus: Casus::Adjective);
 		if ($output) {
 			return $output;
 		}

@@ -97,6 +97,7 @@ class RawMaterial extends AllocationCommand implements Activity
 			} else {
 				$this->message(RawMaterialOutputMessage::class)->i($quantity)->s($talent);
 			}
+			$this->productionDone($quantity);
 		}
 	}
 
@@ -161,6 +162,9 @@ class RawMaterial extends AllocationCommand implements Activity
 				}
 			}
 		}
+	}
+
+	protected function productionDone(Quantity $quantity): void {
 	}
 
 	private function checkForDoubleProductionFacility(): void {
