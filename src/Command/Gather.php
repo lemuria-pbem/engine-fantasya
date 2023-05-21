@@ -11,6 +11,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\GatherNotMessage;
  *
  * - SAMMELN [Alles]
  * - SAMMELN Nicht|Nichts
+ * - SAMMELN Alle Beute
  */
 final class Gather extends UnitCommand
 {
@@ -27,6 +28,13 @@ final class Gather extends UnitCommand
 			} catch (\UnhandledMatchError $e) {
 				throw new InvalidCommandException($this, previous: $e);
 			}
+		} elseif ($n === 2) {
+			$all  = strtolower($this->phrase->getParameter());
+			$loot = strtolower($this->phrase->getParameter(2));
+			if ($all !== 'alle' || $loot !== 'beute') {
+				throw new InvalidCommandException($this);
+			}
+			$isLooting = true;
 		} else {
 			throw new InvalidCommandException($this);
 		}
