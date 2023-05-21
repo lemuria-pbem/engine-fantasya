@@ -215,10 +215,7 @@ final class Commerce
 				$i = 0;
 			}
 		}
-		/** @noinspection PhpStatementHasEmptyBodyInspection */
-		if ($supply->hasMore()) {
-			// Lemuria::Log()->debug('All merchants have stopped trading ' . $class . '.');
-		} else {
+		if (!$supply->hasMore()) {
 			Lemuria::Log()->debug('No more peasants want to trade ' . $class . '.');
 		}
 		Lemuria::Log()->debug($traded . ' ' . $class . ' were traded in region ' . $this->region . '.');
@@ -236,7 +233,6 @@ final class Commerce
 			}
 			return true;
 		}
-		// Lemuria::Log()->debug('Merchant ' . $merchant . ' has stopped trading.');
 		return false;
 	}
 

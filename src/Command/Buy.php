@@ -68,7 +68,6 @@ final class Buy extends CommerceCommand
 	 */
 	public function costEstimation(int $cost): Merchant {
 		$payment = new Quantity($this->silver, $cost);
-		// Lemuria::Log()->debug('Merchant ' . $this . ' expects buy cost of ' . $payment . '.');
 		$this->context->getResourcePool($this->unit)->reserve($this->unit, $payment);
 		return $this;
 	}

@@ -62,6 +62,10 @@ class Supply implements \Countable
 		return $this->max;
 	}
 
+	public function getStep(): int {
+		return (int)floor($this->step);
+	}
+
 	/**
 	 * Check if more of the current luxury is available.
 	 */

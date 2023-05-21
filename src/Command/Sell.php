@@ -63,8 +63,6 @@ final class Sell extends CommerceCommand
 	 * Give a cost estimation to the merchant to allow silver reservation from pool.
 	 */
 	public function costEstimation(int $cost): Merchant {
-		// $income = new Quantity($this->silver, $cost);
-		// Lemuria::Log()->debug('Merchant ' . $this . ' expects income of ' . $income . '.');
 		return $this;
 	}
 

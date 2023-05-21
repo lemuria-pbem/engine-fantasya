@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\CommerceActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
+use Lemuria\Engine\Fantasya\Factory\Supply;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\CommerceGuardedMessage;
@@ -159,7 +160,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	protected function getDemand(): Quantity {
 		$n = $this->phrase->count();
 		if ($n === 1) {
-			$demand       = $this->getMaximum();
+			$demand       = $this->getMaximumSupply();
 			$this->demand = 0;
 			$luxury       = $this->phrase->getParameter();
 		} elseif ($n === 2) {
@@ -196,6 +197,11 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 			$this->remaining = max(0, $this->maximum - $this->trades->count());
 		}
 		return $this->remaining;
+	}
+
+	protected function getMaximumSupply(): int {
+		$supply = new Supply($this->unit->Region());
+		return $supply->getStep();
 	}
 
 	protected function isTradePossible(): bool {
