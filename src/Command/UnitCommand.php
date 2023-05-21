@@ -33,10 +33,6 @@ abstract class UnitCommand extends AbstractCommand
 		$this->unit = $context->Unit();
 	}
 
-	public function Phrase(): Phrase {
-		return $this->phrase;
-	}
-
 	public function Unit(): Unit {
 		return $this->unit;
 	}

@@ -5,7 +5,7 @@ namespace Lemuria\Engine\Fantasya;
 /**
  * Activities are commands that keep a unit busy the whole round, so it cannot do more than one activity per round.
  */
-interface Activity
+interface Activity extends Command
 {
 	/**
 	 * Check if this activity is the unit's default activity.

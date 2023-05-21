@@ -15,7 +15,9 @@ trait ReassignTrait
 			$new    = (string)$identifiable->Id();
 			$phrase = $this->getReassignPhrase($old, $new);
 			if ($phrase) {
+				$oldPhrase    = $this->phrase;
 				$this->phrase = $phrase;
+				$this->context->getProtocol($this->unit)->reassignDefaultActivity($oldPhrase, $this);
 			}
 		}
 	}

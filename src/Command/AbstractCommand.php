@@ -42,6 +42,10 @@ abstract class AbstractCommand implements Command
 		$this->id = self::id();
 	}
 
+	public function Phrase(): Phrase {
+		return $this->phrase;
+	}
+
 	/**
 	 * Get command as string.
 	 */

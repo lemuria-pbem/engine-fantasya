@@ -104,6 +104,16 @@ final class ActivityProtocol
 		$this->defaultActivities = $defaults;
 	}
 
+	public function reassignDefaultActivity(Phrase $old, Activity $new): void {
+		$n = count($this->defaultActivities);
+		for ($i = 0; $i < $n; $i++) {
+			$activity = $this->defaultActivities[$i];
+			if ((string)$activity->Phrase() === (string)$old) {
+				$this->defaultActivities[$i] = $new;
+			}
+		}
+	}
+
 	/**
 	 * Determine which new defaults are persisted.
 	 */

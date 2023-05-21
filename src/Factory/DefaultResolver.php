@@ -25,6 +25,7 @@ class DefaultResolver
 				continue;
 			}
 			$command = $this->defaults[$first];
+			$phrase  = (string)$command;
 			$second  = 0;
 			while ($second < $n) {
 				if ($second === $first || !isset($this->defaults[$second])) {
@@ -34,7 +35,7 @@ class DefaultResolver
 				if ($command instanceof Activity) {
 					$other = $this->defaults[$second];
 					if ($other instanceof Activity) {
-						if (!$command->allows($other)) {
+						if ((string)$other === $phrase || !$command->allows($other)) {
 							unset($this->defaults[$second]);
 							$n--;
 							continue;

@@ -8,6 +8,11 @@ namespace Lemuria\Engine\Fantasya;
 interface Command extends Action
 {
 	/**
+	 * Get the command phrase.
+	 */
+	public function Phrase(): Phrase;
+
+	/**
 	 * Get the command ID.
 	 */
 	public function getId(): int;
