@@ -224,7 +224,7 @@ final class Attack extends UnitCommand implements Reassignment
 			} else {
 				$this->message(AttackNotFoundMessage::class)->p($id);
 			}
-		};
+		}
 	}
 
 	private function addAttackedUnit(Unit $unit): void {

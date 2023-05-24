@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Factory\ActionTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Message\Party\WelcomeMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
@@ -110,6 +111,10 @@ final class Initiate implements Command
 
 	public function __construct(private LemuriaNewcomer $newcomer) {
 		$this->id = AbstractCommand::id();
+	}
+
+	public function Phrase(): Phrase {
+		return new Phrase($this->__toString());
 	}
 
 	public function __toString(): string {

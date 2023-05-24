@@ -2,6 +2,10 @@
 declare(strict_types = 1);
 namespace Lemuria\Tests\Engine\Fantasya;
 
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\Test;
+
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
@@ -14,9 +18,9 @@ use Lemuria\Model\Fantasya\Talent\Stamina;
 
 use Lemuria\Tests\Model\Fantasya\Mock\RegionMock;
 use Lemuria\Tests\Model\Fantasya\Mock\UnitMock;
-use Lemuria\Tests\Model\Fantasya\ModelTest;
+use Lemuria\Tests\Model\Fantasya\Model;
 
-class CalculusTest extends ModelTest
+class CalculusTest extends Model
 {
 	use BuilderTrait;
 
@@ -26,8 +30,8 @@ class CalculusTest extends ModelTest
 
 	protected UnitMock $unit;
 
-	protected function setUp(): void {
-		parent::setUp();
+	#[Before]
+	protected function iniMock(): void {
 		$this->unit = new UnitMock();
 		$this->unit->setRace(self::createRace(Human::class))->setSize(10)->setBattleRow(BattleRow::Back);
 		foreach (self::KNOWLEDGE as $talent => $level) {
@@ -42,9 +46,7 @@ class CalculusTest extends ModelTest
 		$this->unit->setRegion($region);
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function construct(): Calculus {
 		$calculus = new Calculus($this->unit);
 
@@ -53,27 +55,21 @@ class CalculusTest extends ModelTest
 		return $calculus;
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function unit(): void {
 		$calculus = new Calculus($this->unit);
 
 		$this->assertSame($this->unit, $calculus->Unit());
 	}
 
-	/**
-	 * @test
-	 * @depends construct
-	 */
+	#[Test]
+	#[Depends('construct')]
 	public function knowledge(Calculus $calculus): void {
 		$this->assertSame(5, $calculus->knowledge(Stamina::class)->Level());
 	}
 
-	/**
-	 * @test
-	 * @depends construct
-	 */
+	#[Test]
+	#[Depends('construct')]
 	public function payload(Calculus $calculus): void {
 		$this->assertSame(10 * 750, $calculus->payload());
 	}

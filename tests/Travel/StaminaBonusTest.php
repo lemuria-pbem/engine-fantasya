@@ -2,31 +2,27 @@
 declare(strict_types = 1);
 namespace Lemuria\Tests\Engine\Fantasya\Travel;
 
+use PHPUnit\Framework\Attributes\Test;
+
 use Lemuria\Engine\Fantasya\Travel\StaminaBonus;
 
-use Lemuria\Tests\Test;
+use Lemuria\Tests\Base;
 
-class StaminaBonusTest extends Test
+class StaminaBonusTest extends Base
 {
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function factorNegative(): void {
 		$this->assertSame(0.0, StaminaBonus::factor(-3));
 		$this->assertSame(0.0, StaminaBonus::factor(-2));
 		$this->assertSame(0.0, StaminaBonus::factor(-1));
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function factorZero(): void {
 		$this->assertSame(0.0, StaminaBonus::factor(0));
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function factorPositiveTill12(): void {
 		$this->assertSame(0.1, StaminaBonus::factor(1));
 		$this->assertSame(0.2, StaminaBonus::factor(2));
@@ -42,9 +38,7 @@ class StaminaBonusTest extends Test
 		$this->assertSame(1.0, StaminaBonus::factor(12));
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function factorGreaterThan12(): void {
 		$this->assertSame(round(13 ** (1 / 3.6) - 1, 3), round(StaminaBonus::factor(13), 3));
 		$this->assertSame(round(14 ** (1 / 3.6) - 1, 3), round(StaminaBonus::factor(14), 3));
@@ -54,9 +48,7 @@ class StaminaBonusTest extends Test
 		$this->assertSame(round(18 ** (1 / 3.6) - 1, 3), round(StaminaBonus::factor(18), 3));
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function factor52(): void {
 		$this->assertSame(2.0, round(StaminaBonus::factor(52), 1));
 	}

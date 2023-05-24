@@ -2,17 +2,21 @@
 declare (strict_types = 1);
 namespace Lemuria\Tests\Engine\Fantasya\Factory;
 
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\Test;
+
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Tests\Test;
 
-class OptionsTraitTest extends Test
+use Lemuria\Tests\Base;
+
+class OptionsTraitTest extends Base
 {
 	use OptionsTrait;
 
-	protected function setUp(): void {
-		parent::setUp();
+	#[Before]
+	protected function initTestDataOptions(): void {
 		$this->options['empty']     = null;
 		$this->options['bool']      = true;
 		$this->options['int']       = 123;
@@ -27,9 +31,7 @@ class OptionsTraitTest extends Test
 		$this->expectExceptionMessage('Expected ' . $type . ' option "' . $name . '".');
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function notExistingInt(): void {
 		$name = 'I-do-not-exist';
 
@@ -38,9 +40,7 @@ class OptionsTraitTest extends Test
 		$this->getOption($name, 'int');
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function notExistingClass(): void {
 		$name = 'I-do-not-exist';
 
@@ -49,9 +49,7 @@ class OptionsTraitTest extends Test
 		$this->getOption($name, Phrase::class);
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function emptyStringOption(): void {
 		$name = 'empty';
 
@@ -60,9 +58,7 @@ class OptionsTraitTest extends Test
 		$this->getOption($name, 'string');
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function emptyClassOption(): void {
 		$name = 'empty';
 
@@ -71,23 +67,17 @@ class OptionsTraitTest extends Test
 		$this->getOption($name, LemuriaException::class);
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function boolOption(): void {
 		$this->assertTrue($this->getOption('bool', 'bool'));
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function intOption(): void {
 		$this->assertSame(123, $this->getOption('int', 'int'));
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function notIntOption(): void {
 		$name = 'string';
 
@@ -96,23 +86,17 @@ class OptionsTraitTest extends Test
 		$this->getOption($name, 'int');
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function floatOption(): void {
 		$this->assertSame(0.25, $this->getOption('float', 'float'));
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function stringOption(): void {
 		$this->assertSame('123', $this->getOption('string', 'string'));
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function notStringOption(): void {
 		$name = 'int';
 
@@ -121,16 +105,12 @@ class OptionsTraitTest extends Test
 		$this->getOption($name, 'string');
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function phraseOption(): void {
 		$this->assertSame($this->options['phrase'], $this->getOption('phrase', Phrase::class));
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function notPhraseOption(): void {
 		$name = 'exception';
 

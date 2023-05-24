@@ -2,6 +2,10 @@
 declare(strict_types = 1);
 namespace Lemuria\Tests\Engine\Fantasya\Factory;
 
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\Test;
+
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Factory\GearDistribution;
 use Lemuria\Model\Fantasya\Ability;
@@ -18,11 +22,12 @@ use Lemuria\Model\Fantasya\Race\Human;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Talent\Archery;
 use Lemuria\Model\Fantasya\Talent\Bladefighting;
+
 use Lemuria\Tests\Model\Fantasya\Mock\RegionMock;
 use Lemuria\Tests\Model\Fantasya\Mock\UnitMock;
-use Lemuria\Tests\Model\Fantasya\ModelTest;
+use Lemuria\Tests\Model\Fantasya\Model;
 
-class GearDistributionTest extends ModelTest
+class GearDistributionTest extends Model
 {
 	use BuilderTrait;
 
@@ -34,8 +39,8 @@ class GearDistributionTest extends ModelTest
 
 	protected Calculus $calculus;
 
-	protected function setUp(): void {
-		parent::setUp();
+	#[Before]
+	protected function iniMock(): void {
 		$this->unit = new UnitMock();
 		$this->unit->setRace(self::createRace(Human::class))->setSize(10)->setBattleRow(BattleRow::Back);
 		foreach (self::KNOWLEDGE as $talent => $level) {
@@ -52,9 +57,7 @@ class GearDistributionTest extends ModelTest
 		$this->calculus = new Calculus($this->unit);
 	}
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function construct(): GearDistribution {
 		$gearDistribution = new GearDistribution($this->calculus);
 
@@ -63,20 +66,16 @@ class GearDistributionTest extends ModelTest
 		return $gearDistribution;
 	}
 
-	/**
-	 * @test
-	 * @depends construct
-	 */
+	#[Test]
+	#[Depends('construct')]
 	public function distribute(GearDistribution $gearDistribution): GearDistribution {
 		$this->assertSame($gearDistribution, $gearDistribution->distribute());
 
 		return $gearDistribution;
 	}
 
-	/**
-	 * @test
-	 * @depends distribute
-	 */
+	#[Test]
+	#[Depends('distribute')]
 	public function getDistributions(GearDistribution $gearDistribution): void {
 		$distributions = $gearDistribution->getDistributions();
 

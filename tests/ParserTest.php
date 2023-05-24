@@ -2,11 +2,15 @@
 declare (strict_types = 1);
 namespace Lemuria\Tests\Engine\Fantasya;
 
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\Test;
+
 use Lemuria\Engine\Fantasya\Parser;
 use Lemuria\Tests\Engine\Fantasya\Mock\MoveMock;
-use Lemuria\Tests\Test;
 
-class ParserTest extends Test
+use Lemuria\Tests\Base;
+
+class ParserTest extends Base
 {
 	protected const LINES = [
 		'@MACHEN Holz',      // => @ * MACHEN Holz
@@ -19,9 +23,7 @@ class ParserTest extends Test
 		'+2 =2 MACHEN Holz'  // => @ 2/3 MACHEN Holz
 	];
 
-	/**
-	 * @test
-	 */
+	#[Test]
 	public function construct(): Parser {
 		$parser = new Parser();
 
@@ -30,20 +32,16 @@ class ParserTest extends Test
 		return $parser;
 	}
 
-	/**
-	 * @test
-	 * @depends construct
-	 */
+	#[Test]
+	#[Depends('construct')]
 	public function parse(Parser $parser): Parser {
 		$this->assertSame($parser, $parser->parse(new MoveMock(self::LINES)));
 
 		return $parser;
 	}
 
-	/**
-	 * @test
-	 * @depends parse
-	 */
+	#[Test]
+	#[Depends('parse')]
 	public function next(Parser $parser): Parser {
 		$this->assertSame('@ * MACHEN Holz', (string)$parser->next());
 		$this->assertSame('@ 0/2 MACHEN Holz', (string)$parser->next());
@@ -57,6 +55,8 @@ class ParserTest extends Test
 		return $parser;
 	}
 
+	#[Test]
+	#[Depends('next')]
 	public function hasMoreReturnsFalse(Parser $parser): void {
 		$this->assertFalse($parser->hasMore());
 	}
