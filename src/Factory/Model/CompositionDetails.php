@@ -87,7 +87,7 @@ class CompositionDetails
 
 	public function TakeCommand(): string {
 		$command = 'NEHMEN [' . $this->Name() . '] Nummer';
-		$take    = $this->json[self::TAKE];
+		$take    = $this->json[self::TAKE] ?? '';
 		if (strlen($take) > 0) {
 			$command .= ' ' . $take;
 		}
