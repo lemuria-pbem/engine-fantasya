@@ -115,7 +115,7 @@ final class Unicum extends UnitCommand implements Activity
 		$id     = $this->createId();
 		$unicum->setId($id);
 		$unicum->setName($this->translateSingleton($this->composition, casus: Casus::Nominative) . ' ' . $id);
-		$unicum->setComposition($this->composition);
+		$unicum->setComposition($this->composition->init());
 		$this->addToWorkload(1);
 		$this->unit->Treasury()->add($unicum);
 		$this->addReadEffect()->Treasury()->add($unicum);
