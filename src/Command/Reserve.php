@@ -33,6 +33,8 @@ final class Reserve extends UnitCommand
 				$commodity = trim($count . ' ' . $commodity); // RESERVIEREN <commodity> (every piece of a commodity)
 			}
 			$amount = PHP_INT_MAX;
+		} else {
+			$amount = max(0, $amount);
 		}
 		if (!$commodity && $amount < PHP_INT_MAX) { // RESERVIEREN Alles <commodity>
 			throw new InvalidCommandException($this, 'No resource parameter.');

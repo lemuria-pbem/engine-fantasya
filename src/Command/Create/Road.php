@@ -73,7 +73,7 @@ final class Road extends UnitCommand implements Activity
 		if ($n === 2) {
 			$amount = $this->maximum;
 		} else {
-			$amount = (int)$this->phrase->getParameter(3);
+			$amount = max(0, (int)$this->phrase->getParameter(3));
 		}
 		$amount = $this->reduceByWorkload($amount);
 		if ($amount <= 0) {

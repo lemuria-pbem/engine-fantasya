@@ -90,7 +90,7 @@ final class Entertain extends AllocationCommand implements Activity
 	 */
 	protected function createDemand(): void {
 		if ($this->phrase->count() > 0) {
-			$this->demand = (int)$this->phrase->getParameter();
+			$this->demand = max(0, (int)$this->phrase->getParameter());
 		}
 		$level = $this->getProductivity(Entertaining::class)->Level();
 		if ($level > 0) {

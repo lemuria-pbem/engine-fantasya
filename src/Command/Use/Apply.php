@@ -49,7 +49,7 @@ final class Apply extends UnitCommand
 			if ($n < 2) {
 				throw new UnknownCommandException($this);
 			}
-			$amount = (int)$first;
+			$amount = max(0, (int)$first);
 			$class  = $this->phrase->getLine(2);
 		} else {
 			$amount = 1;

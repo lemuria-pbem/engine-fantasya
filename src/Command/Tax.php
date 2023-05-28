@@ -100,7 +100,7 @@ final class Tax extends AllocationCommand implements Activity
 
 	protected function createDemand(): void {
 		if ($this->phrase->count() > 0) {
-			$this->demand = (int)$this->phrase->getParameter();
+			$this->demand = max(0, (int)$this->phrase->getParameter());
 		}
 		$this->level = $this->getProductivity(Taxcollecting::class)->Level();
 		if ($this->level > 0) {

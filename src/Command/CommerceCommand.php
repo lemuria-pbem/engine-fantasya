@@ -169,7 +169,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 				$demand       = $this->getMaximum();
 				$this->demand = PHP_INT_MAX;
 			} else {
-				$demand       = (int)$parameter;
+				$demand       = max(0, (int)$parameter);
 				$this->demand = $demand;
 			}
 			$luxury = $this->phrase->getParameter(2);
