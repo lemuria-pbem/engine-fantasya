@@ -88,11 +88,13 @@ class RawMaterial extends AllocationCommand implements Activity
 		} else {
 			$this->resources->rewind();
 			$quantity = $this->resources->current();
+			$production = $this->production;
 			if ($this->hasLodging) {
 				$quantity->multiply(2);
+				$production *= 2;
 			}
 			$this->unit->Inventory()->add($quantity);
-			if ($quantity->Count() < $this->production || $this->production < $this->demand) {
+			if ($quantity->Count() < $production || $production < $this->demand) {
 				$this->message(RawMaterialOnlyMessage::class)->i($quantity)->s($talent);
 			} else {
 				$this->message(RawMaterialOutputMessage::class)->i($quantity)->s($talent);
@@ -193,7 +195,7 @@ class RawMaterial extends AllocationCommand implements Activity
 
 		if ($this->production > 0) {
 			if (count($this->phrase) === 2) {
-				$this->demand = (int)$this->phrase->getParameter();
+				$this->demand = max(0, (int)$this->phrase->getParameter());
 				if ($this->demand <= $this->production) {
 					$this->production = (int)ceil($this->demand / $factor);
 					$quantity = new Quantity($this->getCommodity(), $this->production);
@@ -205,10 +207,9 @@ class RawMaterial extends AllocationCommand implements Activity
 				$this->addToWorkload($this->production);
 				$this->resources->add($quantity);
 			} else {
-				$production       = (int)ceil($this->production / $factor);
-				$this->production = $factor * min($production, $this->available);
+				$this->production = (int)ceil($this->available / $factor);
 				if ($this->production > 0) {
-					$quantity = new Quantity($this->getCommodity(), (int)ceil($this->production / $factor));
+					$quantity = new Quantity($this->getCommodity(), $this->production);
 					$this->addToWorkload($this->production);
 					$this->resources->add($quantity);
 					$quantity = new Quantity($this->getCommodity(), $this->production);
