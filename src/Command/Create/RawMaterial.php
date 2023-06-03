@@ -207,7 +207,7 @@ class RawMaterial extends AllocationCommand implements Activity
 				$this->addToWorkload($this->production);
 				$this->resources->add($quantity);
 			} else {
-				$this->production = (int)ceil($this->available / $factor);
+				$this->production = (int)ceil($this->production / $factor);
 				if ($this->production > 0) {
 					$quantity = new Quantity($this->getCommodity(), $this->production);
 					$this->addToWorkload($this->production);
