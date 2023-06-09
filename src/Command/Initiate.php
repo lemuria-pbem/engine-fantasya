@@ -5,11 +5,13 @@ namespace Lemuria\Engine\Fantasya\Command;
 use function Lemuria\randElement;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Engine\Fantasya\Effect\NonAggressionPact;
 use Lemuria\Engine\Fantasya\Factory\ActionTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Message\Party\WelcomeMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
@@ -156,6 +158,7 @@ final class Initiate implements Command
 		$party->setName($this->cleanName($this->newcomer->Name()));
 		$party->setDescription($this->cleanDescription($this->newcomer->Description()));
 		$party->setRace($race)->setOrigin($origin);
+		$this->addNonAggressionPact($party);
 
 		$unit = new Unit();
 		$id   = Lemuria::Catalog()->nextId(Domain::Unit);
@@ -246,5 +249,10 @@ final class Initiate implements Command
 			$ability = new Ability(self::createTalent($talent), Ability::getExperience($level));
 			$unit->Knowledge()->add($ability);
 		}
+	}
+
+	private function addNonAggressionPact(Party $party): void {
+		$effect = new NonAggressionPact(State::getInstance());
+		Lemuria::Score()->add($effect->setParty($party));
 	}
 }

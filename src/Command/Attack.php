@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Combat\BattlePlan;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleBeginsMessage;
 use Lemuria\Engine\Fantasya\Combat\Place;
 use Lemuria\Engine\Fantasya\Combat\Side;
+use Lemuria\Engine\Fantasya\Effect\NonAggressionPact;
 use Lemuria\Engine\Fantasya\Exception\Command\InvalidIdException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
@@ -28,8 +29,10 @@ use Lemuria\Engine\Fantasya\Message\Unit\AttackNotFoundMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackOnVesselMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackOwnPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackOwnUnitMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackProtectedPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackSelfMessage;
 use Lemuria\Engine\Fantasya\Outlook;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\IdException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
@@ -269,6 +272,10 @@ final class Attack extends UnitCommand implements Reassignment
 			$this->message(AttackOwnUnitMessage::class)->p((string)$unit->Id());
 			return Place::None;
 		}
+		if ($this->isProtectedFromAttacks($party)) {
+			$this->message(AttackProtectedPartyMessage::class)->p((string)$unit->Id());
+			return Place::None;
+		}
 		if ($unit->Region() !== $this->unit->Region()) {
 			$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
 			return Place::None;
@@ -316,5 +323,10 @@ final class Attack extends UnitCommand implements Reassignment
 			return null;
 		}
 		return $party === false ? $unit->Party() : $party;
+	}
+
+	private function isProtectedFromAttacks(Party $party): bool {
+		$effect = new NonAggressionPact(State::getInstance());
+		return (bool)Lemuria::Score()->find($effect->setParty($party));
 	}
 }
