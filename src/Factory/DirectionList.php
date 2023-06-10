@@ -25,6 +25,8 @@ class DirectionList implements \Countable
 
 	private int $count = 0;
 
+	private int $numberOfDirections = 0;
+
 	private bool $isRotating = false;
 
 	private int $previousIndex;
@@ -35,6 +37,10 @@ class DirectionList implements \Countable
 
 	public function count(): int {
 		return $this->isRotating ? PHP_INT_MAX : $this->count;
+	}
+
+	public function getNumberOfDirections(): int {
+		return $this->numberOfDirections;
 	}
 
 	public function hasMore(): bool {
@@ -78,6 +84,7 @@ class DirectionList implements \Countable
 			$this->directions[] = Direction::ROUTE_STOP;
 		} else {
 			$this->directions[] = $this->factory->direction($direction);
+			$this->numberOfDirections++;
 		}
 		$this->count++;
 		return $this;

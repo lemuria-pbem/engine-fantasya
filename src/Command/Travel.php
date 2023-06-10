@@ -165,12 +165,14 @@ class Travel extends UnitCommand implements Activity
 		}
 		$this->setRoadsLeft($movement);
 
-		$route             = [$this->unit->Region()];
-		$regions           = $speed - $this->workload->count();
-		$roadRegions       = 2 * $regions;
-		$chronicle         = $this->unit->Party()->Chronicle();
-		$isSimulation      = $this->context->getTurnOptions()->IsSimulation();
-		$simulationStopped = false;
+		$route              = [$this->unit->Region()];
+		$regions            = $speed - $this->workload->count();
+		$roadRegions        = 2 * $regions;
+		$chronicle          = $this->unit->Party()->Chronicle();
+		$isSimulation       = $this->context->getTurnOptions()->IsSimulation();
+		$numberOfDirections = $this->directions->getNumberOfDirections();
+		$invalidDirections  = 0;
+		$simulationStopped  = false;
 		$this->message(TravelSpeedMessage::class)->p($regions)->p($weight, TravelSpeedMessage::WEIGHT);
 		try {
 			while (($regions > 0 || $roadRegions > 0) && $this->directions->hasMore()) {
@@ -178,9 +180,13 @@ class Travel extends UnitCommand implements Activity
 				if ($next === Direction::ROUTE_STOP) {
 					break;
 				}
+				if ($invalidDirections >= $numberOfDirections) {
+					Lemuria::Log()->debug('All directions are invalid on this travel.');
+					break;
+				}
 
 				$region = $this->canMoveTo($next);
-				if ($isSimulation && !$chronicle->has($region->Id())) {
+				if ($isSimulation && $region && !$chronicle->has($region->Id())) {
 					$region            = null;
 					$regions           = 0;
 					$roadRegions       = 0;
@@ -202,6 +208,7 @@ class Travel extends UnitCommand implements Activity
 						$roadRegions -= 2;
 					}
 					$regions--;
+					$invalidDirections = 0;
 
 					$this->moveTo($region);
 					$this->addToTravelRoute($next->value);
@@ -238,6 +245,8 @@ class Travel extends UnitCommand implements Activity
 							}
 						}
 					}
+				} else {
+					$invalidDirections++;
 				}
 			}
 		} catch (UnknownCommandException $directionError) {
