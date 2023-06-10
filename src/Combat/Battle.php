@@ -33,6 +33,7 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Heirs;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Monster;
+use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Quantity;
@@ -442,7 +443,7 @@ class Battle
 			return;
 		}
 		$vessel = $unit->Vessel();
-		if ($vessel) {
+		if ($vessel && !($unit->Region()->Landscape() instanceof Navigable)) {
 			$this->message(AttackBoardAfterCombatMessage::class, $unit)->e($vessel);
 		}
 	}

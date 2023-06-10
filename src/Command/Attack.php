@@ -39,6 +39,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Gathering;
+use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Relation;
@@ -276,7 +277,8 @@ final class Attack extends UnitCommand implements Reassignment
 			$this->message(AttackProtectedPartyMessage::class)->p((string)$unit->Id());
 			return Place::None;
 		}
-		if ($unit->Region() !== $this->unit->Region()) {
+		$region = $unit->Region();
+		if ($region !== $this->unit->Region()) {
 			$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
 			return Place::None;
 		}
@@ -307,7 +309,7 @@ final class Attack extends UnitCommand implements Reassignment
 					$this->message(AttackLeaveConstructionCombatMessage::class)->e($construction);
 				} else {
 					$vessel = $this->unit->Vessel();
-					if ($vessel) {
+					if ($vessel && !($region->Landscape() instanceof Navigable)) {
 						self::$leavers[$id] = true;
 						$this->message(AttackLeaveVesselCombatMessage::class)->e($vessel);
 					}
