@@ -61,7 +61,7 @@ trait ReassignTrait
 		}
 		$i = $parameters[$old] ?? 0;
 		if ($i > 0) {
-			$parameters = array_values($parameters);
+			$parameters = array_keys($parameters);
 			$parameters[--$i] = $new;
 			return $parameters;
 		}
