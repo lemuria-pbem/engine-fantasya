@@ -49,6 +49,10 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 
 	private float $bonus = 0.0;
 
+	public function allows(Activity $activity): bool {
+		return false;
+	}
+
 	/**
 	 * Get learning bonus.
 	 */
