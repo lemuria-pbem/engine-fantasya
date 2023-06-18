@@ -4,12 +4,11 @@ namespace Lemuria\Tests\Engine\Fantasya\Factory;
 
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
+use SATHub\PHPUnit\Base;
 
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
-
-use Lemuria\Tests\Base;
 
 class OptionsTraitTest extends Base
 {

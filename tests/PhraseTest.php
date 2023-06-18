@@ -4,10 +4,9 @@ namespace Lemuria\Tests\Engine\Fantasya;
 
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Attributes\Test;
+use SATHub\PHPUnit\Base;
 
 use Lemuria\Engine\Fantasya\Phrase;
-
-use Lemuria\Tests\Base;
 
 class PhraseTest extends Base
 {

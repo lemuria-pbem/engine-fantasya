@@ -3,10 +3,9 @@ declare(strict_types = 1);
 namespace Lemuria\Tests\Engine\Fantasya\Travel;
 
 use PHPUnit\Framework\Attributes\Test;
+use SATHub\PHPUnit\Base;
 
 use Lemuria\Engine\Fantasya\Travel\StaminaBonus;
-
-use Lemuria\Tests\Base;
 
 class StaminaBonusTest extends Base
 {

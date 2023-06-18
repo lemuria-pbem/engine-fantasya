@@ -4,11 +4,10 @@ namespace Lemuria\Tests\Engine\Fantasya;
 
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Attributes\Test;
+use SATHub\PHPUnit\Base;
 
 use Lemuria\Engine\Fantasya\Parser;
 use Lemuria\Tests\Engine\Fantasya\Mock\MoveMock;
-
-use Lemuria\Tests\Base;
 
 class ParserTest extends Base
 {
