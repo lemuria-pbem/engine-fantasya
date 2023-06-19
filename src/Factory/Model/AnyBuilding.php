@@ -43,6 +43,10 @@ class AnyBuilding implements Building
 		return new BuildingEffect();
 	}
 
+	public function StructurePoints(): int {
+		return 0;
+	}
+
 	public function getCraft(): Requirement {
 		$talent = self::createTalent(Constructing::class);
 		return new Requirement($talent);
