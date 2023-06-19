@@ -211,6 +211,7 @@ trait TravelTrait
 			if ($diplomacy->has(Relation::PASS, $this->unit)) {
 				if ($this->directions->hasMore()) {
 					$direction = $this->directions->peek();
+					/** @var Region|null $neighbour */
 					$neighbour = Lemuria::World()->getNeighbours($region)[$direction] ?? null;
 					if ($neighbour) {
 						/** @var Region $neighbour */
