@@ -54,13 +54,13 @@ final class CommandPriority
 		'Fee'              => 32,
 		'Forbid'           => 33,
 		'Allow'            => 34,
-		//35
+		'Quota'            => 35,
 		'Abandon'          => 36,
 		'Enter'            => 37,
 		'Board'            => 38,
 		'Grant'            => 39,
 		'Leave'            => 40,
-		//41
+		'Realm'            => 41,
 		'Reserve'          => 42,
 		'Dismiss'          => 43,
 		'Lose'             => 44,

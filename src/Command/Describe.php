@@ -34,6 +34,7 @@ use Lemuria\Model\Reassignment;
  * - BESCHREIBUNG [Einheit] <Beschreibung>
  * - BESCHREIBUNG Burg|Gebäude <Beschreibung>
  * - BESCHREIBUNG Region <Beschreibung>
+ * - BESCHREIBUNG Reich <Beschreibung>
  * - BESCHREIBUNG Schiff <Beschreibung>
  * - BESCHREIBUNG Kontinent|Insel <Beschreibung>
  * - BESCHREIBUNG Gegenstand <ID> <Beschreibung>

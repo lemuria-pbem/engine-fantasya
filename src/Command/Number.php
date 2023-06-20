@@ -29,6 +29,7 @@ use Lemuria\Model\Domain;
  * - NUMMER [Einheit] <ID>
  * - NUMMER Partei <ID>
  * - NUMMER Burg|Gebäude <ID>
+ * - NUMMER Reich <ID>
  * - NUMMER Schiff <ID>
  * - NUMMER Gegenstand <old ID> <new ID>
  */

@@ -56,7 +56,9 @@ use Lemuria\Engine\Fantasya\Command\Origin;
 use Lemuria\Engine\Fantasya\Command\Party;
 use Lemuria\Engine\Fantasya\Command\Presetting;
 use Lemuria\Engine\Fantasya\Command\Price;
+use Lemuria\Engine\Fantasya\Command\Quota;
 use Lemuria\Engine\Fantasya\Command\Read;
+use Lemuria\Engine\Fantasya\Command\Realm;
 use Lemuria\Engine\Fantasya\Command\Recruit;
 use Lemuria\Engine\Fantasya\Command\Repeat;
 use Lemuria\Engine\Fantasya\Command\Reserve;
@@ -372,6 +374,7 @@ class CommandFactory
 		'GEBEN'        => true,
 		'GERUECHT'     => 'GERÜCHT',
 		'GERÜCHT'      => true,
+		'GRENZE'       => true,
 		'HANDELN'      => true,
 		'HELFEN'       => true,
 		'HILFE'        => 'HELFEN',
@@ -402,6 +405,7 @@ class CommandFactory
 		'NUMMER'       => true,
 		'PARTEI'       => true,
 		'PREIS'        => true,
+		'REICH'        => true,
 		'REISEN'       => true,
 		'REKRUTEN'     => 'REKRUTIEREN',
 		'REKRUTIEREN'  => true,
@@ -950,6 +954,7 @@ class CommandFactory
 				'FORSCHEN'     => Explore::class,
 				'GEBEN'        => Handover::class,
 				'GERÜCHT'      => Rumor::class,
+				'GRENZE'       => Quota::class,
 				'HANDELN'      => Accept::class,
 				'HELFEN'       => Help::class,
 				'KAMPFZAUBER'  => BattleSpell::class,
@@ -972,6 +977,7 @@ class CommandFactory
 				'NUMMER'       => Number::class,
 				'PARTEI'       => Party::class,
 				'PREIS'        => Price::class,
+				'REICH'        => Realm::class,
 				'REISEN'       => Travel::class,
 				'REKRUTIEREN'  => Recruit::class,
 				'RESERVIEREN'  => Reserve::class,

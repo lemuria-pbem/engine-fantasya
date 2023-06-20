@@ -36,6 +36,7 @@ use Lemuria\Model\Reassignment;
  * - NAME [Einheit] <Name>
  * - NAME Burg|Gebäude <Name>
  * - NAME Region <Name>
+ * - NAME Reich <Name>
  * - NAME Schiff <Name>
  * - NAME Kontinent|Insel <Name>
  * - NAME Gegenstand <ID> <Name>

@@ -27,7 +27,7 @@
 ^@?(benu|benut|benutz|benutze|benutzen)( +[0-9]+)? +(bauernlieb|berserkerblut|elixier der macht|gehirnschmalz|goliathwasser|heiltrank|pferdeglück|pferdeglueck|schaffenstrunk|siebenmeilentee|trank der wahrheit|wasser des lebens|wundsalbe)$
 ^@?(benu|benut|benutz|benutze|benutzen)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
-^@?(besc|besch|beschr|beschre|beschrei|beschreib|beschreibu|beschreibun|beschreibung|beschreibe|beschreiben|te|tex|text)( +(einheit|region|gebaeude|gebäude|burg|schiff|partei))? .+$
+^@?(besc|besch|beschr|beschre|beschrei|beschreib|beschreibu|beschreibun|beschreibung|beschreibe|beschreiben|te|tex|text)( +(einheit|region|reich|gebaeude|gebäude|burg|schiff|partei))? .+$
 
 ^@?(bestei|besteig|besteige|besteigen)( +schiff)? +[a-z0-9]{1,6}$
 
@@ -62,6 +62,8 @@
 ^@?(gi|gib|geb|gebe|geben) +[a-z0-9]{1,6}( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 ^@?(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6}( +.*)?$
 ^@?(ü|ue|üb|ueb|übe|uebe|über|ueber|überg|ueberg|überge|ueberge|übergeb|uebergeb|übergebe|uebergebe|übergeben|uebergeben) +[a-z0-9]{1,6}( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+
+^@?(gr|gre|gren|grenz|grenze) +[0-9]+%? +[a-zäöüß ]+$
 
 ^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6}$
 ^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +(\*|alle|alles)$
@@ -102,14 +104,14 @@
 
 ^(nachf|nachfr|nachfra|nachfrag|nachfrage) +([0-9-]+|\*) +[a-zäöüß ]+[0-9-]+ +[a-zäöüß ]+$
 
-^@?(nam|name|bene|benen|benenn|benenne|benennen)( +(einheit|region|gebäude|gebaeude|burg|schiff|partei))? +.+$
+^@?(nam|name|bene|benen|benenn|benenne|benennen)( +(einheit|region|reich|gebäude|gebaeude|burg|schiff|partei))? +.+$
 
 ^(nä|näc|näch|nächs|nächst|nächste|nächster|nae|naec|naech|naechs|naechst|naechste|naechster)$
 
 ^@?(ne|neh|nehm|nehme|nehmen)( +(kadaver|kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}.*$
 ^@?(ni|nim|nimm)( +(kadaver|kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}.*$
 
-^@?(nu|num|numm|numme|nummer|i|id)( +(einheit|gebaeude|gebäude|burg|schiff|partei))? +[a-z0-9]{1,6}$
+^@?(nu|num|numm|numme|nummer|i|id)( +(einheit|gebaeude|gebäude|burg|reich|schiff|partei))? +[a-z0-9]{1,6}$
 
 ^(pa|par|part|parte|partei) +[a-z0-9]{1,6}( +.*)?$
 ^(ere|eres|eress|eresse|eressea) +[a-z0-9]{1,6}( +.*)?$
@@ -118,7 +120,9 @@
 
 ^(pr|pre|prei|preis) +[a-z0-9]{1,6} +([0-9-]+|\*) +[a-zäöüß ]+$
 
-^@?(rei|reis|reise|reisen|nac|nach)( +(e|ne|no|nw|o|so|sw|w|east|nordosten|nordwesten|northeast|northwest|osten|suedosten|suedwesten|southeast|southwest|westen|west))+$
+^(reic|reich) +[a-z0-9]{1,6}$
+
+^@?(reis|reise|reisen|nac|nach)( +(e|ne|no|nw|o|so|sw|w|east|nordosten|nordwesten|northeast|northwest|osten|suedosten|suedwesten|southeast|southwest|westen|west))+$
 
 ^@?(rek|rekr|rekru|rekrut|rekruti|rekrutie|rekrutier|rekrutiere|rekrutieren|rekrute|rekruten) +[0-9]+$
 
