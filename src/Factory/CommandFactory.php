@@ -905,7 +905,7 @@ class CommandFactory
 
 	protected final const APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Apply\\';
 
-	protected final const BATTLE_SPELL_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Combat\\Spell';
+	protected final const BATTLE_SPELL_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Combat\\Spell\\';
 
 	protected final const CAST_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Cast\\';
 
