@@ -84,7 +84,7 @@ final class Construction extends AbstractProduct
 		$this->fromOutside = $this->prepareBuildingFromOutside();
 		$this->replacePlaceholderJob();
 		parent::initialize();
-		$castle = $this->context->getIntelligence($this->unit->Region())->getGovernment();
+		$castle = $this->context->getIntelligence($this->unit->Region())->getCastle();
 		if ($castle?->Size() > Site::MAX_SIZE) {
 			$this->hasMarket = true;
 		}

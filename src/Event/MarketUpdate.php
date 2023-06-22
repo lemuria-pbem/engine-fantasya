@@ -75,7 +75,7 @@ final class MarketUpdate extends AbstractEvent
 	}
 
 	private function hasMarket(Region $region): bool {
-		$castle = $this->context->getIntelligence($region)->getGovernment();
+		$castle = $this->context->getIntelligence($region)->getCastle();
 		return $castle?->Size() > Site::MAX_SIZE;
 	}
 

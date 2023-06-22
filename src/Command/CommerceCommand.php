@@ -206,7 +206,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 
 	protected function isTradePossible(): bool {
 		if ($this->isTradePossible === null) {
-			$castle                = $this->context->getIntelligence($this->unit->Region())->getGovernment();
+			$castle                = $this->context->getIntelligence($this->unit->Region())->getCastle();
 			$this->isTradePossible = $castle?->Size() > Site::MAX_SIZE;
 		}
 		return $this->isTradePossible;
