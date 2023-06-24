@@ -46,7 +46,7 @@ class BattleSpellNoAuraMessage extends AbstractMessage
 	}
 
 	protected function getParameters(): array {
-		return [self::UNIT => $this->unit->id->Id(), self::NAME => $this->unit->name, self::SPELL => $this->spell];
+		return [self::UNIT => $this->unit->id->Id(), self::NAME => $this->unit->name, self::SPELL => (string)$this->spell];
 	}
 
 	protected function translate(string $template): string {
