@@ -14,6 +14,7 @@ use Lemuria\Model\Fantasya\Region;
 class Home extends Roam
 {
 	protected function noPossibleRegion(Region $region): void {
+		/** @var Region $target */
 		$target = $this->chooseRandomNeighbour();
 		if ($target) {
 			$this->moveTo($target);

@@ -18,6 +18,7 @@ use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Party\NoMoveMessage;
 use Lemuria\Engine\Fantasya\Message\Party\PartyExceptionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnitExceptionMessage;
+use Lemuria\Engine\Fantasya\Turn\Option\ThrowOption;
 use Lemuria\Engine\Fantasya\Turn\Options;
 use Lemuria\Engine\Move;
 use Lemuria\Engine\Newcomer;
@@ -97,7 +98,7 @@ class LemuriaTurn implements Turn
 			} catch (UnknownCommandException|UnknownItemException $e) {
 				Lemuria::Log()->error($e->getMessage(), ['exception' => $e]);
 				$this->addExceptionMessage($e, $context);
-				if ($this->throwExceptions()) {
+				if ($this->throwExceptions(ThrowOption::ADD)) {
 					throw $e;
 				}
 				continue;
@@ -121,7 +122,7 @@ class LemuriaTurn implements Turn
 				} catch (CommandException $e) {
 					Lemuria::Log()->error($e->getMessage(), ['exception' => $e, 'command' => $command]);
 					$this->addExceptionMessage($e, $context);
-					if ($this->throwExceptions()) {
+					if ($this->throwExceptions(ThrowOption::EVALUATE)) {
 						throw $e;
 					}
 				}
@@ -215,7 +216,7 @@ class LemuriaTurn implements Turn
 				} catch (ActionException $e) {
 					Lemuria::Log()->error($e->getMessage(), ['stage' => 'prepare', 'action' => $action]);
 					$this->addActionException($e, $action);
-					if ($this->throwExceptions()) {
+					if ($this->throwExceptions(ThrowOption::EVALUATE)) {
 						throw $e;
 					}
 				}
@@ -231,7 +232,7 @@ class LemuriaTurn implements Turn
 				} catch (ActionException $e) {
 					Lemuria::Log()->error($e->getMessage(), ['stage' => 'execute', 'action' => $action]);
 					$this->addActionException($e, $action);
-					if ($this->throwExceptions()) {
+					if ($this->throwExceptions(ThrowOption::EVALUATE)) {
 						throw $e;
 					}
 				}
@@ -337,8 +338,8 @@ class LemuriaTurn implements Turn
 		}
 	}
 
-	private function throwExceptions(): bool {
-		return $this->state->getTurnOptions()->ThrowExceptions();
+	private function throwExceptions(int $option = ThrowOption::ANY): bool {
+		return $this->state->getTurnOptions()->ThrowExceptions()->offsetGet($option);
 	}
 
 	private function substituteParty(Id $id): void {
@@ -347,7 +348,7 @@ class LemuriaTurn implements Turn
 			$party = Party::get($id);
 		} catch (NotRegisteredException $e) {
 			Lemuria::Log()->critical($e->getMessage(), ['exception' => $e]);
-			if ($this->throwExceptions()) {
+			if ($this->throwExceptions(ThrowOption::SUBSTITUTE)) {
 				throw $e;
 			}
 			return;
@@ -387,7 +388,7 @@ class LemuriaTurn implements Turn
 			}
 		} catch (NotRegisteredException $e) {
 			Lemuria::Log()->critical($e->getMessage(), ['exception' => $e]);
-			if ($this->throwExceptions()) {
+			if ($this->throwExceptions(ThrowOption::SUBSTITUTE)) {
 				throw $e;
 			}
 		}

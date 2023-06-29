@@ -201,6 +201,7 @@ final class Attack extends UnitCommand implements Reassignment
 			} catch (IdException $e) {
 				throw new InvalidIdException($this->phrase->getParameter($i), $e);
 			} catch (NotRegisteredException) {
+				/** @noinspection PhpUndefinedVariableInspection */
 				Lemuria::Log()->debug('Party ' . $we . ' tried to attack non-existing party ' . $id . '.');
 			}
 		}

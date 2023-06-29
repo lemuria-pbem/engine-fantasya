@@ -213,6 +213,7 @@ trait TravelTrait
 					$direction = $this->directions->peek();
 					$neighbour = Lemuria::World()->getNeighbours($region)[$direction] ?? null;
 					if ($neighbour) {
+						/** @var Region $neighbour */
 						$nextGuards = $this->context->getIntelligence($neighbour)->getGuards();
 						if ($nextGuards->isEmpty()) {
 							$remaining->remove($party);

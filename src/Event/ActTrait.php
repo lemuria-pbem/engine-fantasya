@@ -13,6 +13,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Location;
 
 trait ActTrait
 {
@@ -72,7 +73,7 @@ trait ActTrait
 		throw new LemuriaException();
 	}
 
-	protected function chooseRandomNeighbour(): ?Region {
+	protected function chooseRandomNeighbour(): ?Location {
 		$neighbours = Lemuria::World()->getNeighbours($this->unit->Region());
 		$directions = $neighbours->getDirections();
 		return $neighbours[randElement($directions)];

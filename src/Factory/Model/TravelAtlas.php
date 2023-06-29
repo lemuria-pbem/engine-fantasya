@@ -94,6 +94,7 @@ final class TravelAtlas extends Atlas
 	}
 
 	private function hasFarsight(Location $region): bool {
+		/** @var Region $region */
 		$effect = new FarsightEffect(State::getInstance());
 		$effect = Lemuria::Score()->find($effect->setRegion($region));
 		if ($effect instanceof FarsightEffect) {

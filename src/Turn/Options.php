@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Turn;
 
+use Lemuria\Engine\Fantasya\Turn\Option\ThrowOption;
+
 class Options
 {
 	private CherryPicker $cherryPicker;
@@ -10,7 +12,7 @@ class Options
 
 	private bool $isSimulation = false;
 
-	private bool $throwExceptions = false;
+	private ThrowOption $throwExceptions;
 
 	public function __construct() {
 		$this->cherryPicker = new DefaultCherryPicker();
@@ -28,7 +30,7 @@ class Options
 		return $this->isSimulation;
 	}
 
-	public function ThrowExceptions(): bool {
+	public function ThrowExceptions(): ThrowOption {
 		return $this->throwExceptions;
 	}
 
@@ -47,7 +49,7 @@ class Options
 		return $this;
 	}
 
-	public function setThrowExceptions(bool $throwExceptions): Options {
+	public function setThrowExceptions(ThrowOption $throwExceptions): Options {
 		$this->throwExceptions = $throwExceptions;
 		return $this;
 	}
