@@ -97,6 +97,9 @@ final class Vessel extends AbstractProduct
 				}
 				if ($vessel->Completion() === 1.0) {
 					$this->message(VesselFinishedMessage::class, $vessel);
+					if ($this->unit->Construction()) {
+						$vessel->Passengers()->remove($this->unit);
+					}
 					$this->preventDefault();
 				} else {
 					$this->newDefault = new Vessel(new Phrase('MACHEN Schiff'), $this->context, $this->job);
@@ -117,6 +120,9 @@ final class Vessel extends AbstractProduct
 				}
 			}
 		} else {
+			if ($this->unit->Construction()) {
+				$vessel->Passengers()->remove($this->unit);
+			}
 			$this->preventDefault();
 			$this->message(VesselAlreadyFinishedMessage::class)->e($vessel);
 		}
