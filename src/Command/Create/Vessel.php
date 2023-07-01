@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
+use Lemuria\Engine\Fantasya\Effect\ShipbuildingEffect;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyShip;
 use Lemuria\Engine\Fantasya\Factory\Model\Dockyards;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
@@ -18,6 +19,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\VesselSpaceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselUnableMessage;
 use Lemuria\Engine\Fantasya\Message\Vessel\VesselFinishedMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
@@ -102,6 +104,7 @@ final class Vessel extends AbstractProduct
 					}
 					$this->preventDefault();
 				} else {
+					$this->addShipbuildingEffect();
 					$this->newDefault = new Vessel(new Phrase('MACHEN Schiff'), $this->context, $this->job);
 				}
 			} else {
@@ -170,5 +173,10 @@ final class Vessel extends AbstractProduct
 		}
 		$this->port = $dockyards->Port();
 		return (bool)$this->port;
+	}
+
+	private function addShipbuildingEffect(): void {
+		$effect = new ShipbuildingEffect(State::getInstance());
+		Lemuria::Score()->add($effect->setUnit($this->unit));
 	}
 }
