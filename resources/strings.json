@@ -914,6 +914,7 @@
 		"TravelUnpaidDemurrageMessage": "Die Einheit $id kann den Hafen nicht in Richtung $direction verlassen, weil die Liegegebühr nicht bezahlt wurde.",
 		"TravelVesselMessage": "Das Schiff $vessel ist durch die Region $id gereist.",
 		"TravelVesselTooHeavyMessage": "Die Einheit $id kann das überladene Schiff nicht steuern.",
+		"TravelVesselIncompleteMessage": "Die Einheit $id kann das unvollendete Schiff noch nicht steuern.",
 		"UnemploymentMessage": "{$recruits:Rekrut ist} in der Region $id verfügbar.",
 		"UnguardMessage": "Die Einheit $id bewacht nicht länger die Region.",
 		"UnguardNotGuardingMessage": "Die Einheit $id bewacht die Region nicht.",
