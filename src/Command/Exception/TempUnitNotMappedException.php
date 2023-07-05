@@ -6,12 +6,19 @@ use Lemuria\Engine\Fantasya\Message\Exception;
 
 class TempUnitNotMappedException extends TempUnitException
 {
-	public function __construct(private readonly string $temp) {
-		parent::__construct('TEMP unit ' . $temp . ' is not mapped.');
+	private readonly string $temp;
+
+	public function __construct(string $temp) {
+		$this->temp = $this->cleanTemp($temp);
+		parent::__construct('TEMP unit ' . $this->temp . ' is not mapped.');
 		$this->translationKey = Exception::TempUnitNotMapped;
 	}
 
 	protected function translate(string $template): string {
 		return str_replace('$temp', $this->temp, $template);
+	}
+
+	private function cleanTemp(string $temp): string {
+		return trim(strip_tags($temp));
 	}
 }

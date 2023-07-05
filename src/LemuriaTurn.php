@@ -10,7 +10,7 @@ use Lemuria\Engine\Fantasya\Event\DelegatedEvent;
 use Lemuria\Engine\Fantasya\Exception\ActionException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
-use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
+use Lemuria\Engine\Fantasya\Exception\UnknownArgumentException;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
 use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
@@ -26,7 +26,6 @@ use Lemuria\Engine\Score;
 use Lemuria\Engine\Turn;
 use Lemuria\EntitySet;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
@@ -95,8 +94,8 @@ class LemuriaTurn implements Turn
 				$originalCommand = $factory->create($phrase);
 				$command         = $originalCommand->getDelegate();
 				Lemuria::Log()->debug('New command: ' . $originalCommand, ['command' => $command]);
-			} catch (UnknownCommandException|UnknownItemException $e) {
-				Lemuria::Log()->error($e->getMessage(), ['exception' => $e]);
+			} catch (UnknownArgumentException $e) {
+				Lemuria::Log()->error($e->getMessage(), [UnknownArgumentException::ARGUMENT => $e->getArgument(), 'exception' => $e]);
 				$this->addExceptionMessage($e, $context);
 				if ($this->throwExceptions(ThrowOption::ADD)) {
 					throw $e;

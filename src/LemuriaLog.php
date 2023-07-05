@@ -8,6 +8,7 @@ use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
+use Monolog\Processor\PsrLogMessageProcessor;
 use Psr\Log\LoggerInterface;
 
 use Lemuria\Log;
@@ -23,6 +24,7 @@ class LemuriaLog implements Log
 
 	public function getLogger(): LoggerInterface {
 		$log = new Logger('lemuria');
+		$log->pushProcessor(new PsrLogMessageProcessor());
 		foreach ($this->getHandlers() as $handler) {
 			$log->pushHandler($handler);
 		}

@@ -8,10 +8,9 @@ use Lemuria\Engine\Fantasya\Phrase;
 /**
  * This exception is thrown when an unknown Command is parsed.
  */
-class UnknownCommandException extends CommandException
+class UnknownCommandException extends UnknownArgumentException
 {
 	public function __construct(Command|Phrase|string|null $command = null, ?CommandException $exception = null) {
-		$message = 'Unknown command' . ($command ? ' ' . $command : '.');
-		parent::__construct($message, 0, $exception);
+		parent::__construct($command, 'Unknown command ' . parent::PLACEHOLDER . '.', $exception);
 	}
 }

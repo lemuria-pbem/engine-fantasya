@@ -7,10 +7,9 @@ use Lemuria\Singleton;
 /**
  * This exception is thrown when an unknown item is parsed.
  */
-class UnknownItemException extends CommandException
+class UnknownItemException extends UnknownArgumentException
 {
 	public function __construct(Singleton|string $item, ?CommandException $exception = null) {
-		$message = 'Unknown item ' . $item;
-		parent::__construct($message, 0, $exception);
+		parent::__construct($item, 'Unknown item ' . parent::PLACEHOLDER . '.', $exception);
 	}
 }
