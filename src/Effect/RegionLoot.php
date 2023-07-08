@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Animal;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
@@ -63,19 +64,26 @@ final class RegionLoot extends AbstractRegionEffect
 	}
 
 	protected function run(): void {
-		$region     = $this->Region();
-		$residents  = $region->Residents();
-		$candidates = new People();
-		$removed    = new Resources();
+		$region      = $this->Region();
+		$environment = $region->Resources();
+		$residents   = $region->Residents();
+		$candidates  = new People();
+		$removed     = new Resources();
 		foreach ($this->resources as $quantity) {
 			$commodity = $quantity->Commodity();
 			$candidates->clear();
 			foreach ($residents as $unit) {
-				if ($unit->Party()->Loot()->wants($commodity)) {
+				if ($unit->Size() > 0 && $unit->Party()->Loot()->wants($commodity)) {
 					$candidates->add($unit);
 				}
 			}
-			if (!$candidates->isEmpty()) {
+			if ($candidates->isEmpty()) {
+				if ($commodity instanceof Animal) {
+					$removed->add($quantity);
+					$environment->add(new Quantity($commodity, $quantity->Count()));
+					Lemuria::Log()->debug($quantity . ' is added to the region resources.');
+				}
+			} else {
 				$removed->add($quantity);
 				$unit = $candidates->random();
 				$unit->Inventory()->add(new Quantity($commodity, $quantity->Count()));
