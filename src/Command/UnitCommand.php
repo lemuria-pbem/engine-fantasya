@@ -44,6 +44,10 @@ abstract class UnitCommand extends AbstractCommand
 		return parent::isPrepared();
 	}
 
+	public function canBeCentralized(): bool {
+		return false;
+	}
+
 	/**
 	 * Execute the command.
 	 *

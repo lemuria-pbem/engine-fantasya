@@ -13,6 +13,7 @@ use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Exception\UnknownArgumentException;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
+use Lemuria\Engine\Fantasya\Factory\CommandQueue;
 use Lemuria\Engine\Fantasya\Factory\Model\LemuriaNewcomer;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Party\NoMoveMessage;
@@ -44,12 +45,9 @@ class LemuriaTurn implements Turn
 {
 	use BuilderTrait;
 
-	protected readonly CommandPriority $priority;
+	protected readonly CommandQueue $queue;
 
-	/**
-	 * @var array<int, array>
-	 */
-	protected array $queue = [];
+	protected readonly CommandPriority $priority;
 
 	protected int $currentPriority = 0;
 
@@ -66,9 +64,7 @@ class LemuriaTurn implements Turn
 			$this->state->setTurnOptions($options);
 		}
 		$this->priority = CommandPriority::getInstance();
-		foreach (CommandPriority::ORDER as $priority) {
-			$this->queue[$priority] = [];
-		}
+		$this->queue    = new CommandQueue();
 		Lemuria::Report()->clear();
 	}
 
@@ -194,25 +190,20 @@ class LemuriaTurn implements Turn
 		Lemuria::Hostilities()->clear();
 		Lemuria::Orders()->clear();
 
-		Lemuria::Log()->debug('Shuffling all queues.');
-		$priorities   = array_keys($this->queue);
+		Lemuria::Log()->debug('Applying the CherryPicker...');
 		$cherryPicker = $this->state->getTurnOptions()->CherryPicker();
-		foreach ($priorities as $priority) {
-			if ($cherryPicker->pickPriority($priority)) {
-				if ($this->priority->canShuffle($priority)) {
-					$this->shuffle($priority);
-				}
-			} else {
+		foreach ($this->queue->getPriorities() as $priority) {
+			if (!$cherryPicker->pickPriority($priority)) {
+				$this->queue->remove($priority);
 				Lemuria::Log()->critical('Queue priority ' . $priority . ' removed by cherry picker.');
-				unset($this->queue[$priority]);
 			}
 		}
-		$priorities = array_keys($this->queue);
+		$priorities = $this->queue->getPriorities();
 
-		Lemuria::Log()->debug('Executing queued actions.', ['queues' => count($this->queue)]);
+		Lemuria::Log()->debug('Executing queued actions.', ['queues' => count($priorities)]);
 		foreach ($priorities as $priority) {
 			$this->currentPriority = $priority;
-			$actions               = $this->queue[$priority];
+			$actions               = $this->queue->shuffle($priority)->getActions($priority);
 			Lemuria::Log()->debug('Queue ' . $priority . ' has ' . count($actions) . ' actions.');
 
 			foreach ($actions as $action /** @var Action $action */) {
@@ -292,12 +283,12 @@ class LemuriaTurn implements Turn
 			$isActivity = false;
 			foreach ($action->getCommands() as $command) {
 				$command = $command->getDelegate();
-				$this->addAction($command);
+				$this->queue->add($command);
 				$isActivity = $isActivity || $command instanceof Activity;
 			}
 			return $isActivity;
 		}
-		$this->addAction($action);
+		$this->queue->add($action);
 		return $action instanceof Activity;
 	}
 
@@ -319,32 +310,6 @@ class LemuriaTurn implements Turn
 		$this->enqueue($effect);
 		Lemuria::Log()->debug('New effect: ' . $effect . '.', ['effect' => $effect]);
 		return $this;
-	}
-
-	private function shuffle(int $priority): void {
-		$units         = [];
-		$isUnitCommand = false;
-		foreach ($this->queue[$priority] as $action) {
-			if ($action instanceof UnitCommand) {
-				$id = $action->Unit()->Id()->Id();
-				if (!isset($units[$id])) {
-					$units[$id] = [];
-				}
-				$units[$id][]  = $action;
-				$isUnitCommand = true;
-			} else {
-				$units[] = $action;
-			}
-		}
-
-		if ($isUnitCommand) {
-			shuffle($units);
-			$queue = [];
-			foreach ($units as $actions) {
-				array_push($queue, ...$actions);
-			}
-			$this->queue[$priority] = $queue;
-		}
 	}
 
 	private function throwExceptions(int $option = ThrowOption::ANY): bool {
@@ -446,11 +411,6 @@ class LemuriaTurn implements Turn
 			$translation = $exception instanceof CommandException ? $exception->getTranslation() : $exception->getMessage();
 			$message->p($translation)->p((string)$action->Phrase(), UnitExceptionMessage::ACTION)->setId($id);
 		}
-	}
-
-	private function addAction(Action $action): void {
-		$priority                 = $this->priority->getPriority($action);
-		$this->queue[$priority][] = $action;
 	}
 
 	private function getDefaultActivity(Unit $unit, Context $context): ?Command {
