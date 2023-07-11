@@ -38,6 +38,10 @@ final class Entertain extends AllocationCommand implements Activity
 
 	private int $demand = 0;
 
+	public function canBeCentralized(): bool {
+		return true;
+	}
+
 	/**
 	 * Get the requested resource quota that is available for allocation.
 	 */

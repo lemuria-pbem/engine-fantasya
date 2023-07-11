@@ -70,6 +70,10 @@ class RawMaterial extends AllocationCommand implements Activity
 		parent::__construct($phrase, $context);
 	}
 
+	public function canBeCentralized(): bool {
+		return true;
+	}
+
 	protected function initialize(): void {
 		$this->checkForDoubleProductionFacility();
 		if ($this->isInDoublingFacility) {

@@ -43,6 +43,10 @@ final class Recruit extends AllocationCommand
 
 	private int $size;
 
+	public function canBeCentralized(): bool {
+		return true;
+	}
+
 	protected function run(): void {
 		$tooMuch = $this->size - $this->getFreeSpace();
 		if ($tooMuch > 0) {

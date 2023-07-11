@@ -47,6 +47,10 @@ final class Tax extends AllocationCommand implements Activity
 
 	private int $collectors = 0;
 
+	public function canBeCentralized(): bool {
+		return true;
+	}
+
 	protected function run(): void {
 		parent::run();
 		$quantity = $this->getResource(Silver::class);

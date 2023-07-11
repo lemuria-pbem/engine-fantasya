@@ -3,8 +3,10 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Allotment;
 use Lemuria\Engine\Fantasya\Consumer;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\RealmTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\AllocationSiegeMessage;
@@ -20,12 +22,15 @@ use Lemuria\Model\Fantasya\Resources;
  */
 abstract class AllocationCommand extends UnitCommand implements Consumer
 {
+	use RealmTrait;
 	use SiegeTrait;
 	use WorkloadTrait;
 
 	private const QUOTA = 1.0;
 
 	protected Resources $resources;
+
+	protected ?Allotment $allotment = null;
 
 	protected ?array $lastCheck = null;
 
@@ -85,8 +90,6 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 			Lemuria::Log()->debug('Allocation command skipped due to empty unit.', ['command' => $this]);
 			return;
 		}
-
-		$allocation = $this->context->getAllocation($this->unit->Region());
 		if ($this->isSieged($this->unit->Construction())) {
 			$this->message(AllocationSiegeMessage::class);
 			return;
@@ -95,7 +98,12 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 		$this->initWorkload();
 		$this->createDemand();
 		if (count($this->resources)) {
-			$allocation->register($this);
+			if ($this->isRunCentrally($this)) {
+				$this->allotment = $this->createAllotment($this);
+				Lemuria::Log()->debug('New allotment helper for realm ' . $this->allotment->Realm()->Id() . '.', ['command' => $this]);
+			} else {
+				$this->context->getAllocation($this->unit->Region())->register($this);
+			}
 		} else {
 			Lemuria::Log()->debug('Allocation registration skipped due to empty demand.', ['command' => $this]);
 		}

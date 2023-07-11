@@ -8,6 +8,8 @@ use Lemuria\Lemuria;
 
 class CommandQueue
 {
+	use RealmTrait;
+
 	/**
 	 * @var array<int, array>
 	 */
@@ -84,18 +86,5 @@ class CommandQueue
 		}
 		$this->queue[$priority] = $queue;
 		return $this;
-	}
-
-	protected function isRealmCommand(UnitCommand $command): bool {
-		if (!$command->canBeCentralized()) {
-			return false;
-		}
-		$unit   = $command->Unit();
-		$region = $unit->Region();
-		$realm  = $region->Realm();
-		if (!$realm || $unit->Party() !== $realm->Party()) {
-			return false;
-		}
-		return $region === $realm->Territory()->Central();
 	}
 }

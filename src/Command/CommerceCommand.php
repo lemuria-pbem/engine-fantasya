@@ -73,6 +73,10 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 		$this->silver = self::createCommodity(Silver::class);
 	}
 
+	public function canBeCentralized(): bool {
+		return true;
+	}
+
 	/**
 	 * Get the resources this merchant wants to trade.
 	 */
