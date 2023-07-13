@@ -2,9 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use Lemuria\Engine\Fantasya\Exception\AllocationException;
-use Lemuria\Engine\Fantasya\Factory\CommandPriority;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
 use Lemuria\Model\Fantasya\Commodity\Horse;
@@ -19,7 +18,7 @@ use Lemuria\Model\Fantasya\Resources;
 /**
  * Helper for central resource distribution in realms.
  */
-final class Allotment
+class Allotment
 {
 	use BuilderTrait;
 
@@ -28,19 +27,16 @@ final class Allotment
 	];
 
 	/**
-	 * @var array<int, Resources>
+	 * @var array<int, Region>
 	 */
-	private array $allocations = [];
+	private array $region;
 
 	/**
-	 * @var array<string, Quantity>
+	 * @var array<int, int>
 	 */
-	private array $resources = [];
+	private array $availability;
 
-	/**
-	 * @var array<string, array>
-	 */
-	private array $distribution;
+	private int $availableSum;
 
 	public function __construct(private readonly Realm $realm) {
 	}
@@ -53,28 +49,44 @@ final class Allotment
 	 * Start resource distribution.
 	 */
 	public function distribute(Consumer $consumer): void {
-		$round = $this->priority->getPriority($consumer);
-		if ($round > $this->round) {
-			foreach (array_keys($this->consumersLeft) as $id) {
-				if (!isset($this->consumers[$id])) {
-					throw new AllocationException($consumer, $this->Region());
+		$resources = new Resources();
+		$quota     = $consumer->getQuota();
+		foreach ($consumer->getDemand() as $quantity) {
+			$commodity = $quantity->Commodity();
+			$this->calculateAvailability($commodity, $quota);
+			$total = min($quantity->Count(), $this->availableSum);
+			$rate  = $total / $this->availableSum;
+			foreach ($this->region as $id => $region) {
+				$part = (int)round($rate * $this->availability[$id]);
+				if ($part > $total) {
+					$part = $total;
 				}
-				$consumer = $this->consumers[$id];
-				if ($consumer->checkBeforeAllocation()) {
-					$this->unregister($consumer);
+				if ($part > 0) {
+					$region->Resources()->remove(new Quantity($commodity, $part));
+					$resources->add($quantity);
+					$total -= $part;
+					Lemuria::Log()->debug('Allotment of ' . $quantity . ' in region ' . $id . ' for consumer ' . $consumer->getId() . '.');
 				}
-				unset ($this->consumersLeft[$id]);
 			}
+		}
+		$consumer->allocate($resources);
+	}
 
-			$this->analyze($round);
-			foreach (array_keys($this->distribution) as $class) {
-				$this->fillDemand($class);
-			}
-			$this->createAllocations();
-			$this->round = $round;
-			foreach ($this->rounds[$round] as $id) {
-				$this->allocate($this->consumers[$id]);
-			}
+	protected function calculateAvailability(Commodity $commodity, float $quota): void {
+		$this->region       = [];
+		$this->availability = [];
+		$this->availableSum = 0;
+
+		$regulation = $this->realm->Party()->Regulation();
+		foreach ($this->realm->Territory() as $region) {
+			$id                      = $region->Id()->Id();
+			$this->region[$id]       = $region;
+			$threshold               = $regulation->getQuotas($region)?->getQuota($commodity)?->Threshold();
+			$resource                = $region->Resources()->offsetGet($commodity)->Count();
+			$reserve                 = $threshold === null ? $resource : min($resource, $threshold);
+			$availability            = (int)floor($quota * $reserve);
+			$this->availability[$id] = $availability;
+			$this->availableSum     += $availability;
 		}
 	}
 }

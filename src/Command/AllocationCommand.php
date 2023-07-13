@@ -114,7 +114,11 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	 */
 	protected function run(): void {
 		if (count($this->resources)) {
-			$this->context->getAllocation($this->unit->Region())->distribute($this);
+			if ($this->allotment) {
+				$this->allotment->distribute($this);
+			} else {
+				$this->context->getAllocation($this->unit->Region())->distribute($this);
+			}
 		}
 	}
 
