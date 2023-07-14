@@ -16,6 +16,9 @@ use Lemuria\Engine\Fantasya\Message\Region\NameRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameMonumentOnceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameNoContinentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameNoUnicumMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NameRealmCentralMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NameRealmMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NameRealmNotFoundMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameUnicumMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameNotInConstructionMessage;
@@ -80,6 +83,9 @@ final class Name extends UnitCommand implements Reassignment
 				break;
 			case 'schiff' :
 				$this->renameVessel($name);
+				break;
+			case 'reich' :
+				$this->renameRealm($name);
 				break;
 			case 'partei' :
 				$this->renameParty($name);
@@ -218,6 +224,27 @@ final class Name extends UnitCommand implements Reassignment
 		} else {
 			$this->message(NameNoUnicumMessage::class)->p((string)$id);
 		}
+	}
+
+	private function renameRealm(string $name): void {
+		$region = $this->unit->Region();
+		$realm  = $region->Realm();
+		if ($realm) {
+			$possessions = $this->unit->Party()->Possessions();
+			if ($possessions->has($realm->Identifier())) {
+				$possession = $possessions[$realm->Identifier()];
+				if ($possession === $realm) {
+					if ($realm->Territory()->Central() === $region) {
+						$realm->setName($name);
+						$this->message(NameRealmMessage::class)->p($name);
+					} else {
+						$this->message(NameRealmCentralMessage::class)->p($realm->Name());
+					}
+					return;
+				}
+			}
+		}
+		$this->message(NameRealmNotFoundMessage::class);
 	}
 
 	private function setContinentName(string $name): void {
