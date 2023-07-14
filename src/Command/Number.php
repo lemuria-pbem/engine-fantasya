@@ -9,6 +9,10 @@ use Lemuria\Engine\Fantasya\Message\Construction\NumberConstructionUsedMessage;
 use Lemuria\Engine\Fantasya\Message\Party\NumberPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Party\NumberPartyUsedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NumberNoUnicumMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NumberRealmCentralMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NumberRealmMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NumberRealmNotFoundMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NumberRealmUsedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NumberUnicumMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NumberUnicumUsedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NumberUnitMessage;
@@ -60,6 +64,9 @@ final class Number extends UnitCommand
 				break;
 			case 'schiff' :
 				$this->setVesselId($newId);
+				break;
+			case 'reich' :
+				$this->setRealmIdentifier($newId);
 				break;
 			case 'partei' :
 				$this->setPartyId($newId);
@@ -157,5 +164,31 @@ final class Number extends UnitCommand
 		$composition = $unicum->Composition();
 		Lemuria::Catalog()->reassign($unicum->replaceId($newId), $oldId);
 		$this->message(NumberUnicumMessage::class)->s($composition)->p($oldId->Id())->p($newId->Id(), NumberUnicumUsedMessage::NEW_ID);
+	}
+
+	private function setRealmIdentifier(Id $identifier): void {
+		$region = $this->unit->Region();
+		$realm  = $region->Realm();
+		if ($realm) {
+			$possessions = $this->unit->Party()->Possessions();
+			if ($possessions->has($realm->Identifier())) {
+				$possession = $possessions[$realm->Identifier()];
+				if ($possession === $realm) {
+					if ($realm->Territory()->Central() === $region) {
+						if ($possessions->has($identifier)) {
+							$this->message(NumberRealmUsedMessage::class)->p($identifier->Id())->p($realm->Name(), NumberRealmUsedMessage::REALM);
+						} else {
+							$possessions->remove($realm);
+							$possessions->add($realm->setIdentifier($identifier));
+							$this->message(NumberRealmMessage::class)->p($identifier->Id())->p($realm->Name(), NumberRealmUsedMessage::REALM);
+						}
+					} else {
+						$this->message(NumberRealmCentralMessage::class)->p($realm->Name());
+					}
+					return;
+				}
+			}
+		}
+		$this->message(NumberRealmNotFoundMessage::class);
 	}
 }
