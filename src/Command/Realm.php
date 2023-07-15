@@ -120,6 +120,7 @@ final class Realm extends UnitCommand
 				$realm = new Model();
 				$realm->setId(Lemuria::Catalog()->nextId(Domain::Realm));
 				$realm->setIdentifier($this->id)->setName('Reich ' . $this->id)->Territory()->add($region);
+				$party->Possessions()->add($realm);
 				$this->message(RealmCreateMessage::class)->p((string)$this->id);
 				$this->message(RealmFoundedMessage::class, $region)->e($party)->p((string)$this->id);
 			}

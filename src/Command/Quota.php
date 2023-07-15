@@ -5,7 +5,6 @@ namespace Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command\Create\Herb;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Model\Fantasya\Commodity;
-use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quota as Model;
 use Lemuria\Model\Fantasya\Quotas;
 
@@ -19,15 +18,15 @@ use Lemuria\Model\Fantasya\Quotas;
  */
 class Quota extends UnitCommand
 {
-	use BuilderTrait;
-
 	private const HERB = ['kräuter', 'kraeuter'];
 
 	private Quotas $quotas;
 
 	protected function initialize(): void {
 		parent::initialize();
-		$this->quotas = $this->unit->Party()->Regulation()->getQuotas($this->unit->Region());
+		$region       = $this->unit->Region();
+		$regulation   = $this->unit->Party()->Regulation();
+		$this->quotas = $regulation->add($region)->getQuotas($region);
 	}
 
 	protected function run(): void {
@@ -41,7 +40,7 @@ class Quota extends UnitCommand
 			if (in_array($amount, self::HERB)) {
 				$this->removeHerbQuota();
 			} else {
-				$this->removeQuota(self::createCommodity($amount));
+				$this->removeQuota($this->context->Factory()->commodity($amount));
 			}
 		} else {
 			$value = (int)$amount;
@@ -54,7 +53,7 @@ class Quota extends UnitCommand
 				if ((string)$value !== $amount) {
 					throw new InvalidCommandException($this, 'Quota must be number.');
 				}
-				$this->setQuota($value, self::createCommodity($commodity));
+				$this->setQuota($value, $this->context->Factory()->commodity($commodity));
 			}
 		}
 	}

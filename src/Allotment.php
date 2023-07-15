@@ -63,7 +63,7 @@ class Allotment
 				}
 				if ($part > 0) {
 					$region->Resources()->remove(new Quantity($commodity, $part));
-					$resources->add($quantity);
+					$resources->add(new Quantity($commodity, $part));
 					$total -= $part;
 					Lemuria::Log()->debug('Allotment of ' . $quantity . ' in region ' . $id . ' for consumer ' . $consumer->getId() . '.');
 				}
@@ -83,7 +83,7 @@ class Allotment
 			$this->region[$id]       = $region;
 			$threshold               = $regulation->getQuotas($region)?->getQuota($commodity)?->Threshold();
 			$resource                = $region->Resources()->offsetGet($commodity)->Count();
-			$reserve                 = $threshold === null ? $resource : min($resource, $threshold);
+			$reserve                 = $threshold === null ? $resource : max(0, (int)floor(($resource - $threshold) / $quota));
 			$availability            = (int)floor($quota * $reserve);
 			$this->availability[$id] = $availability;
 			$this->availableSum     += $availability;
