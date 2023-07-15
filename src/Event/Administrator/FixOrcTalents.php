@@ -34,7 +34,7 @@ final class FixOrcTalents extends AbstractEvent
 	private int $experience;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::Before);
+		parent::__construct($state, Priority::Middle);
 		$this->orc           = self::createRace(Orc::class);
 		$this->bladeFighting = self::createTalent(Bladefighting::class);
 		$this->spearFighting = self::createTalent(Spearfighting::class);
