@@ -10,11 +10,10 @@ use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Model\Reassignment;
 use Lemuria\Serializable;
 use Lemuria\Validate;
 
-final class SpyEffect extends AbstractPartyEffect implements Reassignment
+final class SpyEffect extends AbstractPartyEffect
 {
 	private const TARGETS = 'targets';
 
@@ -25,7 +24,6 @@ final class SpyEffect extends AbstractPartyEffect implements Reassignment
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::Before);
-		Lemuria::Catalog()->addReassignment($this);
 	}
 
 	public function Targets(): array {

@@ -8,7 +8,6 @@ use Lemuria\Engine\Score;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
-use Lemuria\Model\Reassignment;
 use Lemuria\SerializableTrait;
 
 class LemuriaScore implements Score
@@ -115,9 +114,6 @@ class LemuriaScore implements Score
 		$class     = getClass($effect);
 
 		$this->effects[$namespace][$id][$class] = $effect;
-		if ($effect instanceof Reassignment) {
-			Lemuria::Catalog()->addReassignment($effect);
-		}
 		if ($this->isLoaded && $effect instanceof Effect && $effect->needsAftercare()) {
 			$this->aftercare[] = $effect;
 		}
