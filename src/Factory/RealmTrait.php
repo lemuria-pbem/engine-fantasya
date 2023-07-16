@@ -4,6 +4,9 @@ namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Allotment;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Realm;
+use Lemuria\Model\Fantasya\Region;
 
 trait RealmTrait
 {
@@ -26,5 +29,14 @@ trait RealmTrait
 
 	protected function createAllotment(UnitCommand $command): Allotment {
 		return new Allotment($command->Unit()->Region()->Realm());
+	}
+
+	private function isValidNeighbour(Realm $realm, Region $region): bool {
+		$central  = $realm->Territory()->Central();
+		$distance = Lemuria::World()->getDistance($central, $region);
+		return match ($distance) {
+			2       => $central->hasRoadTo($region),
+			default => $distance < 2
+		};
 	}
 }

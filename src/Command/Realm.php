@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\RealmTrait;
 use Lemuria\Engine\Fantasya\Message\Region\RealmAddedMessage;
 use Lemuria\Engine\Fantasya\Message\Region\RealmDissolvedMessage;
 use Lemuria\Engine\Fantasya\Message\Region\RealmFoundedMessage;
@@ -24,7 +25,6 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Realm as Model;
-use Lemuria\Model\Fantasya\Region;
 
 /**
  * This command is used to build realms.
@@ -34,6 +34,8 @@ use Lemuria\Model\Fantasya\Region;
  */
 final class Realm extends UnitCommand
 {
+	use RealmTrait;
+
 	private Id $id;
 
 	private Intelligence $intelligence;
@@ -172,14 +174,5 @@ final class Realm extends UnitCommand
 			return $possessions->offsetGet($this->id);
 		}
 		return null;
-	}
-
-	private function isValidNeighbour(Model $realm, Region $region): bool {
-		$central  = $realm->Territory()->Central();
-		$distance = Lemuria::World()->getDistance($central, $region);
-		return match ($distance) {
-			2       => $central->hasRoadTo($region),
-			default => $distance < 2
-		};
 	}
 }
