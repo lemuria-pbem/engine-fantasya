@@ -74,36 +74,36 @@ final class CommandPriority
 		'Siege'            => 52,
 		'Smash'            => 53,
 		//54
-		'Teach'            => 55,
-		'Learn'            => 56,
-		'Operate'          => 57,
+		'Operate'          => 55,
+		//56
+		'Spy'              => 57,
 		//58
-		'Spy'              => 59,
-		//60
-		'Sell'             => 61,
-		'Buy'              => 62,
-		//63
-		'Construction'     => 64,
-		'Vessel'           => 65,
-		"Road"             => 66,
-		'Commodity'        => 67,
-		'Herb'             => 68,
-		'RawMaterial'      => 69,
-		//70
-		'Unknown'          => 71,
-		//72
-		'Tax'              => 73,
-        'Entertain'        => 74,
-		'Steal'            => 75,
-		'Explore'          => 76,
-		//77
-		'Unicum'           => 78,
-		'Write'            => 79,
-		'Devastate'        => 80,
-		//81
-		'Travel'           => 82,
-		'Route'            => 83,
-		'Follow'           => 84,
+		'Sell'             => 59,
+		'Buy'              => 60,
+		'Construction'     => 61,
+		'Vessel'           => 62,
+		"Road"             => 63,
+		'Commodity'        => 64,
+		'Herb'             => 65,
+		'RawMaterial'      => 66,
+		//67
+		'Unknown'          => 68,
+		//69
+		'Tax'              => 70,
+        'Entertain'        => 71,
+		'Steal'            => 72,
+		'Explore'          => 73,
+		//74
+		'Unicum'           => 75,
+		'Write'            => 76,
+		'Devastate'        => 77,
+		//78
+		'Travel'           => 79,
+		'Route'            => 80,
+		'Follow'           => 81,
+		//82
+		'Teach'            => 83,
+		'Learn'            => 84,
 		//85
 		'Offer'            => 86,
 		'Demand'           => 87,

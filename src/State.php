@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Combat\Campaign;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\Workload;
+use Lemuria\Engine\Fantasya\Realm\Fleet;
 use Lemuria\Engine\Fantasya\Turn\Options;
 use Lemuria\Id;
 use Lemuria\Identifiable;
@@ -14,6 +15,7 @@ use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Market\Trade;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Realm;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
@@ -84,6 +86,11 @@ final class State implements Reassignment
 	 * @var array<int, Campaign>
 	 */
 	private array $campaigns = [];
+
+	/**
+	 * @var array<int, Fleet>
+	 */
+	private array $realmFleets = [];
 
 	/**
 	 * @var array<Behaviour>
@@ -292,6 +299,17 @@ final class State implements Reassignment
 			$this->campaigns[$id] = new Campaign($region);
 		}
 		return $this->campaigns[$id];
+	}
+
+	/**
+	 * Get the fleet of a realm.
+	 */
+	public function getRealmFleet(Realm $realm): Fleet {
+		$id = $realm->Id()->Id();
+		if (!isset($this->realmFleets[$id])) {
+			$this->realmFleets[$id] = new Fleet($realm);
+		}
+		return $this->realmFleets[$id];
 	}
 
 	/**

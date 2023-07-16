@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Factory\CommandFactory;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\Workload;
+use Lemuria\Engine\Fantasya\Realm\Fund;
 use Lemuria\Engine\Fantasya\Turn\Options;
 use Lemuria\Id;
 use Lemuria\Identifiable;
@@ -17,6 +18,7 @@ use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Market\Trade;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Realm;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
@@ -48,6 +50,11 @@ final class Context implements Reassignment
 	 * @var array<int, Besieger>
 	 */
 	private array $sieges = [];
+
+	/**
+	 * @var array<int, Fund>
+	 */
+	private array $realmFunds = [];
 
 	public function __construct(private readonly State $state) {
 		$this->parser  = new Parser();
@@ -201,6 +208,17 @@ final class Context implements Reassignment
 	 */
 	public function getCampaign(Region $region): Campaign {
 		return $this->state->getCampaign($region);
+	}
+
+	/**
+	 * Get the fund of a realm.
+	 */
+	public function getRealmFund(Realm $realm): Fund {
+		$id = $realm->Id()->Id();
+		if (!$this->realmFunds[$id]) {
+			$this->realmFunds[$id] = new Fund($realm, $this);
+		}
+		return $this->realmFunds[$id];
 	}
 
 	/**
