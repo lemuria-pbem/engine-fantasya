@@ -29,6 +29,11 @@ final class ActivityProtocol
 	private array $defaultActivities = [];
 
 	/**
+	 * @var array<Activity>
+	 */
+	private array $plannedActivities = [];
+
+	/**
 	 * @var array<Comment>
 	 */
 	private array $comments = [];
@@ -48,6 +53,21 @@ final class ActivityProtocol
 	 */
 	public function hasActivity(?Activity $command = null): bool {
 		return $command ? !$this->isAllowed($command) : !empty($this->activities);
+	}
+
+	/**
+	 * Get all planned activities.
+	 */
+	public function getPlannedActivities(): array {
+		return $this->plannedActivities;
+	}
+
+	/**
+	 * Add a planned activity.
+	 */
+	public function addPlannedActivity(Activity $activity): ActivityProtocol {
+		$this->plannedActivities[] = $activity;
+		return $this;
 	}
 
 	/**

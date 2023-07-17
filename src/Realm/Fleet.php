@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Realm;
 
+use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
@@ -13,6 +14,8 @@ use Lemuria\Model\Fantasya\Unit;
  */
 class Fleet
 {
+	protected const ALLOWED_ACTIVITIES = [Learn::class => true];
+
 	/**
 	 * @var array<int, Wagoner>
 	 */
@@ -73,6 +76,11 @@ class Fleet
 		}
 		$this->removeWagoners($remove);
 		return $outgoing;
+	}
+
+	public function getUsedCapacity(Unit $unit): float {
+		$wagoner = $this->wagoner[$unit->Id()->Id()] ?? null;
+		return $wagoner ? $wagoner->UsedCapacity(): 0.0;
 	}
 
 	/**
@@ -166,9 +174,11 @@ class Fleet
 	}
 
 	protected function isAvailable(Unit $unit): bool {
-		if (self::$state->getProtocol($unit)->hasActivity()) {
-			Lemuria::Log()->debug('Unit ' . $unit->Id() . ' is not available anymore for realm transport.');
-			return false;
+		foreach (self::$state->getProtocol($unit)->getPlannedActivities() as $activity) {
+			if (!isset(self::ALLOWED_ACTIVITIES[$activity::class])) {
+				Lemuria::Log()->debug('Unit ' . $unit->Id() . ' is not available anymore for realm transport.');
+				return false;
+			}
 		}
 		return true;
 	}

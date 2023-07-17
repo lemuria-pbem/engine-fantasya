@@ -124,7 +124,9 @@ class LemuriaTurn implements Turn
 					}
 				}
 			} else {
-				if ($this->enqueue($command)) {
+				$activities = $this->enqueue($command);
+				if (!empty($activities)) {
+					$this->addPlannedActivities($activities, $context);
 					$units->add($context->Unit());
 				}
 			}
@@ -149,7 +151,7 @@ class LemuriaTurn implements Turn
 		if ($priority <= $this->currentPriority) {
 			throw new LemuriaException('Cannot inject action into this running evaluation.');
 		}
-		$this->enqueue($action);
+		$this->addPlannedActivities($this->enqueue($action));
 		Lemuria::Log()->debug('New action injected: ' . $action, ['command' => $action]);
 	}
 
@@ -278,18 +280,23 @@ class LemuriaTurn implements Turn
 		return $this->result;
 	}
 
-	protected function enqueue(Action $action): bool {
+	/**
+	 * @return array<Activity>|null
+	 */
+	protected function enqueue(Action $action): ?array {
 		if ($action instanceof CompositeCommand) {
-			$isActivity = false;
+			$activities = [];
 			foreach ($action->getCommands() as $command) {
 				$command = $command->getDelegate();
 				$this->queue->add($command);
-				$isActivity = $isActivity || $command instanceof Activity;
+				if ($command instanceof Activity) {
+					$activities[] = $command;
+				}
 			}
-			return $isActivity;
+			return empty($activities) ? null : $activities;
 		}
 		$this->queue->add($action);
-		return $action instanceof Activity;
+		return $action instanceof Activity ? [$action] : null;
 	}
 
 	protected function addEvent(Event $event): Turn {
@@ -339,7 +346,7 @@ class LemuriaTurn implements Turn
 		foreach ($party->People()->getClone() as $unit) {
 			$command = $this->getDefaultActivity($unit, $context->setUnit($unit));
 			if ($command) {
-				$this->enqueue($command);
+				$this->addPlannedActivities($this->enqueue($command), $context);
 				Lemuria::Log()->debug('Enqueue default command.', ['unit' => $unit->Id(), 'command' => $command]);
 			} else {
 				Lemuria::Log()->debug('No default command for unit ' . $unit->Id() . '.');
@@ -355,7 +362,7 @@ class LemuriaTurn implements Turn
 			Lemuria::Catalog()->addReassignment($context);
 			$command = $this->getDefaultActivity($unit, $context->setParty($unit->Party())->setUnit($unit));
 			if ($command) {
-				$this->enqueue($command);
+				$this->addPlannedActivities($this->enqueue($command), $context);
 				Lemuria::Log()->debug('Enqueue default command.', ['command' => $command]);
 			} else {
 				Lemuria::Log()->debug('No default command set.');
@@ -422,5 +429,27 @@ class LemuriaTurn implements Turn
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * @param array<Activity>|null $activities
+	 */
+	private function addPlannedActivities(?array $activities, ?Context $context = null): void {
+		if (!empty($activities)) {
+			if ($context) {
+				$unit     = $context->Unit();
+				$protocol = $context->getProtocol($unit);
+				foreach ($activities as $activity) {
+					$protocol->addPlannedActivity($activity);
+				}
+			} else {
+				$state = State::getInstance();
+				foreach ($activities as $activity) {
+					if ($activity instanceof UnitCommand) {
+						$state->getProtocol($activity->Unit())->addPlannedActivity($activity);
+					}
+				}
+			}
+		}
 	}
 }

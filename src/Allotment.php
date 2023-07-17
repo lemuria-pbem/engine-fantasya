@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use Lemuria\Engine\Fantasya\Realm\Fleet;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Camel;
@@ -36,9 +37,12 @@ class Allotment
 	 */
 	private array $availability;
 
+	private Fleet $fleet;
+
 	private int $availableSum;
 
 	public function __construct(private readonly Realm $realm) {
+		$this->fleet = State::getInstance()->getRealmFleet($realm);
 	}
 
 	public function Realm(): Realm {
@@ -54,7 +58,7 @@ class Allotment
 		foreach ($consumer->getDemand() as $quantity) {
 			$commodity = $quantity->Commodity();
 			$this->calculateAvailability($commodity, $quota);
-			$total = min($quantity->Count(), $this->availableSum);
+			$total = $this->calculateTotal($commodity, min($quantity->Count(), $this->availableSum));
 			$rate  = $total / $this->availableSum;
 			foreach ($this->region as $id => $region) {
 				$part = (int)round($rate * $this->availability[$id]);
@@ -88,5 +92,12 @@ class Allotment
 			$this->availability[$id] = $availability;
 			$this->availableSum     += $availability;
 		}
+	}
+
+	protected function calculateTotal(Commodity $commodity, int $amount): int {
+		$piece  = $commodity->Weight();
+		$weight = $amount * $piece;
+		$weight = $this->fleet->fetch($weight);
+		return (int)floor($weight / $piece);
 	}
 }
