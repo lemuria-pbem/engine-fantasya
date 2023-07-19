@@ -2,15 +2,10 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use Lemuria\Engine\Fantasya\Factory\Model\RealmQuota;
 use Lemuria\Engine\Fantasya\Realm\Fleet;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity;
-use Lemuria\Model\Fantasya\Commodity\Camel;
-use Lemuria\Model\Fantasya\Commodity\Elephant;
-use Lemuria\Model\Fantasya\Commodity\Horse;
-use Lemuria\Model\Fantasya\Commodity\Pegasus;
-use Lemuria\Model\Fantasya\Commodity\Silver;
-use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Realm;
 use Lemuria\Model\Fantasya\Region;
@@ -21,12 +16,6 @@ use Lemuria\Model\Fantasya\Resources;
  */
 class Allotment
 {
-	use BuilderTrait;
-
-	public const POOL_COMMODITIES = [
-		Silver::class => true, Camel::class  => true, Elephant::class => true, Horse::class => true, Pegasus::class => true
-	];
-
 	/**
 	 * @var array<int, Region>
 	 */
@@ -37,12 +26,15 @@ class Allotment
 	 */
 	private array $availability;
 
+	private RealmQuota $quotas;
+
 	private Fleet $fleet;
 
 	private int $availableSum;
 
 	public function __construct(private readonly Realm $realm) {
-		$this->fleet = State::getInstance()->getRealmFleet($realm);
+		$this->quotas = new RealmQuota($realm);
+		$this->fleet  = State::getInstance()->getRealmFleet($realm);
 	}
 
 	public function Realm(): Realm {
@@ -81,13 +73,12 @@ class Allotment
 		$this->availability = [];
 		$this->availableSum = 0;
 
-		$regulation = $this->realm->Party()->Regulation();
 		foreach ($this->realm->Territory() as $region) {
 			$id                      = $region->Id()->Id();
 			$this->region[$id]       = $region;
-			$threshold               = $regulation->getQuotas($region)?->getQuota($commodity)?->Threshold();
+			$threshold               = $this->quotas->getQuota($region, $commodity)->Threshold();
 			$resource                = $region->Resources()->offsetGet($commodity)->Count();
-			$reserve                 = $threshold === null ? $resource : max(0, (int)floor(($resource - $threshold) / $quota));
+			$reserve                 = max(0, (int)floor(($resource - $threshold) / $quota));
 			$availability            = (int)floor($quota * $reserve);
 			$this->availability[$id] = $availability;
 			$this->availableSum     += $availability;
