@@ -2,8 +2,9 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
-use Lemuria\Engine\Fantasya\Allotment;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Realm\Allotment;
+use Lemuria\Engine\Fantasya\Realm\Distributor;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Realm;
 use Lemuria\Model\Fantasya\Region;
@@ -29,6 +30,10 @@ trait RealmTrait
 
 	protected function createAllotment(UnitCommand $command): Allotment {
 		return new Allotment($command->Unit()->Region()->Realm());
+	}
+
+	protected function createDistributor(UnitCommand $command): Distributor {
+		return new Distributor($command->Unit()->Region()->Realm());
 	}
 
 	private function isValidNeighbour(Realm $realm, Region $region): bool {

@@ -7,12 +7,14 @@ use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\CommerceActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\RealmTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\Supply;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\CommerceGuardedMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\Realm\Distributor;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Commodity;
@@ -31,6 +33,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 {
 	use CollectTrait;
 	use CommerceActivityTrait;
+	use RealmTrait;
 	use SiegeTrait;
 
 	private const ALL = ['alle', 'alles'];
@@ -60,6 +63,8 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	protected Resources $traded;
 
 	protected Commodity $commodity;
+
+	protected ?Distributor $distributor = null;
 
 	private ?bool $isTradePossible = null;
 
@@ -117,13 +122,18 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 		}
 
 		if ($this->isTradePossible()) {
-			$commerce     = $this->context->getCommerce($this->unit->Region());
-			$this->trades = $commerce->getWorkload($this->unit);
+			$this->trades = $this->context->getWorkload($this->unit);
 			$this->createGoods();
-			if (count($this->goods)) {
-				$commerce->register($this);
+			if ($this->isRunCentrally($this)) {
+				$this->distributor = $this->createDistributor($this);
+				Lemuria::Log()->debug('New distributor helper for realm ' . $this->distributor->Realm()->Id() . '.', ['command' => $this]);
 			} else {
-				Lemuria::Log()->debug('Commerce registration skipped due to empty demand.', ['command' => $this]);
+				$commerce = $this->context->getCommerce($this->unit->Region());
+				if (count($this->goods)) {
+					$commerce->register($this);
+				} else {
+					Lemuria::Log()->debug('Commerce registration skipped due to empty demand.', ['command' => $this]);
+				}
 			}
 		} else {
 			Lemuria::Log()->debug('Commerce disabled in this region - no castle here.');
@@ -135,7 +145,11 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	 */
 	protected function run(): void {
 		if (count($this->goods)) {
-			$this->context->getCommerce($this->unit->Region())->distribute($this);
+			if ($this->distributor) {
+				$this->distributor->distribute($this);
+			} else {
+				$this->context->getCommerce($this->unit->Region())->distribute($this);
+			}
 		}
 	}
 
