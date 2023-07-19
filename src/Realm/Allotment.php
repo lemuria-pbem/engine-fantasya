@@ -1,15 +1,16 @@
 <?php
 declare (strict_types = 1);
-namespace Lemuria\Engine\Fantasya;
+namespace Lemuria\Engine\Fantasya\Realm;
 
 use Lemuria\Engine\Fantasya\Factory\Model\RealmQuota;
-use Lemuria\Engine\Fantasya\Realm\Fleet;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Engine\Fantasya\Consumer;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Realm;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Engine\Fantasya\State;
 
 /**
  * Helper for central resource distribution in realms.

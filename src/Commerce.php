@@ -67,10 +67,6 @@ final class Commerce
 		return $this->region;
 	}
 
-	public function getWorkload(Unit $unit): Workload {
-		return State::getInstance()->getWorkload($unit);
-	}
-
 	/**
 	 * Register a Merchant.
 	 */
@@ -122,6 +118,10 @@ final class Commerce
 	 */
 	public function getSupplies(): array {
 		return $this->supplies;
+	}
+
+	protected function getWorkload(Unit $unit): Workload {
+		return State::getInstance()->getWorkload($unit);
 	}
 
 	/**

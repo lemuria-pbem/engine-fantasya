@@ -3,7 +3,6 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Activity;
-use Lemuria\Engine\Fantasya\Allotment;
 use Lemuria\Engine\Fantasya\Consumer;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\RealmTrait;
@@ -11,6 +10,7 @@ use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\AllocationSiegeMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\Realm\Allotment;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Party;
