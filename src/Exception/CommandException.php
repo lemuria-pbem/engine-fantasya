@@ -17,14 +17,10 @@ class CommandException extends ActionException
 		if ($dictionary->has('exception', $this->translationKey->name)) {
 			return $this->translate($dictionary->get('exception', $this->translationKey->name));
 		}
-		return $this->getFallbackTranslation();
+		return $this->getMessage();
 	}
 
 	protected function translate(string $template): string {
 		return $template;
-	}
-
-	protected function getFallbackTranslation(): string {
-		return $this->getMessage();
 	}
 }

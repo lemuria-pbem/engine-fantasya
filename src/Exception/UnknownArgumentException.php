@@ -11,20 +11,27 @@ class UnknownArgumentException extends CommandException
 
 	protected final const PLACEHOLDER = '{' . self::ARGUMENT . '}';
 
+	private string $logMessage;
+
 	public function __construct(
 		private readonly \Stringable|string|null $argument = null,
 		?string $message = 'Unknown argument ' . self::PLACEHOLDER . '.',
 		?CommandException $exception = null
 	) {
-		parent::__construct($message, 0, $exception);
+		$this->logMessage = $message;
+		parent::__construct($this->replacedMessage(), 0, $exception);
 	}
 
 	public function getArgument(): \Stringable|string|null {
 		return $this->argument;
 	}
 
-	protected function getFallbackTranslation(): string {
+	public function getLogMessage(): string {
+		return $this->logMessage;
+	}
+
+	protected function replacedMessage(): string {
 		$argument = trim(strip_tags($this->argument));
-		return str_replace(self::PLACEHOLDER, $argument, $this->getMessage());
+		return str_replace(self::PLACEHOLDER, $argument, $this->logMessage);
 	}
 }
