@@ -26,6 +26,8 @@ class Allotment
 	 */
 	private array $availability;
 
+	private State $state;
+
 	private RealmQuota $quotas;
 
 	private Fleet $fleet;
@@ -33,6 +35,7 @@ class Allotment
 	private int $availableSum;
 
 	public function __construct(private readonly Realm $realm) {
+		$this->state  = State::getInstance();
 		$this->quotas = new RealmQuota($realm);
 		$this->fleet  = State::getInstance()->getRealmFleet($realm);
 	}
@@ -58,7 +61,7 @@ class Allotment
 					$part = $total;
 				}
 				if ($part > 0) {
-					$region->Resources()->remove(new Quantity($commodity, $part));
+					$this->state->getAvailability($region)->remove(new Quantity($commodity, $part));
 					$resources->add(new Quantity($commodity, $part));
 					$total -= $part;
 					Lemuria::Log()->debug('Allotment of ' . $quantity . ' in region ' . $id . ' for consumer ' . $consumer->getId() . '.');
@@ -77,8 +80,9 @@ class Allotment
 			$id                      = $region->Id()->Id();
 			$this->region[$id]       = $region;
 			$threshold               = $this->quotas->getQuota($region, $commodity)->Threshold();
-			$resource                = $region->Resources()->offsetGet($commodity)->Count();
-			$reserve                 = max(0, (int)floor(($resource - $threshold) / $quota));
+			$resource                = $this->state->getAvailability($region)->getResource($commodity)->Count();
+			$reducedResource         = is_int($threshold) ? $resource - $threshold : $threshold * $resource;
+			$reserve                 = max(0, (int)floor($reducedResource / $quota));
 			$availability            = (int)floor($quota * $reserve);
 			$this->availability[$id] = $availability;
 			$this->availableSum     += $availability;
