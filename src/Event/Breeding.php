@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\PotionReserve;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
@@ -22,6 +23,7 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\RawMaterial;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Horsetaming;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Animals grow or migrate to neighbour regions.
@@ -36,6 +38,8 @@ final class Breeding extends AbstractEvent
 	private const BOOST_FACTOR = 4;
 
 	private Talent $horsetaming;
+
+	private Unit $unit;
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::Middle);
@@ -84,10 +88,12 @@ final class Breeding extends AbstractEvent
 	private function calculateProduction(Construction $construction, int $cost): int {
 		$production = 0;
 		foreach ($construction->Inhabitants() as $unit) {
-			$level = $this->getProductivity($this->horsetaming)->Level();
+			$this->unit = $unit;
+			$calculus   = $this->context->getCalculus($unit);
+			$level      = $this->getProductivity($this->horsetaming, $calculus)->Level();
 			if ($level >= $cost) {
 				$size        = $unit->Size();
-				$production += (int)floor($this->potionBoost($size) * $size * $level / $cost);
+				$production += (int)floor($this->potionBoost($size, $calculus) * $size * $level / $cost);
 				$this->initWorkload(0);
 			}
 		}
