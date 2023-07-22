@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
-use function Lemuria\getClass;
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message\Section;
 use Lemuria\Model\Fantasya\Quantity;
@@ -23,14 +23,6 @@ class AllocationTakeMessage extends AbstractUnitMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		if ($name === 'item') {
-			$commodity = getClass($this->item->Commodity());
-			$index     = $this->item->Count() > 1 ? 1 : 0;
-			$cost = $this->translateKey('resource.' . $commodity, $index);
-			if ($cost) {
-				return $this->item->Count() . ' ' . $cost;
-			}
-		}
-		return parent::getTranslation($name);
+		return $this->item($name, 'item', casus: Casus::Adjective) ?? parent::getTranslation($name);
 	}
 }
