@@ -4,11 +4,10 @@ namespace Lemuria\Tests\Engine\Fantasya\Turn\Option;
 
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Attributes\Test;
+use SATHub\PHPUnit\Base;
 
 use Lemuria\Engine\Fantasya\Exception\OptionException;
 use Lemuria\Engine\Fantasya\Turn\Option\ThrowOption;
-
-use Lemuria\Tests\Base;
 
 class ThrowOptionTest extends Base
 {
