@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\PotionReserve;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
@@ -93,7 +92,7 @@ final class Breeding extends AbstractEvent
 			$level      = $this->getProductivity($this->horsetaming, $calculus)->Level();
 			if ($level >= $cost) {
 				$size        = $unit->Size();
-				$production += (int)floor($this->potionBoost($size, $calculus) * $size * $level / $cost);
+				$production += (int)floor($this->potionBoost($size) * $size * $level / $cost);
 				$this->initWorkload(0);
 			}
 		}

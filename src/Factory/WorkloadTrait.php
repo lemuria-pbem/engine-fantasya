@@ -17,7 +17,7 @@ trait WorkloadTrait
 
 	protected int $fullProduction;
 
-	protected readonly Workload $workload;
+	protected Workload $workload;
 
 	protected function initWorkload(int $maximum = 1000000): void {
 		$this->workload = $this->context->getWorkload($this->unit)->setMaximum($maximum);
