@@ -403,6 +403,7 @@
 		"DismissOnlyPeasantsMessage": "Die Einheit $id kann nur {$persons:Person} an die Bauern in der Region $region entlassen.",
 		"DismissPeasantsMessage": "Die Einheit $id entlässt {$persons:Person} an die Bauern in der Region $region.",
 		"DismissSiegeMessage": "Die Einheit $id kann nichts entlassen, das Gebäude wird belagert.",
+		"DistributorFleetMessage": "Die übrige Transportkapazität beträgt $capacity ($quantity).",
 		"DriftDamageMessage": "Das Schiff $id wird beim Auflaufen auf das Riff vor der Küste der Region $region beschädigt, weil Kapitän und Crew es nicht mehr steuern können.",
 		"DriftMessage": "Das Schiff $id treibt in Richtung $direction ab, weil Kapitän und Crew es nicht mehr steuern können.",
 		"DrinkOfCreationMessage": "Die Einheit $id ist voller Energie und Tatendrang.",

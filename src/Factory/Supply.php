@@ -30,6 +30,10 @@ class Supply implements \Countable
 		$this->step     = $this->peasants / 100.0;
 	}
 
+	public function Region(): Region {
+		return $this->region;
+	}
+
 	/**
 	 * Get the current Luxury.
 	 *
@@ -113,7 +117,7 @@ class Supply implements \Countable
 	}
 
 	/**
-	 * Buy one piece of the current luxury and get its price.
+	 * Trade one piece of the current luxury and get its price.
 	 */
 	public function one(): int {
 		if (!$this->hasMore()) {
