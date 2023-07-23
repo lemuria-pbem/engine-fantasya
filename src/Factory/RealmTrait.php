@@ -29,11 +29,11 @@ trait RealmTrait
 	}
 
 	protected function createAllotment(UnitCommand $command): Allotment {
-		return new Allotment($command->Unit()->Region()->Realm());
+		return new Allotment($command->Unit()->Region()->Realm(), $this->context);
 	}
 
 	protected function createDistributor(UnitCommand $command): Distributor {
-		return new Distributor($command->Unit()->Region()->Realm());
+		return new Distributor($command->Unit()->Region()->Realm(), $this->context);
 	}
 
 	private function isValidNeighbour(Realm $realm, Region $region): bool {

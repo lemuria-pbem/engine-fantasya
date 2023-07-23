@@ -2,8 +2,11 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Realm;
 
+use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\Supply;
+use Lemuria\Engine\Fantasya\Factory\UnitTrait;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\DistributorFleetMessage;
 use Lemuria\Lemuria;
@@ -15,6 +18,7 @@ use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Realm;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Model\Fantasya\Relation;
 
 /**
  * Helper for central luxury trade in realms.
@@ -23,6 +27,8 @@ class Distributor
 {
 	use BuilderTrait;
 	use MessageTrait;
+	use SiegeTrait;
+	use UnitTrait;
 
 	/**
 	 * @var array<int, int>
@@ -40,10 +46,13 @@ class Distributor
 
 	private Commodity $silver;
 
-	public function __construct(private readonly Realm $realm) {
+	public function __construct(private readonly Realm $realm, protected Context $context) {
 		$this->state = State::getInstance();
 		$this->fleet = State::getInstance()->getRealmFleet($realm);
 		foreach ($realm->Territory() as $region) {
+			if ($this->isUnderSiege($region) || !$this->getCheckByAgreement(Relation::TRADE)) {
+				continue;
+			}
 			if ($this->state->getIntelligence($region)->getCastle()?->Size() > Site::MAX_SIZE) {
 				$this->supply[$region->Id()->Id()] = new Supply($region);
 			}

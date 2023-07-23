@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Inhabitants;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Unit;
@@ -88,5 +89,10 @@ trait SiegeTrait
 			}
 		}
 		return true;
+	}
+
+	protected function isUnderSiege(Region $region): bool {
+		$castle = $this->context->getIntelligence($region)->getCastle();
+		return $castle && $this->isSieged($castle);
 	}
 }

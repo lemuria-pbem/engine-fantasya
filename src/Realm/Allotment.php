@@ -2,13 +2,17 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Realm;
 
+use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\Model\RealmQuota;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
+use Lemuria\Engine\Fantasya\Factory\UnitTrait;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Engine\Fantasya\Consumer;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Realm;
 use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Engine\Fantasya\State;
 
@@ -17,6 +21,9 @@ use Lemuria\Engine\Fantasya\State;
  */
 class Allotment
 {
+	use SiegeTrait;
+	use UnitTrait;
+
 	/**
 	 * @var array<int, Region>
 	 */
@@ -35,7 +42,7 @@ class Allotment
 
 	private int $availableSum;
 
-	public function __construct(private readonly Realm $realm) {
+	public function __construct(private readonly Realm $realm, protected Context $context) {
 		$this->state  = State::getInstance();
 		$this->quotas = new RealmQuota($realm);
 		$this->fleet  = State::getInstance()->getRealmFleet($realm);
@@ -78,6 +85,9 @@ class Allotment
 		$this->availableSum = 0;
 
 		foreach ($this->realm->Territory() as $region) {
+			if ($this->isUnderSiege($region) || !$this->getCheckByAgreement(Relation::RESOURCES)) {
+				continue;
+			}
 			$id                      = $region->Id()->Id();
 			$this->region[$id]       = $region;
 			$threshold               = $this->quotas->getQuota($region, $commodity)->Threshold();
