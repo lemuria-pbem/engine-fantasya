@@ -4,7 +4,16 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Command\Create\Herb;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Message\Unit\QuotaNoHerbageMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\QuotaNoHerbMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\QuotaNotSetMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\QuotaRemoveHerbMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\QuotaRemoveMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\QuotaSetHerbMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\QuotaSetMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\QuotaUnknownHerbageMessage;
 use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Quota as Model;
 use Lemuria\Model\Fantasya\Quotas;
 
@@ -65,7 +74,9 @@ class Quota extends UnitCommand
 		} else {
 			$this->quotas->add(new Model($commodity, $amount));
 		}
-		//TODO quota set
+		$region = $this->unit->Region();
+		$quota  = new Quantity($commodity, $amount);
+		$this->message(QuotaSetMessage::class)->e($region)->i($quota);
 	}
 
 	protected function setHerbQuota(float $percentage): void {
@@ -78,33 +89,35 @@ class Quota extends UnitCommand
 					$this->quotas->offsetUnset($commodity);
 				}
 				$this->quotas->add(new Model($herb, $percentage));
-				//TODO set
+				$this->message(QuotaSetHerbMessage::class)->e($region)->p($percentage);
 			} else {
-				//TODO no herbage
+				$this->message(QuotaNoHerbageMessage::class)->e($region);
 			}
 		} else {
-			//TODO unknown herbage
+			$this->message(QuotaUnknownHerbageMessage::class)->e($region);
 		}
 	}
 
 	protected function removeQuota(Commodity $commodity): void {
+		$region = $this->unit->Region();
 		if ($this->quotas->offsetExists($commodity)) {
 			$this->quotas->offsetUnset($commodity);
-			//TODO removed
+			$this->message(QuotaRemoveMessage::class)->e($region)->s($commodity);
 		} else {
-			//TODO no quota
+			$this->message(QuotaNotSetMessage::class)->e($region)->s($commodity);
 		}
 	}
 
 	protected function removeHerbQuota(): void {
-		$herbs = $this->getQuotasHerbs();
+		$region = $this->unit->Region();
+		$herbs  = $this->getQuotasHerbs();
 		if (empty($herbs)) {
-			//TODO no quota
+			$this->message(QuotaNoHerbMessage::class)->e($region);
 		} else {
 			foreach ($herbs as $commodity) {
 				$this->quotas->offsetUnset($commodity);
 			}
-			//TODO removed
+			$this->message(QuotaRemoveHerbMessage::class)->e($region);
 		}
 	}
 
