@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\UnpaidFee;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\MarketFeeBannedMessage;
@@ -27,7 +26,6 @@ final class MarketFee extends AbstractEvent
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::Before);
-		$this->context = new Context($state);
 	}
 
 	protected function run(): void {
@@ -60,6 +58,17 @@ final class MarketFee extends AbstractEvent
 
 	private function pay(Unit $unit, Commodity $commodity, int $amount, Unit $owner): bool {
 		$payment = $this->collectQuantity($unit, $commodity, $amount);
+		$paid    = $payment->Count();
+		if ($paid < $amount) {
+			$region = $unit->Region();
+			$realm  = $unit->Region()->Realm();
+			if ($unit->Party() === $realm?->Party() && $region !== $realm->Territory()->Central()) {
+				$inventory = $unit->Inventory();
+				$needed    = $amount - $paid;
+				$inventory->add($this->context->getRealmFund($realm)->take(new Quantity($commodity, $needed)));
+				$payment = $this->collectQuantity($unit, $commodity, $amount);
+			}
+		}
 		if ($payment->Count() < $amount) {
 			return false;
 		}

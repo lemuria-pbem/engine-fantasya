@@ -94,7 +94,7 @@ final class Upkeep extends AbstractEvent
 				}
 			}
 			foreach ($unmaintained as $construction) {
-				if (!$this->payFromResourcePool($construction)) {
+				if (!$this->payFromResourcePool($construction) && !$this->payFromRealmFund($construction)) {
 					$this->unmaintained->add($construction);
 				}
 			}
@@ -165,10 +165,31 @@ final class Upkeep extends AbstractEvent
 	}
 
 	private function payFromResourcePool(Construction $construction): bool {
-		$upkeep   = $construction->Building()->Upkeep();
-		$unit     = $construction->Inhabitants()->Owner();
-		$quantity = $this->collectQuantity($unit, $this->silver, $upkeep);
-		if ($quantity->Count() >= $upkeep) {
+		$upkeep = $construction->Building()->Upkeep();
+		$unit   = $construction->Inhabitants()->Owner();
+		$this->collectQuantity($unit, $this->silver, $upkeep);
+		return $this->payUpkeepIfPossible($unit, $construction, $upkeep);
+	}
+
+	private function payFromRealmFund(Construction $construction): bool {
+		$region = $construction->Region();
+		$unit   = $construction->Inhabitants()->Owner();
+		$realm  = $region->Realm();
+		if ($unit->Party() === $realm?->Party() && $region !== $realm->Territory()->Central()) {
+			$upkeep    = $construction->Building()->Upkeep();
+			$inventory = $unit->Inventory();
+			$ownSilver = $inventory->offsetGet($this->silver)->Count();
+			$inventory->add($this->context->getRealmFund($realm)->take(new Quantity($this->silver, $upkeep - $ownSilver)));
+			return $this->payUpkeepIfPossible($unit, $construction, $upkeep);
+		}
+		return false;
+	}
+
+	private function payUpkeepIfPossible(Unit $unit, Construction $construction, int $upkeep): bool {
+		$inventory = $unit->Inventory();
+		$ownSilver = $inventory->offsetGet($this->silver)->Count();
+		if ($ownSilver >= $upkeep) {
+			$quantity = new Quantity($this->silver, $upkeep);
 			$unit->Inventory()->remove($quantity);
 			$this->placeDataMetrics(Subject::Maintenance, $quantity->Count(), $unit);
 			$this->message(UpkeepPayMessage::class, $unit)->e($construction)->i($quantity);

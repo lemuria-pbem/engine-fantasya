@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Event;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\ActionTrait;
+use Lemuria\Engine\Fantasya\Factory\ContextTrait;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
@@ -15,8 +16,7 @@ use Lemuria\Lemuria;
 abstract class AbstractEvent implements Event
 {
 	use ActionTrait;
-
-	protected Context $context;
+	use ContextTrait;
 
 	public function __construct(protected State $state, Priority $priority) {
 		$this->setPriority($priority);

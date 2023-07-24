@@ -94,7 +94,7 @@ final class Support extends AbstractEvent
 					}
 				}
 				foreach ($hungry as $unit) {
-					if ($this->payFromResourcePool($unit)) {
+					if ($this->payFromResourcePool($unit) || $this->payFromRealmFund($unit)) {
 						Lemuria::Score()->remove($this->effect($unit));
 					} else {
 						$this->hungryUnits->add($unit);
@@ -161,13 +161,20 @@ final class Support extends AbstractEvent
 	}
 
 	private function payFromResourcePool(Unit $unit): bool {
-		$support  = $this->support($unit);
-		$quantity = $this->collectQuantity($unit, $this->silver, $support);
-		if ($quantity->Count() >= $support) {
-			$unit->Inventory()->remove($quantity);
-			$this->placeDataMetrics(Subject::Support, $quantity->Count(), $unit);
-			$this->message(SupportPayMessage::class, $unit)->i($quantity);
-			return true;
+		$support = $this->support($unit);
+		$this->collectQuantity($unit, $this->silver, $support);
+		return $this->payOwnSupportIfPossible($unit, $support);
+	}
+
+	private function payFromRealmFund(Unit $unit): bool {
+		$region = $unit->Region();
+		$realm  = $region->Realm();
+		if ($unit->Party() === $realm?->Party() && $region !== $realm->Territory()->Central()) {
+			$support   = $this->support($unit);
+			$inventory = $unit->Inventory();
+			$ownSilver = $inventory->offsetGet($this->silver)->Count();
+			$inventory->add($this->context->getRealmFund($realm)->take(new Quantity($this->silver, $support - $ownSilver)));
+			return $this->payOwnSupportIfPossible($unit, $support);
 		}
 		return false;
 	}
@@ -176,6 +183,19 @@ final class Support extends AbstractEvent
 		$support  = self::SILVER;
 		$support += $unit->Construction()?->Building()?->Feed() ?? 0;
 		return $unit->Size() * $support;
+	}
+
+	private function payOwnSupportIfPossible(Unit $unit, int $support): bool {
+		$inventory = $unit->Inventory();
+		$ownSilver = $inventory->offsetGet($this->silver)->Count();
+		if ($ownSilver >= $support) {
+			$quantity = new Quantity($this->silver, $support);
+			$unit->Inventory()->remove($quantity);
+			$this->placeDataMetrics(Subject::Support, $support, $unit);
+			$this->message(SupportPayMessage::class, $unit)->i($quantity);
+			return true;
+		}
+		return false;
 	}
 
 	private function findBailOut(Unit $unit): Gathering {

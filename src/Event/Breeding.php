@@ -25,7 +25,7 @@ use Lemuria\Model\Fantasya\Talent\Horsetaming;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
- * Animals grow or migrate to neighbour regions.
+ * Animals grow in breeding farms.
  */
 final class Breeding extends AbstractEvent
 {
