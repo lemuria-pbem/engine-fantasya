@@ -20,11 +20,11 @@ use Lemuria\Engine\Fantasya\Message\Party\PartyExceptionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnitExceptionMessage;
 use Lemuria\Engine\Fantasya\Turn\Option\ThrowOption;
 use Lemuria\Engine\Fantasya\Turn\Options;
+use Lemuria\Engine\Fantasya\Turn\Result;
 use Lemuria\Engine\Move;
 use Lemuria\Engine\Newcomer;
 use Lemuria\Engine\Score;
 use Lemuria\Engine\Turn;
-use Lemuria\EntitySet;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Identifiable;
@@ -53,6 +53,8 @@ class LemuriaTurn implements Turn
 
 	protected int $currentPriority = 0;
 
+	private Result $result;
+
 	private readonly State $state;
 
 	/**
@@ -80,7 +82,7 @@ class LemuriaTurn implements Turn
 	/**
 	 * Add commands.
 	 */
-	public function add(Move $move): EntitySet {
+	public function add(Move $move): Turn {
 		Lemuria::Log()->debug('Adding party move.', ['move' => $move]);
 		$context = new Context($this->state);
 		Lemuria::Catalog()->addReassignment($context);
@@ -132,7 +134,11 @@ class LemuriaTurn implements Turn
 			}
 		}
 
-		return $units;
+		$this->result = new Result($units);
+		if ($context->hasParty()) {
+			$this->result->setParty($context->Party());
+		}
+		return $this;
 	}
 
 	/**
@@ -275,6 +281,10 @@ class LemuriaTurn implements Turn
 	public function getVersion(): VersionTag {
 		$versionFinder = new VersionFinder(__DIR__ . '/..');
 		return $versionFinder->get();
+	}
+
+	public function getResult(): Result {
+		return $this->result;
 	}
 
 	protected function enqueue(Action $action): bool {

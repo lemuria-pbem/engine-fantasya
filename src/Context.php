@@ -116,6 +116,10 @@ final class Context implements Reassignment
 		}
 	}
 
+	public function hasParty(): bool {
+		return (bool)$this->party;
+	}
+
 	/**
 	 * Get a unit's calculus.
 	 */
