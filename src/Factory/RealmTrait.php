@@ -36,6 +36,25 @@ trait RealmTrait
 		return new Distributor($command->Unit()->Region()->Realm(), $this->context);
 	}
 
+	protected function calculateInfrastructure(Region $region): int {
+		$realm = $region->Realm();
+		if ($realm) {
+			$territory       = $realm->Territory();
+			$structurePoints = [];
+			foreach ($territory as $realmRegion) {
+				$id                   = $realmRegion->Id()->Id();
+				$structurePoints[$id] = $this->context->getIntelligence($realmRegion)->getInfrastructure();
+			}
+			$infrastructure = array_sum($structurePoints);
+			if ($region === $territory->Central()) {
+				return $infrastructure;
+			}
+			$average = $infrastructure / count($structurePoints);
+			return (int)round(max($average, $structurePoints[$region->Id()->Id()]));
+		}
+		return $this->context->getIntelligence($region)->getInfrastructure();
+	}
+
 	private function isValidNeighbour(Realm $realm, Region $region): bool {
 		$central  = $realm->Territory()->Central();
 		$distance = Lemuria::World()->getDistance($central, $region);

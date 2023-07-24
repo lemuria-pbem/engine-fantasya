@@ -3,6 +3,8 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Effect\CivilCommotionEffect;
+use Lemuria\Engine\Fantasya\Factory\Model\Wage;
+use Lemuria\Engine\Fantasya\Factory\RealmTrait;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Factory\WorkplacesTrait;
 use Lemuria\Engine\Fantasya\Message\Region\SubsistenceMessage;
@@ -22,6 +24,7 @@ use Lemuria\Model\Fantasya\Region;
  */
 final class Subsistence extends AbstractEvent
 {
+	use RealmTrait;
 	use StatisticsTrait;
 	use WorkplacesTrait;
 
@@ -53,15 +56,15 @@ final class Subsistence extends AbstractEvent
 			$resources = $region->Resources();
 			$peasants  = $resources[$this->peasant]->Count();
 			if ($peasants > 0) {
-				$wage      = $this->context->getIntelligence($region)->getWage(self::WAGE);
+				$wage      = new Wage($this->calculateInfrastructure($region));
 				$available = $this->getAvailableWorkplaces($region);
 				$this->placeDataMetrics(Subject::Workplaces, $available, $region);
 				$workers   = min($peasants, $available);
-				$earnings  = $workers * $wage;
+				$earnings  = $wage->getWage($workers);
 				$working   = new Quantity($this->peasant, $workers);
 				$silver    = new Quantity($this->silver, $earnings);
 				$resources->add($silver);
-				$this->message(SubsistenceMessage::class, $region)->i($working)->i($silver, SubsistenceMessage::SILVER)->p($wage);
+				$this->message(SubsistenceMessage::class, $region)->i($working)->i($silver, SubsistenceMessage::SILVER)->p($wage->getWage());
 				$this->placeDataMetrics(Subject::Income, $earnings, $region);
 				$this->placeDataMetrics(Subject::Workers, $workers, $region);
 			}
