@@ -4,12 +4,18 @@ namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Consumers are commands that apply for resource allocation.
  */
 interface Consumer extends Command
 {
+	/**
+	 * Get the requesting unit.
+	 */
+	public function Unit(): Unit;
+
 	/**
 	 * Get the requested resources.
 	 */

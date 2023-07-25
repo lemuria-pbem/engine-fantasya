@@ -96,7 +96,7 @@ final class Realm extends UnitCommand
 				}
 				if ($this->isValidNeighbour($realm, $region)) {
 					$realm->Territory()->add($region);
-					$this->message(RealmAddMessage::class)->p($realm->Identifier());
+					$this->message(RealmAddMessage::class)->p((string)$realm->Identifier());
 					$this->message(RealmAddedMessage::class, $region)->e($party)->p($realm->Name());
 				}
 			}

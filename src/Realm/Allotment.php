@@ -56,8 +56,9 @@ class Allotment
 	 * Start resource distribution.
 	 */
 	public function distribute(Consumer $consumer): void {
-		$resources = new Resources();
-		$quota     = $consumer->getQuota();
+		$this->unit = $consumer->Unit();
+		$resources  = new Resources();
+		$quota      = $consumer->getQuota();
 		foreach ($consumer->getDemand() as $quantity) {
 			$commodity = $quantity->Commodity();
 			$this->calculateAvailability($commodity, $quota);
@@ -70,9 +71,10 @@ class Allotment
 				}
 				if ($part > 0) {
 					$this->state->getAvailability($region)->remove(new Quantity($commodity, $part));
-					$resources->add(new Quantity($commodity, $part));
+					$partQuantity = new Quantity($commodity, $part);
+					$resources->add($partQuantity);
 					$total -= $part;
-					Lemuria::Log()->debug('Allotment of ' . $quantity . ' in region ' . $id . ' for consumer ' . $consumer->getId() . '.');
+					Lemuria::Log()->debug('Allotment of ' . $partQuantity . ' in region ' . $id . ' for consumer ' . $consumer->getId() . '.');
 				}
 			}
 		}
@@ -85,7 +87,7 @@ class Allotment
 		$this->availableSum = 0;
 
 		foreach ($this->realm->Territory() as $region) {
-			if ($this->isUnderSiege($region) || !$this->getCheckByAgreement(Relation::RESOURCES)) {
+			if ($this->isUnderSiege($region) || $this->getCheckByAgreement(Relation::RESOURCES)) {
 				continue;
 			}
 			$id                      = $region->Id()->Id();

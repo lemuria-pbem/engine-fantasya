@@ -18,7 +18,7 @@ class RealmFoundedMessage extends AbstractRegionMessage
 	protected string $realm;
 
 	protected function create(): string {
-		return 'In region ' . $this->id . ' the new realm ' . $this->realm . ' of party ' . $this->party . ' is founded.';
+		return 'In region ' . $this->id . ' the realm ' . $this->realm . ' of party ' . $this->party . ' is founded.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {

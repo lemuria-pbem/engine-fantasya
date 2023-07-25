@@ -38,12 +38,14 @@ class Fleet
 			self::$state = State::getInstance();
 		}
 		foreach ($realm->Territory()->Central()->Residents() as $unit) {
-			if ($this->isAvailable($unit)) {
-				$id                  = $unit->Id()->Id();
-				$wagoner             = new Wagoner($unit);
-				$this->wagoner[$id]  = $wagoner;
-				$this->incoming[$id] = $wagoner->Incoming();
-				$this->outgoing[$id] = $wagoner->Outgoing();
+			if (!$unit->Vessel() && $this->isAvailable($unit)) {
+				$wagoner = new Wagoner($unit);
+				if ($wagoner->Maximum() > 0) {
+					$id                  = $unit->Id()->Id();
+					$this->wagoner[$id]  = $wagoner;
+					$this->incoming[$id] = $wagoner->Incoming();
+					$this->outgoing[$id] = $wagoner->Outgoing();
+				}
 			}
 		}
 		arsort($this->incoming);

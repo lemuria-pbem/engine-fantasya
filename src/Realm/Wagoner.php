@@ -11,6 +11,8 @@ class Wagoner
 {
 	protected Trip $trip;
 
+	private int $maximum;
+
 	private int $incoming;
 
 	private int $outgoing;
@@ -18,12 +20,17 @@ class Wagoner
 	public function __construct(protected readonly Unit $unit) {
 		$calculus       = new Calculus($this->unit);
 		$this->trip     = $calculus->getTrip();
-		$this->incoming = $this->trip->Capacity();
+		$this->maximum  = max(0, $this->trip->Capacity() - $this->trip->Weight());
+		$this->incoming = $this->maximum;
 		$this->outgoing = $this->incoming;
 	}
 
 	public function Unit(): Unit {
 		return $this->unit;
+	}
+
+	public function Maximum(): int {
+		return $this->maximum;
 	}
 
 	public function Incoming(): int {
@@ -35,7 +42,7 @@ class Wagoner
 	}
 
 	public function UsedCapacity(): float {
-		$used = max($this->incoming, $this->outgoing) / $this->trip->Capacity();
+		$used = $this->maximum > 0 ? max($this->incoming, $this->outgoing) / $this->maximum : 1.0;
 		if ($used < 0.0 || $used > 1.0) {
 			throw new LemuriaException('Used capacity of wagoner ' . $this->unit . ' out of range: ' . $used);
 		}

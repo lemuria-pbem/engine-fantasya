@@ -736,7 +736,7 @@
 		"RealmAddedMessage": "Hört, hört! Die Region $id gehört ab sofort zum Reich $realm der Partei $party.",
 		"RealmAlreadyAddedMessage": "Diese Region gehört bereits zum Reich.",
 		"RealmAnotherMessage": "Diese Region gehört bereits zu einem anderen Reich.",
-		"RealmCreateMessage": "Die Einheit $id gründet das neue Reich $realm.",
+		"RealmCreateMessage": "Die Einheit $id gründet das Reich $realm.",
 		"RealmDisconnectedMessage": "Die Region $id hat die Verbindung zum Reich $realm der Partei $party verloren.",
 		"RealmDissolvedMessage": "Das Reich $realm wurde von der Partei $party aufgelöst.",
 		"RealmDissolveMessage": "Die Einheit $id hat das Reich $realm aufgelöst.",

@@ -16,6 +16,7 @@ use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Base class for all commands that request resources from a Region.
@@ -40,6 +41,10 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		$this->resources = new Resources();
+	}
+
+	public function Unit(): Unit {
+		return $this->unit;
 	}
 
 	/**

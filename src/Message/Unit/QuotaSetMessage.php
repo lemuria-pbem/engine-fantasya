@@ -23,6 +23,6 @@ class QuotaSetMessage extends QuotaRemoveHerbMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->item($name, 'quota', casus: Casus::Adjective) ?? parent::getTranslation($name);
+		return $this->item($name, 'quota', casus: Casus::Dative) ?? parent::getTranslation($name);
 	}
 }
