@@ -696,6 +696,10 @@
 		"PresettingDisguiseMessage": "Neue Einheiten werden ab sofort ihre Parteizugehörigkeit verheimlichen.",
 		"PresettingDisguisePartyMessage": "Neue Einheiten werden sich ab sofort als Mitglieder der Partei $party ausgeben.",
 		"PresettingDisguiseUnknownMessage": "Uns ist keine Partei mit der Nummer $party bekannt.",
+		"PresettingExploreDepartMessage": "Unsere Kapitäne werden unbekannte Küsten erkunden und dann weiterfahren.",
+		"PresettingExploreLandMessage": "Unsere Kapitäne werden beim Erkunden vor unbekannten Küsten ankern.",
+		"PresettingExploreMessage": "Unsere Kundschafter und Kapitäne wählen Alternativrouten in unbekannten Regionen.",
+		"PresettingExploreNotMessage": "Unsere Kundschafter und Kapitäne werden sich strikt an ihre Reiseroute halten.",
 		"PresettingHideMessage": "Neue Einheiten werden sich ab sofort tarnen.",
 		"PresettingLootMessage": "Neue Einheiten werden ab sofort Beute sammeln.",
 		"PresettingNoDisguiseMessage": "Neue Einheiten werden ihre Parteizugehörigkeit nicht mehr verheimlichen.",
@@ -1022,6 +1026,14 @@
 		"Horse": ["Pferd", "Pferden"],
 		"Pegasus": ["Pegasus", "Pegasi"],
 		"WarElephant": ["Kriegselefant", "Kriegselefanten"]
+	},
+	"presetting": {
+		"exploring": {
+			"Depart": "Erkunden/Anlanden/Ablegen",
+			"Explore": "Erkunden",
+			"Land": "Erkunden/Anlanden",
+			"Not": "Nicht erkunden"
+		}
 	},
 	"quantity": {
 		"herb": ["einige", "viele", "eine riesige Menge"],
