@@ -40,7 +40,7 @@ final class Contagion extends AbstractRegionEffect
 
 	public function serialize(): array {
 		$data                 = parent::serialize();
-		$data[self::DISEASE]  = $this->disease->value;
+		$data[self::DISEASE]  = $this->disease->name;
 		$data[self::DURATION] = $this->duration;
 		$data[self::UNITS]    = $this->units->serialize();
 		return $data;
@@ -48,7 +48,7 @@ final class Contagion extends AbstractRegionEffect
 
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
-		$this->disease  = Disease::from($data[self::DISEASE]);
+		$this->disease  = Disease::parse($data[self::DISEASE]);
 		$this->duration = $data[self::DURATION];
 		$this->units->unserialize($data[self::UNITS]);
 		return $this;
@@ -82,7 +82,7 @@ final class Contagion extends AbstractRegionEffect
 	protected function run(): void {
 		$this->duration--;
 		if ($this->duration > 0) {
-			$this->message(ContagionMessage::class, $this->Region())->p($this->disease->value);
+			$this->message(ContagionMessage::class, $this->Region())->p($this->disease->name);
 		} else {
 			Lemuria::Score()->remove($this);
 		}
