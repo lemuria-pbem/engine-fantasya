@@ -17,6 +17,8 @@ use Lemuria\Engine\Fantasya\Message\Party\TravelGuardMessage;
 use Lemuria\Engine\Fantasya\Message\Region\TravelAllowedRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Region\TravelGuardedRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RoutePauseMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelExploreDepartMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelExploreLandMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelIntoMonsterMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelMessage;
@@ -40,6 +42,7 @@ use Lemuria\Engine\Fantasya\Travel\Movement;
 use Lemuria\Engine\Fantasya\Travel\NavigationTrait;
 use Lemuria\Engine\Fantasya\Travel\TravelTrait;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Party\Exploring;
 use Lemuria\Model\Fantasya\Spell\FavorableWinds;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Navigation;
@@ -65,6 +68,7 @@ class Travel extends UnitCommand implements Activity
 
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
+		$this->chronicle  = $this->unit->Party()->Chronicle();
 		$this->workload   = $context->getWorkload($this->unit);
 		$this->directions = new DirectionList($context);
 		$this->riding     = self::createTalent(Riding::class);
@@ -104,8 +108,9 @@ class Travel extends UnitCommand implements Activity
 	protected function initialize(): void {
 		parent::initialize();
 		$this->context->resetResourcePools();
-		$this->vessel = $this->unit->Vessel();
-		$this->trip   = $this->calculus()->getTrip();
+		$this->exploring = $this->unit->Party()->Presettings()->Exploring();
+		$this->vessel    = $this->unit->Vessel();
+		$this->trip      = $this->calculus()->getTrip();
 		$this->workload->setMaximum(min($this->workload->Maximum(), $this->trip->Speed()));
 		$this->initDirections();
 	}
@@ -173,7 +178,6 @@ class Travel extends UnitCommand implements Activity
 		$route              = [$this->unit->Region()];
 		$regions            = $speed - $this->workload->count();
 		$roadRegions        = 2 * $regions;
-		$chronicle          = $this->unit->Party()->Chronicle();
 		$isSimulation       = $this->context->getTurnOptions()->IsSimulation();
 		$numberOfDirections = $this->directions->getNumberOfDirections();
 		$invalidDirections  = 0;
@@ -190,12 +194,14 @@ class Travel extends UnitCommand implements Activity
 					break;
 				}
 
-				$region = $this->canMoveTo($next);
-				if ($isSimulation && $region && !$chronicle->has($region->Id())) {
+				if ($isSimulation && $this->stopSimulation($next)) {
 					$region            = null;
 					$regions           = 0;
 					$roadRegions       = 0;
 					$simulationStopped = true;
+				} else {
+					$region = $this->canMoveTo($next);
+					$region = $this->considerExploration($next, $region);
 				}
 				if ($region) {
 					$overRoad = $this->overRoad($this->unit->Region(), $next, $region);
@@ -214,6 +220,17 @@ class Travel extends UnitCommand implements Activity
 					}
 					$regions--;
 					$invalidDirections = 0;
+
+					if ($regions > 0 && $this->isNewlyExploredLand($region)) {
+						if ($this->exploring === Exploring::Land) {
+							$regions     = 0;
+							$roadRegions = 0;
+							$this->message(TravelExploreLandMessage::class);
+						} elseif ($this->exploring === Exploring::Depart) {
+							$this->directions->insertNext($this->getOppositeDirection($next)->value);
+							$this->message(TravelExploreDepartMessage::class);
+						}
+					}
 
 					$this->moveTo($region);
 					$this->addToTravelRoute($next->value);

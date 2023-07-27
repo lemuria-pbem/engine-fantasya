@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Travel;
 
+use Lemuria\Engine\Fantasya\Message\Unit\TravelAlternativeChaosMessage;
+use function Lemuria\randElement;
 use Lemuria\Engine\Fantasya\Effect\Airship;
 use Lemuria\Engine\Fantasya\Effect\SneakPastEffect;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
@@ -11,6 +13,8 @@ use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\ContextTrait;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Message\Region\TravelUnitMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelAlternativeMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelAlternativeNavigableMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelCanalFeeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelCanalMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelCanalPaidMessage;
@@ -28,11 +32,13 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Canal;
+use Lemuria\Model\Fantasya\Chronicle;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Extension\Fee;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Navigable;
+use Lemuria\Model\Fantasya\Party\Exploring;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
@@ -54,6 +60,10 @@ trait TravelTrait
 
 	private Workload $workload;
 
+	private Chronicle $chronicle;
+
+	private Exploring $exploring;
+
 	private int $roadsLeft = 0;
 
 	private bool $hasTravelled = false;
@@ -63,6 +73,13 @@ trait TravelTrait
 	private bool $airshipped = false;
 
 	private array $neighbourDirections = [];
+
+	protected function stopSimulation(Direction $direction): bool {
+		$region = $this->unit->Region();
+		/** @var Region $neighbour */
+		$neighbour = Lemuria::World()->getNeighbours($region)[$direction] ?? null;
+		return $neighbour && !$this->chronicle->has($neighbour->Id());
+	}
 
 	protected function canMoveTo(Direction $direction): ?Region {
 		$this->airshipped = false;
@@ -130,6 +147,54 @@ trait TravelTrait
 		}
 		$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
 		return $neighbour;
+	}
+
+	protected function considerExploration(Direction &$direction, ?Region $region): ?Region {
+		if ($this->exploring === Exploring::Not) {
+			return $region;
+		}
+
+		$alternative = $region;
+		if ($this->trip->Movement() === Movement::Ship) {
+			if ($region && !$this->chronicle->has($region->Id())) {
+				$landscape = $region->Landscape();
+				if (!$landscape instanceof Navigable && $this->exploring === Exploring::Explore) {
+					$alternatives = $this->chooseAlternativeNavigable($direction, $region);
+					if (!empty($alternatives)) {
+						$original    = $direction;
+						$pick        = randElement($alternatives);
+						$direction   = $pick[0];
+						$alternative = $pick[1];
+						$this->message(TravelAlternativeNavigableMessage::class)->p($original->value)->p($direction->value, TravelAlternativeMessage::ALTERNATIVE);
+					}
+				}
+			} elseif (!$region) {
+				if ($this->exploring === Exploring::Explore) {
+					$alternatives = $this->chooseAlternativeNavigable($direction, $region);
+				} else {
+					$alternatives = $this->chooseAlternatives($direction, $region);
+				}
+				if (!empty($alternatives)) {
+					$original    = $direction;
+					$pick        = randElement($alternatives);
+					$direction   = $pick[0];
+					$alternative = $pick[1];
+					$this->message(TravelAlternativeChaosMessage::class)->p($original->value)->p($direction->value, TravelAlternativeMessage::ALTERNATIVE);
+				}
+			}
+		} else {
+			if (!$region) {
+				$alternatives = $this->chooseAlternatives($direction, $region);
+				if (!empty($alternatives)) {
+					$original    = $direction;
+					$pick        = randElement($alternatives);
+					$direction   = $pick[0];
+					$alternative = $pick[1];
+					$this->message(TravelAlternativeMessage::class)->p($original->value)->p($direction->value, TravelAlternativeMessage::ALTERNATIVE);
+				}
+			}
+		}
+		return $alternative;
 	}
 
 	protected function setRoadsLeft(Movement $movement): void {
@@ -310,6 +375,10 @@ trait TravelTrait
 		return false;
 	}
 
+	protected function isNewlyExploredLand(Region $region): bool {
+		return !$this->chronicle->has($region->Id()) && $this->trip->Movement() === Movement::Ship && !$region->Landscape() instanceof Navigable;
+	}
+
 	private function initNeighbourDirections(): void {
 		if (empty($this->neighbourDirections)) {
 			$map        = Lemuria::World();
@@ -351,6 +420,67 @@ trait TravelTrait
 			$this->message(TravelCanalFeeMessage::class, $master)->e($captain)->i($payment);
 		}
 		return true;
+	}
+
+	/**
+	 * @return array<array>
+	 */
+	private function chooseAlternatives(Direction $direction, Region $region): array {
+		$alternatives = [];
+		$count        = 0;
+		$considered   = 0;
+		$known        = null;
+		foreach (Lemuria::World()->getAlternatives($region, $direction) as $altDirection => $altRegion) {
+			$considered++;
+			if ($this->canMoveTo($altDirection)) {
+				if ($this->chronicle->has($altRegion->Id())) {
+					if (!$known) {
+						$known = [$altDirection, $altRegion];
+					}
+				} else {
+					$alternatives[] = [$altDirection, $altRegion];
+					$count++;
+				}
+			}
+			if ($considered > 2 && $count) {
+				break; // Use nearest alternatives if possible (octagonal maps).
+			}
+		}
+		if (empty($alternatives) && $known) {
+			return [$known];
+		}
+		return $alternatives;
+	}
+
+	/**
+	 * @return array<array>
+	 */
+	private function chooseAlternativeNavigable(Direction $direction, Region $region): array {
+		$alternatives = [];
+		$count        = 0;
+		$considered   = 0;
+		$known        = null;
+		foreach (Lemuria::World()->getAlternatives($region, $direction) as $altDirection => $altRegion) {
+			$considered++;
+			/** @var Region $altRegion */
+			if ($altRegion->Landscape() instanceof Navigable && $this->canMoveTo($altDirection)) {
+				if ($this->chronicle->has($altRegion->Id())) {
+					if (!$known) {
+						$known = [$altDirection, $altRegion];
+					}
+				} else {
+					$alternatives[] = [$altDirection, $altRegion];
+					$count++;
+				}
+			}
+			if ($considered > 2 && $count) {
+				break; // Use nearest alternatives if possible (octagonal maps).
+			}
+		}
+		if (empty($alternatives) && $known) {
+			return [$known];
+		}
+		return $alternatives;
 	}
 
 	private function createTravelEffect(): void {

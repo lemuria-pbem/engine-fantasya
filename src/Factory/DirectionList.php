@@ -79,13 +79,23 @@ class DirectionList implements \Countable
 		return $this;
 	}
 
-	public function add(string $direction): DirectionList {
-		if ($this->isRotating && $this->factory->isRouteStop($direction)) {
+	public function add(Direction|string $direction): DirectionList {
+		if ($this->isRotating && ($direction === Direction::ROUTE_STOP || $this->factory->isRouteStop($direction))) {
 			$this->directions[] = Direction::ROUTE_STOP;
 		} else {
-			$this->directions[] = $this->factory->direction($direction);
+			$this->directions[] = $direction instanceof Direction ? $direction : $this->factory->direction($direction);
 			$this->numberOfDirections++;
 		}
+		$this->count++;
+		return $this;
+	}
+
+	public function insertNext(Direction|string $direction): DirectionList {
+		if (is_string($direction)) {
+			$direction = $this->factory->direction($direction);
+		}
+		array_unshift($this->directions, $direction);
+		$this->numberOfDirections++;
 		$this->count++;
 		return $this;
 	}
