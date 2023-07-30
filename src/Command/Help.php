@@ -4,12 +4,16 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpDeleteMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpNotMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyDeleteMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyNotMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyRegionDeleteMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpPartyRegionNotMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\HelpRegionDeleteMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpRegionNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HelpSelfMessage;
@@ -175,12 +179,16 @@ final class Help extends UnitCommand implements Reassignment
 			if ($party === $this->unit->Party()) {
 				if ($isNot) {
 					$this->message(HelpRegionNotMessage::class)->e($region)->p($agreement);
+				} elseif ($agreement === Relation::NONE) {
+					$this->message(HelpRegionDeleteMessage::class)->e($region);
 				} else {
 					$this->message(HelpRegionMessage::class)->e($region)->p($agreement);
 				}
 			} else {
 				if ($isNot) {
 					$this->message(HelpPartyRegionNotMessage::class)->e($party)->e($region, HelpPartyRegionMessage::REGION)->p($agreement);
+				} elseif ($agreement === Relation::NONE) {
+					$this->message(HelpPartyRegionDeleteMessage::class)->e($party)->e($region, HelpPartyRegionMessage::REGION);
 				} else {
 					$this->message(HelpPartyRegionMessage::class)->e($party)->e($region, HelpPartyRegionMessage::REGION)->p($agreement);
 				}
@@ -189,12 +197,16 @@ final class Help extends UnitCommand implements Reassignment
 			if ($party === $this->unit->Party()) {
 				if ($isNot) {
 					$this->message(HelpNotMessage::class)->p($agreement);
+				} elseif ($agreement === Relation::NONE) {
+					$this->message(HelpDeleteMessage::class);
 				} else {
 					$this->message(HelpMessage::class)->p($agreement);
 				}
 			} else {
 				if ($isNot) {
 					$this->message(HelpPartyNotMessage::class)->e($party)->p($agreement);
+				} elseif ($agreement === Relation::NONE) {
+					$this->message(HelpPartyDeleteMessage::class)->e($party);
 				} else {
 					$this->message(HelpPartyMessage::class)->e($party)->p($agreement);
 				}
