@@ -128,18 +128,41 @@ final class Announcement extends UnitCommand implements Reassignment
 	}
 
 	private function sendToParty(Party $party): void {
+		$construction = $this->unit->Construction();
+		if ($construction) {
+			foreach ($construction->Inhabitants() as $unit) {
+				if ($this->trySendToPartyUnit($party, $unit)) {
+					return;
+				}
+			}
+		}
+		$vessel = $this->unit->Vessel();
+		if ($vessel) {
+			foreach ($vessel->Passengers() as $unit) {
+				if ($this->trySendToPartyUnit($party, $unit)) {
+					return;
+				}
+			}
+		}
 		$outlook = new Outlook(new Census($this->unit->Party()));
-		foreach ($outlook->getApparitions($this->unit->Region()) as $unit ) {
-			if ($unit->Party() === $party) {
-				$message   = $this->getMessage();
-				$sender    = (string)$this->unit->Party();
-				$recipient = (string)$party;
-				$this->message(AnnouncementPartyMessage::class, $party)->p($message)->p($sender, Announce::SENDER)->p($recipient, Announce::RECIPIENT);
-				$this->message(AnnouncementToPartyMessage::class)->p($message)->e($party);
+		foreach ($outlook->getApparitions($this->unit->Region()) as $unit) {
+			if ($this->trySendToPartyUnit($party, $unit)) {
 				return;
 			}
 		}
 		$this->message(AnnouncementNoPartyMessage::class)->e($party);
+	}
+
+	private function trySendToPartyUnit(Party $party, Unit $unit): bool {
+		if ($unit->Disguise() === $party || $unit->Party() === $party) {
+			$message   = $this->getMessage();
+			$sender    = (string)$this->unit->Party();
+			$recipient = (string)$party;
+			$this->message(AnnouncementPartyMessage::class, $party)->p($message)->p($sender, Announce::SENDER)->p($recipient, Announce::RECIPIENT);
+			$this->message(AnnouncementToPartyMessage::class)->p($message)->e($party);
+			return true;
+		}
+		return false;
 	}
 
 	private function sendToConstruction(Construction $construction): void {
