@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Factory\CommandFactory;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\Workload;
+use Lemuria\Engine\Fantasya\Realm\Fleet;
 use Lemuria\Engine\Fantasya\Realm\Fund;
 use Lemuria\Engine\Fantasya\Turn\Options;
 use Lemuria\Id;
@@ -208,6 +209,13 @@ final class Context implements Reassignment
 	 */
 	public function getCampaign(Region $region): Campaign {
 		return $this->state->getCampaign($region);
+	}
+
+	/**
+	 * Get the fleet of a realm.
+	 */
+	public function getRealmFleet(Realm $realm): Fleet {
+		return $this->state->getRealmFleet($realm);
 	}
 
 	/**

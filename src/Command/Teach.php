@@ -7,10 +7,13 @@ use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\RealmTrait;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachBonusMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachExceptionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TeachFleetMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TeachFleetNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachSelfMessage;
@@ -35,6 +38,7 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 {
 	use CamouflageTrait;
 	use ModifiedActivityTrait;
+	use RealmTrait;
 	use ReassignTrait;
 	use SiegeTrait;
 
@@ -48,6 +52,8 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 	private int $size = 0;
 
 	private float $bonus = 0.0;
+
+	private float $fleetTime = 0.0;
 
 	public function allows(Activity $activity): bool {
 		return false;
@@ -81,6 +87,11 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 			return;
 		}
 
+		if ($this->isRunCentrally($this)) {
+			$realm           = $this->unit->Region()->Realm();
+			$this->fleetTime = $this->context->getRealmFleet($realm)->getUsedCapacity($this->unit);
+		}
+
 		$ids = [];
 		$i   = 1;
 		if (count($this->phrase) >= $i) {
@@ -112,9 +123,18 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 	}
 
 	protected function run(): void {
+		if ($this->fleetTime > 0.0) {
+			if ($this->fleetTime < 1.0) {
+				$this->message(TeachFleetMessage::class);
+			} else {
+				$this->message(TeachFleetNothingMessage::class);
+			}
+		}
 		$this->calculateBonuses();
-		$bonus = round($this->bonus ** 2, 3);
-		$this->message(TeachBonusMessage::class)->p($this->size, TeachBonusMessage::STUDENTS)->p($bonus, TeachBonusMessage::BONUS);
+		if ($this->fleetTime < 1.0) {
+			$bonus = round($this->bonus ** 2, 3);
+			$this->message(TeachBonusMessage::class)->p($this->size, TeachBonusMessage::STUDENTS)->p($bonus, TeachBonusMessage::BONUS);
+		}
 	}
 
 	protected function commitCommand(UnitCommand $command): void {
@@ -217,7 +237,7 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 			$people += $learn->Unit()->Size();
 		}
 		$maxStudents = $this->unit->Size() * self::MAX_STUDENTS;
-		$this->bonus = $people > 0 ? min($maxStudents / $people, 1.0) : 1.0;
+		$this->bonus = (1.0 - $this->fleetTime) * ($people > 0 ? min($maxStudents / $people, 1.0) : 1.0);
 	}
 
 	private function createNewDefault(array $ids): void {

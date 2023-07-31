@@ -6,7 +6,10 @@ use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\OneActivityTrait;
+use Lemuria\Engine\Fantasya\Factory\RealmTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnEffectivityMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LearnFleetMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LearnFleetNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnMagicMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnOnlyMessage;
@@ -54,6 +57,7 @@ final class Learn extends UnitCommand implements Activity
 	use BuilderTrait;
 	use CollectTrait;
 	use OneActivityTrait;
+	use RealmTrait;
 	use StatisticsTrait;
 
 	public final const PROGRESS = 100;
@@ -89,6 +93,8 @@ final class Learn extends UnitCommand implements Activity
 
 	private float $effectivity = 1.0;
 
+	private float $fleetTime = 0.0;
+
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		$this->silver = self::createCommodity(Silver::class);
@@ -108,13 +114,18 @@ final class Learn extends UnitCommand implements Activity
 			return;
 		}
 
+		if ($this->isRunCentrally($this)) {
+			$realm           = $this->unit->Region()->Realm();
+			$this->fleetTime = $this->context->getRealmFleet($realm)->getUsedCapacity($this->unit);
+		}
+
 		$this->message(LearnTeachersMessage::class)->p(count($this->calculus()->getTeachers()));
 		$calculus       = $this->calculus();
 		$knowledge      = $this->unit->Knowledge();
 		$ability        = $knowledge[$this->talent];
 		$level          = $ability instanceof Ability ? $ability->Level() : 0;
-		$this->progress = $calculus->progress($this->talent, $this->effectivity());
-		$this->expense  = $this->unit->Size() * $this->talent->getExpense($level);
+		$this->progress = $calculus->progress($this->talent, (1.0 - $this->fleetTime) * $this->effectivity());
+		$this->expense  = (int)round((1.0 - $this->fleetTime) * $this->unit->Size() * $this->talent->getExpense($level));
 	}
 
 	protected function run(): void {
@@ -146,13 +157,19 @@ final class Learn extends UnitCommand implements Activity
 			$oldLevel = $this->calculus()->knowledge($this->talent)->Level();
 
 			$this->unit->Knowledge()->add($this->progress);
-			foreach ($this->calculus()->getTeachers() as $teacher/** @var Teach $teacher */) {
+			foreach ($this->calculus()->getTeachers() as $teacher) {
 				$teacher->hasTaught($this);
 			}
 			if ($this->effectivity < 1.0) {
 				$ship = $this->unit->Vessel()->Ship();
 				$this->message(LearnEffectivityMessage::class)->p($this->effectivity);
 				$this->message(LearnReducedMessage::class)->s($this->talent)->p($this->progress->Experience())->s($ship, LearnReducedMessage::SHIP);
+			} elseif ($this->fleetTime > 0.0) {
+				if ($this->fleetTime < 1.0) {
+					$this->message(LearnFleetMessage::class)->s($this->talent)->p($this->progress->Experience());
+				} else {
+					$this->message(LearnFleetNothingMessage::class)->s($this->talent);
+				}
 			} else {
 				$this->message(LearnProgressMessage::class)->s($this->talent)->p($this->progress->Experience());
 			}
