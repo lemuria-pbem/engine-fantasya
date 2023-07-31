@@ -30,7 +30,7 @@ final class Trespass extends DelegatedCommand
 			throw new InvalidCommandException($this, 'No recipient parameter in trespass.');
 		}
 		if ($n === 1) {
-			return new Enter($this->phrase, $this->context);
+			return $this->createTrespassWithAbandon(new Enter($this->phrase, $this->context));
 		}
 		if ($n === 2) {
 			$type = mb_strtolower($this->phrase->getParameter());
@@ -39,18 +39,19 @@ final class Trespass extends DelegatedCommand
 					'burg', 'gebäude', 'gebaeude' => new Enter($this->phrase, $this->context),
 					'schiff' => new Board($this->phrase, $this->context)
 				};
-				if ($this->unit->Construction()) {
-					$command = new CompositeCommand($this->phrase, $this->context);
-					return $command->setCommands([
-						new Abandon($this->phrase, $this->context),
-						$trespass
-					]);
-				}
-				return $trespass;
+				return $this->createTrespassWithAbandon($trespass);
 			} catch (\UnhandledMatchError $e) {
 				throw new UnknownCommandException($this, new CommandException('Invalid trespass type: ' . $type, previous: $e));
 			}
 		}
 		throw new UnknownCommandException($this);
+	}
+
+	private function createTrespassWithAbandon(Command $trespass): Command {
+		if ($this->unit->Construction()) {
+			$command = new CompositeCommand($this->phrase, $this->context);
+			return $command->setCommands([new Abandon($this->phrase, $this->context), $trespass]);
+		}
+		return $trespass;
 	}
 }
