@@ -18,9 +18,12 @@ class Wagoner
 	private int $outgoing;
 
 	public function __construct(protected readonly Unit $unit) {
-		$calculus       = new Calculus($this->unit);
-		$this->trip     = $calculus->getTrip();
-		$this->maximum  = max(0, $this->trip->Capacity() - $this->trip->Weight());
+		$calculus      = new Calculus($this->unit);
+		$this->trip    = $calculus->getTrip();
+		$this->maximum = max(0, $this->trip->Capacity() - $this->trip->Weight());
+		if ($this->trip->Speed() <= 1) {
+			$this->maximum = (int)round($this->maximum / 2);
+		}
 		$this->incoming = $this->maximum;
 		$this->outgoing = $this->incoming;
 	}
