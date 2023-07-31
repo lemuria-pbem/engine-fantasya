@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Travel;
 
-use Lemuria\Engine\Fantasya\Message\Unit\TravelAlternativeChaosMessage;
 use function Lemuria\randElement;
 use Lemuria\Engine\Fantasya\Effect\Airship;
 use Lemuria\Engine\Fantasya\Effect\SneakPastEffect;
@@ -13,6 +12,7 @@ use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\ContextTrait;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Message\Region\TravelUnitMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelAlternativeChaosMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelAlternativeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelAlternativeNavigableMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelCanalFeeMessage;

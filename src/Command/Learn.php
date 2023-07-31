@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Effect\TravelEffect;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\OneActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\RealmTrait;
@@ -19,6 +20,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\LearnSilverMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnTeachersMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnVesselMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Exception\LemuriaException;
@@ -28,7 +30,6 @@ use Lemuria\Model\Fantasya\Aura;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Ship\Boat;
 use Lemuria\Model\Fantasya\Ship\Dragonship;
 use Lemuria\Model\Fantasya\Ship\Longboat;
@@ -191,7 +192,7 @@ final class Learn extends UnitCommand implements Activity
 	}
 
 	private function effectivity(): float {
-		if ($this->unit->Region()->Landscape() instanceof Navigable) {
+		if ($this->hasTravelled()) {
 			$ship = $this->unit->Vessel()?->Ship();
 			if ($ship) {
 				$class = $ship::class;
@@ -202,5 +203,10 @@ final class Learn extends UnitCommand implements Activity
 			}
 		}
 		return $this->effectivity;
+	}
+
+	private function hasTravelled(): bool {
+		$effect = new TravelEffect(State::getInstance());
+		return Lemuria::Score()->find($effect->setUnit($this->unit)) instanceof TravelEffect;
 	}
 }
