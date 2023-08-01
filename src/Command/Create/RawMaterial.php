@@ -151,7 +151,11 @@ class RawMaterial extends AllocationCommand implements Activity
 		if ($this->isRunCentrally) {
 			return $reserve;
 		}
-		$quota = $this->unit->Party()->Regulation()->getQuotas($region)?->getQuota($commodity)?->Threshold();
+		if ($this->job->hasThreshold()) {
+			$quota = $this->job->Threshold();
+		} else {
+			$quota = $this->unit->Party()->Regulation()->getQuotas($region)?->getQuota($commodity)?->Threshold();
+		}
 		if (is_int($quota) && $quota > 0) {
 			Lemuria::Log()->debug('Availability of ' . $commodity . ' reduced due to quota.');
 			return max(0, $reserve - $quota);
@@ -215,8 +219,8 @@ class RawMaterial extends AllocationCommand implements Activity
 		$this->available  = $this->getAvailability();
 
 		if ($this->production > 0) {
-			if (count($this->phrase) === 2) {
-				$this->demand = max(0, (int)$this->phrase->getParameter());
+			if ($this->job->hasCount()) {
+				$this->demand = max(0, $this->job->Count());
 				if ($this->demand <= $this->production) {
 					$this->production = (int)ceil($this->demand / $factor);
 					$quantity         = new Quantity($this->getCommodity(), $this->production);

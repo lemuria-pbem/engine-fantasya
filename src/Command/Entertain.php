@@ -95,7 +95,12 @@ final class Entertain extends AllocationCommand implements Activity
 	 */
 	protected function createDemand(): void {
 		if ($this->phrase->count() > 0) {
-			$this->demand = max(0, (int)$this->phrase->getParameter());
+			$amount = (int)$this->phrase->getParameter();
+			if ($amount < 0) {
+				$quota  = abs($amount);
+				$amount = 0;
+			}
+			$this->demand = $amount;
 		}
 		$level = $this->getProductivity(Entertaining::class)->Level();
 		if ($level > 0) {
@@ -108,7 +113,9 @@ final class Entertain extends AllocationCommand implements Activity
 			$silver = self::createCommodity(Silver::class);
 			if (!$this->isRunCentrally) {
 				$region = $this->unit->Region();
-				$quota  = $this->unit->Party()->Regulation()->getQuotas($region)?->getQuota($silver)?->Threshold();
+				if (!isset($quota)) {
+					$quota = $this->unit->Party()->Regulation()->getQuotas($region)?->getQuota($silver)?->Threshold();
+				}
 				if (is_int($quota) && $quota > 0) {
 					$reserve   = $region->Resources()[$silver]->Count();
 					$available = max(0, $reserve - $quota);

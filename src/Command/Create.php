@@ -21,6 +21,7 @@ use Lemuria\Engine\Fantasya\Factory\Model\Herb as HerbModel;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg as GriffineggModel;
 use Lemuria\Model\Fantasya\Herb as HerbInterface;
+use function Lemuria\isPercentage;
 
 /**
  * Implementation of command MACHEN.
@@ -70,9 +71,21 @@ final class Create extends DelegatedCommand
 		}
 
 		// MACHEN <amount> <Ressource>
+		$threshold = null;
 		if (isInt($param)) {
+			$number = (int)$param;
+			if ($number < 0) {
+				$threshold = abs($number);
+				$number    = 0;
+			}
+			$what = $this->phrase->getLine(2);
+		} elseif (isPercentage($param)) {
+			$percentage = (int)substr($param, 0, strlen($param) - 1);
+			if ($percentage < 0) {
+				$threshold = abs($percentage);
+			}
+			$number = 0;
 			$what   = $this->phrase->getLine(2);
-			$number = max(0, (int)$param);
 		} else {
 			$what  = $param;
 			$param = $this->phrase->getParameter(2);
@@ -87,11 +100,11 @@ final class Create extends DelegatedCommand
 		// MACHEN Kräuter
 		$lower = mb_strtolower($what);
 		if ($lower === 'kraut' || $lower === 'kraeuter' || $lower === 'kräuter') {
-			return new Herb($this->phrase, $this->context, new Job(new HerbModel(), $number));
+			return new Herb($this->phrase, $this->context, new Job(new HerbModel(), $number, $threshold));
 		}
 		if ($lower === 'greifenei' || $lower === 'greifeneier') {
 			$egg = self::createCommodity(GriffineggModel::class);
-			return new Griffinegg($this->phrase, $this->context, new Job($egg, $number));
+			return new Griffinegg($this->phrase, $this->context, new Job($egg, $number, $threshold));
 		}
 
 		// MACHEN <Unicum> [<ID>]
@@ -101,7 +114,7 @@ final class Create extends DelegatedCommand
 
 		try {
 			$resource = $this->context->Factory()->resource($what);
-			$job      = new Job($resource, $number);
+			$job      = new Job($resource, $number, $threshold);
 			if ($resource instanceof HerbInterface) {
 				return new Herb($this->phrase, $this->context, $job);
 			}

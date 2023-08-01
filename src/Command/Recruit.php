@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Message\Party\RecruitPreventMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitGuardedMessage;
@@ -107,12 +106,14 @@ final class Recruit extends AllocationCommand
 	 * Determine the demand.
 	 */
 	protected function createDemand(): void {
-		$size = (int)$this->phrase->getParameter();
-		if ($size <= 0) {
-			throw new InvalidCommandException('Invalid size "' . $size . '".');
+		$region  = $this->unit->Region();
+		$peasant = self::createCommodity(Peasant::class);
+		$size    = (int)$this->phrase->getParameter();
+		if ($size < 0) {
+			$quota = abs($size);
+			$size  = $this->context->getAvailability($region)->getResource($peasant)->Count();
 		}
 
-		$peasant      = self::createCommodity(Peasant::class);
 		$this->demand = $size;
 		$free         = $this->getFreeSpace();
 		if ($free < $size) {
@@ -120,8 +121,9 @@ final class Recruit extends AllocationCommand
 		}
 
 		if (!$this->isRunCentrally) {
-			$region = $this->unit->Region();
-			$quota  = $this->unit->Party()->Regulation()->getQuotas($region)?->getQuota($peasant)?->Threshold();
+			if (!isset($quota)) {
+				$quota = $this->unit->Party()->Regulation()->getQuotas($region)?->getQuota($peasant)?->Threshold();
+			}
 			if (is_int($quota) && $quota > 0) {
 				$peasants  = $region->Resources()[$peasant]->Count();
 				$available = max(0, $peasants - $quota);

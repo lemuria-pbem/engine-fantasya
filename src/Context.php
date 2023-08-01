@@ -147,6 +147,13 @@ final class Context implements Reassignment
 	}
 
 	/**
+	 * Get a region's available resources.
+	 */
+	public function getAvailability(Region $region): Availability {
+		return $this->state->getAvailability($region);
+	}
+
+	/**
 	 * Get a region's allocation.
 	 */
 	public function getAllocation(Region $region): Allocation {
