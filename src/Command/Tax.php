@@ -18,6 +18,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TaxNoSilverMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxNotFightingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TaxWithoutWeaponMessage;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Quantity;
@@ -115,7 +116,24 @@ final class Tax extends AllocationCommand implements Activity
 				if ($this->demand > 0 && $this->demand < $this->rate) {
 					$this->rate = $this->demand;
 				}
+
 				$silver = self::createCommodity(Silver::class);
+				if (!$this->isRunCentrally) {
+					$region    = $this->unit->Region();
+					$quota = $this->unit->Party()->Regulation()->getQuotas($region)?->getQuota($silver)?->Threshold();
+					if (is_int($quota) && $quota > 0) {
+						$reserve   = $region->Resources()[$silver]->Count();
+						$available = max(0, $reserve - $quota);
+						if ($available < $this->rate) {
+							Lemuria::Log()->debug('Availability of ' . $silver . ' reduced due to quota.');
+							$this->rate = $available;
+							if ($this->demand > $available) {
+								$this->demand = $available;
+							}
+						}
+					}
+				}
+
 				$this->addToWorkload($this->rate);
 				$this->resources->add(new Quantity($silver, $this->rate));
 				$this->message(TaxDemandMessage::class)->p($this->collectors, TaxDemandMessage::COLLECTORS)->p($this->rate, TaxDemandMessage::RATE);

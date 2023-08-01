@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command\Create;
 
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Availability;
 use Lemuria\Engine\Fantasya\Command\AllocationCommand;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
@@ -26,6 +27,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\SawmillUnmaintainedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SawmillUnusableMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Building\Mine;
 use Lemuria\Model\Fantasya\Building\Quarry;
@@ -143,8 +145,23 @@ class RawMaterial extends AllocationCommand implements Activity
 
 	protected function getAvailability(): int {
 		$commodity = $this->getCommodity();
-		$resources = $this->unit->Region()->Resources();
-		return $resources[$commodity]->Count();
+		$region    = $this->unit->Region();
+		$resources = $region->Resources();
+		$reserve   = $resources[$commodity]->Count();
+		if ($this->isRunCentrally) {
+			return $reserve;
+		}
+		$quota = $this->unit->Party()->Regulation()->getQuotas($region)?->getQuota($commodity)?->Threshold();
+		if (is_int($quota) && $quota > 0) {
+			Lemuria::Log()->debug('Availability of ' . $commodity . ' reduced due to quota.');
+			return max(0, $reserve - $quota);
+		}
+		if (is_float($quota) && $quota < 1.0) {
+			Lemuria::Log()->debug('Availability of ' . $commodity . ' reduced due to quota.');
+			$pieces = Availability::HERBS_PER_REGION * $quota;
+			return max(0, $reserve - $pieces);
+		}
+		return $reserve;
 	}
 
 	protected function getRequiredTalent(): Requirement {
@@ -202,7 +219,7 @@ class RawMaterial extends AllocationCommand implements Activity
 				$this->demand = max(0, (int)$this->phrase->getParameter());
 				if ($this->demand <= $this->production) {
 					$this->production = (int)ceil($this->demand / $factor);
-					$quantity = new Quantity($this->getCommodity(), $this->production);
+					$quantity         = new Quantity($this->getCommodity(), $this->production);
 					$this->message(RawMaterialWantsMessage::class)->i($quantity);
 				} else {
 					$quantity = new Quantity($this->getCommodity(), $this->production);

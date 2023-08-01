@@ -12,6 +12,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\EntertainNoPeasantsMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EntertainNoSilverMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EntertainOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Party\EntertainPreventMessage;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
@@ -103,7 +104,24 @@ final class Entertain extends AllocationCommand implements Activity
 			if ($this->demand > 0 && $this->demand < $this->fee) {
 				$this->fee = $this->demand;
 			}
+
 			$silver = self::createCommodity(Silver::class);
+			if (!$this->isRunCentrally) {
+				$region = $this->unit->Region();
+				$quota  = $this->unit->Party()->Regulation()->getQuotas($region)?->getQuota($silver)?->Threshold();
+				if (is_int($quota) && $quota > 0) {
+					$reserve   = $region->Resources()[$silver]->Count();
+					$available = max(0, $reserve - $quota);
+					if ($available < $this->fee) {
+						Lemuria::Log()->debug('Availability of ' . $silver . ' reduced due to quota.');
+						$this->fee = $available;
+						if ($this->demand > $available) {
+							$this->demand = $available;
+						}
+					}
+				}
+			}
+
 			$this->addToWorkload($this->fee);
 			$this->resources->add(new Quantity($silver, $this->fee));
 		} else {

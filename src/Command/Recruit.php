@@ -14,6 +14,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\RecruitReducedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitTooExpensiveMessage;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Silver;
@@ -111,13 +112,27 @@ final class Recruit extends AllocationCommand
 			throw new InvalidCommandException('Invalid size "' . $size . '".');
 		}
 
+		$peasant      = self::createCommodity(Peasant::class);
 		$this->demand = $size;
 		$free         = $this->getFreeSpace();
 		if ($free < $size) {
 			$size = $free;
 		}
+
+		if (!$this->isRunCentrally) {
+			$region = $this->unit->Region();
+			$quota  = $this->unit->Party()->Regulation()->getQuotas($region)?->getQuota($peasant)?->Threshold();
+			if (is_int($quota) && $quota > 0) {
+				$peasants  = $region->Resources()[$peasant]->Count();
+				$available = max(0, $peasants - $quota);
+				if ($available < $size) {
+					$size = $available;
+					Lemuria::Log()->debug('Peasant availability reduced due to quota.');
+				}
+			}
+		}
+
 		$this->size = $size;
-		$peasant    = self::createCommodity(Peasant::class);
 		$this->resources->add(new Quantity($peasant, $size));
 	}
 

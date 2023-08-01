@@ -35,6 +35,8 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 
 	protected ?array $lastCheck = null;
 
+	protected bool $isRunCentrally;
+
 	/**
 	 * Create a new command for given Phrase.
 	 */
@@ -100,10 +102,11 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 			return;
 		}
 
+		$this->isRunCentrally = $this->isRunCentrally($this);
 		$this->initWorkload();
 		$this->createDemand();
 		if (count($this->resources)) {
-			if ($this->isRunCentrally($this)) {
+			if ($this->isRunCentrally) {
 				$this->allotment = $this->createAllotment($this);
 				Lemuria::Log()->debug('New allotment helper for realm ' . $this->allotment->Realm()->Id() . '.', ['command' => $this]);
 			} else {
