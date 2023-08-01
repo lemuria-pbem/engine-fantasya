@@ -13,6 +13,8 @@ use Lemuria\Engine\Fantasya\Message\Unit\QuotaSetHerbMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\QuotaSetMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\QuotaUnknownHerbageMessage;
 use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Quota as Model;
 use Lemuria\Model\Fantasya\Quotas;
@@ -27,6 +29,10 @@ use Lemuria\Model\Fantasya\Quotas;
  */
 class Quota extends UnitCommand
 {
+	use BuilderTrait;
+
+	private const PEASANT = ['bauer', 'bauern'];
+
 	private const HERB = ['kräuter', 'kraeuter'];
 
 	private Quotas $quotas;
@@ -48,6 +54,8 @@ class Quota extends UnitCommand
 		if ($commodity === 'nicht') {
 			if (in_array($amount, self::HERB)) {
 				$this->removeHerbQuota();
+			} elseif (in_array($amount, self::PEASANT)) {
+				$this->removeQuota(self::createCommodity(Peasant::class));
 			} else {
 				$this->removeQuota($this->context->Factory()->commodity($amount));
 			}
@@ -62,7 +70,11 @@ class Quota extends UnitCommand
 				if ((string)$value !== $amount) {
 					throw new InvalidCommandException($this, 'Quota must be number.');
 				}
-				$this->setQuota($value, $this->context->Factory()->commodity($commodity));
+				if (in_array($commodity, self::PEASANT)) {
+					$this->setQuota($value, self::createCommodity(Peasant::class));
+				} else {
+					$this->setQuota($value, $this->context->Factory()->commodity($commodity));
+				}
 			}
 		}
 	}
