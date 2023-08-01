@@ -39,6 +39,8 @@ final class Entertain extends AllocationCommand implements Activity
 
 	private int $demand = 0;
 
+	private ?int $threshold = null;
+
 	public function canBeCentralized(): bool {
 		return true;
 	}
@@ -97,8 +99,9 @@ final class Entertain extends AllocationCommand implements Activity
 		if ($this->phrase->count() > 0) {
 			$amount = (int)$this->phrase->getParameter();
 			if ($amount < 0) {
-				$quota  = abs($amount);
-				$amount = 0;
+				$quota           = abs($amount);
+				$this->threshold = $quota;
+				$amount          = 0;
 			}
 			$this->demand = $amount;
 		}
@@ -134,5 +137,9 @@ final class Entertain extends AllocationCommand implements Activity
 		} else {
 			$this->message(EntertainNoDemandMessage::class);
 		}
+	}
+
+	protected function getImplicitThreshold(): int|float|null {
+		return $this->threshold;
 	}
 }

@@ -43,6 +43,8 @@ final class Recruit extends AllocationCommand
 
 	private int $size;
 
+	private ?int $threshold = null;
+
 	public function canBeCentralized(): bool {
 		return true;
 	}
@@ -110,8 +112,9 @@ final class Recruit extends AllocationCommand
 		$peasant = self::createCommodity(Peasant::class);
 		$size    = (int)$this->phrase->getParameter();
 		if ($size < 0) {
-			$quota = abs($size);
-			$size  = $this->context->getAvailability($region)->getResource($peasant)->Count();
+			$quota           = abs($size);
+			$this->threshold = $quota;
+			$size            = $this->context->getAvailability($region)->getResource($peasant)->Count();
 		}
 
 		$this->demand = $size;
@@ -136,6 +139,10 @@ final class Recruit extends AllocationCommand
 
 		$this->size = $size;
 		$this->resources->add(new Quantity($peasant, $size));
+	}
+
+	protected function getImplicitThreshold(): int|float|null {
+		return $this->threshold;
 	}
 
 	private function getFreeSpace(): int {

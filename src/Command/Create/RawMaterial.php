@@ -143,6 +143,10 @@ class RawMaterial extends AllocationCommand implements Activity
 		throw new LemuriaException($resource . ' is not a commodity.');
 	}
 
+	protected function getImplicitThreshold(): int|float|null {
+		return $this->job->Threshold();
+	}
+
 	protected function getAvailability(): int {
 		$commodity = $this->getCommodity();
 		$region    = $this->unit->Region();

@@ -29,7 +29,8 @@ trait RealmTrait
 	}
 
 	protected function createAllotment(UnitCommand $command): Allotment {
-		return new Allotment($command->Unit()->Region()->Realm(), $this->context);
+		$allotment = new Allotment($command->Unit()->Region()->Realm(), $this->context);
+		return $allotment->setThreshold($this->getImplicitThreshold());
 	}
 
 	protected function createDistributor(UnitCommand $command): Distributor {
@@ -53,6 +54,10 @@ trait RealmTrait
 			return (int)round(max($average, $structurePoints[$region->Id()->Id()]));
 		}
 		return $this->context->getIntelligence($region)->getInfrastructure();
+	}
+
+	protected function getImplicitThreshold(): int|float|null {
+		return null;
 	}
 
 	private function isValidNeighbour(Realm $realm, Region $region): bool {

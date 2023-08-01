@@ -58,6 +58,10 @@ final class Herb extends RawMaterial
 		throw new LemuriaException($resource . ' is not a herb.');
 	}
 
+	protected function getImplicitThreshold(): int|float|null {
+		return $this->job->Threshold();
+	}
+
 	protected function getAvailability(): int {
 		$availability = new Availability($this->unit->Region());
 		return $availability->getResource($this->getCommodity())->Count();

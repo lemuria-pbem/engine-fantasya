@@ -39,6 +39,8 @@ class Allotment
 
 	private RealmQuota $quotas;
 
+	private int|float|null $threshold = null;
+
 	private Fleet $fleet;
 
 	private int $availableSum;
@@ -51,6 +53,11 @@ class Allotment
 
 	public function Realm(): Realm {
 		return $this->realm;
+	}
+
+	public function setThreshold(int|float|null $threshold): Allotment {
+		$this->threshold = $threshold;
+		return $this;
 	}
 
 	/**
@@ -91,10 +98,10 @@ class Allotment
 			if ($this->isUnderSiege($region) || $this->getCheckByAgreement(Relation::RESOURCES)) {
 				continue;
 			}
-			$id                      = $region->Id()->Id();
-			$this->region[$id]       = $region;
-			$threshold               = $this->quotas->getQuota($region, $commodity)->Threshold();
-			$resource                = $this->state->getAvailability($region)->getResource($commodity)->Count();
+			$id                = $region->Id()->Id();
+			$this->region[$id] = $region;
+			$threshold         = $this->threshold !== null ? $this->threshold : $this->quotas->getQuota($region, $commodity)->Threshold();
+			$resource          = $this->state->getAvailability($region)->getResource($commodity)->Count();
 			if (is_int($threshold)) {
 				$reducedResource = $resource - $threshold;
 			} else {
