@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Realm;
 
+use Lemuria\Engine\Fantasya\Availability;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\Model\RealmQuota;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
@@ -94,7 +95,12 @@ class Allotment
 			$this->region[$id]       = $region;
 			$threshold               = $this->quotas->getQuota($region, $commodity)->Threshold();
 			$resource                = $this->state->getAvailability($region)->getResource($commodity)->Count();
-			$reducedResource         = is_int($threshold) ? $resource - $threshold : $threshold * $resource;
+			if (is_int($threshold)) {
+				$reducedResource = $resource - $threshold;
+			} else {
+				$pieces          = (int)floor(Availability::HERBS_PER_REGION * $threshold);
+				$reducedResource = $resource - $pieces;
+			}
 			$reserve                 = max(0, (int)floor($reducedResource / $quota));
 			$availability            = (int)floor($quota * $reserve);
 			$this->availability[$id] = $availability;
