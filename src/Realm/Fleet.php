@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Realm;
 
 use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Realm;
 use Lemuria\Model\Fantasya\Unit;
@@ -91,7 +90,7 @@ class Fleet
 	public function fetch(int $weight): int {
 		$fetch  = 0;
 		$remove = [];
-		while ($fetch < $weight && !empty($this->incoming)) {
+		while ($weight > 0 && !empty($this->incoming)) {
 			$transport = null;
 			foreach ($this->incoming as $id => $capacity) {
 				$wagoner = $this->wagoner[$id];
@@ -119,15 +118,16 @@ class Fleet
 				$this->incoming[$id] = $transport->fetch($weight);
 				$fetch              += $weight;
 				arsort($this->incoming);
+				Lemuria::Log()->debug('Wagoner ' . $transport->Unit()->Id() . ' fetches ' . ($weight / 100) . ' GE, ' . ($this->incoming[$id] / 100) .' GE remain.');
 				return $fetch;
 			}
-			$part    = $weight - $capacity;
-			$fetch  += $part;
-			$weight -= $part;
+			$fetch  += $capacity;
+			$weight -= $capacity;
 			unset($this->incoming[$id]);
+			Lemuria::Log()->debug('Wagoner ' . $transport->Unit()->Id() . ' fetches ' . ($weight / 100) . ' GE.');
 		}
 
-		throw new LemuriaException(); // We should never get here.
+		return $fetch;
 	}
 
 	/**
@@ -136,7 +136,7 @@ class Fleet
 	public function send(int $weight): int {
 		$send   = 0;
 		$remove = [];
-		while ($send < $weight && !empty($this->outgoing)) {
+		while ($weight > 0 && !empty($this->outgoing)) {
 			$transport = null;
 			foreach ($this->outgoing as $id => $capacity) {
 				$wagoner = $this->wagoner[$id];
@@ -164,15 +164,16 @@ class Fleet
 				$this->outgoing[$id] = $transport->send($weight);
 				$send               += $weight;
 				arsort($this->outgoing);
+				Lemuria::Log()->debug('Wagoner ' . $transport->Unit()->Id() . ' sends ' . ($weight / 100) . ' GE, ' . ($this->outgoing[$id] / 100) .' GE remain.');
 				return $send;
 			}
-			$part    = $weight - $capacity;
-			$send   += $part;
-			$weight -= $part;
+			$send   += $capacity;
+			$weight -= $capacity;
 			unset($this->outgoing[$id]);
+			Lemuria::Log()->debug('Wagoner ' . $transport->Unit()->Id() . ' sends ' . ($weight / 100) . ' GE.');
 		}
 
-		throw new LemuriaException(); // We should never get here.
+		return $send;
 	}
 
 	protected function isAvailable(Unit $unit): bool {

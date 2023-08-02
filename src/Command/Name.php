@@ -231,8 +231,8 @@ final class Name extends UnitCommand implements Reassignment
 		$realm  = $region->Realm();
 		if ($realm) {
 			$possessions = $this->unit->Party()->Possessions();
-			if ($possessions->has($realm->Identifier())) {
-				$possession = $possessions[$realm->Identifier()];
+			if ($possessions->has($realm->Id())) {
+				$possession = $possessions[$realm->Id()];
 				if ($possession === $realm) {
 					if ($realm->Territory()->Central() === $region) {
 						$realm->setName($name);

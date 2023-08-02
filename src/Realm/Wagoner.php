@@ -45,7 +45,7 @@ class Wagoner
 	}
 
 	public function UsedCapacity(): float {
-		$used = $this->maximum > 0 ? max($this->incoming, $this->outgoing) / $this->maximum : 1.0;
+		$used = $this->maximum > 0 ? ($this->maximum - min($this->incoming, $this->outgoing)) / $this->maximum : 1.0;
 		if ($used < 0.0 || $used > 1.0) {
 			throw new LemuriaException('Used capacity of wagoner ' . $this->unit . ' out of range: ' . $used);
 		}

@@ -171,15 +171,14 @@ final class Number extends UnitCommand
 		$realm  = $region->Realm();
 		if ($realm) {
 			$possessions = $this->unit->Party()->Possessions();
-			if ($possessions->has($realm->Identifier())) {
-				$possession = $possessions[$realm->Identifier()];
+			if ($possessions->has($realm->Id())) {
+				$possession = $possessions[$realm->Id()];
 				if ($possession === $realm) {
 					if ($realm->Territory()->Central() === $region) {
-						if ($possessions->has($identifier)) {
+						if ($possessions->identify($identifier)) {
 							$this->message(NumberRealmUsedMessage::class)->p($identifier->Id())->p($realm->Name(), NumberRealmUsedMessage::REALM);
 						} else {
-							$possessions->remove($realm);
-							$possessions->add($realm->setIdentifier($identifier));
+							$realm->setIdentifier($identifier);
 							$this->message(NumberRealmMessage::class)->p($identifier->Id())->p($realm->Name(), NumberRealmUsedMessage::REALM);
 						}
 					} else {

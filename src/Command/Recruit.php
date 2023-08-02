@@ -11,6 +11,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\RecruitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitPaymentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitReducedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitTooExpensiveMessage;
+use Lemuria\Engine\Fantasya\Realm\Allotment;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
@@ -139,6 +140,11 @@ final class Recruit extends AllocationCommand
 
 		$this->size = $size;
 		$this->resources->add(new Quantity($peasant, $size));
+	}
+
+	protected function createAllotment(UnitCommand $command): Allotment {
+		$allotment = parent::createAllotment($command);
+		return $allotment->disableFleetCheck();
 	}
 
 	protected function getImplicitThreshold(): int|float|null {

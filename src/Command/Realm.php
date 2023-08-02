@@ -170,8 +170,9 @@ final class Realm extends UnitCommand
 
 	private function getRealm(): ?Model {
 		$possessions = $this->unit->Party()->Possessions();
-		if ($possessions->has($this->id)) {
-			return $possessions->offsetGet($this->id);
+		$id          = $possessions->identify($this->id);
+		if ($id) {
+			return $possessions->offsetGet($id);
 		}
 		return null;
 	}

@@ -25,6 +25,8 @@ class Allotment
 	use SiegeTrait;
 	use UnitTrait;
 
+	private int $center;
+
 	/**
 	 * @var array<int, Region>
 	 */
@@ -43,9 +45,10 @@ class Allotment
 
 	private Fleet $fleet;
 
-	private int $availableSum;
+	private bool $isFleetEnabled = true;
 
 	public function __construct(private readonly Realm $realm, protected Context $context) {
+		$this->center = $realm->Territory()->Central()->Id()->Id();
 		$this->state  = State::getInstance();
 		$this->quotas = new RealmQuota($realm);
 		$this->fleet  = State::getInstance()->getRealmFleet($realm);
@@ -69,31 +72,52 @@ class Allotment
 		$quota      = $consumer->getQuota();
 		foreach ($consumer->getDemand() as $quantity) {
 			$commodity = $quantity->Commodity();
+			$piece     = $commodity->Weight();
+			$demand    = $quantity->Count();
 			$this->calculateAvailability($commodity, $quota);
-			$total = $this->calculateTotal($commodity, min($quantity->Count(), $this->availableSum));
-			$rate  = $total / $this->availableSum;
+			$fleetTotal = $this->calculateFleetTotal($commodity);
+			$local      = $this->availability[$this->center];
+			$rate       = $demand / ($fleetTotal + $local);
 			foreach ($this->region as $id => $region) {
+				if ($id === $this->center) {
+					continue;
+				}
 				$part = (int)round($rate * $this->availability[$id]);
-				if ($part > $total) {
-					$part = $total;
+				if ($part > $demand) {
+					$part = $demand;
+				}
+				if ($this->isFleetEnabled) {
+					$weight = $this->fleet->fetch($part * $piece);
+					$part   = (int)floor($weight / $piece);
 				}
 				if ($part > 0) {
 					$this->state->getAvailability($region)->remove(new Quantity($commodity, $part));
 					$partQuantity = new Quantity($commodity, $part);
 					$resources->add($partQuantity);
-					$total -= $part;
+					$demand -= $part;
 					Lemuria::Log()->debug('Allotment of ' . $partQuantity . ' in region ' . $id . ' for consumer ' . $consumer->getId() . '.');
 				}
+			}
+			$demand = min($demand, $local);
+			if ($demand > 0) {
+				$this->state->getAvailability($this->region[$this->center])->remove(new Quantity($commodity, $demand));
+				$partQuantity = new Quantity($commodity, $demand);
+				$resources->add($partQuantity);
+				Lemuria::Log()->debug('Allotment of ' . $partQuantity . ' in region ' . $this->center . ' for consumer ' . $consumer->getId() . '.');
 			}
 		}
 		$consumer->allocate($resources);
 	}
 
+	public function disableFleetCheck(): Allotment {
+		$this->isFleetEnabled = false;
+		Lemuria::Log()->debug('Fleet check is disabled for this command');
+		return $this;
+	}
+
 	protected function calculateAvailability(Commodity $commodity, float $quota): void {
 		$this->region       = [];
 		$this->availability = [];
-		$this->availableSum = 0;
-
 		foreach ($this->realm->Territory() as $region) {
 			if ($this->isUnderSiege($region) || $this->getCheckByAgreement(Relation::RESOURCES)) {
 				continue;
@@ -111,14 +135,15 @@ class Allotment
 			$reserve                 = max(0, (int)floor($reducedResource / $quota));
 			$availability            = (int)floor($quota * $reserve);
 			$this->availability[$id] = $availability;
-			$this->availableSum     += $availability;
 		}
 	}
 
-	protected function calculateTotal(Commodity $commodity, int $amount): int {
-		$piece  = $commodity->Weight();
-		$weight = $amount * $piece;
-		$weight = $this->fleet->fetch($weight);
-		return (int)floor($weight / $piece);
+	protected function calculateFleetTotal(Commodity $commodity): int {
+		$availableSum = array_sum($this->availability) - $this->availability[$this->center];
+		if ($this->isFleetEnabled) {
+			$fleetMaximum = (int)floor($this->fleet->Incoming() / $commodity->Weight());
+			return min($availableSum, $fleetMaximum);
+		}
+		return $availableSum;
 	}
 }
