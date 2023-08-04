@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Factory\Supply;
 use Lemuria\Engine\Fantasya\Factory\UnitTrait;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\DistributorFleetMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Commodity;
@@ -17,8 +18,9 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Realm;
-use Lemuria\Engine\Fantasya\State;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Helper for central luxury trade in realms.
@@ -30,6 +32,10 @@ class Distributor
 	use SiegeTrait;
 	use UnitTrait;
 
+	private readonly Realm $realm;
+
+	private int $center;
+
 	/**
 	 * @var array<int, int>
 	 */
@@ -40,21 +46,30 @@ class Distributor
 	private Fleet $fleet;
 
 	/**
+	 * @var array<int, Region>
+	 */
+	private array $regions = [];
+
+	/**
 	 * @var array<int, Supply>
 	 */
 	private array $supply = [];
 
 	private Commodity $silver;
 
-	public function __construct(private readonly Realm $realm, protected Context $context) {
-		$this->state = State::getInstance();
-		$this->fleet = State::getInstance()->getRealmFleet($realm);
-		foreach ($realm->Territory() as $region) {
-			if ($this->isUnderSiege($region) || !$this->getCheckByAgreement(Relation::TRADE)) {
+	public function __construct(Unit $unit, protected Context $context) {
+		$this->unit   = $unit;
+		$this->realm  = $unit->Region()->Realm();
+		$this->center = $this->realm->Territory()->Central()->Id()->Id();
+		$this->state  = State::getInstance();
+		$this->fleet  = State::getInstance()->getRealmFleet($this->realm);
+		foreach ($this->realm->Territory() as $region) {
+			if ($this->isUnderSiege($region) || $this->getCheckByAgreement(Relation::TRADE)) {
 				continue;
 			}
 			if ($this->state->getIntelligence($region)->getCastle()?->Size() > Site::MAX_SIZE) {
-				$this->supply[$region->Id()->Id()] = new Supply($region);
+				$this->regions[$region->Id()->Id()] = $region;
+				//$this->supply[$region->Id()->Id()] = new Supply($region);
 			}
 		}
 		$this->silver = self::createCommodity(Silver::class);
@@ -64,8 +79,12 @@ class Distributor
 		return $this->realm;
 	}
 
+	public function Regions(): array {
+		return $this->regions;
+	}
+
 	public function distribute(Merchant $merchant): void {
-		if (empty($this->supply)) {
+		if (empty($this->regions)) {
 			Lemuria::Log()->debug('There is no supply to trade in realm ' . $this->realm . '.');
 			return;
 		}
@@ -79,19 +98,28 @@ class Distributor
 			$total    = $demand->Count();
 			$value    = $luxury->Value();
 			$weight   = $luxury->Weight();
-			$quantity = new Quantity($luxury, (int)floor($capacity / $luxury->Weight()));
+			$quantity = new Quantity($luxury, (int)floor($capacity / $weight));
 			$this->message(DistributorFleetMessage::class, $unit)->p($capacity)->i($quantity);
 			Lemuria::Log()->debug('Merchant ' . $unit . ' wants to ' . ($isBuy ? 'buy' : 'sell') . ' ' . $demand . ' in realm ' . $this->realm . '.');
 
 			$price = [];
 			$step  = [];
 			$max   = [];
+			foreach ($this->regions as $id => $region) {
+				$supply            = $this->state->getSupply($region, $luxury);
+				$price[$id]        = $supply->Price();
+				$step[$id]         = $supply->getStep();
+				$max[$id]          = $supply->count();
+				$this->supply[$id] = $supply;
+			}
+			/*
 			foreach ($this->supply as $id => $supply) {
 				$supply->setLuxury($luxury);
 				$price[$id] = $supply->Price();
 				$step[$id]  = $supply->getStep();
 				$max[$id]   = $supply->count();
 			}
+			*/
 			arsort($step);
 
 			$plan = [];
@@ -115,11 +143,18 @@ class Distributor
 				if ($next < $total) {
 					$price[$id] += $value;
 					$plan[$id][] = $next;
+					$max[$id]   -= $next;
+					$total      -= $next;
+					if ($id !== $this->center) {
+						$capacity -= $next * $weight;
+					}
 				} else {
-					$plan[$id][] = min($next, $total);
+					$plan[$id][] = $total;
+					$total       = 0;
 				}
-				$max[$id] -= $next;
-				$total -= $next;
+			}
+			if ($total > 0) {
+				$plan[$this->center][] = $total;
 			}
 
 			$trade = [];
@@ -130,7 +165,7 @@ class Distributor
 				$total     += $this->supply[$id]->estimate($amount);
 			}
 			$merchant->costEstimation($total);
-			Lemuria::Log()->debug('Cost estimation to ' . ($isBuy ? 'buy' : 'sell') . $luxury . ' in realm ' . $this->realm . ' is ' . $total . ' silver.');
+			Lemuria::Log()->debug('Cost estimation to ' . ($isBuy ? 'buy ' : 'sell ') . $luxury . ' in realm ' . $this->realm . ' is ' . $total . ' silver.');
 
 			$trades = $this->state->getWorkload($unit);
 			foreach ($trade as $id => $amount) {
@@ -142,6 +177,7 @@ class Distributor
 					Lemuria::Log()->debug('The peasants in ' . $region . ' have ' . $regionSilver . ' left for trading.');
 				}
 				$traded = 0;
+				$silver = 0;
 				for ($i = 0; $i < $amount; $i++) {
 					if ($trades->CanWork()) {
 						$price = $supply->ask();
@@ -160,6 +196,7 @@ class Distributor
 							}
 							$trades->add();
 							$traded++;
+							$silver += $price;
 						} else {
 							Lemuria::Log()->debug('Merchant ' . $merchant . ' cannot trade any more ' . $luxury . '.');
 						}
@@ -167,6 +204,14 @@ class Distributor
 						Lemuria::Log()->debug('Merchant ' . $merchant . ' has no more trades.');
 					}
 				}
+				if ($isBuy) {
+					$this->fleet->fetch($traded * $weight);
+					$this->fleet->send($silver * $this->silver->Weight());
+				} else {
+					$this->fleet->send($traded * $weight);
+					$this->fleet->fetch($silver * $this->silver->Weight());
+				}
+				$merchant->finish();
 				Lemuria::Log()->debug('Merchant ' . $merchant . ' has ' . ($isBuy ? 'bought' : 'sold') . ' ' . $traded . ' ' . $luxury . ' in region ' . $region . '.');
 			}
 		}

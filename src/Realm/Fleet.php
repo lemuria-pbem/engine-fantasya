@@ -123,8 +123,9 @@ class Fleet
 			}
 			$fetch  += $capacity;
 			$weight -= $capacity;
+			$transport->fetch($capacity);
 			unset($this->incoming[$id]);
-			Lemuria::Log()->debug('Wagoner ' . $transport->Unit()->Id() . ' fetches ' . ($weight / 100) . ' GE.');
+			Lemuria::Log()->debug('Wagoner ' . $transport->Unit()->Id() . ' fetches ' . ($capacity / 100) . ' GE.');
 		}
 
 		return $fetch;

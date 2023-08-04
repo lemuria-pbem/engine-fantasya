@@ -147,8 +147,8 @@ final class Commerce
 				if ($luxury instanceof Luxury) {
 					$demand = $quantity->Count();
 					if (!isset($this->goods[$class])) {
-						$supply = new Supply($this->region);
-						$this->goods[$class] = ['demand' => [], 'good' => $luxury, 'supply' => $supply->setLuxury($luxury)];
+						$supply              = State::getInstance()->getSupply($this->region, $luxury);
+						$this->goods[$class] = ['demand' => [], 'good' => $luxury, 'supply' => $supply];
 					}
 					$this->goods[$class]['demand'][$id] = $demand;
 				}

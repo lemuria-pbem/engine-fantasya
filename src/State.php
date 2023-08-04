@@ -2,9 +2,11 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Campaign;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
+use Lemuria\Engine\Fantasya\Factory\Supply;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Realm\Fleet;
 use Lemuria\Engine\Fantasya\Turn\Options;
@@ -12,7 +14,10 @@ use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
+use Lemuria\Model\Fantasya\Commodity\Luxury\Gem;
+use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Intelligence;
+use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Market\Trade;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Realm;
@@ -22,6 +27,8 @@ use Lemuria\Model\Reassignment;
 
 final class State implements Reassignment
 {
+	use BuilderTrait;
+
 	private static ?self $instance = null;
 
 	public bool $isTravelling = false;
@@ -61,6 +68,11 @@ final class State implements Reassignment
 	 * @var array<int, Commerce>
 	 */
 	private array $commerce = [];
+
+	/**
+	 * @var array<string, Supply>
+	 */
+	private array $supply = [];
 
 	/**
 	 * @var array<int, Intelligence>
@@ -250,6 +262,28 @@ final class State implements Reassignment
 	}
 
 	/**
+	 * Get a region's luxury supply.
+	 */
+	public function getSupply(Region $region, ?Luxury $luxury = null): Supply {
+		if (!$luxury) {
+			$id = $region->Id()->Id() . '-';
+			foreach ($this->supply as $key => $supply) {
+				if (str_starts_with($key, $id)) {
+					return $supply;
+				}
+			}
+			$luxury = self::createCommodity(Gem::class);
+		}
+
+		$id = $this->id($region, $luxury);
+		if (!isset($this->supply[$id])) {
+			$supply            = new Supply($region);
+			$this->supply[$id] = $supply->setLuxury($luxury);
+		}
+		return $this->supply[$id];
+	}
+
+	/**
 	 * Get a region's intelligence.
 	 */
 	public function getIntelligence(Region $region): Intelligence {
@@ -320,6 +354,13 @@ final class State implements Reassignment
 	}
 
 	/**
+	 * @return array<Supply>
+	 */
+	public function getAllSupplies(): array {
+		return array_values($this->supply);
+	}
+
+	/**
 	 * @return array<Behaviour>
 	 */
 	public function getAllMonsters(): array {
@@ -348,5 +389,9 @@ final class State implements Reassignment
 
 	public function injectIntoTurn(Action $action): void {
 		$this->turn->inject($action);
+	}
+
+	private function id(Region $region, Luxury $luxury): string {
+		return $region->Id()->Id() . '-' . getClass($luxury);
 	}
 }

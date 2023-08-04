@@ -89,4 +89,16 @@ final class Sell extends CommerceCommand
 		}
 		return $demand;
 	}
+
+	protected function getMaximumSupplyInRealm(): int {
+		$maximum = 0;
+		foreach ($this->distributor->Regions() as $region) {
+			/** @var Luxury $luxury */
+			$luxury = $this->commodity;
+			if (isset($region->Luxuries()[$luxury])) {
+				$maximum += $this->context->getSupply($region, $luxury)->getStep();
+			}
+		}
+		return $maximum;
+	}
 }

@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Exception\Command\PartyAlreadySetException;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Factory\CommandFactory;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
+use Lemuria\Engine\Fantasya\Factory\Supply;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Realm\Fleet;
 use Lemuria\Engine\Fantasya\Realm\Fund;
@@ -17,6 +18,7 @@ use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Intelligence;
+use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Market\Trade;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Realm;
@@ -165,6 +167,13 @@ final class Context implements Reassignment
 	 */
 	public function getCommerce(Region $region): Commerce {
 		return $this->state->getCommerce($region);
+	}
+
+	/**
+	 * Get a region's luxury supply.
+	 */
+	public function getSupply(Region $region, ?Luxury $luxury = null): Supply {
+		return $this->state->getSupply($region, $luxury);
 	}
 
 	/**

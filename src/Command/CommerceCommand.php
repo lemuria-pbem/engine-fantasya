@@ -9,7 +9,6 @@ use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\CommerceActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\RealmTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
-use Lemuria\Engine\Fantasya\Factory\Supply;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\CommerceGuardedMessage;
@@ -123,11 +122,12 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 
 		if ($this->isTradePossible()) {
 			$this->trades = $this->context->getWorkload($this->unit);
-			$this->createGoods();
 			if ($this->isRunCentrally($this)) {
 				$this->distributor = $this->createDistributor($this);
+				$this->createGoods();
 				Lemuria::Log()->debug('New distributor helper for realm ' . $this->distributor->Realm()->Id() . '.', ['command' => $this]);
 			} else {
+				$this->createGoods();
 				$commerce = $this->context->getCommerce($this->unit->Region());
 				if (count($this->goods)) {
 					$commerce->register($this);
@@ -178,9 +178,10 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	protected function getDemand(): Quantity {
 		$n = $this->phrase->count();
 		if ($n === 1) {
-			$demand       = $this->getMaximumSupply();
-			$this->demand = 0;
-			$luxury       = $this->phrase->getParameter();
+			$luxury          = $this->phrase->getParameter();
+			$this->commodity = $this->context->Factory()->commodity($luxury);
+			$demand          = $this->getMaximumSupply();
+			$this->demand    = 0;
 		} elseif ($n === 2) {
 			$parameter = $this->phrase->getParameter();
 			if (in_array(strtolower($parameter), self::ALL)) {
@@ -190,12 +191,12 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 				$demand       = max(0, (int)$parameter);
 				$this->demand = $demand;
 			}
-			$luxury = $this->phrase->getParameter(2);
+			$luxury          = $this->phrase->getParameter(2);
+			$this->commodity = $this->context->Factory()->commodity($luxury);
 		} else {
 			throw new UnknownCommandException($this);
 		}
 
-		$this->commodity = $this->context->Factory()->commodity($luxury);
 		if ($this->demand === 0 && $this->commodity instanceof Luxury) {
 			$luxuries = $this->unit->Region()->Luxuries();
 			$offer    = $luxuries->Offer();
@@ -217,8 +218,13 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 		return $this->remaining;
 	}
 
+	abstract protected function getMaximumSupplyInRealm(): int;
+
 	protected function getMaximumSupply(): int {
-		$supply = new Supply($this->unit->Region());
+		if ($this->isRunCentrally($this)) {
+			return $this->getMaximumSupplyInRealm();
+		}
+		$supply = $this->context->getSupply($this->unit->Region());
 		return $supply->getStep();
 	}
 

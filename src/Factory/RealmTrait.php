@@ -34,7 +34,7 @@ trait RealmTrait
 	}
 
 	protected function createDistributor(UnitCommand $command): Distributor {
-		return new Distributor($command->Unit()->Region()->Realm(), $this->context);
+		return new Distributor($command->Unit(), $this->context);
 	}
 
 	protected function calculateInfrastructure(Region $region): int {

@@ -33,28 +33,26 @@ final class MarketUpdate extends AbstractEvent
 
 	protected function initialize(): void {
 		Lemuria::Log()->debug('Setting luxury prices from commerce supplies.');
-		foreach ($this->state->getAllCommerces() as $commerce) {
-			$region   = $commerce->Region();
-			$luxuries = $region->Luxuries();
-			$offer    = $luxuries->Offer()->Commodity();
-			foreach ($commerce->getSupplies() as $supply) {
-				$commodity = $supply->Luxury();
-				$price     = $supply->Price();
-				if ($commodity === $offer) {
-					$luxury = $luxuries->Offer();
-					if ($price > $luxury->Price()) {
-						$luxury->setPrice($price);
-						$this->message(MarketUpdateOfferMessage::class, $region)->s($commodity)->p($price);
-					}
-				} else {
-					$luxury = $luxuries[$commodity];
-					if ($price < $luxury->Price()) {
-						$luxury->setPrice($price);
-						$this->message(MarketUpdateDemandMessage::class, $region)->s($commodity)->p($price);
-					}
+		foreach ($this->state->getAllSupplies() as $supply) {
+			$region    = $supply->Region();
+			$commodity = $supply->Luxury();
+			$price     = $supply->Price();
+			$luxuries  = $region->Luxuries();
+			$offer     = $luxuries->Offer()->Commodity();
+			if ($commodity === $offer) {
+				$luxury = $luxuries->Offer();
+				if ($price > $luxury->Price()) {
+					$luxury->setPrice($price);
+					$this->message(MarketUpdateOfferMessage::class, $region)->s($commodity)->p($price);
 				}
-				$this->commerce[$this->id($region, $commodity)] = true;
+			} else {
+				$luxury = $luxuries[$commodity];
+				if ($price < $luxury->Price()) {
+					$luxury->setPrice($price);
+					$this->message(MarketUpdateDemandMessage::class, $region)->s($commodity)->p($price);
+				}
 			}
+			$this->commerce[$this->id($region, $commodity)] = true;
 		}
 	}
 
