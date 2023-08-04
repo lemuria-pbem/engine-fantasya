@@ -24,6 +24,7 @@ final class Game extends DelegatedEvent
 	protected function createDelegates(): void {
 		Lemuria::Log()->debug('Adding game events.');
 
+		Lemuria::Log()->debug('Skipping ZombieInfection.');
 		$regions = [];
 		foreach (Party::get(Id::fromId(Spawn::ZOMBIES))->People() as $unit) {
 			if ($unit->Race() instanceof Zombie) {
@@ -35,7 +36,7 @@ final class Game extends DelegatedEvent
 			$event  = new ZombieInfection($this->state);
 			$infect = (1.0 + (randInt(0, 40) - 20) / 100) * 0.01;
 			$event->setOptions([ZombieInfection::REGION => $id, ZombieInfection::INFECT => $infect, ZombieInfection::CHANCE => 0.01]);
-			$this->delegates[] = $event;
+			//$this->delegates[] = $event;
 		}
 	}
 }
