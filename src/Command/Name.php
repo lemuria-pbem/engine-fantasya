@@ -3,7 +3,9 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\Construction\NameConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\NameOwnerMessage;
 use Lemuria\Engine\Fantasya\Message\Party\NameContinentMessage;
@@ -40,6 +42,7 @@ use Lemuria\Model\Reassignment;
  */
 final class Name extends UnitCommand implements Reassignment
 {
+	use GrammarTrait;
 	use ReassignTrait;
 
 	private const UNICUM = 'gegenstand';
@@ -112,11 +115,17 @@ final class Name extends UnitCommand implements Reassignment
 
 	private function renameParty(string $name): void {
 		$party = $this->unit->Party();
+		if (empty($name)) {
+			$name = 'Partei ' . $party->Id();
+		}
 		$party->setName($name);
 		$this->message(NamePartyMessage::class, $party)->p($name);
 	}
 
 	private function renameUnit(string $name): void {
+		if (empty($name)) {
+			$name = 'Einheit ' . $this->unit->Id();
+		}
 		$this->unit->setName($name);
 		$this->message(NameUnitMessage::class)->p($name);
 	}
@@ -133,6 +142,9 @@ final class Name extends UnitCommand implements Reassignment
 
 			$owner = $construction->Inhabitants()->Owner();
 			if ($owner && $owner->Party() === $this->unit->Party()) {
+				if (empty($name)) {
+					$name = $this->translateSingleton($construction->Building(), casus: Casus::Nominative) . ' ' . $construction->Id();
+				}
 				$construction->setName($name);
 				$this->message(NameConstructionMessage::class, $construction)->p($name);
 				return;
@@ -145,6 +157,9 @@ final class Name extends UnitCommand implements Reassignment
 
 	private function renameRegion(string $name): void {
 		$region = $this->unit->Region();
+		if (empty($name)) {
+			$name = $this->translateSingleton($region->Landscape(), casus: Casus::Nominative) . ' ' . $region->Id();
+		}
 		$estate = $region->Estate();
 		if ($estate->isEmpty()) {
 			$region->setName($name);
@@ -176,6 +191,9 @@ final class Name extends UnitCommand implements Reassignment
 		if ($vessel) {
 			$captain = $vessel->Passengers()->Owner();
 			if ($captain && $captain->Party() === $this->unit->Party()) {
+				if (empty($name)) {
+					$name = $this->translateSingleton($vessel->Ship(), casus: Casus::Nominative) . ' ' . $vessel->Id();
+				}
 				$vessel->setName($name);
 				$this->message(NameVesselMessage::class, $vessel)->p($name);
 				return;
@@ -191,6 +209,9 @@ final class Name extends UnitCommand implements Reassignment
 		$id       = $this->toId($id);
 		if ($treasury->has($id)) {
 			$unicum = $treasury[$id];
+			if (empty($name)) {
+				$name = $this->translateSingleton($unicum->Composition(), casus: Casus::Nominative) . ' ' . $unicum->Id();
+			}
 			$unicum->setName($name);
 			$this->message(NameUnicumMessage::class)->e($unicum)->p($name);
 		} else {
