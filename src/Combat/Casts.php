@@ -2,8 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
+use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
-use Lemuria\Engine\Fantasya\Command\Cast;
 use Lemuria\Engine\Fantasya\Exception\ActionException;
 use Lemuria\Lemuria;
 
@@ -26,12 +26,14 @@ class Casts
 		ksort($this->casts);
 		foreach ($this->casts as $order => $casts) {
 			Lemuria::Log()->debug('Casting battle spells of order ' . $order . '.');
-			foreach ($casts as $cast /** @var Cast $cast */) {
-				Lemuria::Log()->debug('Casting ' . $cast . '.');
+			foreach ($casts as $cast /** @var AbstractBattleSpell $cast */) {
+				Lemuria::Log()->debug('Casting ' . getClass($cast) . '.');
 				try {
-					$cast->cast();
+					//TODO Refactoring: Get rid of unit parameter.
+					$cast->cast($cast->getGrade()->Unit());
 				} catch (ActionException $e) {
-					$cast->setException($e);
+					//TODO Refactoring: What to do with this exception?
+					//$cast->setException($e);
 				}
 			}
 		}

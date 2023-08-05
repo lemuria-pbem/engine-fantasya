@@ -309,7 +309,8 @@ class Combat
 				$unit = $combatant->Unit();
 				if ($unit->BattleSpells()?->Preparation()) {
 					$grade = new BattleSpellGrade($unit->BattleSpells()->Preparation(), $this);
-					$spell = $this->context->Factory()->castBattleSpell($grade);
+					//TODO Refactoring: Get rid of $grade->setUnit().
+					$spell = $this->context->Factory()->castBattleSpell($grade->setUnit($unit));
 					$casts->add($spell->setCaster($caster)->setVictim($victim));
 				}
 			}
@@ -583,7 +584,8 @@ class Combat
 	protected function castCombatSpell(array $units, Ranks $caster, Ranks $victim): void {
 		foreach ($units as $unit) {
 			$grade = new BattleSpellGrade($unit->BattleSpells()->Combat(), $this);
-			$spell = $this->context->Factory()->castBattleSpell($grade);
+			//TODO Refactoring: Get rid of $grade->setUnit().
+			$spell = $this->context->Factory()->castBattleSpell($grade->setUnit($unit));
 			$grade = $spell->setCaster($caster)->setVictim($victim)->cast($unit);
 			if ($grade > 0) {
 				$this->setHasCast($unit, $caster[Rank::FRONT]);

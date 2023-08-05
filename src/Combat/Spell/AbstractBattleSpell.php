@@ -39,6 +39,13 @@ abstract class AbstractBattleSpell
 		return $this->grade->Spell();
 	}
 
+	/**
+	 * @todo Refactoring: Check if this is needed anymore.
+	 */
+	public function getGrade(): BattleSpellGrade {
+		return $this->grade;
+	}
+
 	public function setCaster(Ranks $ranks): AbstractBattleSpell {
 		$this->caster = $ranks;
 		return $this;
