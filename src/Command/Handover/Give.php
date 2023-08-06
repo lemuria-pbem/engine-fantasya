@@ -64,10 +64,10 @@ final class Give extends UnitCommand implements Reassignment
 		$count           = $this->phrase->getParameter($i++);
 		$commodity       = $this->phrase->getLine($i);
 		$this->parseObject($count, $commodity);
-		$this->resources = $this->fillResources($this->resourceCount);
 	}
 
 	protected function run(): void {
+		$this->resources = $this->fillResources($this->resourceCount);
 		if ($this->recipient->Region() !== $this->unit->Region()) {
 			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
 			return;
