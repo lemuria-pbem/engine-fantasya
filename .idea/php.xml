@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="LaravelPintOptionsConfiguration">
+    <option name="ruleset" value="psr12" />
+  </component>
   <component name="MessDetectorOptionsConfiguration">
     <option name="transferred" value="true" />
   </component>
@@ -134,6 +137,9 @@
       <extension name="zend" enabled="false" />
       <extension name="zmq" enabled="false" />
     </extensions>
+  </component>
+  <component name="PhpStanOptionsConfiguration">
+    <option name="transferred" value="true" />
   </component>
   <component name="PhpUnit">
     <phpunit_settings>
