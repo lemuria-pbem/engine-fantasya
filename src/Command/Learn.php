@@ -42,6 +42,7 @@ use Lemuria\Model\Fantasya\Talent\Entertaining;
 use Lemuria\Model\Fantasya\Talent\Magic;
 use Lemuria\Model\Fantasya\Talent\Navigation;
 use Lemuria\Model\Fantasya\Talent\Perception;
+use Lemuria\Model\Fantasya\Talent\Riding;
 use Lemuria\Model\Fantasya\Talent\Shipbuilding;
 use Lemuria\Model\Fantasya\Talent\Spearfighting;
 use Lemuria\Model\Fantasya\Talent\Tactics;
@@ -84,6 +85,8 @@ final class Learn extends UnitCommand implements Activity
 		]
 	];
 
+	private const FLEET_EXCEPTION = [Riding::class => true];
+
 	private Talent $talent;
 
 	private ?Ability $progress = null;
@@ -115,7 +118,7 @@ final class Learn extends UnitCommand implements Activity
 			return;
 		}
 
-		if ($this->isRunCentrally($this)) {
+		if ($this->isRunCentrally($this) && !isset(self::FLEET_EXCEPTION[$this->talent::class])) {
 			$realm           = $this->unit->Region()->Realm();
 			$this->fleetTime = $this->context->getRealmFleet($realm)->getUsedCapacity($this->unit);
 		}
