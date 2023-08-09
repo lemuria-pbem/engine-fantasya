@@ -224,6 +224,9 @@ class RawMaterial extends AllocationCommand implements Activity
 		$this->available  = $this->getAvailability();
 
 		if ($this->production > 0 && $this->available > 0) {
+			if ($this->available < $this->production) {
+				$this->production = $this->available;
+			}
 			if ($this->job->hasCount()) {
 				$this->demand = max(0, $this->job->Count());
 				if ($this->demand <= $this->production) {

@@ -130,12 +130,19 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 				$this->context->getAllocation($this->unit->Region())->distribute($this);
 			}
 		}
+		$this->commitCommand($this);
 	}
 
 	/**
 	 * Determine the demand.
 	 */
 	abstract protected function createDemand(): void;
+
+	protected function commitCommand(UnitCommand $command): void {
+		if (!$this->resources->isEmpty()) {
+			parent::commitCommand($command);
+		}
+	}
 
 	/**
 	 * Do the check before allocation.
