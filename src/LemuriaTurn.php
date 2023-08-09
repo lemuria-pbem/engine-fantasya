@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Command\Initiate;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Event\DelegatedEvent;
 use Lemuria\Engine\Fantasya\Exception\ActionException;
+use Lemuria\Engine\Fantasya\Exception\AlternativeException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Exception\UnknownArgumentException;
@@ -211,6 +212,8 @@ class LemuriaTurn implements Turn
 			foreach ($actions as $action /** @var Action $action */) {
 				try {
 					$action->prepare();
+				} catch (AlternativeException) {
+					Lemuria::Log()->debug('Alternative activity not prepared.', ['activity' => $action]);
 				} catch (ActionException $e) {
 					Lemuria::Log()->error($e->getMessage(), ['stage' => 'prepare', 'action' => $action]);
 					$this->addActionException($e, $action);

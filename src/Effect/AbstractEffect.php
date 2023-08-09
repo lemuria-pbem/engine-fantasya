@@ -47,7 +47,7 @@ abstract class AbstractEffect implements Effect, Reassignment
 	}
 
 	public function isPrepared(): bool {
-		return $this->isPrepared && $this->canExecute;
+		return $this->preparation > 0 && $this->canExecute;
 	}
 
 	public function needsAftercare(): bool {

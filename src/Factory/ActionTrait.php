@@ -12,7 +12,7 @@ trait ActionTrait
 
 	private Priority $priority = Priority::Middle;
 
-	private bool $isPrepared = false;
+	private int $preparation = 0;
 
 	public function Priority(): Priority {
 		return $this->priority;
@@ -22,7 +22,24 @@ trait ActionTrait
 	 * Check if the action has been prepared and is ready to execute.
 	 */
 	public function isPrepared(): bool {
-		return $this->isPrepared;
+		return $this->preparation > 0;
+	}
+
+	/**
+	 * Check if the action is an alternative action.
+	 */
+	public function isAlternative(): bool {
+		return $this->preparation < 0 || $this->preparation > 1;
+	}
+
+	/**
+	 * Mark the action as alternative.
+	 */
+	public function setAlternative(): static {
+		if (!$this->preparation) {
+			$this->preparation--;
+		}
+		return $this;
 	}
 
 	protected function getPriority(): string {
@@ -44,7 +61,7 @@ trait ActionTrait
 		try {
 			$this->initialize();
 			if ($this->checkSize()) {
-				$this->isPrepared = true;
+				$this->preparation = $this->preparation < 0 ? 2 : 1;
 			}
 		} catch (CommandException $e) {
 			throw $e;

@@ -2,8 +2,10 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
+use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
+use Lemuria\Engine\Fantasya\Exception\AlternativeException;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Perception;
@@ -18,6 +20,9 @@ trait UnitTrait
 	protected function commitCommand(UnitCommand $command): void {
 		$protocol = $this->context->getProtocol($this->unit);
 		if (!$protocol->commit($command)) {
+			if ($command instanceof Activity && $command->isAlternative()) {
+				throw new AlternativeException($command);
+			}
 			throw new ActivityException($command);
 		}
 	}
