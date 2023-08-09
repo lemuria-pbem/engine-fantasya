@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Spell;
 
-use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\FireballHitMessage;
@@ -14,7 +13,6 @@ use Lemuria\Model\Fantasya\Commodity\Protection\Ironshield;
 use Lemuria\Model\Fantasya\Commodity\Protection\Mail;
 use Lemuria\Model\Fantasya\Commodity\Protection\Woodshield;
 use Lemuria\Model\Fantasya\Talent\Magic;
-use Lemuria\Model\Fantasya\Unit;
 
 class Fireball extends AbstractBattleSpell
 {
@@ -27,11 +25,10 @@ class Fireball extends AbstractBattleSpell
 		Woodshield::class => 2
 	];
 
-	public function cast(Unit $unit): int {
-		$damage = parent::cast($unit);
+	public function cast(): int {
+		$damage = parent::cast();
 		if ($damage > 0) {
-			$calculus = new Calculus($unit);
-			$level    = $calculus->knowledge(Magic::class)->Level();
+			$level    = $this->calculus->knowledge(Magic::class)->Level();
 			$victims  = self::VICTIMS + (int)round(sqrt($level)) - 1;
 			$victims  = $this->castOnCombatants($this->victim[BattleRow::Front->value], $damage, $victims);
 			$victims  = $this->castOnCombatants($this->victim[BattleRow::Back->value], $damage, $victims);

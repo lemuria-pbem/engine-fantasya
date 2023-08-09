@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Spell;
 
-use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\BattleLog;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\SongOfPeaceCombatantMessage;
@@ -11,17 +10,15 @@ use Lemuria\Engine\Fantasya\Combat\Rank;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Talent\Magic;
-use Lemuria\Model\Fantasya\Unit;
 
 class SongOfPeace extends AbstractBattleSpell
 {
 	protected const POINTS = 10;
 
-	public function cast(Unit $unit): int {
-		$grade = parent::cast($unit);
+	public function cast(): int {
+		$grade = parent::cast();
 		if ($grade > 0) {
-			$calculus    = new Calculus($unit);
-			$level       = $calculus->knowledge(Magic::class)->Level();
+			$level       = $this->calculus->knowledge(Magic::class)->Level();
 			$gradePoints = $grade * self::POINTS * $level;
 			$gradePoints = $this->castOnCombatants($this->victim[BattleRow::Front->value], $gradePoints);
 			$gradePoints = $this->castOnCombatants($this->victim[BattleRow::Back->value], $gradePoints);

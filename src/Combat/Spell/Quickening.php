@@ -2,12 +2,10 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Spell;
 
-use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Rank;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Talent\Magic;
-use Lemuria\Model\Fantasya\Unit;
 
 class Quickening extends AbstractBattleSpell
 {
@@ -19,12 +17,11 @@ class Quickening extends AbstractBattleSpell
 
 	protected bool $addQuickening;
 
-	public function cast(Unit $unit): int {
-		$grade = parent::cast($unit);
+	public function cast(): int {
+		$grade = parent::cast();
 		if ($grade > 0) {
 			$fighters       = $grade * self::FIGHTERS;
-			$calculus       = new Calculus($unit);
-			$level          = $calculus->knowledge(Magic::class)->Level();
+			$level          = $this->calculus->knowledge(Magic::class)->Level();
 			$this->duration = self::DURATION + $level - $this->grade->Spell()->Difficulty();
 
 			// First iteration: Add Quickening to fighters that have no Quickening yet.

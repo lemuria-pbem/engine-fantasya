@@ -21,7 +21,6 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
 use Lemuria\Model\Fantasya\Factory\RepairableCatalog;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Repairable;
-use Lemuria\Model\Fantasya\Unit;
 
 class RustyMist extends AbstractBattleSpell
 {
@@ -37,8 +36,8 @@ class RustyMist extends AbstractBattleSpell
 		$this->repairables = new RepairableCatalog();
 	}
 
-	public function cast(Unit $unit): int {
-		$grade = parent::cast($unit);
+	public function cast(): int {
+		$grade = parent::cast();
 		if ($grade > 0) {
 			$this->rustCombatants($this->victim[BattleRow::Front->value], $grade);
 			$this->rustCombatants($this->victim[BattleRow::Back->value], $grade);

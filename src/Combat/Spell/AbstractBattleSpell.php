@@ -39,11 +39,9 @@ abstract class AbstractBattleSpell
 		return $this->grade->Spell();
 	}
 
-	/**
-	 * @todo Refactoring: Check if this is needed anymore.
-	 */
-	public function getGrade(): BattleSpellGrade {
-		return $this->grade;
+	public function setCalculus(Calculus $calculus): AbstractBattleSpell {
+		$this->calculus = $calculus;
+		return $this;
 	}
 
 	public function setCaster(Ranks $ranks): AbstractBattleSpell {
@@ -56,10 +54,10 @@ abstract class AbstractBattleSpell
 		return $this;
 	}
 
-	public function cast(Unit $unit): int {
-		$this->calculus = new Calculus($unit);
-		$initialGrade   = $this->grade($unit);
-		$grade          = $this->modifyReliability($initialGrade);
+	public function cast(): int {
+		$unit         = $this->calculus->Unit();
+		$initialGrade = $this->grade($unit);
+		$grade        = $this->modifyReliability($initialGrade);
 		if ($grade > 0) {
 			$this->consume($unit, $grade);
 			Lemuria::Log()->debug('Unit ' . $unit . ' casts ' . $this->grade->Spell() . ' with grade ' . $grade . '.');

@@ -39,9 +39,10 @@ class ElementalBeing extends AbstractBattleSpell
 		}
 	}
 
-	public function cast(Unit $unit): int {
-		$grade = parent::cast($unit);
+	public function cast(): int {
+		$grade = parent::cast();
 		if ($grade > 0) {
+			$unit      = $this->calculus->Unit();
 			$party     = $unit->Party();
 			$region    = $unit->Region();
 			$landscape = $region->Landscape();

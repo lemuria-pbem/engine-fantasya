@@ -29,11 +29,9 @@ class Casts
 			foreach ($casts as $cast /** @var AbstractBattleSpell $cast */) {
 				Lemuria::Log()->debug('Casting ' . getClass($cast) . '.');
 				try {
-					//TODO Refactoring: Get rid of unit parameter.
-					$cast->cast($cast->getGrade()->Unit());
+					$cast->cast();
 				} catch (ActionException $e) {
-					//TODO Refactoring: What to do with this exception?
-					//$cast->setException($e);
+					Lemuria::Log()->critical($e->getMessage(), ['cast' => $cast]);
 				}
 			}
 		}
