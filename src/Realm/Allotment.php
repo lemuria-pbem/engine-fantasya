@@ -63,6 +63,11 @@ class Allotment
 		return $this;
 	}
 
+	public function getAvailability(Consumer $consumer, Commodity $commodity): int {
+		$this->calculateAvailability($commodity, $consumer->getQuota());
+		return array_sum($this->availability);
+	}
+
 	/**
 	 * Start resource distribution.
 	 */

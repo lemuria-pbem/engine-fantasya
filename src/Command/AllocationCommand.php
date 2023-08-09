@@ -104,12 +104,14 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 
 		$this->isRunCentrally = $this->isRunCentrally($this);
 		$this->initWorkload();
+		if ($this->isRunCentrally) {
+			$this->allotment = $this->createAllotment($this);
+			Lemuria::Log()->debug('New allotment helper for realm ' . $this->allotment->Realm()->Id() . '.', ['command' => $this]);
+		}
+
 		$this->createDemand();
 		if (count($this->resources)) {
-			if ($this->isRunCentrally) {
-				$this->allotment = $this->createAllotment($this);
-				Lemuria::Log()->debug('New allotment helper for realm ' . $this->allotment->Realm()->Id() . '.', ['command' => $this]);
-			} else {
+			if (!$this->isRunCentrally) {
 				$this->context->getAllocation($this->unit->Region())->register($this);
 			}
 		} else {

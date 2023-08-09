@@ -732,7 +732,7 @@
 		"RawMaterialNoDemandMessage": "Die Einheit $id kann {g/akk:kein:$material} produzieren.",
 		"RawMaterialOnlyMessage": "Die Einheit $id kann nur $output mit $talent produzieren.",
 		"RawMaterialOutputMessage": "Die Einheit $id produziert $output mit $talent.",
-		"RawMaterialResourcesMessage": "Die Einheit $id kann {g/akk:kein:$material} finden.",
+		"RawMaterialResourcesMessage": "Die Einheit $id kann {g/akk:kein verfügbares:$material} finden.",
 		"RawMaterialWantsMessage": "Die Einheit $id möchte $quantity produzieren.",
 		"ReadMessage": "Die Einheit $unit hat {g/akk:das:$composition} $unicum untersucht.",
 		"ReadNoCompositionMessage": "Die Einheit $id hat {g/akk:kein:$composition} mit der Nummer $unicum.",
@@ -1397,6 +1397,14 @@
 			"n": ["kein", "keines", "keinem", "kein"],
 			"p": ["kein", "keines", "keinem", "keinen"],
 			"q": ["kein", "keines", "keinem", "kein"]
+		},
+		"kein verfügbares": {
+			"numerus": 0,
+			"f": ["keine verfügbare", "keiner verfügbaren", "keiner verfügbaren", "keine verfügbare"],
+			"m": ["kein verfügbarer", "keines verfügbaren", "keinen verfügbaren", "keinen verfügbaren"],
+			"n": ["kein verfügbares", "keines verfügbaren", "keinem verfügbaren", "kein verfügbares"],
+			"p": ["kein verfügbares", "keines verfügbaren", "keinem verfügbaren", "kein verfügbares"],
+			"q": ["kein verfügbares", "keines verfügbaren", "keinem verfügbaren", "kein verfügbares"]
 		},
 		"keine": {
 			"numerus": 1,

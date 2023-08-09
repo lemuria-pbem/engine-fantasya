@@ -14,6 +14,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\QuotaSetMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\QuotaUnknownHerbageMessage;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Quota as Model;
@@ -31,9 +32,11 @@ class Quota extends UnitCommand
 {
 	use BuilderTrait;
 
+	private const HERB = ['kräuter', 'kraeuter'];
+
 	private const PEASANT = ['bauer', 'bauern'];
 
-	private const HERB = ['kräuter', 'kraeuter'];
+	private const TREE = ['baum', 'bäume'];
 
 	private Quotas $quotas;
 
@@ -56,6 +59,8 @@ class Quota extends UnitCommand
 				$this->removeHerbQuota();
 			} elseif (in_array($amount, self::PEASANT)) {
 				$this->removeQuota(self::createCommodity(Peasant::class));
+			} elseif (in_array($amount, self::TREE)) {
+				$this->removeQuota(self::createCommodity(Wood::class));
 			} else {
 				$this->removeQuota($this->context->Factory()->commodity($amount));
 			}
@@ -72,6 +77,8 @@ class Quota extends UnitCommand
 				}
 				if (in_array($commodity, self::PEASANT)) {
 					$this->setQuota($value, self::createCommodity(Peasant::class));
+				} elseif (in_array($commodity, self::TREE)) {
+					$this->setQuota($value, self::createCommodity(Wood::class));
 				} else {
 					$this->setQuota($value, $this->context->Factory()->commodity($commodity));
 				}

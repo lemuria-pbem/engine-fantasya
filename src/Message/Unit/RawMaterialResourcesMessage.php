@@ -16,7 +16,7 @@ class RawMaterialResourcesMessage extends AbstractUnitMessage
 	protected Singleton $material;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' cannot find any ' . $this->material . '.';
+		return 'Unit ' . $this->id . ' cannot find any available ' . $this->material . '.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {

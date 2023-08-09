@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Exception;
 
+use function Lemuria\mbUcFirst;
 use Lemuria\Singleton;
 
 /**
@@ -10,6 +11,9 @@ use Lemuria\Singleton;
 class UnknownItemException extends UnknownArgumentException
 {
 	public function __construct(Singleton|string $item, ?CommandException $exception = null) {
+		if (is_string($item)) {
+			$item = mbUcFirst($item);
+		}
 		parent::__construct($item, 'Unknown item ' . parent::PLACEHOLDER . '.', $exception);
 	}
 }

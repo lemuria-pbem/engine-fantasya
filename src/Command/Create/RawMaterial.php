@@ -149,12 +149,13 @@ class RawMaterial extends AllocationCommand implements Activity
 
 	protected function getAvailability(): int {
 		$commodity = $this->getCommodity();
+		if ($this->isRunCentrally) {
+			return $this->allotment->getAvailability($this, $commodity);
+		}
+
 		$region    = $this->unit->Region();
 		$resources = $region->Resources();
 		$reserve   = $resources[$commodity]->Count();
-		if ($this->isRunCentrally) {
-			return $reserve;
-		}
 		if ($this->job->hasThreshold()) {
 			$quota = $this->job->Threshold();
 		} else {
@@ -222,7 +223,7 @@ class RawMaterial extends AllocationCommand implements Activity
 		$this->production = $this->reduceByWorkload($production);
 		$this->available  = $this->getAvailability();
 
-		if ($this->production > 0) {
+		if ($this->production > 0 && $this->available > 0) {
 			if ($this->job->hasCount()) {
 				$this->demand = max(0, $this->job->Count());
 				if ($this->demand <= $this->production) {
