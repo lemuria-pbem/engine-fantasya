@@ -5,12 +5,14 @@ namespace Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\OneActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\RealmTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnEffectivityMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnFleetMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnFleetNothingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\LearnHasReachedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnMagicMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LearnOnlyMessage;
@@ -23,7 +25,6 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
-use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Aura;
@@ -53,6 +54,7 @@ use Lemuria\Model\Fantasya\Talent\Tactics;
  * The command increases the current unit's knowledge in one skill.
  *
  * - LERNEN <skill>
+ * - LERNEN <skill> <level>
  */
 final class Learn extends UnitCommand implements Activity
 {
@@ -89,6 +91,8 @@ final class Learn extends UnitCommand implements Activity
 
 	private Talent $talent;
 
+	private int $level = 0;
+
 	private ?Ability $progress = null;
 
 	private Commodity $silver;
@@ -123,18 +127,32 @@ final class Learn extends UnitCommand implements Activity
 			$this->fleetTime = $this->context->getRealmFleet($realm)->getUsedCapacity($this->unit);
 		}
 
-		$this->message(LearnTeachersMessage::class)->p(count($this->calculus()->getTeachers()));
-		$calculus       = $this->calculus();
-		$knowledge      = $this->unit->Knowledge();
-		$ability        = $knowledge[$this->talent];
-		$level          = $ability instanceof Ability ? $ability->Level() : 0;
-		$this->progress = $calculus->progress($this->talent, (1.0 - $this->fleetTime) * $this->effectivity());
-		$this->expense  = (int)round((1.0 - $this->fleetTime) * $this->unit->Size() * $this->talent->getExpense($level));
+		if ($this->phrase->count() === 2) {
+			$parameter = $this->phrase->getParameter(2);
+			$level     = (int)$parameter;
+			if ($level > 0 && (string)$level === $parameter) {
+				$this->level = $level;
+			} else {
+				throw new InvalidCommandException($this);
+			}
+		}
+
+		$calculus  = $this->calculus();
+		$knowledge = $this->unit->Knowledge();
+		$ability   = $knowledge[$this->talent];
+		$level     = $ability instanceof Ability ? $ability->Level() : 0;
+		if ($this->level <= 0 || $level < $this->level) {
+			$this->message(LearnTeachersMessage::class)->p(count($this->calculus()->getTeachers()));
+			$this->progress = $calculus->progress($this->talent, (1.0 - $this->fleetTime) * $this->effectivity());
+			$this->expense  = (int)round((1.0 - $this->fleetTime) * $this->unit->Size() * $this->talent->getExpense($level));
+			$this->commitCommand($this);
+		}
 	}
 
 	protected function run(): void {
 		if (!$this->progress) {
-			throw new LemuriaException('No progress initialized.');
+			$this->message(LearnHasReachedMessage::class)->s($this->talent)->p($this->level);
+			return;
 		}
 
 		if ($this->effectivity > 0.0) {
@@ -191,6 +209,12 @@ final class Learn extends UnitCommand implements Activity
 		} else {
 			$ship = $this->unit->Vessel()->Ship();
 			$this->message(LearnVesselMessage::class)->s($this->talent)->s($ship, LearnVesselMessage::SHIP);
+		}
+	}
+
+	protected function commitCommand(UnitCommand $command): void {
+		if ($this->progress) {
+			parent::commitCommand($command);
 		}
 	}
 

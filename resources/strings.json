@@ -553,6 +553,7 @@
 		"LearnEffectivityMessage": "Die Einheit $id an Bord des Schiffes hat eine Lerneffektivität von $effectivity.",
 		"LearnFleetMessage": "Die Einheit $id übernimmt Transporte im Reich und kann $talent nur mit $experience Erfahrungspunkten lernen.",
 		"LearnFleetNothingMessage": "Die Einheit $id ist mit Transporten im Reich zu beschäftigt, um $talent zu lernen.",
+		"LearnHasReachedMessage": "Die Einheit $id hat im Lernen von $talent die Stufe $experience bereits erreicht.",
 		"LearnMagicMessage": "Die Einheit $id erreicht eine neue Magiestufe und erhält {$aura:Aurapunkt}.",
 		"LearnNotMessage": "Die Einheit $id kann kein Silber ausgeben, um $talent zu lernen.",
 		"LearnOnlyMessage": "Die Einheit $id kann nur $silver Silber ausgeben, um $talent zu lernen.",
