@@ -152,6 +152,7 @@
 		"Vessel": "Schiff"
 	},
 	"exception": {
+		"InvalidAlternative": "Nur lange Befehle können alternativ ausgeführt werden.",
 		"InvalidCommand": "Die Befehlssyntax ist ungültig.",
 		"InvalidId": "'$id' ist keine gültige Nummer.",
 		"PartyAlreadySet": "Der Partei-Befehl kann nur einmal ausgeführt werden.",

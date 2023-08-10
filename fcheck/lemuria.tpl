@@ -14,6 +14,8 @@
 ^(locale) +[a-zA-Z0-9]+$
 ^(region) +.+$
 
+^(al|alt|alte|alter|altern|alterna|alternat|alternati|ælternativ|alternative) +[a-zäöüß]+( .+)?$
+
 ^(ange|angeb|angebo|angebot) +([0-9-]+|\*) +[a-zäöüß ]+[0-9-]+ +[a-zäöüß ]+$
 
 ^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren)( +[a-z0-9]{1,6})+$

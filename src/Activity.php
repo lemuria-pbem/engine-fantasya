@@ -28,4 +28,9 @@ interface Activity extends Command
 	 * Check if this activity allows execution of another activity.
 	 */
 	public function allows(Activity $activity): bool;
+
+	/**
+	 * Set activity as alternative.
+	 */
+	public function setAlternative(): void;
 }

@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Combat\Spell\AbstractBattleSpell;
 use Lemuria\Engine\Fantasya\Command\AbstractCommand;
 use Lemuria\Engine\Fantasya\Command\Accept;
 use Lemuria\Engine\Fantasya\Command\Allow;
+use Lemuria\Engine\Fantasya\Command\Alternative;
 use Lemuria\Engine\Fantasya\Command\Amount;
 use Lemuria\Engine\Fantasya\Command\Announcement;
 use Lemuria\Engine\Fantasya\Command\Apply\AbstractApply;
@@ -332,6 +333,7 @@ class CommandFactory
 	protected array $verbs = [
 		'//'           => 'KOMMENTAR',
 		'@'            => 'VORLAGE',
+		'ALTERNATIVE'  => true,
 		'ANGEBOT'      => true,
 		'ANGREIFEN'    => 'ATTACKIEREN',
 		'ANGRIFF'      => 'ATTACKIEREN',
@@ -932,6 +934,7 @@ class CommandFactory
 		$verb = $this->identifyVerb($phrase->getVerb());
 		try {
 			$command = match ($verb) {
+				'ALTERNATIVE'  => Alternative::class,
 				'ANGEBOT'      => Offer::class,
 				'ATTACKIEREN'  => Attack::class,
 				'BANNER'       => Banner::class,

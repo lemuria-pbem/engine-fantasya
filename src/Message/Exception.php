@@ -6,6 +6,8 @@ enum Exception
 {
 	case None;
 
+	case InvalidAlternative;
+
 	case InvalidCommand;
 
 	case InvalidId;

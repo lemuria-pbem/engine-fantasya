@@ -35,11 +35,10 @@ trait ActionTrait
 	/**
 	 * Mark the action as alternative.
 	 */
-	public function setAlternative(): static {
+	public function setAlternative(): void {
 		if (!$this->preparation) {
 			$this->preparation--;
 		}
-		return $this;
 	}
 
 	protected function getPriority(): string {
