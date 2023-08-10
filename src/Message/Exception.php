@@ -19,4 +19,6 @@ enum Exception
 	case TempUnitNotMapped;
 
 	case UnitNotFound;
+
+	case UnknownItem;
 }
