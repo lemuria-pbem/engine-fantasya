@@ -55,6 +55,8 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 
 	private float $fleetTime = 0.0;
 
+	private bool $logCommit = false;
+
 	public function allows(Activity $activity): bool {
 		return false;
 	}
@@ -119,7 +121,8 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 			}
 		}
 		$this->createNewDefault($ids);
-		parent::commitCommand($this);
+		$this->logCommit = true;
+		$this->commitCommand($this);
 	}
 
 	protected function run(): void {
@@ -141,6 +144,11 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 		$protocol = $this->context->getProtocol($this->unit);
 		if ($protocol->hasActivity($this)) {
 			throw new ActivityException($command);
+		}
+		if ($this->size > 0) {
+			parent::commitCommand($command);
+		} elseif ($this->logCommit) {
+			$protocol->logCurrent($command);
 		}
 	}
 
@@ -179,7 +187,9 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 						$this->message(TeachStudentMessage::class)->e($unit);
 						$size = $unit->Size();
 					} elseif ($log) {
-						$this->message(TeachUnableMessage::class)->e($unit);
+						if (!$this->isAlternative()) {
+							$this->message(TeachUnableMessage::class)->e($unit);
+						}
 					}
 				} elseif ($log) {
 					$this->message(TeachPartyMessage::class)->e($unit, TeachPartyMessage::UNIT)->e($unit->Party());
@@ -221,7 +231,12 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 		$teacherAbility = $this->unit->Knowledge()[$talent];
 		if ($teacherAbility instanceof Ability) {
 			if ($studentAbility instanceof Ability) {
-				return $teacherAbility->Level() > $studentAbility->Level();
+				$level        = $studentAbility->Level();
+				$levelToReach = $student->getLevel();
+				if ($levelToReach > 0 && $level >= $levelToReach) {
+					return false;
+				}
+				return $teacherAbility->Level() > $level;
 			}
 			return true;
 		}

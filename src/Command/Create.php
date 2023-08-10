@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use function Lemuria\isInt;
+use function Lemuria\isPercentage;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command\Create\Construction;
 use Lemuria\Engine\Fantasya\Command\Create\Griffinegg;
@@ -21,7 +22,6 @@ use Lemuria\Engine\Fantasya\Factory\Model\Herb as HerbModel;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg as GriffineggModel;
 use Lemuria\Model\Fantasya\Herb as HerbInterface;
-use function Lemuria\isPercentage;
 
 /**
  * Implementation of command MACHEN.

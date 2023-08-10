@@ -536,6 +536,8 @@ class CommandFactory
 		'Armbrüste'                  => Crossbow::class,
 		'Balsame'                    => Balsam::class,
 		'Bauernliebe'                => PeasantJoy::class,
+		'Baum'                       => Wood::class,
+		'Bäume'                      => Wood::class,
 		'Berserkerblute'             => BerserkBlood::class,
 		'Blasenmorcheln'             => Bubblemorel::class,
 		'Blaue baumringel'           => CobaltFungus::class,

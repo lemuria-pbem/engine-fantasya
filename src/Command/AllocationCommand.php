@@ -37,6 +37,8 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 
 	protected bool $isRunCentrally;
 
+	private bool $logCommit = false;
+
 	/**
 	 * Create a new command for given Phrase.
 	 */
@@ -130,6 +132,7 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 				$this->context->getAllocation($this->unit->Region())->distribute($this);
 			}
 		}
+		$this->logCommit = true;
 		$this->commitCommand($this);
 	}
 
@@ -141,6 +144,8 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	protected function commitCommand(UnitCommand $command): void {
 		if (!$this->resources->isEmpty()) {
 			parent::commitCommand($command);
+		} elseif ($this->logCommit) {
+			$this->context->getProtocol($this->unit)->logCurrent($command);
 		}
 	}
 

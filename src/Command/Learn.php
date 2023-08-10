@@ -103,16 +103,23 @@ final class Learn extends UnitCommand implements Activity
 
 	private float $fleetTime = 0.0;
 
+	private bool $logCommit = false;
+
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		$this->silver = self::createCommodity(Silver::class);
 		$topic        = $this->phrase->getParameter();
 		$this->talent = $this->context->Factory()->talent($topic);
+		$this->parseTalentLevel();
 		$this->calculus()->setStudent($this);
 	}
 
 	public function getTalent(): Talent {
 		return $this->talent;
+	}
+
+	public function getLevel(): int {
+		return $this->level;
 	}
 
 	protected function initialize(): void {
@@ -127,16 +134,6 @@ final class Learn extends UnitCommand implements Activity
 			$this->fleetTime = $this->context->getRealmFleet($realm)->getUsedCapacity($this->unit);
 		}
 
-		if ($this->phrase->count() === 2) {
-			$parameter = $this->phrase->getParameter(2);
-			$level     = (int)$parameter;
-			if ($level > 0 && (string)$level === $parameter) {
-				$this->level = $level;
-			} else {
-				throw new InvalidCommandException($this);
-			}
-		}
-
 		$calculus  = $this->calculus();
 		$knowledge = $this->unit->Knowledge();
 		$ability   = $knowledge[$this->talent];
@@ -145,8 +142,9 @@ final class Learn extends UnitCommand implements Activity
 			$this->message(LearnTeachersMessage::class)->p(count($this->calculus()->getTeachers()));
 			$this->progress = $calculus->progress($this->talent, (1.0 - $this->fleetTime) * $this->effectivity());
 			$this->expense  = (int)round((1.0 - $this->fleetTime) * $this->unit->Size() * $this->talent->getExpense($level));
-			$this->commitCommand($this);
 		}
+		$this->logCommit = true;
+		$this->commitCommand($this);
 	}
 
 	protected function run(): void {
@@ -215,6 +213,20 @@ final class Learn extends UnitCommand implements Activity
 	protected function commitCommand(UnitCommand $command): void {
 		if ($this->progress) {
 			parent::commitCommand($command);
+		} elseif ($this->logCommit) {
+			$this->context->getProtocol($this->unit)->logCurrent($command);
+		}
+	}
+
+	private function parseTalentLevel(): void {
+		if ($this->phrase->count() === 2) {
+			$parameter = $this->phrase->getParameter(2);
+			$level     = (int)$parameter;
+			if ($level > 0 && (string)$level === $parameter) {
+				$this->level = $level;
+			} else {
+				throw new InvalidCommandException($this);
+			}
 		}
 	}
 

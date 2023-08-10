@@ -71,10 +71,17 @@ final class ActivityProtocol
 	}
 
 	/**
+	 * Add a command to the current protocol.
+	 */
+	public function logCurrent(UnitCommand $command): void {
+		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
+	}
+
+	/**
 	 * Add a command to the protocol.
 	 */
 	public function commit(UnitCommand $command): bool {
-		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
+		$this->logCurrent($command);
 		if ($command instanceof Activity) {
 			if ($this->isAllowed($command)) {
 				$this->activities[] = $command;
