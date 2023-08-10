@@ -189,7 +189,7 @@ class RawMaterial extends AllocationCommand implements Activity
 			if (!empty($guardParties)) {
 				$this->message(RawMaterialGuardedMessage::class)->s($resource);
 			} else {
-				if ($this->available <= 0) {
+				if ($this->available <= 0 && !$this->isAlternative()) {
 					$this->message(RawMaterialResourcesMessage::class)->s($resource);
 				}
 			}
