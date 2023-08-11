@@ -51,6 +51,9 @@ class InventoryDistribution
 		}
 	}
 
+	/**
+	 * @noinspection DuplicatedCode
+	 */
 	protected function distributeInventory(): void {
 		$size = $this->unit->Size();
 		foreach ($this->inventory as $quantity) {
@@ -70,6 +73,9 @@ class InventoryDistribution
 		}
 	}
 
+	/**
+	 * @noinspection DuplicatedCode
+	 */
 	private function giveOnlyOne(Commodity $commodity, int $amount): void {
 		$i = 0;
 		while ($amount > 0) {

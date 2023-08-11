@@ -69,6 +69,9 @@ abstract class AbstractSplitMessage extends AbstractMessage
 		return str_replace('$battleRow', $battleRow, $message);
 	}
 
+	/**
+	 * @noinspection DuplicatedCode
+	 */
 	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
 		$this->validate($data, self::UNIT, Validate::Int);

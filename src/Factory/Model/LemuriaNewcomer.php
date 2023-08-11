@@ -138,6 +138,9 @@ class LemuriaNewcomer implements Newcomer, Serializable
 		return $this;
 	}
 
+	/**
+	 * @noinspection DuplicatedCode
+	 */
 	protected function validateSerializedData(array $data): void {
 		$this->validate($data, self::UUID, Validate::String);
 		$this->validate($data, self::CREATION, Validate::Int);
