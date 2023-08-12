@@ -111,7 +111,14 @@ final class Learn extends UnitCommand implements Activity
 		$topic        = $this->phrase->getParameter();
 		$this->talent = $this->context->Factory()->talent($topic);
 		$this->parseTalentLevel();
-		$this->calculus()->setStudent($this);
+		$this->calculus()->addStudent($this);
+	}
+
+	public function canLearn(): bool {
+		$result         = $this->progress(false);
+		$this->progress = null;
+		$this->expense  = 0;
+		return $result;
 	}
 
 	public function getTalent(): Talent {
@@ -124,24 +131,10 @@ final class Learn extends UnitCommand implements Activity
 
 	protected function initialize(): void {
 		parent::initialize();
+		$this->progress();
 		if (!$this->checkSize() && $this->IsDefault()) {
 			Lemuria::Log()->debug('Learning command skipped due to empty unit.', ['command' => $this]);
 			return;
-		}
-
-		if ($this->isRunCentrally($this) && !isset(self::FLEET_EXCEPTION[$this->talent::class])) {
-			$realm           = $this->unit->Region()->Realm();
-			$this->fleetTime = $this->context->getRealmFleet($realm)->getUsedCapacity($this->unit);
-		}
-
-		$calculus  = $this->calculus();
-		$knowledge = $this->unit->Knowledge();
-		$ability   = $knowledge[$this->talent];
-		$level     = $ability instanceof Ability ? $ability->Level() : 0;
-		if ($this->level <= 0 || $level < $this->level) {
-			$this->message(LearnTeachersMessage::class)->p(count($this->calculus()->getTeachers()));
-			$this->progress = $calculus->progress($this->talent, (1.0 - $this->fleetTime) * $this->effectivity());
-			$this->expense  = (int)round((1.0 - $this->fleetTime) * $this->unit->Size() * $this->talent->getExpense($level));
 		}
 		$this->logCommit = true;
 		$this->commitCommand($this);
@@ -228,6 +221,31 @@ final class Learn extends UnitCommand implements Activity
 				throw new InvalidCommandException($this);
 			}
 		}
+	}
+
+	private function progress(bool $withMessage = true): bool {
+		if (!$this->checkSize() && $this->IsDefault()) {
+			return false;
+		}
+
+		if ($this->isRunCentrally($this) && !isset(self::FLEET_EXCEPTION[$this->talent::class])) {
+			$realm           = $this->unit->Region()->Realm();
+			$this->fleetTime = $this->context->getRealmFleet($realm)->getUsedCapacity($this->unit);
+		}
+
+		$calculus  = $this->calculus();
+		$knowledge = $this->unit->Knowledge();
+		$ability   = $knowledge[$this->talent];
+		$level     = $ability instanceof Ability ? $ability->Level() : 0;
+		if ($this->level <= 0 || $level < $this->level) {
+			if ($withMessage) {
+				$this->message(LearnTeachersMessage::class)->p(count($this->calculus()->getTeachers()));
+			}
+			$this->progress = $calculus->progress($this->talent, (1.0 - $this->fleetTime) * $this->effectivity());
+			$this->expense  = (int)round((1.0 - $this->fleetTime) * $this->unit->Size() * $this->talent->getExpense($level));
+			return true;
+		}
+		return false;
 	}
 
 	private function effectivity(): float {

@@ -81,13 +81,15 @@ trait TravelTrait
 		return $neighbour && !$this->chronicle->has($neighbour->Id());
 	}
 
-	protected function canMoveTo(Direction $direction): ?Region {
+	protected function canMoveTo(Direction $direction, bool $withFailure = true): ?Region {
 		$this->airshipped = false;
 		$region = $this->unit->Region();
 		/** @var Region $neighbour */
 		$neighbour = Lemuria::World()->getNeighbours($region)[$direction] ?? null;
 		if (!$neighbour) {
-			$this->message(TravelIntoChaosMessage::class)->p($direction->value);
+			if ($withFailure) {
+				$this->message(TravelIntoChaosMessage::class)->p($direction->value);
+			}
 			return null;
 		}
 		$landscape = $neighbour->Landscape();
@@ -118,7 +120,9 @@ trait TravelTrait
 			}
 			if ($region->Landscape() instanceof Navigable) {
 				if (!$this->canSailTo($neighbour) && !$this->useAirshipEffect()) {
-					$this->message(TravelLandMessage::class, $this->vessel)->p($direction->value)->s($landscape)->e($neighbour);
+					if ($withFailure) {
+						$this->message(TravelLandMessage::class, $this->vessel)->p($direction->value)->s($landscape)->e($neighbour);
+					}
 					return null;
 				}
 				$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
@@ -142,7 +146,9 @@ trait TravelTrait
 		}
 
 		if ($landscape instanceof Navigable) {
-			$this->message(TravelIntoOceanMessage::class)->p($direction->value);
+			if ($withFailure) {
+				$this->message(TravelIntoOceanMessage::class)->p($direction->value);
+			}
 			return null;
 		}
 		$this->message(TravelNeighbourMessage::class)->p($direction->value)->s($landscape)->e($neighbour);
@@ -159,7 +165,7 @@ trait TravelTrait
 			if ($region && !$this->chronicle->has($region->Id())) {
 				$landscape = $region->Landscape();
 				if (!$landscape instanceof Navigable && $this->exploring === Exploring::Explore) {
-					$alternatives = $this->chooseAlternativeNavigable($direction, $region);
+					$alternatives = $this->chooseAlternativeNavigables($direction, $this->unit->Region());
 					if (!empty($alternatives)) {
 						$original    = $direction;
 						$pick        = randElement($alternatives);
@@ -169,10 +175,18 @@ trait TravelTrait
 					}
 				}
 			} elseif (!$region) {
-				if ($this->exploring === Exploring::Explore) {
-					$alternatives = $this->chooseAlternativeNavigable($direction, $region);
+				$allowNavigable = $this->exploring === Exploring::Explore;
+				$origin         = $this->unit->Region();
+				/** @var Region|null $region */
+				$region = Lemuria::World()->getNeighbours($origin)[$direction] ?? null;
+				if ($region) {
+					if ($allowNavigable) {
+						$alternatives = $this->chooseAlternativeNavigables($direction, $origin);
+					} else {
+						$alternatives = $this->chooseAlternatives($direction, $origin);
+					}
 				} else {
-					$alternatives = $this->chooseAlternatives($direction, $region);
+					$alternatives = $this->chooseAlternativesToChaos($direction, $origin, $allowNavigable);
 				}
 				if (!empty($alternatives)) {
 					$original    = $direction;
@@ -184,7 +198,14 @@ trait TravelTrait
 			}
 		} else {
 			if (!$region) {
-				$alternatives = $this->chooseAlternatives($direction, $region);
+				$origin = $this->unit->Region();
+				/** @var Region|null $region */
+				$region = Lemuria::World()->getNeighbours($origin)[$direction] ?? null;
+				if ($region) {
+					$alternatives = $this->chooseAlternatives($direction, $origin);
+				} else {
+					$alternatives = $this->chooseAlternativesToChaos($direction, $origin);
+				}
 				if (!empty($alternatives)) {
 					$original    = $direction;
 					$pick        = randElement($alternatives);
@@ -424,6 +445,7 @@ trait TravelTrait
 
 	/**
 	 * @return array<array>
+	 * @noinspection DuplicatedCode
 	 */
 	private function chooseAlternatives(Direction $direction, Region $region): array {
 		$alternatives = [];
@@ -432,7 +454,7 @@ trait TravelTrait
 		$known        = null;
 		foreach (Lemuria::World()->getAlternatives($region, $direction) as $altDirection => $altRegion) {
 			$considered++;
-			if ($this->canMoveTo($altDirection)) {
+			if ($this->canMoveTo($altDirection, false)) {
 				if ($this->chronicle->has($altRegion->Id())) {
 					if (!$known) {
 						$known = [$altDirection, $altRegion];
@@ -454,8 +476,9 @@ trait TravelTrait
 
 	/**
 	 * @return array<array>
+	 * @noinspection DuplicatedCode
 	 */
-	private function chooseAlternativeNavigable(Direction $direction, Region $region): array {
+	private function chooseAlternativeNavigables(Direction $direction, Region $region): array {
 		$alternatives = [];
 		$count        = 0;
 		$considered   = 0;
@@ -463,7 +486,42 @@ trait TravelTrait
 		foreach (Lemuria::World()->getAlternatives($region, $direction) as $altDirection => $altRegion) {
 			$considered++;
 			/** @var Region $altRegion */
-			if ($altRegion->Landscape() instanceof Navigable && $this->canMoveTo($altDirection)) {
+			if ($altRegion->Landscape() instanceof Navigable && $this->canMoveTo($altDirection, false)) {
+				if ($this->chronicle->has($altRegion->Id())) {
+					if (!$known) {
+						$known = [$altDirection, $altRegion];
+					}
+				} else {
+					$alternatives[] = [$altDirection, $altRegion];
+					$count++;
+				}
+			}
+			if ($considered > 2 && $count) {
+				break; // Use nearest alternatives if possible (octagonal maps).
+			}
+		}
+		if (empty($alternatives) && $known) {
+			return [$known];
+		}
+		return $alternatives;
+	}
+
+	/**
+	 * @return array<array>
+	 * @noinspection DuplicatedCode
+	 */
+	private function chooseAlternativesToChaos(Direction $direction, Region $region, bool $allowNavigable = false): array {
+		$alternatives = [];
+		$count        = 0;
+		$considered   = 0;
+		$known        = null;
+		foreach (Lemuria::World()->getAlternatives($region, $direction) as $altDirection => $altRegion) {
+			/** @var Region $altRegion */
+			$considered++;
+			if (!$allowNavigable && $altRegion->Landscape() instanceof Navigable) {
+				continue;
+			}
+			if ($this->canMoveTo($altDirection, false)) {
 				if ($this->chronicle->has($altRegion->Id())) {
 					if (!$known) {
 						$known = [$altDirection, $altRegion];

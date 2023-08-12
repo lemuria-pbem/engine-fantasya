@@ -64,6 +64,7 @@ class Allotment
 	}
 
 	public function getAvailability(Consumer $consumer, Commodity $commodity): int {
+		$this->unit = $consumer->Unit();
 		$this->calculateAvailability($commodity, $consumer->getQuota());
 		return array_sum($this->availability);
 	}

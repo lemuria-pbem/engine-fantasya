@@ -112,14 +112,6 @@ class Distributor
 				$max[$id]          = $supply->count();
 				$this->supply[$id] = $supply;
 			}
-			/*
-			foreach ($this->supply as $id => $supply) {
-				$supply->setLuxury($luxury);
-				$price[$id] = $supply->Price();
-				$step[$id]  = $supply->getStep();
-				$max[$id]   = $supply->count();
-			}
-			*/
 			arsort($step);
 
 			$plan = [];
@@ -204,12 +196,14 @@ class Distributor
 						Lemuria::Log()->debug('Merchant ' . $merchant . ' has no more trades.');
 					}
 				}
-				if ($isBuy) {
-					$this->fleet->fetch($traded * $weight);
-					$this->fleet->send($silver * $this->silver->Weight());
-				} else {
-					$this->fleet->send($traded * $weight);
-					$this->fleet->fetch($silver * $this->silver->Weight());
+				if ($id !== $this->center) {
+					if ($isBuy) {
+						$this->fleet->fetch($traded * $weight);
+						$this->fleet->send($silver * $this->silver->Weight());
+					} else {
+						$this->fleet->send($traded * $weight);
+						$this->fleet->fetch($silver * $this->silver->Weight());
+					}
 				}
 				$merchant->finish();
 				Lemuria::Log()->debug('Merchant ' . $merchant . ' has ' . ($isBuy ? 'bought' : 'sold') . ' ' . $traded . ' ' . $luxury . ' in region ' . $region . '.');

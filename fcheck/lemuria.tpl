@@ -176,6 +176,7 @@
 ^(vorg|vorga|vorgab|vorgabe) +tarnen +partei( +(nicht|[a-z0-9]{1,6}))?$
 ^(vorg|vorga|vorgab|vorgabe) +sammeln( +nicht)?$
 ^(vorg|vorga|vorgab|vorgabe) +(wiederhole|wiederholen|wiederholung)( +nicht)?$
+^(vorg|vorga|vorgab|vorgabe) +erkunden( +(anlegen|ablegen|nicht))?$
 
 ^(vorl|vorla|vorlag|vorlage) +[a-z].+$
 ^(vorl|vorla|vorlag|vorlage) +(\*[0-9]*|[0-9]*\*) +[a-z].+$

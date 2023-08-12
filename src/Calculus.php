@@ -58,7 +58,10 @@ final class Calculus
 
 	private static ?Talent $stamina = null;
 
-	private ?Learn $student = null;
+	/**
+	 * @var array<Learn>
+	 */
+	private array $students = [];
 
 	/**
 	 * @var array<int, Teach>
@@ -73,10 +76,10 @@ final class Calculus
 	}
 
 	/**
-	 * Set student status for teaching.
+	 * Add student status for teaching.
 	 */
-	public function setStudent(Learn $student): Calculus {
-		$this->student = $student;
+	public function addStudent(Learn $student): Calculus {
+		$this->students[] = $student;
 		return $this;
 	}
 
@@ -92,8 +95,8 @@ final class Calculus
 	/**
 	 * Get student status.
 	 */
-	public function getStudent(): ?Learn {
-		return $this->student;
+	public function getStudents(): array {
+		return $this->students;
 	}
 
 	/**

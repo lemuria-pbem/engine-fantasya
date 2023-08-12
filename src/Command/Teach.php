@@ -212,17 +212,17 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 		}
 
 		$calculus = $this->context->getCalculus($unit);
-		$learn    = $calculus->getStudent();
-		if ($learn) {
-			if ($this->canTeach($learn)) {
-				$calculus->addTeacher($this);
-				$this->students[$unit->Id()->Id()] = $learn;
-				return true;
+		foreach ($calculus->getStudents() as $learn) {
+			if ($learn->canLearn()) {
+				if ($this->canTeach($learn)) {
+					$calculus->addTeacher($this);
+					$this->students[$unit->Id()->Id()] = $learn;
+					return true;
+				}
+				return false;
 			}
-			return false;
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	private function canTeach(Learn $student): bool {
