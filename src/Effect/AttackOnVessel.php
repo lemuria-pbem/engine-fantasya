@@ -9,6 +9,8 @@ use Lemuria\Model\Fantasya\Vessel;
 
 final class AttackOnVessel extends AbstractUnitEffect
 {
+	protected ?bool $isReassign = null;
+
 	private Vessel $vessel;
 
 	public function __construct(State $state) {

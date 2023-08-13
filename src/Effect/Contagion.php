@@ -23,6 +23,8 @@ final class Contagion extends AbstractRegionEffect
 
 	private const UNITS = 'units';
 
+	protected ?bool $isReassign = null;
+
 	private int $duration;
 
 	private Disease $disease;

@@ -27,6 +27,8 @@ final class PotionInfluence extends AbstractRegionEffect
 
 	private const WEEKS = 'weeks';
 
+	protected ?bool $isReassign = null;
+
 	private array $potions = [];
 
 	private array $weeks = [];

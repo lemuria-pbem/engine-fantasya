@@ -25,6 +25,7 @@ final class FarsightEffect extends AbstractRegionEffect
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::Before);
 		$this->parties = new Gathering();
+		$this->parties->addReassignment();
 	}
 
 	public function Parties(): Gathering {

@@ -32,6 +32,8 @@ abstract class AbstractEffect implements Effect, Reassignment
 
 	protected Context $context;
 
+	protected ?bool $isReassign = false;
+
 	private Id $id;
 
 	private bool $canExecute = true;
@@ -39,7 +41,9 @@ abstract class AbstractEffect implements Effect, Reassignment
 	public function __construct(protected State $state, Priority $priority) {
 		$this->context = new Context($state);
 		$this->setPriority($priority);
-		Lemuria::Catalog()->addReassignment($this);
+		if ($this->isReassign === false) {
+			$this->addReassignment();
+		}
 	}
 
 	public function Id(): Id {
@@ -113,6 +117,14 @@ abstract class AbstractEffect implements Effect, Reassignment
 			throw new LemuriaException('Class name mismatch.', new UnserializeException());
 		}
 		$this->id = new Id($data[self::ID]);
+		return $this;
+	}
+
+	public function addReassignment(): static {
+		if (!$this->isReassign) {
+			Lemuria::Catalog()->addReassignment($this);
+			$this->isReassign = true;
+		}
 		return $this;
 	}
 

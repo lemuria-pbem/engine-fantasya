@@ -67,7 +67,7 @@ final class GoblinPlague extends AbstractEvent
 			Lemuria::Score()->add($effect);
 			$this->state->injectIntoTurn($effect);
 		}
-		$effect->Units()->clear();
+		$effect->addReassignment()->Units()->clear();
 		return $effect->setDisease(Disease::GoblinPlague)->setDuration($this->duration);
 	}
 }

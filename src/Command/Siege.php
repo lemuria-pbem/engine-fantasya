@@ -155,9 +155,9 @@ final class Siege extends UnitCommand implements Reassignment
 		$effect   = new SiegeEffect(State::getInstance());
 		$existing = Lemuria::Score()->find($effect->setConstruction($this->construction));
 		if ($existing instanceof SiegeEffect) {
-			return $existing;
+			return $existing->addReassignment();
 		}
 		Lemuria::Score()->add($effect);
-		return $effect;
+		return $effect->addReassignment();
 	}
 }

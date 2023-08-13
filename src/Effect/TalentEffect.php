@@ -14,6 +14,8 @@ final class TalentEffect extends AbstractUnitEffect
 {
 	private const MODIFICATIONS = 'modifications';
 
+	protected ?bool $isReassign = null;
+
 	private Knowledge $modifications;
 
 	public function __construct(State $state) {

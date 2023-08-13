@@ -21,6 +21,8 @@ final class Hunger extends AbstractUnitEffect
 
 	private const HEALTH_THRESHOLD = 0.9;
 
+	protected ?bool $isReassign = null;
+
 	private float $hunger = 1.0;
 
 	public function __construct(State $state) {

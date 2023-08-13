@@ -25,7 +25,7 @@ final class Timer extends DelegatedEvent
 			['class' => GoblinPlague::class, 'options' => [GoblinPlague::REGION => 61, GoblinPlague::DURATION => 2]]
 		],
 		127 => [
-			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 3828, FindWallet::SILVER => 1200]],
+			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 3828, FindWallet::SILVER => 2000]],
 		]
 	];
 

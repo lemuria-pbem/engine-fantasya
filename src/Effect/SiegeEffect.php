@@ -16,6 +16,8 @@ final class SiegeEffect extends AbstractConstructionEffect
 {
 	private const PERCEPTION = 'perception';
 
+	protected ?bool $isReassign = null;
+
 	private int $perception = 0;
 
 	private bool $isActive = true;
