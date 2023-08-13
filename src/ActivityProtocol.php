@@ -74,7 +74,11 @@ final class ActivityProtocol
 	 * Add a command to the current protocol.
 	 */
 	public function logCurrent(UnitCommand $command): void {
-		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
+		$phrase = $command->Phrase();
+		if ($command->isAlternative()) {
+			$phrase = 'ALTERNATIVE ' . $phrase;
+		}
+		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $phrase;
 	}
 
 	/**
