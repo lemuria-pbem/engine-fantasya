@@ -29,11 +29,11 @@ class CombatantWeaponMessage extends CombatantNoWeaponMessage
 	}
 
 	public function getDebug(): string {
-		return 'Combatant ' . $this->combatant . ', ' . $this->count .' fighters with ' . $this->weapon . ', ' . Combat::ROW_NAME[$this->battleRow] . ' row';
+		return 'Combatant ' . $this->combatant . ', ' . $this->count .' ' . $this->fighter . ' with ' . $this->weapon . ', ' . Combat::ROW_NAME[$this->battleRow] . ' row';
 	}
 
 	protected function getParameters(): array {
-		$parameters           = parent::getParameters();
+		$parameters               = parent::getParameters();
 		$parameters[self::WEAPON] = $this->weapon;
 		return $parameters;
 	}
