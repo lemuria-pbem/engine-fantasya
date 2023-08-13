@@ -17,6 +17,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\NameMonumentOnceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameNoContinentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameNoUnicumMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameRealmCentralMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\NameRealmFirstTimeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameRealmMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameRealmNotFoundMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\NameUnicumMessage;
@@ -235,8 +236,13 @@ final class Name extends UnitCommand implements Reassignment
 				$possession = $possessions[$realm->Id()];
 				if ($possession === $realm) {
 					if ($realm->Territory()->Central() === $region) {
+						$oldName = $realm->Name();
 						$realm->setName($name);
-						$this->message(NameRealmMessage::class)->p($name);
+						if ($oldName === 'Reich ' . $realm->Identifier()) {
+							$this->message(NameRealmFirstTimeMessage::class)->p($name);
+						} else {
+							$this->message(NameRealmMessage::class)->p($name);
+						}
 					} else {
 						$this->message(NameRealmCentralMessage::class)->p($realm->Name());
 					}

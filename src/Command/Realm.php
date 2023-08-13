@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Exception\Command\InvalidIdException;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\RealmTrait;
 use Lemuria\Engine\Fantasya\Message\Region\RealmAddedMessage;
@@ -50,10 +51,11 @@ final class Realm extends UnitCommand
 		if ($n < 1 || $n > 2) {
 			throw new InvalidCommandException($this);
 		}
+		$id = $this->phrase->getParameter();
 		try {
-			$this->id = Id::fromId($this->phrase->getParameter());
+			$this->id = Id::fromId($id);
 		} catch (IdException $e) {
-			throw new InvalidCommandException($this, previous: $e);
+			throw new InvalidIdException($id, previous: $e);
 		}
 		try {
 			$not = match (strtolower($this->phrase->getParameter(2))) {

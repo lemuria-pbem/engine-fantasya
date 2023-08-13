@@ -628,6 +628,7 @@
 		"NameOwnerMessage": "Die Einheit $owner ist kein Mitglied der Besitzerpartei des Gebäudes $id und kann daher dessen Namen nicht ändern.",
 		"NamePartyMessage": "Die Partei $id trägt nun den Namen $name.",
 		"NameRealmCentralMessage": "Die Einheit $id muss in der Zentralregion des Reiches $realm sein, um es umzubenennen.",
+		"NameRealmFirstTimeMessage": "Die Einheit $id verleiht dem Reich den Namen $name.",
 		"NameRealmMessage": "Die Einheit $id hat das Reich umbenannt zu $name.",
 		"NameRealmNotFoundMessage": "Der Name des Reiches kann nicht geändert werden.",
 		"NameRegionMessage": "Die Region $id trägt nun den Namen $name.",
