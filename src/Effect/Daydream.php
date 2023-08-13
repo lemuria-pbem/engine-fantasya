@@ -8,6 +8,8 @@ use Lemuria\Lemuria;
 
 final class Daydream extends AbstractUnitEffect
 {
+	protected ?bool $isReassign = null;
+
 	private int $level = 0;
 
 	public function __construct(State $state) {

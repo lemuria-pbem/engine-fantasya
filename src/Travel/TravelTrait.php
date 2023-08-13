@@ -544,7 +544,7 @@ trait TravelTrait
 	private function createTravelEffect(): void {
 		$effect = new TravelEffect(State::getInstance());
 		if (!Lemuria::Score()->find($effect->setUnit($this->unit))) {
-			Lemuria::Score()->add($effect);
+			Lemuria::Score()->add($effect->addReassignment());
 		}
 	}
 

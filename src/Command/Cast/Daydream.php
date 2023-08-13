@@ -40,7 +40,7 @@ final class Daydream extends AbstractCast
 		} else {
 			Lemuria::Score()->add($effect);
 		}
-		$effect->setLevel($effect->Level() + $level);
+		$effect->setLevel($effect->Level() + $level)->addReassignment();
 
 		if ($level < $demand) {
 			$this->message(DaydreamOnlyMessage::class, $unit)->e($target)->p($level);

@@ -23,7 +23,7 @@ class Hibernate implements Act
 	public function act(): Hibernate {
 		$effect = new HibernateEffect(State::getInstance());
 		if (!Lemuria::Score()->find($effect->setUnit($this->unit))) {
-			Lemuria::Score()->add($effect);
+			Lemuria::Score()->add($effect->addReassignment());
 		}
 		$this->message(HibernateMessage::class, $this->unit);
 		return $this;

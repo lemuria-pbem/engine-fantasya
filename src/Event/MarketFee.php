@@ -47,7 +47,7 @@ final class MarketFee extends AbstractEvent
 					}
 					foreach ($nonPayers as $unit) {
 						$effect = new UnpaidFee($this->state);
-						Lemuria::Score()->add($effect->setUnit($unit));
+						Lemuria::Score()->add($effect->setUnit($unit)->addReassignment());
 						$this->message(MarketFeeNotPaidMessage::class, $unit);
 						$this->message(MarketFeeBannedMessage::class, $owner)->e($unit);
 					}

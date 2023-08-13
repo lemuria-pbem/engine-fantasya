@@ -8,6 +8,8 @@ use Lemuria\Lemuria;
 
 final class Unmaintained extends AbstractConstructionEffect
 {
+	protected ?bool $isReassign = null;
+
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::Before);
 	}

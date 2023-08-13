@@ -204,7 +204,7 @@ trait NavigationTrait
 	private function createNavigationEffect(Unit $unit): void {
 		$effect = new TravelEffect(State::getInstance());
 		if (!Lemuria::Score()->find($effect->setUnit($unit))) {
-			Lemuria::Score()->add($effect);
+			Lemuria::Score()->add($effect->addReassignment());
 		}
 	}
 }

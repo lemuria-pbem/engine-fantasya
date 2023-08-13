@@ -8,6 +8,8 @@ use Lemuria\Lemuria;
 
 final class TravelEffect extends AbstractUnitEffect
 {
+	protected ?bool $isReassign = null;
+
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::Before);
 	}

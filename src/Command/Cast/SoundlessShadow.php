@@ -37,7 +37,7 @@ final class SoundlessShadow extends AbstractCast
 		if (Lemuria::Score()->find($effect->setUnit($unit))) {
 			return;
 		}
-		Lemuria::Score()->add($effect);
+		Lemuria::Score()->add($effect->addReassignment());
 	}
 
 	private function getTalentEffect(Unit $unit): TalentEffect {

@@ -15,6 +15,8 @@ final class FarsightEffect extends AbstractRegionEffect
 {
 	private const PARTIES = 'parties';
 
+	protected ?bool $isReassign = null;
+
 	private Gathering $parties;
 
 	/**
@@ -23,9 +25,8 @@ final class FarsightEffect extends AbstractRegionEffect
 	private array $perception = [];
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::Before);
 		$this->parties = new Gathering();
-		$this->parties->addReassignment();
+		parent::__construct($state, Priority::Before);
 	}
 
 	public function Parties(): Gathering {
@@ -41,6 +42,14 @@ final class FarsightEffect extends AbstractRegionEffect
 	public function unserialize(array $data): Serializable {
 		parent::unserialize($data);
 		$this->parties->unserialize($data[self::PARTIES]);
+		return $this;
+	}
+
+	public function addReassignment(): static {
+		if (!$this->isReassign) {
+			parent::addReassignment();
+			$this->parties->addReassignment();
+		}
 		return $this;
 	}
 

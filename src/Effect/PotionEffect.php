@@ -25,6 +25,8 @@ final class PotionEffect extends AbstractUnitEffect
 
 	private const WEEKS = 'weeks';
 
+	protected ?bool $isReassign = null;
+
 	private Potion $potion;
 
 	private int $count = 1;

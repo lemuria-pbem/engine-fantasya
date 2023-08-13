@@ -225,6 +225,6 @@ final class Upkeep extends AbstractEvent
 	private function effect(Construction $construction): Unmaintained {
 		$effect = new Unmaintained($this->state);
 		$existing = Lemuria::Score()->find($effect->setConstruction($construction));
-		return $existing instanceof Unmaintained ? $existing : $effect;
+		return $existing instanceof Unmaintained ? $existing->addReassignment() : $effect->addReassignment();
 	}
 }
