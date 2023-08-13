@@ -16,6 +16,7 @@ use Lemuria\Engine\Fantasya\Turn\Options;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Luxury;
@@ -108,21 +109,37 @@ final class Context implements Reassignment
 	}
 
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
-		if ($identifiable instanceof Unit) {
-			$old = $oldId->Id();
-			$new = $identifiable->Id()->Id();
-			if (isset($this->calculus[$old])) {
-				$this->calculus[$new] = $this->calculus[$old];
-				unset($this->calculus[$old]);
-			}
+		$old = $oldId->Id();
+		$new = $identifiable->Id()->Id();
+		switch ($identifiable->Catalog()) {
+			case Domain::Unit :
+				if (isset($this->calculus[$old])) {
+					$this->calculus[$new] = $this->calculus[$old];
+					unset($this->calculus[$old]);
+				}
+				break;
+			case Domain::Realm :
+				if (isset($this->realmFunds[$old])) {
+					$this->realmFunds[$new] = $this->realmFunds[$old];
+					unset($this->realmFunds[$old]);
+				}
+				break;
+			default :
 		}
 	}
 
 	public function remove(Identifiable $identifiable): void {
-		if ($identifiable instanceof Unit) {
-			$id = $identifiable->Id()->Id();
-			unset($this->calculus[$id]);
-			unset($this->resourcePool[self::resourcePoolId($identifiable)]);
+		$old = $identifiable->Id()->Id();
+		switch ($identifiable->Catalog()) {
+			case Domain::Unit :
+				/** @var Unit $identifiable */
+				unset($this->calculus[$old]);
+				unset($this->resourcePool[self::resourcePoolId($identifiable)]);
+				break;
+			case Domain::Realm :
+				unset($this->realmFunds[$old]);
+				break;
+			default :
 		}
 	}
 

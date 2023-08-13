@@ -151,11 +151,18 @@ final class State implements Reassignment
 				unset($this->commerce[$old]);
 				$this->intelligence[$new] = $this->intelligence[$old];
 				unset($this->intelligence[$old]);
+				$this->reassignSupplies($old, $new);
 				break;
 			case Domain::Party :
 				if (isset($this->unitMapper[$old])) {
 					$this->unitMapper[$new] = $this->unitMapper[$old];
 					unset($this->unitMapper[$old]);
+				}
+				break;
+			case Domain::Realm :
+				if (isset($this->realmFleets[$old])) {
+					$this->realmFleets[$new] = $this->realmFleets[$old];
+					unset($this->realmFleets[$old]);
 				}
 				break;
 			default :
@@ -176,6 +183,7 @@ final class State implements Reassignment
 				unset($this->campaigns[$old]);
 				unset($this->commerce[$old]);
 				unset($this->intelligence[$old]);
+				$this->unsetSupplies($old);
 				break;
 			case Domain::Party :
 				unset($this->unitMapper[$old]);
@@ -183,6 +191,10 @@ final class State implements Reassignment
 			case Domain::Trade :
 				/** @var Trade $identifiable */
 				$this->closedTrades[$identifiable->Id()->Id()] = $identifiable;
+				break;
+			case Domain::Realm :
+				unset($this->realmFleets[$old]);
+				break;
 			default :
 		}
 	}
@@ -393,5 +405,27 @@ final class State implements Reassignment
 
 	private function id(Region $region, Luxury $luxury): string {
 		return $region->Id()->Id() . '-' . getClass($luxury);
+	}
+
+	private function reassignSupplies(int $old, int $new): void {
+		$sOld = $old . '-';
+		$sNew = $new . '-';
+		$i    = strlen($sOld);
+		foreach (array_keys($this->supply) as $oldKey) {
+			if (str_starts_with($oldKey, $sOld)) {
+				$newKey                = $sNew . '-' . substr($oldKey, $i);
+				$this->supply[$newKey] = $this->supply[$oldKey];
+				unset($this->supply[$oldKey]);
+			}
+		}
+	}
+
+	private function unsetSupplies(int $old): void {
+		$sOld = $old . '-';
+		foreach (array_keys($this->supply) as $oldKey) {
+			if (str_starts_with($oldKey, $sOld)) {
+				unset($this->supply[$oldKey]);
+			}
+		}
 	}
 }
