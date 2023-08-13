@@ -21,6 +21,8 @@ use Lemuria\Engine\Fantasya\Message\Unit\TeachSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachStudentMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachUnableMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Id;
+use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Unit;
@@ -61,6 +63,19 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 		return false;
 	}
 
+	public function reassign(Id $oldId, Identifiable $identifiable): void {
+		if ($this->checkReassignmentDomain($identifiable->Catalog())) {
+			$old       = (string)$oldId;
+			$new       = (string)$identifiable->Id();
+			$oldPhrase = $this->getReassignPhrase($old, $new);
+			if ($oldPhrase) {
+				$phrase       = str_replace($old, $new, (string)$oldPhrase);
+				$this->phrase = new Phrase($phrase);
+				$this->context->getProtocol($this->unit)->reassignDefaultActivity($oldPhrase, $this);
+			}
+		}
+	}
+
 	/**
 	 * Get learning bonus.
 	 */
@@ -96,9 +111,10 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 
 		$ids = [];
 		$i   = 1;
-		if (count($this->phrase) >= $i) {
+		$n   = count($this->phrase);
+		if ($n >= $i) {
 			// Add specific students.
-			while (true) {
+			while ($i <= $n) {
 				try {
 					$unit = $this->nextId($i);
 					if ($unit) {
@@ -106,8 +122,6 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 							$this->size += $this->teach($unit, true);
 							$ids[]      = $unit->Id();
 						}
-					} else {
-						break;
 					}
 				} catch (CommandException $e) {
 					$this->message(TeachExceptionMessage::class)->p($e->getTranslation());

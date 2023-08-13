@@ -54,17 +54,20 @@ trait ReassignTrait
 
 	protected function getReassignPhraseParameters(string $old, string $new): ?array {
 		$parameters = [];
+		$i          = 1;
 		$n          = $this->phrase->count();
-		for ($i = 1; $i <= $n; $i++) {
-			$id              = strtolower($this->phrase->getParameter($i));
-			$parameters[$id] = $i;
+		while ($i <= $n) {
+			try {
+				$id = $this->nextId($i)?->Id()->__toString();
+			} catch (\Exception) {
+				$id = $this->phrase->getParameter($i - 1);
+			}
+			$parameters[] = $id;
 		}
-		$i = $parameters[$old] ?? 0;
-		if ($i > 0) {
-			$parameters = array_keys($parameters);
-			$parameters[--$i] = $new;
-			return $parameters;
+		$i = array_search($new, $parameters, true);
+		if (is_int($i)) {
+			$parameters[$i] = $old;
 		}
-		return null;
+		return in_array($old, $parameters) ? $parameters : null;
 	}
 }
