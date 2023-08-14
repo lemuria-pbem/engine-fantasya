@@ -2,14 +2,11 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
-use Lemuria\Engine\Message\Result;
-use Lemuria\Engine\Message\Section;
+use Lemuria\Engine\Fantasya\Message\Reliability;
 
-class SupportNothingMessage extends AbstractUnitMessage
+class SupportNothingMessage extends SupportHungerMessage
 {
-	protected Result $result = Result::Failure;
-
-	protected Section $section = Section::Production;
+	protected Reliability $reliability = Reliability::Unreliable;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' cannot pay any support.';

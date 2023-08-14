@@ -166,6 +166,9 @@ final class Support extends AbstractEvent
 		return $this->payOwnSupportIfPossible($unit, $support);
 	}
 
+	/**
+	 * @noinspection DuplicatedCode
+	 */
 	private function payFromRealmFund(Unit $unit): bool {
 		$region = $unit->Region();
 		$realm  = $region->Realm();
