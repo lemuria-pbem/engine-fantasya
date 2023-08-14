@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use Lemuria\Engine\Fantasya\Combat\Combat;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 class CombatantNoWeaponMessage extends AbstractMessage
@@ -37,7 +36,7 @@ class CombatantNoWeaponMessage extends AbstractMessage
 		}
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->combatant = $data[self::COMBATANT];
 		$this->count     = $data[self::COUNT];

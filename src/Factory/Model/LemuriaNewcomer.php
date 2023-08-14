@@ -101,7 +101,7 @@ class LemuriaNewcomer implements Newcomer, Serializable
 		];
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		$this->uuid        = $data[self::UUID];
 		$this->creation    = $data[self::CREATION];
 		$this->name        = $data[self::NAME];
@@ -113,27 +113,27 @@ class LemuriaNewcomer implements Newcomer, Serializable
 		return $this;
 	}
 
-	public function setName(string $name): LemuriaNewcomer {
+	public function setName(string $name): static {
 		$this->name = $name;
 		return $this;
 	}
 
-	public function setDescription(string $description): LemuriaNewcomer {
+	public function setDescription(string $description): static {
 		$this->description = $description;
 		return $this;
 	}
 
-	public function setRace(?Race $race): LemuriaNewcomer {
+	public function setRace(?Race $race): static {
 		$this->race = $race;
 		return $this;
 	}
 
-	public function setLandscape(?Landscape $landscape): LemuriaNewcomer {
+	public function setLandscape(?Landscape $landscape): static {
 		$this->landscape = $landscape;
 		return $this;
 	}
 
-	public function setOrigin(?Region $region): LemuriaNewcomer {
+	public function setOrigin(?Region $region): static {
 		$this->origin = $region?->Id();
 		return $this;
 	}

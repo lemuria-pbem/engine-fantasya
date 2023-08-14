@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
 use function Lemuria\getClass;
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
@@ -17,7 +16,6 @@ use Lemuria\Identifiable;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Reassignment;
-use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
 use Lemuria\Validate;
 
@@ -73,7 +71,7 @@ abstract class AbstractEffect implements Effect, Reassignment
 		}
 	}
 
-	public function setId(Id $id): AbstractEffect {
+	public function setId(Id $id): static {
 		$this->id = $id;
 		return $this;
 	}
@@ -90,7 +88,7 @@ abstract class AbstractEffect implements Effect, Reassignment
 	 *
 	 * @throws CommandException
 	 */
-	public function prepare(): Action {
+	public function prepare(): static {
 		Lemuria::Log()->debug('Preparing ' . $this . '.');
 		$this->prepareAction();
 		return $this;
@@ -101,7 +99,7 @@ abstract class AbstractEffect implements Effect, Reassignment
 	 *
 	 * @throws CommandException
 	 */
-	public function execute(): Action {
+	public function execute(): static {
 		Lemuria::Log()->debug('Executing ' . $this . '.');
 		$this->executeAction();
 		return $this;
@@ -111,7 +109,7 @@ abstract class AbstractEffect implements Effect, Reassignment
 		return [self::CLASS_KEY => getClass($this), self::ID => $this->id->Id()];
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		$this->validateSerializedData($data);
 		if ($data[self::CLASS_KEY] !== getClass($this)) {
 			throw new LemuriaException('Class name mismatch.', new UnserializeException());

@@ -9,7 +9,6 @@ use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class SiegeEffect extends AbstractConstructionEffect
@@ -40,7 +39,7 @@ final class SiegeEffect extends AbstractConstructionEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->perception = $data[self::PERCEPTION];
 		return $this;

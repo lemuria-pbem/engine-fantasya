@@ -8,7 +8,7 @@ use Lemuria\Lemuria;
 
 final class NotImplementedCommand extends AbstractCommand implements Immediate
 {
-	public function skip(): Immediate {
+	public function skip(): static {
 		return $this;
 	}
 

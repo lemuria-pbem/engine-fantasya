@@ -42,7 +42,7 @@ final class Entity implements \Stringable, Serializable
 		return [self::ID => $this->id->Id(), self::NAME => $this->name];
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		$this->validateSerializedData($data);
 		$this->id   = new Id($data[self::ID]);
 		$this->name = $data[self::NAME];

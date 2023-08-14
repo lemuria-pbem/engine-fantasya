@@ -34,25 +34,25 @@ class CombatEffect extends Item
 		return $this->combatSpell;
 	}
 
-	public function add(CombatEffect $effect): CombatEffect {
+	public function add(CombatEffect $effect): static {
 		$this->addItem($effect);
 		$this->duration = max($this->duration, $effect->duration);
 
 		return $this;
 	}
 
-	public function remove(CombatEffect $effect): CombatEffect {
+	public function remove(CombatEffect $effect): static {
 		$this->removeItem($effect);
 
 		return $this;
 	}
 
-	public function setCombatSpell(AbstractBattleSpell $combatSpell): CombatEffect {
+	public function setCombatSpell(AbstractBattleSpell $combatSpell): static {
 		$this->combatSpell = $combatSpell;
 		return $this;
 	}
 
-	public function setDuration(int $duration): CombatEffect {
+	public function setDuration(int $duration): static {
 		$this->duration = $duration;
 		return $this;
 	}

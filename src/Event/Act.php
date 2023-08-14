@@ -4,5 +4,5 @@ namespace Lemuria\Engine\Fantasya\Event;
 
 interface Act
 {
-	public function act(): Act;
+	public function act(): static;
 }

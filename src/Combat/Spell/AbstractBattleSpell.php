@@ -39,17 +39,17 @@ abstract class AbstractBattleSpell
 		return $this->grade->Spell();
 	}
 
-	public function setCalculus(Calculus $calculus): AbstractBattleSpell {
+	public function setCalculus(Calculus $calculus): static {
 		$this->calculus = $calculus;
 		return $this;
 	}
 
-	public function setCaster(Ranks $ranks): AbstractBattleSpell {
+	public function setCaster(Ranks $ranks): static {
 		$this->caster = $ranks;
 		return $this;
 	}
 
-	public function setVictim(Ranks $ranks): AbstractBattleSpell {
+	public function setVictim(Ranks $ranks): static {
 		$this->victim = $ranks;
 		return $this;
 	}

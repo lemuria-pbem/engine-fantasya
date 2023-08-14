@@ -23,7 +23,7 @@ class Besieger
 		return $this->besiegers;
 	}
 
-	public function siege(): Besieger {
+	public function siege(): static {
 		$this->sieged = true;
 		return $this;
 	}

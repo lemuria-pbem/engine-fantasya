@@ -129,7 +129,7 @@ class Supply implements \Countable
 	/**
 	 * Set the luxury and reset the calculator.
 	 */
-	public function setLuxury(Luxury $luxury): Supply {
+	public function setLuxury(Luxury $luxury): static {
 		$luxuries = $this->region->Luxuries();
 		if ($luxuries) {
 			$this->luxury = $luxury;

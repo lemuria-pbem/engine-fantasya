@@ -6,7 +6,6 @@ use function Lemuria\randFloat;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Effect\Contagion;
 use Lemuria\Engine\Fantasya\Event\Act\Seek;
-use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Event\Behaviour\AbstractBehaviour;
 use Lemuria\Engine\Fantasya\Event\Reproduction;
 use Lemuria\Engine\Fantasya\State;
@@ -59,14 +58,14 @@ class Goblin extends AbstractBehaviour
 		return $this->reproduction;
 	}
 
-	public function prepare(): Behaviour {
+	public function prepare(): static {
 		if ($this->hasContagionEffect() || $this->hasRoamEffect()) {
 			return $this;
 		}
 		return $this->seek();
 	}
 
-	public function conduct(): Behaviour {
+	public function conduct(): static {
 		$this->perishByChance(self::PERISH);
 		if ($this->act instanceof Seek) {
 			if ($this->act->Enemy()->isEmpty()) {
@@ -87,7 +86,7 @@ class Goblin extends AbstractBehaviour
 		return $this;
 	}
 
-	public function finish(): Behaviour {
+	public function finish(): static {
 		if (!$this->hasContagionEffect()) {
 			parent::finish();
 			return $this->scatter(self::SCATTER_UNITS, self::SCATTER_PERSONS);

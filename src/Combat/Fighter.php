@@ -49,12 +49,12 @@ class Fighter
 		return $quickening;
 	}
 
-	public function addRound(): Fighter {
+	public function addRound(): static {
 		$this->round++;
 		return $this;
 	}
 
-	public function heal(): Fighter {
+	public function heal(): static {
 		$this->health = 1;
 		$this->potion = null;
 		$this->hasBeenHealed = true;

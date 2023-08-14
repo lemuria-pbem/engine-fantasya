@@ -37,7 +37,7 @@ class PickPocket implements Act
 
 	protected People $enemy;
 
-	public function act(): PickPocket {
+	public function act(): static {
 		$size       = $this->unit->Size();
 		$tries      = (int)ceil($size / self::TRIES);
 		$triesLeft  = $tries;

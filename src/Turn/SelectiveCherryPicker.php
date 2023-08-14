@@ -36,44 +36,44 @@ class SelectiveCherryPicker implements CherryPicker
 		return $this->priorityDefault;
 	}
 
-	public function run(int $priority): SelectiveCherryPicker {
+	public function run(int $priority): static {
 		$this->priorities[$priority] = true;
 		return $this;
 	}
 
-	public function skip(int $priority): SelectiveCherryPicker {
+	public function skip(int $priority): static {
 		$this->priorities[$priority] = false;
 		return $this;
 	}
 
-	public function everyone(): SelectiveCherryPicker {
+	public function everyone(): static {
 		$this->partyDefault = true;
 		return $this;
 	}
 
-	public function none(): SelectiveCherryPicker {
+	public function none(): static {
 		$this->partyDefault = false;
 		return $this;
 	}
 
-	public function add(Id|Party|int|string $party): SelectiveCherryPicker {
+	public function add(Id|Party|int|string $party): static {
 		$id                 = $this->determineId($party);
 		$this->parties[$id] = true;
 		return $this;
 	}
 
-	public function remove(Id|Party|int|string $party): SelectiveCherryPicker {
+	public function remove(Id|Party|int|string $party): static {
 		$id                 = $this->determineId($party);
 		$this->parties[$id] = false;
 		return $this;
 	}
 
-	public function everything(): SelectiveCherryPicker {
+	public function everything(): static {
 		$this->priorityDefault = true;
 		return $this;
 	}
 
-	public function nothing(): SelectiveCherryPicker {
+	public function nothing(): static {
 		$this->priorityDefault = false;
 		return $this;
 	}

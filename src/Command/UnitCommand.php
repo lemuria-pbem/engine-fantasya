@@ -2,10 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Calculus;
-use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\UnitTrait;
@@ -53,7 +51,7 @@ abstract class UnitCommand extends AbstractCommand
 	 *
 	 * @throws CommandException
 	 */
-	public function execute(): Action {
+	public function execute(): static {
 		parent::execute();
 		if ($this instanceof Activity) {
 			$this->context->getProtocol($this->unit)->addNewDefaults($this);
@@ -74,7 +72,7 @@ abstract class UnitCommand extends AbstractCommand
 	/**
 	 * Prevent that this command is used as new default.
 	 */
-	public function preventDefault(): Command {
+	public function preventDefault(): UnitCommand {
 		$this->preventDefault = true;
 		return $this;
 	}

@@ -16,7 +16,6 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Composition\RingOfInvisibility as RingOfInvisibilityComposition;
 use Lemuria\Model\Fantasya\Spell\RingOfInvisibility;
 use Lemuria\Model\Fantasya\Wizardry;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class Enchantment extends AbstractUnitEffect
@@ -51,7 +50,7 @@ final class Enchantment extends AbstractUnitEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->enchantments->unserialize($data[self::ENCHANTMENTS]);
 		return $this;

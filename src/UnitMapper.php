@@ -41,7 +41,7 @@ class UnitMapper
 	 *
 	 * @throws TempUnitException
 	 */
-	public function map(Temp $command): UnitMapper {
+	public function map(Temp $command): static {
 		$temp = $command->getTempNumber();
 		if ($temp) {
 			if ($this->has($temp)) {

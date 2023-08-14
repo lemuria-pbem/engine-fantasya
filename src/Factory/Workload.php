@@ -24,12 +24,12 @@ class Workload implements \Countable
 		return $this->count;
 	}
 
-	public function add(int $count = 1): Workload {
+	public function add(int $count = 1): static {
 		$this->count += $count;
 		return $this;
 	}
 
-	public function setMaximum(int $maximum): Workload {
+	public function setMaximum(int $maximum): static {
 		$this->maximum = $maximum;
 		return $this;
 	}

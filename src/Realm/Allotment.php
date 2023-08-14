@@ -58,7 +58,7 @@ class Allotment
 		return $this->realm;
 	}
 
-	public function setThreshold(int|float|null $threshold): Allotment {
+	public function setThreshold(int|float|null $threshold): static {
 		$this->threshold = $threshold;
 		return $this;
 	}
@@ -115,7 +115,7 @@ class Allotment
 		$consumer->allocate($resources);
 	}
 
-	public function disableFleetCheck(): Allotment {
+	public function disableFleetCheck(): static {
 		$this->isFleetEnabled = false;
 		Lemuria::Log()->debug('Fleet check is disabled for this command');
 		return $this;

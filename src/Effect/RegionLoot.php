@@ -12,7 +12,6 @@ use Lemuria\Model\Fantasya\Animal;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class RegionLoot extends AbstractRegionEffect
@@ -44,7 +43,7 @@ final class RegionLoot extends AbstractRegionEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->rounds = $data[self::ROUNDS];
 		return $this;

@@ -10,7 +10,6 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\People;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class Contagion extends AbstractRegionEffect
@@ -48,7 +47,7 @@ final class Contagion extends AbstractRegionEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->disease  = Disease::parse($data[self::DISEASE]);
 		$this->duration = $data[self::DURATION];

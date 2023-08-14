@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\People;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class ContactEffect extends AbstractPartyEffect
@@ -31,7 +30,7 @@ final class ContactEffect extends AbstractPartyEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->from->unserialize($data[self::FROM]);
 		return $this;

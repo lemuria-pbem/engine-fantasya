@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 abstract class AbstractOverrunMessage extends AbstractMessage
@@ -15,7 +14,7 @@ abstract class AbstractOverrunMessage extends AbstractMessage
 		parent::__construct();
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->additional = $data[self::ADDITIONAL];
 		return $this;

@@ -16,12 +16,12 @@ class Effects extends ItemSet
 {
 	use BuilderTrait;
 
-	public function add(CombatEffect $effect): Effects {
+	public function add(CombatEffect $effect): static {
 		$this->addItem($effect);
 		return $this;
 	}
 
-	public function remove(CombatEffect $effect): Effects {
+	public function remove(CombatEffect $effect): static {
 		$this->removeItem($effect);
 		return $this;
 	}

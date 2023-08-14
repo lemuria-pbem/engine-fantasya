@@ -5,7 +5,6 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 use Lemuria\Engine\Fantasya\Combat\Combat;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 abstract class AbstractSplitMessage extends AbstractMessage
@@ -41,7 +40,7 @@ abstract class AbstractSplitMessage extends AbstractMessage
 		}
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->unit      = Entity::create($data[self::ID], $data[self::NAME]);
 		$this->from      = $data[self::FROM];

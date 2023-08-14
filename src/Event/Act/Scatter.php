@@ -24,7 +24,7 @@ class Scatter implements Act
 
 	protected ?People $gathering = null;
 
-	public function act(): Scatter {
+	public function act(): static {
 		if ($this->checkUnits()) {
 			$this->message(ScatterMessage::class, $this->unit);
 			$this->createRoamEffect();

@@ -43,7 +43,7 @@ class LemuriaDebut implements Debut
 	/**
 	 * Add a newcomer to the catalog.
 	 */
-	public function add(Newcomer $newcomer): Debut {
+	public function add(Newcomer $newcomer): static {
 		$uuid = $newcomer->Uuid();
 		$this->newcomers[$uuid] = $newcomer;
 		return $this;
@@ -52,7 +52,7 @@ class LemuriaDebut implements Debut
 	/**
 	 * Remove a newcomer from the catalog.
 	 */
-	public function remove(Newcomer $newcomer): Debut {
+	public function remove(Newcomer $newcomer): static {
 		$uuid = $newcomer->Uuid();
 		unset($this->newcomers[$uuid]);
 		return $this;
@@ -61,7 +61,7 @@ class LemuriaDebut implements Debut
 	/**
 	 * Load newcomers data.
 	 */
-	public function load(): Debut {
+	public function load(): static {
 		if (!$this->isLoaded) {
 			foreach (Lemuria::Game()->getNewcomers() as $data) {
 				$newcomer = new LemuriaNewcomer();
@@ -76,7 +76,7 @@ class LemuriaDebut implements Debut
 	/**
 	 * Save newcomers data.
 	 */
-	public function save(): Debut {
+	public function save(): static {
 		$data = [];
 		foreach ($this->newcomers as $newcomer) {
 			$data[] = $newcomer->serialize();
@@ -88,7 +88,7 @@ class LemuriaDebut implements Debut
 	/**
 	 * Clear all newcomers.
 	 */
-	public function clear(): Debut {
+	public function clear(): static {
 		$this->newcomers = [];
 		return $this;
 	}

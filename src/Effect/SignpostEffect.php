@@ -8,7 +8,6 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class SignpostEffect extends AbstractConstructionEffect
@@ -33,7 +32,7 @@ final class SignpostEffect extends AbstractConstructionEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->age = $data[self::AGE];
 		return $this;

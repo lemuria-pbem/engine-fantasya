@@ -5,7 +5,6 @@ namespace Lemuria\Engine\Fantasya\Storage;
 use Lemuria\Engine\Fantasya\Storage\Migration\AbstractUpgrade;
 use Lemuria\Model\Fantasya\Storage\JsonGame;
 use Lemuria\Model\Fantasya\Storage\JsonProvider;
-use Lemuria\Model\Game;
 use Lemuria\Storage\Provider;
 
 class LemuriaGame extends JsonGame
@@ -20,7 +19,7 @@ class LemuriaGame extends JsonGame
 		parent::__construct();
 	}
 
-	public function migrate(): Game {
+	public function migrate(): static {
 		$calendar = $this->getCalendar();
 		$version  = $calendar['version'];
 		parent::migrate();

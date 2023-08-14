@@ -6,7 +6,6 @@ use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 use Lemuria\Engine\Fantasya\Message\Casus;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 abstract class AbstractReinforcementWeaponMessage extends AbstractReinforcementMessage
@@ -23,7 +22,7 @@ abstract class AbstractReinforcementWeaponMessage extends AbstractReinforcementM
 		}
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->weapon = $data[self::WEAPON];
 		return $this;

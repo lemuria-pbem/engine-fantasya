@@ -21,7 +21,6 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait as ModelBuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
-use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
 use Lemuria\Validate;
 
@@ -103,7 +102,7 @@ class LemuriaMessage implements Message
 		return $this->type;
 	}
 
-	public function setId(Id $id): Message {
+	public function setId(Id $id): static {
 		if ($this->id) {
 			throw new LemuriaException('Cannot set ID twice.');
 		}
@@ -146,7 +145,7 @@ class LemuriaMessage implements Message
 	/**
 	 * Restore the model's data from serialized data.
 	 */
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		$this->validateSerializedData($data);
 		if (isset($data[self::NEW_ASSIGNEE])) {
 			$this->newAssignee = new Id($data[self::NEW_ASSIGNEE]);
@@ -168,12 +167,12 @@ class LemuriaMessage implements Message
 		return $this;
 	}
 
-	public function setType(MessageType $type): LemuriaMessage {
+	public function setType(MessageType $type): static {
 		$this->type = $type;
 		return $this;
 	}
 
-	public function setAssignee(Entity|Id $assignee): LemuriaMessage {
+	public function setAssignee(Entity|Id $assignee): static {
 		$this->assignee = $assignee instanceof Entity ? $assignee->Id() : $assignee;
 		return $this;
 	}
@@ -242,7 +241,7 @@ class LemuriaMessage implements Message
 	/**
 	 * Set an entity.
 	 */
-	public function e(Identifiable $entity, ?string $name = null): LemuriaMessage {
+	public function e(Identifiable $entity, ?string $name = null): static {
 		if (!$name) {
 			$name = self::ENTITY;
 		}
@@ -259,7 +258,7 @@ class LemuriaMessage implements Message
 	 * @param array<Entity> $entities
 	 * @return LemuriaMessage
 	 */
-	public function entities(array $entities): LemuriaMessage {
+	public function entities(array $entities): static {
 		$i = 0;
 		foreach ($entities as $entity) {
 			$this->e($entity, 'e' . ++$i);
@@ -270,7 +269,7 @@ class LemuriaMessage implements Message
 	/**
 	 * Set an item.
 	 */
-	public function i(Item $item, ?string $name = null): LemuriaMessage {
+	public function i(Item $item, ?string $name = null): static {
 		if (!$name) {
 			$name = self::ITEM;
 		}
@@ -281,7 +280,7 @@ class LemuriaMessage implements Message
 	/**
 	 * Set a Singleton.
 	 */
-	public function s(Singleton $singleton, ?string $name = null): LemuriaMessage {
+	public function s(Singleton $singleton, ?string $name = null): static {
 		if (!$name) {
 			$name = self::SINGLETON;
 		}
@@ -295,7 +294,7 @@ class LemuriaMessage implements Message
 	/**
 	 * Set a parameter.
 	 */
-	public function p(array|bool|float|int|string $value, ?string $name = null): LemuriaMessage {
+	public function p(array|bool|float|int|string $value, ?string $name = null): static {
 		if (!$name) {
 			$name = self::PARAMETER;
 		}

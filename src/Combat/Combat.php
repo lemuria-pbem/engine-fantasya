@@ -174,7 +174,7 @@ class Combat
 		return $armies;
 	}
 
-	public function embattle(): Combat {
+	public function embattle(): static {
 		$log = BattleLog::getInstance();
 		$log->add(new AttackerSideMessage($this->attackParticipants));
 		foreach ($this->attacker as $rank) {
@@ -191,7 +191,7 @@ class Combat
 		return $this;
 	}
 
-	public function castPreparationSpells(?Party $first): Combat {
+	public function castPreparationSpells(?Party $first): static {
 		$casts = new Casts();
 		if ($first) {
 			if ($this->isAttacker[$first->Id()->Id()]) {
@@ -211,7 +211,7 @@ class Combat
 		return $this;
 	}
 
-	public function tacticsRound(Party $party): Combat {
+	public function tacticsRound(Party $party): static {
 		BattleLog::getInstance()->add(new TacticsRoundMessage());
 		if ($this->isAttacker[$party->Id()->Id()]) {
 			BattleLog::getInstance()->add(new AttackerTacticsRoundMessage());
@@ -294,7 +294,7 @@ class Combat
 		return $effect;
 	}
 
-	public function addEffect(CombatEffect $effect): Combat {
+	public function addEffect(CombatEffect $effect): static {
 		$this->effects->add($effect);
 		return $this;
 	}

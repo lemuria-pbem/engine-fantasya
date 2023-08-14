@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 class ShockwaveHitMessage extends AbstractMessage
@@ -21,7 +20,7 @@ class ShockwaveHitMessage extends AbstractMessage
 		return $this->count . ' fighters of combatant ' . $this->combatant . ' are distracted by a Shockwave.';
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->combatant = $data[self::COMBATANT];
 		$this->count     = $data[self::COUNT];

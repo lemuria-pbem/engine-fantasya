@@ -42,18 +42,18 @@ class CommandQueue
 		return count($this->queue[$priority] ?? []);
 	}
 
-	public function remove(int $priority): CommandQueue {
+	public function remove(int $priority): static {
 		unset($this->queue[$priority]);
 		return $this;
 	}
 
-	public function add(Action $action): CommandQueue {
+	public function add(Action $action): static {
 		$priority                 = $this->priority->getPriority($action);
 		$this->queue[$priority][] = $action;
 		return $this;
 	}
 
-	public function shuffle(int $priority): CommandQueue {
+	public function shuffle(int $priority): static {
 		if (!$this->priority->canShuffle($priority)) {
 			return $this;
 		}

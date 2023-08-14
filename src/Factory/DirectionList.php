@@ -66,12 +66,12 @@ class DirectionList implements \Countable
 		throw new LemuriaException('No more directions.');
 	}
 
-	public function revert(): DirectionList {
+	public function revert(): static {
 		$this->index = $this->previousIndex;
 		return $this;
 	}
 
-	public function set(Phrase $phrase): DirectionList {
+	public function set(Phrase $phrase): static {
 		$n = $phrase->count();
 		for ($i = 1; $i <= $n; $i++) {
 			$this->add($phrase->getParameter($i));
@@ -79,7 +79,7 @@ class DirectionList implements \Countable
 		return $this;
 	}
 
-	public function add(Direction|string $direction): DirectionList {
+	public function add(Direction|string $direction): static {
 		if ($this->isRotating && ($direction === Direction::ROUTE_STOP || $this->factory->isRouteStop($direction))) {
 			$this->directions[] = Direction::ROUTE_STOP;
 		} else {
@@ -90,7 +90,7 @@ class DirectionList implements \Countable
 		return $this;
 	}
 
-	public function insertNext(Direction|string $direction): DirectionList {
+	public function insertNext(Direction|string $direction): static {
 		if (is_string($direction)) {
 			$direction = $this->factory->direction($direction);
 		}
@@ -100,7 +100,7 @@ class DirectionList implements \Countable
 		return $this;
 	}
 
-	public function setIsRotating(bool $isRotating = true): DirectionList {
+	public function setIsRotating(bool $isRotating = true): static {
 		$this->isRotating = $isRotating;
 		return $this;
 	}

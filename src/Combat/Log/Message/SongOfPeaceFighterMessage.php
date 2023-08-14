@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use Lemuria\Engine\Fantasya\Combat\Combatant;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 class SongOfPeaceFighterMessage extends SongOfPeaceCombatantMessage
@@ -19,7 +18,7 @@ class SongOfPeaceFighterMessage extends SongOfPeaceCombatantMessage
 		return $this->fighter . ' fighters of combatant ' . $this->combatant . ' leave the battlefield in peace.';
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->fighter = $data[self::FIGHTER];
 		return $this;

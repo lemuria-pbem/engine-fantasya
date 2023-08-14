@@ -11,7 +11,6 @@ use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Potion;
-use Lemuria\Serializable;
 use Lemuria\SingletonSet;
 use Lemuria\Validate;
 
@@ -58,7 +57,7 @@ final class PotionReserve extends AbstractConstructionEffect
 	/**
 	 * @noinspection DuplicatedCode
 	 */
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		foreach ($data[self::POTIONS] as $potionData) {
 			$class  = $potionData[self::POTION];

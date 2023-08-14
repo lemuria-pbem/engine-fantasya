@@ -67,26 +67,26 @@ class Charge
 		return $this->damage;
 	}
 
-	public function setAttacking(?Combatant $combatant): Charge {
+	public function setAttacking(?Combatant $combatant): static {
 		if ($combatant) {
 			$this->attackCombatant = $combatant;
 		}
 		return $this;
 	}
 
-	public function setAttacker(int $attacker): Charge {
+	public function setAttacker(int $attacker): static {
 		$this->attacker = $attacker;
 		return $this;
 	}
 
-	public function setDefending(?Combatant $combatant): Charge {
+	public function setDefending(?Combatant $combatant): static {
 		if ($combatant) {
 			$this->defendCombatant = $combatant;
 		}
 		return $this;
 	}
 
-	public function setDefender(int $defender): Charge {
+	public function setDefender(int $defender): static {
 		$this->defender = $defender;
 		return $this;
 	}
@@ -108,7 +108,7 @@ class Charge
 		$this->damage += $this->defendCombatant->assault($this);
 	}
 
-	protected function countAttacker(): Charge {
+	protected function countAttacker(): static {
 		$next = $this->attackCombatant->getId($this->attacker);
 		if ($next !== $this->lastAttacker) {
 			$this->lastAttacker = $next;
@@ -117,7 +117,7 @@ class Charge
 		return $this;
 	}
 
-	protected function countDefender(): Charge {
+	protected function countDefender(): static {
 		$next = $this->defendCombatant->getId($this->defender);
 		if ($next !== $this->lastDefender) {
 			$this->lastDefender = $next;

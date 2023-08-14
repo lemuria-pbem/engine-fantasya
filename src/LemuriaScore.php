@@ -108,7 +108,7 @@ class LemuriaScore implements Score
 	/**
 	 * Add an Effect to persistence.
 	 */
-	public function add(Identifiable $effect): Score {
+	public function add(Identifiable $effect): static {
 		$namespace = $effect->Catalog()->value;
 		$id        = $effect->Id()->Id();
 		$class     = getClass($effect);
@@ -123,7 +123,7 @@ class LemuriaScore implements Score
 	/**
 	 * Remove an Effect from persistence.
 	 */
-	public function remove(Identifiable $effect): Score {
+	public function remove(Identifiable $effect): static {
 		$namespace = $effect->Catalog()->value;
 		$id        = $effect->Id()->Id();
 		$class     = getClass($effect);
@@ -134,7 +134,7 @@ class LemuriaScore implements Score
 	/**
 	 * Load message data into score.
 	 */
-	public function load(): Score {
+	public function load(): static {
 		if (!$this->isLoaded) {
 			$effects = Lemuria::Game()->getEffects();
 			foreach ($effects as $data) {
@@ -148,7 +148,7 @@ class LemuriaScore implements Score
 	/**
 	 * Save game data from score.
 	 */
-	public function save(): Score {
+	public function save(): static {
 		$effects = [];
 		foreach ($this->effects as $namespace) {
 			foreach ($namespace as $id) {

@@ -22,7 +22,7 @@ class Watch implements Act
 		return $this->isGuarding;
 	}
 
-	public function act(): Watch {
+	public function act(): static {
 		$this->isGuarding = $this->unit->IsGuarding();
 		if (!$this->isGuarding && $this->unit->BattleRow()->value >= BattleRow::Defensive->value) {
 			$this->unit->setIsGuarding(true);

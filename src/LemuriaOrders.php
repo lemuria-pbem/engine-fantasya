@@ -66,7 +66,7 @@ class LemuriaOrders implements Orders, Reassignment
 	/**
 	 * Load orders data.
 	 */
-	public function load(): Orders {
+	public function load(): static {
 		if (!$this->isLoaded) {
 			$orders = Lemuria::Game()->getOrders();
 			$this->validateSerializedData($orders);
@@ -88,7 +88,7 @@ class LemuriaOrders implements Orders, Reassignment
 	/**
 	 * Save orders data.
 	 */
-	public function save(): Orders {
+	public function save(): static {
 		$current = [];
 		$default = [];
 		ksort($this->current);
@@ -103,7 +103,7 @@ class LemuriaOrders implements Orders, Reassignment
 		return $this;
 	}
 
-	public function clear(): Orders {
+	public function clear(): static {
 		$this->current = [];
 		$this->default = [];
 		return $this;

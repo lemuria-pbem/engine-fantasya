@@ -27,7 +27,7 @@ class GearDistribution extends InventoryDistribution
 		parent::__construct($this->calculus->Unit());
 	}
 
-	public function distribute(): GearDistribution {
+	public function distribute(): static {
 		$this->sortWeaponSkills();
 		if ($this->canDistributeInventory()) {
 			parent::distribute();

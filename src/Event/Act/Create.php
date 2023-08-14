@@ -87,7 +87,7 @@ class Create implements Act
 		$this->camouflage = self::createTalent(Camouflage::class);
 	}
 
-	public function act(): Create {
+	public function act(): static {
 		foreach ($this->gangs as $gang) {
 			$unit = new Unit();
 			$unit->setId(Lemuria::Catalog()->nextId(Domain::Unit));

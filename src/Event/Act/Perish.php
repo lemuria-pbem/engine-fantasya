@@ -28,7 +28,7 @@ class Perish implements Act
 	use ActTrait;
 	use MessageTrait;
 
-	public function act(): Perish {
+	public function act(): static {
 		Lemuria::Log()->debug('In ' . $this->unit . ' one member perishes.');
 		$size = $this->unit->Size();
 		if ($size > 1) {

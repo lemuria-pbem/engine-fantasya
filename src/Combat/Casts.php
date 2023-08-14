@@ -22,7 +22,7 @@ class Casts
 		$this->casts[$order][] = $cast;
 	}
 
-	public function cast(): Casts {
+	public function cast(): static {
 		ksort($this->casts);
 		foreach ($this->casts as $order => $casts) {
 			Lemuria::Log()->debug('Casting battle spells of order ' . $order . '.');
@@ -38,7 +38,7 @@ class Casts
 		return $this;
 	}
 
-	public function clear(): Casts {
+	public function clear(): static {
 		$this->casts = [];
 		return $this;
 	}

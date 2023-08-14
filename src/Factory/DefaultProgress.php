@@ -93,7 +93,7 @@ class DefaultProgress implements Progress
 	 * @param Event $event
 	 * @return Progress
 	 */
-	public function add(Event $event): Progress {
+	public function add(Event $event): static {
 		$this->events[] = $event;
 		$this->count++;
 		return $this;

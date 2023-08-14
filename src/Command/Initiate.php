@@ -3,7 +3,6 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use function Lemuria\randElement;
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Effect\NonAggressionPact;
 use Lemuria\Engine\Fantasya\Factory\ActionTrait;
@@ -126,7 +125,7 @@ final class Initiate implements Command
 	/**
 	 * @throws CommandException
 	 */
-	public function prepare(): Action {
+	public function prepare(): static {
 		Lemuria::Log()->debug('Preparing command ' . $this . '.', ['command' => $this]);
 		$this->prepareAction();
 		return $this;
@@ -135,7 +134,7 @@ final class Initiate implements Command
 	/**
 	 * @throws CommandException
 	 */
-	public function execute(): Action {
+	public function execute(): static {
 		Lemuria::Log()->debug('Executing command ' . $this . '.', ['command' => $this]);
 		$this->executeAction();
 		return $this;
