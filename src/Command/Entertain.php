@@ -58,7 +58,15 @@ final class Entertain extends AllocationCommand implements Activity
 		if ($quantity->Count() <= 0) {
 			$guardParties = $this->checkBeforeAllocation();
 			if (empty($guardParties)) {
-				$this->message(EntertainNoExperienceMessage::class);
+				if ($this->calculus()->knowledge(Entertaining::class)->Level() > 0) {
+					if ($this->hasRegionResources(self::createCommodity(Peasant::class))) {
+						$this->message(EntertainNoSilverMessage::class)->e($this->unit->Region());
+					} else {
+						$this->message(EntertainNoPeasantsMessage::class)->e($this->unit->Region());
+					}
+				} else {
+					$this->message(EntertainNoExperienceMessage::class);
+				}
 			} else {
 				$this->message(EntertainGuardedMessage::class);
 				foreach ($guardParties as $party) {
