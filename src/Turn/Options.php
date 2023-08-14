@@ -12,6 +12,8 @@ class Options
 
 	private bool $isSimulation = false;
 
+	private bool $isProfiling = false;
+
 	private ThrowOption $throwExceptions;
 
 	public function __construct() {
@@ -30,6 +32,10 @@ class Options
 		return $this->isSimulation;
 	}
 
+	public function IsProfiling(): bool {
+		return $this->isProfiling;
+	}
+
 	public function ThrowExceptions(): ThrowOption {
 		return $this->throwExceptions;
 	}
@@ -46,6 +52,11 @@ class Options
 
 	public function setIsSimulation(bool $isSimulation): Options {
 		$this->isSimulation = $isSimulation;
+		return $this;
+	}
+
+	public function setIsProfiling(bool $isProfiling): Options {
+		$this->isProfiling = $isProfiling;
 		return $this;
 	}
 

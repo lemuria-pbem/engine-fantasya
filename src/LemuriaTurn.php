@@ -46,6 +46,8 @@ class LemuriaTurn implements Turn
 {
 	use BuilderTrait;
 
+	protected const PROFILE_PREFIX = 'LemuriaTurn_';
+
 	protected readonly CommandQueue $queue;
 
 	protected readonly CommandPriority $priority;
@@ -56,6 +58,8 @@ class LemuriaTurn implements Turn
 
 	private readonly State $state;
 
+	private bool $isProfiling = false;
+
 	/**
 	 * Initialize turn.
 	 */
@@ -63,6 +67,7 @@ class LemuriaTurn implements Turn
 		$this->state = State::getInstance($this);
 		if ($options) {
 			$this->state->setTurnOptions($options);
+			$this->isProfiling = $options->IsProfiling();
 		}
 		$this->priority = CommandPriority::getInstance();
 		$this->queue    = new CommandQueue();
@@ -202,6 +207,9 @@ class LemuriaTurn implements Turn
 			}
 		}
 		$priorities = $this->queue->getPriorities();
+		if ($this->isProfiling) {
+			Lemuria::Profiler()->recordAndLog(self::PROFILE_PREFIX . 'cherrypicking');
+		}
 
 		Lemuria::Log()->debug('Executing queued actions.', ['queues' => count($priorities)]);
 		foreach ($priorities as $priority) {
@@ -237,6 +245,10 @@ class LemuriaTurn implements Turn
 						throw $e;
 					}
 				}
+			}
+
+			if ($this->isProfiling) {
+				Lemuria::Profiler()->recordAndLog(self::PROFILE_PREFIX . 'priority-' . $priority);
 			}
 		}
 		Lemuria::Log()->debug('Queued actions executed.');
