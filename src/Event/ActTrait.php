@@ -92,7 +92,7 @@ trait ActTrait
 	protected function createRoamEffect(): void {
 		$effect = new RoamEffect(State::getInstance());
 		if (!Lemuria::Score()->find($effect->setUnit($this->unit))) {
-			Lemuria::Score()->add($effect->addReassignment());
+			Lemuria::Score()->add($effect);
 		}
 	}
 }

@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
 use function Lemuria\getClass;
+use Lemuria\Engine\Fantasya\Effect\AbstractEffect;
 use Lemuria\Engine\Fantasya\Factory\EffectFactory;
 use Lemuria\Engine\Score;
 use Lemuria\Exception\LemuriaException;
@@ -113,6 +114,9 @@ class LemuriaScore implements Score
 		$id        = $effect->Id()->Id();
 		$class     = getClass($effect);
 
+		if ($effect instanceof AbstractEffect) {
+			$effect->addReassignment();
+		}
 		$this->effects[$namespace][$id][$class] = $effect;
 		if ($this->isLoaded && $effect instanceof Effect && $effect->needsAftercare()) {
 			$this->aftercare[] = $effect;

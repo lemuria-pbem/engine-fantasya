@@ -22,7 +22,7 @@ trait SiegeTrait
 			$siege  = new SiegeEffect(State::getInstance());
 			$effect = Lemuria::Score()->find($siege->setConstruction($construction));
 			if ($effect instanceof SiegeEffect) {
-				$this->siege = $effect->addReassignment();
+				$this->siege = $effect;
 			}
 		}
 		return $this;

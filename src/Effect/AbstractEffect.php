@@ -115,7 +115,7 @@ abstract class AbstractEffect implements Effect, Reassignment
 			throw new LemuriaException('Class name mismatch.', new UnserializeException());
 		}
 		$this->id = new Id($data[self::ID]);
-		return $this;
+		return $this->addReassignment();
 	}
 
 	public function addReassignment(): static {

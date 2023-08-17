@@ -126,7 +126,7 @@ class Kraken extends AbstractBehaviour
 			if ($existing instanceof AttackOnVessel) {
 				$effect = $existing;
 			}
-			$effect->setVessel($vessel)->addReassignment();
+			$effect->setVessel($vessel);
 			return true;
 		}
 		return false;
