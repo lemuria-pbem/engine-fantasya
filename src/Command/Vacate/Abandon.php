@@ -12,8 +12,6 @@ use Lemuria\Model\Fantasya\Construction;
 /**
  * This command creates a construction effect for the building that the unit leaves, to make it possible for entering
  * units to calculate free space correctly.
- *
- * - VERLASSEN
  */
 final class Abandon extends UnitCommand
 {
@@ -35,6 +33,9 @@ final class Abandon extends UnitCommand
 				);
 			}
 		}
+	}
+
+	protected function commitCommand(UnitCommand $command): void {
 	}
 
 	private function getEffect(Construction $construction): FreeSpace {
