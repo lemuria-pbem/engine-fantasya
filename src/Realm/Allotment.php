@@ -83,25 +83,28 @@ class Allotment
 			$this->calculateAvailability($commodity, $quota);
 			$fleetTotal = $this->calculateFleetTotal($commodity);
 			$local      = $this->availability[$this->center];
-			$rate       = $demand / ($fleetTotal + $local);
-			foreach ($this->region as $id => $region) {
-				if ($id === $this->center) {
-					continue;
-				}
-				$part = (int)round($rate * $this->availability[$id]);
-				if ($part > $demand) {
-					$part = $demand;
-				}
-				if ($this->isFleetEnabled) {
-					$weight = $this->fleet->fetch($part * $piece);
-					$part   = (int)floor($weight / $piece);
-				}
-				if ($part > 0) {
-					$this->state->getAvailability($region)->remove(new Quantity($commodity, $part));
-					$partQuantity = new Quantity($commodity, $part);
-					$resources->add($partQuantity);
-					$demand -= $part;
-					Lemuria::Log()->debug('Allotment of ' . $partQuantity . ' in region ' . $id . ' for consumer ' . $consumer->getId() . '.');
+			$total      = $fleetTotal + $local;
+			if ($total > 0) {
+				$rate = $demand / $total;
+				foreach ($this->region as $id => $region) {
+					if ($id === $this->center) {
+						continue;
+					}
+					$part = (int)round($rate * $this->availability[$id]);
+					if ($part > $demand) {
+						$part = $demand;
+					}
+					if ($this->isFleetEnabled) {
+						$weight = $this->fleet->fetch($part * $piece);
+						$part   = (int)floor($weight / $piece);
+					}
+					if ($part > 0) {
+						$this->state->getAvailability($region)->remove(new Quantity($commodity, $part));
+						$partQuantity = new Quantity($commodity, $part);
+						$resources->add($partQuantity);
+						$demand -= $part;
+						Lemuria::Log()->debug('Allotment of ' . $partQuantity . ' in region ' . $id . ' for consumer ' . $consumer->getId() . '.');
+					}
 				}
 			}
 			$demand = min($demand, $local);
@@ -138,9 +141,7 @@ class Allotment
 				$pieces          = (int)floor(Availability::HERBS_PER_REGION * $threshold);
 				$reducedResource = $resource - $pieces;
 			}
-			$reserve                 = max(0, (int)floor($reducedResource / $quota));
-			$availability            = (int)floor($quota * $reserve);
-			$this->availability[$id] = $availability;
+			$this->availability[$id] = max(0, (int)floor($quota * $reducedResource));
 		}
 	}
 
