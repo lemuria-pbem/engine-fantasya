@@ -18,6 +18,8 @@ final class VanishEffect extends AbstractUnitEffect
 
 	private const WEEKS = 'weeks';
 
+	protected ?bool $isReassign = null;
+
 	private ?int $summoner = null;
 
 	private int $weeks = 1;
