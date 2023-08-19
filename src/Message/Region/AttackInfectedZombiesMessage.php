@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Region;
 
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message\Result;
 use Lemuria\Singleton;
@@ -27,7 +28,7 @@ class AttackInfectedZombiesMessage extends AbstractRegionMessage
 
 	protected function getTranslation(string $name): string {
 		if ($name === 'zombies') {
-			return $this->translateKey('race.' . getClass($this->zombies), $this->size === 1 ? 0 : 1);
+			return $this->translateSingleton($this->zombies, $this->size === 1 ? 0 : 1);
 		}
 		return parent::getTranslation($name);
 	}
