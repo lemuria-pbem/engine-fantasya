@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
+use Lemuria\Engine\Fantasya\Exception\AlternativeException;
 use Lemuria\Engine\Fantasya\Factory\Command\Dummy;
 use Lemuria\Engine\Fantasya\Factory\Command\Simulation;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
@@ -308,7 +309,10 @@ class Travel extends UnitCommand implements Activity
 	protected function commitCommand(UnitCommand $command): void {
 		$protocol = $this->context->getProtocol($this->unit);
 		if ($protocol->hasActivity($this)) {
-			Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
+			$protocol->logCurrent($command);
+			if ($command->isAlternative()) {
+				throw new AlternativeException($command);
+			}
 			throw new ActivityException($command);
 		}
 	}
