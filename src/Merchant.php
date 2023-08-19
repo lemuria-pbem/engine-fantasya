@@ -49,10 +49,10 @@ interface Merchant extends Command
 	/**
 	 * Give a cost estimation to the merchant to allow silver reservation from pool.
 	 */
-	public function costEstimation(int $cost): Merchant;
+	public function costEstimation(int $cost): static;
 
 	/**
 	 * Finish trade, create messages.
 	 */
-	public function finish(): Merchant;
+	public function finish(): static;
 }

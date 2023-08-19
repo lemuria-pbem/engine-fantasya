@@ -14,7 +14,6 @@ use Lemuria\IteratorTrait;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Location;
-use Lemuria\Serializable;
 use Lemuria\SerializableTrait;
 use Lemuria\Validate;
 
@@ -53,11 +52,11 @@ class BattleLog implements BattleModel
 
 	private static BattleLog $instance;
 
-	public static function getInstance(): BattleLog {
+	public static function getInstance(): self {
 		return self::$instance;
 	}
 
-	public static function init(BattleLog $log): BattleLog {
+	public static function init(BattleLog $log): self {
 		self::$instance = $log;
 		return $log;
 	}
@@ -113,7 +112,7 @@ class BattleLog implements BattleModel
 		];
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		$this->validateSerializedData($data);
 		$this->region  = Region::get(new Id($data[self::REGION]));
 		$this->counter = $data[self::COUNTER];
@@ -129,7 +128,7 @@ class BattleLog implements BattleModel
 		return $this;
 	}
 
-	public function add(Message $message): BattleLog {
+	public function add(Message $message): static {
 		$this->log[] = $message;
 		$this->count++;
 		return $this;

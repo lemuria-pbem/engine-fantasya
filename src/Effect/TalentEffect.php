@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Knowledge;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class TalentEffect extends AbstractUnitEffect
@@ -33,7 +32,7 @@ final class TalentEffect extends AbstractUnitEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->modifications->unserialize($data[self::MODIFICATIONS]);
 		return $this;

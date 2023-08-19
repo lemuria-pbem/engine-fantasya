@@ -38,7 +38,7 @@ class Seek implements Act
 		return $this->enemy;
 	}
 
-	public function act(): Act {
+	public function act(): static {
 		$calculus = new Calculus($this->unit);
 		$races    = self::MONSTER[$this->unit->Race()::class] ?? [];
 		$region   = $this->unit->Region();

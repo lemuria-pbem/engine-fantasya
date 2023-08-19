@@ -16,7 +16,7 @@ use Lemuria\Model\Fantasya\Party as PartyModel;
  */
 final class Party extends AbstractCommand implements Immediate
 {
-	public function skip(): Immediate {
+	public function skip(): static {
 		return $this;
 	}
 

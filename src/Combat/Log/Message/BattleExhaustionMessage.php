@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 class BattleExhaustionMessage extends AbstractMessage
@@ -19,7 +18,7 @@ class BattleExhaustionMessage extends AbstractMessage
 		return 'Battle ended in a draw due to exhaustion (' . $this->rounds. ' rounds without damage).';
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->rounds = $data[self::ROUNDS];
 		return $this;

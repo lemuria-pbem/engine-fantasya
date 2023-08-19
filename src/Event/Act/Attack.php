@@ -21,7 +21,7 @@ class Attack implements Act
 
 	protected People $enemy;
 
-	public function act(): Attack {
+	public function act(): static {
 		if (!$this->enemy->isEmpty()) {
 			$ids     = [];
 			foreach ($this->enemy as $unit) {

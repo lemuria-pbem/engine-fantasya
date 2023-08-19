@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class BrokenCarriageEffect extends AbstractPartyEffect
@@ -30,7 +29,7 @@ final class BrokenCarriageEffect extends AbstractPartyEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->unit = Unit::get(new Id($data[self::UNIT]));
 		return $this;

@@ -34,9 +34,9 @@ final class EagleEye extends AbstractCast
 		$effect   = new TalentEffect(State::getInstance());
 		$existing = Lemuria::Score()->find($effect->setUnit($unit));
 		if ($existing instanceof TalentEffect) {
-			return $existing->addReassignment();
+			return $existing;
 		}
 		Lemuria::Score()->add($effect);
-		return $effect->addReassignment();
+		return $effect;
 	}
 }

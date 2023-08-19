@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\BuyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\CommerceNotPossibleMessage;
@@ -31,7 +30,7 @@ final class Sell extends CommerceCommand
 		return Merchant::SELL;
 	}
 
-	public function execute(): Action {
+	public function execute(): static {
 		parent::execute();
 		if (!$this->isTradePossible()) {
 			$this->message(CommerceNotPossibleMessage::class)->e($this->unit->Region());
@@ -62,14 +61,14 @@ final class Sell extends CommerceCommand
 	/**
 	 * Give a cost estimation to the merchant to allow silver reservation from pool.
 	 */
-	public function costEstimation(int $cost): Merchant {
+	public function costEstimation(int $cost): static {
 		return $this;
 	}
 
 	/**
 	 * Finish trade, create messages.
 	 */
-	public function finish(): Merchant {
+	public function finish(): static {
 		if ($this->count > 0) {
 			if ($this->demand > 0 && $this->count < $this->demand && $this->demand < PHP_INT_MAX) {
 				$this->message(SellOnlyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);

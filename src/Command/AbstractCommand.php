@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\Command\InvalidIdException;
@@ -72,7 +71,7 @@ abstract class AbstractCommand implements Command
 	 *
 	 * @throws CommandException
 	 */
-	public function prepare(): Action {
+	public function prepare(): static {
 		Lemuria::Log()->debug('Preparing command ' . $this->phrase . '.', ['command' => $this]);
 		$this->prepareAction();
 		return $this;
@@ -83,7 +82,7 @@ abstract class AbstractCommand implements Command
 	 *
 	 * @throws CommandException
 	 */
-	public function execute(): Action {
+	public function execute(): static {
 		Lemuria::Log()->debug('Executing command ' . $this->phrase . '.', ['command' => $this]);
 		$this->executeAction();
 		return $this;

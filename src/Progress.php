@@ -14,5 +14,5 @@ interface Progress extends \Iterator
 	 * @param Event $event
 	 * @return Progress
 	 */
-	public function add(Event $event): Progress;
+	public function add(Event $event): static;
 }

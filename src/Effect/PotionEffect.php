@@ -12,7 +12,6 @@ use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Potion;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class PotionEffect extends AbstractUnitEffect
@@ -63,7 +62,7 @@ final class PotionEffect extends AbstractUnitEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$potion = self::createCommodity($data[self::POTION]);
 		if ($potion instanceof Potion) {

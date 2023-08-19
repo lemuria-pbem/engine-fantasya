@@ -84,7 +84,7 @@ class LemuriaTurn implements Turn
 	/**
 	 * Add commands.
 	 */
-	public function add(Move $move): Turn {
+	public function add(Move $move): static {
 		Lemuria::Log()->debug('Adding party move.', ['move' => $move]);
 		$context = new Context($this->state);
 		Lemuria::Catalog()->addReassignment($context);
@@ -164,7 +164,7 @@ class LemuriaTurn implements Turn
 	/**
 	 * Bring a new party into the game.
 	 */
-	public function initiate(Newcomer $newcomer): Turn {
+	public function initiate(Newcomer $newcomer): static {
 		if ($newcomer instanceof LemuriaNewcomer) {
 			$command = new Initiate($newcomer);
 			Lemuria::Log()->debug('New command: ' . $command, ['command' => $command]);
@@ -177,7 +177,7 @@ class LemuriaTurn implements Turn
 	/**
 	 * Add default commands of given entity.
 	 */
-	public function substitute(Identifiable $entity): Turn {
+	public function substitute(Identifiable $entity): static {
 		switch ($entity->Catalog()) {
 			case Domain::Party :
 				$this->substituteParty($entity->Id());
@@ -194,7 +194,7 @@ class LemuriaTurn implements Turn
 	/**
 	 * Evaluate the whole turn.
 	 */
-	public function evaluate(): Turn {
+	public function evaluate(): static {
 		Lemuria::Hostilities()->clear();
 		Lemuria::Orders()->clear();
 

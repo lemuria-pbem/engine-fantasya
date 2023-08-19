@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Event\Act;
 
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Effect\NonAggressionPact;
-use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\PreyMessage;
 use Lemuria\Engine\Fantasya\State;
@@ -22,7 +21,7 @@ class Prey extends Seek
 		parent::__construct($behaviour);
 	}
 
-	public function act(): Act {
+	public function act(): static {
 		$calculus = new Calculus($this->unit);
 		$region   = $this->unit->Region();
 		$smallest = PHP_INT_MAX;

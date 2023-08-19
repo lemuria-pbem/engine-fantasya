@@ -10,7 +10,6 @@ use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Continent;
 use Lemuria\Model\Fantasya\Region;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class Unemployment extends AbstractContinentEffect
@@ -55,7 +54,7 @@ final class Unemployment extends AbstractContinentEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->peasants = $data[self::PEASANTS];
 		return $this;

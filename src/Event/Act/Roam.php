@@ -28,7 +28,7 @@ class Roam implements Act
 		return $this->hasMoved;
 	}
 
-	public function act(): Roam {
+	public function act(): static {
 		$region  = $this->unit->Region();
 		$regions = $this->getPossibleRegions(!$this->leave);
 		if (empty($regions)) {

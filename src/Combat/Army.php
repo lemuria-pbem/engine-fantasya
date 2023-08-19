@@ -87,7 +87,7 @@ class Army
 		return $combatants;
 	}
 
-	public function add(Unit $unit): Army {
+	public function add(Unit $unit): static {
 		if ($unit->Party()->Id() !== $this->party->Id()) {
 			throw new LemuriaException('Only units from the same party can build an army.');
 		}
@@ -117,7 +117,7 @@ class Army
 		return $this;
 	}
 
-	public function addCombatant(Combatant $combatant): Army {
+	public function addCombatant(Combatant $combatant): static {
 		if ($combatant->Unit()->Party()->Id() !== $this->party->Id()) {
 			throw new LemuriaException('Only combatants from the same party can add to its army.');
 		}

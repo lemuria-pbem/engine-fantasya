@@ -140,13 +140,13 @@ class Combatant
 		return false;
 	}
 
-	public function setBattleRow(BattleRow $battleRow): Combatant {
+	public function setBattleRow(BattleRow $battleRow): static {
 		$this->battleRow = $battleRow;
 		$this->initWeaponSkill();
 		return $this;
 	}
 
-	public function setDistribution(Distribution $distribution): Combatant {
+	public function setDistribution(Distribution $distribution): static {
 		$n                  = $distribution->Size();
 		$calculus           = new Calculus($this->unit);
 		$this->distribution = $distribution;
@@ -203,7 +203,7 @@ class Combatant
 		return 0;
 	}
 
-	public function flee(?int $fighter = null): Combatant {
+	public function flee(?int $fighter = null): static {
 		if (is_int($fighter)) {
 			$this->refugees[] = $this->fighters[$fighter];
 			unset($this->fighters[$fighter]);
@@ -215,13 +215,13 @@ class Combatant
 		return $this;
 	}
 
-	public function hasDied(int $index): Combatant {
+	public function hasDied(int $index): static {
 		unset($this->fighters[$index]);
 		$this->fighterIndex = array_keys($this->fighters);
 		return $this;
 	}
 
-	public function split(int $size): Combatant {
+	public function split(int $size): static {
 		if ($size >= $this->Size()) {
 			throw new LemuriaException('Split would result in empty combatant.');
 		}

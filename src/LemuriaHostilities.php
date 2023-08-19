@@ -76,7 +76,7 @@ class LemuriaHostilities implements Hostilities
 	/**
 	 * Add a Battle to persistence.
 	 */
-	public function add(Battle $battle): Hostilities {
+	public function add(Battle $battle): static {
 		$id = count($this->logs);
 		$this->logs[] = $battle;
 		$regionId = $battle->Location()->Id()->Id();
@@ -95,7 +95,7 @@ class LemuriaHostilities implements Hostilities
 	/**
 	 * Delete all battles as preparation for a new turn.
 	 */
-	public function clear(): Hostilities {
+	public function clear(): static {
 		$this->logs        = [];
 		$this->party       = [];
 		$this->regionParty = [];
@@ -105,7 +105,7 @@ class LemuriaHostilities implements Hostilities
 	/**
 	 * Load battles.
 	 */
-	public function load(): Hostilities {
+	public function load(): static {
 		if (!$this->isLoaded) {
 			foreach (Lemuria::Game()->getHostilities() as $battle) {
 				$log = new BattleLog();
@@ -120,7 +120,7 @@ class LemuriaHostilities implements Hostilities
 	/**
 	 * Save battles.
 	 */
-	public function save(): Hostilities {
+	public function save(): static {
 		$battles = [];
 		foreach ($this->logs as $log) {
 			$battles[] = $log->serialize();

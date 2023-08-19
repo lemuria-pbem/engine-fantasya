@@ -10,7 +10,6 @@ use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class SpyEffect extends AbstractPartyEffect
@@ -36,7 +35,7 @@ final class SpyEffect extends AbstractPartyEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->targets = $data[self::TARGETS];
 		return $this;

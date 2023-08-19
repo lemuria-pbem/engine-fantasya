@@ -22,7 +22,7 @@ final class ResetSiege extends AbstractEvent
 		foreach (Construction::all() as $construction) {
 			$effect = Lemuria::Score()->find($siege->setConstruction($construction));
 			if ($effect instanceof SiegeEffect) {
-				$effect->addReassignment()->reset();
+				$effect->reset();
 			}
 		}
 	}

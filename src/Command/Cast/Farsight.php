@@ -54,9 +54,9 @@ final class Farsight extends AbstractCast
 		$effect   = new FarsightEffect(State::getInstance());
 		$existing = Lemuria::Score()->find($effect->setRegion($region));
 		if ($existing instanceof FarsightEffect) {
-			$effect = $existing->addReassignment();
+			$effect = $existing;
 		} else {
-			Lemuria::Score()->add($effect->addReassignment());
+			Lemuria::Score()->add($effect);
 		}
 
 		$perception   = self::createTalent(Perception::class);

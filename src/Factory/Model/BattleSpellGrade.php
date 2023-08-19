@@ -29,7 +29,7 @@ class BattleSpellGrade
 		return $this->reliability;
 	}
 
-	public function setReliability(float $reliability): BattleSpellGrade {
+	public function setReliability(float $reliability): static {
 		$this->reliability = $reliability;
 		return $this;
 	}

@@ -34,7 +34,7 @@ class BattleBegins extends AbstractUpgrade
 		$this->battleBegins = getClass(BattleBeginsMessage::class);
 	}
 
-	public function upgrade(): AbstractUpgrade {
+	public function upgrade(): static {
 		$hostilities = [];
 		foreach ($this->game->getHostilities() as $hostility) {
 			$messages = [];

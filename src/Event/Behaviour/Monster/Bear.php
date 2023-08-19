@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Event\Behaviour\Monster;
 
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Event\Act\Create;
-use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Event\Behaviour\AbstractBehaviour;
 use Lemuria\Engine\Fantasya\Event\Reproduction;
 use Lemuria\Lemuria;
@@ -44,14 +43,14 @@ class Bear extends AbstractBehaviour
 		return $reproduction;
 	}
 
-	public function prepare(): Behaviour {
+	public function prepare(): static {
 		if (Lemuria::Calendar()->Season() === Season::Winter) {
 			$this->hibernate();
 		}
 		return $this;
 	}
 
-	public function conduct(): Behaviour {
+	public function conduct(): static {
 		$this->perishByChance(self::PERISH);
 		if ($this->hibernate) {
 			return $this;

@@ -8,7 +8,6 @@ use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Party;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class FarsightEffect extends AbstractRegionEffect
@@ -39,7 +38,7 @@ final class FarsightEffect extends AbstractRegionEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->parties->unserialize($data[self::PARTIES]);
 		return $this;

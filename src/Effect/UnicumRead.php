@@ -9,7 +9,6 @@ use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Treasury;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class UnicumRead extends AbstractPartyEffect
@@ -33,7 +32,7 @@ final class UnicumRead extends AbstractPartyEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->treasury->unserialize($data[self::TREASURY]);
 		return $this;

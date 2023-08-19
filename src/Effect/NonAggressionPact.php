@@ -9,7 +9,6 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class NonAggressionPact extends AbstractPartyEffect
@@ -32,7 +31,7 @@ final class NonAggressionPact extends AbstractPartyEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->rounds = $data[self::ROUNDS];
 		return $this;

@@ -24,12 +24,12 @@ interface Action extends \Stringable
 	/**
 	 * Prepare execution of the action.
 	 */
-	public function prepare(): Action;
+	public function prepare(): static;
 
 	/**
 	 * Execute the action.
 	 *
 	 * @throws ActionException
 	 */
-	public function execute(): Action;
+	public function execute(): static;
 }

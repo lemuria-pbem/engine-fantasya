@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 class AssaultBlockMessage extends AbstractMessage
@@ -21,7 +20,7 @@ class AssaultBlockMessage extends AbstractMessage
 		return $this->defender . ' blocks attack from ' . $this->attacker . '.';
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->attacker = $data[self::ATTACKER];
 		$this->defender = $data[self::DEFENDER];

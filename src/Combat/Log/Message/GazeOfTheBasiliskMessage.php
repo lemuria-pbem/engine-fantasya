@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 class GazeOfTheBasiliskMessage extends AbstractMessage
@@ -19,7 +18,7 @@ class GazeOfTheBasiliskMessage extends AbstractMessage
 		return $this->attacker . ' is petrified by Gaze of the Basilisk.';
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->attacker = $data[self::ATTACKER];
 		return $this;

@@ -14,7 +14,7 @@ use Lemuria\Lemuria;
  */
 final class NullCommand extends AbstractCommand implements Immediate
 {
-	public function skip(): Immediate {
+	public function skip(): static {
 		return $this;
 	}
 

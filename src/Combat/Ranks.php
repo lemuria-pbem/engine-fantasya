@@ -105,7 +105,7 @@ class Ranks implements \ArrayAccess, \Countable, \Iterator
 		return $this->index < $this->count;
 	}
 
-	public function add(Combatant $combatant): Ranks {
+	public function add(Combatant $combatant): static {
 		$this->ranks[$combatant->BattleRow()->value]->add($combatant);
 		return $this;
 	}

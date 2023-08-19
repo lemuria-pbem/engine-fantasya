@@ -50,7 +50,7 @@ class Trades implements \Countable
 		return count($this->available) + count($this->impossible) + count($this->forbidden);
 	}
 
-	public function forUnit(Unit $unit): Trades {
+	public function forUnit(Unit $unit): static {
 		$this->checkIfUnitHasPaidFee($unit);
 		$this->available  = [];
 		$this->impossible = [];

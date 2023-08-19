@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use Lemuria\Engine\Fantasya\Combat\Battle;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 class BattleBeginsMessage extends AbstractMessage
@@ -42,7 +41,7 @@ class BattleBeginsMessage extends AbstractMessage
 		}
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->region = new Entity();
 		$this->region->unserialize($data[self::REGION]);

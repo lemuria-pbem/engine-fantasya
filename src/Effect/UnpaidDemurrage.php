@@ -11,7 +11,6 @@ use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class UnpaidDemurrage extends AbstractVesselEffect
@@ -37,7 +36,7 @@ final class UnpaidDemurrage extends AbstractVesselEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->demurrage->unserialize($data[self::DEMURRAGE]);
 		return $this;

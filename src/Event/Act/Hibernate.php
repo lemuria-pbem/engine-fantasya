@@ -20,10 +20,10 @@ class Hibernate implements Act
 	use BuilderTrait;
 	use MessageTrait;
 
-	public function act(): Hibernate {
+	public function act(): static {
 		$effect = new HibernateEffect(State::getInstance());
 		if (!Lemuria::Score()->find($effect->setUnit($this->unit))) {
-			Lemuria::Score()->add($effect->addReassignment());
+			Lemuria::Score()->add($effect);
 		}
 		$this->message(HibernateMessage::class, $this->unit);
 		return $this;

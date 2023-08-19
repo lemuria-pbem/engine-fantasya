@@ -178,7 +178,7 @@ class ResourcePool
 	/**
 	 * Make a reservation of everything that is available in the pool.
 	 */
-	public function reserveEverything(Unit $unit): ResourcePool {
+	public function reserveEverything(Unit $unit): static {
 		$id = $unit->Id();
 		if (!$this->units->has($id)) {
 			throw new LemuriaException('Unit ' . $unit . ' is not a pool member.');

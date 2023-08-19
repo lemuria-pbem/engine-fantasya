@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 class AssaultHitMessage extends AbstractMessage
@@ -24,7 +23,7 @@ class AssaultHitMessage extends AbstractMessage
 		return 'Fighter ' . $this->attacker . ' deals ' . $this->damage . ' damage to enemy ' . $this->defender . '.';
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->attacker = $data[self::ATTACKER];
 		$this->defender = $data[self::DEFENDER];

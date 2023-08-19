@@ -6,7 +6,6 @@ use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 class BattleSpellCastMessage extends BattleSpellNoAuraMessage
@@ -27,7 +26,7 @@ class BattleSpellCastMessage extends BattleSpellNoAuraMessage
 		return 'Unit ' . $this->unit . ' casts ' . $this->spell . ' with grade ' . $this->grade . '.';
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->grade = $data[self::GRADE];
 		return $this;

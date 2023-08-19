@@ -66,7 +66,7 @@ final class Support extends AbstractEvent
 				if ($hunger >= 1.0) {
 					$this->message(SupportNothingMessage::class, $unit);
 				}
-				$effect = $this->effect($unit)->setHunger($hunger)->addReassignment();
+				$effect = $this->effect($unit)->setHunger($hunger);
 				Lemuria::Score()->add($effect);
 				$this->message(SupportHungerMessage::class, $unit);
 			} else {

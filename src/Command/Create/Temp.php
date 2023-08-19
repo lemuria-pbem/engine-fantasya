@@ -38,7 +38,7 @@ final class Temp extends UnitCommand implements Immediate
 		}
 	}
 
-	public function skip(): Immediate {
+	public function skip(): static {
 		return $this;
 	}
 

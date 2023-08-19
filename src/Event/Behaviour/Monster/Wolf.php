@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Behaviour\Monster;
 
 use function Lemuria\randInt;
-use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Event\Behaviour\AbstractBehaviour;
 use Lemuria\Engine\Fantasya\Event\Reproduction;
 use Lemuria\Lemuria;
@@ -50,14 +49,14 @@ class Wolf extends AbstractBehaviour
 	/**
 	 * In Winter a group of wolves will attack smaller units.
 	 */
-	public function prepare(): Behaviour {
+	public function prepare(): static {
 		if (!$this->hasRoamEffect() && Lemuria::Calendar()->Season() === Season::Winter) {
 			return $this->prey()->attack();
 		}
 		return $this;
 	}
 
-	public function conduct(): Behaviour {
+	public function conduct(): static {
 		return $this->perishByChance(self::PERISH)->reproduceAndLeaveOrRoam();
 	}
 }

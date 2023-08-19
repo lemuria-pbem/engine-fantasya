@@ -35,11 +35,11 @@ abstract class AbstractUnitApply extends AbstractApply
 			$this->effect->setUnit($this->apply->Unit());
 			$existing = Lemuria::Score()->find($this->effect);
 			if ($existing instanceof PotionEffect) {
-				$this->effect = $existing->addReassignment();
+				$this->effect = $existing;
 			} else {
 				$this->isNew = true;
 				$potion      = $this->apply->Potion();
-				$this->effect->setPotion($potion)->setWeeks($potion->Weeks())->addReassignment();
+				$this->effect->setPotion($potion)->setWeeks($potion->Weeks());
 				Lemuria::Score()->add($this->effect);
 			}
 		}

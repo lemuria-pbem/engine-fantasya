@@ -121,7 +121,7 @@ class Battle
 		return $this->vessel;
 	}
 
-	public function addAttacker(Unit $unit): Battle {
+	public function addAttacker(Unit $unit): static {
 		$this->attackers[] = $unit;
 		$id                = $unit->Id()->Id();
 		if (isset($this->monsters[$id])) {
@@ -139,7 +139,7 @@ class Battle
 		return $this;
 	}
 
-	public function addDefender(Unit $unit): Battle {
+	public function addDefender(Unit $unit): static {
 		$this->defenders[] = $unit;
 		$id                = $unit->Id()->Id();
 		if (isset($this->monsters[$id])) {
@@ -159,7 +159,7 @@ class Battle
 		return $this;
 	}
 
-	public function commence(Context $context): Battle {
+	public function commence(Context $context): static {
 		if (empty($this->attackers)) {
 			throw new \RuntimeException('No attackers in battle.');
 		}
@@ -192,7 +192,7 @@ class Battle
 		return $this->takeLoot($combat)->addBattlefieldRemains()->createNewZombies($combat);
 	}
 
-	public function merge(Battle $battle): Battle {
+	public function merge(Battle $battle): static {
 		$armies = [];
 		foreach ($this->attackers as $unit) {
 			$armies[$unit->Id()->Id()] = $unit;
@@ -263,7 +263,7 @@ class Battle
 		return $combat->embattle();
 	}
 
-	protected function takeLoot(Combat $combat): Battle {
+	protected function takeLoot(Combat $combat): static {
 		$rounds       = $combat->getRounds();
 		$attackerLoot = $this->collectLoot($this->attackArmies, $rounds);
 		$defenderLoot = $this->collectLoot($this->defendArmies, $rounds);
@@ -457,7 +457,7 @@ class Battle
 		$unit->Vessel()?->Passengers()->remove($unit);
 	}
 
-	private function addBattlefieldRemains(): Battle {
+	private function addBattlefieldRemains(): static {
 		if ($this->battlefieldRemains->count()) {
 			if ($this->construction) {
 				$effect   = new ConstructionLoot(State::getInstance());
@@ -483,7 +483,7 @@ class Battle
 		return $this;
 	}
 
-	private function createNewZombies(Combat $combat): Battle {
+	private function createNewZombies(Combat $combat): static {
 		$size = $combat->getNewZombies();
 		if ($size > 0) {
 			$region = $this->place->Region();

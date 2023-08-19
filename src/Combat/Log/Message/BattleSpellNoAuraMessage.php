@@ -6,7 +6,6 @@ use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 class BattleSpellNoAuraMessage extends AbstractMessage
@@ -36,7 +35,7 @@ class BattleSpellNoAuraMessage extends AbstractMessage
 		return 'Unit ' . $this->unit . ' has not enough Aura to cast ' . $this->spell . '.';
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->unit = Entity::create($data[self::ID], $data[self::NAME]);
 		/** @var BattleSpell $spell */

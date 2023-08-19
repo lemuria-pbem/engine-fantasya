@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Factory\Command\Dummy;
@@ -74,7 +73,7 @@ class Travel extends UnitCommand implements Activity
 		$this->riding     = self::createTalent(Riding::class);
 	}
 
-	public function execute(): Action {
+	public function execute(): static {
 		parent::execute();
 		if ($this->hasTravelled) {
 			parent::commitCommand($this);

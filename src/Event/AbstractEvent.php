@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use function Lemuria\getClass;
-use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Event;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
@@ -35,7 +34,7 @@ abstract class AbstractEvent implements Event
 	 *
 	 * @throws CommandException
 	 */
-	public function prepare(): Action {
+	public function prepare(): static {
 		Lemuria::Log()->debug('Preparing ' . $this . '.');
 		$this->prepareAction();
 		return $this;
@@ -46,7 +45,7 @@ abstract class AbstractEvent implements Event
 	 *
 	 * @throws CommandException
 	 */
-	public function execute(): Action {
+	public function execute(): static {
 		Lemuria::Log()->debug('Executing ' . $this . '.');
 		$this->executeAction();
 		return $this;

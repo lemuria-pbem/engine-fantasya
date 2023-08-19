@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 class CombatRoundMessage extends AbstractMessage
@@ -19,7 +18,7 @@ class CombatRoundMessage extends AbstractMessage
 		return 'Combat round ' . $this->round . ' starts.';
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->round = $data[self::ROUND];
 		return $this;

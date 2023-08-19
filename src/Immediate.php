@@ -10,5 +10,5 @@ interface Immediate extends Command
 	/**
 	 * Skip the command.
 	 */
-	public function skip(): Immediate;
+	public function skip(): static;
 }

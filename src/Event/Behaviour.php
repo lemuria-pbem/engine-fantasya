@@ -12,9 +12,9 @@ interface Behaviour
 
 	public function Reproduction(): Reproduction;
 
-	public function prepare(): Behaviour;
+	public function prepare(): static;
 
-	public function conduct(): Behaviour;
+	public function conduct(): static;
 
-	public function finish(): Behaviour;
+	public function finish(): static;
 }

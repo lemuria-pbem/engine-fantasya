@@ -10,7 +10,6 @@ use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class VanishEffect extends AbstractUnitEffect
@@ -42,7 +41,7 @@ final class VanishEffect extends AbstractUnitEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->summoner = $data[self::SUMMONER];
 		$this->weeks    = $data[self::WEEKS];

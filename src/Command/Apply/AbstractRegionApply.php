@@ -34,10 +34,10 @@ abstract class AbstractRegionApply extends AbstractApply
 			$this->effect->setRegion($this->apply->Unit()->Region());
 			$existing = Lemuria::Score()->find($this->effect);
 			if ($existing instanceof PotionInfluence) {
-				$this->effect = $existing->addReassignment();
+				$this->effect = $existing;
 			} else {
 				$this->isNew = true;
-				Lemuria::Score()->add($this->effect->addReassignment());
+				Lemuria::Score()->add($this->effect);
 			}
 		}
 		return $this->effect;

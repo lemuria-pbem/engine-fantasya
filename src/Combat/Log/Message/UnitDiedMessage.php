@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 class UnitDiedMessage extends AbstractMessage
@@ -30,7 +29,7 @@ class UnitDiedMessage extends AbstractMessage
 		return $this->unit . ' is destroyed.';
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->unit = Entity::create($data[self::ID], $data[self::NAME]);
 		return $this;

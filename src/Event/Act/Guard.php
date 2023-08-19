@@ -31,7 +31,7 @@ class Guard implements Act
 		return $this->isGuarding;
 	}
 
-	public function act(): Guard {
+	public function act(): static {
 		if ($this->hasVanishEffect()) {
 			$this->isGuarding = true;
 		} else {

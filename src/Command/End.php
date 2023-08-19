@@ -16,7 +16,7 @@ use Lemuria\Entity;
  */
 final class End extends UnitCommand implements Immediate
 {
-	public function skip(): Immediate {
+	public function skip(): static {
 		$this->context->Parser()->skip(false);
 		return $this;
 	}

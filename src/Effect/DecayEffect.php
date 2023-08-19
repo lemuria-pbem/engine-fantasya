@@ -12,7 +12,6 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Dictionary;
 use Lemuria\Model\Fantasya\Building\Ruin;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 /**
@@ -51,7 +50,7 @@ final class DecayEffect extends AbstractConstructionEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->age      = $data[self::AGE];
 		$this->interval = $data[self::INTERVAL];

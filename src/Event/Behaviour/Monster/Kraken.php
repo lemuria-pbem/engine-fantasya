@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Effect\AttackOnVessel;
 use Lemuria\Engine\Fantasya\Event\Act\Attack;
 use Lemuria\Engine\Fantasya\Event\Act\Roam;
-use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Event\Behaviour\AbstractBehaviour;
 use Lemuria\Engine\Fantasya\Event\Reproduction;
 use Lemuria\Engine\Fantasya\State;
@@ -54,7 +53,7 @@ class Kraken extends AbstractBehaviour
 		return $reproduction;
 	}
 
-	public function prepare(): Behaviour {
+	public function prepare(): static {
 		$effect = $this->getAttackEffect();
 		if ($effect) {
 			$enemy = $effect->Vessel()->Passengers();
@@ -66,11 +65,11 @@ class Kraken extends AbstractBehaviour
 		return $this;
 	}
 
-	public function conduct(): Behaviour {
+	public function conduct(): static {
 		return $this->perishByChance(self::PERISH)->reproduceAndLeaveOrRoam();
 	}
 
-	public function finish(): Behaviour {
+	public function finish(): static {
 		parent::finish();
 		if ($this->roam instanceof Roam && !$this->roam->HasMoved()) {
 			$big   = new Fleet();
@@ -127,7 +126,7 @@ class Kraken extends AbstractBehaviour
 			if ($existing instanceof AttackOnVessel) {
 				$effect = $existing;
 			}
-			$effect->setVessel($vessel)->addReassignment();
+			$effect->setVessel($vessel);
 			return true;
 		}
 		return false;

@@ -94,7 +94,7 @@ class LemuriaReport implements Reassignment, Report
 	/**
 	 * Load message data into report.
 	 */
-	public function load(): Report {
+	public function load(): static {
 		if (!$this->isLoaded) {
 			$report = Lemuria::Game()->getMessages();
 			$this->validateSerializedData($report);
@@ -112,7 +112,7 @@ class LemuriaReport implements Reassignment, Report
 	/**
 	 * Save game data from report.
 	 */
-	public function save(): Report {
+	public function save(): static {
 		$messages = [];
 		foreach ($this->message as $message) {
 			$messages[] = $message->serialize();
@@ -121,7 +121,7 @@ class LemuriaReport implements Reassignment, Report
 		return $this;
 	}
 
-	public function clear(): Report {
+	public function clear(): static {
 		$this->report  = [];
 		$this->message = [];
 		$this->removed = [];
@@ -139,7 +139,7 @@ class LemuriaReport implements Reassignment, Report
 	 *
 	 * @throws DuplicateIdException
 	 */
-	public function register(Message $message): Report {
+	public function register(Message $message): static {
 		$namespace = $message->Report();
 		$this->checkNamespace($namespace);
 		$id = $message->Id()->Id() - 1;

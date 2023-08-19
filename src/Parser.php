@@ -22,7 +22,7 @@ class Parser
 
 	private int $skipLevel = 0;
 
-	public function parse(Move $commands): Parser {
+	public function parse(Move $commands): static {
 		foreach ($commands as $command) {
 			$command = $this->replaceDefaultCommand(trim($command));
 			$phrase  = new Phrase($command);
@@ -51,7 +51,7 @@ class Parser
 	/**
 	 * Request end of command parsing.
 	 */
-	public function finish(): Parser {
+	public function finish(): static {
 		$this->index = $this->count;
 		return $this;
 	}
@@ -71,7 +71,7 @@ class Parser
 	/**
 	 * Set or reset skipping mode.
 	 */
-	public function skip(bool $skip = true): Parser {
+	public function skip(bool $skip = true): static {
 		if ($skip) {
 			$this->skipLevel++;
 			Lemuria::Log()->debug('Set skipping mode (level ' . $this->skipLevel . ').');

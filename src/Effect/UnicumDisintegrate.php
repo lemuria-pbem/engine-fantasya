@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Region;
-use Lemuria\Serializable;
 use Lemuria\Validate;
 
 final class UnicumDisintegrate extends AbstractUnicumEffect
@@ -30,7 +29,7 @@ final class UnicumDisintegrate extends AbstractUnicumEffect
 		return $data;
 	}
 
-	public function unserialize(array $data): Serializable {
+	public function unserialize(array $data): static {
 		parent::unserialize($data);
 		$this->rounds = $data[self::ROUNDS];
 		return $this;

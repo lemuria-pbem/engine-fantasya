@@ -27,7 +27,7 @@ class UnicumMapper
 	 *
 	 * @throws TempUnicumException
 	 */
-	public function map(string $tempId, Id $id): UnicumMapper {
+	public function map(string $tempId, Id $id): static {
 		if ($this->has($tempId)) {
 			throw new TempUnicumException('Unicum ' . $tempId . ' is mapped already.');
 		}

@@ -40,27 +40,27 @@ class Options
 		return $this->throwExceptions;
 	}
 
-	public function setCherryPicker(CherryPicker $cherryPicker): Options {
+	public function setCherryPicker(CherryPicker $cherryPicker): static {
 		$this->cherryPicker = $cherryPicker;
 		return $this;
 	}
 
-	public function setDebugBattles(bool $debugBattles): Options {
+	public function setDebugBattles(bool $debugBattles): static {
 		$this->debugBattles = $debugBattles;
 		return $this;
 	}
 
-	public function setIsSimulation(bool $isSimulation): Options {
+	public function setIsSimulation(bool $isSimulation): static {
 		$this->isSimulation = $isSimulation;
 		return $this;
 	}
 
-	public function setIsProfiling(bool $isProfiling): Options {
+	public function setIsProfiling(bool $isProfiling): static {
 		$this->isProfiling = $isProfiling;
 		return $this;
 	}
 
-	public function setThrowExceptions(ThrowOption $throwExceptions): Options {
+	public function setThrowExceptions(ThrowOption $throwExceptions): static {
 		$this->throwExceptions = $throwExceptions;
 		return $this;
 	}
