@@ -61,6 +61,18 @@ final class ActivityProtocol
 	}
 
 	/**
+	 * Check if unit has executed an alternative activity.
+	 */
+	public function hasAlternativeActivity(): bool {
+		foreach ($this->activities as $activity) {
+			if ($activity->IsAlternative()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Get all planned activities.
 	 */
 	public function getPlannedActivities(): array {
@@ -79,7 +91,7 @@ final class ActivityProtocol
 	 * Add a command to the current protocol.
 	 */
 	public function logCurrent(UnitCommand $command): void {
-		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
+		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->getInstruction();
 	}
 
 	/**
@@ -132,9 +144,9 @@ final class ActivityProtocol
 		$defaults = $activity->getNewDefaults();
 		if (empty($defaults)) {
 			/** @var UnitCommand $activity */
-			$default = (string)$activity->Phrase();
+			$default = $activity->getInstruction();
 			foreach ($this->defaultActivities as $activity) {
-				if ((string)$activity->Phrase() !== $default) {
+				if ($activity->getInstruction() !== $default) {
 					$defaults[] = $activity;
 				}
 			}
@@ -142,11 +154,11 @@ final class ActivityProtocol
 		$this->defaultActivities = $defaults;
 	}
 
-	public function reassignDefaultActivity(Phrase $old, Activity $new): void {
+	public function reassignDefaultActivity(string $old, Activity $new): void {
 		$n = count($this->defaultActivities);
 		for ($i = 0; $i < $n; $i++) {
 			$activity = $this->defaultActivities[$i];
-			if ((string)$activity->Phrase() === (string)$old) {
+			if ($activity->getInstruction() === $old) {
 				$this->defaultActivities[$i] = $new;
 			}
 		}
@@ -159,7 +171,7 @@ final class ActivityProtocol
 		$defaults = Lemuria::Orders()->getDefault($this->unit->Id());
 		$resolves = [];
 		array_push($resolves, ...$this->defaults, ...$this->defaultActivities, ...$this->alternativeActivities, ...$this->comments);
-		$resolver = new DefaultResolver($resolves);
+		$resolver = new DefaultResolver($this, $resolves);
 		foreach ($resolver->resolve() as $command) {
 			$defaults[] = $command->getInstruction();
 		}

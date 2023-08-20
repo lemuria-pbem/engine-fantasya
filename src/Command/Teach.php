@@ -69,7 +69,7 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 			$new       = (string)$identifiable->Id();
 			$oldPhrase = $this->getReassignPhrase($old, $new);
 			if ($oldPhrase) {
-				$phrase       = str_replace($old, $new, (string)$oldPhrase);
+				$phrase       = str_replace($old, $new, $oldPhrase);
 				$this->phrase = new Phrase($phrase);
 				$this->context->getProtocol($this->unit)->reassignDefaultActivity($oldPhrase, $this);
 			}
@@ -275,7 +275,10 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 		} else {
 			$teach = $this->phrase->getVerb() . ' ' . implode(' ', $ids);
 			/** @var Teach $command */
-			$command          = $this->context->Factory()->create(new Phrase($teach));
+			$command = $this->context->Factory()->create(new Phrase($teach));
+			if ($this->isAlternative()) {
+				$command->setAlternative();
+			}
 			$this->newDefault = $command;
 		}
 	}

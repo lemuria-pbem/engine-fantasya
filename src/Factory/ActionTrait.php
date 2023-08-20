@@ -55,8 +55,10 @@ trait ActionTrait
 	 */
 	public function setAlternative(bool $isAlternative = true): void {
 		if ($isAlternative) {
-			if (!$this->preparation) {
+			if ($this->preparation === 0) {
 				$this->preparation--;
+			} elseif ($this->preparation === 1) {
+				$this->preparation++;
 			}
 		} else {
 			if ($this->preparation < 0) {

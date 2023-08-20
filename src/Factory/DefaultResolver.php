@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\ActivityProtocol;
 use Lemuria\Engine\Fantasya\Command;
 
 class DefaultResolver
@@ -10,7 +11,7 @@ class DefaultResolver
 	/**
 	 * @param array<Command> $defaults
 	 */
-	public function __construct(protected array $defaults) {
+	public function __construct(protected readonly ActivityProtocol $protocol, protected array $defaults) {
 	}
 
 	/**
@@ -52,18 +53,20 @@ class DefaultResolver
 	}
 
 	protected function promoteAlternative(): array {
-		$first = null;
-		foreach ($this->defaults as $command) {
-			if ($command instanceof Activity) {
-				if (!$command->IsAlternative()) {
-					return $this->defaults;
-				}
-				if (!$first){
-					$first = $command;
+		if (!$this->protocol->hasAlternativeActivity()) {
+			$first = null;
+			foreach ($this->defaults as $command) {
+				if ($command instanceof Activity) {
+					if (!$command->IsAlternative()) {
+						return $this->defaults;
+					}
+					if (!$first) {
+						$first = $command;
+					}
 				}
 			}
+			$first?->setAlternative(false);
 		}
-		$first?->setAlternative(false);
 		return $this->defaults;
 	}
 }

@@ -18,7 +18,7 @@ final class Alternative extends DelegatedCommand
 {
 	protected function createDelegate(): Command {
 		$n = $this->phrase->count();
-		if ($n < 2) {
+		if ($n < 1) {
 			throw new InvalidCommandException($this);
 		}
 
@@ -27,7 +27,7 @@ final class Alternative extends DelegatedCommand
 		$delegate = $order->getDelegate();
 		if ($delegate instanceof Activity) {
 			$delegate->setAlternative();
-			return $order;
+			return $delegate;
 		}
 		throw new InvalidAlternativeException($this->phrase);
 	}

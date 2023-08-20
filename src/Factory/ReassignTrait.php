@@ -15,7 +15,7 @@ trait ReassignTrait
 			$new    = (string)$identifiable->Id();
 			$phrase = $this->getReassignPhrase($old, $new);
 			if ($phrase) {
-				$oldPhrase    = $this->phrase;
+				$oldPhrase    = $this->getInstruction();
 				$this->phrase = $phrase;
 				$this->context->getProtocol($this->unit)->reassignDefaultActivity($oldPhrase, $this);
 			}
@@ -29,11 +29,12 @@ trait ReassignTrait
 		return $domain === Domain::Unit;
 	}
 
-	protected function getReassignPhrase(string $old, string $new): ?Phrase {
+	protected function getReassignPhrase(string $old, string $new): ?string {
 		$parameters = $this->getReassignPhraseParameters($old, $new);
 		if ($parameters) {
-			$command = $this->phrase->getVerb() . ' ' . implode(' ', $parameters);
-			return new Phrase($command);
+			$command  = $this->isAlternative() ? CommandFactory::ALTERNATIVE_PREFIX . ' ' : '';
+			$command .= $this->phrase->getVerb() . ' ' . implode(' ', $parameters);
+			return $command;
 		}
 		return null;
 	}
