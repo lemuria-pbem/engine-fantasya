@@ -118,16 +118,30 @@ final class Calculus
 	}
 
 	/**
+	 * Calculate race Ability in given Talent.
+	 */
+	public function ability(Talent|string $talent): Ability {
+		$talent  = $this->parseTalent($talent);
+		$ability = $this->unit->Knowledge()->offsetGet($talent);
+		if ($ability instanceof Ability) {
+			if ($ability->Level() <= 0) {
+				return $ability;
+			}
+			$race         = $this->unit->Race();
+			$modification = $race->Modifications()->offsetGet($talent);
+			if ($modification instanceof Modification) {
+				$ability = $modification->getModified($ability);
+			}
+			return $ability;
+		}
+		return new Ability($talent, 0);
+	}
+
+	/**
 	 * Calculate Ability in given Talent.
 	 */
 	public function knowledge(Talent|string $talent): Ability {
-		if (is_string($talent)) {
-			$talent = self::createTalent($talent);
-		}
-		if (!($talent instanceof Talent)) {
-			throw new LemuriaException('Invalid talent.');
-		}
-
+		$talent = $this->parseTalent($talent);
 		if ($this->unit->Size() > 0) {
 			$ability = $this->unit->Knowledge()->offsetGet($talent);
 			if ($ability instanceof Ability) {
@@ -401,6 +415,16 @@ final class Calculus
 			return $ride;
 		}
 		return new Caravan($this, $conveyance);
+	}
+
+	private function parseTalent(Talent|string $talent): Talent {
+		if (is_string($talent)) {
+			$talent = self::createTalent($talent);
+		}
+		if (!($talent instanceof Talent)) {
+			throw new LemuriaException('Invalid talent.');
+		}
+		return $talent;
 	}
 
 	private function talentEffect(Talent $talent): ?Modification {

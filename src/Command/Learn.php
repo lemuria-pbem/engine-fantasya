@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
@@ -89,6 +90,8 @@ final class Learn extends UnitCommand implements Activity
 
 	private const FLEET_EXCEPTION = [Riding::class => true];
 
+	private Calculus $calculus;
+
 	private Talent $talent;
 
 	private int $level = 0;
@@ -107,11 +110,12 @@ final class Learn extends UnitCommand implements Activity
 
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
-		$this->silver = self::createCommodity(Silver::class);
-		$topic        = $this->phrase->getParameter();
-		$this->talent = $this->context->Factory()->talent($topic);
+		$this->calculus = $this->calculus();
+		$this->silver   = self::createCommodity(Silver::class);
+		$topic          = $this->phrase->getParameter();
+		$this->talent   = $this->context->Factory()->talent($topic);
 		$this->parseTalentLevel();
-		$this->calculus()->addStudent($this);
+		$this->calculus->addStudent($this);
 	}
 
 	public function canLearn(): bool {
@@ -168,10 +172,10 @@ final class Learn extends UnitCommand implements Activity
 				}
 			}
 
-			$oldLevel = $this->calculus()->knowledge($this->talent)->Level();
+			$oldLevel = $this->calculus->knowledge($this->talent)->Level();
 
 			$this->unit->Knowledge()->add($this->progress);
-			foreach ($this->calculus()->getTeachers() as $teacher) {
+			foreach ($this->calculus->getTeachers() as $teacher) {
 				$teacher->hasTaught($this);
 			}
 			if ($this->effectivity < 1.0) {
@@ -189,7 +193,7 @@ final class Learn extends UnitCommand implements Activity
 			}
 
 			if ($this->talent instanceof Magic) {
-				$newLevel = $this->calculus()->knowledge($this->talent)->Level();
+				$newLevel = $this->calculus->knowledge($this->talent)->Level();
 				if ($newLevel > 0 && $newLevel > $oldLevel) {
 					$aura     = $this->unit->Aura() ?? new Aura();
 					$addition = $newLevel ** 2 - $oldLevel ** 2;
@@ -197,6 +201,9 @@ final class Learn extends UnitCommand implements Activity
 					$this->unit->setAura($aura);
 					$this->message(LearnMagicMessage::class)->p($addition);
 				}
+			}
+			if ($this->hasReachedLevel()) {
+				$this->context->getProtocol($this->unit)->replaceDefaults($this->preventDefault());
 			}
 		} else {
 			$ship = $this->unit->Vessel()->Ship();
@@ -234,19 +241,24 @@ final class Learn extends UnitCommand implements Activity
 			$this->fleetTime = $this->context->getRealmFleet($realm)->getUsedCapacity($this->unit);
 		}
 
-		$calculus  = $this->calculus();
-		$knowledge = $this->unit->Knowledge();
-		$ability   = $knowledge[$this->talent];
-		$level     = $ability instanceof Ability ? $ability->Level() : 0;
+		$level = $this->calculus->ability($this->talent)->Level();
 		if ($this->level <= 0 || $level < $this->level) {
 			if ($withMessage) {
-				$this->message(LearnTeachersMessage::class)->p(count($this->calculus()->getTeachers()));
+				$this->message(LearnTeachersMessage::class)->p(count($this->calculus->getTeachers()));
 			}
-			$this->progress = $calculus->progress($this->talent, (1.0 - $this->fleetTime) * $this->effectivity());
+			$this->progress = $this->calculus->progress($this->talent, (1.0 - $this->fleetTime) * $this->effectivity());
 			$this->expense  = (int)round((1.0 - $this->fleetTime) * $this->unit->Size() * $this->talent->getExpense($level));
 			return true;
 		}
 		return false;
+	}
+
+	private function hasReachedLevel(): bool {
+		if ($this->level <= 0) {
+			return false;
+		}
+		$level = $this->calculus->ability($this->talent)->Level();
+		return $level >= $this->level;
 	}
 
 	private function effectivity(): float {
