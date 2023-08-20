@@ -2,11 +2,9 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Region;
 
-use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message\Result;
 use Lemuria\Singleton;
-use function Lemuria\getClass;
 
 class AttackInfectedZombiesMessage extends AbstractRegionMessage
 {
