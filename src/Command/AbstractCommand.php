@@ -46,13 +46,6 @@ abstract class AbstractCommand implements Command
 	}
 
 	/**
-	 * Get command as string.
-	 */
-	public function __toString(): string {
-		return (string)$this->phrase;
-	}
-
-	/**
 	 * Get the command ID.
 	 */
 	public function getId(): int {

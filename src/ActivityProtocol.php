@@ -31,6 +31,11 @@ final class ActivityProtocol
 	/**
 	 * @var array<Activity>
 	 */
+	private array $alternativeActivities = [];
+
+	/**
+	 * @var array<Activity>
+	 */
 	private array $plannedActivities = [];
 
 	/**
@@ -74,11 +79,7 @@ final class ActivityProtocol
 	 * Add a command to the current protocol.
 	 */
 	public function logCurrent(UnitCommand $command): void {
-		$phrase = $command->Phrase();
-		if ($command->isAlternative()) {
-			$phrase = 'ALTERNATIVE ' . $phrase;
-		}
-		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $phrase;
+		Lemuria::Orders()->getCurrent($this->unit->Id())[] = $command->Phrase();
 	}
 
 	/**
@@ -114,7 +115,13 @@ final class ActivityProtocol
 	 */
 	public function addNewDefaults(Activity $activity): void {
 		foreach ($activity->getNewDefaults() as $default) {
-			$this->defaultActivities[] = $default;
+			if ($default instanceof Activity) {
+				if ($default->IsAlternative()) {
+					$this->alternativeActivities[] = $default;
+				} else {
+					$this->defaultActivities[] = $default;
+				}
+			}
 		}
 	}
 
@@ -151,10 +158,10 @@ final class ActivityProtocol
 	public function persistNewDefaults(): void {
 		$defaults = Lemuria::Orders()->getDefault($this->unit->Id());
 		$resolves = [];
-		array_push($resolves, ...$this->defaults, ...$this->defaultActivities, ...$this->comments);
+		array_push($resolves, ...$this->defaults, ...$this->defaultActivities, ...$this->alternativeActivities, ...$this->comments);
 		$resolver = new DefaultResolver($resolves);
 		foreach ($resolver->resolve() as $command) {
-			$defaults[] = $command;
+			$defaults[] = $command->getInstruction();
 		}
 	}
 

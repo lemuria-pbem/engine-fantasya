@@ -142,6 +142,7 @@ final class Learn extends UnitCommand implements Activity
 
 	protected function run(): void {
 		if (!$this->progress) {
+			$this->preventDefault();
 			$this->message(LearnHasReachedMessage::class)->s($this->talent)->p($this->level);
 			return;
 		}

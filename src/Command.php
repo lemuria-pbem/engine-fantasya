@@ -21,4 +21,9 @@ interface Command extends Action
 	 * Get the delegate to execute.
 	 */
 	public function getDelegate(): Command;
+
+	/**
+	 * Get the instruction string.
+	 */
+	public function getInstruction(): string;
 }

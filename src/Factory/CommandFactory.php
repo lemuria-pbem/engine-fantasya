@@ -325,6 +325,8 @@ use Lemuria\Singleton;
  */
 class CommandFactory
 {
+	public final const ALTERNATIVE_PREFIX = 'ALTERNATIVE';
+
 	use BuilderTrait;
 
 	/**

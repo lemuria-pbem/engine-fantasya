@@ -32,13 +32,15 @@ class DefaultResolver
 					$second++;
 					continue;
 				}
-				if ($command instanceof Activity) {
+				if ($command instanceof Activity && !$command->IsAlternative()) {
 					$other = $this->defaults[$second];
 					if ($other instanceof Activity) {
 						if ((string)$other === $phrase || !$command->allows($other)) {
-							unset($this->defaults[$second]);
-							$n--;
-							continue;
+							if (!$other->IsAlternative()) {
+								unset($this->defaults[$second]);
+								$n--;
+								continue;
+							}
 						}
 					}
 				}
@@ -46,6 +48,22 @@ class DefaultResolver
 			}
 			$first++;
 		}
+		return $this->promoteAlternative();
+	}
+
+	protected function promoteAlternative(): array {
+		$first = null;
+		foreach ($this->defaults as $command) {
+			if ($command instanceof Activity) {
+				if (!$command->IsAlternative()) {
+					return $this->defaults;
+				}
+				if (!$first){
+					$first = $command;
+				}
+			}
+		}
+		$first?->setAlternative(false);
 		return $this->defaults;
 	}
 }

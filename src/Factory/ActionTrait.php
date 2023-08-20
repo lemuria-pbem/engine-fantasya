@@ -19,6 +19,24 @@ trait ActionTrait
 	}
 
 	/**
+	 * Get command as string.
+	 */
+	public function __toString(): string {
+		$phrase = (string)$this->phrase;
+		if ($this->isAlternative()) {
+			return CommandFactory::ALTERNATIVE_PREFIX . ' ' . $phrase;
+		}
+		return $phrase;
+	}
+
+	public function getInstruction(): string {
+		if ($this->isAlternative()) {
+			return CommandFactory::ALTERNATIVE_PREFIX . ' ' . $this->phrase;
+		}
+		return (string)$this->phrase;
+	}
+
+	/**
 	 * Check if the action has been prepared and is ready to execute.
 	 */
 	public function isPrepared(): bool {
@@ -35,9 +53,17 @@ trait ActionTrait
 	/**
 	 * Mark the action as alternative.
 	 */
-	public function setAlternative(): void {
-		if (!$this->preparation) {
-			$this->preparation--;
+	public function setAlternative(bool $isAlternative = true): void {
+		if ($isAlternative) {
+			if (!$this->preparation) {
+				$this->preparation--;
+			}
+		} else {
+			if ($this->preparation < 0) {
+				$this->preparation = 0;
+			} elseif ($this->preparation > 1) {
+				$this->preparation = 1;
+			}
 		}
 	}
 

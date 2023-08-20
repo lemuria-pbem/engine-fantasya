@@ -18,6 +18,16 @@ interface Activity extends Command
 	public function setIsDefault(bool $isDefault = true): void;
 
 	/**
+	 * Check if this activity is an alternative.
+	 */
+	public function IsAlternative(): bool;
+
+	/**
+	 * Set activity as alternative.
+	 */
+	public function setAlternative(bool $isAlternative = true): void;
+
+	/**
 	 * Get the new default commands.
 	 *
 	 * @return array<Command>
@@ -28,9 +38,4 @@ interface Activity extends Command
 	 * Check if this activity allows execution of another activity.
 	 */
 	public function allows(Activity $activity): bool;
-
-	/**
-	 * Set activity as alternative.
-	 */
-	public function setAlternative(): void;
 }
