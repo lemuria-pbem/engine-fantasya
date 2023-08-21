@@ -29,10 +29,7 @@ final class Template extends DelegatedCommand
 			if (preg_match('/^(0*\*|\*0*)$/', $param) === 1) {
 				$copy    = $verb . ' * ' . $phrase;
 				$command = new CompositeCommand($this->phrase, $this->context);
-				return $command->setCommands([
-					new Copy(new Phrase($copy), $this->context),
-					$this->createOrder($phrase)
-				]);
+				return $command->setCommands([$this->createCopy($copy), $this->createOrder($phrase)]);
 			}
 
 			if (preg_match('/^([0-9]+)\*$/', $param, $matches) === 1 || preg_match('/^\*([0-9]+)$/', $param, $matches) === 1) {
@@ -40,20 +37,14 @@ final class Template extends DelegatedCommand
 				if ($limit >= 2) {
 					$copy    = $verb . ' *' . --$limit . ' ' . $phrase;
 					$command = new CompositeCommand($this->phrase, $this->context);
-					return $command->setCommands([
-						new Copy(new Phrase($copy), $this->context),
-						$this->createOrder($phrase)
-					]);
+					return $command->setCommands([$this->createCopy($copy), $this->createOrder($phrase)]);
 				}
 				if ($limit > 0) {
 					return $this->createOrder($phrase);
 				}
 				$copy    = $verb . ' * ' . $phrase;
 				$command = new CompositeCommand($this->phrase, $this->context);
-				return $command->setCommands([
-					new Copy(new Phrase($copy), $this->context),
-					$this->createOrder($phrase)
-				]);
+				return $command->setCommands([$this->createCopy($copy), $this->createOrder($phrase)]);
 			}
 
 			$round = (int)$param;
@@ -63,7 +54,7 @@ final class Template extends DelegatedCommand
 				} else {
 					$command = $phrase;
 				}
-				return new Copy(new Phrase($command), $this->context);
+				return $this->createCopy($command);
 			}
 
 			if (preg_match('#^([0-9]+)/([0-9]+)$#', $param, $matches) === 1) {
@@ -71,18 +62,20 @@ final class Template extends DelegatedCommand
 				$interval = (int)$matches[2];
 				if ($round > 0) {
 					$command = $verb . ' ' . --$round . '/' . $interval . ' ' . $phrase;
-					return new Copy(new Phrase($command), $this->context);
+					return $this->createCopy($command);
 				}
 				$copy    = $verb . ' ' . ($interval - 1) . '/' . $interval . ' ' . $phrase;
 				$command = new CompositeCommand($this->phrase, $this->context);
-				return $command->setCommands([
-					new Copy(new Phrase($copy), $this->context),
-					$this->createOrder($phrase)
-				]);
+				return $command->setCommands([$this->createCopy($copy), $this->createOrder($phrase)]);
 			}
 		}
 
 		return new DefaultCommand($this->phrase, $this->context);
+	}
+
+	private function createCopy(string $copy): Copy {
+		$order = new Copy(new Phrase($copy), $this->context);
+		return $order->setCurrent($this);
 	}
 
 	private function createOrder(string $phrase): Command {

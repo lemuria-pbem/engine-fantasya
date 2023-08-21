@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Template;
 
+use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Message\Unit\DefaultMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 
@@ -19,10 +20,22 @@ use Lemuria\Engine\Fantasya\Phrase;
  */
 final class Copy extends AbstractTemplate
 {
+	private ?UnitCommand $current = null;
+
+	public function setCurrent(UnitCommand $current): Copy {
+		$this->current = $current;
+		return $this;
+	}
+
 	protected function run(): void {
 		$this->phrase = $this->cleanPhrase();
 		$this->context->getProtocol($this->unit)->addDefault($this);
 		$this->message(DefaultMessage::class)->p((string)$this->phrase);
+	}
+
+	protected function commitCommand(UnitCommand $command): void {
+		$protocol = $this->context->getProtocol($this->unit);
+		$protocol->logCurrent($this->current ?? $this);
 	}
 
 	private function cleanPhrase(): Phrase {
