@@ -3,10 +3,13 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit\Operate;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Fantasya\Message\Reliability;
 use Lemuria\Item;
 
 class CarcassOnlyMessage extends CarcassNothingMessage
 {
+	protected Reliability $reliability = Reliability::Determined;
+
 	protected Item $item;
 
 	protected function create(): string {

@@ -24,7 +24,7 @@ final class Carcass extends AbstractOperate
 		$unicum  = $this->operator->Unicum();
 		$carcass = $this->getCarcass();
 		$loot    = $carcass->Inventory();
-		if ($loot->isEmpty()) {
+		if ($this->context->getTurnOptions()->IsSimulation() || $loot->isEmpty()) {
 			$this->message(CarcassNothingMessage::class, $this->unit)->s($carcass)->e($unicum);
 			return;
 		}
