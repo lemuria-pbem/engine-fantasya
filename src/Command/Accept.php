@@ -181,7 +181,7 @@ final class Accept extends UnitCommand
 		}
 
 		$price = $this->trade->Price();
-		if ($this->price < $price->Minimum()) {
+		if (!$this->context->getTurnOptions()->IsSimulation() && $this->price < $price->Minimum()) {
 			if ($this->trade->Trade() === Trade::OFFER) {
 				$this->message(AcceptOfferPriceMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
 			} else {
@@ -208,7 +208,7 @@ final class Accept extends UnitCommand
 		if ($goods) {
 			$price   = $this->trade->Price();
 			$minimum = $this->amount * $price->Minimum();
-			if ($this->price < $minimum) {
+			if (!$this->context->getTurnOptions()->IsSimulation() && $this->price < $minimum) {
 				if ($this->trade->Trade() === Trade::OFFER) {
 					$this->message(AcceptOfferPriceMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
 				} else {
