@@ -58,7 +58,9 @@ final class Recruit extends AllocationCommand
 		}
 
 		if ($this->size < $this->demand) {
-			$this->message(RecruitReducedMessage::class)->p($this->size);
+			if ($tooMuch > 0) {
+				$this->message(RecruitReducedMessage::class)->p($this->size);
+			}
 		}
 		parent::run();
 
