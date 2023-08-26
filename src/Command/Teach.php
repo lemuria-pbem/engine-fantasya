@@ -25,7 +25,6 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
 
@@ -241,20 +240,14 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 
 	private function canTeach(Learn $student): bool {
 		$talent         = $student->getTalent();
-		$studentAbility = $student->unit->Knowledge()[$talent];
-		$teacherAbility = $this->unit->Knowledge()[$talent];
-		if ($teacherAbility instanceof Ability) {
-			if ($studentAbility instanceof Ability) {
-				$level        = $studentAbility->Level();
-				$levelToReach = $student->getLevel();
-				if ($levelToReach > 0 && $level >= $levelToReach) {
-					return false;
-				}
-				return $teacherAbility->Level() > $level;
-			}
-			return true;
+		$studentAbility = $this->context->getCalculus($student->unit)->ability($talent);
+		$teacherAbility = $this->calculus()->ability($talent);
+		$level          = $studentAbility->Level();
+		$levelToReach   = $student->getLevel();
+		if ($levelToReach > 0 && $level >= $levelToReach) {
+			return false;
 		}
-		return false;
+		return $teacherAbility->Level() > $level;
 	}
 
 	private function createNewDefault(array $ids): void {
