@@ -94,7 +94,7 @@ final class Sell extends CommerceCommand
 		foreach ($this->distributor->Regions() as $region) {
 			/** @var Luxury $luxury */
 			$luxury = $this->commodity;
-			if (isset($region->Luxuries()[$luxury])) {
+			if ($region->Luxuries()?->offsetExists($luxury)) {
 				$maximum += $this->context->getSupply($region, $luxury)->getStep();
 			}
 		}

@@ -64,12 +64,11 @@ class Distributor
 		$this->state  = State::getInstance();
 		$this->fleet  = State::getInstance()->getRealmFleet($this->realm);
 		foreach ($this->realm->Territory() as $region) {
-			if ($this->isUnderSiege($region) || $this->getCheckByAgreement(Relation::TRADE)) {
+			if (!$this->isTradePossible($region) || $this->isUnderSiege($region) || $this->getCheckByAgreement(Relation::TRADE)) {
 				continue;
 			}
 			if ($this->state->getIntelligence($region)->getCastle()?->Size() > Site::MAX_SIZE) {
 				$this->regions[$region->Id()->Id()] = $region;
-				//$this->supply[$region->Id()->Id()] = new Supply($region);
 			}
 		}
 		$this->silver = self::createCommodity(Silver::class);
@@ -209,5 +208,13 @@ class Distributor
 				Lemuria::Log()->debug('Merchant ' . $merchant . ' has ' . ($isBuy ? 'bought' : 'sold') . ' ' . $traded . ' ' . $luxury . ' in region ' . $region . '.');
 			}
 		}
+	}
+
+	private function isTradePossible(Region $region): bool {
+		if (!$region->Luxuries()) {
+			return false;
+		}
+		$castle = $this->context->getIntelligence($region)->getCastle();
+		return $castle?->Size() > Site::MAX_SIZE;
 	}
 }

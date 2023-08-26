@@ -120,13 +120,14 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 			return;
 		}
 
-		if ($this->isTradePossible()) {
-			$this->trades = $this->context->getWorkload($this->unit);
-			if ($this->isRunCentrally($this)) {
-				$this->distributor = $this->createDistributor($this);
-				$this->createGoods();
-				Lemuria::Log()->debug('New distributor helper for realm ' . $this->distributor->Realm()->Id() . '.', ['command' => $this]);
-			} else {
+		if ($this->isRunCentrally($this)) {
+			$this->trades      = $this->context->getWorkload($this->unit);
+			$this->distributor = $this->createDistributor($this);
+			$this->createGoods();
+			Lemuria::Log()->debug('New distributor helper for realm ' . $this->distributor->Realm()->Id() . '.', ['command' => $this]);
+		} else {
+			if ($this->isTradePossible()) {
+				$this->trades = $this->context->getWorkload($this->unit);
 				$this->createGoods();
 				$commerce = $this->context->getCommerce($this->unit->Region());
 				if (count($this->goods)) {
@@ -134,9 +135,9 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 				} else {
 					Lemuria::Log()->debug('Commerce registration skipped due to empty demand.', ['command' => $this]);
 				}
+			} else {
+				Lemuria::Log()->debug('Commerce disabled in this region - no castle here.');
 			}
-		} else {
-			Lemuria::Log()->debug('Commerce disabled in this region - no castle here.');
 		}
 	}
 

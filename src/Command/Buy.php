@@ -90,7 +90,7 @@ final class Buy extends CommerceCommand
 	protected function getMaximumSupplyInRealm(): int {
 		$maximum = 0;
 		foreach ($this->distributor->Regions() as $region) {
-			if ($region->Luxuries()->Offer()->Commodity() === $this->commodity) {
+			if ($region->Luxuries()?->Offer()->Commodity() === $this->commodity) {
 				$maximum += $this->context->getSupply($region, $this->commodity)->getStep();
 			}
 		}
