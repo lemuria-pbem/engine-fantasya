@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
+use Lemuria\Engine\Fantasya\Factory\Model\Teacher;
 use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\RealmTrait;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
@@ -44,8 +45,6 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 	use ReassignTrait;
 	use SiegeTrait;
 
-	private const MAX_STUDENTS = 10;
-
 	/**
 	 * @var array<int, Learn>
 	 */
@@ -57,11 +56,9 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 
 	private float $fleetTime = 0.0;
 
-	private bool $logCommit = false;
+	private Teacher $teacher;
 
-	public function allows(Activity $activity): bool {
-		return false;
-	}
+	private bool $logCommit = false;
 
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
 		if ($this->checkReassignmentDomain($identifiable->Catalog())) {
@@ -104,9 +101,11 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 			return;
 		}
 
+		$this->teacher = $this->calculus()->getTeacher();
 		if ($this->isRunCentrally($this)) {
 			$realm           = $this->unit->Region()->Realm();
 			$this->fleetTime = $this->context->getRealmFleet($realm)->getUsedCapacity($this->unit);
+			$this->teacher->setFleetTime($this->fleetTime);
 		}
 
 		$ids = [];
@@ -147,7 +146,7 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 				$this->message(TeachFleetNothingMessage::class);
 			}
 		}
-		$this->calculateBonuses();
+		$this->bonus = $this->teacher->calculateBonus();
 		if ($this->fleetTime < 1.0) {
 			$bonus = round($this->bonus ** 2, 3);
 			$this->message(TeachBonusMessage::class)->p($this->size, TeachBonusMessage::STUDENTS)->p($bonus, TeachBonusMessage::BONUS);
@@ -231,6 +230,7 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 				if ($this->canTeach($learn)) {
 					$calculus->addTeacher($this);
 					$this->students[$unit->Id()->Id()] = $learn;
+					$this->teacher->addStudents($learn->Unit()->Size());
 					return true;
 				}
 				return false;
@@ -255,18 +255,6 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Calculate the bonus for every student.
-	 */
-	private function calculateBonuses(): void {
-		$people = 0;
-		foreach ($this->students as $learn) {
-			$people += $learn->Unit()->Size();
-		}
-		$maxStudents = $this->unit->Size() * self::MAX_STUDENTS;
-		$this->bonus = (1.0 - $this->fleetTime) * ($people > 0 ? min($maxStudents / $people, 1.0) : 1.0);
 	}
 
 	private function createNewDefault(array $ids): void {

@@ -12,6 +12,7 @@ use Lemuria\Engine\Fantasya\Effect\TalentEffect;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\Factory\GearDistribution;
 use Lemuria\Engine\Fantasya\Factory\LodgingTrait;
+use Lemuria\Engine\Fantasya\Factory\Model\Teacher;
 use Lemuria\Engine\Fantasya\Travel\Conveyance;
 use Lemuria\Engine\Fantasya\Travel\StaminaBonus;
 use Lemuria\Engine\Fantasya\Travel\Trip;
@@ -68,6 +69,8 @@ final class Calculus
 	 */
 	private array $teachers = [];
 
+	private ?Teacher $teacher = null;
+
 	public function __construct(private readonly Unit $unit) {
 	}
 
@@ -106,6 +109,16 @@ final class Calculus
 	 */
 	public function getTeachers(): array {
 		return $this->teachers;
+	}
+
+	/**
+	 * Get the Teacher object.
+	 */
+	public function getTeacher(): Teacher {
+		if (!$this->teacher) {
+			$this->teacher = new Teacher($this->unit);
+		}
+		return $this->teacher;
 	}
 
 	/**
