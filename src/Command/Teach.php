@@ -155,6 +155,12 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 	protected function commitCommand(UnitCommand $command): void {
 		$protocol = $this->context->getProtocol($this->unit);
 		if ($protocol->hasActivity($this)) {
+			if ($this->isAlternative()) {
+				if ($this->logCommit) {
+					$protocol->logCurrent($command);
+				}
+				return;
+			}
 			throw new ActivityException($command);
 		}
 		if ($this->size > 0) {
