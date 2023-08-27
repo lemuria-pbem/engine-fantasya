@@ -27,6 +27,7 @@ final class CensusWorkers extends AbstractEvent
 				continue;
 			}
 
+			$this->placeMetrics(Subject::Infrastructure, $region);
 			$this->placeMetrics(Subject::Population, $region);
 			$this->placeMetrics(Subject::Unemployment, $region);
 			$this->placeMetrics(Subject::Wealth, $region);

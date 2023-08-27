@@ -18,6 +18,8 @@ enum Subject
 
 	case Experts;
 
+	case Infrastructure;
+
 	case Joblessness;
 
 	case LearningCosts;
