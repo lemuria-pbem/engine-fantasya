@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Storage\Migration\AbstractUpgrade;
 use Lemuria\Model\Fantasya\Storage\JsonGame;
 use Lemuria\Model\Fantasya\Storage\JsonProvider;
 use Lemuria\Storage\Provider;
+use Lemuria\Storage\RecursiveProvider;
 
 class LemuriaGame extends JsonGame
 {
@@ -15,8 +16,37 @@ class LemuriaGame extends JsonGame
 
 	private const STRINGS_FILE = 'strings.json';
 
+	private const SCRIPTS_DIR = 'scripts';
+
 	public function __construct(protected readonly LemuriaConfig $config) {
 		parent::__construct();
+	}
+
+	/**
+	 * Get NPC scripts data.
+	 */
+	public function getScripts(): array {
+		$data       = [];
+		$scriptsDir = self::GAME_DIR . DIRECTORY_SEPARATOR . self::SCRIPTS_DIR;
+		$pathPos    = strlen($scriptsDir) + 1;
+		$provider   = new RecursiveProvider($scriptsDir);
+		foreach ($provider->glob() as $path) {
+			$file        = substr($path, $pathPos);
+			$data[$file] = $provider->read($file);
+		}
+		return $data;
+	}
+
+	/**
+	 * Set NPC scripts data.
+	 */
+	public function setScripts(array $scripts): static {
+		$scriptsDir = self::GAME_DIR . DIRECTORY_SEPARATOR . self::SCRIPTS_DIR;
+		$provider   = new RecursiveProvider($scriptsDir);
+		foreach ($scripts as $file => $data) {
+			$provider->write($file, $data);
+		}
+		return $this;
 	}
 
 	public function migrate(): static {

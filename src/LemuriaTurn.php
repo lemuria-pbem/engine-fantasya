@@ -13,6 +13,7 @@ use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\InvalidDefaultException;
+use Lemuria\Engine\Fantasya\Exception\ScriptException;
 use Lemuria\Engine\Fantasya\Exception\UnknownArgumentException;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
@@ -51,6 +52,11 @@ class LemuriaTurn implements Turn
 	protected const PROFILE_PREFIX = 'LemuriaTurn_';
 
 	protected readonly CommandQueue $queue;
+
+	/**
+	 * @var array<Script>
+	 */
+	private array $scripts = [];
 
 	protected readonly CommandPriority $priority;
 
@@ -278,6 +284,11 @@ class LemuriaTurn implements Turn
 		foreach ($this->state->getAllProtocols() as $protocol) {
 			$protocol->persistNewDefaults();
 		}
+		$scripts = [];
+		foreach ($this->scripts as $script) {
+			$scripts[$script->File()] = $script->Data();
+		}
+		Lemuria::Game()->setScripts($scripts);
 		return $this;
 	}
 
@@ -298,6 +309,18 @@ class LemuriaTurn implements Turn
 	public function addScore(Score $score): LemuriaTurn {
 		foreach ($score as $effect /** @var Effect $effect */) {
 			$this->addEffect($effect);
+		}
+		return $this;
+	}
+
+	/**
+	 * Add a script.
+	 */
+	public function addScript(Script $script): LemuriaTurn {
+		try {
+			$this->scripts[] = $script->play();
+		} catch (ScriptException $e) {
+			Lemuria::Log()->critical($e->getMessage());
 		}
 		return $this;
 	}
