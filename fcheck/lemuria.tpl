@@ -96,7 +96,8 @@
 
 ^@?(ma|mac|mach|mache|machen) +(temp) +[a-z0-9]{1,6}$
 ^@?(ma|mac|mach|mache|machen) +[a-zäöüß]+$
-^@?(ma|mac|mach|mache|machen) +[0-9]+ +[a-zäöüß]+$
+^@?(ma|mac|mach|mache|machen) +-?[0-9]+ +[a-zäöüß]+$
+^@?(ma|mac|mach|mache|machen) +-[0-9]+% Kräuter$
 ^@?(ma|mac|mach|mache|machen) +(schiff|boot|drachenschiff|galeone|karavelle|langboot|trireme)( +[0-9]+)?$
 ^@?(ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|akropolis|alchemistenküche|bergwerk|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|kamelzucht|kanal|leuchtturm|leuchttürme|magierturm|markt|minen|mine|monument|monumente|pferdezucht|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steingrube|steuerturm|taverne|wegweiser|werkstatt)(( +[0-9]+)|( +[a-z0-9]{1,6}))?$
 ^@?(ma|mac|mach|mache|machen) +straße +(no|o|so|sw|w|nw)( +[0-9]+)?$
@@ -126,7 +127,7 @@
 
 ^@?(reis|reise|reisen|nac|nach)( +(e|ne|no|nw|o|so|sw|w|east|nordosten|nordwesten|northeast|northwest|osten|suedosten|suedwesten|southeast|southwest|westen|west))+$
 
-^@?(rek|rekr|rekru|rekrut|rekruti|rekrutie|rekrutier|rekrutiere|rekrutieren|rekrute|rekruten) +[0-9]+$
+^@?(rek|rekr|rekru|rekrut|rekruti|rekrutie|rekrutier|rekrutiere|rekrutieren|rekrute|rekruten) +-?[0-9]+$
 
 ^@?(res|rese|reser|reserv|reservi|reserve|reservie|reservier|reserviere|reservieren|reservieru|reservierun|reservierung) +[0-9]+ +[a-z äöüß]+$
 ^@?(res|rese|reser|reserv|reservi|reserve|reservie|reservier|reserviere|reservieren|reservieru|reservierun|reservierung) +[a-z äöüß]+$
@@ -155,11 +156,11 @@
 
 ^@?(tar|tarn|tarne|tarnen|tarnu|tarnun|tarnung)( +([0-9]+|nein|nicht|partei( +[a-z0-9]{1,6})?))?$
 
-^@?(tr|tre|trei|treib|treibe|treiben)( +[0-9]+)?$
-^@?(besteu|besteue|besteuer|besteuern|besteueru|besteuerun|besteuerung)( +[0-9]+)?$
-^@?(eint|eintr|eintre|eintrei|eintreib|eintreibe|eintreiben)( +[0-9]+)?$
+^@?(tr|tre|trei|treib|treibe|treiben)( +-?[0-9]+)?$
+^@?(besteu|besteue|besteuer|besteuern|besteueru|besteuerun|besteuerung)( +-?[0-9]+)?$
+^@?(eint|eintr|eintre|eintrei|eintreib|eintreibe|eintreiben)( +-?[0-9]+)?$
 
-^@?(unterh|unterha|unterhal|unterhalt|unterhalte|unterhalten|unterhaltu|unterhaltun|unterhaltung)( +[0-9]+)?$
+^@?(unterh|unterha|unterhal|unterhalt|unterhalte|unterhalten|unterhaltu|unterhaltun|unterhaltung)( +-?[0-9]+)?$
 
 ^@?(ur|urs|ursp|urspr|urspru|ursprun|ursprung)( +(partei|region) +[a-z0-9]{1,6})?$
 
