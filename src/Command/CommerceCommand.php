@@ -51,6 +51,8 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 
 	protected int $count = 0;
 
+	protected int $bundle = 0;
+
 	protected int $cost = 0;
 
 	protected ?array $lastCheck = null;
@@ -170,7 +172,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 		$demand       = $this->getDemand();
 		$this->amount = min($demand->Count(), $this->getMaximum());
 		if ($this->amount > 0) {
-			$this->goods->add($demand);
+			$this->goods->add(new Quantity($demand->Commodity(), $this->amount));
 		} else {
 			Lemuria::Log()->debug('Merchant ' . $this . ' has no demand.');
 		}
@@ -197,15 +199,8 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 		} else {
 			throw new UnknownCommandException($this);
 		}
-
 		if ($this->demand === 0 && $this->commodity instanceof Luxury) {
-			$luxuries = $this->unit->Region()->Luxuries();
-			$offer    = $luxuries->Offer();
-			if ($offer->Commodity() === $this->commodity) {
-				$this->threshold = $offer->Price();
-			} else {
-				$this->threshold = $luxuries[$this->commodity]->Price();
-			}
+			$this->calculateThreshold();
 		}
 		return new Quantity($this->commodity, $demand);
 	}
@@ -221,6 +216,8 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 
 	abstract protected function getMaximumSupplyInRealm(): int;
 
+	abstract protected function setRealmThreshold(array $threshold): void;
+
 	protected function getMaximumSupply(): int {
 		if ($this->isRunCentrally($this)) {
 			return $this->getMaximumSupplyInRealm();
@@ -235,6 +232,34 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 			$this->isTradePossible = $castle?->Size() > Site::MAX_SIZE;
 		}
 		return $this->isTradePossible;
+	}
+
+	protected function calculateThreshold(): void {
+		if ($this->distributor) {
+			$this->calculateRealmThreshold();
+		} else {
+			$luxuries = $this->unit->Region()->Luxuries();
+			$offer    = $luxuries->Offer();
+			if ($offer->Commodity() === $this->commodity) {
+				$this->threshold = $offer->Price();
+			} else {
+				$this->threshold = $luxuries[$this->commodity]->Price();
+			}
+		}
+	}
+
+	public function calculateRealmThreshold(): void {
+		$threshold = [];
+		foreach ($this->distributor->Regions() as $region) {
+			$luxuries = $this->unit->Region()->Luxuries();
+			$offer    = $luxuries->Offer();
+			if ($offer->Commodity() === $this->commodity) {
+				$threshold[] = $offer->Price();
+			} else {
+				$threshold[] = $luxuries[$this->commodity]->Price();
+			}
+		}
+		$this->setRealmThreshold($threshold);
 	}
 
 	protected function goods(): Quantity {

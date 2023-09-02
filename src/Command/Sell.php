@@ -51,6 +51,7 @@ final class Sell extends CommerceCommand
 				$inventory->remove(new Quantity($good, 1));
 				$inventory->add(new Quantity($this->silver, $price));
 				$this->count++;
+				$this->bundle++;
 				$this->cost += $price;
 				return true;
 			}
@@ -78,6 +79,8 @@ final class Sell extends CommerceCommand
 		} else {
 			$this->message(SellNoneMessage::class)->s($this->goods()->Commodity());
 		}
+		$this->bundle = 0;
+		$this->cost   = 0;
 		return $this;
 	}
 
@@ -99,5 +102,9 @@ final class Sell extends CommerceCommand
 			}
 		}
 		return $maximum;
+	}
+
+	protected function setRealmThreshold(array $threshold): void {
+		$this->threshold = max($threshold);
 	}
 }

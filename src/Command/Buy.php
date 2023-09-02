@@ -55,6 +55,7 @@ final class Buy extends CommerceCommand
 				$this->placeDataMetrics(Subject::Purchase, $price, $this->unit);
 				$inventory->add(new Quantity($good, 1));
 				$this->count++;
+				$this->bundle++;
 				$this->cost += $price;
 				return true;
 			}
@@ -76,14 +77,17 @@ final class Buy extends CommerceCommand
 	 */
 	public function finish(): static {
 		if ($this->count > 0) {
+			$bundle = new Quantity($this->goods()->Commodity(), $this->bundle);
 			if ($this->demand > 0 && $this->count < $this->demand && $this->demand < PHP_INT_MAX) {
-				$this->message(BuyOnlyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
+				$this->message(BuyOnlyMessage::class)->i($bundle)->i($this->cost(), BuyMessage::PAYMENT);
 			} else {
-				$this->message(BuyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
+				$this->message(BuyMessage::class)->i($bundle)->i($this->cost(), BuyMessage::PAYMENT);
 			}
 		} else {
 			$this->message(BuyNoneMessage::class)->s($this->goods()->Commodity());
 		}
+		$this->bundle = 0;
+		$this->cost   = 0;
 		return $this;
 	}
 
@@ -95,5 +99,9 @@ final class Buy extends CommerceCommand
 			}
 		}
 		return $maximum;
+	}
+
+	protected function setRealmThreshold(array $threshold): void {
+		$this->threshold = min($threshold);
 	}
 }
