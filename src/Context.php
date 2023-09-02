@@ -256,7 +256,7 @@ final class Context implements Reassignment
 	 */
 	public function getRealmFund(Realm $realm): Fund {
 		$id = $realm->Id()->Id();
-		if (!$this->realmFunds[$id]) {
+		if (!isset($this->realmFunds[$id])) {
 			$this->realmFunds[$id] = new Fund($realm, $this);
 		}
 		return $this->realmFunds[$id];
