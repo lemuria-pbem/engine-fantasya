@@ -211,12 +211,14 @@ final class Allocation
 	 */
 	private function giveRandom(string $class, int $count): void {
 		$consumers = $this->distribution[$class]['demand'];
-		$count     = min($count, count($consumers));
-		foreach (randKeys($consumers, $count) as $consumer) {
-			$this->distribution[$class]['allocation'][$consumer]++;
-			$this->distribution[$class]['demand'][$consumer]--;
-			if ($this->distribution[$class]['demand'][$consumer] === 0) {
-				unset($this->distribution[$class]['demand'][$consumer]);
+		while ($count > 0 && count($consumers) > 0) {
+			foreach (randKeys($consumers, min($count, count($consumers))) as $consumer) {
+				$this->distribution[$class]['allocation'][$consumer]++;
+				$this->distribution[$class]['demand'][$consumer]--;
+				if ($this->distribution[$class]['demand'][$consumer] === 0) {
+					unset($this->distribution[$class]['demand'][$consumer]);
+				}
+				$count--;
 			}
 		}
 	}
