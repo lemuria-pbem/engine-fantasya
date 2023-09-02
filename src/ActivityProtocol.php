@@ -180,7 +180,7 @@ final class ActivityProtocol
 	/**
 	 * Check if an activity is allowed.
 	 */
-	private function isAllowed(Activity $activity): bool {
+	public function isAllowed(Activity $activity): bool {
 		foreach ($this->activities as $oldActivity) {
 			if (!$oldActivity->allows($activity)) {
 				return false;

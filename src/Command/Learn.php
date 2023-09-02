@@ -119,6 +119,9 @@ final class Learn extends UnitCommand implements Activity
 	}
 
 	public function canLearn(): bool {
+		if (!$this->context->getProtocol($this->unit)->isAllowed($this)) {
+			return false;
+		}
 		$result         = $this->progress(false);
 		$this->progress = null;
 		$this->expense  = 0;
