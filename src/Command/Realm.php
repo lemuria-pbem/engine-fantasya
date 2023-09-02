@@ -90,10 +90,12 @@ final class Realm extends UnitCommand
 			if ($government && $government !== $party) {
 				$this->message(RealmGovernedMessage::class)->e($government);
 			} else {
-				foreach ($this->intelligence->getGuards() as $unit) {
-					if ($unit->Party() !== $party) {
-						$this->message(RealmGuardedMessage::class);
-						return;
+				if (!$government) {
+					foreach ($this->intelligence->getGuards() as $unit) {
+						if ($unit->Party() !== $party) {
+							$this->message(RealmGuardedMessage::class);
+							return;
+						}
 					}
 				}
 				if ($this->isValidNeighbour($realm, $region)) {
