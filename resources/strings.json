@@ -1264,7 +1264,7 @@
 		"HealingPotion": ["m", ["Heiltrank", "Heiltränke"], ["Heiltrankes", 1], [0, "Heiltränken"], 1, 1],
 		"HerbAlmanac": ["m", ["Kräuteralmanach", "Kräuteralmanache"], ["Kräuteralmanachs", 1], [0, "Kräuteralmanachen"], 1, 1],
 		"Highland": ["n", ["Hochland", "Hochländer"], ["Hochlandes", 1], [0, "Hochländern"], 1, 1],
-		"Horse": ["n", ["Pferd", "Pferde"], ["Pferdes", 1], [1, "Pferden"], 1, 1],
+		"Horse": ["n", ["Pferd", "Pferde"], ["Pferdes", 1], [0, "Pferden"], 1, 1],
 		"HorseBliss": ["n", ["Pferdeglück", 0], ["Pferdeglückes", 2], [0, 0], [0, 0], [0, 0]],
 		"HorseBreeding": ["f", ["Pferdezucht", "Pferdezuchten"], 1, 1, 1, 1],
 		"Human": ["m", ["Mensch", "Menschen"], [1, 1], [1, 1], 1, 1],
