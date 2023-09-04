@@ -2,14 +2,23 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use Lemuria\Engine\Fantasya\Event\Game\BlownByTheWind;
+use Lemuria\Engine\Fantasya\Event\Game\CarriedOffWayfarer;
 use Lemuria\Engine\Fantasya\Event\Game\Drought;
-use Lemuria\Engine\Fantasya\Event\Game\FindWallet;
 use Lemuria\Engine\Fantasya\Event\Game\GoblinPlague;
+use Lemuria\Engine\Fantasya\Event\Game\PotionGift;
 use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
+use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
+use Lemuria\Model\Fantasya\Commodity\Potion\DrinkOfCreation;
+use Lemuria\Model\Fantasya\Commodity\Silver;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
+use Lemuria\Model\Fantasya\Race\Human;
+use Lemuria\Model\Fantasya\Spell\AstralPassage;
+use Lemuria\Model\Fantasya\Spell\Farsight;
 
 /**
  * The Timer event adds other events at predefined rounds.
@@ -17,15 +26,19 @@ use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 final class Timer extends DelegatedEvent
 {
 	private const SCHEDULE = [
-		111 => [
-			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => 2359, Spawn::SIZE => 27, Spawn::RACE => Zombie::class]],
-			['class' => GoblinPlague::class, 'options' => [GoblinPlague::REGION => 61, GoblinPlague::DURATION => 2]]
-		],
-		127 => [
-			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 3828, FindWallet::SILVER => 2000]],
-		],
 		130 => [
-			['class' => Drought::class, 'options' => [Drought::RATE => 0.476]]
+			['class' => Drought::class, 'options' => [Drought::RATE => 0.476]],
+			['class' => GoblinPlague::class, 'options' => [GoblinPlague::REGION => 3759, GoblinPlague::DURATION => 3]],
+			['class' => GoblinPlague::class, 'options' => [GoblinPlague::REGION => 3760, GoblinPlague::DURATION => 3]],
+			['class' => CarriedOffWayfarer::class, 'options' => [
+				CarriedOffWayfarer::REGION => 3949, CarriedOffWayfarer::RACE => Human::class,
+				CarriedOffWayfarer::INVENTORY => [Silver::class => 30, Sword::class => 1]
+			]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => 3949, Spawn::SIZE => 1, Spawn::RACE => Zombie::class]],
+			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => 526, BlownByTheWind::SPELL => Farsight::class]],
+			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => 4687, BlownByTheWind::SPELL => AstralPassage::class]],
+			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 1603, PotionGift::POTION => DrinkOfCreation::class]],
+			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 3828, PotionGift::POTION => Brainpower::class]]
 		]
 	];
 

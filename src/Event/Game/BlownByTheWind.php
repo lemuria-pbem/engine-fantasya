@@ -33,11 +33,11 @@ final class BlownByTheWind extends AbstractEvent
 
 	private const ROUNDS = 3;
 
+	protected ?Dictionary $dictionary;
+
 	private Region $region;
 
 	private Spell $spell;
-
-	private Dictionary $dictionary;
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);

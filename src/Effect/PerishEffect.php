@@ -3,16 +3,13 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
 use function Lemuria\randElement;
-use Lemuria\Engine\Fantasya\Command\Operate\Carcass as Operate;
-use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
+use Lemuria\Engine\Fantasya\Command\Operate\Carcass;
+use Lemuria\Engine\Fantasya\Factory\BuilderTrait as CarcassBuilderTrait;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
-use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\Region\PerishWashedAshoreMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Domain;
-use Lemuria\Model\Fantasya\Composition\Carcass;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Navigable;
@@ -24,7 +21,7 @@ use Lemuria\Model\Fantasya\Unicum;
 final class PerishEffect extends AbstractUnitEffect
 {
 	use BuilderTrait;
-	use GrammarTrait;
+	use CarcassBuilderTrait;
 	use MessageTrait;
 
 	public function __construct(State $state) {
@@ -62,30 +59,16 @@ final class PerishEffect extends AbstractUnitEffect
 	}
 
 	private function createCarcass(): Unicum {
-		$unit = $this->Unit();
-		$race = $unit->Race();
-
-		/** @var Carcass $carcass */
-		$carcass = self::createComposition(Carcass::class);
-		$carcass->setCreature($race);
+		$unit      = $this->Unit();
+		$race      = $unit->Race();
 		$inventory = new Resources();
-		$carcass->setInventory($inventory);
 		$inventory->fill($unit->Inventory());
 		if ($race instanceof Monster) {
 			$trophy = $race->Trophy();
-			if ($trophy && isset(Operate::WITH_TROPHY[$race::class])) {
+			if ($trophy && isset(Carcass::WITH_TROPHY[$race::class])) {
 				$inventory->add(new Quantity($trophy));
 			}
 		}
-
-		$name   = $this->translateSingleton($carcass, casus: Casus::Nominative) . ' '
-			    . $this->combineGrammar($race, 'ein', Casus::Genitive);
-		$unicum = new Unicum();
-		$unicum->setId(Lemuria::Catalog()->nextId(Domain::Unicum));
-		$unicum->setComposition($carcass)->setName($name);
-
-		$effect = new UnicumDisintegrate(State::getInstance());
-		Lemuria::Score()->add($effect->setUnicum($unicum)->setRounds(Operate::DISINTEGRATE));
-		return $unicum;
+		return $this->createNamedCarcass($race, $inventory);
 	}
 }
