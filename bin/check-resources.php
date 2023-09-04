@@ -28,6 +28,7 @@ echo 'Checking ' . count($messages) . ' message translations...' . PHP_EOL;
 $errors  = checkDirectory('Construction', $messages);
 $errors += checkDirectory('Party', $messages);
 $errors += checkDirectory('Party/Administrator', $messages);
+$errors += checkDirectory('Party/Event', $messages);
 $errors += checkDirectory('Region', $messages);
 $errors += checkDirectory('Region/Event', $messages);
 $errors += checkDirectory('Unit', $messages);

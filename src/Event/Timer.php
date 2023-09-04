@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use Lemuria\Engine\Fantasya\Event\Game\Drought;
 use Lemuria\Engine\Fantasya\Event\Game\FindWallet;
 use Lemuria\Engine\Fantasya\Event\Game\GoblinPlague;
 use Lemuria\Engine\Fantasya\Event\Game\Spawn;
@@ -18,14 +19,13 @@ final class Timer extends DelegatedEvent
 	private const SCHEDULE = [
 		111 => [
 			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => 2359, Spawn::SIZE => 27, Spawn::RACE => Zombie::class]],
-			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => 3877, Spawn::SIZE => 32, Spawn::RACE => Zombie::class]],
-			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 1669, FindWallet::SILVER => 400]],
-			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 2158, FindWallet::SILVER => 180]],
-			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 4411, FindWallet::SILVER => 250]],
 			['class' => GoblinPlague::class, 'options' => [GoblinPlague::REGION => 61, GoblinPlague::DURATION => 2]]
 		],
 		127 => [
 			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 3828, FindWallet::SILVER => 2000]],
+		],
+		130 => [
+			['class' => Drought::class, 'options' => [Drought::RATE => 0.476]]
 		]
 	];
 

@@ -30,8 +30,6 @@ final class Subsistence extends AbstractEvent
 
 	public const SILVER = 10;
 
-	public const WAGE = 11;
-
 	private Workplaces $workplaces;
 
 	private Commodity $peasant;

@@ -26,7 +26,7 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
- * A travelling sorcerer gifts a potion.
+ * In the Wild Hunt all parties receive a bunch of gifts.
  */
 final class TheWildHunt extends AbstractEvent
 {
