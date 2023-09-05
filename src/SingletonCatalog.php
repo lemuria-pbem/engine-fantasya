@@ -14,7 +14,7 @@ class SingletonCatalog implements SingletonCatalogInterface
 		'Message\\Construction',
 		'Message\\Party', 'Message\\Party\\Administrator', 'Message\\Party\\Event',
 		'Message\\Region', 'Message\\Region\\Event',
-		'Message\\Unit', 'Message\\Unit\\Act', 'Message\\Unit\\Apply', 'Message\\Unit\\Cast', 'Message\\Unit\\Operate',
+		'Message\\Unit', 'Message\\Unit\\Act', 'Message\\Unit\\Apply', 'Message\\Unit\\Cast', 'Message\\Unit\\Event', 'Message\\Unit\\Operate',
 		'Message\\Vessel'
 	];
 

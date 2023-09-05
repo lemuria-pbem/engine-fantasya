@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Game;
 
 use function Lemuria\randChance;
+use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
@@ -11,6 +12,7 @@ use Lemuria\Engine\Fantasya\Message\Region\Event\ZombieInfectionMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
@@ -36,6 +38,12 @@ final class ZombieInfection extends AbstractEvent
 
 	public final const CHANCE = 'chance';
 
+	private const MAX_ZOMBIE_COUNT = 15;
+
+	private const MAX_ZOMBIE_SIZE = 450;
+
+	private const MAX_ZOMBIE_REGIONS = 8;
+
 	private Region $region;
 
 	private float $infect;
@@ -47,6 +55,41 @@ final class ZombieInfection extends AbstractEvent
 	private Monster $zombie;
 
 	private Commodity $peasant;
+
+	public static function addZombieInfections(array &$events): void {
+		$zombies = Party::get(Id::fromId(Spawn::ZOMBIES))->People();
+		if ($zombies->count() >= self::MAX_ZOMBIE_COUNT || $zombies->Size() >= self::MAX_ZOMBIE_SIZE) {
+			Lemuria::Log()->debug('Skipping ZombieInfection.');
+			return;
+		}
+
+		$regions = [];
+		foreach ($zombies as $unit) {
+			if ($unit->Race() instanceof Zombie && $unit->Size() > 0) {
+				$region = $unit->Region();
+				$id     = $region->Id()->Id();
+				if (isset($regions[$id])) {
+					$regions[$id] += $unit->Size();
+				} else {
+					$regions[$id] = $unit->Size();
+				}
+			}
+		}
+		$count = count($regions);
+		if ($count >= self::MAX_ZOMBIE_REGIONS) {
+			Lemuria::Log()->debug('Skipping ZombieInfection.');
+			return;
+		}
+
+		Lemuria::Log()->debug('Adding ZombieInfection in ' . $count . ' regions.');
+		$state = State::getInstance();
+		foreach (array_keys($regions) as $id) {
+			$event  = new self($state);
+			$infect = (1.0 + (randInt(0, 40) - 20) / 100) * 0.01;
+			$event->setOptions([self::REGION => $id, self::INFECT => $infect, self::CHANCE => 0.01]);
+			$events[] = $event;
+		}
+	}
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);

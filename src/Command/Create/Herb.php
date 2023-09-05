@@ -36,6 +36,17 @@ final class Herb extends RawMaterial
 		$this->herbage   = $this->unit->Party()->HerbalBook()->getHerbage($this->unit->Region());
 	}
 
+	public function getCommodity(): Commodity {
+		$resource = $this->job->getObject();
+		if ($resource instanceof HerbModel) {
+			return $this->herbage?->Herb() ?? self::createCommodity(Elvendear::class); // Dummy
+		}
+		if ($resource instanceof HerbInterface) {
+			return $resource;
+		}
+		throw new LemuriaException($resource . ' is not a herb.');
+	}
+
 	/**
 	 * Determine the demand.
 	 */
@@ -45,17 +56,6 @@ final class Herb extends RawMaterial
 			return;
 		}
 		parent::createDemand();
-	}
-
-	protected function getCommodity(): Commodity {
-		$resource = $this->job->getObject();
-		if ($resource instanceof HerbModel) {
-			return $this->herbage?->Herb() ?? self::createCommodity(Elvendear::class); // Dummy
-		}
-		if ($resource instanceof HerbInterface) {
-			return $resource;
-		}
-		throw new LemuriaException($resource . ' is not a herb.');
 	}
 
 	protected function getImplicitThreshold(): int|float|null {

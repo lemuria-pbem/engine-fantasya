@@ -151,6 +151,12 @@
 		"Unit": "Einheit",
 		"Vessel": "Schiff"
 	},
+	"event" : {
+		"discovery": {
+			"Gem": "einige wertvolle Edelsteine",
+			"Gold": "einen Klumpen Gold"
+		}
+	},
 	"exception": {
 		"InvalidAlternative": "Nur lange Befehle können alternativ ausgeführt werden.",
 		"InvalidCommand": "Die Befehlssyntax ist ungültig.",
@@ -617,6 +623,7 @@
 		"MigrateToMessage": "Wir haben die Einheit $migrant in unsere Partei aufgenommen.",
 		"MineUnmaintainedMessage": "Die Einheit $id kann kein Eisen in einem stillgelegten Bergwerk produzieren.",
 		"MineUnusableMessage": "Die Einheit $id kann kein Eisen im Bergwerk produzieren, es fehlen Unterkünfte in einer Mine.",
+		"MiningDiscoveryMessage": "Die Einheit $id findet während der Arbeit {g/dat:im:$landscape} $discovery.",
 		"NameNotInConstructionMessage": "Die Einheit $id ist in keinem Gebäude, das sie benennen könnte.",
 		"NameNotInVesselMessage": "Die Einheit $id ist in keinem Schiff, das sie benennen könnte.",
 		"NameCaptainMessage": "Die Einheit $captain ist kein Mitglied der Partei des Kapitäns von Schiff $id und kann daher dessen Namen nicht ändern.",

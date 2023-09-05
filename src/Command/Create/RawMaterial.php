@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Availability;
 use Lemuria\Engine\Fantasya\Command\AllocationCommand;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Event\Game\MiningDiscovery;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\LodgingTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
@@ -76,6 +77,14 @@ class RawMaterial extends AllocationCommand implements Activity
 		return true;
 	}
 
+	public function getCommodity(): Commodity {
+		$resource = $this->job->getObject();
+		if ($resource instanceof Commodity) {
+			return $resource;
+		}
+		throw new LemuriaException($resource . ' is not a commodity.');
+	}
+
 	protected function initialize(): void {
 		$this->checkForDoubleProductionFacility();
 		if ($this->isInDoublingFacility) {
@@ -135,14 +144,6 @@ class RawMaterial extends AllocationCommand implements Activity
 		$this->createMultipleDemand();
 	}
 
-	protected function getCommodity(): Commodity {
-		$resource = $this->job->getObject();
-		if ($resource instanceof Commodity) {
-			return $resource;
-		}
-		throw new LemuriaException($resource . ' is not a commodity.');
-	}
-
 	protected function getImplicitThreshold(): int|float|null {
 		return $this->job->Threshold();
 	}
@@ -197,6 +198,7 @@ class RawMaterial extends AllocationCommand implements Activity
 	}
 
 	protected function productionDone(Quantity $quantity): void {
+		MiningDiscovery::getInstance()->addMiner($this);
 	}
 
 	private function checkForDoubleProductionFacility(): void {
