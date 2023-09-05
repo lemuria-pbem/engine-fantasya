@@ -251,7 +251,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	public function calculateRealmThreshold(): void {
 		$threshold = [];
 		foreach ($this->distributor->Regions() as $region) {
-			$luxuries = $this->unit->Region()->Luxuries();
+			$luxuries = $region->Luxuries();
 			$offer    = $luxuries->Offer();
 			if ($offer->Commodity() === $this->commodity) {
 				$threshold[] = $offer->Price();
