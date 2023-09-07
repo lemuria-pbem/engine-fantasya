@@ -51,7 +51,7 @@ final class MiningDiscovery extends AbstractEvent
 
 	private const MAX_GEM = 25;
 
-	private static self $instance;
+	private static ?self $instance = null;
 
 	private Unit $unit;
 
@@ -68,13 +68,15 @@ final class MiningDiscovery extends AbstractEvent
 	private array $size = [];
 
 	public static function getInstance(): self {
+		if (!self::$instance) {
+			self::$instance = new self(State::getInstance());
+		}
 		return self::$instance;
 	}
 
 	public static function addMiningDiscoveries(array &$events): void {
 		Lemuria::Log()->debug('Adding MiningDiscovery.');
-		self::$instance = new self(State::getInstance());
-		$events[]       = self::$instance;
+		$events[] = self::getInstance();
 	}
 
 	public function __construct(State $state) {
