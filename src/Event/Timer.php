@@ -14,11 +14,13 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Potion\DrinkOfCreation;
+use Lemuria\Model\Fantasya\Commodity\Potion\ElixirOfPower;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
 use Lemuria\Model\Fantasya\Race\Human;
 use Lemuria\Model\Fantasya\Spell\AstralPassage;
 use Lemuria\Model\Fantasya\Spell\Farsight;
+use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
 
 /**
  * The Timer event adds other events at predefined rounds.
@@ -36,9 +38,11 @@ final class Timer extends DelegatedEvent
 			]],
 			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => 3949, Spawn::SIZE => 1, Spawn::RACE => Zombie::class]],
 			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => 526, BlownByTheWind::SPELL => Farsight::class]],
+			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => 1693, BlownByTheWind::SPELL => GazeOfTheGriffin::class]],
 			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => 4687, BlownByTheWind::SPELL => AstralPassage::class]],
 			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 1603, PotionGift::POTION => DrinkOfCreation::class]],
-			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 3828, PotionGift::POTION => Brainpower::class]]
+			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 3828, PotionGift::POTION => Brainpower::class]],
+			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 720149, PotionGift::POTION => ElixirOfPower::class]]
 		]
 	];
 
