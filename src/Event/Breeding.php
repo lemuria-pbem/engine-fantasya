@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\PotionReserve;
+use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Construction\BreedingAtLeastMessage;
 use Lemuria\Engine\Fantasya\Message\Construction\BreedingFullMessage;
@@ -49,7 +50,7 @@ final class Breeding extends AbstractEvent
 	protected function run(): void {
 		foreach (Construction::all() as $construction) {
 			$building = $construction->Building();
-			if ($building instanceof AbstractBreeding) {
+			if ($building instanceof AbstractBreeding && $this->isMaintained($construction)) {
 				$animal   = $building->Animal();
 				$maxBreed = $construction->Size();
 				$stock    = $this->countStock($construction, $animal);
@@ -118,5 +119,10 @@ final class Breeding extends AbstractEvent
 		$maxBorn     = $regularBorn + $boostBorn;
 		$growth      = $production + $boost;
 		return max(1, min($maxBorn, $growth, $maxBreed));
+	}
+
+	private function isMaintained(Construction $construction): bool {
+		$effect = new Unmaintained($this->state);
+		return Lemuria::Score()->find($effect->setConstruction($construction)) === null;
 	}
 }
