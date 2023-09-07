@@ -30,6 +30,8 @@ final class Drought extends AbstractEvent
 
 	private const THRESHOLD = [Forest::class => 850, Highland::class => 100, Mountain::class => 50];
 
+	private const MAXIMUM = [Forest::class => 1000, Highland::class => 400, Mountain::class => 100];
+
 	private float $rate;
 
 	private Commodity $wood;
@@ -62,9 +64,12 @@ final class Drought extends AbstractEvent
 				$resources = $region->Resources();
 				$forest    = $resources[$this->wood];
 				if ($forest) {
-					$trees = $forest->Count();
+					$trees   = $forest->Count();
+					$maximum = self::MAXIMUM[$landscape];
+					$excess  = max(0, $trees - $maximum);
+					$trees  -= $excess;
 					if ($trees > $threshold) {
-						$wither = (int)round($this->rate * ($trees - $threshold));
+						$wither = (int)round($this->rate * ($trees - $threshold)) + $excess;
 						if ($wither > 0) {
 							$deadTrees = new Quantity($this->wood, $wither);
 							$resources->remove($deadTrees);
