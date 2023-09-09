@@ -155,18 +155,19 @@ final class Realm extends UnitCommand
 		} else {
 			$territory->remove($region);
 			$this->message(RealmRemoveMessage::class)->e($region)->p($realm->Name());
-			$this->message(RealmRemovedMessage::class, $region)->p($realm->Name());
+			$this->message(RealmRemovedMessage::class, $region)->e($this->unit->Party())->p($realm->Name());
 		}
 	}
 
 	private function dissolve(Model $realm): void {
+		$party     = $this->unit->Party();
 		$territory = $realm->Territory();
 		$central   = $territory->Central();
 		foreach ($territory as $region) {
-			$this->message(RealmRemovedMessage::class, $region)->p($realm->Name());
+			$this->message(RealmRemovedMessage::class, $region)->e($party)->p($realm->Name());
 		}
 		$territory->clear();
-		$this->unit->Party()->Possessions()->remove($realm);
+		$party->Possessions()->remove($realm);
 		Lemuria::Catalog()->remove($realm);
 		$this->message(RealmDissolveMessage::class)->p($realm->Name());
 		$this->message(RealmDissolvedMessage::class, $central)->p($realm->Name());
