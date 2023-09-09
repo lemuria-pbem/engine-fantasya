@@ -80,7 +80,7 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 	}
 
 	public function hasTaught(Learn $student): void {
-		if (!$this->canTeach($student)) {
+		if (!$this->canTeach($student) && $student->getLevel() <= 0) {
 			$id = $student->Unit()->Id()->Id();
 			unset($this->students[$id]);
 			$ids = [];
