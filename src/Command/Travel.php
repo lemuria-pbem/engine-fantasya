@@ -93,6 +93,7 @@ class Travel extends UnitCommand implements Activity
 			$travel = $this->phrase->getVerb() . ' ' . implode(' ', $this->directions->route());
 			/** @var Travel $command */
 			$command = $this->context->Factory()->create(new Phrase($travel));
+			$this->preventDefault = false;
 			return $command;
 		}
 		return null;
