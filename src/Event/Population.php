@@ -66,13 +66,15 @@ final class Population extends AbstractEvent
 			}
 
 			$workplaces = $this->getAvailableWorkplaces($region) - $peasants;
+			$work       = $region->Landscape()->Workplaces();
+			$work       = $work > 0 ? min(1.0, max(-1.0, $workplaces / $work)) : -1.0;
 			$available  = max(0, $workplaces);
 			$reserve    = $resources[$this->silver]->Count();
 			$wealth     = $reserve / $peasants / Subsistence::SILVER;
 			$years      = $wealth / self::WEALTH;
 			$this->placeDataMetrics(Subject::Prosperity, $years, $region);
 
-			$growth = $this->calculateGrowth($peasants, $available, $years, $region);
+			$growth = $this->calculateGrowth($peasants, $available, $years, $work, $region);
 			if ($growth > 0) {
 				$quantity = new Quantity($this->peasant, $growth);
 				$resources->add($quantity);
@@ -117,7 +119,7 @@ final class Population extends AbstractEvent
 		}
 	}
 
-	private function calculateGrowth(int $peasants, int $available, float $years, Region $region): int {
+	private function calculateGrowth(int $peasants, int $available, float $years, float $work, Region $region): int {
 		$rate = self::RATE;
 		if ($available > 0) {
 			$rate += $years * self::RATE;
@@ -128,7 +130,11 @@ final class Population extends AbstractEvent
 		}
 		$boostPeasants = $this->hasApplied(PeasantJoy::class, $region) * PeasantJoy::PEASANTS;
 		$boost         = min(1.0, $boostPeasants / $peasants);
-		return (int)ceil((1.0 - $boost) * $rate * $peasants + self::BOOST * $boost * $rate * $peasants);
+		$growth        = (int)ceil((1.0 - $boost) * $rate * $peasants + self::BOOST * $boost * $rate * $peasants);
+		if ($work < 0) {
+			$growth += (int)round($work * $peasants / 10.0);
+		}
+		return max(0, $growth);
 	}
 
 	private function calculateMigrants(int $peasants, int $workplaces, float $years): int {
