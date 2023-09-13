@@ -437,8 +437,6 @@ class CommandFactory
 		'UNTERHALTUNG' => 'UNTERHALTEN',
 		'UNTERSUCHEN'  => 'LESEN',
 		'URSPRUNG'     => true,
-		'ÜBERGEBEN'    => 'GIB',
-		'UEBERGEBEN'   => 'GIB',
 		'VERBIETEN'    => true,
 		'VERKAUFEN'    => true,
 		'VERLASSEN'    => true,
