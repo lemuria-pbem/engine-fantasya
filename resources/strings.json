@@ -268,6 +268,7 @@
 		"AttackBattleMessage": "In der Region $id findet ein Kampf statt: $attacker greifen $defender an.",
 		"AttackBoardAfterCombatMessage": "Die Einheit $id kehrt nach dem Kampf auf das Schiff $place zurück.",
 		"AttackCancelMessage": "Wir können die Einheit $unit nicht angreifen, weil wir uns selbst verteidigen müssen.",
+		"AttackEmptyMessage": "Die leere Einheit $id kann nicht mitkämpfen.",
 		"AttackEnterAfterCombatMessage": "Die Einheit $id kehrt nach dem Kampf in das Gebäude $place zurück.",
 		"AttackFromMessage": "Die Einheit $id wird von Einheiten der Partei $party angegriffen.",
 		"AttackFromMonsterMessage": "Die Einheit $id wird von Monstern angegriffen.",

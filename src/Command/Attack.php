@@ -17,6 +17,7 @@ use Lemuria\Engine\Fantasya\Message\Region\AttackBattleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackAlliedPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackAllyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackCancelMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\AttackEmptyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackFromMonsterMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackInBuildingMessage;
@@ -81,6 +82,10 @@ final class Attack extends UnitCommand implements Reassignment
 
 	protected function initialize(): void {
 		parent::initialize();
+		if (!$this->checkSize()) {
+			$this->message(AttackEmptyMessage::class);
+			return;
+		}
 		if ($this->unit->BattleRow()->value <= BattleRow::Bystander->value) {
 			$this->message(AttackNotFightingMessage::class);
 			parent::commitCommand($this);
