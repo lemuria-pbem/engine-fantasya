@@ -72,7 +72,11 @@ final class Create extends DelegatedCommand
 
 		// MACHEN <amount> <Ressource>
 		$threshold = null;
-		if (isInt($param)) {
+		if (in_array($param, ['-0', '-0%'])) {
+			$number    = 0;
+			$threshold = 0;
+			$what      = $this->phrase->getLine(2);
+		} elseif (isInt($param)) {
 			$number = (int)$param;
 			if ($number < 0) {
 				$threshold = abs($number);
