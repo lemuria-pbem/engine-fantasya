@@ -9,12 +9,15 @@ use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use Lemuria\Engine\Fantasya\Factory\Supply;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Realm\Fleet;
+use Lemuria\Engine\Fantasya\Statistics\ContinentPopulation;
+use Lemuria\Engine\Fantasya\Statistics\ContinentScenery;
 use Lemuria\Engine\Fantasya\Turn\Options;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity\Luxury\Gem;
+use Lemuria\Model\Fantasya\Continent;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Intelligence;
 use Lemuria\Model\Fantasya\Luxury;
@@ -103,6 +106,16 @@ final class State implements Reassignment
 	 * @var array<int, Fleet>
 	 */
 	private array $realmFleets = [];
+
+	/**
+	 * @var array<int, ContinentPopulation>
+	 */
+	private array $populations = [];
+
+	/**$
+	 * @var array<int, ContinentScenery>
+	 */
+	private array $sceneries = [];
 
 	/**
 	 * @var array<Behaviour>
@@ -356,6 +369,28 @@ final class State implements Reassignment
 			$this->realmFleets[$id] = new Fleet($realm);
 		}
 		return $this->realmFleets[$id];
+	}
+
+	/**
+	 * Get the population of a continent.
+	 */
+	public function getPopulation(Continent $continent): ContinentPopulation {
+		$id = $continent->Id()->Id();
+		if (!isset($this->populations[$id])) {
+			$this->populations[$id] = new ContinentPopulation($continent);
+		}
+		return $this->populations[$id];
+	}
+
+	/**
+	 * Get the scenery of a continent.
+	 */
+	public function getScenery(Continent $continent): ContinentScenery {
+		$id = $continent->Id()->Id();
+		if (!isset($this->sceneries[$id])) {
+			$this->sceneries[$id] = new ContinentScenery($continent);
+		}
+		return $this->sceneries[$id];
 	}
 
 	/**

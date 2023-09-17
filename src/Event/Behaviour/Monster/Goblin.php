@@ -45,7 +45,7 @@ class Goblin extends AbstractBehaviour
 
 	public function __construct(Unit $unit) {
 		parent::__construct($unit);
-		$this->reproduction = new Reproduction($this->race());
+		$this->reproduction = new Reproduction($unit);
 		if (self::$globalMaximum === null) {
 			$this->initGlobalMaximum();
 		}
@@ -75,7 +75,11 @@ class Goblin extends AbstractBehaviour
 					if ($size > self::MINIMUM) {
 						$this->reproduction->setChance(1.0)->setSize($size);
 						$this->reproduce();
-						Lemuria::Log()->debug($this->unit . ' has nothing to do and reproduced.');
+						if ($this->reproduction->Chance() > 0.0) {
+							Lemuria::Log()->debug($this->unit . ' has nothing to do and reproduced.');
+						} else {
+							Lemuria::Log()->debug($this->unit . ' has nothing to do and tried to reproduce.');
+						}
 					}
 				}
 			}

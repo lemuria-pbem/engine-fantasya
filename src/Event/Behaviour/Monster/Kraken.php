@@ -46,7 +46,9 @@ class Kraken extends AbstractBehaviour
 			if ($kinsmen->Size() >= 2) {
 				if ($calculus->getRelatives()->count() <= 0) {
 					$reproduction->setChance(self::CHANCE)->setSize(self::REPRODUCTION);
-					Lemuria::Log()->debug($this->unit . ' may reproduce this round.');
+					if ($reproduction->Chance() > 0.0) {
+						Lemuria::Log()->debug($this->unit . ' may reproduce this round.');
+					}
 				}
 			}
 		}

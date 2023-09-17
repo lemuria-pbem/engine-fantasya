@@ -51,7 +51,7 @@ abstract class AbstractBehaviour implements Behaviour
 	}
 
 	public function Reproduction(): Reproduction {
-		return new Reproduction($this->race());
+		return new Reproduction($this->unit);
 	}
 
 	public function prepare(): static {

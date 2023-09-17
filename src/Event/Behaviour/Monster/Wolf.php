@@ -31,14 +31,18 @@ class Wolf extends AbstractBehaviour
 		if ($calendar->Season() === Season::Spring && $calendar->Week() === 1) {
 			if ($size >= self::GROW) {
 				$this->unit->setSize($size + randInt(self::GROW_MIN, self::GROW_MAX));
-				Lemuria::Log()->debug($this->unit . ' will reproduce this round.');
+				if ($reproduction->Chance() > 0.0) {
+					Lemuria::Log()->debug($this->unit . ' will reproduce this round.');
+				}
 			}
 		} else {
 			if ($size >= self::SPLIT) {
 				$split = (int)floor($size / 2);
 				$this->unit->setSize($size - $split);
 				$reproduction->setChance(1.0)->setSize($split);
-				Lemuria::Log()->debug($this->unit . ' will split this round.');
+				if ($reproduction->Chance() > 0.0) {
+					Lemuria::Log()->debug($this->unit . ' will split this round.');
+				}
 			}
 
 		}
