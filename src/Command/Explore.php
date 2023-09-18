@@ -29,6 +29,8 @@ final class Explore extends UnitCommand implements Activity
 	use DefaultActivityTrait;
 	use SiegeTrait;
 
+	private bool $hasEnoughKnowledge = false;
+
 	public static function occurrence(Herbage $herbage): string {
 		$occurrence = $herbage->Occurrence();
 		return match (true) {
@@ -44,7 +46,10 @@ final class Explore extends UnitCommand implements Activity
 	 * Allow writing of explored herbage.
 	 */
 	public function allows(Activity $activity): bool {
-		return $activity instanceof Write && $activity->Composition() instanceof HerbAlmanac;
+		if ($this->hasEnoughKnowledge) {
+			return $activity instanceof Write && $activity->Composition() instanceof HerbAlmanac;
+		}
+		return true;
 	}
 
 	protected function run(): void {
@@ -80,6 +85,7 @@ final class Explore extends UnitCommand implements Activity
 			} else {
 				$this->message(ExploreNothingMessage::class)->e($region);
 			}
+			$this->hasEnoughKnowledge = true;
 		} else {
 			$this->message(ExploreSiegeMessage::class);
 		}
