@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Blockade;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Exception\AlternativeException;
@@ -13,10 +14,13 @@ use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\ModifiedActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Party\TravelAllowedMessage;
+use Lemuria\Engine\Fantasya\Message\Party\TravelBlockMessage;
 use Lemuria\Engine\Fantasya\Message\Party\TravelGuardMessage;
 use Lemuria\Engine\Fantasya\Message\Region\TravelAllowedRegionMessage;
+use Lemuria\Engine\Fantasya\Message\Region\TravelBlockedInMessage;
 use Lemuria\Engine\Fantasya\Message\Region\TravelGuardedRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RoutePauseMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TravelBlockedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelExploreDepartMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelExploreLandMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardedMessage;
@@ -183,6 +187,7 @@ class Travel extends UnitCommand implements Activity
 		$numberOfDirections = $this->directions->getNumberOfDirections();
 		$invalidDirections  = 0;
 		$simulationStopped  = false;
+		$blockade           = new Blockade();
 		$this->message(TravelSpeedMessage::class)->p($regions)->p($weight, TravelSpeedMessage::WEIGHT);
 		try {
 			while (($regions > 0 || $roadRegions > 0) && $this->directions->hasMore()) {
@@ -205,7 +210,14 @@ class Travel extends UnitCommand implements Activity
 					$region = $this->considerExploration($next, $region);
 				}
 				if ($region) {
-					$overRoad = $this->overRoad($this->unit->Region(), $next, $region);
+					$origin   = $this->unit->Region();
+					$blockade = $this->unitIsBlockedByGuards($origin, $next);
+					if (!$blockade->isEmpty()) {
+						$this->directions->revert();
+						break;
+					}
+
+					$overRoad = $this->overRoad($origin, $next, $region);
 					if ($overRoad) {
 						if ($this->roadsLeft > 0) {
 							$this->message(TravelRoadMessage::class);
@@ -292,12 +304,31 @@ class Travel extends UnitCommand implements Activity
 					$this->message(TravelSimulationMessage::class);
 				}
 			} else {
-				if ($this->vessel) {
-					foreach ($this->vessel->Passengers() as $unit) {
-						$this->message(RoutePauseMessage::class, $unit);
+				if (!$blockade->isEmpty()) {
+					$parties = [];
+					foreach ($blockade as $guard) {
+						$parties[$guard->Party()->Id()->Id()] = $guard->Party();
 					}
+					foreach ($parties as $party) {
+						$this->message(TravelBlockMessage::class, $party)->e($origin)->p($next->value)->e($this->unit, TravelGuardMessage::UNIT);
+						$this->message(TravelBlockedInMessage::class, $origin)->e($this->unit)->e($party, TravelGuardedRegionMessage::PARTY)->p($next->value);
+					}
+					if ($this->vessel) {
+						foreach ($this->vessel->Passengers() as $unit) {
+							$this->message(TravelBlockedMessage::class, $unit)->e($origin)->p($next->value);
+						}
+					} else {
+						$this->message(TravelBlockedMessage::class)->e($origin)->p($next->value);
+					}
+					$this->hasTravelled = true;
 				} else {
-					$this->message(RoutePauseMessage::class);
+					if ($this->vessel) {
+						foreach ($this->vessel->Passengers() as $unit) {
+							$this->message(RoutePauseMessage::class, $unit);
+						}
+					} else {
+						$this->message(RoutePauseMessage::class);
+					}
 				}
 			}
 		}

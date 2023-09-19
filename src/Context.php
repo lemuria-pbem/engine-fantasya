@@ -26,6 +26,7 @@ use Lemuria\Model\Fantasya\Realm;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
+use Lemuria\Model\World\Direction;
 
 /**
  * A context class available to all commands.
@@ -59,6 +60,11 @@ final class Context implements Reassignment
 	 * @var array<int, Fund>
 	 */
 	private array $realmFunds = [];
+
+	/**
+	 * @var array<string, Blockade>
+	 */
+	private array $blockades = [];
 
 	public function __construct(private readonly State $state) {
 		$this->parser  = new Parser();
@@ -260,6 +266,17 @@ final class Context implements Reassignment
 			$this->realmFunds[$id] = new Fund($realm, $this);
 		}
 		return $this->realmFunds[$id];
+	}
+
+	/**
+	 * Get the blockade of a region and direction.
+	 */
+	public function getBlockade(Region $region, Direction $direction): Blockade {
+		$id = $region->Id()->Id() . '-' . $direction->value;
+		if (!isset($this->blockades[$id])) {
+			$this->blockades[$id] = new Blockade();
+		}
+		return $this->blockades[$id];
 	}
 
 	/**

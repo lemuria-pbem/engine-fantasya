@@ -148,8 +148,9 @@ abstract class AbstractMessage implements MessageType
 		return $this->getTranslatedName($property, $name, 'spell');
 	}
 
-	protected function direction(string $property, string $name = 'direction'): ?string {
-		return $this->getTranslatedName($property, $name, 'world.short');
+	protected function direction(string $property, string $name = 'direction', bool $useFullName = false): ?string {
+		$key = $useFullName ? 'world' : 'world.short';
+		return $this->getTranslatedName($property, $name, $key);
 	}
 
 	protected function number(string $property, string $name): ?string {

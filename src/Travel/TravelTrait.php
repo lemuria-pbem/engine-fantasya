@@ -39,6 +39,7 @@ use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gathering;
 use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Party\Exploring;
+use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
@@ -281,6 +282,47 @@ trait TravelTrait
 		return $guards;
 	}
 
+	protected function unitIsBlockedByGuards(Region $region, Direction $direction): People {
+		$guards = new People();
+		$effect = new SneakPastEffect(State::getInstance());
+		if (Lemuria::Score()->find($effect->setUnit($this->unit))) {
+			return $guards;
+		}
+
+		$isSimulation = $this->context->getTurnOptions()->IsSimulation();
+		$blockade     = $isSimulation ? null : $this->context->getBlockade($region, $direction);
+		$isOnVessel   = (bool)$this->unit->Vessel();
+		$intelligence = $this->context->getIntelligence($region);
+		$camouflage   = $this->calculus()->knowledge(Camouflage::class)->Level();
+		foreach ($intelligence->getGuards() as $guard) {
+			$guardParty = $guard->Party();
+			if ($guardParty !== $this->unit->Party()) {
+				$guardOnVessel = (bool)$guard->Vessel();
+				if ($guardOnVessel === $isOnVessel) {
+					if ($guard->GuardDirection() === $direction) {
+						if ($isSimulation) {
+							$guards->add($guard);
+							continue;
+						}
+						if ($blockade->add($guard)->block($this->unit)) {
+							if (!$guardParty->Diplomacy()->has(Relation::GUARD, $this->unit)) {
+								if ($region instanceof Navigable) {
+									$guards->add($guard);
+								} else {
+									$perception = $this->context->getCalculus($guard)->knowledge(Perception::class)->Level();
+									if ($perception >= $camouflage) {
+										$guards->add($guard);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return $guards;
+	}
+
 	/**
 	 * If unit is allowed to pass region, check if next region of the journey is guarded by same party.
 	 * If it is guarded, check if unit is also allowed to pass or has GUARD relation.
@@ -295,16 +337,14 @@ trait TravelTrait
 			}
 			$diplomacy = $party->Diplomacy();
 			if ($diplomacy->has(Relation::PASS, $this->unit)) {
+				$allowToPass = true;
 				if ($this->directions->hasMore()) {
 					$direction = $this->directions->peek();
 					/** @var Region|null $neighbour */
 					$neighbour = Lemuria::World()->getNeighbours($region)[$direction] ?? null;
 					if ($neighbour) {
 						$nextGuards = $this->context->getIntelligence($neighbour)->getGuards();
-						if ($nextGuards->isEmpty()) {
-							$remaining->remove($party);
-						} else {
-							$allowToPass = true;
+						if (!$nextGuards->isEmpty()) {
 							foreach ($nextGuards as $guard) {
 								if ($guard->Party() === $party) {
 									if (!$diplomacy->has(Relation::GUARD, $this->unit, $neighbour) && !$diplomacy->has(Relation::PASS, $this->unit, $neighbour)) {
@@ -313,14 +353,10 @@ trait TravelTrait
 									}
 								}
 							}
-							if ($allowToPass) {
-								$remaining->remove($party);
-							}
 						}
-					} else {
-						$remaining->remove($party);
 					}
-				} else {
+				}
+				if ($allowToPass) {
 					$remaining->remove($party);
 				}
 			}

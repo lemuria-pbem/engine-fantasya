@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardBattleRowMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\GuardRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GuardWithoutWeaponMessage;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
@@ -17,12 +18,18 @@ use Lemuria\Model\Fantasya\Combat\BattleRow;
  * The command sets the unit in guarding mode.
  *
  * - BEWACHEN
+ * - BEWACHEN Region
  */
 final class Guard extends UnitCommand
 {
 	use SiegeTrait;
 
 	protected function run(): void {
+		if ($this->phrase->count() === 1) {
+			$this->unit->setIsGuarding(true);
+			$this->message(GuardRegionMessage::class);
+			return;
+		}
 		if ($this->unit->IsGuarding()) {
 			$this->message(GuardAlreadyMessage::class);
 			return;

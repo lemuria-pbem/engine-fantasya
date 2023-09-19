@@ -39,7 +39,8 @@
 
 ^(beu|beut|beute) +[a-zäöüß ]+$
 
-^@?(bew|bewa|bewac|bewach|bewache|bewachen|bewachu|bewachun|bewachung)( +nicht)?$
+^@?(bew|bewa|bewac|bewach|bewache|bewachen|bewachu|bewachun|bewachung)( +(nicht|region))?$
+^@?(bew|bewa|bewac|bewach|bewache|bewachen|bewachu|bewachun|bewachung) +(e|ne|no|nw|o|so|sw|w|east|nordosten|nordwesten|northeast|northwest|osten|suedosten|suedwesten|southeast|southwest|westen|west)$
 
 ^@?(bo|bot|bots|botsc|botsch|botscha|botschaf|botschaft) +(einheit +)?[a-z0-9]{1,6} +.+$
 ^@?(bo|bot|bots|botsc|botsch|botscha|botschaf|botschaft) +region +.+$

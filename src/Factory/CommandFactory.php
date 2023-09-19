@@ -1260,7 +1260,7 @@ class CommandFactory
 	/**
 	 * Parse a singleton.
 	 */
-	protected function getCandidate(string $singleton, array $map, bool $isExactMatch = false): ?string {
+	protected function getCandidate(string $singleton, array $map, bool $isExactMatch = false): Direction|string|null {
 		$singleton = str_replace(['-', '_', '~'], ' ', $singleton);
 		$singleton = mbUcFirst(mb_strtolower(undupChar(' ', $singleton)));
 
