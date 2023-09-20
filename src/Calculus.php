@@ -2,6 +2,13 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use Lemuria\Model\Fantasya\Commodity\Camel;
+use Lemuria\Model\Fantasya\Commodity\Carriage;
+use Lemuria\Model\Fantasya\Commodity\Elephant;
+use Lemuria\Model\Fantasya\Commodity\Griffin;
+use Lemuria\Model\Fantasya\Commodity\Pegasus;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
+use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Combat\WeaponSkill;
 use Lemuria\Engine\Fantasya\Command\Learn;
@@ -54,6 +61,12 @@ final class Calculus
 {
 	use BuilderTrait;
 	use LodgingTrait;
+
+	private const CAMOUFLAGE_MALUS = [
+		Horse::class    => 1, Pegasus::class     => 1, Camel::class    => 1,
+		Elephant::class => 2, WarElephant::class => 2, Griffin::class  => 2,
+		Carriage::class => 2, Catapult::class    => 2
+	];
 
 	private static ?int $horsePayload = null;
 
@@ -196,6 +209,29 @@ final class Calculus
 			}
 		}
 		return new Ability($talent, 0);
+	}
+
+	public function camouflage(): Ability {
+		$camouflage = self::createTalent(Camouflage::class);
+		$ability    = $this->knowledge($camouflage);
+		if ($ability->Level() <= 0) {
+			return $ability;
+		}
+
+		$malus = 0;
+		foreach ($this->unit->Inventory() as $quantity) {
+			$commodity = $quantity->Commodity()::class;
+			if (isset(self::CAMOUFLAGE_MALUS[$commodity])) {
+				$malus -= $quantity->Count() * self::CAMOUFLAGE_MALUS[$commodity];
+			}
+		}
+		if ($malus < 0) {
+			$malus        = (int)ceil($malus / $this->unit->Size());
+			$modification = new Modification($camouflage, $malus);
+			$ability      = $modification->getModified($ability);
+		}
+
+		return $ability;
 	}
 
 	/**

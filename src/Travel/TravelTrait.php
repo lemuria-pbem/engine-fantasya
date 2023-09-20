@@ -43,7 +43,6 @@ use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
-use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Vessel;
 use Lemuria\Model\World\Direction;
@@ -260,7 +259,7 @@ trait TravelTrait
 
 		$isOnVessel   = (bool)$this->unit->Vessel();
 		$intelligence = $this->context->getIntelligence($region);
-		$camouflage   = $this->calculus()->knowledge(Camouflage::class)->Level();
+		$camouflage   = $this->calculus()->camouflage()->Level();
 		foreach ($intelligence->getGuards() as $guard) {
 			$guardParty = $guard->Party();
 			if ($guardParty !== $this->unit->Party()) {
@@ -293,7 +292,7 @@ trait TravelTrait
 		$blockade     = $isSimulation ? null : $this->context->getBlockade($region, $direction);
 		$isOnVessel   = (bool)$this->unit->Vessel();
 		$intelligence = $this->context->getIntelligence($region);
-		$camouflage   = $this->calculus()->knowledge(Camouflage::class)->Level();
+		$camouflage   = $this->calculus()->camouflage()->Level();
 		foreach ($intelligence->getGuards() as $guard) {
 			$guardParty = $guard->Party();
 			if ($guardParty !== $this->unit->Party()) {

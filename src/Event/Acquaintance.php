@@ -17,7 +17,6 @@ use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent;
-use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -31,13 +30,10 @@ final class Acquaintance extends AbstractEvent
 
 	private array $network = [];
 
-	private Talent $camouflage;
-
 	private Talent $perception;
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);
-		$this->camouflage = self::createTalent(Camouflage::class);
 		$this->perception = self::createTalent(Perception::class);
 	}
 
@@ -57,7 +53,7 @@ final class Acquaintance extends AbstractEvent
 					if ($id) {
 						if ($unit->IsHiding()) {
 							$calculus   = new Calculus($unit);
-							$camouflage = $calculus->knowledge($this->camouflage)->Level();
+							$camouflage = $calculus->camouflage()->Level();
 						} else {
 							$camouflage = 0;
 						}

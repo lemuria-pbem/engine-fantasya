@@ -10,7 +10,6 @@ use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Inhabitants;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
-use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Unit;
 
 trait SiegeTrait
@@ -41,7 +40,7 @@ trait SiegeTrait
 		}
 		if ($this->isSieged() && !$this->context->getTurnOptions()->IsSimulation()) {
 			$calculus = new Calculus($unit);
-			return $calculus->knowledge(Camouflage::class)->Level() > $this->siege->Perception();
+			return $calculus->camouflage()->Level() > $this->siege->Perception();
 		}
 		return true;
 	}

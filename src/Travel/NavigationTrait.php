@@ -24,7 +24,6 @@ use Lemuria\Model\Fantasya\Race\Aquan;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Ship\Boat;
-use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Navigation;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
@@ -183,7 +182,7 @@ trait NavigationTrait
 					$passengerParty = $unit->Party();
 					if ($passengerParty !== $party && !$diplomacy->has(Relation::TRADE, $unit)) {
 						$calculus   = new Calculus($unit);
-						$camouflage = $calculus->knowledge(Camouflage::class)->Level();
+						$camouflage = $calculus->camouflage()->Level();
 						if ($unit->IsHiding() && $camouflage > $perception) {
 							$this->message(EnterPortSmuggleMessage::class, $unit);
 						} else {

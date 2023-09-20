@@ -21,7 +21,6 @@ use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
-use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Reassignment;
 
@@ -74,7 +73,7 @@ final class Steal extends UnitCommand implements Activity, Reassignment
 			return;
 		}
 
-		$camouflage = $this->calculus()->knowledge(Camouflage::class)->Level();
+		$camouflage = $this->calculus()->camouflage()->Level();
 		$perception = $this->context->getCalculus($unit)->knowledge(Perception::class)->Level();
 		$silver     = ($camouflage - $perception) * self::SILVER * $this->unit->Size();
 		$inventory  = $unit->Inventory();

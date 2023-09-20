@@ -16,7 +16,6 @@ use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\People;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
-use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\SortMode;
@@ -49,9 +48,8 @@ final class Outlook
 			$level    = max($level, $this->getFarsightPerception($region));
 		}
 
-		$units      = new People();
-		$party      = $this->census->Party();
-		$camouflage = self::createTalent(Camouflage::class);
+		$units = new People();
+		$party = $this->census->Party();
 		foreach ($region->Residents() as $unit) {
 			if (!$unit->Construction() && !$unit->Vessel()) {
 				$other = $unit->Party();
@@ -70,7 +68,7 @@ final class Outlook
 						$units->add($unit);
 					} else {
 						$calculus = new Calculus($unit);
-						if ($calculus->knowledge($camouflage)->Level() <= $level) {
+						if ($calculus->camouflage()->Level() <= $level) {
 							$units->add($unit);
 						}
 					}
@@ -93,9 +91,8 @@ final class Outlook
 			$level    = max($level, $calculus->knowledge($perception)->Level());
 		}
 
-		$units      = new People();
-		$party      = $this->census->Party();
-		$camouflage = self::createTalent(Camouflage::class);
+		$units = new People();
+		$party = $this->census->Party();
 		foreach ($region->Residents() as $unit) {
 			if ($unit->Construction()) {
 				$units->add($unit);
@@ -113,7 +110,7 @@ final class Outlook
 						$units->add($unit);
 					} else {
 						$calculus = new Calculus($unit);
-						if ($calculus->knowledge($camouflage)->Level() <= $level) {
+						if ($calculus->camouflage()->Level() <= $level) {
 							$units->add($unit);
 						}
 					}

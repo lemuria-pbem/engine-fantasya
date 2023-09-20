@@ -19,7 +19,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\SpyOwnUnitMessage;
 use Lemuria\Engine\Fantasya\Outlook;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Espionage;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
@@ -79,7 +78,7 @@ final class Spy extends UnitCommand implements Activity
 		}
 
 		$calculus   = $this->context->getCalculus($unit);
-		$camouflage = $calculus->knowledge(Camouflage::class)->Level();
+		$camouflage = $calculus->camouflage()->Level();
 		$spyLevel   = $espionage - $camouflage;
 		$spySuccess = self::SPY_BASE + $spyLevel * self::SPY_BONUS;
 		if (randInt(1, 100) <= $spySuccess) {

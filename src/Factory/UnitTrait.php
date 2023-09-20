@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
 use Lemuria\Engine\Fantasya\Exception\AlternativeException;
 use Lemuria\Model\Fantasya\Party;
-use Lemuria\Model\Fantasya\Talent\Camouflage;
 use Lemuria\Model\Fantasya\Talent\Perception;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -47,7 +46,7 @@ trait UnitTrait
 		$intelligence = $context->getIntelligence($unit->Region());
 		$camouflage   = PHP_INT_MIN;
 		if (!$unit->Construction() && $unit->IsHiding() && !$unit->IsGuarding()) {
-			$camouflage = $context->getCalculus($unit)->knowledge(Camouflage::class)->Level();
+			$camouflage = $context->getCalculus($unit)->camouflage()->Level();
 		}
 
 		foreach ($intelligence->getGuards() as $guard) {
