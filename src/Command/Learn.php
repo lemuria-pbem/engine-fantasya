@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\TravelEffect;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Exception\UnknownItemException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\OneActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\RealmTrait;
@@ -26,6 +27,7 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
+use Lemuria\Exception\SingletonException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Aura;
@@ -92,7 +94,7 @@ final class Learn extends UnitCommand implements Activity
 
 	private Calculus $calculus;
 
-	private Talent $talent;
+	private ?Talent $talent = null;
 
 	private int $level = 0;
 
@@ -112,14 +114,13 @@ final class Learn extends UnitCommand implements Activity
 		parent::__construct($phrase, $context);
 		$this->calculus = $this->calculus();
 		$this->silver   = self::createCommodity(Silver::class);
-		$topic          = $this->phrase->getParameter();
-		$this->talent   = $this->context->Factory()->talent($topic);
+		$this->parseTalent();
 		$this->parseTalentLevel();
 		$this->calculus->addStudent($this);
 	}
 
 	public function canLearn(): bool {
-		if (!$this->context->getProtocol($this->unit)->isAllowed($this)) {
+		if (!$this->talent || !$this->context->getProtocol($this->unit)->isAllowed($this)) {
 			return false;
 		}
 		$result         = $this->progress(false);
@@ -137,6 +138,10 @@ final class Learn extends UnitCommand implements Activity
 	}
 
 	protected function initialize(): void {
+		$n = $this->phrase->count();
+		if ($n < 1 || $n > 2 || !$this->talent || $n === 2 && !$this->level) {
+			throw new InvalidCommandException($this);
+		}
 		parent::initialize();
 		$this->progress();
 		if (!$this->checkSize() && $this->IsDefault()) {
@@ -222,14 +227,21 @@ final class Learn extends UnitCommand implements Activity
 		}
 	}
 
+	private function parseTalent(): void {
+		if ($this->phrase->count() > 0) {
+			try {
+				$this->talent = $this->context->Factory()->talent($this->phrase->getParameter());
+			} catch (SingletonException|UnknownItemException) {
+			}
+		}
+	}
+
 	private function parseTalentLevel(): void {
-		if ($this->phrase->count() === 2) {
+		if ($this->phrase->count() >= 2) {
 			$parameter = $this->phrase->getParameter(2);
 			$level     = (int)$parameter;
 			if ($level > 0 && (string)$level === $parameter) {
 				$this->level = $level;
-			} else {
-				throw new InvalidCommandException($this);
 			}
 		}
 	}
