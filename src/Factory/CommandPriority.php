@@ -72,8 +72,8 @@ final class CommandPriority
 		'EFFECT_MIDDLE'  => 50,
 		'EVENT_MIDDLE'   => 51,
 		'Siege'          => 52,
-		'Smash'          => 53,
-		//54
+		'Transport'      => 53,
+		'Smash'          => 54,
 		'Operate'        => 55,
 		//56
 		'Spy'            => 57,

@@ -940,6 +940,8 @@
 		"TradeForbiddenPaymentMessage": "Auf diesem Markt ist es nicht erlaubt, mit $commodity zu bezahlen.",
 		"TradeNotFoundMessage": "Es gibt kein Handelsangebot mit der Nummer $trade.",
 		"TradeNotOursMessage": "Die Einheit $id kann das fremde Handelsangebot $trade nicht verändern.",
+		"TransportMessage": "Die Einheit $id nimmt an Reichstransporten teil.",
+		"TransportNotMessage": "Die Einheit $id nimmt nicht an Reichstransporten teil.",
 		"TravelAirshipMessage": "Das Schiff $vessel hat die Region $id überflogen.",
 		"TravelAllowedMessage": "Unsere Wachen haben die Einheit $unit in der Region $region durchreisen lassen.",
 		"TravelAllowedRegionMessage": "Die Wachen der Partei $party haben die Einheit $unit durchreisen lassen.",

@@ -155,7 +155,9 @@
 
 ^@?(tar|tarn|tarne|tarnen|tarnu|tarnun|tarnung)( +([0-9]+|nein|nicht|partei( +[a-z0-9]{1,6})?))?$
 
-^@?(tr|tre|trei|treib|treibe|treiben)( +-?[0-9]+)?$
+^(tra|tran|trans|transp|transpo|transpor|transport|transporti|transportie|transportier|transportiere|transportieren)( +nicht)?$
+
+^@?(tre|trei|treib|treibe|treiben)( +-?[0-9]+)?$
 ^@?(besteu|besteue|besteuer|besteuern|besteueru|besteuerun|besteuerung)( +-?[0-9]+)?$
 ^@?(eint|eintr|eintre|eintrei|eintreib|eintreibe|eintreiben)( +-?[0-9]+)?$
 

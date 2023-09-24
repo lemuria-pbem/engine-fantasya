@@ -38,7 +38,7 @@ class Fleet
 		}
 		$party = $realm->Party();
 		foreach ($realm->Territory()->Central()->Residents() as $unit) {
-			if ($unit->Party() === $party && !$unit->Vessel() && $this->isAvailable($unit)) {
+			if ($unit->Party() === $party && !$unit->Vessel() && $unit->IsTransporting() && $this->isAvailable($unit)) {
 				$wagoner = new Wagoner($unit);
 				if ($wagoner->Maximum() > 0) {
 					$id                  = $unit->Id()->Id();
