@@ -36,6 +36,10 @@ trait WorkloadTrait
 		$this->workload->add((int)round($production / $this->fullProduction * $this->workload->Maximum()));
 	}
 
+	protected function undoWorkload(int $production): void {
+		$this->workload->add(-(int)round($production / $this->fullProduction * $this->workload->Maximum()));
+	}
+
 	protected function potionBoost(int $unitSize): float {
 		if ($unitSize > 0) {
 			$effect     = $this->context->getCalculus($this->unit)->hasApplied(DrinkOfCreation::class);

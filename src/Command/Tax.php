@@ -155,6 +155,11 @@ final class Tax extends AllocationCommand implements Activity
 		}
 	}
 
+	protected function undoProduction(): void {
+		parent::undoProduction();
+		$this->undoWorkload($this->rate);
+	}
+
 	protected function getImplicitThreshold(): int|float|null {
 		return $this->threshold;
 	}

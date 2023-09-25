@@ -144,6 +144,11 @@ class RawMaterial extends AllocationCommand implements Activity
 		$this->createMultipleDemand();
 	}
 
+	protected function undoProduction(): void {
+		parent::undoProduction();
+		$this->undoWorkload($this->production);
+	}
+
 	protected function getImplicitThreshold(): int|float|null {
 		return $this->job->Threshold();
 	}

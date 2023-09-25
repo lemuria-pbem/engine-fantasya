@@ -77,7 +77,7 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 		if ($this->lastCheck === null) {
 			$this->lastCheck = $this->getCheckBeforeAllocation();
 			if (!empty($this->lastCheck)) {
-				$this->resources->clear();
+				$this->undoProduction();
 			}
 		}
 		return $this->lastCheck;
@@ -172,5 +172,9 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	protected function hasRegionResources(Commodity $commodity): bool {
 		$resources = $this->unit->Region()->Resources();
 		return $resources[$commodity]->Count() > 0;
+	}
+
+	protected function undoProduction(): void {
+		$this->resources->clear();
 	}
 }

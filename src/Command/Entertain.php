@@ -147,6 +147,11 @@ final class Entertain extends AllocationCommand implements Activity
 		}
 	}
 
+	protected function undoProduction(): void {
+		parent::undoProduction();
+		$this->undoWorkload($this->fee);
+	}
+
 	protected function getImplicitThreshold(): int|float|null {
 		return $this->threshold;
 	}
