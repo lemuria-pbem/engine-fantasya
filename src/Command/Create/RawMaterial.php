@@ -159,9 +159,9 @@ class RawMaterial extends AllocationCommand implements Activity
 			return $this->allotment->getAvailability($this, $commodity);
 		}
 
-		$region    = $this->unit->Region();
-		$resources = $region->Resources();
-		$reserve   = $resources[$commodity]->Count();
+		$region       = $this->unit->Region();
+		$availability = $this->context->getAvailability($region);
+		$reserve      = $availability->getResource($commodity)->Count();
 		if ($this->job->hasThreshold()) {
 			$quota = $this->job->Threshold();
 		} else {
@@ -173,7 +173,7 @@ class RawMaterial extends AllocationCommand implements Activity
 		}
 		if (is_float($quota) && $quota < 1.0) {
 			Lemuria::Log()->debug('Availability of ' . $commodity . ' reduced due to quota.');
-			$pieces = Availability::HERBS_PER_REGION * $quota;
+			$pieces = (int)floor(Availability::HERBS_PER_REGION * $quota);
 			return max(0, $reserve - $pieces);
 		}
 		return $reserve;

@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
-use Lemuria\Engine\Fantasya\Availability;
 use Lemuria\Engine\Fantasya\Command\Explore;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\Model\Herb as HerbModel;
@@ -56,15 +55,6 @@ final class Herb extends RawMaterial
 			return;
 		}
 		parent::createDemand();
-	}
-
-	protected function getImplicitThreshold(): int|float|null {
-		return $this->job->Threshold();
-	}
-
-	protected function getAvailability(): int {
-		$availability = new Availability($this->unit->Region());
-		return $availability->getResource($this->getCommodity())->Count();
 	}
 
 	protected function runForEmptyDemand(Talent $talent, Commodity $resource): void {

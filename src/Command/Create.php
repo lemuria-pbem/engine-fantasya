@@ -86,7 +86,7 @@ final class Create extends DelegatedCommand
 		} elseif (isPercentage($param)) {
 			$percentage = (int)substr($param, 0, strlen($param) - 1);
 			if ($percentage < 0) {
-				$threshold = abs($percentage);
+				$threshold = abs($percentage) / 100;
 			}
 			$number = 0;
 			$what   = $this->phrase->getLine(2);
