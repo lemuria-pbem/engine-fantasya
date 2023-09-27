@@ -31,7 +31,7 @@ class UnknownArgumentException extends CommandException
 	}
 
 	protected function replacedMessage(): string {
-		$argument = trim(strip_tags($this->argument));
+		$argument = trim(strip_tags((string)$this->argument));
 		return str_replace(self::PLACEHOLDER, $argument, $this->logMessage);
 	}
 }
