@@ -150,7 +150,7 @@ final class Calculus
 		$talent  = $this->parseTalent($talent);
 		$ability = $this->unit->Knowledge()->offsetGet($talent);
 		if ($ability instanceof Ability) {
-			if ($ability->Level() <= 0) {
+			if ($ability->Experience() <= 0) {
 				return $ability;
 			}
 			$race         = $this->unit->Race();
@@ -171,7 +171,7 @@ final class Calculus
 		if ($this->unit->Size() > 0) {
 			$ability = $this->unit->Knowledge()->offsetGet($talent);
 			if ($ability instanceof Ability) {
-				if ($ability->Level() <= 0) {
+				if ($ability->Experience() <= 0) {
 					return $ability;
 				}
 				if ($this->contagionEffect()?->Units()->has($this->unit->Id())) {
@@ -214,7 +214,7 @@ final class Calculus
 	public function camouflage(): Ability {
 		$camouflage = self::createTalent(Camouflage::class);
 		$ability    = $this->knowledge($camouflage);
-		if ($ability->Level() <= 0) {
+		if ($ability->Experience() <= 0) {
 			return $ability;
 		}
 
