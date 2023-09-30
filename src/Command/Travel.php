@@ -224,6 +224,9 @@ class Travel extends UnitCommand implements Activity
 						}
 						$roadRegions--;
 					} else {
+						if ($regions <= 0 && $roadRegions >= 2) {
+							$regions++;
+						}
 						if ($regions <= 0) {
 							$this->directions->revert();
 							$this->message(TravelNoMoreMessage::class);
