@@ -148,11 +148,12 @@ final class Accept extends UnitCommand
 			throw new InvalidCommandException($this);
 		}
 
-		$price   = $this->trade->Price();
-		$payment = $this->collectPayment($price->Commodity(), $price->Amount());
-		if ($payment) {
+		$price = $this->trade->Trade() === Trade::OFFER ? $this->trade->Price() : $this->trade->Goods();
+		if ($this->collectPayment($price->Commodity(), $price->Amount())) {
 			$goods    = $this->trade->Goods();
+			$price    = $this->trade->Price();
 			$quantity = new Quantity($goods->Commodity(), $goods->Amount());
+			$payment  = new Quantity($price->Commodity(), $price->Amount());
 			$this->exchange($quantity, $payment);
 			$this->tradeMessages($quantity, $payment);
 		}
