@@ -24,7 +24,7 @@ class Parser
 
 	public function parse(Move $commands): static {
 		foreach ($commands as $command) {
-			$command = $this->replaceDefaultCommand(trim($command));
+			$command = $this->replaceDefaultCommand($command);
 			$phrase  = new Phrase($command);
 			if ($phrase->getVerb()) {
 				$this->phrases[] = $phrase;
