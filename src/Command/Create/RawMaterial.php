@@ -114,7 +114,7 @@ class RawMaterial extends AllocationCommand implements Activity
 			} else {
 				$this->message(RawMaterialOutputMessage::class)->i($quantity)->s($talent);
 			}
-			$this->productionDone($quantity);
+			$this->productionDone();
 		}
 	}
 
@@ -202,7 +202,7 @@ class RawMaterial extends AllocationCommand implements Activity
 		}
 	}
 
-	protected function productionDone(Quantity $quantity): void {
+	protected function productionDone(): void {
 		MiningDiscovery::getInstance()->addMiner($this);
 	}
 
