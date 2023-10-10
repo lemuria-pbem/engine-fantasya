@@ -39,6 +39,11 @@ use Lemuria\Model\Domain;
  */
 final class Number extends UnitCommand
 {
+	protected function initialize(): void {
+		parent::initialize();
+		$this->context->resetResourcePools();
+	}
+
 	protected function run(): void {
 		$n = $this->phrase->count();
 		if ($n <= 0) {

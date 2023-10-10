@@ -34,8 +34,6 @@ final class State implements Reassignment
 
 	private static ?self $instance = null;
 
-	public bool $isTravelling = false;
-
 	private readonly LemuriaTurn $turn;
 
 	private ?Options $turnOptions = null;
@@ -81,6 +79,11 @@ final class State implements Reassignment
 	 * @var array<int, Intelligence>
 	 */
 	private array $intelligence = [];
+
+	/**
+	 * @var array<int, ResourcePool>
+	 */
+	private array $resourcePool = [];
 
 	/**
 	 * @var array<int, ActivityProtocol>
@@ -186,6 +189,8 @@ final class State implements Reassignment
 		$old = $identifiable->Id()->Id();
 		switch ($identifiable->Catalog()) {
 			case Domain::Unit :
+				/** @var Unit $identifiable */
+				unset($this->resourcePool[self::resourcePoolId($identifiable)]);
 				unset($this->protocol[$old]);
 				unset($this->travelRoute[$old]);
 				unset($this->workload[$old]);
@@ -300,7 +305,7 @@ final class State implements Reassignment
 			$luxury = self::createCommodity(Gem::class);
 		}
 
-		$id = $this->id($region, $luxury);
+		$id = self::id($region, $luxury);
 		if (!isset($this->supply[$id])) {
 			$supply            = new Supply($region);
 			$this->supply[$id] = $supply->setLuxury($luxury);
@@ -317,6 +322,17 @@ final class State implements Reassignment
 			$this->intelligence[$id] = new Intelligence($region);
 		}
 		return $this->intelligence[$id];
+	}
+
+	/**
+	 * Get a resource pool.
+	 */
+	public function getResourcePool(Unit $unit): ResourcePool {
+		$id = self::resourcePoolId($unit);
+		if (!isset($this->resourcePool[$id])) {
+			$this->resourcePool[$id] = new ResourcePool($unit);
+		}
+		return $this->resourcePool[$id];
 	}
 
 	/**
@@ -438,7 +454,22 @@ final class State implements Reassignment
 		$this->turn->inject($action);
 	}
 
-	private function id(Region $region, Luxury $luxury): string {
+	/**
+	 * Clears all existing resource pools when units have moved.
+	 */
+	public function resetResourcePools(): void {
+		$n = count($this->resourcePool);
+		if ($n > 0) {
+			$this->resourcePool = [];
+			Lemuria::Log()->debug('Clearing ' . $n . ' resource pools.');
+		}
+	}
+
+	private static function resourcePoolId(Unit $unit): string {
+		return $unit->Party()->Id()->Id() . '-' . $unit->Region()->Id()->Id();
+	}
+
+	private static function id(Region $region, Luxury $luxury): string {
 		return $region->Id()->Id() . '-' . getClass($luxury);
 	}
 

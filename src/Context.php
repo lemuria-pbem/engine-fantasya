@@ -15,7 +15,6 @@ use Lemuria\Engine\Fantasya\Realm\Fund;
 use Lemuria\Engine\Fantasya\Turn\Options;
 use Lemuria\Id;
 use Lemuria\Identifiable;
-use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Intelligence;
@@ -45,11 +44,6 @@ final class Context implements Reassignment
 	 * @var array<int, Calculus>
 	 */
 	private array $calculus = [];
-
-	/**
-	 * @var array<int, ResourcePool>
-	 */
-	private array $resourcePool = [];
 
 	/**
 	 * @var array<int, Besieger>
@@ -140,7 +134,6 @@ final class Context implements Reassignment
 			case Domain::Unit :
 				/** @var Unit $identifiable */
 				unset($this->calculus[$old]);
-				unset($this->resourcePool[self::resourcePoolId($identifiable)]);
 				break;
 			case Domain::Realm :
 				unset($this->realmFunds[$old]);
@@ -203,11 +196,7 @@ final class Context implements Reassignment
 	 * Get a resource pool.
 	 */
 	public function getResourcePool(Unit $unit): ResourcePool {
-		$id = self::resourcePoolId($unit);
-		if (!isset($this->resourcePool[$id])) {
-			$this->resourcePool[$id] = new ResourcePool($unit, $this);
-		}
-		return $this->resourcePool[$id];
+		return $this->state->getResourcePool($unit);
 	}
 
 	/**
@@ -222,13 +211,6 @@ final class Context implements Reassignment
 	 */
 	public function getWorkload(Unit $unit): Workload {
 		return $this->state->getWorkload($unit);
-	}
-
-	/**
-	 * Check if a unit is travelling.
-	 */
-	public function isTravelling(Unit $unit): bool {
-		return $this->state->isTravelling && $this->state->getTravelRoute($unit) !== null;
 	}
 
 	/**
@@ -327,11 +309,7 @@ final class Context implements Reassignment
 	 * Clears all existing resource pools when units have moved.
 	 */
 	public function resetResourcePools(): void {
-		$n = count($this->resourcePool);
-		if ($n > 0) {
-			$this->resourcePool = [];
-			Lemuria::Log()->debug('Clearing ' . $n . ' resource pools.');
-		}
+		$this->state->resetResourcePools();
 	}
 
 	public function getSiege(Construction $construction): Besieger {
@@ -340,9 +318,5 @@ final class Context implements Reassignment
 			$this->sieges[$id] = new Besieger($construction);
 		}
 		return $this->sieges[$id];
-	}
-
-	private static function resourcePoolId(Unit $unit): string {
-		return $unit->Party()->Id()->Id() . '-' . $unit->Region()->Id()->Id();
 	}
 }

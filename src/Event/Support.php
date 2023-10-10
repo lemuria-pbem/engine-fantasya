@@ -48,11 +48,6 @@ final class Support extends AbstractEvent
 		$this->hungryUnits = new People();
 	}
 
-	protected function prepareAction(): void {
-		parent::prepareAction();
-		$this->state->isTravelling = false;
-	}
-
 	protected function run(): void {
 		$this->pay();
 		if ($this->hungryUnits->count()) {

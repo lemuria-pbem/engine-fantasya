@@ -41,11 +41,6 @@ final class Drift extends AbstractEvent
 		$this->navigation = self::createTalent(Navigation::class);
 	}
 
-	protected function prepareAction(): void {
-		parent::prepareAction();
-		$this->state->isTravelling = true;
-	}
-
 	protected function run(): void {
 		foreach (Vessel::all() as $vessel) {
 			$this->vessel = $vessel;
