@@ -9,12 +9,12 @@ use Lemuria\Engine\Fantasya\Message\Unit\RecruitKnowledgeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitLessMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitPaymentMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RecruitQuotaMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitReducedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RecruitTooExpensiveMessage;
 use Lemuria\Engine\Fantasya\Realm\Allotment;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
-use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Silver;
@@ -127,7 +127,8 @@ final class Recruit extends AllocationCommand
 		}
 
 		if (!$this->isRunCentrally) {
-			if (!isset($quota)) {
+			$isImplicitQuota = isset($quota);
+			if (!$isImplicitQuota) {
 				$quota = $this->unit->Party()->Regulation()->getQuotas($region)?->getQuota($peasant)?->Threshold();
 			}
 			if (is_int($quota) && $quota > 0) {
@@ -135,7 +136,9 @@ final class Recruit extends AllocationCommand
 				$available = max(0, $peasants - $quota);
 				if ($available < $size) {
 					$size = $available;
-					Lemuria::Log()->debug('Peasant availability reduced due to quota.');
+					if (!$isImplicitQuota) {
+						$this->message(RecruitQuotaMessage::class);
+					}
 				}
 			}
 		}

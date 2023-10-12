@@ -22,13 +22,13 @@ use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialGuardedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialNoDemandMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialOutputMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialQuotaMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialResourcesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialWantsMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SawmillUnmaintainedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SawmillUnusableMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Exception\LemuriaException;
-use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Building\Mine;
 use Lemuria\Model\Fantasya\Building\Quarry;
@@ -168,11 +168,9 @@ class RawMaterial extends AllocationCommand implements Activity
 			$quota = $this->unit->Party()->Regulation()->getQuotas($region)?->getQuota($commodity)?->Threshold();
 		}
 		if (is_int($quota) && $quota > 0) {
-			Lemuria::Log()->debug('Availability of ' . $commodity . ' reduced due to quota.');
 			return max(0, $reserve - $quota);
 		}
 		if (is_float($quota) && $quota < 1.0) {
-			Lemuria::Log()->debug('Availability of ' . $commodity . ' reduced due to quota.');
 			$pieces = (int)floor(Availability::HERBS_PER_REGION * $quota);
 			return max(0, $reserve - $pieces);
 		}
@@ -232,6 +230,9 @@ class RawMaterial extends AllocationCommand implements Activity
 
 		if ($this->production > 0 && $this->available > 0) {
 			if ($this->available < $this->production) {
+				if ($this->demand > $this->available) {
+					$this->message(RawMaterialQuotaMessage::class);
+				}
 				$this->production = $this->available;
 			}
 			if ($this->job->hasCount()) {
