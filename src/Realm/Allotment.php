@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Realm;
 
-use Lemuria\Engine\Fantasya\Availability;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\Model\RealmQuota;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
@@ -131,17 +130,11 @@ class Allotment
 			if ($this->isUnderSiege($region) || $this->getCheckByAgreement(Relation::RESOURCES)) {
 				continue;
 			}
-			$id                = $region->Id()->Id();
-			$this->region[$id] = $region;
-			$threshold         = $this->threshold !== null ? $this->threshold : $this->quotas->getQuota($region, $commodity)->Threshold();
-			$resource          = $this->state->getAvailability($region)->getResource($commodity)->Count();
-			if (is_int($threshold)) {
-				$reducedResource = $resource - $threshold;
-			} else {
-				$pieces          = (int)floor(Availability::HERBS_PER_REGION * $threshold);
-				$reducedResource = $resource - $pieces;
-			}
-			$this->availability[$id] = max(0, (int)floor($quota * $reducedResource));
+			$id                      = $region->Id()->Id();
+			$this->region[$id]       = $region;
+			$threshold               = $this->threshold !== null ? $this->threshold : $this->quotas->getQuota($region, $commodity)->Threshold();
+			$resource                = $this->state->getAvailability($region)->getQuotaResource($commodity, $threshold)->Count();
+			$this->availability[$id] = max(0, (int)floor($quota * $resource));
 		}
 	}
 

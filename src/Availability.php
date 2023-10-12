@@ -24,6 +24,8 @@ class Availability
 
 	protected readonly Resources $available;
 
+	protected int|float|null $quota = null;
+
 	public function __construct(protected readonly Region $region) {
 		$this->available = new Resources();
 	}
@@ -33,7 +35,7 @@ class Availability
 	}
 
 	public function getResource(mixed $offset): Quantity {
-		if (isset($this->available[$offset])) {
+		if ($this->quota === null && isset($this->available[$offset])) {
 			$available = $this->available[$offset];
 		} else {
 			$resources = $this->region->Resources();
@@ -48,8 +50,17 @@ class Availability
 				$quantity = new Quantity($commodity, 0);
 			}
 			$available = $this->calculateAvailability($quantity);
-			$this->available->add($available);
+			if ($this->quota === null) {
+				$this->available->add($available);
+			}
 		}
+		return $available;
+	}
+
+	public function getQuotaResource(mixed $offset, int|float $quota): Quantity {
+		$this->quota = $quota;
+		$available   = $this->getResource($offset);
+		$this->quota = null;
 		return $available;
 	}
 
@@ -93,13 +104,23 @@ class Availability
 		}
 
 		$unemployment = Unemployment::getFor($this->region);
-		return $unemployment->getPeasants($this->region) ?? (int)ceil(Population::UNEMPLOYMENT / 100.0 * $totalPeasants);
+		$recruits     = $unemployment->getPeasants($this->region) ?? (int)ceil(Population::UNEMPLOYMENT / 100.0 * $totalPeasants);
+		if (is_int($this->quota)) {
+			$maximum  = $totalPeasants - $this->quota;
+			$recruits = max(0, min($maximum, $recruits));
+		}
+		return $recruits;
 	}
 
 	private function getHerbCount(?HerbInterface $herb = null):int {
 		$herbage = $this->region->Herbage();
 		if ($herbage && (!$herb || $herb === $herbage->Herb())) {
-			return (int)round($herbage->Occurrence() * self::HERBS_PER_REGION);
+			$occurrence = $herbage->Occurrence();
+			if (is_float($this->quota)) {
+				$occurrence -= $this->quota;
+				$occurrence  = max(0.0, $occurrence);
+			}
+			return (int)round($occurrence * self::HERBS_PER_REGION);
 		}
 		return 0;
 	}
@@ -109,6 +130,11 @@ class Availability
 		if ($commodity instanceof HerbInterface) {
 			return $this->getHerbCount($commodity);
 		}
-		return $quantity->Count();
+		$count = $quantity->Count();
+		if (is_int($this->quota)) {
+			$count -= $this->quota;
+			$count  = max(0, $count);
+		}
+		return $count;
 	}
 }
