@@ -121,7 +121,9 @@ trait TravelTrait
 			if ($region->Landscape() instanceof Navigable) {
 				if (!$this->canSailTo($neighbour) && !$this->useAirshipEffect()) {
 					if ($withFailure) {
-						$this->message(TravelLandMessage::class, $this->vessel)->p($direction->value)->s($landscape)->e($neighbour);
+						if ($this->exploring !== Exploring::Explore || $this->chronicle->has($neighbour->Id())) {
+							$this->message(TravelLandMessage::class, $this->vessel)->p($direction->value)->s($landscape)->e($neighbour);
+						}
 					}
 					return null;
 				}
@@ -193,7 +195,11 @@ trait TravelTrait
 					$pick        = randElement($alternatives);
 					$direction   = $pick[0];
 					$alternative = $pick[1];
-					$this->message(TravelAlternativeChaosMessage::class)->p($original->value)->p($direction->value, TravelAlternativeMessage::ALTERNATIVE);
+					if ($region) {
+						$this->message(TravelAlternativeNavigableMessage::class)->p($original->value)->p($direction->value, TravelAlternativeMessage::ALTERNATIVE);
+					} else {
+						$this->message(TravelAlternativeChaosMessage::class)->p($original->value)->p($direction->value, TravelAlternativeMessage::ALTERNATIVE);
+					}
 				}
 			}
 		} else {
@@ -211,7 +217,11 @@ trait TravelTrait
 					$pick        = randElement($alternatives);
 					$direction   = $pick[0];
 					$alternative = $pick[1];
-					$this->message(TravelAlternativeMessage::class)->p($original->value)->p($direction->value, TravelAlternativeMessage::ALTERNATIVE);
+					if ($region) {
+						$this->message(TravelAlternativeMessage::class)->p($original->value)->p($direction->value, TravelAlternativeMessage::ALTERNATIVE);
+					} else {
+						$this->message(TravelAlternativeChaosMessage::class)->p($original->value)->p($direction->value, TravelAlternativeMessage::ALTERNATIVE);
+					}
 				}
 			}
 		}
