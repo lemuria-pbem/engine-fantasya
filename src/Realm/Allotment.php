@@ -89,7 +89,7 @@ class Allotment
 					if ($id === $this->center) {
 						continue;
 					}
-					$part = (int)round($rate * $this->availability[$id]);
+					$part = (int)ceil($rate * $this->availability[$id]);
 					if ($part > $demand) {
 						$part = $demand;
 					}
