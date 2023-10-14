@@ -62,6 +62,10 @@ class Supply implements \Countable
 		return $this->offer->Price() - $factor * $this->luxury->Value();
 	}
 
+	public function Amount(): int {
+		return $this->count;
+	}
+
 	public function count(): int {
 		return $this->max;
 	}

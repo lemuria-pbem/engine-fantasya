@@ -52,7 +52,9 @@ final class MarketUpdate extends AbstractEvent
 					$this->message(MarketUpdateDemandMessage::class, $region)->s($commodity)->p($price);
 				}
 			}
-			$this->commerce[$this->id($region, $commodity)] = true;
+			if ($supply->Amount() > 0) {
+				$this->commerce[$this->id($region, $commodity)] = true;
+			}
 		}
 	}
 
