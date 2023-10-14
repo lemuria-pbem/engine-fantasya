@@ -84,7 +84,7 @@ class Allotment
 			$local      = $this->availability[$this->center];
 			$total      = $fleetTotal + $local;
 			if ($total > 0) {
-				$rate = $demand / $total;
+				$rate = min(1.0, $demand / $total);
 				foreach ($this->region as $id => $region) {
 					if ($id === $this->center) {
 						continue;

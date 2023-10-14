@@ -81,6 +81,11 @@ class Availability
 			}
 		}
 		$this->region->Resources()->remove($resource);
+		if ($commodity instanceof Peasant) {
+			$unemployment = Unemployment::getFor($this->region);
+			$peasants     = $unemployment->getPeasants($this->region);
+			$unemployment->setPeasants($this->region, $peasants - $resource->Count());
+		}
 	}
 
 	/**
