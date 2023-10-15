@@ -4,12 +4,9 @@ namespace Lemuria\Engine\Fantasya\Message\Unit\Cast;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AbstractUnitMessage;
-use Lemuria\Engine\Message\Section;
 
 class EagleEyeMessage extends AbstractUnitMessage
 {
-	protected Section $section = Section::Event;
-
 	protected int $perception;
 
 	protected function create(): string {
