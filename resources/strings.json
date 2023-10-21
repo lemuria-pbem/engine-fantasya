@@ -365,7 +365,7 @@
 		"DaydreamMessage": "Die Einheit $id zaubert Tagtraum mit Stufe $needed auf die Zieleinheit $unit.",
 		"DaydreamOnlyMessage": "Die Einheit $id kann Tagtraum nur mit Stufe $needed auf die Zieleinheit $unit zaubern.",
 		"DaydreamProductivityMessage": "Die Einheit $id hängt ihren Tagträumen nach und wird von der Arbeit abgelenkt.",
-		"DecayMessage": "Der Zahn der Zeit nagt {an:$building} $id.",
+		"DecayMessage": "Der Zahn der Zeit nagt {g/dat:an:$building} $id.",
 		"DecayToRuinMessage": "Der Zahn der Zeit hat sein Werk vollendet und {g/akk:das:$building} in eine Ruine verwandelt.",
 		"DeceaseMessage": "Die Einheit $unit stirbt.",
 		"DefaultInvalidMessage": "\"$command\" ist keine gültige Vorlage für die Einheit $id.",
@@ -1384,6 +1384,14 @@
 			"f": ["alle verfügbaren", "aller verfügbaren", "allen verfügbaren", "alle verfügbaren"],
 			"m": ["alle verfügbaren", "aller verfügbaren", "allen verfügbaren", "alle verfügbaren"],
 			"n": ["alle verfügbaren", "aller verfügbaren", "allen verfügbaren", "alle verfügbaren"]
+		},
+		"an": {
+			"numerus": 0,
+			"f": ["an der", "an der", "an der", "an der"],
+			"m": ["am", "am", "am", "am"],
+			"n": ["am", "am", "am", "am"],
+			"p": ["am", "am", "am", "am"],
+			"q": ["am", "am", "am", "am"]
 		},
 		"das": {
 			"numerus": 0,
