@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Command\Create;
 
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
-use Lemuria\Engine\Fantasya\Command\Trespass\Enter;
 use Lemuria\Engine\Fantasya\Effect\DecayEffect;
 use Lemuria\Engine\Fantasya\Effect\SignpostEffect;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
@@ -63,6 +62,8 @@ final class Construction extends AbstractProduct
 {
 	use GrammarTrait;
 	use ModifiedActivityTrait;
+
+	private const FORBIDDEN = [Ruin::class, Signpost::class];
 
 	private const EXTENSIONS = [
 		Market::class => [MarketExtension::class],
@@ -215,7 +216,7 @@ final class Construction extends AbstractProduct
 				if ($estate->has($id)) {
 					$construction = $estate[$id];
 					$building     = $construction->Building();
-					if (!in_array($building::class, Enter::FORBIDDEN)) {
+					if (!in_array($building::class, self::FORBIDDEN)) {
 						return $construction;
 					}
 				}
