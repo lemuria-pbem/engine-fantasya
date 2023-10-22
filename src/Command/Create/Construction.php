@@ -346,10 +346,10 @@ final class Construction extends AbstractProduct
 		}
 	}
 
-	private function monumentEffect(ConstructionModel $signpost): DecayEffect {
+	private function monumentEffect(ConstructionModel $monument): DecayEffect {
 		$effect = new DecayEffect(State::getInstance());
 		/** @var DecayEffect $monumentEffect */
-		$monumentEffect = Lemuria::Score()->find($effect->setConstruction($signpost)->setInterval(DecayEffect::MONUMENT));
+		$monumentEffect = Lemuria::Score()->find($effect->setConstruction($monument)->setInterval(DecayEffect::MONUMENT));
 		return $monumentEffect ?? $effect;
 	}
 
