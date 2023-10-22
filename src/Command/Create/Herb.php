@@ -31,7 +31,7 @@ final class Herb extends RawMaterial
 	public function __construct(Phrase $phrase, Context $context, Job $job) {
 		parent::__construct($phrase, $context, $job);
 		$this->knowledge = new Ability(self::createTalent(Herballore::class), Ability::getExperience(3));
-		$this->herbage   = $this->unit->Party()->HerbalBook()->getHerbage($this->unit->Region());
+		$this->determineHerbage();
 	}
 
 	public function allows(Activity $activity): bool {
@@ -70,5 +70,21 @@ final class Herb extends RawMaterial
 	}
 
 	protected function productionDone(): void {
+	}
+
+	protected function determineHerbage(): void {
+		$herbalBook = $this->unit->Party()->HerbalBook();
+		$region     = $this->unit->Region();
+		$realm      = $region->Realm();
+		if ($realm) {
+			foreach ($realm->Territory() as $region) {
+				$this->herbage = $herbalBook->getHerbage($region);
+				if ($this->herbage) {
+					break;
+				}
+			}
+		} else {
+			$this->herbage = $herbalBook->getHerbage($region);
+		}
 	}
 }
