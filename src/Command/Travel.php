@@ -44,6 +44,7 @@ use Lemuria\Engine\Fantasya\Message\Vessel\TravelShipTooHeavyMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\Travel\Movement;
 use Lemuria\Engine\Fantasya\Travel\NavigationTrait;
+use Lemuria\Engine\Fantasya\Travel\Transport;
 use Lemuria\Engine\Fantasya\Travel\TravelTrait;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party\Exploring;
@@ -129,15 +130,15 @@ class Travel extends UnitCommand implements Activity
 			return;
 		}
 
-		$movement = $this->trip->Movement();
-		$speed    = $this->trip->Speed();
-		$weight   = $this->trip->Weight();
+		$movement  = $this->trip->Movement();
+		$speed     = $this->trip->Speed();
+		$transport = Transport::check($this->trip);
 		if ($movement === Movement::Ship) {
 			if ($this->vessel->Anchor() === Direction::IN_DOCK && $this->vessel->Completion() < 1.0) {
 				$this->message(TravelVesselIncompleteMessage::class)->e($this->vessel);
 				return;
 			}
-			if ($weight > $this->trip->Capacity()) {
+			if ($transport === Transport::TOO_HEAVY) {
 				$this->message(TravelVesselTooHeavyMessage::class)->e($this->vessel);
 				$this->message(TravelShipTooHeavyMessage::class, $this->vessel);
 				return;
@@ -161,21 +162,13 @@ class Travel extends UnitCommand implements Activity
 				$speed += FavorableWinds::SPEED_BONUS;
 			}
 		} else {
-			$riding = $this->Unit()->Size() * $this->calculus()->knowledge($this->riding)->Level();
-			if ($weight > $this->trip->Capacity() || $riding < $this->trip->Knowledge()) {
-				if ($weight > $this->trip->Capacity()) {
-					$this->message(TravelTooHeavyMessage::class);
-					return;
-				}
-				if ($riding < $this->trip->Knowledge()) {
-					$this->message(TravelNoRidingMessage::class);
-					return;
-				}
-				if ($movement !== Movement::Walk) {
-					$movement = Movement::Walk;
-					$speed    = $this->trip->Speed();
-					$this->workload->setMaximum(min($this->workload->Maximum(), $speed));
-				}
+			if ($transport === Transport::TOO_HEAVY) {
+				$this->message(TravelTooHeavyMessage::class);
+				return;
+			}
+			if ($transport === Transport::NO_RIDING) {
+				$this->message(TravelNoRidingMessage::class);
+				return;
 			}
 		}
 		$this->setRoadsLeft($movement);
@@ -188,7 +181,7 @@ class Travel extends UnitCommand implements Activity
 		$invalidDirections  = 0;
 		$simulationStopped  = false;
 		$blockade           = new Blockade();
-		$this->message(TravelSpeedMessage::class)->p($regions)->p($weight, TravelSpeedMessage::WEIGHT);
+		$this->message(TravelSpeedMessage::class)->p($regions)->p($this->trip->Weight(), TravelSpeedMessage::WEIGHT);
 		try {
 			while (($regions > 0 || $roadRegions > 0) && $this->directions->hasMore()) {
 				$next = $this->directions->next();

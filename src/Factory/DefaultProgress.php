@@ -34,6 +34,7 @@ use Lemuria\Engine\Fantasya\Event\Statistics;
 use Lemuria\Engine\Fantasya\Event\Subsistence;
 use Lemuria\Engine\Fantasya\Event\Support;
 use Lemuria\Engine\Fantasya\Event\Timer;
+use Lemuria\Engine\Fantasya\Event\TransporterCheck;
 use Lemuria\Engine\Fantasya\Event\Upkeep;
 use Lemuria\Engine\Fantasya\Event\Visit;
 use Lemuria\Engine\Fantasya\Progress;
@@ -46,6 +47,7 @@ class DefaultProgress implements Progress
 		Administrator::class, Timer::class, Game::class, Visit::class, Monster::class, MarketFee::class, PortFee::class,
 		// middle
 		ResetSiege::class, Conduct::class, Upkeep::class, Subsistence::class, Drift::class, Breeding::class,
+		TransporterCheck::class,
 		// after
 		Finish::class, MarketUpdate::class, Founder::class, Integrity::class, Support::class,
 		Population::class, Fauna::class, Griffinegg::class, Growth::class, Regrow::class,

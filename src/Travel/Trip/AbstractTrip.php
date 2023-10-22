@@ -36,6 +36,10 @@ abstract class AbstractTrip implements Trip
 		$this->calculateWeight();
 	}
 
+	public function Calculus(): Calculus {
+		return $this->calculus;
+	}
+
 	public function Capacity(): int {
 		return $this->capacity;
 	}
