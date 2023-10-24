@@ -284,11 +284,6 @@ class LemuriaTurn implements Turn
 		foreach ($this->state->getAllProtocols() as $protocol) {
 			$protocol->persistNewDefaults();
 		}
-		$scripts = [];
-		foreach ($this->scripts as $script) {
-			$scripts[$script->File()] = $script->Data();
-		}
-		Lemuria::Game()->setScripts($scripts);
 		return $this;
 	}
 
