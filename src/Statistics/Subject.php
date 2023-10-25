@@ -65,4 +65,8 @@ enum Subject
 	case Workers;
 
 	case Workplaces;
+
+	case RaceUnits;
+
+	case RacePeople;
 }
