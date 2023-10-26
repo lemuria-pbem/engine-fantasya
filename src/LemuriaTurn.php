@@ -53,11 +53,6 @@ class LemuriaTurn implements Turn
 
 	protected readonly CommandQueue $queue;
 
-	/**
-	 * @var array<Script>
-	 */
-	private array $scripts = [];
-
 	protected readonly CommandPriority $priority;
 
 	protected int $currentPriority = 0;
@@ -304,18 +299,6 @@ class LemuriaTurn implements Turn
 	public function addScore(Score $score): LemuriaTurn {
 		foreach ($score as $effect /** @var Effect $effect */) {
 			$this->addEffect($effect);
-		}
-		return $this;
-	}
-
-	/**
-	 * Add a script.
-	 */
-	public function addScript(Script $script): LemuriaTurn {
-		try {
-			$this->scripts[] = $script->play();
-		} catch (ScriptException $e) {
-			Lemuria::Log()->critical($e->getMessage());
 		}
 		return $this;
 	}

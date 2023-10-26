@@ -23,7 +23,6 @@ use Lemuria\Engine\Fantasya\Event\Liquidation;
 use Lemuria\Engine\Fantasya\Event\MarketFee;
 use Lemuria\Engine\Fantasya\Event\MarketUpdate;
 use Lemuria\Engine\Fantasya\Event\Monster;
-use Lemuria\Engine\Fantasya\Event\NPC;
 use Lemuria\Engine\Fantasya\Event\Obtainment;
 use Lemuria\Engine\Fantasya\Event\Population;
 use Lemuria\Engine\Fantasya\Event\PortFee;
@@ -45,8 +44,7 @@ class DefaultProgress implements Progress
 {
 	protected const EVENTS = [
 		// before
-		Administrator::class, Timer::class, Game::class, Visit::class, NPC::class, Monster::class,
-		MarketFee::class, PortFee::class,
+		Administrator::class, Timer::class, Game::class, Visit::class, Monster::class, MarketFee::class, PortFee::class,
 		// middle
 		ResetSiege::class, Conduct::class, Upkeep::class, Subsistence::class, Drift::class, Breeding::class,
 		TransporterCheck::class,
