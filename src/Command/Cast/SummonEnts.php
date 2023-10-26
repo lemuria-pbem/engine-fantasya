@@ -6,7 +6,6 @@ use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Effect\VanishEffect;
 use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Event\Behaviour\Monster\Ent as Behaviour;
-use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\SummonEntsMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\SummonEntsNoWoodMessage;
 use Lemuria\Engine\Fantasya\State;
@@ -15,7 +14,6 @@ use Lemuria\Model\Fantasya\Commodity\Monster\Ent;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gang;
-use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 
 final class SummonEnts extends AbstractCast
@@ -42,7 +40,8 @@ final class SummonEnts extends AbstractCast
 			return;
 		}
 
-		$party = Party::get(Spawn::getPartyId(Type::Monster));
+		$state = State::getInstance();
+		$party = $state->getTurnOptions()->Finder()->Party()->findByType(Type::Monster);
 		$race  = self::createRace(Ent::class);
 		$size  = self::size($this->cast->Level());
 		$unit->Aura()->consume($this->cast->Aura());
@@ -53,7 +52,7 @@ final class SummonEnts extends AbstractCast
 			$this->message(SummonEntsMessage::class, $unit)->e($ents)->p($size);
 
 			$behaviour = new Behaviour($ents);
-			State::getInstance()->addMonster($behaviour->prepare());
+			$state->addMonster($behaviour->prepare());
 			Lemuria::Log()->debug('Behaviour for summoned ents has been added.');
 		}
 	}

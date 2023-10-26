@@ -8,7 +8,6 @@ use Lemuria\Engine\Fantasya\Command\AllocationCommand;
 use Lemuria\Engine\Fantasya\Command\Attack as AttackCommand;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\GriffinAttack;
-use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
 use Lemuria\Engine\Fantasya\Message\Unit\GriffineggAttackedMessage;
@@ -27,7 +26,6 @@ use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg as GriffineggModel;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Race;
@@ -114,6 +112,7 @@ final class Griffinegg extends AllocationCommand implements Activity
 	}
 
 	private function attack(int $eggs): void {
+		$state     = State::getInstance();
 		$region    = $this->unit->Region();
 		$resources = $region->Resources();
 		$griffins  = $resources[Griffin::class];
@@ -128,18 +127,18 @@ final class Griffinegg extends AllocationCommand implements Activity
 			/** @var Race $griffin */
 			$griffin = $griffins->Commodity();
 			$effect->setGriffins($unit->setRace($griffin)->setSize($griffins->Count())->setBattleRow(BattleRow::Aggressive));
-			$party = Party::get(Spawn::getPartyId(Type::Monster));
+			$party = $state->getTurnOptions()->Finder()->Party()->findByType(Type::Monster);
 			$party->People()->add($unit);
 			$region->Residents()->add($unit);
 			$unit->Knowledge()->add(new Ability(self::createTalent(Tactics::class), Ability::getExperience(self::TACTICS)));
 			$unit->Inventory()->add(new Quantity($this->griffinegg, $eggs));
 			$this->message(GriffineggAttackerMessage::class, $unit)->e($region)->i($griffins);
 		}
-		State::getInstance()->injectIntoTurn($effect);
+		$state->injectIntoTurn($effect);
 
 		$id     = $this->unit->Id();
 		$attack = new AttackCommand(new Phrase('ATTACKIEREN ' . $id), $this->context);
-		State::getInstance()->injectIntoTurn($attack->from($unit));
+		$state->injectIntoTurn($attack->from($unit));
 	}
 
 	private function getEffect(Region $region): GriffinAttack {

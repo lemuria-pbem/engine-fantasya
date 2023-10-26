@@ -40,7 +40,6 @@ use Lemuria\Model\Fantasya\Landscape\Mountain;
 use Lemuria\Model\Fantasya\Landscape\Ocean;
 use Lemuria\Model\Fantasya\Landscape\Plain;
 use Lemuria\Model\Fantasya\Landscape\Swamp;
-use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Quantity;
 
@@ -122,8 +121,9 @@ final class PopulateContinent extends AbstractEvent
 	}
 
 	protected function initialize(): void {
-		$monsters  = Party::get(Spawn::getPartyId(Type::Monster));
-		$zombies   = Party::get(Id::fromId(Spawn::ZOMBIES));
+		$finder    = $this->state->getTurnOptions()->Finder()->Party();
+		$monsters  = $finder->findByType(Type::Monster);
+		$zombies   = $finder->findByRace(self::createRace(Zombie::class));
 		$continent = Continent::get($this->getIdOption(self::CONTINENT));
 		$chances   = $this->hasOption(self::CHANCES) ? $this->getOption(self::CHANCES, 'array') : self::CHANCE;
 		$sizes     = $this->hasOption(self::SIZES) ? $this->getOption(self::SIZES, 'array') : self::SIZES;

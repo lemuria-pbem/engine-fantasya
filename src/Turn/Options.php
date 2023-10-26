@@ -16,12 +16,19 @@ class Options
 
 	private ThrowOption $throwExceptions;
 
+	private Finder $finder;
+
 	public function __construct() {
 		$this->cherryPicker = new DefaultCherryPicker();
+		$this->finder       = new Finder();
 	}
 
 	public function CherryPicker(): CherryPicker {
 		return $this->cherryPicker;
+	}
+
+	public function Finder(): Finder {
+		return $this->finder;
 	}
 
 	public function DebugBattles(): bool {

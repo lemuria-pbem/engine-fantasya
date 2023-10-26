@@ -57,7 +57,8 @@ final class ZombieInfection extends AbstractEvent
 	private Commodity $peasant;
 
 	public static function addZombieInfections(array &$events): void {
-		$zombies = Party::get(Id::fromId(Spawn::ZOMBIES))->People();
+		$party   = State::getInstance()->getTurnOptions()->Finder()->Party()->findByRace(self::createRace(Zombie::class));
+		$zombies = $party->People();
 		if ($zombies->count() >= self::MAX_ZOMBIE_COUNT || $zombies->Size() >= self::MAX_ZOMBIE_SIZE) {
 			Lemuria::Log()->debug('Skipping ZombieInfection.');
 			return;
@@ -93,7 +94,7 @@ final class ZombieInfection extends AbstractEvent
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);
-		$this->party   = Party::get(Id::fromId(Spawn::ZOMBIES));
+		$this->party   = $state->getTurnOptions()->Finder()->Party()->findByRace(self::createRace(Zombie::class));
 		$this->zombie  = self::createMonster(Zombie::class);
 		$this->peasant = self::createCommodity(Peasant::class);
 	}

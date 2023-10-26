@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Gang;
@@ -33,19 +32,7 @@ final class Spawn extends AbstractEvent
 
 	public final const SIZE = 'size';
 
-	public final const ZOMBIES = 'z';
-
-	private const PARTY_ID = [Type::NPC->value => 'n', Type::Monster->value => 'm'];
-
 	private Create $create;
-
-	public static function getPartyId(Type $type):Id {
-		$id = self::PARTY_ID[$type->value] ?? null;
-		if (!$id) {
-			throw new LemuriaException('Unsupported party type given.');
-		}
-		return Id::fromId($id);
-	}
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);
@@ -57,18 +44,20 @@ final class Spawn extends AbstractEvent
 	}
 
 	protected function initialize(): void {
+		$race = self::createRace($this->getOption(self::RACE, 'string'));
 		if ($this->hasOption(self::PARTY)) {
 			$party = Party::get($this->getIdOption(self::PARTY));
-		} else {
+		} elseif ($this->hasOption(self::TYPE)) {
 			/** @var Type $type */
-			$type = $this->getOption(self::TYPE, Type::class);
-			$party = Party::get(self::getPartyId($type));
+			$type  = $this->getOption(self::TYPE, Type::class);
+			$party = $this->state->getTurnOptions()->Finder()->Party()->findByType($type);
+		} else {
+			$party = $this->state->getTurnOptions()->Finder()->Party()->findByRace($race);
 		}
-		$race   = $this->getOption(self::RACE, 'string');
 		$size   = $this->getOption(self::SIZE, 'int');
 		$region = Region::get($this->getIdOption(self::REGION));
 		$this->create = new Create($party, $region);
-		$this->create->add(new Gang(self::createRace($race), $size));
+		$this->create->add(new Gang($race, $size));
 	}
 
 	protected function run(): void {

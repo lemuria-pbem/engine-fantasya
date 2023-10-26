@@ -447,9 +447,11 @@ class Battle
 	}
 
 	private function initMonsters(): void {
+		$state  = State::getInstance();
+		$finder = $state->getTurnOptions()->Finder()->Party();
 		$score  = Lemuria::Score();
-		$effect = new VanishEffect(State::getInstance());
-		$party  = Party::get(Spawn::getPartyId(Type::Monster));
+		$effect = new VanishEffect($state);
+		$party  = $finder->findByType(Type::Monster);
 		foreach ($this->intelligence->getUnits($party) as $monster) {
 			$existing = $score->find($effect->setUnit($monster));
 			if ($existing instanceof VanishEffect) {
@@ -515,14 +517,16 @@ class Battle
 	private function createNewZombies(Combat $combat): static {
 		$size = $combat->getNewZombies();
 		if ($size > 0) {
+			$zombie = self::createRace(Zombie::class);
 			$region = $this->place->Region();
 			$id     = $region->Id()->Id();
 			$state  = State::getInstance();
+			$party  = (string)$state->getTurnOptions()->Finder()->Party()->findByRace($zombie)->Id();
 			$spawn  = new Spawn($state);
 			$state->injectIntoTurn($spawn->setOptions([
-				Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => $id, Spawn::SIZE => $size, Spawn::RACE => Zombie::class
+				Spawn::PARTY => $party, Spawn::REGION => $id, Spawn::SIZE => $size, Spawn::RACE => Zombie::class
 			]));
-			$this->message(AttackInfectedZombiesMessage::class, $region)->p($size)->s(self::createRace(Zombie::class));
+			$this->message(AttackInfectedZombiesMessage::class, $region)->p($size)->s($zombie);
 		}
 		return $this;
 	}

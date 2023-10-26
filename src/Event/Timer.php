@@ -59,6 +59,7 @@ final class Timer extends DelegatedEvent
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => '231']]   // renn
 		],
 		154 => [
+			['class' => Spawn::class, 'options' => [Spawn::REGION => '', Spawn::SIZE => 1, Spawn::RACE => Zombie::class]],
 			// Vorbereitungen für den Nekromanten-NPC
 			['class' => Spawn::class, 'options' => [Spawn::PARTY => 'm', Spawn::REGION => '2gn', Spawn::SIZE => 78, Spawn::RACE => Skeleton::class]],
 			['class' => Spawn::class, 'options' => [Spawn::PARTY => 'm', Spawn::REGION => '2go', Spawn::SIZE => 85, Spawn::RACE => Skeleton::class]],

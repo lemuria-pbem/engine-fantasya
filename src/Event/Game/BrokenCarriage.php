@@ -95,7 +95,7 @@ final class BrokenCarriage extends AbstractEvent
 		$unit->setId(Lemuria::Catalog()->nextId(Domain::Unit));
 		$unit->setSize(1)->setRace($race)->setHealth(self::HEALTH)->setDisguise();
 		$unit->setName(self::NAME)->setDescription(self::DESCRIPTION);
-		Party::get(Spawn::getPartyId(Type::NPC))->People()->add($unit);
+		$this->state->getTurnOptions()->Finder()->Party()->findByType(Type::NPC)->People()->add($unit);
 		$this->region->Residents()->add($unit);
 		return $unit;
 	}
