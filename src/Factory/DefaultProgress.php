@@ -60,13 +60,12 @@ class DefaultProgress implements Progress
 
 	private int $index = 0;
 
-	private int $count;
+	private int $count = 0;
 
 	public function __construct(State $state) {
-		foreach ($this->getEvents() as $event) {
-			$this->events[] = new $event($state);
+		foreach (self::EVENTS as $event) {
+			$this->add(new $event($state));
 		}
-		$this->count = count($this->events);
 	}
 
 	public function current(): Event {
@@ -101,10 +100,16 @@ class DefaultProgress implements Progress
 		return $this;
 	}
 
+	public function clear(): static {
+		$this->events = [];
+		$this->count  = 0;
+		return $this;
+	}
+
 	/**
-	 * @return array<string>
+	 * @return array<Event>
 	 */
 	protected function getEvents(): array {
-		return self::EVENTS;
+		return $this->events;
 	}
 }

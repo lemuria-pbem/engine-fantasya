@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use Lemuria\Engine\Fantasya\Event;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 
@@ -19,6 +20,8 @@ abstract class DelegatedEvent extends AbstractEvent
 
 	/**
 	 * Get the delegates to execute.
+	 *
+	 * @return array<Event>
 	 */
 	public function getDelegates(): array {
 		return $this->delegates;
