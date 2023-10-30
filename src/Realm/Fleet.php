@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Realm;
 
 use Lemuria\Engine\Fantasya\Command\Learn;
+use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Realm;
@@ -13,7 +14,7 @@ use Lemuria\Model\Fantasya\Unit;
  */
 class Fleet
 {
-	protected const ALLOWED_ACTIVITIES = [Learn::class => true];
+	protected const ALLOWED_ACTIVITIES = [Learn::class => true, Teach::class => true];
 
 	/**
 	 * @var array<int, Wagoner>
