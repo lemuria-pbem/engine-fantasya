@@ -44,6 +44,10 @@ enum Subject
 
 	case Qualification;
 
+	case RacePeople;
+
+	case RaceUnits;
+
 	case Recruiting;
 
 	case RegionPool;
@@ -51,6 +55,8 @@ enum Subject
 	case Support;
 
 	case Talents;
+
+	case TransportUsed;
 
 	case Trees;
 
@@ -65,8 +71,4 @@ enum Subject
 	case Workers;
 
 	case Workplaces;
-
-	case RaceUnits;
-
-	case RacePeople;
 }

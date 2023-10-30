@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Event\Statistics\Colonies;
 use Lemuria\Engine\Fantasya\Event\Statistics\Economy;
 use Lemuria\Engine\Fantasya\Event\Statistics\Education;
 use Lemuria\Engine\Fantasya\Event\Statistics\Ethnology;
+use Lemuria\Engine\Fantasya\Event\Statistics\RealmAdministration;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
@@ -27,5 +28,6 @@ final class Statistics extends DelegatedEvent
 		$this->delegates[] = new Economy($this->state);
 		$this->delegates[] = new Education($this->state);
 		$this->delegates[] = new Ethnology($this->state);
+		$this->delegates[] = new RealmAdministration($this->state);
 	}
 }
