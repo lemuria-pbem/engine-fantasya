@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Effect\TradeEffect;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Sales;
@@ -30,6 +31,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\AcceptOfferUnableMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptSoldMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptTradeUnableMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptUnsatisfiableTradeMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\ItemException;
 use Lemuria\Exception\ItemSetException;
 use Lemuria\Exception\LemuriaException;
@@ -156,6 +158,7 @@ final class Accept extends UnitCommand
 			$payment  = new Quantity($price->Commodity(), $price->Amount());
 			$this->exchange($quantity, $payment);
 			$this->tradeMessages($quantity, $payment);
+			$this->addTradeEffect();
 		}
 	}
 
@@ -172,6 +175,7 @@ final class Accept extends UnitCommand
 				$quantity = new Quantity($goods->Commodity(), $this->amount);
 				$this->exchange($quantity, $payment);
 				$this->tradeMessages($quantity, $payment);
+				$this->addTradeEffect();
 			}
 		}
 	}
@@ -197,6 +201,7 @@ final class Accept extends UnitCommand
 			$quantity = new Quantity($goods->Commodity(), $goods->Amount());
 			$this->exchange($quantity, $payment);
 			$this->tradeMessages($quantity, $payment);
+			$this->addTradeEffect();
 		}
 	}
 
@@ -223,6 +228,7 @@ final class Accept extends UnitCommand
 				$quantity = new Quantity($goods->Commodity(), $this->amount);
 				$this->exchange($quantity, $payment);
 				$this->tradeMessages($quantity, $payment);
+				$this->addTradeEffect();
 			}
 		}
 	}
@@ -524,5 +530,16 @@ final class Accept extends UnitCommand
 			$ppp       = $price->Maximum();
 			return (int)floor($inventory[$commodity]->Count() / $ppp);
 		}
+	}
+
+	private function addTradeEffect(): void {
+		$effect = new TradeEffect(State::getInstance());
+		$existing = Lemuria::Score()->find($effect->setUnit($this->unit));
+		if ($existing instanceof TradeEffect) {
+			$effect = $existing;
+		} else {
+			Lemuria::Score()->add($effect);
+		}
+		$effect->Trades()->add($this->trade);
 	}
 }
