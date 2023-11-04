@@ -192,6 +192,31 @@ class Battle
 		return $this->takeLoot($combat)->addBattlefieldRemains()->createNewZombies($combat);
 	}
 
+	public function integrateOpposite(Battle $battle): ?Battle {
+		if (count($battle->attackers) <= count($this->defenders) && count($battle->defenders) <= count($this->attackers)) {
+			$ids = [];
+			foreach ($this->defenders as $unit) {
+				$ids[$unit->Id()->Id()] = true;
+			}
+			foreach ($battle->attackers as $unit) {
+				if (!isset($ids[$unit->Id()->Id()])) {
+					return null;
+				}
+			}
+			$ids = [];
+			foreach ($this->attackers as $unit) {
+				$ids[$unit->Id()->Id()] = true;
+			}
+			foreach ($battle->defenders as $unit) {
+				if (!isset($ids[$unit->Id()->Id()])) {
+					return null;
+				}
+			}
+			return $this;
+		}
+		return null;
+	}
+
 	public function merge(Battle $battle): static {
 		$armies = [];
 		foreach ($this->attackers as $unit) {

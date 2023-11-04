@@ -106,6 +106,7 @@ class Campaign
 		$this->addDefenderOtherUnits($defenders);
 		$this->addDefenderAlliedUnits();
 		$this->mergeAttackerBattles();
+		$this->mergeOpposedBattles();
 		$this->battles = array_values($this->battles);
 		$n             = count($this->battles);
 		for ($i = 0; $i < $n; $i++) {
@@ -228,6 +229,22 @@ class Campaign
 				}
 			}
 		}
+	}
+
+	private function mergeOpposedBattles(): void {
+		do {
+			$n = count($this->battles);
+			for ($first = 0; $first < $n - 1; $first++) {
+				$second = $first + 1;
+				$merged = $this->battles[$first]->integrateOpposite($this->battles[$second]);
+				if ($merged) {
+					unset($this->battles[$second]);
+					$this->battles = array_values($this->battles);
+					$n--;
+					break;
+				}
+			}
+		} while ($n > 1);
 	}
 
 	protected function unit(int $id): Unit {
