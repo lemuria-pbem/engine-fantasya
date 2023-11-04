@@ -132,7 +132,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 				$this->trades = $this->context->getWorkload($this->unit);
 				$this->createGoods();
 				$commerce = $this->context->getCommerce($this->unit->Region());
-				if (count($this->goods)) {
+				if (!$this->goods->isEmpty()) {
 					$commerce->register($this);
 				} else {
 					Lemuria::Log()->debug('Commerce registration skipped due to empty demand.', ['command' => $this]);
@@ -141,6 +141,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 				Lemuria::Log()->debug('Commerce disabled in this region - no castle here.');
 			}
 		}
+		$this->commitCommand($this);
 	}
 
 	/**
@@ -153,6 +154,12 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 			} else {
 				$this->context->getCommerce($this->unit->Region())->distribute($this);
 			}
+		}
+	}
+
+	protected function commitCommand(UnitCommand $command): void {
+		if (!$this->goods->isEmpty() && !$this->checkBeforeCommerce()) {
+			parent::commitCommand($command);
 		}
 	}
 
