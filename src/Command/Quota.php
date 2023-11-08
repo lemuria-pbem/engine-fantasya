@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Fantasya\Command\Create\Herb;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\QuotaNoHerbageMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\QuotaNoHerbMessage;
@@ -13,6 +12,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\QuotaSetHerbMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\QuotaSetMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\QuotaUnknownHerbageMessage;
 use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Herb;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
