@@ -44,7 +44,7 @@ final class Herb extends RawMaterial
 	public function getCommodity(): Commodity {
 		$resource = $this->job->getObject();
 		if ($resource instanceof HerbModel) {
-			return $this->herbage?->Herb() ?? self::createCommodity(Elvendear::class); // Dummy
+			return $this->herbage?->Herb() ?? self::createCommodity(Elvendear::class); // TODO: Improve for Allotment.
 		}
 		if ($resource instanceof HerbInterface) {
 			return $resource;

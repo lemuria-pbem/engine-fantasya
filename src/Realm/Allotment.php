@@ -76,6 +76,7 @@ class Allotment
 		$resources  = new Resources();
 		$quota      = $consumer->getQuota();
 		foreach ($consumer->getDemand() as $quantity) {
+			// TODO: Herb commodities must be more flexible here.
 			$commodity = $quantity->Commodity();
 			$piece     = $commodity->Weight();
 			$demand    = $quantity->Count();
