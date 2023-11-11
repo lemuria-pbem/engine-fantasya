@@ -128,11 +128,18 @@ final class ActivityProtocol
 	public function addNewDefaults(Activity $activity): void {
 		foreach ($activity->getNewDefaults() as $default) {
 			if ($default instanceof Activity) {
-				if ($default->IsAlternative()) {
-					$this->alternativeActivities[] = $default;
-				} else {
-					$this->defaultActivities[] = $default;
-				}
+				$this->defaultActivities[] = $default;
+			}
+		}
+	}
+
+	/**
+	 * Add the new default of an alternative Activity.
+	 */
+	public function addNewAlternatives(Activity $activity): void {
+		foreach ($activity->getNewDefaults() as $default) {
+			if ($default instanceof Activity) {
+				$this->alternativeActivities[] = $default;
 			}
 		}
 	}

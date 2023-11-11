@@ -20,7 +20,7 @@ trait UnitTrait
 		$protocol = $this->context->getProtocol($this->unit);
 		if (!$protocol->commit($command)) {
 			if ($command instanceof Activity && $command->isAlternative()) {
-				$protocol->addNewDefaults($command);
+				$protocol->addNewAlternatives($command);
 				throw new AlternativeException($command);
 			}
 			throw new ActivityException($command);
