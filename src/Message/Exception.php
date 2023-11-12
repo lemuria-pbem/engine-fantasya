@@ -10,6 +10,8 @@ enum Exception
 
 	case InvalidCommand;
 
+	case InvalidDefault;
+
 	case InvalidId;
 
 	case PartyAlreadySet;

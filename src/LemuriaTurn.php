@@ -11,6 +11,7 @@ use Lemuria\Engine\Fantasya\Exception\ActionException;
 use Lemuria\Engine\Fantasya\Exception\AlternativeException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
+use Lemuria\Engine\Fantasya\Exception\InvalidDefaultException;
 use Lemuria\Engine\Fantasya\Exception\UnknownArgumentException;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
@@ -98,6 +99,13 @@ class LemuriaTurn implements Turn
 				$originalCommand = $factory->create($phrase);
 				$command         = $originalCommand->getDelegate();
 				Lemuria::Log()->debug('New command: ' . $originalCommand, ['command' => $command]);
+			} catch (InvalidDefaultException $e) {
+				Lemuria::Log()->error($e->getMessage(), ['command' => $e->getArgument(), 'exception' => $e]);
+				$this->addExceptionMessage($e, $context);
+				if ($this->throwExceptions(ThrowOption::ADD)) {
+					throw $e;
+				}
+				continue;
 			} catch (UnknownArgumentException $e) {
 				Lemuria::Log()->error($e->getMessage(), [UnknownArgumentException::ARGUMENT => $e->getArgument(), 'exception' => $e]);
 				$this->addExceptionMessage($e, $context);

@@ -5,6 +5,8 @@ namespace Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command\Template\Copy;
 use Lemuria\Engine\Fantasya\Command\Template\DefaultCommand;
+use Lemuria\Engine\Fantasya\Exception\CommandException;
+use Lemuria\Engine\Fantasya\Exception\InvalidDefaultException;
 use Lemuria\Engine\Fantasya\Phrase;
 
 /**
@@ -79,11 +81,15 @@ final class Template extends DelegatedCommand
 	}
 
 	private function createOrder(string $phrase): Command {
-		$order    = $this->context->Factory()->create(new Phrase($phrase));
-		$delegate = $order->getDelegate();
-		if ($delegate instanceof UnitCommand) {
-			$delegate->preventDefault();
+		try {
+			$order    = $this->context->Factory()->create(new Phrase($phrase));
+			$delegate = $order->getDelegate();
+			if ($delegate instanceof UnitCommand) {
+				$delegate->preventDefault();
+			}
+			return $order;
+		} catch (CommandException) {
+			throw new InvalidDefaultException($this->phrase);
 		}
-		return $order;
 	}
 }

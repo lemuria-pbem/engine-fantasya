@@ -160,6 +160,7 @@
 	"exception": {
 		"InvalidAlternative": "{argument}: Nur lange Befehle können alternativ ausgeführt werden.",
 		"InvalidCommand": "Die Befehlssyntax ist ungültig.",
+		"InvalidDefault": "Der Befehl in der Vorlage {argument} ist ungültig.",
 		"InvalidId": "'$id' ist keine gültige Nummer.",
 		"PartyAlreadySet": "Der Partei-Befehl kann nur einmal ausgeführt werden.",
 		"TempIdExists": "Die Einheit TEMP $temp wurde bereits erstellt.",
