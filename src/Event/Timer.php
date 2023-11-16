@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use Lemuria\Engine\Fantasya\Event\Administrator\ResetGatherUnits;
 use Lemuria\Engine\Fantasya\Event\Game\BlownByTheWind;
 use Lemuria\Engine\Fantasya\Event\Game\CarriedOffWayfarer;
 use Lemuria\Engine\Fantasya\Event\Game\Drought;
@@ -43,6 +44,9 @@ final class Timer extends DelegatedEvent
 			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 1603, PotionGift::POTION => DrinkOfCreation::class]],
 			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 3828, PotionGift::POTION => Brainpower::class]],
 			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 720149, PotionGift::POTION => ElixirOfPower::class]]
+		],
+		140 => [
+			['class' => ResetGatherUnits::class, 'options' => [ResetGatherUnits::PARTY => 5, ResetGatherUnits::IS_LOOTING => false]]
 		]
 	];
 
