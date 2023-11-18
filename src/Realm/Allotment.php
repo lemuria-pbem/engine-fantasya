@@ -81,11 +81,11 @@ class Allotment
 			$piece     = $commodity->Weight();
 			$demand    = $quantity->Count();
 			$this->calculateAvailability($commodity, $quota);
-			$fleetTotal = $this->calculateFleetTotal($commodity);
-			$local      = $this->availability[$this->center];
-			$total      = $fleetTotal + $local;
+			$fleetTotal     = $this->calculateFleetTotal($commodity);
+			$local          = $this->availability[$this->center];
+			$total          = $fleetTotal + $local;
 			if ($total > 0) {
-				$rate = min(1.0, $demand / $total);
+				$rate = min(1.0, $demand / array_sum($this->availability));
 				foreach ($this->region as $id => $region) {
 					if ($id === $this->center) {
 						continue;
