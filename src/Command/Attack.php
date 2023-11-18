@@ -238,10 +238,14 @@ final class Attack extends UnitCommand implements Reassignment
 	}
 
 	private function addAttackedUnit(Unit $unit): void {
-		$place = $this->getPlace($unit);
-		if ($place !== Place::None) {
-			$this->units[] = $unit;
-			Lemuria::Log()->debug($this->unit . ' will fight against ' . $unit . ' in ' . strtolower($place->name) . '.');
+		if ($unit->Size() > 0) {
+			$place = $this->getPlace($unit);
+			if ($place !== Place::None) {
+				$this->units[] = $unit;
+				Lemuria::Log()->debug($this->unit . ' will fight against ' . $unit . ' in ' . strtolower($place->name) . '.');
+			}
+		} else {
+			Lemuria::Log()->debug('Attacked unit ' . $unit . ' is empty, skipped.');
 		}
 	}
 
