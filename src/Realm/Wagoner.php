@@ -3,8 +3,12 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Realm;
 
 use Lemuria\Engine\Fantasya\Calculus;
+use Lemuria\Engine\Fantasya\Travel\Transport;
 use Lemuria\Engine\Fantasya\Travel\Trip;
 use Lemuria\Exception\LemuriaException;
+use Lemuria\Model\Fantasya\Animal;
+use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Talent\Riding;
 use Lemuria\Model\Fantasya\Unit;
 
 class Wagoner
@@ -52,6 +56,17 @@ class Wagoner
 		return $used;
 	}
 
+	public function getMounts(Animal $animal): int {
+		$need     = Transport::requiredRidingLevel($animal);
+		$calculus = new Calculus($this->unit);
+		$level    = $calculus->knowledge(Riding::class)->Level();
+		if ($level < $need) {
+			return 0;
+		}
+		$capacity = (int)floor((1.0 - $this->UsedCapacity()) * $this->unit->Size() * $level);
+		return $capacity > $need ? (int)floor($capacity / $need) : 0;
+	}
+
 	public function fetch(int $incoming): int {
 		$this->incoming -= $incoming;
 		return $this->incoming;
@@ -60,5 +75,21 @@ class Wagoner
 	public function send(int $outgoing): int {
 		$this->outgoing -= $outgoing;
 		return $this->outgoing;
+	}
+
+	public function ride(Quantity $animals): Quantity {
+		/** @var Animal $animal */
+		$animal          = $animals->Commodity();
+		$need            = Transport::requiredRidingLevel($animal);
+		$calculus        = new Calculus($this->unit);
+		$level           = $calculus->knowledge(Riding::class)->Level();
+		$size            = $this->unit->Size();
+		$needed          = $animals->Count() * $need;
+		$capability      = (int)ceil($size * $level / $need);
+		$persons         = (int)ceil($needed / $capability * $size);
+		$capacity        = (int)ceil($persons / $size * $this->maximum);
+		$this->incoming -= $capacity;
+		$this->outgoing -= $capacity;
+		return $animals;
 	}
 }

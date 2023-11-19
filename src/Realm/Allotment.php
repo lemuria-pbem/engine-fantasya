@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Factory\Model\RealmQuota;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\UnitTrait;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Animal;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Engine\Fantasya\Consumer;
 use Lemuria\Model\Fantasya\Quantity;
@@ -81,9 +82,9 @@ class Allotment
 			$piece     = $commodity->Weight();
 			$demand    = $quantity->Count();
 			$this->calculateAvailability($commodity, $quota);
-			$fleetTotal     = $this->calculateFleetTotal($commodity);
-			$local          = $this->availability[$this->center];
-			$total          = $fleetTotal + $local;
+			$fleetTotal = $this->calculateFleetTotal($commodity);
+			$local      = $this->availability[$this->center];
+			$total      = $fleetTotal + $local;
 			if ($total > 0) {
 				$rate = min(1.0, $demand / array_sum($this->availability));
 				foreach ($this->region as $id => $region) {
@@ -95,8 +96,12 @@ class Allotment
 						$part = $demand;
 					}
 					if ($this->isFleetEnabled) {
-						$weight = $this->fleet->fetch($part * $piece);
-						$part   = (int)floor($weight / $piece);
+						if ($commodity instanceof Animal) {
+							$part = $this->fleet->mount(new Quantity($commodity, $part))->Count();
+						} else {
+							$weight = $this->fleet->fetch($part * $piece);
+							$part   = (int)floor($weight / $piece);
+						}
 					}
 					if ($part > 0) {
 						$this->state->getAvailability($region)->remove(new Quantity($commodity, $part));
@@ -142,7 +147,11 @@ class Allotment
 	protected function calculateFleetTotal(Commodity $commodity): int {
 		$availableSum = array_sum($this->availability) - $this->availability[$this->center];
 		if ($this->isFleetEnabled) {
-			$fleetMaximum = (int)floor($this->fleet->Incoming() / $commodity->Weight());
+			if ($commodity instanceof Animal) {
+				$fleetMaximum = $this->fleet->getMounts($commodity);
+			} else {
+				$fleetMaximum = (int)floor($this->fleet->Incoming() / $commodity->Weight());
+			}
 			return min($availableSum, $fleetMaximum);
 		}
 		return $availableSum;

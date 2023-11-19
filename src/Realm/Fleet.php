@@ -6,6 +6,8 @@ use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Animal;
+use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Realm;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -79,6 +81,20 @@ class Fleet
 		}
 		$this->removeWagoners($remove);
 		return $outgoing;
+	}
+
+	public function getMounts(Animal $animal): int {
+		$count  = 0;
+		$remove = [];
+		foreach ($this->wagoner as $id => $wagoner) {
+			if ($this->isAvailable($wagoner->Unit())) {
+				$count += $wagoner->getMounts($animal);
+			} else {
+				$remove[] = $id;
+			}
+		}
+		$this->removeWagoners($remove);
+		return $count;
 	}
 
 	public function getUsedCapacity(Unit $unit): float {
@@ -177,6 +193,68 @@ class Fleet
 		}
 
 		return $send;
+	}
+
+	public function mount(Quantity $animals): Quantity {
+		/** @var Animal $animal */
+		$animal    = $animals->Commodity();
+		$available = $this->getMounts($animal);
+		$remaining = min($animals->Count(), $available);
+		$mounted   = 0;
+		$riders    = $this->getAvailableRiders($animal);
+		while ($remaining > 0) {
+			$transport = null;
+			foreach ($riders as $id => $count) {
+				$wagoner = $this->wagoner[$id];
+				if ($remaining <= $count) {
+					$transport = $wagoner;
+				} else {
+					if (!$transport) {
+						$transport = $wagoner;
+					}
+					break;
+				}
+			}
+			if (!$transport) {
+				break;
+			}
+
+			$id     = $transport->Unit()->Id()->Id();
+			$mounts = $transport->getMounts($animal);
+			if ($remaining <= $mounts) {
+				$quantity = new Quantity($animal, $remaining);
+				$quantity = $transport->ride($quantity);
+				$mounted += $remaining;
+				Lemuria::Log()->debug('Wagoner ' . $transport->Unit()->Id() . ' rides ' . $quantity . ', ' . $mounts - $remaining . ' remain.');
+				break;
+			}
+			$quantity   = new Quantity($animal, $mounts);
+			$quantity   = $transport->ride($quantity);
+			$mounted   += $mounts;
+			$remaining -= $mounts;
+			unset($riders[$id]);
+			Lemuria::Log()->debug('Wagoner ' . $transport->Unit()->Id() . ' rides ' . $quantity . '.');
+		}
+
+		return new Quantity($animal, $mounted);
+	}
+
+	protected function getAvailableRiders(Animal $animal): array {
+		$riders = [];
+		$remove = [];
+		foreach ($this->wagoner as $id => $wagoner) {
+			if ($this->isAvailable($wagoner->Unit())) {
+				$mounts = $wagoner->getMounts($animal);
+				if ($mounts > 0) {
+					$riders[$id] = $mounts;
+				}
+			} else {
+				$remove[] = $id;
+			}
+		}
+		arsort($riders);
+		$this->removeWagoners($remove);
+		return $riders;
 	}
 
 	protected function isAvailable(Unit $unit): bool {
