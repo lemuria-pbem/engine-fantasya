@@ -6,9 +6,11 @@ use Lemuria\Engine\Fantasya\Event\Administrator\ResetGatherUnits;
 use Lemuria\Engine\Fantasya\Event\Game\BlownByTheWind;
 use Lemuria\Engine\Fantasya\Event\Game\CarriedOffWayfarer;
 use Lemuria\Engine\Fantasya\Event\Game\Drought;
+use Lemuria\Engine\Fantasya\Event\Game\FindWallet;
 use Lemuria\Engine\Fantasya\Event\Game\GoblinPlague;
 use Lemuria\Engine\Fantasya\Event\Game\PotionGift;
 use Lemuria\Engine\Fantasya\Event\Game\Spawn;
+use Lemuria\Engine\Fantasya\Event\Game\TheWildHunt;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
@@ -31,7 +33,6 @@ final class Timer extends DelegatedEvent
 	private const SCHEDULE = [
 		130 => [
 			['class' => Drought::class, 'options' => [Drought::RATE => 0.476]],
-			['class' => GoblinPlague::class, 'options' => [GoblinPlague::REGION => 3759, GoblinPlague::DURATION => 3]],
 			['class' => GoblinPlague::class, 'options' => [GoblinPlague::REGION => 3760, GoblinPlague::DURATION => 3]],
 			['class' => CarriedOffWayfarer::class, 'options' => [
 				CarriedOffWayfarer::REGION => 3949, CarriedOffWayfarer::RACE => Human::class,
@@ -39,14 +40,26 @@ final class Timer extends DelegatedEvent
 			]],
 			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => 3949, Spawn::SIZE => 1, Spawn::RACE => Zombie::class]],
 			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => 526, BlownByTheWind::SPELL => Farsight::class]],
-			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => 1693, BlownByTheWind::SPELL => GazeOfTheGriffin::class]],
-			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => 4687, BlownByTheWind::SPELL => AstralPassage::class]],
-			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 1603, PotionGift::POTION => DrinkOfCreation::class]],
-			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 3828, PotionGift::POTION => Brainpower::class]],
-			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 720149, PotionGift::POTION => ElixirOfPower::class]]
+			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 3828, PotionGift::POTION => Brainpower::class]]
 		],
 		140 => [
 			['class' => ResetGatherUnits::class, 'options' => [ResetGatherUnits::PARTY => 5, ResetGatherUnits::IS_LOOTING => false]]
+		],
+		141 => [
+			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 2856, FindWallet::SILVER => 2400]]
+		],
+		145 => [
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 1392]],
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 9]],
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 1285]],
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 21520]],
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 548735]],
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 3325]],
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 21574]],
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 4775]],
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 506462]],
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 680926]],
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 2701]]
 		]
 	];
 
