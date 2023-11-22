@@ -26,7 +26,10 @@ use Lemuria\Model\Fantasya\Quantity;
  */
 final class Commodity extends AbstractProduct
 {
-	private const EFFICIENCY = [
+	/**
+	 * @type array<string, float>
+	 */
+	private const array EFFICIENCY = [
 		LeatherArmor::class => 5.0
 	];
 

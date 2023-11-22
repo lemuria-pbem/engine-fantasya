@@ -17,9 +17,9 @@ final class Hunger extends AbstractUnitEffect
 {
 	use BuilderTrait;
 
-	private const FEED_THRESHOLD = 0.5;
+	private const float FEED_THRESHOLD = 0.5;
 
-	private const HEALTH_THRESHOLD = 0.9;
+	private const float HEALTH_THRESHOLD = 0.9;
 
 	protected ?bool $isReassign = null;
 

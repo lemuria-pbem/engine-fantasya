@@ -31,9 +31,9 @@ final class Entertain extends AllocationCommand implements Activity
 {
 	use DefaultActivityTrait;
 
-	public const QUOTA = 0.05;
+	public const float QUOTA = 0.05;
 
-	private const FEE = 20;
+	private const int FEE = 20;
 
 	private int $fee = 0;
 

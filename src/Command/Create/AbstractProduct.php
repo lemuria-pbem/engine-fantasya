@@ -40,7 +40,10 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 	use DefaultActivityTrait;
 	use WorkloadTrait;
 
-	protected final const CONSUMPTION = [
+	/**
+	 * @type array<string, array<string, float>>
+	 */
+	protected final const array CONSUMPTION = [
 		Alchemy::class        => [AlchemyKitchen::class => self::CONSUMPTION_RATE],
 		Armory::class         => [Saddlery::class       => self::CONSUMPTION_RATE],
 		Bowmaking::class      => [Blacksmith::class     => self::CONSUMPTION_RATE],
@@ -49,7 +52,7 @@ abstract class AbstractProduct extends UnitCommand implements Activity
 		Weaponry::class       => [Blacksmith::class     => self::CONSUMPTION_RATE]
 	];
 
-	private const CONSUMPTION_RATE = 0.5;
+	private const float CONSUMPTION_RATE = 0.5;
 
 	protected int $maximum = 0;
 

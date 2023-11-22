@@ -8,11 +8,11 @@ use Lemuria\Validate;
 
 class BattleBeginsMessage extends AbstractMessage
 {
-	private const REGION = 'region';
+	private const string REGION = 'region';
 
-	private const ATTACKERS = 'attackers';
+	private const string ATTACKERS = 'attackers';
 
-	private const DEFENDERS = 'defenders';
+	private const string DEFENDERS = 'defenders';
 
 	protected array $simpleParameters = [self::REGION];
 

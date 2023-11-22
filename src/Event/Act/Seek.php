@@ -23,7 +23,10 @@ class Seek implements Act
 	use ActTrait;
 	use MessageTrait;
 
-	protected const MONSTER = [
+	/**
+	 * @type array<string, array<string>>
+	 */
+	protected const array MONSTER = [
 		Zombie::class => [Bear::class, Goblin::class, Wolf::class]
 	];
 

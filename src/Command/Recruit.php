@@ -38,7 +38,10 @@ final class Recruit extends AllocationCommand
 	use CollectTrait;
 	use StatisticsTrait;
 
-	private const KNOWLEDGE = [Orc::class => [Bladefighting::class => 1, Spearfighting::class => 1]];
+	/**
+	 * @type array<string, array<string, int>>
+	 */
+	private const array KNOWLEDGE = [Orc::class => [Bladefighting::class => 1, Spearfighting::class => 1]];
 
 	private int $demand;
 

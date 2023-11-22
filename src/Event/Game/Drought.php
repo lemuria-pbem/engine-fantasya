@@ -26,11 +26,17 @@ final class Drought extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
-	public final const RATE = 'rate';
+	public final const string RATE = 'rate';
 
-	private const THRESHOLD = [Forest::class => 850, Highland::class => 100, Mountain::class => 50];
+	/**
+	 * @type array<string, int>
+	 */
+	private const array THRESHOLD = [Forest::class => 850, Highland::class => 100, Mountain::class => 50];
 
-	private const MAXIMUM = [Forest::class => 1000, Highland::class => 400, Mountain::class => 100];
+	/**
+	 * @type array<string, int>
+	 */
+	private const array MAXIMUM = [Forest::class => 1000, Highland::class => 400, Mountain::class => 100];
 
 	private float $rate;
 

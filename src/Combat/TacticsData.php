@@ -9,11 +9,11 @@ use Lemuria\Model\Fantasya\Unit;
 
 class TacticsData implements \Countable
 {
-	protected final const ONE_THIRD = 1.0 / 3.0;
+	protected final const float ONE_THIRD = 1.0 / 3.0;
 
-	protected const MIN_TACTICS = 0.05;
+	protected const float MIN_TACTICS = 0.05;
 
-	protected const MIN_ADVANCE = 1.0;
+	protected const float MIN_ADVANCE = 1.0;
 
 	protected array $sizes = [];
 

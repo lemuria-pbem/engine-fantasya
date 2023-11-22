@@ -9,11 +9,11 @@ use Lemuria\Storage\Provider;
 
 class LemuriaGame extends JsonGame
 {
-	protected const GAME_DIR = 'game';
+	protected const string GAME_DIR = 'game';
 
-	private const STRINGS_DIR = __DIR__ . '/../../resources';
+	private const string STRINGS_DIR = __DIR__ . '/../../resources';
 
-	private const STRINGS_FILE = 'strings.json';
+	private const string STRINGS_FILE = 'strings.json';
 
 	public function __construct(protected readonly LemuriaConfig $config) {
 		parent::__construct();

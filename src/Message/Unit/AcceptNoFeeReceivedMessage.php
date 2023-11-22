@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class AcceptNoFeeReceivedMessage extends AcceptNoFeeMessage
 {
-	public final const UNIT = 'unit';
+	public final const string UNIT = 'unit';
 
 	protected Result $result = Result::Event;
 

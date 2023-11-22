@@ -30,9 +30,15 @@ final class MonsterParties extends AbstractEvent
 {
 	use BuilderTrait;
 
-	private const IDS = ['m' => Goblin::class, 'z' => Zombie::class];
+	/**
+	 * @type array<string, string>
+	 */
+	private const array IDS = ['m' => Goblin::class, 'z' => Zombie::class];
 
-	private const IS_SENSING = [
+	/**
+	 * @type array<string, int>
+	 */
+	private const array IS_SENSING = [
 		Bear::class   => 7,
 		Ghoul::class  => 1,
 		Wolf::class   => 4,

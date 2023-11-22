@@ -17,7 +17,7 @@ final class UnpaidDemurrage extends AbstractVesselEffect
 {
 	use CollectTrait;
 
-	private const DEMURRAGE = 'demurrage';
+	private const string DEMURRAGE = 'demurrage';
 
 	private Resources $demurrage;
 

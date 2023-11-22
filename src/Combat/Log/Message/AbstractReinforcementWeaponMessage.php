@@ -10,7 +10,7 @@ use Lemuria\Validate;
 
 abstract class AbstractReinforcementWeaponMessage extends AbstractReinforcementMessage
 {
-	private const WEAPON = 'weapon';
+	private const string WEAPON = 'weapon';
 
 	protected string $weapon;
 

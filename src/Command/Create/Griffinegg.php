@@ -46,7 +46,7 @@ final class Griffinegg extends AllocationCommand implements Activity
 	use BuilderTrait;
 	use DefaultActivityTrait;
 
-	private const TACTICS = 4;
+	private const int TACTICS = 4;
 
 	private GriffineggModel $griffinegg;
 

@@ -29,17 +29,17 @@ final class BrokenCarriage extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
-	public final const PARTY = 'party';
+	public final const string PARTY = 'party';
 
-	public final const REGION = 'region';
+	public final const string REGION = 'region';
 
-	public final const CARGO = 'cargo';
+	public final const string CARGO = 'cargo';
 
-	private const NAME = 'Abgerissener Ork';
+	private const string NAME = 'Abgerissener Ork';
 
-	private const DESCRIPTION = 'Ein ziemlich wild und heruntergekommen aussehender Ork, offensichtlich am Ende seiner Kräfte.';
+	private const string DESCRIPTION = 'Ein ziemlich wild und heruntergekommen aussehender Ork, offensichtlich am Ende seiner Kräfte.';
 
-	private const HEALTH = 0.5;
+	private const float HEALTH = 0.5;
 
 	private Party $party;
 

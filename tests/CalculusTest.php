@@ -24,9 +24,15 @@ class CalculusTest extends Model
 {
 	use BuilderTrait;
 
-	protected final const KNOWLEDGE = [Stamina::class => 5];
+	/**
+	 * @type array<string, int>
+	 */
+	protected final const array KNOWLEDGE = [Stamina::class => 5];
 
-	protected final const INVENTORY = [Silver::class => 500];
+	/**
+	 * @type array<string, int>
+	 */
+	protected final const array INVENTORY = [Silver::class => 500];
 
 	protected UnitMock $unit;
 

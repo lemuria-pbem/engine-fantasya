@@ -327,7 +327,7 @@ use Lemuria\Singleton;
  */
 class CommandFactory
 {
-	public final const ALTERNATIVE_PREFIX = 'ALTERNATIVE';
+	public final const string ALTERNATIVE_PREFIX = 'ALTERNATIVE';
 
 	use BuilderTrait;
 
@@ -913,15 +913,18 @@ class CommandFactory
 		'Westen'     => Direction::West
 	];
 
-	protected final const APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Apply\\';
+	protected final const string APPLY_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Apply\\';
 
-	protected final const BATTLE_SPELL_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Combat\\Spell\\';
+	protected final const string BATTLE_SPELL_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Combat\\Spell\\';
 
-	protected final const CAST_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Cast\\';
+	protected final const string CAST_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Cast\\';
 
-	protected final const OPERATE_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Operate\\';
+	protected final const string OPERATE_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Command\\Operate\\';
 
-	protected final const APPLY_BREED = [
+	/**
+	 * @type array<string, array<string, string>>
+	 */
+	protected final const array APPLY_BREED = [
 		HorseBliss::class => [HorseBreeding::class => HorseBlissBreed::class]
 	];
 

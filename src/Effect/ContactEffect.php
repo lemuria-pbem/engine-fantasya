@@ -11,7 +11,7 @@ use Lemuria\Validate;
 
 final class ContactEffect extends AbstractPartyEffect
 {
-	private const FROM = 'from';
+	private const string FROM = 'from';
 
 	private People $from;
 

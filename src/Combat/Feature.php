@@ -7,7 +7,7 @@ namespace Lemuria\Engine\Fantasya\Combat;
  */
 enum Feature : int
 {
-	public final const SIZE = 256;
+	public final const int SIZE = 256;
 
 	case Shockwave = 1;
 

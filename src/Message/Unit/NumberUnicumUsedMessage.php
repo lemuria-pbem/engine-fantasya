@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class NumberUnicumUsedMessage extends AbstractUnitMessage
 {
-	public final const NEW_ID = 'newId';
+	public final const string NEW_ID = 'newId';
 
 	protected Result $result = Result::Failure;
 

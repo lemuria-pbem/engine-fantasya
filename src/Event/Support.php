@@ -36,7 +36,7 @@ final class Support extends AbstractEvent
 	use CollectTrait;
 	use StatisticsTrait;
 
-	public const SILVER = 10;
+	public const int SILVER = 10;
 
 	private Commodity $silver;
 

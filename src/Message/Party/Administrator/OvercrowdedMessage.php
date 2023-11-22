@@ -8,7 +8,7 @@ use Lemuria\Engine\Message\Result;
 
 class OvercrowdedMessage extends AbstractPartyMessage
 {
-	public final const REGION = 'region';
+	public final const string REGION = 'region';
 
 	protected Result $result = Result::Event;
 

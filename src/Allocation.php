@@ -26,7 +26,10 @@ final class Allocation
 {
 	use BuilderTrait;
 
-	public const POOL_COMMODITIES = [
+	/**
+	 * @type array<string, true>
+	 */
+	public const array POOL_COMMODITIES = [
 		Silver::class => true, Griffinegg::class => true,
 		Camel::class  => true, Elephant::class   => true, Griffin::class => true, Horse::class => true, Pegasus::class => true
 	];

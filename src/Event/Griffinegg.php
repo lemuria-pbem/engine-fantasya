@@ -21,7 +21,7 @@ final class Griffinegg extends AbstractEvent
 {
 	use BuilderTrait;
 
-	private const CHANCE = 0.15;
+	private const float CHANCE = 0.15;
 
 	private Commodity $griffin;
 

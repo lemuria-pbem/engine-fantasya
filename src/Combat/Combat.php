@@ -53,9 +53,12 @@ class Combat
 {
 	use BuilderTrait;
 
-	public final const ROW_NAME = [Rank::REFUGEE => 'refugees', Rank::BYSTANDER => 'bystanders', Rank::BACK => 'back', Rank::FRONT => 'front'];
+	/**
+	 * @type array<int, string>
+	 */
+	public final const array ROW_NAME = [Rank::REFUGEE => 'refugees', Rank::BYSTANDER => 'bystanders', Rank::BACK => 'back', Rank::FRONT => 'front'];
 
-	protected const OVERRUN = 3.0;
+	protected const float OVERRUN = 3.0;
 
 	protected int $round = 0;
 

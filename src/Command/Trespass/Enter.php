@@ -39,7 +39,10 @@ final class Enter extends UnitCommand implements Reassignment
 	use ReassignTrait;
 	use SiegeTrait;
 
-	public final const FORBIDDEN = [Monument::class, Ruin::class, Signpost::class];
+	/**
+	 * @type array<string>
+	 */
+	public final const array FORBIDDEN = [Monument::class, Ruin::class, Signpost::class];
 
 	protected function run(): void {
 		$n = $this->phrase->count();

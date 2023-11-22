@@ -10,7 +10,10 @@ use Lemuria\Factory\SingletonGroup;
  */
 class SingletonCatalog implements SingletonCatalogInterface
 {
-	private const GROUPS = [
+	/**
+	 * @type array<string>
+	 */
+	private const array GROUPS = [
 		'Message\\Construction',
 		'Message\\Party', 'Message\\Party\\Administrator', 'Message\\Party\\Event',
 		'Message\\Region', 'Message\\Region\\Event',

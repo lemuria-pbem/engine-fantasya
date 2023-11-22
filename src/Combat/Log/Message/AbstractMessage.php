@@ -18,9 +18,9 @@ abstract class AbstractMessage implements Message
 
 	private const ID = 'id';
 
-	private const TYPE = 'type';
+	private const string TYPE = 'type';
 
-	private const DEBUG = 'debug';
+	private const string DEBUG = 'debug';
 
 	/**
 	 * @var array<string>

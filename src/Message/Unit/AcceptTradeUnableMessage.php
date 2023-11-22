@@ -7,7 +7,7 @@ use Lemuria\Id;
 
 class AcceptTradeUnableMessage extends AcceptForbiddenTradeMessage
 {
-	public final const CUSTOMER = 'customer';
+	public final const string CUSTOMER = 'customer';
 
 	protected Id $customer;
 

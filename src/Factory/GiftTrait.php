@@ -22,7 +22,10 @@ trait GiftTrait
 {
 	use UnitTrait;
 
-	private const EVERYTHING = ['alle', 'alles'];
+	/**
+	 * @type array<string>
+	 */
+	private const array EVERYTHING = ['alle', 'alles'];
 
 	private int $amount;
 

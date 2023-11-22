@@ -12,7 +12,10 @@ use Lemuria\Model\Fantasya\Unit;
 
 class BattlePlan
 {
-	protected const ATTACK_REGION = [Canal::class, Monument::class, Quay::class, Ruin::class, Signpost::class, Site::class];
+	/**
+	 * @type array<string>
+	 */
+	protected const array ATTACK_REGION = [Canal::class, Monument::class, Quay::class, Ruin::class, Signpost::class, Site::class];
 
 	/**
 	 * @var array<int

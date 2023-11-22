@@ -8,13 +8,13 @@ use Lemuria\Validate;
 
 class CombatantNoWeaponMessage extends AbstractMessage
 {
-	private const COMBATANT = 'combatant';
+	private const string COMBATANT = 'combatant';
 
-	private const COUNT = 'count';
+	private const string COUNT = 'count';
 
-	private const FIGHTER = 'fighter';
+	private const string FIGHTER = 'fighter';
 
-	private const BATTLE_ROW = 'battleRow';
+	private const string BATTLE_ROW = 'battleRow';
 
 	protected array $simpleParameters = [self::COMBATANT, self::COUNT];
 

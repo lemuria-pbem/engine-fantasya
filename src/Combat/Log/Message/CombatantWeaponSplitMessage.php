@@ -7,11 +7,11 @@ use Lemuria\Validate;
 
 class CombatantWeaponSplitMessage extends AbstractMessage
 {
-	private const COMBATANT = 'combatant';
+	private const string COMBATANT = 'combatant';
 
-	private const COUNT = 'count';
+	private const string COUNT = 'count';
 
-	private const NEW_COMBATANT = 'newCombatant';
+	private const string NEW_COMBATANT = 'newCombatant';
 
 	protected array $simpleParameters = [self::COMBATANT, self::COUNT, self::NEW_COMBATANT];
 

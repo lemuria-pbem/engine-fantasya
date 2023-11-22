@@ -62,7 +62,10 @@ final class Calculus
 	use BuilderTrait;
 	use LodgingTrait;
 
-	private const CAMOUFLAGE_MALUS = [
+	/**
+	 * @type array<string, int>
+	 */
+	private const array CAMOUFLAGE_MALUS = [
 		Horse::class    => 1, Pegasus::class     => 1, Camel::class    => 1,
 		Elephant::class => 2, WarElephant::class => 2, Griffin::class  => 2,
 		Carriage::class => 2, Catapult::class    => 2

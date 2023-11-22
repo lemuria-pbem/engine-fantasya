@@ -6,11 +6,11 @@ use Lemuria\Validate;
 
 class AssaultHitMessage extends AbstractMessage
 {
-	private const ATTACKER = 'attacker';
+	private const string ATTACKER = 'attacker';
 
-	private const DAMAGE = 'damage';
+	private const string DAMAGE = 'damage';
 
-	private const DEFENDER = 'defender';
+	private const string DEFENDER = 'defender';
 
 	protected array $simpleParameters = [self::ATTACKER, self::DAMAGE, self::DEFENDER];
 

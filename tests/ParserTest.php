@@ -11,7 +11,7 @@ use Lemuria\Tests\Engine\Fantasya\Mock\MoveMock;
 
 class ParserTest extends Base
 {
-	protected const LINES = [
+	protected const array LINES = [
 		'@MACHEN Holz',      // => @ * MACHEN Holz
 		'=1 MACHEN Holz',    // => @ 0/2 MACHEN Holz
 		'=2 MACHEN Holz',    // => @ 0/3 MACHEN Holz

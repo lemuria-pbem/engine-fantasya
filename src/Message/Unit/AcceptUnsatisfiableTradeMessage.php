@@ -7,7 +7,7 @@ use Lemuria\Id;
 
 class AcceptUnsatisfiableTradeMessage extends AcceptForbiddenTradeMessage
 {
-	public final const MERCHANT = 'merchant';
+	public final const string MERCHANT = 'merchant';
 
 	protected Id $merchant;
 

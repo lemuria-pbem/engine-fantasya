@@ -10,7 +10,7 @@ use Lemuria\Singleton;
 
 class ReadMessage extends AbstractPartyMessage
 {
-	public final const UNICUM = 'unicum';
+	public final const string UNICUM = 'unicum';
 
 	protected Result $result = Result::Success;
 

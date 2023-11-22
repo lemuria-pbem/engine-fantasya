@@ -22,7 +22,10 @@ use Lemuria\Model\Fantasya\Unit;
 
 class ElementalBeing extends AbstractBattleSpell
 {
-	private const ELEMENTALS = [AirElemental::class, EarthElemental::class, FireElemental::class, WaterElemental::class];
+	/**
+	 * @type array<string>
+	 */
+	private const array ELEMENTALS = [AirElemental::class, EarthElemental::class, FireElemental::class, WaterElemental::class];
 
 	private static ?array $races = null;
 

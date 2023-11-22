@@ -7,7 +7,7 @@ use Lemuria\Singleton;
 
 class LearnVesselMessage extends LearnNotMessage
 {
-	public final const SHIP = 'ship';
+	public final const string SHIP = 'ship';
 
 	protected Singleton $ship;
 

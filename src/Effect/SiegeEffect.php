@@ -13,7 +13,7 @@ use Lemuria\Validate;
 
 final class SiegeEffect extends AbstractConstructionEffect
 {
-	private const PERCEPTION = 'perception';
+	private const string PERCEPTION = 'perception';
 
 	protected ?bool $isReassign = null;
 

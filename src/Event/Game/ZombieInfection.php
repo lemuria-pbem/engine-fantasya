@@ -32,17 +32,17 @@ final class ZombieInfection extends AbstractEvent
 	use MessageTrait;
 	use OptionsTrait;
 
-	public final const REGION = 'region';
+	public final const string REGION = 'region';
 
-	public final const INFECT = 'infect';
+	public final const string INFECT = 'infect';
 
-	public final const CHANCE = 'chance';
+	public final const string CHANCE = 'chance';
 
-	private const MAX_ZOMBIE_COUNT = 30;
+	private const int MAX_ZOMBIE_COUNT = 30;
 
-	private const MAX_ZOMBIE_SIZE = 1000;
+	private const int MAX_ZOMBIE_SIZE = 1000;
 
-	private const MAX_ZOMBIE_REGIONS = 25;
+	private const int MAX_ZOMBIE_REGIONS = 25;
 
 	private Region $region;
 

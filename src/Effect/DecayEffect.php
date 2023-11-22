@@ -21,11 +21,11 @@ final class DecayEffect extends AbstractConstructionEffect
 {
 	use BuilderTrait;
 
-	public final const MONUMENT = 4 * 2 * 3;
+	public final const int MONUMENT = 4 * 2 * 3;
 
-	private const AGE = 'age';
+	private const string AGE = 'age';
 
-	private const INTERVAL = 'interval';
+	private const string INTERVAL = 'interval';
 
 	private int $age = 0;
 

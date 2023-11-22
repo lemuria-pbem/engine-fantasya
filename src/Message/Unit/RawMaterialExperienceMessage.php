@@ -9,9 +9,9 @@ use Lemuria\Singleton;
 
 class RawMaterialExperienceMessage extends AbstractUnitMessage
 {
-	public final const TALENT = 'talent';
+	public final const string TALENT = 'talent';
 
-	public final const MATERIAL = 'material';
+	public final const string MATERIAL = 'material';
 
 	protected Result $result = Result::Failure;
 

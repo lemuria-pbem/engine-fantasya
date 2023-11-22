@@ -27,7 +27,10 @@ use Lemuria\Model\Fantasya\Composition\Spellbook;
  */
 final class UseCommand extends DelegatedCommand
 {
-	private const ACTIVITY_COMPOSITE = [Scroll::class => true, Spellbook::class => true];
+	/**
+	 * @type array<string, true>
+	 */
+	private const array ACTIVITY_COMPOSITE = [Scroll::class => true, Spellbook::class => true];
 
 	use OperateTrait;
 

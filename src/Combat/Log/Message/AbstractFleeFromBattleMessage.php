@@ -7,7 +7,7 @@ use Lemuria\Validate;
 
 abstract class AbstractFleeFromBattleMessage extends AbstractMessage
 {
-	private const COMBATANT = 'combatant';
+	private const string COMBATANT = 'combatant';
 
 	protected array $simpleParameters = [self::COMBATANT];
 

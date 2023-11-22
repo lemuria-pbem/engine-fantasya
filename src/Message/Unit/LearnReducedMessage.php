@@ -8,7 +8,7 @@ use Lemuria\Singleton;
 
 class LearnReducedMessage extends LearnProgressMessage
 {
-	public final const SHIP = 'ship';
+	public final const string SHIP = 'ship';
 
 	protected Result $result = Result::Failure;
 

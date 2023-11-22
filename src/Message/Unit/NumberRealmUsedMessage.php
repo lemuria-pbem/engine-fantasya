@@ -6,7 +6,7 @@ use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 
 class NumberRealmUsedMessage extends NumberUnitUsedMessage
 {
-	public final const REALM = 'realm';
+	public final const string REALM = 'realm';
 
 	protected string $realm;
 

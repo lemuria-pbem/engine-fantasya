@@ -6,7 +6,7 @@ use Lemuria\Validate;
 
 class CombatRoundMessage extends AbstractMessage
 {
-	private const ROUND = 'round';
+	private const string ROUND = 'round';
 
 	protected array $simpleParameters = [self::ROUND];
 

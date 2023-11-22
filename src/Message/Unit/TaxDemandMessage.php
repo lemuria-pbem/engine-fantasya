@@ -8,9 +8,9 @@ use Lemuria\Engine\Message\Section;
 
 class TaxDemandMessage extends AbstractUnitMessage
 {
-	public final const COLLECTORS = 'collectors';
+	public final const string COLLECTORS = 'collectors';
 
-	public final const RATE = 'rate';
+	public final const string RATE = 'rate';
 
 	protected Result $result = Result::Debug;
 

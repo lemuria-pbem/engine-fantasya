@@ -7,7 +7,7 @@ use Lemuria\Id;
 
 class MigrateFromMessage extends MigrateToMessage
 {
-	public final const PARTY = 'party';
+	public final const string PARTY = 'party';
 
 	protected Id $party;
 

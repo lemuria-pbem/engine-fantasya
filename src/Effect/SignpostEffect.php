@@ -12,9 +12,9 @@ use Lemuria\Validate;
 
 final class SignpostEffect extends AbstractConstructionEffect
 {
-	public const MINIMUM_LIFE = 50;
+	public const int MINIMUM_LIFE = 50;
 
-	private const AGE = 'age';
+	private const string AGE = 'age';
 
 	private int $age = 0;
 

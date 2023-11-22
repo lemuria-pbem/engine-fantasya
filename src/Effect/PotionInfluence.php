@@ -18,13 +18,13 @@ final class PotionInfluence extends AbstractRegionEffect
 {
 	use BuilderTrait;
 
-	private const POTIONS = 'potions';
+	private const string POTIONS = 'potions';
 
-	private const POTION = 'potion';
+	private const string POTION = 'potion';
 
-	private const COUNT = 'count';
+	private const string COUNT = 'count';
 
-	private const WEEKS = 'weeks';
+	private const string WEEKS = 'weeks';
 
 	protected ?bool $isReassign = null;
 

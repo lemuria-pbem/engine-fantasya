@@ -8,7 +8,7 @@ use Lemuria\Singleton;
 
 class CarcassNotMessage extends CarcassNothingMessage
 {
-	public final const ITEM = 'item';
+	public final const string ITEM = 'item';
 
 	protected Reliability $reliability = Reliability::Determined;
 

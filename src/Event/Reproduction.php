@@ -21,7 +21,10 @@ use Lemuria\Model\Fantasya\Unit;
 
 final class Reproduction
 {
-	public final const POPULATION = [
+	/**
+	 * @type array<string, array<string, float>>
+	 */
+	public final const array POPULATION = [
 		Bear::class   => [Forest::class => 1.0, Highland::class => 0.2, Mountain::class => 0.4, Plain::class => 0.5],
 		Goblin::class => [Desert::class => 0.5, Forest::class => 3.0, Highland::class => 2.0, Mountain::class => 1.0, Plain::class => 5.0, Swamp::class => 3.0],
 		Kraken::class => [Ocean::class  => 0.125],

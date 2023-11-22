@@ -14,7 +14,7 @@ use Lemuria\Validate;
 
 final class SpyEffect extends AbstractPartyEffect
 {
-	private const TARGETS = 'targets';
+	private const string TARGETS = 'targets';
 
 	/**
 	 * @var array<int, int>

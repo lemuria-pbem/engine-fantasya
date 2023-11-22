@@ -9,7 +9,7 @@ use Lemuria\Id;
 
 class TeachPartyMessage extends AbstractUnitMessage
 {
-	public final const UNIT = 'unit';
+	public final const string UNIT = 'unit';
 
 	protected Result $result = Result::Failure;
 

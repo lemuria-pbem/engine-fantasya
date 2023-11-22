@@ -15,7 +15,7 @@ abstract class AbstractTrip implements Trip
 {
 	use BuilderTrait;
 
-	protected final const MIN_SPEED = 1;
+	protected final const int MIN_SPEED = 1;
 
 	protected Movement $movement;
 

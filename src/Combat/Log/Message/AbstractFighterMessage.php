@@ -6,7 +6,7 @@ use Lemuria\Validate;
 
 abstract class AbstractFighterMessage extends AbstractMessage
 {
-	private const FIGHTER = 'fighter';
+	private const string FIGHTER = 'fighter';
 
 	protected array $simpleParameters = [self::FIGHTER];
 

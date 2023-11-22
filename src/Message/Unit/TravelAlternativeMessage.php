@@ -6,7 +6,7 @@ use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 
 class TravelAlternativeMessage extends TravelExploreLandMessage
 {
-	public final const ALTERNATIVE = 'alternative';
+	public final const string ALTERNATIVE = 'alternative';
 
 	protected string $direction;
 

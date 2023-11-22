@@ -7,7 +7,7 @@ use Lemuria\Engine\Message\Result;
 
 class OperatePracticeMessage extends OperateNoCompositionMessage
 {
-	public final const PRACTICE = 'practice';
+	public final const string PRACTICE = 'practice';
 
 	protected Result $result = Result::Debug;
 

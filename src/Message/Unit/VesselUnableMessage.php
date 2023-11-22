@@ -7,7 +7,7 @@ use Lemuria\Singleton;
 
 class VesselUnableMessage extends VesselCreateMessage
 {
-	public final const TALENT = 'talent';
+	public final const string TALENT = 'talent';
 
 	protected Singleton $talent;
 

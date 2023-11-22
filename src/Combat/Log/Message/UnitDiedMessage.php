@@ -8,11 +8,11 @@ use Lemuria\Validate;
 
 class UnitDiedMessage extends AbstractMessage
 {
-	private const ID = 'id';
+	private const string ID = 'id';
 
-	private const UNIT = 'unit';
+	private const string UNIT = 'unit';
 
-	private const NAME = 'name';
+	private const string NAME = 'name';
 
 	protected array $simpleParameters = [self::UNIT];
 

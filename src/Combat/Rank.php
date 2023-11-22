@@ -6,13 +6,13 @@ use Lemuria\Model\Fantasya\Combat\BattleRow;
 
 class Rank implements \ArrayAccess, \Countable, \Iterator
 {
-	public final const FRONT = BattleRow::Front->value;
+	public final const int FRONT = BattleRow::Front->value;
 
-	public final const BACK = BattleRow::Back->value;
+	public final const int BACK = BattleRow::Back->value;
 
-	public final const BYSTANDER = BattleRow::Bystander->value;
+	public final const int BYSTANDER = BattleRow::Bystander->value;
 
-	public final const REFUGEE = BattleRow::Refugee->value;
+	public final const int REFUGEE = BattleRow::Refugee->value;
 
 	/**
 	 * @var array<Combatant>

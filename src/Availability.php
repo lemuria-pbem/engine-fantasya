@@ -20,7 +20,7 @@ class Availability
 {
 	use BuilderTrait;
 
-	public final const HERBS_PER_REGION = 100;
+	public final const int HERBS_PER_REGION = 100;
 
 	protected readonly Resources $available;
 

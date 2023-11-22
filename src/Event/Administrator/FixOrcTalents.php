@@ -23,7 +23,7 @@ final class FixOrcTalents extends AbstractEvent
 {
 	use BuilderTrait;
 
-	private const LEVEL = 1;
+	private const int LEVEL = 1;
 
 	private Race $orc;
 

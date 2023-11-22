@@ -18,7 +18,7 @@ final class RegionLoot extends AbstractRegionEffect
 {
 	use MessageTrait;
 
-	private const ROUNDS = 'rounds';
+	private const string ROUNDS = 'rounds';
 
 	private int $rounds = 10;
 

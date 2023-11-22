@@ -7,7 +7,7 @@ use Lemuria\Validate;
 
 abstract class AbstractBattleSideMessage extends AbstractMessage
 {
-	private const PARTICIPANTS = 'participants';
+	private const string PARTICIPANTS = 'participants';
 
 	/**
 	 * @param array<Participant>|null $participants

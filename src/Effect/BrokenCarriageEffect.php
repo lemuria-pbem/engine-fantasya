@@ -11,7 +11,7 @@ use Lemuria\Validate;
 
 final class BrokenCarriageEffect extends AbstractPartyEffect
 {
-	private const UNIT = 'unit';
+	private const string UNIT = 'unit';
 
 	private ?Unit $unit = null;
 

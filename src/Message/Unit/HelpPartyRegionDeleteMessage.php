@@ -7,7 +7,7 @@ use Lemuria\Id;
 
 class HelpPartyRegionDeleteMessage extends HelpPartyDeleteMessage
 {
-	public final const REGION = 'region';
+	public final const string REGION = 'region';
 
 	protected Id $region;
 

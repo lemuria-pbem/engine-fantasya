@@ -18,11 +18,11 @@ final class PotionEffect extends AbstractUnitEffect
 {
 	use BuilderTrait;
 
-	private const POTION = 'potion';
+	private const string POTION = 'potion';
 
-	private const COUNT = 'count';
+	private const string COUNT = 'count';
 
-	private const WEEKS = 'weeks';
+	private const string WEEKS = 'weeks';
 
 	protected ?bool $isReassign = null;
 

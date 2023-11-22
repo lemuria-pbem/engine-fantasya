@@ -27,11 +27,11 @@ final class Growth extends AbstractEvent
 	use BuilderTrait;
 	use StatisticsTrait;
 
-	public const RATE = 0.02;
+	public const float RATE = 0.02;
 
-	private const NEIGHBOUR = 0.003;
+	private const float NEIGHBOUR = 0.003;
 
-	private const RANDOM = 0.3;
+	private const float RANDOM = 0.3;
 
 	private bool $isSeason = false;
 

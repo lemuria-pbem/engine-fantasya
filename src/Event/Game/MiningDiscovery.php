@@ -36,20 +36,23 @@ final class MiningDiscovery extends AbstractEvent
 	use MessageTrait;
 	use OptionsTrait;
 
-	public final const UNIT = 'unit';
+	public final const string UNIT = 'unit';
 
-	public final const DISCOVERY = 'discovery';
+	public final const string DISCOVERY = 'discovery';
 
-	public final const AMOUNT = 'amount';
+	public final const string AMOUNT = 'amount';
 
-	private const MAX_CHANCE = 0.25;
+	private const float MAX_CHANCE = 0.25;
 
-	private const CHANCE = [
+	/**
+	 * @type array<string, float>
+	 */
+	private const array CHANCE = [
 		Glacier::class => 0.12, Mountain::class => 0.04,
 		Iron::class    => 0.2,  Stone::class    => 0.05
 	];
 
-	private const MAX_GEM = 25;
+	private const int MAX_GEM = 25;
 
 	private static ?self $instance = null;
 

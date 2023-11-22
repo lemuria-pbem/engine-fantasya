@@ -14,7 +14,7 @@ use Lemuria\Validate;
 
 final class Unemployment extends AbstractContinentEffect
 {
-	private const PEASANTS = 'peasants';
+	private const string PEASANTS = 'peasants';
 
 	/**
 	 * @var array<int, Unemployment>

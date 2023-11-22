@@ -18,13 +18,13 @@ class CompositionDetails
 	use GrammarTrait;
 	use SerializableTrait;
 
-	protected final const DESCRIPTION = 'description';
+	protected final const string DESCRIPTION = 'description';
 
-	protected final const APPLY = 'apply';
+	protected final const string APPLY = 'apply';
 
-	protected final const TAKE = 'take';
+	protected final const string TAKE = 'take';
 
-	protected final const WRITE = 'write';
+	protected final const string WRITE = 'write';
 
 	protected static ?JsonProvider $provider = null;
 

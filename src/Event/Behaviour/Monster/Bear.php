@@ -12,11 +12,11 @@ use Lemuria\Model\Fantasya\Gang;
 
 class Bear extends AbstractBehaviour
 {
-	protected const CHANCE = 1.0;
+	protected const float CHANCE = 1.0;
 
-	protected const REPRODUCTION = 1;
+	protected const int REPRODUCTION = 1;
 
-	protected const PERISH = 0.01;
+	protected const float PERISH = 0.01;
 
 	/**
 	 * In Summer a group of bears splits into individuals. If there are exactly two bears in a region, they reproduce.

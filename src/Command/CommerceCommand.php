@@ -35,7 +35,10 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	use RealmTrait;
 	use SiegeTrait;
 
-	private const ALL = ['alle', 'alles'];
+	/**
+	 * @type array<string>
+	 */
+	private const array ALL = ['alle', 'alles'];
 
 	protected Resources $goods;
 

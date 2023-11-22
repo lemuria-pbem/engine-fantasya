@@ -6,9 +6,9 @@ use Lemuria\Model\Domain;
 
 interface Announcement
 {
-	public final const SENDER = 'sender';
+	public final const string SENDER = 'sender';
 
-	public final const RECIPIENT = 'recipient';
+	public final const string RECIPIENT = 'recipient';
 
 	public function Report(): Domain;
 

@@ -9,9 +9,9 @@ use Lemuria\Model\Fantasya\Talent\Magic;
 
 class Quickening extends AbstractBattleSpell
 {
-	protected const DURATION = 5;
+	protected const int DURATION = 5;
 
-	protected const FIGHTERS = 10;
+	protected const int FIGHTERS = 10;
 
 	protected int $duration;
 

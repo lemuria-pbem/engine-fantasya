@@ -51,15 +51,18 @@ final class PopulateContinent extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
-	public final const CONTINENT = 'continent';
+	public final const string CONTINENT = 'continent';
 
-	public final const CHANCES = 'chances';
+	public final const string CHANCES = 'chances';
 
-	public final const SIZES = 'sizes';
+	public final const string SIZES = 'sizes';
 
-	public final const VARIATION = 'variation';
+	public final const string VARIATION = 'variation';
 
-	private const LANDSCAPE = [
+	/**
+	 * @type array<string, string>
+	 */
+	private const array LANDSCAPE = [
 		Bear::class     => Forest::class,
 		Ent::class      => Forest::class,
 		Ghoul::class    => Swamp::class,
@@ -70,7 +73,10 @@ final class PopulateContinent extends AbstractEvent
 		Zombie::class   => Highland::class
 	];
 
-	private const SIZE = [
+	/**
+	 * @type array<string, int>
+	 */
+	private const array SIZE = [
 		Bear::class     =>  1,
 		Ent::class      =>  4,
 		Ghoul::class    =>  8,
@@ -81,7 +87,10 @@ final class PopulateContinent extends AbstractEvent
 		Zombie::class   =>  6
 	];
 
-	private const CHANCE = [
+	/**
+	 * @type array<string, int>
+	 */
+	private const array CHANCE = [
 		Bear::class     =>  7,
 		Ent::class      => 25,
 		Ghoul::class    => 30,
@@ -92,19 +101,28 @@ final class PopulateContinent extends AbstractEvent
 		Zombie::class   => 40
 	];
 
-	private const HAS_SHIELD = 0.5;
+	private const float HAS_SHIELD = 0.5;
 
-	private const HAS_ARMOR = 0.35;
+	private const float HAS_ARMOR = 0.35;
 
-	private const WEAPONS = [LooseWarhammer::class, RustyBattleaxe::class, RustySword::class, StumpSpear::class];
+	/**
+	 * @type array<string>
+	 */
+	private const array WEAPONS = [LooseWarhammer::class, RustyBattleaxe::class, RustySword::class, StumpSpear::class];
 
-	private const ARMOR = [DentedArmor::class, RustyMail::class, TatteredLeatherArmor::class];
+	/**
+	 * @type array<string>
+	 */
+	private const array ARMOR = [DentedArmor::class, RustyMail::class, TatteredLeatherArmor::class];
 
-	private const SHIELD = [DentedIronshield::class, SplitWoodshield::class];
+	/**
+	 * @type array<string>
+	 */
+	private const array SHIELD = [DentedIronshield::class, SplitWoodshield::class];
 
-	private const MAX_SKILL = 5;
+	private const int MAX_SKILL = 5;
 
-	private const VARIATION_VALUE = 0.33;
+	private const float VARIATION_VALUE = 0.33;
 
 	/**
 	 * @var array<Create>

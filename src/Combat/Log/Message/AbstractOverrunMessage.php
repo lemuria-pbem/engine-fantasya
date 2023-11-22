@@ -6,7 +6,7 @@ use Lemuria\Validate;
 
 abstract class AbstractOverrunMessage extends AbstractMessage
 {
-	private const ADDITIONAL = 'additional';
+	private const string ADDITIONAL = 'additional';
 
 	protected array $simpleParameters = [self::ADDITIONAL];
 

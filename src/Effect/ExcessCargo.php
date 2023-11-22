@@ -9,9 +9,9 @@ use Lemuria\Engine\Fantasya\State;
 
 final class ExcessCargo extends AbstractVesselEffect
 {
-	private const MIN_DAMAGE = 5;
+	private const int MIN_DAMAGE = 5;
 
-	private const MAX_DAMAGE = 10;
+	private const int MAX_DAMAGE = 10;
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);

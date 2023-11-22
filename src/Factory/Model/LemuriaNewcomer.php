@@ -21,21 +21,21 @@ class LemuriaNewcomer implements Newcomer, Serializable
 	use BuilderTrait;
 	use SerializableTrait;
 
-	private const UUID = 'uuid';
+	private const string UUID = 'uuid';
 
-	private const CREATION = 'creation';
+	private const string CREATION = 'creation';
 
-	private const NAME = 'name';
+	private const string NAME = 'name';
 
-	private const DESCRIPTION = 'description';
+	private const string DESCRIPTION = 'description';
 
-	private const RACE = 'race';
+	private const string RACE = 'race';
 
-	private const LANDSCAPE = 'landscape';
+	private const string LANDSCAPE = 'landscape';
 
-	private const ORIGIN = 'origin';
+	private const string ORIGIN = 'origin';
 
-	private const INVENTORY = 'inventory';
+	private const string INVENTORY = 'inventory';
 
 	private string $uuid;
 

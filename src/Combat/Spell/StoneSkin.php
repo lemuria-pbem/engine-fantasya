@@ -10,9 +10,9 @@ use Lemuria\Model\Fantasya\Talent\Magic;
 
 class StoneSkin extends AbstractBattleSpell
 {
-	public final const ATTACK_MALUS = 1;
+	public final const int ATTACK_MALUS = 1;
 
-	public final const BLOCK = 3;
+	public final const int BLOCK = 3;
 
 	public function cast(): int {
 		$grade = parent::cast();

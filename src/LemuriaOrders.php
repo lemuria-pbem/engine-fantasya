@@ -17,13 +17,13 @@ class LemuriaOrders implements Orders, Reassignment
 {
 	use SerializableTrait;
 
-	private const CURRENT = 'current';
+	private const string CURRENT = 'current';
 
-	private const DEFAULT = 'default';
+	private const string DEFAULT = 'default';
 
-	private const ID = 'id';
+	private const string ID = 'id';
 
-	private const ORDERS = 'orders';
+	private const string ORDERS = 'orders';
 
 	/**
 	 * @var array<int, array>

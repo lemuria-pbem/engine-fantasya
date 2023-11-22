@@ -24,9 +24,9 @@ class LemuriaReport implements Reassignment, Report
 {
 	use SerializableTrait;
 
-	private const MESSAGES = 'messages';
+	private const string MESSAGES = 'messages';
 
-	private const REMOVED = 'removed';
+	private const string REMOVED = 'removed';
 
 	/**
 	 * @var array<int, array>

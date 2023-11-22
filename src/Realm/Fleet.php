@@ -20,7 +20,10 @@ use Lemuria\Model\Reassignment;
  */
 class Fleet implements Reassignment
 {
-	protected const ALLOWED_ACTIVITIES = [Learn::class => true, Teach::class => true];
+	/**
+	 * @type array<string, true>
+	 */
+	protected const array ALLOWED_ACTIVITIES = [Learn::class => true, Teach::class => true];
 
 	/**
 	 * @var array<int, Wagoner>

@@ -6,7 +6,10 @@ use Lemuria\Exception\LemuriaException;
 
 class Ranks implements \ArrayAccess, \Countable, \Iterator
 {
-	public final const BATTLE_ROWS = [Rank::REFUGEE, Rank::BYSTANDER, Rank::BACK, Rank::FRONT];
+	/**
+	 * @type array<int>
+	 */
+	public final const array BATTLE_ROWS = [Rank::REFUGEE, Rank::BYSTANDER, Rank::BACK, Rank::FRONT];
 
 	/**
 	 * @var array<Rank>

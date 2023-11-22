@@ -21,23 +21,23 @@ class Goblin extends AbstractBehaviour
 {
 	use BuilderTrait;
 
-	protected const RATE = 0.33;
+	protected const float RATE = 0.33;
 
-	protected const VARIANCE = 0.2;
+	protected const float VARIANCE = 0.2;
 
-	protected const MINIMUM = 5;
+	protected const int MINIMUM = 5;
 
-	protected const MAXIMUM = 0.01;
+	protected const float MAXIMUM = 0.01;
 
-	protected const MAX_UNITS = 3;
+	protected const int MAX_UNITS = 3;
 
-	protected const SCATTER_UNITS = 3;
+	protected const int SCATTER_UNITS = 3;
 
-	protected const SCATTER_PERSONS = 31;
+	protected const int SCATTER_PERSONS = 31;
 
-	protected const GLOBAL_RATE = 0.33;
+	protected const float GLOBAL_RATE = 0.33;
 
-	protected const PERISH = 0.01;
+	protected const float PERISH = 0.01;
 
 	protected static ?int $globalMaximum = null;
 

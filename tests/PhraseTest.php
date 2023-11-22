@@ -10,7 +10,7 @@ use Lemuria\Engine\Fantasya\Phrase;
 
 class PhraseTest extends Base
 {
-	private const PHRASE = 'TEstE Klasse Phrase Cool';
+	private const string PHRASE = 'TEstE Klasse Phrase Cool';
 
 	#[Test]
 	public function construct(): Phrase {

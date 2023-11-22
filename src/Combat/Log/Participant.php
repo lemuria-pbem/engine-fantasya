@@ -11,13 +11,13 @@ final class Participant implements \Stringable, Serializable
 {
 	use SerializableTrait;
 
-	private const ID = 'id';
+	private const string ID = 'id';
 
-	private const NAME = 'name';
+	private const string NAME = 'name';
 
-	private const COMBATANTS = 'combatants';
+	private const string COMBATANTS = 'combatants';
 
-	private const FIGHTERS = 'fighters';
+	private const string FIGHTERS = 'fighters';
 
 	public int $combatants;
 

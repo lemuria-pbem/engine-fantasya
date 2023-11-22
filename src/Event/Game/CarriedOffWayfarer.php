@@ -22,11 +22,11 @@ final class CarriedOffWayfarer extends AbstractEvent
 	use CarcassBuilderTrait;
 	use OptionsTrait;
 
-	public final const REGION = 'region';
+	public final const string REGION = 'region';
 
-	public final const RACE = 'race';
+	public final const string RACE = 'race';
 
-	public final const INVENTORY = 'inventory';
+	public final const string INVENTORY = 'inventory';
 
 	private Race $race;
 

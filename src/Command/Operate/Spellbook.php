@@ -11,7 +11,7 @@ use Lemuria\Model\Fantasya\Composition\Spellbook as SpellbookModel;
 
 final class Spellbook extends AbstractOperate
 {
-	private const DISINTEGRATE = 3 * 3;
+	private const int DISINTEGRATE = 3 * 3;
 
 	use BurnTrait;
 	use LearnSpellTrait;

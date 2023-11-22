@@ -22,15 +22,15 @@ final class Spawn extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
-	public final const TYPE = 'type';
+	public final const string TYPE = 'type';
 
-	public final const PARTY = 'party';
+	public final const string PARTY = 'party';
 
-	public final const REGION = 'region';
+	public final const string REGION = 'region';
 
-	public final const RACE = 'race';
+	public final const string RACE = 'race';
 
-	public final const SIZE = 'size';
+	public final const string SIZE = 'size';
 
 	private Create $create;
 

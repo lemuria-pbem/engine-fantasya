@@ -4,9 +4,9 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 class RepairExperienceMessage extends CommodityExperienceMessage
 {
-	public const TALENT = parent::TALENT;
+	public const string TALENT = parent::TALENT;
 
-	public const ARTIFACT = parent::ARTIFACT;
+	public const string ARTIFACT = parent::ARTIFACT;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' has not enough experience in ' . $this->talent . ' to repair ' . $this->artifact . '.';

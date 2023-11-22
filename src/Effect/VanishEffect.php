@@ -14,9 +14,9 @@ use Lemuria\Validate;
 
 final class VanishEffect extends AbstractUnitEffect
 {
-	private const SUMMONER = 'summoner';
+	private const string SUMMONER = 'summoner';
 
-	private const WEEKS = 'weeks';
+	private const string WEEKS = 'weeks';
 
 	protected ?bool $isReassign = null;
 

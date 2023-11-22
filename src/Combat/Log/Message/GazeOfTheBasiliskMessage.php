@@ -6,7 +6,7 @@ use Lemuria\Validate;
 
 class GazeOfTheBasiliskMessage extends AbstractMessage
 {
-	private const ATTACKER = 'attacker';
+	private const string ATTACKER = 'attacker';
 
 	protected array $simpleParameters = [self::ATTACKER];
 

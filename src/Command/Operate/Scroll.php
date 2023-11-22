@@ -11,7 +11,7 @@ use Lemuria\Model\Fantasya\Composition\Scroll as ScrollModel;
 
 final class Scroll extends AbstractOperate
 {
-	private const DISINTEGRATE = 3;
+	private const int DISINTEGRATE = 3;
 
 	use BurnTrait;
 	use LearnSpellTrait;

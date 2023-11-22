@@ -38,7 +38,7 @@ final class Tax extends AllocationCommand implements Activity
 {
 	use DefaultActivityTrait;
 
-	private const RATE = 20;
+	private const int RATE = 20;
 
 	private int $rate = 0;
 

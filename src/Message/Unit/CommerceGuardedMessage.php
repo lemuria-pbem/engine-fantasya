@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class CommerceGuardedMessage extends CommerceNotPossibleMessage
 {
-	public final const PARTY = 'party';
+	public final const string PARTY = 'party';
 
 	protected Reliability $reliability = Reliability::Unreliable;
 

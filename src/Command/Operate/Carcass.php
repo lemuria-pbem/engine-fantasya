@@ -18,9 +18,12 @@ final class Carcass extends AbstractOperate
 {
 	use BurnTrait;
 
-	public final const DISINTEGRATE = 6;
+	public final const int DISINTEGRATE = 6;
 
-	public final const WITH_TROPHY = [Bear::class => true, Griffin::class => true];
+	/**
+	 * @type array<string, true>
+	 */
+	public final const array WITH_TROPHY = [Bear::class => true, Griffin::class => true];
 
 	public function take(): void {
 		$unicum  = $this->operator->Unicum();

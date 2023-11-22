@@ -32,9 +32,12 @@ final class TheWildHunt extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
-	public final const UNIT = 'unit';
+	public final const string UNIT = 'unit';
 
-	private const GIFTS = [
+	/**
+	 * @type array<string, int>
+	 */
+	private const array GIFTS = [
 		Gold::class       => 1,
 		Gem::class        => 10, Myrrh::class         => 10, Olibanum::class     => 10,
 		Peyote::class     => 3, Sandreeker::class     => 3, Snowcrystal::class   => 3,

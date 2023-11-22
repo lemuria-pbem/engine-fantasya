@@ -10,15 +10,15 @@ use Lemuria\Model\Calendar\Season;
 
 class Wolf extends AbstractBehaviour
 {
-	protected const GROW = 2;
+	protected const int GROW = 2;
 
-	protected const SPLIT = 11;
+	protected const int SPLIT = 11;
 
-	protected const GROW_MIN = 2;
+	protected const int GROW_MIN = 2;
 
-	protected const GROW_MAX = 3;
+	protected const int GROW_MAX = 3;
 
-	protected const PERISH = 0.01;
+	protected const float PERISH = 0.01;
 
 	/**
 	 * In Spring a group of wolves reproduces. If at any time there are more than ten wolves in the group, they split.

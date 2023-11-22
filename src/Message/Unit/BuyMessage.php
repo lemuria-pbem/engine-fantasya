@@ -9,7 +9,7 @@ use Lemuria\Item;
 
 class BuyMessage extends AbstractUnitMessage
 {
-	public final const PAYMENT = 'payment';
+	public final const string PAYMENT = 'payment';
 
 	protected Result $result = Result::Success;
 

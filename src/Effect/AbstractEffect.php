@@ -24,9 +24,9 @@ abstract class AbstractEffect implements Effect, Reassignment
 	use ActionTrait;
 	use SerializableTrait;
 
-	public final const CLASS_KEY = 'class';
+	public final const string CLASS_KEY = 'class';
 
-	private const ID = 'id';
+	private const string ID = 'id';
 
 	protected Context $context;
 

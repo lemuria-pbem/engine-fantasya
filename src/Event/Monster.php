@@ -15,7 +15,7 @@ use Lemuria\Model\Fantasya\Monster as MonsterModel;
  */
 final class Monster extends AbstractEvent
 {
-	private const NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Event\\Behaviour\\Monster';
+	private const string NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Event\\Behaviour\\Monster';
 
 	private static array $behaviours = [];
 

@@ -20,11 +20,17 @@ use Lemuria\Model\Fantasya\Regulation;
 
 class RealmQuota
 {
-	public final const DEFAULT_TREE = [Forest::class => 600, Highland::class => 100, Plain::class => 100, Swamp::class => 40];
+	/**
+	 * @type array<string, int>
+	 */
+	public final const array DEFAULT_TREE = [Forest::class => 600, Highland::class => 100, Plain::class => 100, Swamp::class => 40];
 
-	public final const DEFAULT_ANIMAL = [Horse::class => 100, Camel::class => 100, Elephant::class => 50];
+	/**
+	 * @type array<string, int>
+	 */
+	public final const array DEFAULT_ANIMAL = [Horse::class => 100, Camel::class => 100, Elephant::class => 50];
 
-	public final const DEFAULT_HERB = 0.5;
+	public final const float DEFAULT_HERB = 0.5;
 
 	protected readonly Regulation $regulation;
 

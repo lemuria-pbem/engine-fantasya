@@ -47,13 +47,13 @@ class Battle
 	use BuilderTrait;
 	use MessageTrait;
 
-	protected const EXHAUSTION_ROUNDS = 10;
+	protected const int EXHAUSTION_ROUNDS = 10;
 
-	protected const WEAR = 0.5;
+	protected const float WEAR = 0.5;
 
-	protected const WEAR_ROUNDS = 50;
+	protected const int WEAR_ROUNDS = 50;
 
-	protected const WEAR_DIVISOR = self::WEAR_ROUNDS ** 2 / self::WEAR;
+	protected const float WEAR_DIVISOR = self::WEAR_ROUNDS ** 2 / self::WEAR;
 
 	public int $counter;
 

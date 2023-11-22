@@ -16,11 +16,11 @@ final class Contagion extends AbstractRegionEffect
 {
 	use MessageTrait;
 
-	private const DISEASE = 'disease';
+	private const string DISEASE = 'disease';
 
-	private const DURATION = 'duration';
+	private const string DURATION = 'duration';
 
-	private const UNITS = 'units';
+	private const string UNITS = 'units';
 
 	protected ?bool $isReassign = null;
 

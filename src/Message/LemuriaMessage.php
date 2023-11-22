@@ -30,29 +30,29 @@ class LemuriaMessage implements Message
 	use ModelBuilderTrait;
 	use SerializableTrait;
 
-	private const ID = 'id';
+	private const string ID = 'id';
 
-	private const TYPE = 'type';
+	private const string TYPE = 'type';
 
-	private const ASSIGNEE = 'assignee';
+	private const string ASSIGNEE = 'assignee';
 
-	private const NEW_ASSIGNEE = 'newAssignee';
+	private const string NEW_ASSIGNEE = 'newAssignee';
 
-	private const ENTITIES = 'entities';
+	private const string ENTITIES = 'entities';
 
-	private const SINGLETONS = 'singletons';
+	private const string SINGLETONS = 'singletons';
 
-	private const ITEMS = 'items';
+	private const string ITEMS = 'items';
 
-	private const PARAMETERS = 'parameters';
+	private const string PARAMETERS = 'parameters';
 
-	private const ENTITY = 'e';
+	private const string ENTITY = 'e';
 
-	private const SINGLETON = 's';
+	private const string SINGLETON = 's';
 
-	private const ITEM = 'i';
+	private const string ITEM = 'i';
 
-	private const PARAMETER = 'p';
+	private const string PARAMETER = 'p';
 
 	private ?Id $id = null;
 

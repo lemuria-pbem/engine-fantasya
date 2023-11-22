@@ -46,7 +46,7 @@ final class Describe extends UnitCommand implements Reassignment
 {
 	use ReassignTrait;
 
-	private const UNICUM = 'gegenstand';
+	private const string UNICUM = 'gegenstand';
 
 	public static function trimDescription(string $description): string {
 		return trim($description, "\"'`^°§$%&/()={[]}\\+*~#<>|,-;:_ ");

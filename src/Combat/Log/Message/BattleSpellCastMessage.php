@@ -12,7 +12,7 @@ class BattleSpellCastMessage extends BattleSpellNoAuraMessage
 {
 	use BuilderTrait;
 
-	private const GRADE = 'grade';
+	private const string GRADE = 'grade';
 
 	protected Entity $unit;
 

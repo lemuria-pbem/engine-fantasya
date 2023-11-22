@@ -7,7 +7,7 @@ use Lemuria\Validate;
 
 class SongOfPeaceCombatantMessage extends AbstractMessage
 {
-	private const COMBATANT = 'combatant';
+	private const string COMBATANT = 'combatant';
 
 	protected array $simpleParameters = [self::COMBATANT];
 

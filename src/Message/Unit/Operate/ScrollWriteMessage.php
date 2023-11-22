@@ -9,7 +9,7 @@ use Lemuria\Singleton;
 
 class ScrollWriteMessage extends ScrollWriteNothingMessage
 {
-	public final const SPELL = 'spell';
+	public final const string SPELL = 'spell';
 
 	protected Result $result = Result::Success;
 

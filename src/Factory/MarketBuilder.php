@@ -21,9 +21,12 @@ class MarketBuilder
 {
 	use BuilderTrait;
 
-	public final const INITIAL_PRICE_FACTOR = 10;
+	public final const int INITIAL_PRICE_FACTOR = 10;
 
-	protected final const LUXURIES = [Balsam::class, Fur::class, Gem::class, Myrrh::class, Oil::class, Olibanum::class, Silk::class, Spice::class];
+	/**
+	 * @type array<string>
+	 */
+	protected final const array LUXURIES = [Balsam::class, Fur::class, Gem::class, Myrrh::class, Oil::class, Olibanum::class, Silk::class, Spice::class];
 
 	public function __construct(private readonly Intelligence $intelligence) {
 	}

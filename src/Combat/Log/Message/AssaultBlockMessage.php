@@ -6,9 +6,9 @@ use Lemuria\Validate;
 
 class AssaultBlockMessage extends AbstractMessage
 {
-	private const ATTACKER = 'attacker';
+	private const string ATTACKER = 'attacker';
 
-	private const DEFENDER = 'defender';
+	private const string DEFENDER = 'defender';
 
 	protected array $simpleParameters = [self::ATTACKER, self::DEFENDER];
 

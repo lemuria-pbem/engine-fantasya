@@ -24,7 +24,10 @@ use Lemuria\Model\Fantasya\Repairable;
 
 class RustyMist extends AbstractBattleSpell
 {
-	protected final const AFFECTED = [
+	/**
+	 * @type array<string, true>
+	 */
+	protected final const array AFFECTED = [
 		Battleaxe::class => true, Claymore::class, Sword::class => true,
 		Armor::class => true, Ironshield::class => true, Mail::class => true
 	];

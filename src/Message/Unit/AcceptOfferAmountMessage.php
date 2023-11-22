@@ -8,7 +8,7 @@ use Lemuria\Id;
 
 class AcceptOfferAmountMessage extends AcceptOfferRemovedMessage
 {
-	public final const UNIT = 'unit';
+	public final const string UNIT = 'unit';
 
 	protected Result $result = Result::Failure;
 

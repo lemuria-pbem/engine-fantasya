@@ -9,7 +9,7 @@ use Lemuria\Id;
 
 class TravelGuardMessage extends AbstractPartyMessage
 {
-	public final const UNIT = 'unit';
+	public final const string UNIT = 'unit';
 
 	protected Result $result = Result::Event;
 

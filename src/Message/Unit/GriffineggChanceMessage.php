@@ -8,7 +8,7 @@ use Lemuria\Engine\Message\Section;
 
 class GriffineggChanceMessage extends GriffineggOnlyMessage
 {
-	public final const CHANCE = 'chance';
+	public final const string CHANCE = 'chance';
 
 	protected Result $result = Result::Debug;
 

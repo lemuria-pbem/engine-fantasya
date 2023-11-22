@@ -30,13 +30,13 @@ abstract class TradeCommand extends UnitCommand
 	use BuilderTrait;
 	use TradeTrait;
 
-	protected final const AMOUNT = 0;
+	protected final const int AMOUNT = 0;
 
-	protected final const COMMODITY = 1;
+	protected final const int COMMODITY = 1;
 
-	protected final const PRICE = 2;
+	protected final const int PRICE = 2;
 
-	protected final const PAYMENT = 3;
+	protected final const int PAYMENT = 3;
 
 	protected Commodity $silver;
 

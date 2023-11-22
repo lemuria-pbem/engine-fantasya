@@ -13,7 +13,6 @@ use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Exception\CommandParserException;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\InvalidDefaultException;
-use Lemuria\Engine\Fantasya\Exception\ScriptException;
 use Lemuria\Engine\Fantasya\Exception\UnknownArgumentException;
 use Lemuria\Engine\Fantasya\Factory\BuilderTrait;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
@@ -49,7 +48,7 @@ class LemuriaTurn implements Turn
 {
 	use BuilderTrait;
 
-	protected const PROFILE_PREFIX = 'LemuriaTurn_';
+	protected const string PROFILE_PREFIX = 'LemuriaTurn_';
 
 	protected readonly CommandQueue $queue;
 

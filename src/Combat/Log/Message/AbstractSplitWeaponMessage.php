@@ -10,7 +10,7 @@ use Lemuria\Validate;
 
 abstract class AbstractSplitWeaponMessage extends AbstractSplitMessage
 {
-	private const WEAPON = 'weapon';
+	private const string WEAPON = 'weapon';
 
 	protected string $weapon;
 

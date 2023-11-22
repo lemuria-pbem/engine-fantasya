@@ -9,7 +9,7 @@ use Lemuria\Id;
 
 class TravelGuardedRegionMessage extends AbstractRegionMessage
 {
-	public final const PARTY = 'party';
+	public final const string PARTY = 'party';
 
 	protected Result $result = Result::Event;
 

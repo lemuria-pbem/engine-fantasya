@@ -16,9 +16,12 @@ use Lemuria\Model\Fantasya\Talent\Magic;
 
 class Fireball extends AbstractBattleSpell
 {
-	protected const VICTIMS = 5;
+	protected const int VICTIMS = 5;
 
-	protected const PROTECTION = [
+	/**
+	 * @type array<string, int>
+	 */
+	protected const array PROTECTION = [
 		Armor::class      => 3,
 		Ironshield::class => 5,
 		Mail::class       => 1,

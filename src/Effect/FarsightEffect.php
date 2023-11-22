@@ -12,7 +12,7 @@ use Lemuria\Validate;
 
 final class FarsightEffect extends AbstractRegionEffect
 {
-	private const PARTIES = 'parties';
+	private const string PARTIES = 'parties';
 
 	protected ?bool $isReassign = null;
 

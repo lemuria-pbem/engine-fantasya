@@ -17,8 +17,10 @@ final class CommandPriority
 {
 	/**
 	 * Execution order of all command classes.
+	 *
+	 * @type array<string, int>
 	 */
-	public final const ORDER = [
+	public final const array ORDER = [
 		// 0 forbidden
 		'EFFECT_BEFORE'  => 1,
 		'EVENT_BEFORE'   => 2,
@@ -124,22 +126,22 @@ final class CommandPriority
 	/**
 	 * Priority of A-Effects.
 	 */
-	public final const AFTER_EFFECT = self::A_ACTION - 1;
+	public final const int AFTER_EFFECT = self::A_ACTION - 1;
 
 	/**
 	 * Priority of B-Events.
 	 */
-	private const B_ACTION = 2;
+	private const int B_ACTION = 2;
 
 	/**
 	 * Priority of M-Events.
 	 */
-	private const M_ACTION = 51;
+	private const int M_ACTION = 51;
 
 	/**
 	 * Priority of A-Events.
 	 */
-	private const A_ACTION = 99;
+	private const int A_ACTION = 99;
 
 	private static ?CommandPriority $instance = null;
 

@@ -35,7 +35,7 @@ final class Steal extends UnitCommand implements Activity, Reassignment
 	use OneActivityTrait;
 	use ReassignTrait;
 
-	private const SILVER = 50;
+	private const int SILVER = 50;
 
 	private Commodity $silver;
 

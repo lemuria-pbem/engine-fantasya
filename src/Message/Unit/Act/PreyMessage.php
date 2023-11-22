@@ -7,7 +7,7 @@ use Lemuria\Id;
 
 class PreyMessage extends SeekMessage
 {
-	public final const PREY = 'prey';
+	public final const string PREY = 'prey';
 
 	protected Id $prey;
 

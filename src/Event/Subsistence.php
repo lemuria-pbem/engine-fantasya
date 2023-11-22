@@ -28,7 +28,7 @@ final class Subsistence extends AbstractEvent
 	use StatisticsTrait;
 	use WorkplacesTrait;
 
-	public const SILVER = 10;
+	public const int SILVER = 10;
 
 	private Workplaces $workplaces;
 

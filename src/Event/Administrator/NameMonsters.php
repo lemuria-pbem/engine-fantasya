@@ -17,7 +17,7 @@ use Lemuria\Model\Fantasya\Party\Type;
  */
 final class NameMonsters extends AbstractEvent
 {
-	private const PARTY = 'm';
+	private const string PARTY = 'm';
 
 	private Namer $namer;
 

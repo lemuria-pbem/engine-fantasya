@@ -50,17 +50,20 @@ final class Regrow extends AbstractEvent
 {
 	use BuilderTrait;
 
-	private const MINIMUM = 0.01;
+	private const float MINIMUM = 0.01;
 
-	private const GROW = 0.04;
+	private const float GROW = 0.04;
 
-	private const SHRINK = -0.05;
+	private const float SHRINK = -0.05;
 
-	private const MIGRATE = -0.05;
+	private const float MIGRATE = -0.05;
 
-	private const SWITCH = 0.1;
+	private const float SWITCH = 0.1;
 
-	private const HERBS = [
+	/**
+	 * @type array<string, array<string, string>>
+	 */
+	private const array HERBS = [
 		Plain::class => [
 			Glacier::class  => TangyTemerity::class, Desert::class => Flatroot::class,
 			Highland::class => TangyTemerity::class, Swamp::class  => Owlsgaze::class,

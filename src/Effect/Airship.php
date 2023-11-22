@@ -13,7 +13,7 @@ use Lemuria\Model\Fantasya\People;
 
 final class Airship extends AbstractVesselEffect
 {
-	private const WEIGHT = 100 * 100;
+	private const int WEIGHT = 100 * 100;
 
 	private People $mages;
 

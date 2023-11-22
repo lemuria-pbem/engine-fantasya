@@ -34,20 +34,24 @@ use Lemuria\Model\Fantasya\Storage\JsonProvider;
 use Lemuria\Model\World;
 use Lemuria\Model\World\HexagonalMap;
 use Lemuria\Registry;
+use Lemuria\Scenario\Scripts;
 
 abstract class LemuriaConfig implements \ArrayAccess, Config
 {
-	public final const ROUND = 'round';
+	public final const string ROUND = 'round';
 
-	public final const MDD = 'mdd';
+	public final const string MDD = 'mdd';
 
-	public final const CONFIG_FILE = 'config.json';
+	public final const string CONFIG_FILE = 'config.json';
 
-	public final const LOG_DIR = 'log';
+	public final const string LOG_DIR = 'log';
 
-	public final const LOG_FILE = 'lemuria.log';
+	public final const string LOG_FILE = 'lemuria.log';
 
-	private const DEFAULTS = [
+	/**
+	 * @type array<string, int>
+	 */
+	private const array DEFAULTS = [
 		self::ROUND => 0,
 		self::MDD   => 0
 	];
@@ -174,6 +178,10 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 
 	public function Namer(): Namer {
 		return new DefaultNamer();
+	}
+
+	public function Scripts(): ?Scripts {
+		return null;
 	}
 
 	public function getStoragePath(): string {

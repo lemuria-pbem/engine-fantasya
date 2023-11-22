@@ -42,7 +42,10 @@ use Lemuria\Engine\Fantasya\State;
 
 class DefaultProgress implements Progress
 {
-	protected const EVENTS = [
+	/**
+	 * @type array<string>
+	 */
+	protected const array EVENTS = [
 		// before
 		Administrator::class, Timer::class, Game::class, Visit::class, Monster::class, MarketFee::class, PortFee::class,
 		// middle

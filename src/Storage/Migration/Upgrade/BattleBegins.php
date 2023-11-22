@@ -12,16 +12,16 @@ use Lemuria\Model\Game;
 
 class BattleBegins extends AbstractUpgrade
 {
-	private const P_ENTITY = '|^([^\]]+)\[([0-9a-z]+)\]$|';
+	private const string P_ENTITY = '|^([^\]]+)\[([0-9a-z]+)\]$|';
 
-	private const P_ENTITIES = '([^\]]+\])';
+	private const string P_ENTITIES = '([^\]]+\])';
 
-	private const PATTERN = '|^In region ' . self::P_ENTITIES . ' a battle is raging: '
-	                      . 'Parties ' . self::P_ENTITIES . ' attack parties ' . self::P_ENTITIES . '\.$|';
+	private const string PATTERN = '|^In region ' . self::P_ENTITIES . ' a battle is raging: '
+								   . 'Parties ' . self::P_ENTITIES . ' attack parties ' . self::P_ENTITIES . '\.$|';
 
-	private const P_EXTRACT = '|^In region ([^\]]+\]) a battle is raging: Parties ([^.]+)\.$|';
+	private const string P_EXTRACT = '|^In region ([^\]]+\]) a battle is raging: Parties ([^.]+)\.$|';
 
-	private const SPLIT = ' attack parties ';
+	private const string SPLIT = ' attack parties ';
 
 	protected string $before = '1.2.0';
 

@@ -17,11 +17,11 @@ class SpellDetails
 {
 	use SerializableTrait;
 
-	protected final const DESCRIPTION = 'description';
+	protected final const string DESCRIPTION = 'description';
 
-	protected final const COMPONENTS = 'components';
+	protected final const string COMPONENTS = 'components';
 
-	protected final const AURA = 'aura';
+	protected final const string AURA = 'aura';
 
 	protected static ?JsonProvider $provider = null;
 

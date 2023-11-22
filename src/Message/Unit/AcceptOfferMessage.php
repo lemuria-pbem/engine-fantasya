@@ -10,9 +10,9 @@ use Lemuria\Model\Fantasya\Quantity;
 
 class AcceptOfferMessage extends AbstractUnitMessage
 {
-	public final const PAYMENT = 'payment';
+	public final const string PAYMENT = 'payment';
 
-	public final const UNIT = 'unit';
+	public final const string UNIT = 'unit';
 
 	protected Result $result = Result::Event;
 

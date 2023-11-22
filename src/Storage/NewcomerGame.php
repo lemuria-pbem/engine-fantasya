@@ -9,7 +9,7 @@ use Lemuria\Storage\Provider;
 
 class NewcomerGame extends LemuriaGame
 {
-	private const NEWCOMERS_FILE = 'newcomers.json';
+	private const string NEWCOMERS_FILE = 'newcomers.json';
 
 	public function __construct(NewcomerConfig $config) {
 		parent::__construct($config);

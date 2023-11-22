@@ -18,7 +18,10 @@ abstract class AbstractMessage implements MessageType
 	use GrammarTrait;
 	use SingletonTrait;
 
-	protected final const NOT_VARIABLE = ['dictionary' => true, 'level' => true];
+	/**
+	 * @type array<string, true>
+	 */
+	protected final const array NOT_VARIABLE = ['dictionary' => true, 'level' => true];
 
 	protected Result $result = Result::Debug;
 

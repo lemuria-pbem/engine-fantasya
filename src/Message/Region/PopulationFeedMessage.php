@@ -7,7 +7,7 @@ use Lemuria\Item;
 
 class PopulationFeedMessage extends PopulationGrowthMessage
 {
-	public final const SILVER = 'silver';
+	public final const string SILVER = 'silver';
 
 	protected Item $silver;
 

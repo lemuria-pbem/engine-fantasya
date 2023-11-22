@@ -34,11 +34,20 @@ class Quota extends UnitCommand
 {
 	use BuilderTrait;
 
-	private const HERB = ['kräuter', 'kraeuter'];
+	/**
+	 * @type array<string>
+	 */
+	private const array HERB = ['kräuter', 'kraeuter'];
 
-	private const PEASANT = ['bauer', 'bauern'];
+	/**
+	 * @type array<string>
+	 */
+	private const array PEASANT = ['bauer', 'bauern'];
 
-	private const TREE = ['baum', 'bäume'];
+	/**
+	 * @type array<string>
+	 */
+	private const array TREE = ['baum', 'bäume'];
 
 	private Quotas $quotas;
 

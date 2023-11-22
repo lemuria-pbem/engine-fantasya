@@ -23,15 +23,21 @@ final class Enchantment extends AbstractUnitEffect
 	use GrammarTrait;
 	use MessageTrait;
 
-	private const MESSAGE = [
+	/**
+	 * @type array<string, string>
+	 */
+	private const array MESSAGE = [
 		RingOfInvisibility::class => RingOfInvisibilityEnchantmentMessage::class
 	];
 
-	private const CREATE = [
+	/**
+	 * @type array<string, string>
+	 */
+	private const array CREATE = [
 		RingOfInvisibility::class => RingOfInvisibilityComposition::class
 	];
 
-	private const ENCHANTMENTS = 'enchantments';
+	private const string ENCHANTMENTS = 'enchantments';
 
 	private Wizardry $enchantments;
 

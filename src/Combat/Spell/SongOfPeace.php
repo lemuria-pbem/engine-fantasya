@@ -13,7 +13,7 @@ use Lemuria\Model\Fantasya\Talent\Magic;
 
 class SongOfPeace extends AbstractBattleSpell
 {
-	protected const POINTS = 10;
+	protected const int POINTS = 10;
 
 	public function cast(): int {
 		$grade = parent::cast();

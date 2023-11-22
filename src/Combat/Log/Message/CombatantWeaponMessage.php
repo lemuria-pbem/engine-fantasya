@@ -10,7 +10,7 @@ use Lemuria\Validate;
 
 class CombatantWeaponMessage extends CombatantNoWeaponMessage
 {
-	private const WEAPON = 'weapon';
+	private const string WEAPON = 'weapon';
 
 	protected string $weapon;
 

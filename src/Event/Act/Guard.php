@@ -21,9 +21,9 @@ class Guard implements Act
 	use ActTrait;
 	use MessageTrait;
 
-	protected const GUARD = 0.5;
+	protected const float GUARD = 0.5;
 
-	protected const UNGUARD = 0.2;
+	protected const float UNGUARD = 0.2;
 
 	protected bool $isGuarding;
 

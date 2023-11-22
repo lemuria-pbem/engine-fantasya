@@ -27,7 +27,10 @@ use Lemuria\Model\Fantasya\Spell\Farsight;
  */
 final class Timer extends DelegatedEvent
 {
-	private const SCHEDULE = [
+	/**
+	 * @type array<int, array<array>>
+	 */
+	private const array SCHEDULE = [
 		130 => [
 			['class' => Drought::class, 'options' => [Drought::RATE => 0.476]],
 			['class' => GoblinPlague::class, 'options' => [GoblinPlague::REGION => '', GoblinPlague::DURATION => 3]],

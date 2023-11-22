@@ -6,7 +6,7 @@ use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 
 class NameContinentMessage extends NameContinentUndoMessage
 {
-	public final const NAME = 'name';
+	public final const string NAME = 'name';
 
 	protected string $name;
 

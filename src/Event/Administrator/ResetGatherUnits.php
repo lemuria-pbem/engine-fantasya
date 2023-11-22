@@ -16,9 +16,9 @@ final class ResetGatherUnits extends AbstractEvent
 {
 	use OptionsTrait;
 
-	public final const PARTY = 'party';
+	public final const string PARTY = 'party';
 
-	public final const IS_LOOTING = 'isLooting';
+	public final const string IS_LOOTING = 'isLooting';
 
 	private Party $party;
 

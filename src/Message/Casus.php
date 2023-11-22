@@ -4,17 +4,20 @@ namespace Lemuria\Engine\Fantasya\Message;
 
 enum Casus : string
 {
-	private const NOMINATIVE = 'nom';
+	private const string NOMINATIVE = 'nom';
 
-	private const GENITIVE = 'gen';
+	private const string GENITIVE = 'gen';
 
-	private const DATIVE = 'dat';
+	private const string DATIVE = 'dat';
 
-	private const ACCUSATIVE = 'akk';
+	private const string ACCUSATIVE = 'akk';
 
-	private const ADJECTIVE = 'adj';
+	private const string ADJECTIVE = 'adj';
 
-	private const INDEX = [
+	/**
+	 * @type array<string, int>
+	 */
+	private const array INDEX = [
 		self::NOMINATIVE => 0, self::GENITIVE => 1, self::DATIVE => 2, self::ACCUSATIVE => 3,
 		self::ADJECTIVE  => 4
 	];

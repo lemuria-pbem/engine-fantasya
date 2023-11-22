@@ -7,9 +7,9 @@ namespace Lemuria\Engine\Fantasya\Exception;
  */
 class UnknownArgumentException extends CommandException
 {
-	public final const ARGUMENT = 'argument';
+	public final const string ARGUMENT = 'argument';
 
-	protected final const PLACEHOLDER = '{' . self::ARGUMENT . '}';
+	protected final const string PLACEHOLDER = '{' . self::ARGUMENT . '}';
 
 	private string $logMessage;
 

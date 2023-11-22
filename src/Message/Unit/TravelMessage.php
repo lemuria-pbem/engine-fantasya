@@ -9,7 +9,10 @@ use Lemuria\Engine\Fantasya\Travel\Movement;
 
 class TravelMessage extends AbstractUnitMessage
 {
-	protected const MOVES = [
+	/**
+	 * @type array<string, string>
+	 */
+	protected const array MOVES = [
 		Movement::Drive->name => 'drives',
 		Movement::Fly->name   => 'flies',
 		Movement::Ride->name  => 'rides',

@@ -9,15 +9,15 @@ use Lemuria\Validate;
 
 abstract class AbstractReinforcementMessage extends AbstractMessage
 {
-	private const COMBATANT = 'combatant';
+	private const string COMBATANT = 'combatant';
 
-	private const COUNT = 'count';
+	private const string COUNT = 'count';
 
-	private const UNIT = 'unit';
+	private const string UNIT = 'unit';
 
-	private const BATTLE_ROW = 'battleRow';
+	private const string BATTLE_ROW = 'battleRow';
 
-	private const NAME = 'name';
+	private const string NAME = 'name';
 
 	protected array $simpleParameters = [self::COMBATANT, self::COUNT, self::UNIT];
 

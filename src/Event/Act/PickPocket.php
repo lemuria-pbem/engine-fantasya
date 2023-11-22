@@ -27,13 +27,13 @@ class PickPocket implements Act
 	use BuilderTrait;
 	use MessageTrait;
 
-	protected const TRIES = 3;
+	protected const int TRIES = 3;
 
-	protected const NEED = 1;
+	protected const int NEED = 1;
 
-	protected const PICK = 10;
+	protected const int PICK = 10;
 
-	protected const MAXIMUM = 0.1;
+	protected const float MAXIMUM = 0.1;
 
 	protected People $enemy;
 

@@ -6,9 +6,9 @@ use Lemuria\Validate;
 
 class ShockwaveHitMessage extends AbstractMessage
 {
-	private const COMBATANT = 'combatant';
+	private const string COMBATANT = 'combatant';
 
-	private const COUNT = 'count';
+	private const string COUNT = 'count';
 
 	protected array $simpleParameters = [self::COMBATANT, self::COUNT];
 

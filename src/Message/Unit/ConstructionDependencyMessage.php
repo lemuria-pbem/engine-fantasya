@@ -8,7 +8,7 @@ use Lemuria\Singleton;
 
 class ConstructionDependencyMessage extends AbstractUnitMessage
 {
-	public final const DEPENDENCY = 'dependency';
+	public final const string DEPENDENCY = 'dependency';
 
 	protected Result $result = Result::Failure;
 

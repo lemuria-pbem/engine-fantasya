@@ -24,17 +24,17 @@ class BattleLog implements BattleModel
 	use IteratorTrait;
 	use SerializableTrait;
 
-	private const REGION = 'region';
+	private const string REGION = 'region';
 
-	private const COUNTER = 'counter';
+	private const string COUNTER = 'counter';
 
-	private const PARTIES = 'parties';
+	private const string PARTIES = 'parties';
 
-	private const REAL = 'real';
+	private const string REAL = 'real';
 
-	private const DISGUISE = 'disguise';
+	private const string DISGUISE = 'disguise';
 
-	private const MESSAGES = 'messages';
+	private const string MESSAGES = 'messages';
 
 	private Region $region;
 

@@ -67,9 +67,12 @@ final class Learn extends UnitCommand implements Activity
 	use RealmTrait;
 	use StatisticsTrait;
 
-	public final const PROGRESS = 100;
+	public final const int PROGRESS = 100;
 
-	private const EFFECTIVITY = [
+	/**
+	 * @type array<string, array<string, float>>
+	 */
+	private const array EFFECTIVITY = [
 		''                => [
 			Alchemy::class       => 0.5,  Archery::class      => 0.5,  Bladefighting::class => 0.75,
 			Crossbowing::class   => 0.5,  Entertaining::class => 0.75, Magic::class        => 0.5,
@@ -90,7 +93,10 @@ final class Learn extends UnitCommand implements Activity
 		]
 	];
 
-	private const FLEET_EXCEPTION = [Riding::class => true];
+	/**
+	 * @type array<string, true>
+	 */
+	private const array FLEET_EXCEPTION = [Riding::class => true];
 
 	private Calculus $calculus;
 

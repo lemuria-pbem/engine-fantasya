@@ -6,19 +6,19 @@ use Lemuria\Engine\Fantasya\Exception\OptionException;
 
 final class ThrowOption implements \ArrayAccess
 {
-	public final const NONE = 0;
+	public final const int NONE = 0;
 
-	public final const ANY = PHP_INT_MAX;
+	public final const int ANY = PHP_INT_MAX;
 
-	public final const EVALUATE = 1;
+	public final const int EVALUATE = 1;
 
-	public final const ADD = 2;
+	public final const int ADD = 2;
 
-	public final const SUBSTITUTE = 4;
+	public final const int SUBSTITUTE = 4;
 
-	public final const PHP = 8;
+	public final const int PHP = 8;
 
-	private const DEFAULT = 'ANY';
+	private const string DEFAULT = 'ANY';
 
 	/**
 	 * @var array<string, int>|null

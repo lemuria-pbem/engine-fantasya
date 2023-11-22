@@ -24,13 +24,13 @@ final class BlownByTheWind extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
-	public final const REGION = 'region';
+	public final const string REGION = 'region';
 
-	public final const SPELL = 'spell';
+	public final const string SPELL = 'spell';
 
-	private const DESCRIPTION = 'Ein leicht zerknittertes und fleckiges, beschriebenes Pergamentblatt.';
+	private const string DESCRIPTION = 'Ein leicht zerknittertes und fleckiges, beschriebenes Pergamentblatt.';
 
-	private const ROUNDS = 3;
+	private const int ROUNDS = 3;
 
 	protected ?Dictionary $dictionary;
 

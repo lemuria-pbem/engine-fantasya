@@ -33,15 +33,15 @@ final class Population extends AbstractEvent
 	use StatisticsTrait;
 	use WorkplacesTrait;
 
-	public const UNEMPLOYMENT = 5.0;
+	public const float UNEMPLOYMENT = 5.0;
 
-	private const RATE = 0.01;
+	private const float RATE = 0.01;
 
-	private const MIGRATION = 0.1;
+	private const float MIGRATION = 0.1;
 
-	private const WEALTH = 24;
+	private const int WEALTH = 24;
 
-	private const BOOST = 10.0;
+	private const float BOOST = 10.0;
 
 	private Workplaces $workplaces;
 

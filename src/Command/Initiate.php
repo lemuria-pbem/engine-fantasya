@@ -73,7 +73,10 @@ use Lemuria\SortMode;
  */
 final class Initiate implements Command
 {
-	private const LANDSCAPES = [
+	/**
+	 * @type array<string, array<string>>
+	 */
+	private const array LANDSCAPES = [
 		Aquan::class    => [Plain::class, Forest::class],
 		Dwarf::class    => [Mountain::class, Highland::class],
 		Elf::class      => [Forest::class, Plain::class, Highland::class, Swamp::class],
@@ -83,7 +86,10 @@ final class Initiate implements Command
 		Troll::class    => [Highland::class, Mountain::class, Desert::class, Plain::class]
 	];
 
-	private const KNOWLEDGE = [
+	/**
+	 * @type array<string, array<string, int>>
+	 */
+	private const array KNOWLEDGE = [
 		Aquan::class    => [Navigation::class => 12, Shipbuilding::class => 8, Spearfighting::class => 5],
 		Dwarf::class    => [Mining::class => 12, Constructing::class => 8, Bladefighting::class => 5],
 		Elf::class      => [Perception::class => 12, Camouflage::class => 8, Archery::class => 5],
@@ -93,9 +99,15 @@ final class Initiate implements Command
 		Troll::class    => [Quarrying::class => 12, Stamina::class => 8, Bladefighting::class => 5]
 	];
 
-	private const EVERYONE = [Silver::class => 10000, Wood::class => 500, Stone::class => 500, Iron::class => 500];
+	/**
+	 * @type array<string, int>
+	 */
+	private const array EVERYONE = [Silver::class => 10000, Wood::class => 500, Stone::class => 500, Iron::class => 500];
 
-	private const INVENTORY = [
+	/**
+	 * @type array<string, array<string, int>>
+	 */
+	private const array INVENTORY = [
 		Aquan::class    => [Spear::class => 1, Mail::class => 1, Woodshield::class => 1],
 		Dwarf::class    => [Battleaxe::class => 1, Armor::class => 1, Ironshield::class => 1],
 		Elf::class      => [Bow::class => 1, Mail::class => 1],

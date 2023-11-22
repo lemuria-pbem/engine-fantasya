@@ -31,7 +31,10 @@ final class Obtainment extends AbstractEvent
 {
 	use BuilderTrait;
 
-	private const SPELL = [
+	/**
+	 * @type array<int, string>
+	 */
+	private const array SPELL = [
 		1 => Quacksalver::class,
 		2 => SongOfPeace::class,
 		3 => Fireball::class,

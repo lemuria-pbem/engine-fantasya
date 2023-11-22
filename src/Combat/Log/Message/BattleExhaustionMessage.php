@@ -6,7 +6,7 @@ use Lemuria\Validate;
 
 class BattleExhaustionMessage extends AbstractMessage
 {
-	private const ROUNDS = 'rounds';
+	private const string ROUNDS = 'rounds';
 
 	protected array $simpleParameters = [self::ROUNDS];
 

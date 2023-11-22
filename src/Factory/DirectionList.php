@@ -9,13 +9,13 @@ use Lemuria\Model\World\Direction;
 
 class DirectionList implements \Countable
 {
-	private const NORTH_EAST = 'NO';
+	private const string NORTH_EAST = 'NO';
 
-	private const EAST = 'O';
+	private const string EAST = 'O';
 
-	private const SOUTH_EAST = 'SO';
+	private const string SOUTH_EAST = 'SO';
 
-	private const ROUTE_STOP = 'Pause';
+	private const string ROUTE_STOP = 'Pause';
 
 	private readonly CommandFactory $factory;
 

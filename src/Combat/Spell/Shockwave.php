@@ -10,7 +10,7 @@ use Lemuria\Model\Fantasya\Talent\Magic;
 
 class Shockwave extends AbstractBattleSpell
 {
-	protected const VICTIMS = 5;
+	protected const int VICTIMS = 5;
 
 	public function cast(): int {
 		$grade = parent::cast();

@@ -32,15 +32,15 @@ final class Spy extends UnitCommand implements Activity
 {
 	use OneActivityTrait;
 
-	public const LEVEL_REVEAL_DISGUISE = 5;
+	public const int LEVEL_REVEAL_DISGUISE = 5;
 
-	private const SPY_BASE = 50;
+	private const int SPY_BASE = 50;
 
-	private const SPY_BONUS = 10;
+	private const int SPY_BONUS = 10;
 
-	private const DISCOVER_BASE = 50;
+	private const int DISCOVER_BASE = 50;
 
-	private const DISCOVER_BONUS = 5;
+	private const int DISCOVER_BONUS = 5;
 
 	protected function run(): void {
 		if ($this->phrase->count() !== 1) {

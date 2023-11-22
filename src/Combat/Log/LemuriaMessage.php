@@ -10,9 +10,9 @@ class LemuriaMessage
 {
 	use SerializableTrait;
 
-	private const NAMESPACE = __NAMESPACE__ . '\\Message\\';
+	private const string NAMESPACE = __NAMESPACE__ . '\\Message\\';
 
-	private const TYPE = 'type';
+	private const string TYPE = 'type';
 
 	public function unserialize(array $data): Message {
 		$this->validateSerializedData($data);

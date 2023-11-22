@@ -15,7 +15,7 @@ use Lemuria\Validate;
 
 final class UnicumRead extends AbstractPartyEffect
 {
-	private const TREASURY = 'treasury';
+	private const string TREASURY = 'treasury';
 
 	private const INVENTORY = 'inventory';
 

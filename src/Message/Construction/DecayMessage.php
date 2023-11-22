@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Construction;
 
-use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message\Result;
 use Lemuria\Singleton;

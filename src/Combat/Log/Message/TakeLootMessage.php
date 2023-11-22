@@ -14,15 +14,15 @@ class TakeLootMessage extends AbstractMessage
 {
 	use BuilderTrait;
 
-	private const ID = 'id';
+	private const string ID = 'id';
 
-	private const UNIT = 'unit';
+	private const string UNIT = 'unit';
 
-	private const NAME = 'name';
+	private const string NAME = 'name';
 
-	private const COMMODITY = 'commodity';
+	private const string COMMODITY = 'commodity';
 
-	private const COUNT = 'count';
+	private const string COUNT = 'count';
 
 	protected array $simpleParameters = [self::UNIT];
 

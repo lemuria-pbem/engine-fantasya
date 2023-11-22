@@ -23,17 +23,17 @@ use Lemuria\Model\Fantasya\Vessel;
 
 class Kraken extends AbstractBehaviour
 {
-	protected const CHANCE = 0.5;
+	protected const float CHANCE = 0.5;
 
-	protected const REPRODUCTION = 1;
+	protected const int REPRODUCTION = 1;
 
-	protected const CURIOSITY_SMALL = 0.2;
+	protected const float CURIOSITY_SMALL = 0.2;
 
-	protected const CURIOSITY_BIG = 0.8;
+	protected const float CURIOSITY_BIG = 0.8;
 
-	protected const MAX_PROVOKE = 0.9;
+	protected const float MAX_PROVOKE = 0.9;
 
-	protected const PERISH = 0.01;
+	protected const float PERISH = 0.01;
 
 	/**
 	 * Two or more krakens in the same region reproduce if there are no other krakens in the neighbour regions.

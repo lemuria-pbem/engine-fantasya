@@ -13,7 +13,7 @@ use Lemuria\Validate;
 
 final class NonAggressionPact extends AbstractPartyEffect
 {
-	private const ROUNDS = 'rounds';
+	private const string ROUNDS = 'rounds';
 
 	private int $rounds = 24;
 

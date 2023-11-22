@@ -12,13 +12,13 @@ class BattleSpellNoAuraMessage extends AbstractMessage
 {
 	use BuilderTrait;
 
-	private const ID = 'id';
+	private const string ID = 'id';
 
-	private const UNIT = 'unit';
+	private const string UNIT = 'unit';
 
-	private const NAME = 'name';
+	private const string NAME = 'name';
 
-	private const SPELL = 'spell';
+	private const string SPELL = 'spell';
 
 	protected Entity $unit;
 

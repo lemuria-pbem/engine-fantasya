@@ -54,35 +54,47 @@ final class Fauna extends AbstractEvent
 	use StatisticsTrait;
 	use WorkplacesTrait;
 
-	private const ANIMAL = [Camel::class, Elephant::class, Griffin::class, Horse::class];
+	/**
+	 * @type array<string>
+	 */
+	private const array ANIMAL = [Camel::class, Elephant::class, Griffin::class, Horse::class];
 
-	private const RATE = [
+	/**
+	 * @type array<string, array<string, float>>
+	 */
+	private const array RATE = [
 		Camel::class    => [Desert::class  => 0.01, Highland::class => 0.005, Plain::class => 0.002, Mountain::class    => 0.002],
 		Elephant::class => [Swamp::class   => 0.01, Forest::class   => 0.002, Plain::class => 0.002],
 		Griffin::class  => [Glacier::class => 0.002],
 		Horse::class    => [Plain::class   => 0.01, Forest::class   => 0.005, Highland::class => 0.005, Mountain::class => 0.002]
 	];
 
-	private const SEASON = [
+	/**
+	 * @type array<string, array<int, true>>
+	 */
+	private const array SEASON = [
 		Camel::class    => [Season::Fall->value   => true, Season::Winter->value => true],
 		Elephant::class => [Season::Spring->value => true, Season::Fall->value   => true, Season::Winter->value => true],
 		Griffin::class  => [Season::Spring->value => true],
 		Horse::class    => [Season::Spring->value => true, Season::Summer->value => true]
 	];
 
-	private const BOOST = [Camel::class => 0.0, Elephant::class => 0.0, Griffin::class => 0.0, Horse::class => 4.0];
+	/**
+	 * @type array<string, float>
+	 */
+	private const array BOOST = [Camel::class => 0.0, Elephant::class => 0.0, Griffin::class => 0.0, Horse::class => 4.0];
 
-	private const MAX_RATE = 0.01;
+	private const float MAX_RATE = 0.01;
 
-	private const MIGRATION = 0.2;
+	private const float MIGRATION = 0.2;
 
-	private const HUNGER = 0.1;
+	private const float HUNGER = 0.1;
 
-	private const EGG_PROBABILITY = 0.25;
+	private const float EGG_PROBABILITY = 0.25;
 
-	private const PERISH_BASE = 150;
+	private const int PERISH_BASE = 150;
 
-	private const PERISH_CHANCE = 0.01;
+	private const float PERISH_CHANCE = 0.01;
 
 	private Workplaces $workplaces;
 

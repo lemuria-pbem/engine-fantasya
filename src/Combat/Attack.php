@@ -50,16 +50,25 @@ class Attack
 {
 	use BuilderTrait;
 
-	public final const TWO_HANDED = [
+	/**
+	 * @type array<string, true>
+	 */
+	public final const array TWO_HANDED = [
 		Claymore::class    => true, Halberd::class       => true,
 		BentHalberd::class => true, RustyClaymore::class => true
 	];
 
-	protected const DAMAGE_BONUS = [
+	/**
+	 * @type array<string, float>
+	 */
+	protected const array DAMAGE_BONUS = [
 		Bow::class => 0.5
 	];
 
-	protected const BLOCK_BONUS = [
+	/**
+	 * @type array<string, int>
+	 */
+	protected const array BLOCK_BONUS = [
 		Ironshield::class => 2,
 		Woodshield::class => 1,
 
@@ -67,7 +76,7 @@ class Attack
 		SplitWoodshield::class  => 0
 	];
 
-	protected const ATTACK_MALUS = [
+	protected const array ATTACK_MALUS = [
 		Armor::class        => 2,
 		LeatherArmor::class => 0,
 		Mail::class         => 1,
@@ -77,13 +86,22 @@ class Attack
 		RustyMail::class            => 1
 	];
 
-	protected const ATTACK_FAILURE = [
+	/**
+	 * @type array<string, array<string>>
+	 */
+	protected const array ATTACK_FAILURE = [
 		WarElephant::class => [Halberd::class, Spear::class]
 	];
 
-	protected const BASILISK_WEAPON = [Warhammer::class, Catapult::class];
+	/**
+	 * @type array<string>
+	 */
+	protected const array BASILISK_WEAPON = [Warhammer::class, Catapult::class];
 
-	protected const WIND_EFFECT = [
+	/**
+	 * @type array<string, float>
+	 */
+	protected const array WIND_EFFECT = [
 		Bow::class      => 1.0,
 		Catapult::class => 0.2,
 		Crossbow::class => 0.5,
@@ -93,11 +111,14 @@ class Attack
 		UngirtCrossbow::class => 1.0
 	];
 
-	protected const FLIGHT = [1.0, 0.9, 0.9, 0.9, 0.2, 0.2, 0.0];
+	/**
+	 * @type array<float>
+	 */
+	protected const array FLIGHT = [1.0, 0.9, 0.9, 0.9, 0.2, 0.2, 0.0];
 
-	protected const BLOCK_EFFECT = 0.5;
+	protected const float BLOCK_EFFECT = 0.5;
 
-	protected const INFECTION = 0.3;
+	protected const float INFECTION = 0.3;
 
 	private float $flight;
 

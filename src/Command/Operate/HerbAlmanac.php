@@ -21,7 +21,7 @@ use Lemuria\Model\Fantasya\Region;
 
 final class HerbAlmanac extends AbstractOperate
 {
-	private const DISINTEGRATE = 4;
+	private const int DISINTEGRATE = 4;
 
 	use BurnTrait;
 

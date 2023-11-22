@@ -63,9 +63,15 @@ final class Construction extends AbstractProduct
 	use GrammarTrait;
 	use ModifiedActivityTrait;
 
-	private const FORBIDDEN = [Ruin::class, Signpost::class];
+	/**
+	 * @type array<string>
+	 */
+	private const array FORBIDDEN = [Ruin::class, Signpost::class];
 
-	private const EXTENSIONS = [
+	/**
+	 * @type array<string, array<string>>
+	 */
+	private const array EXTENSIONS = [
 		Canal::class  => [Fee::class],
 		Market::class => [MarketExtension::class],
 		Port::class   => [Fee::class, Duty::class]

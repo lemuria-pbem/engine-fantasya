@@ -6,7 +6,7 @@ use Lemuria\Model\Fantasya\Unit;
 
 class Teacher
 {
-	private const MAX_STUDENTS = 10;
+	private const int MAX_STUDENTS = 10;
 
 	protected int $students = 0;
 

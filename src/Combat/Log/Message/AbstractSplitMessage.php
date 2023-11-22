@@ -9,19 +9,19 @@ use Lemuria\Validate;
 
 abstract class AbstractSplitMessage extends AbstractMessage
 {
-	private const ID = 'id';
+	private const string ID = 'id';
 
-	private const UNIT = 'unit';
+	private const string UNIT = 'unit';
 
-	private const NAME = 'name';
+	private const string NAME = 'name';
 
-	private const FROM = 'from';
+	private const string FROM = 'from';
 
-	private const TO = 'to';
+	private const string TO = 'to';
 
-	private const COUNT = 'count';
+	private const string COUNT = 'count';
 
-	private const BATTLE_ROW = 'battleRow';
+	private const string BATTLE_ROW = 'battleRow';
 
 	protected array $simpleParameters = [self::COUNT, self::FROM, self::TO, self::UNIT];
 

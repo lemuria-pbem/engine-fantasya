@@ -51,6 +51,7 @@
     <inspection_tool class="CssBrowserCompatibilityForProperties" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="CssConvertColorToHexInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="CssConvertColorToRgbInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="CssDeprecatedValue" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="CssInvalidAtRule" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="CssInvalidCharsetRule" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="CssInvalidFunction" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -79,6 +80,7 @@
       </option>
     </inspection_tool>
     <inspection_tool class="CssUnknownTarget" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="CssUnknownUnit" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="CssUnresolvedClassInComposesRule" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="CssUnresolvedCustomProperty" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="CssUnusedSymbol" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -417,6 +419,7 @@
     <inspection_tool class="PhpAbstractStaticMethodInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpAccessStaticViaInstanceInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpAccessingStaticMembersOnTraitInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpAddOverrideAttributeInspection" enabled="false" level="INFORMATION" enabled_by_default="false" />
     <inspection_tool class="PhpApplyingEmptyIndexOperatorOnStringInspection" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="PhpArgumentWithoutNamedIdentifierInspection" enabled="true" level="INFORMATION" enabled_by_default="true" />
     <inspection_tool class="PhpArithmeticTypeCheckInspection" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -478,6 +481,7 @@
     <inspection_tool class="PhpConstantReassignmentInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpConstructorStyleInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpContinueTargetingSwitchInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpConvertToJsonValidateInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpCoveredCharacterInClassInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpCurlyBraceAccessSyntaxUsageInspection" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="PhpDangerousArrayInitializationInspection" enabled="true" level="INFORMATION" enabled_by_default="true" />
@@ -593,6 +597,7 @@
     <inspection_tool class="PhpMethodOrClassCallIsNotCaseSensitiveInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpMethodParametersCountMismatchInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpMissingBreakStatementInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpMissingClassConstantTypeInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpMissingDocCommentInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpMissingFieldTypeInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpMissingParamTypeInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
@@ -629,6 +634,7 @@
     <inspection_tool class="PhpObjectFieldsAreOnlyWrittenInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpObjectShapeCanBeAddedInspection" enabled="false" level="INFORMATION" enabled_by_default="false" />
     <inspection_tool class="PhpOptionalBeforeRequiredParametersInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpOverriddenMethodExistsInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="PhpOverridingMethodVisibilityInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpParameterByRefIsNotUsedAsReferenceInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpParameterNameChangedDuringInheritanceInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />

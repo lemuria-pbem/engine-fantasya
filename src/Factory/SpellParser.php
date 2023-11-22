@@ -48,51 +48,54 @@ class SpellParser
 	/**
 	 * Spell has no parameters.
 	 */
-	public final const NONE = 0;
+	public final const int NONE = 0;
 
 	/**
 	 * Spell has optional level.
 	 */
-	public final const LEVEL = 1;
+	public final const int LEVEL = 1;
 
 	/**
 	 * Spell has optional target domain.
 	 */
-	public final const DOMAIN = 2;
+	public final const int DOMAIN = 2;
 
 	/**
 	 * Spell has mandatory target unit ID.
 	 */
-	public final const TARGET = 4;
+	public final const int TARGET = 4;
 
 	/**
 	 * Spell has optional target region ID.
 	 */
-	public final const REGION = 8;
+	public final const int REGION = 8;
 
 	/**
 	 * Spell has mandatory directions.
 	 */
-	public final const DIRECTIONS = 16;
+	public final const int DIRECTIONS = 16;
 
 	/**
 	 * Spell has optional level and mandatory target unit ID.
 	 */
-	public final const LEVEL_AND_TARGET = self::LEVEL + self::TARGET;
+	public final const int LEVEL_AND_TARGET = self::LEVEL + self::TARGET;
 
 	/**
 	 * Spell has optional target domain and mandatory target ID.
 	 */
-	public final const DOMAIN_AND_TARGET = self::DOMAIN + self::TARGET;
+	public final const int DOMAIN_AND_TARGET = self::DOMAIN + self::TARGET;
 
 	/**
 	 * Spell has mandatory target ID and optional level.
 	 *
 	 * If level is not given, it is set to the maximum.
 	 */
-	public final const TARGET_AND_LEVEL = self::TARGET - self::LEVEL;
+	public final const int TARGET_AND_LEVEL = self::TARGET - self::LEVEL;
 
-	protected final const SYNTAX = [
+	/**
+	 * @type array<string, int>
+	 */
+	protected final const array SYNTAX = [
 		AstralChaos::class        => self::LEVEL,
 		AstralPassage::class      => self::DOMAIN_AND_TARGET,
 		AuraTransfer::class       => self::LEVEL_AND_TARGET,
@@ -120,7 +123,10 @@ class SpellParser
 		Teleportation::class      => self::TARGET_AND_LEVEL
 	];
 
-	protected final const SPELLS = [
+	/**
+	 * @type array<string, mixed>
+	 */
+	protected final const array SPELLS = [
 		'Astrales'        => ['Chaos'       => AstralChaos::class],
 		'Astraler'        => ['Weg'         => AstralPassage::class],
 		'Aufruhr'         => ['verursachen' => CivilCommotion::class],

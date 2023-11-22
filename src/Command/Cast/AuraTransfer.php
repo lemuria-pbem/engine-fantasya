@@ -21,7 +21,7 @@ final class AuraTransfer extends AbstractCast
 	use CamouflageTrait;
 	use GiftTrait;
 
-	private const RATE = 2.0;
+	private const float RATE = 2.0;
 
 	public function cast(): void {
 		$unit      = $this->cast->Unit();

@@ -18,7 +18,10 @@ final class ConvertLakes extends AbstractEvent
 {
 	use BuilderTrait;
 
-	private const BIG_LAKES = [
+	/**
+	 * @type array<int, int>
+	 */
+	private const array BIG_LAKES = [
 		2450 => 1, 2451 => 1, 2519 => 1,
 		2504 => 2, 2505 => 2, 2574 => 2, 2575 => 2, 2644 => 2,
 		3269 => 3, 3270 => 3,

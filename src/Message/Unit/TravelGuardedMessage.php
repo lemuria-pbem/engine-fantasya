@@ -9,7 +9,7 @@ use Lemuria\Id;
 
 class TravelGuardedMessage extends TravelRegionMessage
 {
-	public final const GUARD = 'guard';
+	public final const string GUARD = 'guard';
 
 	protected Result $result = Result::Failure;
 

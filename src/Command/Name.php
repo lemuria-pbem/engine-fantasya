@@ -50,7 +50,7 @@ final class Name extends UnitCommand implements Reassignment
 	use GrammarTrait;
 	use ReassignTrait;
 
-	private const UNICUM = 'gegenstand';
+	private const string UNICUM = 'gegenstand';
 
 	public static function trimName(string $name): string {
 		$name = ltrim($name, "\"'`^°!$%&/()=?{[]}\\+~#<>|,.-;:_ ");

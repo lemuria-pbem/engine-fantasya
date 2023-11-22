@@ -8,7 +8,7 @@ use Lemuria\Engine\Message\Section;
 
 class UnitExceptionMessage extends AbstractUnitMessage
 {
-	public final const ACTION = 'action';
+	public final const string ACTION = 'action';
 
 	protected Result $result = Result::Error;
 

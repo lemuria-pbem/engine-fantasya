@@ -26,11 +26,11 @@ abstract class RegulateCommand extends UnitCommand
 {
 	use GiftTrait;
 
-	protected final const NONE = 0;
+	protected final const int NONE = 0;
 
-	protected final const SOME = 1;
+	protected final const int SOME = 1;
 
-	protected final const ALL = 2;
+	protected final const int ALL = 2;
 
 	protected ?Construction $construction = null;
 

@@ -12,9 +12,9 @@ final class Entity implements \Stringable, Serializable
 {
 	use SerializableTrait;
 
-	private const ID = 'id';
+	private const string ID = 'id';
 
-	private const NAME = 'name';
+	private const string NAME = 'name';
 
 	public Id $id;
 

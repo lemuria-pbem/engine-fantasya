@@ -33,9 +33,9 @@ final class Breeding extends AbstractEvent
 	use BuilderTrait;
 	use WorkloadTrait;
 
-	private const RATE = 0.1;
+	private const float RATE = 0.1;
 
-	private const BOOST_FACTOR = 4;
+	private const int BOOST_FACTOR = 4;
 
 	private Talent $horsetaming;
 

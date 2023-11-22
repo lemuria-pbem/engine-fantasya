@@ -43,7 +43,10 @@ class WeaponSkill
 {
 	use BuilderTrait;
 
-	public const WEAPONS = [
+	/**
+	 * @type array<string, array<string>>
+	 */
+	public const array WEAPONS = [
 		Archery::class       => [Bow::class, UngirtBow::class],
 		Bladefighting::class => [
 			Claymore::class, Battleaxe::class, Warhammer::class, Sword::class,

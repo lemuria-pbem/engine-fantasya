@@ -11,7 +11,7 @@ use Lemuria\Validate;
 
 final class TalentEffect extends AbstractUnitEffect
 {
-	private const MODIFICATIONS = 'modifications';
+	private const string MODIFICATIONS = 'modifications';
 
 	protected ?bool $isReassign = null;
 

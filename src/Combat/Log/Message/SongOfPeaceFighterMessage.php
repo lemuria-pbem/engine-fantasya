@@ -7,7 +7,7 @@ use Lemuria\Validate;
 
 class SongOfPeaceFighterMessage extends SongOfPeaceCombatantMessage
 {
-	private const FIGHTER = 'fighter';
+	private const string FIGHTER = 'fighter';
 
 	public function __construct(?Combatant $combatant = null, protected ?int $fighter = null) {
 		parent::__construct($combatant);

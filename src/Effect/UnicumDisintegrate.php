@@ -11,7 +11,7 @@ use Lemuria\Validate;
 
 final class UnicumDisintegrate extends AbstractUnicumEffect
 {
-	private const ROUNDS = 'rounds';
+	private const string ROUNDS = 'rounds';
 
 	private int $rounds;
 

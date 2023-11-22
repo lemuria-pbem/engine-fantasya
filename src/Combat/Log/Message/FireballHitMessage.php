@@ -6,9 +6,9 @@ use Lemuria\Validate;
 
 class FireballHitMessage extends AbstractMessage
 {
-	private const FIGHTER = 'fighter';
+	private const string FIGHTER = 'fighter';
 
-	private const DAMAGE = 'damage';
+	private const string DAMAGE = 'damage';
 
 	protected array $simpleParameters = [self::FIGHTER, self::DAMAGE];
 

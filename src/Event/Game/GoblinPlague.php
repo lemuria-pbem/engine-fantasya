@@ -23,9 +23,9 @@ final class GoblinPlague extends AbstractEvent
 	use BuilderTrait;
 	use OptionsTrait;
 
-	public final const REGION = 'region';
+	public final const string REGION = 'region';
 
-	public final const DURATION = 'duration';
+	public final const string DURATION = 'duration';
 
 	private Region $region;
 

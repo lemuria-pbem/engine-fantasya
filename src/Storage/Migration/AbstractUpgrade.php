@@ -7,7 +7,7 @@ use Lemuria\Model\Fantasya\Storage\Migration\AbstractUpgrade as AbstractModelUpg
 
 abstract class AbstractUpgrade extends AbstractModelUpgrade
 {
-	private const NAMESPACE = __NAMESPACE__ . '\\Upgrade\\';
+	private const string NAMESPACE = __NAMESPACE__ . '\\Upgrade\\';
 
 	public static function getAll(): array {
 		$upgrades = [];

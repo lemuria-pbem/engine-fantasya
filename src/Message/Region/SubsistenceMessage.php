@@ -8,7 +8,7 @@ use Lemuria\Item;
 
 class SubsistenceMessage extends AbstractRegionMessage
 {
-	public final const SILVER = 'silver';
+	public final const string SILVER = 'silver';
 
 	protected Section $section = Section::Economy;
 

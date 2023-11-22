@@ -7,7 +7,7 @@ use Lemuria\Singleton;
 
 class ConstructionUnableMessage extends ConstructionCreateMessage
 {
-	public final const TALENT = 'talent';
+	public final const string TALENT = 'talent';
 
 	protected Singleton $talent;
 

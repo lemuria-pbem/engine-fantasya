@@ -40,11 +40,17 @@ class Create implements Act
 	use MessageTrait;
 	use OptionsTrait;
 
-	protected const NAMER = [
+	/**
+	 * @type array<string, string>
+	 */
+	protected const array NAMER = [
 		'' => RaceNamer::class
 	];
 
-	protected const BATTLE_ROW = [
+	/**
+	 * @type array<string, BattleRow>
+	 */
+	protected const array BATTLE_ROW = [
 		''                    => BattleRow::Front,
 		AirElemental::class   => BattleRow::Aggressive,
 		EarthElemental::class => BattleRow::Aggressive,
@@ -55,7 +61,10 @@ class Create implements Act
 		Zombie::class         => BattleRow::Aggressive
 	];
 
-	protected const IS_SENSING = [
+	/**
+	 * @type array<string, int>
+	 */
+	protected const array IS_SENSING = [
 		''            => 0,
 		Bear::class   => 7,
 		Ghoul::class  => 1,
@@ -63,7 +72,10 @@ class Create implements Act
 		Zombie::class => 1
 	];
 
-	protected const IS_HIDING = [
+	/**
+	 * @type array<string, int>
+	 */
+	protected const array IS_HIDING = [
 		''            => 0,
 		Goblin::class => 5
 	];

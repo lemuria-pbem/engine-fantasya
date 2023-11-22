@@ -11,7 +11,7 @@ use Lemuria\Validate;
 
 final class Cartography extends AbstractRegionEffect
 {
-	private const PARTIES = 'parties';
+	private const string PARTIES = 'parties';
 
 	private Gathering $parties;
 

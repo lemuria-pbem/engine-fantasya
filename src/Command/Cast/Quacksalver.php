@@ -14,7 +14,7 @@ final class Quacksalver extends AbstractCast
 {
 	use BuilderTrait;
 
-	private const SILVER = 50;
+	private const int SILVER = 50;
 
 	public function cast(): void {
 		$unit      = $this->cast->Unit();

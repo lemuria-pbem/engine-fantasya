@@ -7,7 +7,7 @@ use Lemuria\Id;
 
 class UpkeepCharityMessage extends UpkeepPayMessage
 {
-	public final const UNIT = 'unit';
+	public final const string UNIT = 'unit';
 
 	protected Id $unit;
 

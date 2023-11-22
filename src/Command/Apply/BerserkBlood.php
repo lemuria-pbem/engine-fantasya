@@ -6,7 +6,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\Apply\BerserkBloodMessage;
 
 final class BerserkBlood extends AbstractUnitApply
 {
-	public const BONUS = 3;
+	public const int BONUS = 3;
 
 	protected ?string $applyMessage = BerserkBloodMessage::class;
 }
