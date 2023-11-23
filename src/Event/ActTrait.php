@@ -75,7 +75,7 @@ trait ActTrait
 		$random       = randFloat();
 		$distribution = randDistribution23(count($regions));
 		foreach ($distribution as $i => $chance) {
-			if ($random <= $chance) {
+			if ($random < $chance) {
 				return $regions[$i];
 			}
 		}

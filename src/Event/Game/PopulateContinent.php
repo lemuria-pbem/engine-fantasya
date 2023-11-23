@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Event\Game;
 use function Lemuria\randArray;
 use function Lemuria\randElement;
 use function Lemuria\randFloat;
+use function Lemuria\randFloatBetween;
 use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Event\Act\Create;
@@ -159,7 +160,7 @@ final class PopulateContinent extends AbstractEvent
 			}
 			$count = (int)ceil(count($regions) / $chance);
 			foreach (randArray($regions, $count) as $region) {
-				$size            = (int)round((1.0 + $variation * 2.0 * (randFloat() - 0.5)) * $raceSize);
+				$size            = (int)round((1.0 + $variation * 2.0 * randFloatBetween(-0.5, 0.5)) * $raceSize);
 				$create          = new Create($party, $region);
 				$this->creates[] = $create->add(new Gang($monster, $size));
 			}
@@ -180,14 +181,14 @@ final class PopulateContinent extends AbstractEvent
 					$unit->Knowledge()->add(new Ability($skill->Talent(), $experience));
 
 					$chance = randFloat();
-					if ($chance <= self::HAS_SHIELD) {
+					if ($chance < self::HAS_SHIELD) {
 						$shield = randElement(self::SHIELD);
 						$inventory->add(new Quantity(self::createCommodity($shield), $size));
-					} elseif ($chance <= self::HAS_SHIELD + self::HAS_ARMOR) {
+					} elseif ($chance < self::HAS_SHIELD + self::HAS_ARMOR) {
 						$armor = randElement(self::ARMOR);
 						$inventory->add(new Quantity(self::createCommodity($armor), $size));
 					} else {
-						$armor  = randElement(self::ARMOR);
+						$armor = randElement(self::ARMOR);
 						$inventory->add(new Quantity(self::createCommodity($armor), $size));
 						$shield = randElement(self::SHIELD);
 						$inventory->add(new Quantity(self::createCommodity($shield), $size));
