@@ -118,7 +118,7 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 					if ($unit) {
 						if ($this->checkUnit($unit)) {
 							$this->size += $this->teach($unit, true);
-							$ids[]      = $unit->Id();
+							$ids[]       = $unit->Id();
 						}
 					}
 				} catch (CommandException $e) {
@@ -172,7 +172,9 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 
 	private function checkUnit(Unit $unit): bool {
 		if ($unit->Region() !== $this->unit->Region()) {
-			$this->message(TeachRegionMessage::class)->e($unit);
+			if (!$this->isAlternative()) {
+				$this->message(TeachRegionMessage::class)->e($unit);
+			}
 			return false;
 		}
 		if ($this->isStoppedBySiege($this->unit, $unit)) {
@@ -183,7 +185,9 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 			return true;
 		}
 		if (!$this->checkVisibility($this->unit, $unit)) {
-			$this->message(TeachRegionMessage::class)->e($unit);
+			if (!$this->isAlternative()) {
+				$this->message(TeachRegionMessage::class)->e($unit);
+			}
 			return false;
 		}
 		return true;
@@ -213,7 +217,9 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 					$this->message(TeachPartyMessage::class)->e($unit, TeachPartyMessage::UNIT)->e($unit->Party());
 				}
 			} else {
-				$this->message(TeachRegionMessage::class)->e($unit);
+				if (!$this->isAlternative()) {
+					$this->message(TeachRegionMessage::class)->e($unit);
+				}
 			}
 		} elseif ($log) {
 			$this->message(TeachSelfMessage::class);
