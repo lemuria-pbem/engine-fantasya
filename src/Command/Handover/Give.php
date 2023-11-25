@@ -140,9 +140,14 @@ final class Give extends UnitCommand implements Reassignment
 	private function giveEverything(): void {
 		$inventory = $this->unit->Inventory();
 		foreach ($this->resources as $quantity) {
-			$inventory->remove($quantity);
-			$gift = new Quantity($quantity->Commodity(), $quantity->Count());
-			$this->giveOnly($gift);
+			$commodity = $quantity->Commodity();
+			$remaining = $inventory[$commodity];
+			$count     = $remaining->Count();
+			if ($count > 0) {
+				$inventory->remove($remaining);
+				$gift = new Quantity($commodity, $count);
+				$this->giveOnly($gift);
+			}
 		}
 	}
 
