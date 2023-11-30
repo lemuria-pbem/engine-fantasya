@@ -28,7 +28,7 @@ use Lemuria\Model\Fantasya\Herb as HerbInterface;
  *
  * The command determines the create sub command and delegates to it.
  *
- * - MACHEN Burg|Gebaeude|Gebäude <ID> (from outside)
+ * - MACHEN Gebaeude|Gebäude <ID> (from outside)
  * - MACHEN <Resource>
  * - MACHEN <Resource> <size>
  * - MACHEN <amount> <Resource>
@@ -65,7 +65,7 @@ final class Create extends DelegatedCommand
 			return new Vessel($this->phrase, $this->context, new Job(new AnyShip(), $size));
 		}
 		// MACHEN Gebäude <size> | MACHEN Gebäude <ID> <size>
-		if ($lower === 'burg' || $lower === 'gebäude' || $lower === 'gebaeude') {
+		if ($lower === 'gebäude' || $lower === 'gebaeude') {
 			$size = $n >= 2 ? max(0, (int)$this->phrase->getParameter(0)) : 0;
 			return new Construction($this->phrase, $this->context, new Job(new AnyBuilding(), $size));
 		}
