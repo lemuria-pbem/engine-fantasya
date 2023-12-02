@@ -296,9 +296,9 @@ final class Calculus
 		$melee   = 0;
 		$distant = 0;
 		foreach ($this->unit->Knowledge() as $ability) {
-			if (WeaponSkill::isSkill($ability)) {
-				$skill       = $this->knowledge($ability->Talent());
-				$experience  = $skill->Experience();
+			$skill = $this->ability($ability->Talent());
+			if (WeaponSkill::isSkill($skill)) {
+				$experience = $skill->Experience();
 				if ($experience > 0) {
 					$weaponSkill = new WeaponSkill($skill);
 					$skills[]    = $weaponSkill;
