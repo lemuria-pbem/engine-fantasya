@@ -16,6 +16,8 @@ final class ThrowOption implements \ArrayAccess
 
 	public final const SUBSTITUTE = 4;
 
+	public final const PHP = 8;
+
 	private const DEFAULT = 'ANY';
 
 	/**
