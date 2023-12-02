@@ -73,10 +73,11 @@ final class Herb extends RawMaterial
 	}
 
 	protected function determineHerbage(): void {
-		$herbalBook = $this->unit->Party()->HerbalBook();
+		$party      = $this->unit->Party();
+		$herbalBook = $party->HerbalBook();
 		$region     = $this->unit->Region();
 		$realm      = $region->Realm();
-		if ($realm) {
+		if ($realm?->Party() === $party) {
 			foreach ($realm->Territory() as $region) {
 				$this->herbage = $herbalBook->getHerbage($region);
 				if ($this->herbage) {
