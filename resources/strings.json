@@ -1386,7 +1386,9 @@
 			"numerus": 1,
 			"f": ["alle verfügbaren", "aller verfügbaren", "allen verfügbaren", "alle verfügbaren"],
 			"m": ["alle verfügbaren", "aller verfügbaren", "allen verfügbaren", "alle verfügbaren"],
-			"n": ["alle verfügbaren", "aller verfügbaren", "allen verfügbaren", "alle verfügbaren"]
+			"n": ["alle verfügbaren", "aller verfügbaren", "allen verfügbaren", "alle verfügbaren"],
+			"p": ["alle verfügbaren", "aller verfügbaren", "allen verfügbaren", "alle verfügbaren"],
+			"q": ["alle verfügbaren", "aller verfügbaren", "allen verfügbaren", "alle verfügbaren"]
 		},
 		"an": {
 			"numerus": 0,
@@ -1416,7 +1418,9 @@
 			"numerus": 0,
 			"f": ["eine stillgelegte", "einer stillgelegten", "einer stillgelegten", "eine stillgelegte"],
 			"m": ["ein stillgelegter", "eines stillgelegten", "einem stillgelegten", "einen stillgelegten"],
-			"n": ["ein stillgelegtes", "eines stillgelegten", "einem stillgelegten", "ein stillgelegtes"]
+			"n": ["ein stillgelegtes", "eines stillgelegten", "einem stillgelegten", "ein stillgelegtes"],
+			"p": ["ein stillgelegtes", "eines stillgelegten", "einem stillgelegten", "ein stillgelegtes"],
+			"q": ["ein stillgelegtes", "eines stillgelegten", "einem stillgelegten", "ein stillgelegtes"]
 		},
 		"im": {
 			"numerus": 0,
