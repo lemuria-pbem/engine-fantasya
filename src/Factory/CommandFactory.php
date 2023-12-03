@@ -27,9 +27,9 @@ use Lemuria\Engine\Fantasya\Command\Create;
 use Lemuria\Engine\Fantasya\Command\Create\Unicum;
 use Lemuria\Engine\Fantasya\Command\Demand;
 use Lemuria\Engine\Fantasya\Command\Describe;
-use Lemuria\Engine\Fantasya\Command\Destroy;
 use Lemuria\Engine\Fantasya\Command\Destroy\Dismiss;
 use Lemuria\Engine\Fantasya\Command\Destroy\Lose;
+use Lemuria\Engine\Fantasya\Command\Destroy\Smash;
 use Lemuria\Engine\Fantasya\Command\Devastate;
 use Lemuria\Engine\Fantasya\Command\Disguise;
 use Lemuria\Engine\Fantasya\Command\End;
@@ -1008,7 +1008,7 @@ class CommandFactory
 				'VORLAGE'        => Template::class,
 				'WIEDERHOLEN'    => Repeat::class,
 				'ZAUBERN'        => Cast::class,
-				'ZERSTÖREN'      => Destroy::class
+				'ZERSTÖREN'      => Smash::class
 			};
 			return new $command($phrase, $this->context);
 		} catch (\UnhandledMatchError) {
