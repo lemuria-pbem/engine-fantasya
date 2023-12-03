@@ -47,7 +47,7 @@ trait RealmTrait
 				$structurePoints[$id] = $this->context->getIntelligence($realmRegion)->getInfrastructure();
 			}
 			$infrastructure = array_sum($structurePoints);
-			if ($region === $territory->Central()) {
+			if ($infrastructure <= 0 || $region === $territory->Central()) {
 				return $infrastructure;
 			}
 			$average = $infrastructure / count($structurePoints);
