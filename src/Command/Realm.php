@@ -170,7 +170,7 @@ final class Realm extends UnitCommand
 		$party->Possessions()->remove($realm);
 		Lemuria::Catalog()->remove($realm);
 		$this->message(RealmDissolveMessage::class)->p($realm->Name());
-		$this->message(RealmDissolvedMessage::class, $central)->p($realm->Name());
+		$this->message(RealmDissolvedMessage::class, $central)->e($party)->p($realm->Name());
 	}
 
 	private function getRealm(): ?Model {
