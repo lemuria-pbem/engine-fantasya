@@ -195,5 +195,5 @@
 
 ^@?(za|zau|zaub|zaube|zauber|zaubere|zaubern) +(adlerauge|astraler weg|aufruhr verursachen|auratransfer|blick des greifen|erdbeben|erwecke baumhirten|fernsicht|g(ue|ü)nstige winde|lautloser schatten|luftschiff|monster aufhetzen|ring der unsichtbarkeit|tagtraum|teleportation|wunderdoktor)( +[0-9]+)?$
 
-^@?(zerstö|zerstör|zerstöre|zerstören) +(burg|gebäude|gebaeude|schiff)( +[a-z0-9]{1,6})?$
-^@?(zerstoe|zerstoer|zerstoere|zerstoeren) +(burg|gebäude|gebaeude|schiff)( +[a-z0-9]{1,6})?$
+^@?(zerstö|zerstör|zerstöre|zerstören) +(burg|gebäude|gebaeude|schiff|straße|strasse) +[a-z0-9]{1,6}$
+^@?(zerstoe|zerstoer|zerstoere|zerstoeren) +(burg|gebäude|gebaeude|schiff|straße|strasse) +[a-z0-9]{1,6}$
