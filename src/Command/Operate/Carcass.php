@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Operate;
 
+use Lemuria\Engine\Fantasya\Effect\UnicumRead;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\CarcassMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\CarcassNothingMessage;
@@ -11,6 +12,7 @@ use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Monster\Bear;
 use Lemuria\Model\Fantasya\Composition\Carcass as CarcassModel;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Resources;
 
 final class Carcass extends AbstractOperate
 {
@@ -61,6 +63,14 @@ final class Carcass extends AbstractOperate
 				$this->message(CarcassMessage::class, $this->unit)->s($carcass)->e($unicum)->i($taken);
 			}
 		}
+	}
+
+	public function read(): UnicumRead {
+		$effect    = parent::read();
+		$carcass   = $this->getCarcass();
+		$inventory = new Resources();
+		$effect->setInventory($this->operator->Unicum(), $inventory->fill($carcass->Inventory()));
+		return $effect;
 	}
 
 	private function getCarcass(): CarcassModel {

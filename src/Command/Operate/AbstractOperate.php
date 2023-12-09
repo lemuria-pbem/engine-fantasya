@@ -97,15 +97,17 @@ abstract class AbstractOperate
 		throw new UnsupportedOperateException($this->operator->Unicum(), Practice::Destroy);
 	}
 
-	public function read(): void {
+	public function read(): UnicumRead {
 		$unicum = $this->operator->Unicum();
 		if (!$unicum->Composition()->supports(Practice::Read)) {
 			throw new UnsupportedOperateException($unicum, Practice::Read);
 		}
 
-		$party = $this->unit->Party();
-		$this->addReadEffect()->Treasury()->add($unicum);
+		$party  = $this->unit->Party();
+		$effect = $this->addReadEffect();
+		$effect->Treasury()->add($unicum);
 		$this->message(ReadMessage::class, $party)->e($this->unit)->s($unicum->Composition())->e($unicum, ReadMessage::UNICUM);
+		return $effect;
 	}
 
 	public function write(): void {
