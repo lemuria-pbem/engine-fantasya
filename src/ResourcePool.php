@@ -100,6 +100,37 @@ class ResourcePool
 	}
 
 	/**
+	 * Take a quantity out of the pool for the realm fund.
+	 */
+	public function forFund(Unit $unit, Quantity $quantity): Quantity {
+		$id = $unit->Id();
+		if (!$this->units->has($id)) {
+			throw new LemuriaException('Unit ' . $unit . ' is not a pool member.');
+		}
+
+		$commodity    = $quantity->Commodity();
+		$demand       = $quantity->Count();
+		$inventory    = $unit->Inventory();
+		$reservations = $this->reservations[$id->Id()];
+		$ownCount     = $inventory->offsetGet($commodity)->Count();
+		$reserved     = $reservations->offsetGet($commodity)->Count();
+		$available    = $ownCount - $reserved;
+		$needed       = $demand - $available;
+		if ($needed > 0) {
+			$addition   = $this->take($unit, new Quantity($commodity, $needed));
+			$available += $addition->Count();
+		}
+		if ($available < $demand) {
+			$demand = $available;
+		}
+		if ($demand > 0) {
+			$inventory->remove(new Quantity($commodity, $demand));
+			return new Quantity($commodity, $demand);
+		}
+		return new Quantity($commodity, 0);
+	}
+
+	/**
 	 * Make a reservation of one commodity.
 	 */
 	public function reserve(Unit $unit, Quantity $quantity): Quantity {

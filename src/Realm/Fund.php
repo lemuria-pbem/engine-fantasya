@@ -47,7 +47,7 @@ class Fund
 		if (!$unit) {
 			return new Quantity($commodity, 0);
 		}
-		$quantity = $this->context->getResourcePool($unit)->take($unit, $quantity);
+		$quantity = $this->context->getResourcePool($unit)->forFund($unit, $quantity);
 		$weight   = $quantity->Weight();
 		if ($weight > 0) {
 			if ($this->fleet()->send($weight) < $weight) {
