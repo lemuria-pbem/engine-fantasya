@@ -4,8 +4,10 @@ namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Model\World\Direction;
+use Lemuria\Model\World\Way;
 
 class DirectionList implements \Countable
 {
@@ -30,6 +32,20 @@ class DirectionList implements \Countable
 	private bool $isRotating = false;
 
 	private int $previousIndex;
+
+	public static function fromWay(Way $way, ?Context $context = null): self {
+		if (!$context) {
+			$context = new Context(State::getInstance());
+		}
+		$list = new self($context);
+		$way->rewind();
+		$way->next();
+		while ($way->valid()) {
+			$list->add($way->key());
+			$way->next();
+		}
+		return $list;
+	}
 
 	public function __construct(Context $context) {
 		$this->factory = $context->Factory();
