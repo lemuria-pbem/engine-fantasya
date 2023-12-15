@@ -36,7 +36,7 @@ abstract class UnitCommand extends AbstractCommand
 	}
 
 	public function isPrepared(): bool {
-		if ($this instanceof Activity && $this->IsDefault() && $this->unit->Size() <= 0) {
+		if ($this instanceof Activity && $this->IsDefault() && !$this->checkSize()) {
 			return false;
 		}
 		return parent::isPrepared();

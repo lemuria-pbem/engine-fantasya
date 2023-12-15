@@ -75,6 +75,10 @@ final class Leave extends UnitCommand
 		}
 	}
 
+	protected function checkSize(): bool {
+		return true;
+	}
+
 	private function loseExcessInventoryAtSea(): void {
 		$sorted    = [];
 		$silver    = 0.0;

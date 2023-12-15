@@ -45,8 +45,8 @@ final class Timer extends DelegatedEvent
 		140 => [
 			['class' => ResetGatherUnits::class, 'options' => [ResetGatherUnits::PARTY => 5, ResetGatherUnits::IS_LOOTING => false]]
 		],
-		141 => [
-			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 2856, FindWallet::SILVER => 2400]]
+		144 => [
+			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 1507002, FindWallet::SILVER => 300]]
 		],
 		145 => [
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 1392]],
