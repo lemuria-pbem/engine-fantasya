@@ -9,6 +9,8 @@ use Lemuria\Model\Fantasya\Extension\Trades;
 
 final class TradeEffect extends AbstractUnitEffect
 {
+	protected ?bool $isReassign = null;
+
 	private Trades $trades;
 
 	public function __construct(State $state) {

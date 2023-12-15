@@ -36,8 +36,7 @@ trait FreeSpaceTrait
 
 	private function getFreeSpaceEffect(Construction $construction): ?FreeSpace {
 		$effect = new FreeSpace(State::getInstance());
-		$effect->setConstruction($construction);
-		$effect = Lemuria::Score()->find($effect);
+		$effect = Lemuria::Score()->find($effect->setConstruction($construction));
 		return $effect instanceof FreeSpace ? $effect : null;
 	}
 }

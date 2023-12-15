@@ -97,9 +97,8 @@ final class Spy extends UnitCommand implements Activity
 	}
 
 	private function addSpyEffect(Unit $unit, int $spyLevel): void {
-		$effect = new SpyEffect(State::getInstance());
-		$effect->setParty($this->unit->Party());
-		$existing = Lemuria::Score()->find($effect);
+		$effect   = new SpyEffect(State::getInstance());
+		$existing = Lemuria::Score()->find($effect->setParty($this->unit->Party()));
 		if ($existing) {
 			$effect = $existing;
 		} else {

@@ -59,9 +59,8 @@ final class Contact extends UnitCommand implements Reassignment
 	}
 
 	private function createEffect(Party $party, Unit $from): void {
-		$effect = new ContactEffect(State::getInstance());
-		$effect->setParty($party);
-		$existing = Lemuria::Score()->find($effect);
+		$effect   = new ContactEffect(State::getInstance());
+		$existing = Lemuria::Score()->find($effect->setParty($party));
 		if ($existing) {
 			$effect = $existing;
 		} else {

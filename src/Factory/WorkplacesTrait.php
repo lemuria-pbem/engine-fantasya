@@ -43,9 +43,8 @@ trait WorkplacesTrait
 			$potion = self::createCommodity($potion);
 		}
 		$effect = new PotionInfluence(State::getInstance());
-		$effect->setRegion($region);
 		/** @var PotionInfluence $existing */
-		$existing = Lemuria::Score()->find($effect);
+		$existing = Lemuria::Score()->find($effect->setRegion($region));
 		return $existing?->hasPotion($potion) ? $existing->getCount($potion) : 0;
 	}
 }

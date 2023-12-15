@@ -533,12 +533,12 @@ final class Accept extends UnitCommand
 	}
 
 	private function addTradeEffect(): void {
-		$effect = new TradeEffect(State::getInstance());
+		$effect   = new TradeEffect(State::getInstance());
 		$existing = Lemuria::Score()->find($effect->setUnit($this->unit));
 		if ($existing instanceof TradeEffect) {
 			$effect = $existing;
 		} else {
-			Lemuria::Score()->add($effect);
+			Lemuria::Score()->add($effect->addReassignment());
 		}
 		$effect->Trades()->add($this->trade);
 	}

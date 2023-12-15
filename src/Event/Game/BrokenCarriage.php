@@ -80,9 +80,8 @@ final class BrokenCarriage extends AbstractEvent
 	}
 
 	private function getEffect(): BrokenCarriageEffect {
-		$effect = new BrokenCarriageEffect(State::getInstance());
-		$effect->setParty($this->party);
-		$existing = Lemuria::Score()->find($effect);
+		$effect   = new BrokenCarriageEffect(State::getInstance());
+		$existing = Lemuria::Score()->find($effect->setParty($this->party));
 		if ($existing instanceof BrokenCarriageEffect) {
 			return $existing;
 		}

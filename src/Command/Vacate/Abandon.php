@@ -39,10 +39,9 @@ final class Abandon extends UnitCommand
 	}
 
 	private function getEffect(Construction $construction): FreeSpace {
-		$state  = State::getInstance();
-		$effect = new FreeSpace($state);
-		$effect->setConstruction($construction);
-		$existing = Lemuria::Score()->find($effect);
+		$state    = State::getInstance();
+		$effect   = new FreeSpace($state);
+		$existing = Lemuria::Score()->find($effect->setConstruction($construction));
 		if ($existing instanceof FreeSpace) {
 			$effect = $existing;
 		} else {

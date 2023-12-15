@@ -56,7 +56,6 @@ abstract class AbstractEffect implements Effect, Reassignment
 		return false;
 	}
 
-
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
 		if ($identifiable->Catalog() === $this->Catalog() && $this->id->Id() === $oldId->Id()) {
 			$this->id = new Id($identifiable->Id()->Id());

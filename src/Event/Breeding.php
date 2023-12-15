@@ -101,9 +101,8 @@ final class Breeding extends AbstractEvent
 	}
 
 	private function getBoost(Construction $construction): int {
-		$effect = new PotionReserve($this->state);
-		$effect->setConstruction($construction);
-		$existing = Lemuria::Score()->find($effect);
+		$effect   = new PotionReserve($this->state);
+		$existing = Lemuria::Score()->find($effect->setConstruction($construction));
 		if ($existing instanceof PotionReserve) {
 			/** @var Potion $potion */
 			$potion = self::createCommodity(HorseBliss::class);

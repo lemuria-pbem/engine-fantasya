@@ -369,9 +369,8 @@ final class Calculus
 			$potion = self::createCommodity($potion);
 		}
 		$effect = new PotionEffect(State::getInstance());
-		$effect->setUnit($this->unit);
 		/** @var PotionEffect $existing */
-		$existing = Lemuria::Score()->find($effect);
+		$existing = Lemuria::Score()->find($effect->setUnit($this->unit));
 		return $existing?->Potion() === $potion ? $existing : null;
 	}
 
