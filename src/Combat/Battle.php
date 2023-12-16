@@ -381,7 +381,7 @@ class Battle
 		foreach ($armies as $army) {
 			foreach ($army->Trophies() as $quantity) {
 				$unit = $heirs->random();
-				if ($unit->Party()->Type() === Type::Player) {
+				if ($unit?->Party()->Type() === Type::Player) {
 					$unit->Inventory()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
 					// Lemuria::Log()->debug($unit . ' takes trophies: ' . $quantity);
 					BattleLog::getInstance()->add(new TakeTrophiesMessage($unit, $quantity));
