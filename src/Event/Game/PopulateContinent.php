@@ -124,7 +124,7 @@ final class PopulateContinent extends AbstractEvent
 	protected function initialize(): void {
 		$monsters  = Party::get(Spawn::getPartyId(Type::Monster));
 		$zombies   = Party::get(Id::fromId(Spawn::ZOMBIES));
-		$continent = Continent::get(new Id($this->getOption(self::CONTINENT, 'int')));
+		$continent = Continent::get($this->getIdOption(self::CONTINENT));
 		$chances   = $this->hasOption(self::CHANCES) ? $this->getOption(self::CHANCES, 'array') : self::CHANCE;
 		$sizes     = $this->hasOption(self::SIZES) ? $this->getOption(self::SIZES, 'array') : self::SIZES;
 		$variation = $this->hasOption(self::VARIATION) ? $this->getOption(self::VARIATION, 'number') : self::VARIATION_VALUE;

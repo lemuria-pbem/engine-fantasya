@@ -105,7 +105,7 @@ final class MiningDiscovery extends AbstractEvent
 
 	protected function initialize(): void {
 		if (empty($this->people)) {
-			$this->unit = Unit::get(new Id($this->getOption(self::UNIT, 'int')));
+			$this->unit = Unit::get($this->getIdOption(self::UNIT));
 			$commodity  = self::createCommodity($this->getOption(self::DISCOVERY, 'string'));
 			$amount     = 1;
 			if ($this->hasOption(self::AMOUNT)) {

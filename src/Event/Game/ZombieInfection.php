@@ -104,7 +104,7 @@ final class ZombieInfection extends AbstractEvent
 	}
 
 	protected function initialize(): void {
-		$this->region = Region::get(new Id($this->getOption(self::REGION, 'int')));
+		$this->region = Region::get($this->getIdOption(self::REGION));
 		$this->infect = $this->getOption(self::INFECT, 'float');
 		$this->chance = $this->getOption(self::CHANCE, 'float');
 	}

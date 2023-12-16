@@ -8,7 +8,6 @@ use Lemuria\Engine\Fantasya\Factory\Model\Disease;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Monster\Goblin;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -45,7 +44,7 @@ final class GoblinPlague extends AbstractEvent
 	}
 
 	protected function initialize(): void {
-		$this->region   = Region::get(new Id($this->getOption(self::REGION, 'int')));
+		$this->region   = Region::get($this->getIdOption(self::REGION));
 		$this->duration = $this->getOption(self::DURATION, 'int');
 	}
 

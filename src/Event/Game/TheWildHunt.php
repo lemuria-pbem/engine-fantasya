@@ -9,7 +9,6 @@ use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Message\Party\TheWildHuntMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Id;
 use Lemuria\Model\Fantasya\Commodity\Gold;
 use Lemuria\Model\Fantasya\Commodity\Herb\Peyote;
 use Lemuria\Model\Fantasya\Commodity\Herb\Sandreeker;
@@ -55,7 +54,7 @@ final class TheWildHunt extends AbstractEvent
 	}
 
 	protected function initialize(): void {
-		$this->unit = Unit::get(new Id($this->getOption(self::UNIT, 'int')));
+		$this->unit = Unit::get($this->getIdOption(self::UNIT));
 	}
 
 	protected function run(): void {

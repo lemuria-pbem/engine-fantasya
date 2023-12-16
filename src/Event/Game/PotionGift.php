@@ -8,7 +8,6 @@ use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Message\Party\PotionGiftMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Id;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Potion;
 use Lemuria\Model\Fantasya\Quantity;
@@ -40,7 +39,7 @@ final class PotionGift extends AbstractEvent
 	}
 
 	protected function initialize(): void {
-		$this->unit  = Unit::get(new Id($this->getOption(self::UNIT, 'int')));
+		$this->unit  = Unit::get($this->getIdOption(self::UNIT));
 		$potionClass = $this->getOption(self::POTION, 'string');
 		$potion      = self::createCommodity($potionClass);
 		if ($potion instanceof Potion) {

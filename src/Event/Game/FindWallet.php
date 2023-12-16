@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Message\Party\FindWalletMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Id;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
@@ -39,7 +38,7 @@ final class FindWallet extends AbstractEvent
 	}
 
 	protected function initialize(): void {
-		$this->unit   = Unit::get(new Id($this->getOption(self::UNIT, 'int')));
+		$this->unit   = Unit::get($this->getIdOption(self::UNIT));
 		$silver       = self::createCommodity(Silver::class);
 		$this->silver = new Quantity($silver, $this->getOption(self::SILVER, 'int'));
 	}

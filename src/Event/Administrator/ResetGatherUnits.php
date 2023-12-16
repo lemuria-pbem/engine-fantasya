@@ -6,7 +6,6 @@ use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party;
 
@@ -35,7 +34,7 @@ final class ResetGatherUnits extends AbstractEvent
 	}
 
 	protected function initialize(): void {
-		$this->party     = Party::get(new Id($this->getOption(self::PARTY, 'int')));
+		$this->party     = Party::get($this->getIdOption(self::PARTY));
 		$this->isLooting = $this->getOption(self::IS_LOOTING, 'bool');
 	}
 

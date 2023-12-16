@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Dictionary;
 use Lemuria\Model\Domain;
@@ -50,7 +49,7 @@ final class BlownByTheWind extends AbstractEvent
 	}
 
 	protected function initialize(): void {
-		$this->region = Region::get(new Id($this->getOption(self::REGION, 'int')));
+		$this->region = Region::get($this->getIdOption(self::REGION));
 		$this->spell  = self::createSpell($this->getOption(self::SPELL, 'string'));
 	}
 

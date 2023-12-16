@@ -58,7 +58,7 @@ final class Spawn extends AbstractEvent
 
 	protected function initialize(): void {
 		if ($this->hasOption(self::PARTY)) {
-			$party = Party::get(Id::fromId($this->getOption(self::PARTY, 'string')));
+			$party = Party::get($this->getIdOption(self::PARTY));
 		} else {
 			/** @var Type $type */
 			$type = $this->getOption(self::TYPE, Type::class);
@@ -66,7 +66,7 @@ final class Spawn extends AbstractEvent
 		}
 		$race   = $this->getOption(self::RACE, 'string');
 		$size   = $this->getOption(self::SIZE, 'int');
-		$region = Region::get(new Id($this->getOption(self::REGION, 'int')));
+		$region = Region::get($this->getIdOption(self::REGION));
 		$this->create = new Create($party, $region);
 		$this->create->add(new Gang(self::createRace($race), $size));
 	}

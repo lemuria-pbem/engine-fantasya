@@ -7,7 +7,6 @@ use Lemuria\Engine\Fantasya\Factory\BuilderTrait as CarcassBuilderTrait;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Id;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Race;
@@ -47,7 +46,7 @@ final class CarriedOffWayfarer extends AbstractEvent
 
 	protected function initialize(): void {
 		$this->race   = self::createRace($this->getOption(self::RACE, 'string'));
-		$this->region = Region::get(new Id($this->getOption(self::REGION, 'int')));
+		$this->region = Region::get($this->getIdOption(self::REGION));
 		if ($this->hasOption(self::INVENTORY)) {
 			foreach ($this->getOption(self::INVENTORY, 'array') as $commodity => $amount) {
 				$this->inventory->add(new Quantity(self::createCommodity($commodity), $amount));

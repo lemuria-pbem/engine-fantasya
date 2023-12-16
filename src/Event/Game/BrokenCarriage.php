@@ -9,7 +9,6 @@ use Lemuria\Engine\Fantasya\Message\Region\BrokenCarriageDiesMessage;
 use Lemuria\Engine\Fantasya\Message\Region\BrokenCarriageMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Commodity\Carriage;
@@ -56,8 +55,8 @@ final class BrokenCarriage extends AbstractEvent
 	}
 
 	protected function initialize(): void {
-		$this->party  = Party::get(new Id($this->getOption(self::PARTY, 'int')));
-		$this->region = Region::get(new Id($this->getOption(self::REGION, 'int')));
+		$this->party  = Party::get($this->getIdOption(self::PARTY));
+		$this->region = Region::get($this->getIdOption(self::REGION));
 	}
 
 	protected function run(): void {
