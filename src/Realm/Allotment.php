@@ -95,15 +95,15 @@ class Allotment
 					if ($part > $demand) {
 						$part = $demand;
 					}
-					if ($this->isFleetEnabled) {
-						if ($commodity instanceof Animal) {
-							$part = $this->fleet->mount(new Quantity($commodity, $part))->Count();
-						} else {
-							$weight = $this->fleet->fetch($part * $piece);
-							$part   = (int)floor($weight / $piece);
-						}
-					}
 					if ($part > 0) {
+						if ($this->isFleetEnabled) {
+							if ($commodity instanceof Animal) {
+								$part = $this->fleet->mount(new Quantity($commodity, $part))->Count();
+							} else {
+								$weight = $this->fleet->fetch($part * $piece);
+								$part   = (int)floor($weight / $piece);
+							}
+						}
 						$this->state->getAvailability($region)->remove(new Quantity($commodity, $part));
 						$partQuantity = new Quantity($commodity, $part);
 						$resources->add($partQuantity);

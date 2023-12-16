@@ -84,10 +84,10 @@ class Wagoner
 		$calculus        = new Calculus($this->unit);
 		$level           = $calculus->knowledge(Riding::class)->Level();
 		$size            = $this->unit->Size();
+		$capability      = $size * $level;
 		$needed          = $animals->Count() * $need;
-		$capability      = (int)ceil($size * $level / $need);
-		$persons         = (int)ceil($needed / $capability * $size);
-		$capacity        = (int)ceil($persons / $size * $this->maximum);
+		$rate            = $needed / $capability;
+		$capacity        = (int)ceil($rate * $this->maximum);
 		$this->incoming -= $capacity;
 		$this->outgoing -= $capacity;
 		return $animals;
