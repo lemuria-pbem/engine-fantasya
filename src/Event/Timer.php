@@ -33,33 +33,34 @@ final class Timer extends DelegatedEvent
 	private const SCHEDULE = [
 		130 => [
 			['class' => Drought::class, 'options' => [Drought::RATE => 0.476]],
-			['class' => GoblinPlague::class, 'options' => [GoblinPlague::REGION => 3760, GoblinPlague::DURATION => 3]],
+			['class' => GoblinPlague::class, 'options' => [GoblinPlague::REGION => '', GoblinPlague::DURATION => 3]],
 			['class' => CarriedOffWayfarer::class, 'options' => [
-				CarriedOffWayfarer::REGION => 3949, CarriedOffWayfarer::RACE => Human::class,
+				CarriedOffWayfarer::REGION => '', CarriedOffWayfarer::RACE => Human::class,
 				CarriedOffWayfarer::INVENTORY => [Silver::class => 30, Sword::class => 1]
 			]],
-			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => 3949, Spawn::SIZE => 1, Spawn::RACE => Zombie::class]],
-			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => 526, BlownByTheWind::SPELL => Farsight::class]],
-			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => 3828, PotionGift::POTION => Brainpower::class]]
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => '', Spawn::SIZE => 1, Spawn::RACE => Zombie::class]],
+			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => '', BlownByTheWind::SPELL => Farsight::class]],
+			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => '', PotionGift::POTION => Brainpower::class]]
 		],
 		140 => [
-			['class' => ResetGatherUnits::class, 'options' => [ResetGatherUnits::PARTY => 5, ResetGatherUnits::IS_LOOTING => false]]
+			['class' => ResetGatherUnits::class, 'options' => [ResetGatherUnits::PARTY => '', ResetGatherUnits::IS_LOOTING => false]]
 		],
 		144 => [
-			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 1507002, FindWallet::SILVER => 300]]
+			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => '', FindWallet::SILVER => 300]]
 		],
 		145 => [
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 1392]],
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 9]],
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 1285]],
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 21520]],
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 548735]],
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 3325]],
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 21574]],
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 4775]],
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 506462]],
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 680926]],
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 2701]]
+			// 2, 8, c keine Geschenke
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => '12o']],  // 3
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => '9']],    // 4
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 'zp']],   // 5
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 'gls']],  // 7
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 'cod1']], // 9
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => '2kd']],  // b
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => '3on']],  // cala
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 'gna']],  // d
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 'ause']], // lem
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 'elem']], // mw
+			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => '231']]   // renn
 		]
 	];
 
