@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Singleton;
 
@@ -19,6 +20,9 @@ class DismissAllMessage extends DismissEverythingMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->singleton($name, 'commodity') ?? parent::getTranslation($name);
+		if ($name === 'commodity') {
+			return $this->translateSingleton($this->commodity, 1, Casus::Dative);
+		}
+		return parent::getTranslation($name);
 	}
 }
