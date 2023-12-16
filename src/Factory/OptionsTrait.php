@@ -15,11 +15,14 @@ trait OptionsTrait
 
 	protected function getIdOption(string $name): Id {
 		$option = $this->options[$name] ?? null;
-		if (is_numeric($option)) {
-			return new Id((int)round($option));
-		}
 		if (is_string($option)) {
 			return Id::fromId($option);
+		}
+		if (is_int($option)) {
+			return new Id($option);
+		}
+		if (is_float($option)) {
+			return new Id((int)round($option));
 		}
 		throw new \InvalidArgumentException('Expected ID option "' . $name . '".');
 	}
