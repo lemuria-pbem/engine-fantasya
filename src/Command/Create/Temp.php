@@ -15,6 +15,7 @@ use Lemuria\Exception\LemuriaException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
+use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -63,7 +64,14 @@ final class Temp extends UnitCommand implements Immediate
 		$this->createdUnit->setDisguise($presettings->Disguise());
 
 		$party->People()->add($this->createdUnit);
-		$this->creator->Region()->Residents()->add($this->createdUnit);
+		$region = $this->creator->Region();
+		$region->Residents()->add($this->createdUnit);
+		if ($region->Landscape() instanceof Navigable) {
+			$vessel = $this->creator->Vessel();
+			if ($vessel) {
+				$vessel->Passengers()->add($this->createdUnit);
+			}
+		}
 
 		$this->context->UnitMapper()->map($this);
 		$this->context->setUnit($this->createdUnit);
