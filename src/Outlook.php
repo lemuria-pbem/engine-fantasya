@@ -172,7 +172,7 @@ final class Outlook
 			foreach ($nextDirections as $i => $direction) {
 				$isWater = false;
 				foreach ($world->getPath($region, $direction, $distance) as $way) {
-					$neighbour = array_pop($way);
+					$neighbour = $way->last();
 					if ($neighbour->Landscape() instanceof Navigable) {
 						$isWater = true; // Filter out directions that have no water area as target.
 					}
