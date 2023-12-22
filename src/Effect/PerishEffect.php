@@ -11,11 +11,11 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
-use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Fantasya\TrophySource;
 use Lemuria\Model\Fantasya\Unicum;
 
 final class PerishEffect extends AbstractUnitEffect
@@ -63,7 +63,7 @@ final class PerishEffect extends AbstractUnitEffect
 		$race      = $unit->Race();
 		$inventory = new Resources();
 		$inventory->fill($unit->Inventory());
-		if ($race instanceof Monster) {
+		if ($race instanceof TrophySource) {
 			$trophy = $race->Trophy();
 			if ($trophy && isset(Carcass::WITH_TROPHY[$race::class])) {
 				$inventory->add(new Quantity($trophy));

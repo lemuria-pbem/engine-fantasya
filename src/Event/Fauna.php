@@ -29,6 +29,7 @@ use Lemuria\Model\Fantasya\Commodity\Elephant;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Griffinegg;
 use Lemuria\Model\Fantasya\Commodity\Horse;
+use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Potion\HorseBliss;
 use Lemuria\Model\Fantasya\Composition\Carcass;
 use Lemuria\Model\Fantasya\Landscape\Desert;
@@ -38,10 +39,10 @@ use Lemuria\Model\Fantasya\Landscape\Highland;
 use Lemuria\Model\Fantasya\Landscape\Mountain;
 use Lemuria\Model\Fantasya\Landscape\Plain;
 use Lemuria\Model\Fantasya\Landscape\Swamp;
-use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Fantasya\TrophySource;
 use Lemuria\Model\Fantasya\Unicum;
 use Lemuria\Model\Neighbours;
 
@@ -57,7 +58,7 @@ final class Fauna extends AbstractEvent
 	/**
 	 * @type array<string>
 	 */
-	private const array ANIMAL = [Camel::class, Elephant::class, Griffin::class, Horse::class];
+	private const array ANIMAL = [Camel::class, Elephant::class, Griffin::class, Horse::class, Pegasus::class];
 
 	/**
 	 * @type array<string, array<string, float>>
@@ -66,7 +67,8 @@ final class Fauna extends AbstractEvent
 		Camel::class    => [Desert::class  => 0.01, Highland::class => 0.005, Plain::class => 0.002, Mountain::class    => 0.002],
 		Elephant::class => [Swamp::class   => 0.01, Forest::class   => 0.002, Plain::class => 0.002],
 		Griffin::class  => [Glacier::class => 0.002],
-		Horse::class    => [Plain::class   => 0.01, Forest::class   => 0.005, Highland::class => 0.005, Mountain::class => 0.002]
+		Horse::class    => [Plain::class   => 0.01, Forest::class   => 0.005, Highland::class => 0.005, Mountain::class => 0.002],
+		Pegasus::class  => [Plain::class   => 0.01]
 	];
 
 	/**
@@ -76,17 +78,27 @@ final class Fauna extends AbstractEvent
 		Camel::class    => [Season::Fall->value   => true, Season::Winter->value => true],
 		Elephant::class => [Season::Spring->value => true, Season::Fall->value   => true, Season::Winter->value => true],
 		Griffin::class  => [Season::Spring->value => true],
-		Horse::class    => [Season::Spring->value => true, Season::Summer->value => true]
+		Horse::class    => [Season::Spring->value => true, Season::Summer->value => true],
+		Pegasus::class  => [Season::Summer->value => true]
 	];
 
 	/**
 	 * @type array<string, float>
 	 */
-	private const array BOOST = [Camel::class => 0.0, Elephant::class => 0.0, Griffin::class => 0.0, Horse::class => 4.0];
+	private const array BOOST = [
+		Camel::class => 0.0, Elephant::class => 0.0, Griffin::class => 0.0, Pegasus::class => 0.0,
+		Horse::class => 4.0
+	];
+
+	/**
+	 * @type array<string, float>
+	 */
+	private const array MIGRATION = [
+		Camel::class   => 0.2, Elephant::class => 0.2, Griffin::class => 0.2, Horse::class => 0.2,
+		Pegasus::class => 0.0
+	];
 
 	private const float MAX_RATE = 0.01;
-
-	private const float MIGRATION = 0.2;
 
 	private const float HUNGER = 0.1;
 
@@ -144,20 +156,25 @@ final class Fauna extends AbstractEvent
 						}
 					}
 				} else {
-					$migrants = $rate > 0.0 ? (int)ceil(self::MIGRATION * self::MAX_RATE * self::MAX_RATE / $rate * $count) : 0;
-					if ($migrants > 0) {
-						$neighbours   = Lemuria::World()->getNeighbours($region);
-						$distribution = $this->getMigrantDistribution($neighbours, $rates);
-						if (!empty($distribution)) {
-							$destinations = $this->getMigrationDestinations($distribution);
-							if ($destinations <= 0) {
-								$migrants = (int)ceil($migrants / 10);
+					$migration = self::MIGRATION[$animal];
+					if ($migration > 0.0) {
+						$migrants = $rate > 0.0 ? (int)ceil($migration * self::MAX_RATE * self::MAX_RATE / $rate * $count) : 0;
+						if ($migrants > 0) {
+							$neighbours   = Lemuria::World()->getNeighbours($region);
+							$distribution = $this->getMigrantDistribution($neighbours, $rates);
+							if (!empty($distribution)) {
+								$destinations = $this->getMigrationDestinations($distribution);
+								if ($destinations <= 0) {
+									$migrants = (int)ceil($migrants / 10);
+								}
+								$quantity = new Quantity($commodity, $migrants);
+								$resources->remove($quantity);
+								$this->message(FaunaMigrantsMessage::class, $region)->i($quantity);
+								$this->distributeMigrants($quantity, $neighbours, $distribution, $destinations);
 							}
-							$quantity = new Quantity($commodity, $migrants);
-							$resources->remove($quantity);
-							$this->message(FaunaMigrantsMessage::class, $region)->i($quantity);
-							$this->distributeMigrants($quantity, $neighbours, $distribution, $destinations);
 						}
+					} else {
+						$migrants = 0;
 					}
 
 					if ($count - $migrants > 0 && $workplaces + $migrants < 0) {
@@ -282,7 +299,7 @@ final class Fauna extends AbstractEvent
 
 	private function createCarcassInventory(Animal $animal): Resources {
 		$inventory = new Resources();
-		if ($animal instanceof Monster) {
+		if ($animal instanceof TrophySource) {
 			$trophy = $animal->Trophy();
 			if ($trophy && isset(Operate::WITH_TROPHY[$trophy::class])) {
 				$inventory->add(new Quantity($trophy));

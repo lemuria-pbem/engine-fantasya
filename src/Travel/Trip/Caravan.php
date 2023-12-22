@@ -36,7 +36,7 @@ class Caravan extends AbstractTrip
 		$horseCamel       = $this->conveyance->Horse() + $this->conveyance->Camel();
 		$horseCamel      -= $this->calculus->Unit()->Size();
 		$this->knowledge  = max(0, $horseCamel);
-		$this->knowledge += $this->conveyance->Pegasus() * 3;
+		$this->knowledge += $this->conveyance->Pegasus() * 2;
 		$this->knowledge += ($this->conveyance->Elephant() + $this->conveyance->WarElephant()) * 2;
 	}
 

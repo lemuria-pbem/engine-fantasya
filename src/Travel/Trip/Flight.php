@@ -26,7 +26,7 @@ class Flight extends AbstractTrip
 
 	protected function calculateKnowledge(): void {
 		$this->knowledge  = 0;
-		$this->knowledge += $this->conveyance->Pegasus() * 3;
+		$this->knowledge += $this->conveyance->Pegasus() * 2;
 		$this->knowledge += $this->conveyance->Griffin() * 6;
 	}
 

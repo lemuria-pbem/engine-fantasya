@@ -32,7 +32,7 @@ class Ride extends AbstractTrip
 
 	protected function calculateKnowledge(): void {
 		$this->knowledge  = 0;
-		$this->knowledge += $this->conveyance->Pegasus() * 3;
+		$this->knowledge += $this->conveyance->Pegasus() * 2;
 		$this->knowledge += ($this->conveyance->Elephant() + $this->conveyance->WarElephant()) * 2;
 		$this->knowledge += $this->conveyance->Horse() + $this->conveyance->Camel();
 	}

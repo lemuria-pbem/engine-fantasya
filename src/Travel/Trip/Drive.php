@@ -84,7 +84,7 @@ class Drive extends AbstractTrip
 		if ($rideKnowledge) {
 			$this->knowledge = $rideKnowledge;
 		} else {
-			$this->knowledge  = $this->conveyance->Pegasus() * 3;
+			$this->knowledge  = $this->conveyance->Pegasus() * 2;
 			$this->knowledge += $this->conveyance->Elephant() * 2;
 			$this->knowledge += $this->conveyance->WarElephant() * 2;
 			$animals          = $this->conveyance->Horse() + $this->conveyance->Camel();
@@ -114,7 +114,7 @@ class Drive extends AbstractTrip
 		}
 
 		$knowledge = ($this->conveyance->Catapult() + $this->conveyance->Carriage()) * 2;
-		$knowledge += $this->conveyance->Pegasus() * 3;
+		$knowledge += $this->conveyance->Pegasus() * 2;
 		$knowledge += $this->conveyance->Elephant() * 2;
 		$knowledge += $this->conveyance->WarElephant() * 2;
 		$knowledge += $this->conveyance->Camel();

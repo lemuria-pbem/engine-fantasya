@@ -10,6 +10,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\Operate\CarcassNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Operate\CarcassOnlyMessage;
 use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Monster\Bear;
+use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Composition\Carcass as CarcassModel;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Resources;
@@ -23,7 +24,7 @@ final class Carcass extends AbstractOperate
 	/**
 	 * @type array<string, true>
 	 */
-	public final const array WITH_TROPHY = [Bear::class => true, Griffin::class => true];
+	public final const array WITH_TROPHY = [Bear::class => true, Griffin::class => true, Pegasus::class => true];
 
 	public function take(): void {
 		$unicum  = $this->operator->Unicum();
