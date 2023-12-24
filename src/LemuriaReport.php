@@ -13,7 +13,9 @@ use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Exception\DuplicateIdException;
+use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Fantasya\Vessel;
 use Lemuria\Model\Reassignment;
 use Lemuria\SerializableTrait;
 use Lemuria\Validate;
@@ -187,6 +189,12 @@ class LemuriaReport implements Reassignment, Report
 					$this->removed[$party][] = $message;
 				}
 			}
+			return;
+		}
+		if ($identifiable instanceof Construction || $identifiable instanceof Vessel) {
+			$namespace = $identifiable->Catalog()->value;
+			$id        = $identifiable->Id()->Id();
+			unset($this->report[$namespace][$id]);
 		}
 	}
 
