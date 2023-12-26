@@ -24,8 +24,10 @@ use Lemuria\Model\Fantasya\Quotas;
  * The Quota command sets ressource production limits on regions.
  *
  * GRENZE <amount> <commodity>
+ * GRENZE <commodity> <amount>
  * GRENZE <commodity> Nicht
  * GRENZE <percent> Kräuter
+ * GRENZE Kräuter <percent>
  * GRENZE Kräuter Nicht
  */
 class Quota extends UnitCommand
@@ -52,17 +54,17 @@ class Quota extends UnitCommand
 			throw new InvalidCommandException($this);
 		}
 
-		$amount = mb_strtolower($this->phrase->getParameter());
-		$commodity = mb_strtolower($this->phrase->getParameter(2));
-		if ($commodity === 'nicht') {
-			if (in_array($amount, self::HERB)) {
+		$commodity = $this->parseCommodity();
+		$amount    = $this->parseAmount();
+		if ($amount === 'nicht') {
+			if (in_array($commodity, self::HERB)) {
 				$this->removeHerbQuota();
-			} elseif (in_array($amount, self::PEASANT)) {
+			} elseif (in_array($commodity, self::PEASANT)) {
 				$this->removeQuota(self::createCommodity(Peasant::class));
-			} elseif (in_array($amount, self::TREE)) {
+			} elseif (in_array($commodity, self::TREE)) {
 				$this->removeQuota(self::createCommodity(Wood::class));
 			} else {
-				$this->removeQuota($this->context->Factory()->commodity($amount));
+				$this->removeQuota($this->context->Factory()->commodity($commodity));
 			}
 		} else {
 			$value = (int)$amount;
@@ -138,6 +140,24 @@ class Quota extends UnitCommand
 			}
 			$this->message(QuotaRemoveHerbMessage::class)->e($region);
 		}
+	}
+
+	private function parseCommodity(): string {
+		$amount = mb_strtolower($this->phrase->getParameter());
+		$number = (int)$amount;
+		if ((string)$number === $amount || ($number . '%') === $amount) {
+			return mb_strtolower($this->phrase->getParameter(2));
+		}
+		return mb_strtolower($this->phrase->getParameter());
+	}
+
+	private function parseAmount(): string {
+		$amount = mb_strtolower($this->phrase->getParameter());
+		$number = (int)$amount;
+		if ((string)$number === $amount || ($number . '%') === $amount) {
+			return $amount;
+		}
+		return mb_strtolower($this->phrase->getParameter(2));
 	}
 
 	private function getQuotasHerbs(): array {
