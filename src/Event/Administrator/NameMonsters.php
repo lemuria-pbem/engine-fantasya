@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Factory\Namer;
 use Lemuria\Id;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 
@@ -35,6 +36,7 @@ final class NameMonsters extends AbstractEvent
 		foreach ($party->People() as $unit) {
 			if (empty($unit->Name())) {
 				$this->namer->name($unit);
+				Lemuria::Log()->debug('Monster ' . $unit->Id() . ' has been named.');
 			}
 		}
 	}
