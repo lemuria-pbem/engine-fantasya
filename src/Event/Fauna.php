@@ -98,6 +98,14 @@ final class Fauna extends AbstractEvent
 		Pegasus::class => 0.0
 	];
 
+	/**
+	 * @type array<string, float>
+	 */
+	private const array PERISH_CHANCE = [
+		Camel::class   => 0.01, Elephant::class => 0.01, Griffin::class => 0.01, Horse::class => 0.01,
+		Pegasus::class => 0.0
+	];
+
 	private const float MAX_RATE = 0.01;
 
 	private const float HUNGER = 0.1;
@@ -105,8 +113,6 @@ final class Fauna extends AbstractEvent
 	private const float EGG_PROBABILITY = 0.25;
 
 	private const int PERISH_BASE = 150;
-
-	private const float PERISH_CHANCE = 0.01;
 
 	private Workplaces $workplaces;
 
@@ -192,7 +198,7 @@ final class Fauna extends AbstractEvent
 					$region->Treasury()->add($this->createCarcass($commodity));
 				} else {
 					$living = $count - ($migrants ?? 0);
-					$chance = ($living / self::PERISH_BASE) * self::PERISH_CHANCE;
+					$chance = ($living / self::PERISH_BASE) * self::PERISH_CHANCE[$commodity::class];
 					if (randChance($chance)) {
 						$resources->remove(new Quantity($commodity));
 						$region->Treasury()->add($this->createCarcass($commodity));

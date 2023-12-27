@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Event;
 use Lemuria\Engine\Fantasya\Event\Administrator\DesertStones;
 use Lemuria\Engine\Fantasya\Event\Administrator\HerbageFix;
 use Lemuria\Engine\Fantasya\Event\Administrator\Overcrowded;
+use Lemuria\Engine\Fantasya\Event\Administrator\PegasusIsland;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
@@ -23,5 +24,6 @@ final class Administrator extends DelegatedEvent
 		$this->delegates[] = new DesertStones($this->state);
 		$this->delegates[] = new HerbageFix($this->state);
 		$this->delegates[] = new Overcrowded($this->state);
+		$this->delegates[] = new PegasusIsland($this->state);
 	}
 }
