@@ -17,6 +17,7 @@ use Lemuria\Engine\Fantasya\Event\Founder;
 use Lemuria\Engine\Fantasya\Event\Game;
 use Lemuria\Engine\Fantasya\Event\Griffinegg;
 use Lemuria\Engine\Fantasya\Event\Growth;
+use Lemuria\Engine\Fantasya\Event\HerbalHuts;
 use Lemuria\Engine\Fantasya\Event\Integrity;
 use Lemuria\Engine\Fantasya\Event\Layabout;
 use Lemuria\Engine\Fantasya\Event\Liquidation;
@@ -52,7 +53,7 @@ class DefaultProgress implements Progress
 		ResetSiege::class, Conduct::class, Upkeep::class, Subsistence::class, Drift::class, Breeding::class,
 		TransporterCheck::class,
 		// after
-		Finish::class, MarketUpdate::class, Founder::class, Integrity::class, Support::class,
+		HerbalHuts::class, Finish::class, MarketUpdate::class, Founder::class, Integrity::class, Support::class,
 		Population::class, Fauna::class, Griffinegg::class, Growth::class, Regrow::class,
 		Decease::class, Drown::class, Liquidation::class,
 		Obtainment::class, Acquaintance::class, Recreate::class, Layabout::class, Retirement::class,
