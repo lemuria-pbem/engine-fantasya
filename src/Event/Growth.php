@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Event;
 
 use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
+use Lemuria\Engine\Fantasya\Factory\WorkplacesTrait;
 use Lemuria\Engine\Fantasya\Message\Region\GrowthMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
@@ -11,6 +12,7 @@ use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
 use Lemuria\Model\Calendar\Season;
+use Lemuria\Model\Fantasya\Building\ForesterLodge;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -26,8 +28,11 @@ final class Growth extends AbstractEvent
 {
 	use BuilderTrait;
 	use StatisticsTrait;
+	use WorkplacesTrait;
 
 	public const float RATE = 0.02;
+
+	private const float FORESTER = 2.0 * self::RATE;
 
 	private const float NEIGHBOUR = 0.003;
 
@@ -63,10 +68,11 @@ final class Growth extends AbstractEvent
 					continue;
 				}
 
-				$rate   = $trees < $place ? self::RATE : self::RATE / 10;
-				$growth = (int)ceil($rate * $trees);
-				$random = $growth >= 30 ? 5 : 1;
-				$growth = max(0, randInt($growth - $random, $growth + $random));
+				$hasForester = $this->checkForRegionBuilding($region, self::createBuilding(ForesterLodge::class));
+				$rate        = $trees < $place ? ($hasForester ? self::FORESTER : self::RATE) : self::RATE / 10;
+				$growth      = (int)ceil($rate * $trees);
+				$random      = $growth >= 30 ? 5 : 1;
+				$growth      = max(0, randInt($growth - $random, $growth + $random));
 
 				if ($trees < 0.01 * $place) {
 					$neighbourTrees = $this->countNeighbourTrees($region);

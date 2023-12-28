@@ -1273,6 +1273,7 @@
 		"FjordFungus": ["n", ["Fjordwuchs", "Fjordwuchse"], ["Fjordwuchses", 1], [0, "Fjordwuchsen"], 1, 1],
 		"Flatroot": ["f", ["Flachwurz", "Flachwurze"], ["Flachwurzes", 1], [0, "Flachwurzen"], 1, 1],
 		"Forest": ["m", ["Wald", "Wälder"], ["Waldes", 1], ["Walde", "Wäldern"], 1, 1],
+		"ForesterLodge": ["n", ["Forsthaus", "Forsthäuser"], ["Forsthauses", 1], [0, "Forsthäusern"], 1, 1],
 		"Fort": ["f", ["Befestigung", "Befestigungen"], 1, 1, 1, 1],
 		"FounderingWarElephant": ["m", ["Lahmende Kriegselefant", "Lahmenden Kriegselefanten"], [1, 1], [1, 1], [1, 1], ["Lahmender Kriegselefant", "Lahmende Kriegselefanten"]],
 		"Fur": ["m", ["Pelz", "Pelze"], ["Pelzes", 1], [0, "Pelzen"], 1, 1],

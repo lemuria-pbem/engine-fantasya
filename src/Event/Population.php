@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Effect\Unemployment;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Engine\Fantasya\Factory\WorkplacesTrait;
 use Lemuria\Engine\Fantasya\Message\Region\PopulationFeedMessage;
@@ -15,6 +16,8 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Building;
+use Lemuria\Model\Fantasya\Building\ForesterLodge;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Commodity\Potion\PeasantJoy;
@@ -30,6 +33,7 @@ use Lemuria\Model\Neighbours;
  */
 final class Population extends AbstractEvent
 {
+	use SiegeTrait;
 	use StatisticsTrait;
 	use WorkplacesTrait;
 
@@ -49,11 +53,14 @@ final class Population extends AbstractEvent
 
 	private Commodity $silver;
 
+	private Building $foresterLodge;
+
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);
-		$this->workplaces = new Workplaces();
-		$this->peasant    = self::createCommodity(Peasant::class);
-		$this->silver     = self::createCommodity(Silver::class);
+		$this->workplaces    = new Workplaces();
+		$this->foresterLodge = self::createBuilding(ForesterLodge::class);
+		$this->peasant       = self::createCommodity(Peasant::class);
+		$this->silver        = self::createCommodity(Silver::class);
 	}
 
 	protected function run(): void {
@@ -74,14 +81,15 @@ final class Population extends AbstractEvent
 			$years      = $wealth / self::WEALTH;
 			$this->placeDataMetrics(Subject::Prosperity, $years, $region);
 
-			$growth = $this->calculateGrowth($peasants, $available, $years, $work, $region);
+			$hasForester = $this->checkForRegionBuilding($region, $this->foresterLodge);
+			$growth      = $hasForester ? 0 : $this->calculateGrowth($peasants, $available, $years, $work, $region);
 			if ($growth > 0) {
 				$quantity = new Quantity($this->peasant, $growth);
 				$resources->add($quantity);
 				$this->message(PopulationGrowthMessage::class, $region)->i($quantity);
 			}
 
-			$migrants = $this->calculateMigrants($peasants, $workplaces, $years);
+			$migrants = $hasForester ? 0 : $this->calculateMigrants($peasants, $workplaces, $years);
 			if ($migrants > 0) {
 				$neighbours   = Lemuria::World()->getNeighbours($region);
 				$distribution = $this->getMigrantDistribution($neighbours);
@@ -154,7 +162,7 @@ final class Population extends AbstractEvent
 	private function getMigrantDistribution(Neighbours $neighbours): array {
 		$distribution = [];
 		foreach ($neighbours as $direction => $neighbour) {
-			if ($neighbour->Landscape()->Workplaces() <= 0) {
+			if ($neighbour->Landscape()->Workplaces() <= 0 || $this->checkForRegionBuilding($neighbour, $this->foresterLodge)) {
 				continue;
 			}
 			$resources  = $neighbour->Resources();

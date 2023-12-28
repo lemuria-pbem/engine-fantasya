@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Factory;
 use Lemuria\Engine\Fantasya\Effect\PotionInfluence;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\AbstractFarm;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
@@ -70,5 +71,20 @@ trait WorkplacesTrait
 		/** @var PotionInfluence $existing */
 		$existing = Lemuria::Score()->find($effect->setRegion($region));
 		return $existing?->hasPotion($potion) ? $existing->getCount($potion) : 0;
+	}
+
+	private function checkForRegionBuilding(Region $region, Building $building): bool {
+		foreach ($region->Estate() as $construction) {
+			if ($construction->Building() === $building) {
+				$size = $construction->Size();
+				if ($size >= $building->UsefulSize() && !$this->isSieged($construction)) {
+					$owner = $construction->Inhabitants()->Owner();
+					if ($owner && $this->context->getCalculus($owner)->isInMaintainedConstruction()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }
