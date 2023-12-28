@@ -422,7 +422,7 @@ trait TravelTrait
 		$party    = $this->unit->Party();
 		$building = self::createBuilding(Canal::class);
 		foreach ($this->unit->Region()->Estate() as $construction) {
-			if ($construction->Building() === $building) {
+			if ($construction->Building() === $building && $construction->Size() >= $building->UsefulSize()) {
 				$effect = new Unmaintained(State::getInstance());
 				if (Lemuria::Score()->find($effect->setConstruction($construction))) {
 					continue;

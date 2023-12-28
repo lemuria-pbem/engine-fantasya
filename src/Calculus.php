@@ -386,7 +386,7 @@ final class Calculus
 
 	public function isInMaintainedConstruction(): bool {
 		$construction = $this->unit->Construction();
-		if ($construction) {
+		if ($construction && $construction->Size() >= $construction->Building()->UsefulSize()) {
 			$effect = new Unmaintained(State::getInstance());
 			return Lemuria::Score()->find($effect->setConstruction($construction)) === null;
 		}

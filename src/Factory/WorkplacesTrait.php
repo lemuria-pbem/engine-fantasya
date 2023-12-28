@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Factory;
 use Lemuria\Engine\Fantasya\Effect\PotionInfluence;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Building\AbstractFarm;
 use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
 use Lemuria\Model\Fantasya\Commodity\Horse;
@@ -17,11 +18,34 @@ use Lemuria\Model\Fantasya\Region;
 trait WorkplacesTrait
 {
 	use BuilderTrait;
+	use SiegeTrait;
 
 	private Workplaces $workplaces;
 
 	private function getAvailableWorkplaces(Region $region): int {
-		return max(0, $region->Landscape()->Workplaces() - $this->getUsedWorkplaces($region));
+		$workplaces = $region->Landscape()->Workplaces();
+		$additional = $this->getAdditionalWorkplaces($region);
+		$used       = $this->getUsedWorkplaces($region);
+		return max(0, $workplaces + $additional - $used);
+	}
+
+	private function getAdditionalWorkplaces(Region $region): int {
+		$workplaces = $region->Landscape()->Workplaces();
+		$additional = 0;
+		$trees      = $region->Resources()[Wood::class]->Count();
+		foreach ($region->Estate() as $construction) {
+			$building = $construction->Building();
+			if ($building instanceof AbstractFarm) {
+				$size = $construction->Size();
+				if ($size >= $building->UsefulSize() && !$this->isSieged($construction)) {
+					$owner = $construction->Inhabitants()->Owner();
+					if ($owner && $this->context->getCalculus($owner)->isInMaintainedConstruction()) {
+						$additional = max($additional, $this->workplaces->getAdditional($building, $size, $workplaces, $trees));
+					}
+				}
+			}
+		}
+		return $additional;
 	}
 
 	private function getUsedWorkplaces(Region $region): int {
