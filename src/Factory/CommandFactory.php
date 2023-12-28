@@ -108,17 +108,23 @@ use Lemuria\Model\Fantasya\Building\Canal;
 use Lemuria\Model\Fantasya\Building\Citadel;
 use Lemuria\Model\Fantasya\Building\College;
 use Lemuria\Model\Fantasya\Building\Dockyard;
+use Lemuria\Model\Fantasya\Building\ForesterLodge;
 use Lemuria\Model\Fantasya\Building\Fort;
 use Lemuria\Model\Fantasya\Building\GriffinBreeding;
+use Lemuria\Model\Fantasya\Building\HerbalHut;
 use Lemuria\Model\Fantasya\Building\HorseBreeding;
+use Lemuria\Model\Fantasya\Building\HuntingLodge;
 use Lemuria\Model\Fantasya\Building\Lighthouse;
 use Lemuria\Model\Fantasya\Building\Magespire;
 use Lemuria\Model\Fantasya\Building\Market;
 use Lemuria\Model\Fantasya\Building\Megapolis;
 use Lemuria\Model\Fantasya\Building\Mine;
 use Lemuria\Model\Fantasya\Building\Monument;
+use Lemuria\Model\Fantasya\Building\MushroomCave;
+use Lemuria\Model\Fantasya\Building\Oasis;
 use Lemuria\Model\Fantasya\Building\Palace;
 use Lemuria\Model\Fantasya\Building\Pit;
+use Lemuria\Model\Fantasya\Building\Plantation;
 use Lemuria\Model\Fantasya\Building\Port;
 use Lemuria\Model\Fantasya\Building\Quarry;
 use Lemuria\Model\Fantasya\Building\Quay;
@@ -210,6 +216,7 @@ use Lemuria\Model\Fantasya\Commodity\Stone;
 use Lemuria\Model\Fantasya\Commodity\Trophy\Carnassial;
 use Lemuria\Model\Fantasya\Commodity\Trophy\GoblinEar;
 use Lemuria\Model\Fantasya\Commodity\Trophy\GriffinFeather;
+use Lemuria\Model\Fantasya\Commodity\Trophy\PegasusFeather;
 use Lemuria\Model\Fantasya\Commodity\Trophy\Skull;
 use Lemuria\Model\Fantasya\Commodity\Trophy\WolfSkin;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Battleaxe;
@@ -495,22 +502,32 @@ class CommandFactory
 		'Bergwerk'          => Mine::class,
 		'Burg'              => AnyCastle::class,
 		'Festung'           => Stronghold::class,
+		'Forsthaus'         => ForesterLodge::class,
 		'Gebäude'           => AnyBuilding::class,
 		'Gebaeude'          => AnyBuilding::class,
 		'Greifenzucht'      => GriffinBreeding::class,
 		'Hafen'             => Port::class,
 		'Holzfällerhütte'   => Cabin::class,
 		'Holzfaellerhuette' => Cabin::class,
+		'Jagdhaus'          => HuntingLodge::class,
 		'Kamelzucht'        => CamelBreeding::class,
 		'Kanal'             => Canal::class,
+		'Kräuterhütte'      => HerbalHut::class,
+		'Kraeuterhütte'     => HerbalHut::class,
+		'Kräuterhuette'     => HerbalHut::class,
+		'Kraeuterhuette'    => HerbalHut::class,
 		'Leuchtturm'        => Lighthouse::class,
 		'Magierturm'        => Magespire::class,
 		'Markt'             => Market::class,
 		'Megapolis'         => Megapolis::class,
 		'Mine'              => Pit::class,
 		'Monument'          => Monument::class,
+		'Oase'              => Oasis::class,
 		'Palast'            => Palace::class,
 		'Pferdezucht'       => HorseBreeding::class,
+		'Pilzhöhle'         => MushroomCave::class,
+		'Pilzhoehle'        => MushroomCave::class,
+		'Plantage'          => Plantation::class,
 		'Sägewerk'          => Sawmill::class,
 		'Saegewerk'         => Sawmill::class,
 		'Sattlerei'         => Saddlery::class,
@@ -617,6 +634,7 @@ class CommandFactory
 		'Öle'                        => Oil::class,
 		'Pegasi'                     => Pegasus::class,
 		'Pegasus'                    => Pegasus::class,
+		'Pegasusfedern'              => PegasusFeather::class,
 		'Pelze'                      => Fur::class,
 		'Pferd'                      => Horse::class,
 		'Pferde'                     => Horse::class,

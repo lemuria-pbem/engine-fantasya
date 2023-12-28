@@ -1294,6 +1294,7 @@
 		"Halberd": ["f", ["Hellebarde", "Hellebarden"], 1, 1, 1, 1],
 		"Halfling": ["m", ["Halbling", "Halblinge"], ["Halblings", 1], [0, "Halblingen"], 1, 1],
 		"HealingPotion": ["m", ["Heiltrank", "Heiltränke"], ["Heiltrankes", 1], [0, "Heiltränken"], 1, 1],
+		"HerbalHut": ["f", ["Kräuterhütte", "Kräuterhütten"], 1, 1, 1, 1],
 		"HerbAlmanac": ["m", ["Kräuteralmanach", "Kräuteralmanache"], ["Kräuteralmanachs", 1], [0, "Kräuteralmanachen"], 1, 1],
 		"Highland": ["n", ["Hochland", "Hochländer"], ["Hochlandes", 1], [0, "Hochländern"], 1, 1],
 		"Horse": ["n", ["Pferd", "Pferde"], ["Pferdes", 1], [0, "Pferden"], 1, 1],
