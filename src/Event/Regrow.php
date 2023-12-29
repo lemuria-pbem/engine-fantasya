@@ -4,12 +4,14 @@ namespace Lemuria\Engine\Fantasya\Event;
 
 use function Lemuria\getClass;
 use function Lemuria\randElement;
+use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Region\RegrowMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Calendar\Season;
-use Lemuria\Model\Fantasya\Herb;
+use Lemuria\Model\Fantasya\Building;
+use Lemuria\Model\Fantasya\Building\Greenhouse;
 use Lemuria\Model\Fantasya\Commodity\Herb\Bubblemorel;
 use Lemuria\Model\Fantasya\Commodity\Herb\Bugleweed;
 use Lemuria\Model\Fantasya\Commodity\Herb\CaveLichen;
@@ -32,6 +34,7 @@ use Lemuria\Model\Fantasya\Commodity\Herb\Waterfinder;
 use Lemuria\Model\Fantasya\Commodity\Herb\WhiteHemlock;
 use Lemuria\Model\Fantasya\Commodity\Herb\Windbag;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Herb;
 use Lemuria\Model\Fantasya\Herbage;
 use Lemuria\Model\Fantasya\Landscape\Desert;
 use Lemuria\Model\Fantasya\Landscape\Forest;
@@ -49,6 +52,7 @@ use Lemuria\Model\Fantasya\Region;
 final class Regrow extends AbstractEvent
 {
 	use BuilderTrait;
+	use SiegeTrait;
 
 	private const float MINIMUM = 0.01;
 
@@ -103,8 +107,11 @@ final class Regrow extends AbstractEvent
 
 	private float $rate;
 
+	private Building $greenhouse;
+
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);
+		$this->greenhouse = self::createBuilding(Greenhouse::class);
 	}
 
 	protected function initialize(): void {
@@ -179,15 +186,32 @@ final class Regrow extends AbstractEvent
 	}
 
 	private function grow(Region $region): void {
+		$rate       = $this->determineRate($region);
 		$herbage    = $region->Herbage();
-		$occurrence = max(self::MINIMUM, min(1.0, $this->rate * $herbage->Occurrence()));
+		$occurrence = max(self::MINIMUM, min(1.0, $rate * $herbage->Occurrence()));
 		$herbage->setOccurrence($occurrence);
 		$this->message(RegrowMessage::class, $region)->s($herbage->Herb())->p($occurrence);
+	}
+
+	private function determineRate(Region $region): float {
+		if ($this->rate < 0.0) {
+			foreach ($region->Estate() as $construction) {
+				if ($construction->Building() === $this->greenhouse && !$this->isSieged($construction)) {
+					$owner = $construction->Inhabitants()->Owner();
+					if ($owner && $this->context->getCalculus($owner)->isInMaintainedConstruction()) {
+						Lemuria::Log()->debug('Rate in ' . $region . ' is 0.0 due to greenhouse.');
+						return 0.0;
+					}
+				}
+			}
+		}
+		return $this->rate;
 	}
 
 	private function getNeighbourLandscapes(Region $region): array {
 		$neighbours = [];
 		foreach (Lemuria::World()->getNeighbours($region) as $neighbour) {
+			/** @var Region $neighbour */
 			$landscape = $neighbour->Landscape();
 			$neighbours[$landscape::class] = true;
 		}

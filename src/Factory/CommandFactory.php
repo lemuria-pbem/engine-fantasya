@@ -110,6 +110,7 @@ use Lemuria\Model\Fantasya\Building\College;
 use Lemuria\Model\Fantasya\Building\Dockyard;
 use Lemuria\Model\Fantasya\Building\ForesterLodge;
 use Lemuria\Model\Fantasya\Building\Fort;
+use Lemuria\Model\Fantasya\Building\Greenhouse;
 use Lemuria\Model\Fantasya\Building\GriffinBreeding;
 use Lemuria\Model\Fantasya\Building\HerbalHut;
 use Lemuria\Model\Fantasya\Building\HorseBreeding;
@@ -505,6 +506,8 @@ class CommandFactory
 		'Forsthaus'         => ForesterLodge::class,
 		'Gebäude'           => AnyBuilding::class,
 		'Gebaeude'          => AnyBuilding::class,
+		'Gewächshaus'       => Greenhouse::class,
+		'Gewaechshaus'      => Greenhouse::class,
 		'Greifenzucht'      => GriffinBreeding::class,
 		'Hafen'             => Port::class,
 		'Holzfällerhütte'   => Cabin::class,

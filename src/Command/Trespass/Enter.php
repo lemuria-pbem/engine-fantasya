@@ -22,6 +22,7 @@ use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building\Market;
 use Lemuria\Model\Fantasya\Building\Monument;
 use Lemuria\Model\Fantasya\Building\Ruin;
+use Lemuria\Model\Fantasya\Building\Shop;
 use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Relation;
@@ -42,7 +43,7 @@ final class Enter extends UnitCommand implements Reassignment
 	/**
 	 * @type array<string>
 	 */
-	public final const array FORBIDDEN = [Monument::class, Ruin::class, Signpost::class];
+	public final const array FORBIDDEN = [Monument::class, Ruin::class, Signpost::class, Shop::class];
 
 	protected function run(): void {
 		$n = $this->phrase->count();

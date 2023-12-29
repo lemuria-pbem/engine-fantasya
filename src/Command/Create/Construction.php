@@ -31,6 +31,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\AbstractCastle;
+use Lemuria\Model\Fantasya\Building\AbstractVenue;
 use Lemuria\Model\Fantasya\Building\Canal;
 use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Building\Market;
@@ -66,7 +67,7 @@ final class Construction extends AbstractProduct
 	/**
 	 * @type array<string>
 	 */
-	private const array FORBIDDEN = [Ruin::class, Signpost::class];
+	private const array FORBIDDEN = [Signpost::class];
 
 	/**
 	 * @type array<string, array<string>>
@@ -222,7 +223,7 @@ final class Construction extends AbstractProduct
 				if ($estate->has($id)) {
 					$construction = $estate[$id];
 					$building     = $construction->Building();
-					if (!in_array($building::class, self::FORBIDDEN)) {
+					if (!($building instanceof AbstractVenue) && !in_array($building::class, self::FORBIDDEN)) {
 						return $construction;
 					}
 				}

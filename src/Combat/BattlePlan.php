@@ -2,21 +2,10 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use Lemuria\Model\Fantasya\Building\Canal;
-use Lemuria\Model\Fantasya\Building\Monument;
-use Lemuria\Model\Fantasya\Building\Quay;
-use Lemuria\Model\Fantasya\Building\Ruin;
-use Lemuria\Model\Fantasya\Building\Signpost;
-use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Unit;
 
 class BattlePlan
 {
-	/**
-	 * @type array<string>
-	 */
-	protected const array ATTACK_REGION = [Canal::class, Monument::class, Quay::class, Ruin::class, Signpost::class, Site::class];
-
 	/**
 	 * @var array<int
 	 */
