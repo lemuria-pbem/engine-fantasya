@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Exception\ActivityException;
+use Lemuria\Engine\Fantasya\Exception\AlternativeException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Teacher;
@@ -156,10 +157,8 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 		$protocol = $this->context->getProtocol($this->unit);
 		if ($protocol->hasActivity($this)) {
 			if ($this->isAlternative()) {
-				if ($this->logCommit) {
-					$protocol->logCurrent($command);
-				}
-				return;
+				$protocol->logCurrent($command);
+				throw new AlternativeException($command);
 			}
 			throw new ActivityException($command);
 		}
