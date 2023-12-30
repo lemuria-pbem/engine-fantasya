@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Game;
 
-use Lemuria\Engine\Fantasya\Event\Behaviour\Monster\GiantFrog;
 use function Lemuria\randArray;
 use function Lemuria\randElement;
 use function Lemuria\randFloat;
@@ -18,6 +17,7 @@ use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Monster\Bear;
 use Lemuria\Model\Fantasya\Commodity\Monster\Ent;
 use Lemuria\Model\Fantasya\Commodity\Monster\Ghoul;
+use Lemuria\Model\Fantasya\Commodity\Monster\GiantFrog;
 use Lemuria\Model\Fantasya\Commodity\Monster\Goblin;
 use Lemuria\Model\Fantasya\Commodity\Monster\Kraken;
 use Lemuria\Model\Fantasya\Commodity\Monster\Skeleton;
@@ -148,7 +148,7 @@ final class PopulateContinent extends AbstractEvent
 		$zombies   = $finder->findByRace(self::createRace(Zombie::class));
 		$continent = Continent::get($this->getIdOption(self::CONTINENT));
 		$chances   = $this->hasOption(self::CHANCES) ? $this->getOption(self::CHANCES, 'array') : self::CHANCE;
-		$sizes     = $this->hasOption(self::SIZES) ? $this->getOption(self::SIZES, 'array') : self::SIZES;
+		$sizes     = $this->hasOption(self::SIZES) ? $this->getOption(self::SIZES, 'array') : self::SIZE;
 		$variation = $this->hasOption(self::VARIATION) ? $this->getOption(self::VARIATION, 'number') : self::VARIATION_VALUE;
 		foreach ($chances as $race => $chance) {
 			$party       = $race === Zombie::class ? $zombies : $monsters;
