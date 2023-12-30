@@ -25,6 +25,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\GuardMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Gang;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -78,10 +79,10 @@ abstract class AbstractBehaviour implements Behaviour
 		return $this;
 	}
 
-	protected function guard(): static {
+	protected function guard(float $guardChance = 0.5, float $unguardChance = 0.2): static {
 		if (!$this->perish) {
 			$guard       = new Guard($this);
-			$this->guard = $guard->act();
+			$this->guard = $guard->guard($guardChance)->unguard($unguardChance)->act();
 		}
 		return $this;
 	}
@@ -101,6 +102,15 @@ abstract class AbstractBehaviour implements Behaviour
 		}
 		return $this;
 	}
+
+	protected function seekUnperceptive(int $minimumPerception = 0, float $degradation = 0.5): static {
+		if (!$this->perish) {
+			$seek      = new Seek($this);
+			$this->act = $seek->setPerceptionChance($minimumPerception, $degradation)->act();
+		}
+		return $this;
+	}
+
 	protected function prey(): static {
 		if (!$this->perish) {
 			$prey      = new Prey($this);
@@ -118,6 +128,15 @@ abstract class AbstractBehaviour implements Behaviour
 	}
 
 	protected function home(): static {
+		if (!$this->perish && $this->unit->Size() > 0) {
+			$home = new Home($this);
+			$home->act();
+		}
+		return $this;
+
+	}
+
+	protected function lurk(): static {
 		if (!$this->perish && $this->unit->Size() > 0) {
 			$home = new Home($this);
 			$home->act();
@@ -196,6 +215,17 @@ abstract class AbstractBehaviour implements Behaviour
 		if (!$this->perish) {
 			$scatter = new Scatter($this);
 			$scatter->setUnits($minUnits)->setPersons($minPersons)->act();
+		}
+		return $this;
+	}
+
+	protected function split(int $maxPersons): static {
+		$size = $this->unit->Size();
+		if ($size > 1 && $size > $maxPersons) {
+			$split = (int)floor($size / 2);
+			$this->unit->setSize($size - $split);
+			$this->act = new Create($this->unit->Party(), $this->unit->Region());
+			$this->act->add(new Gang($this->unit->Race(), $split))->act();
 		}
 		return $this;
 	}

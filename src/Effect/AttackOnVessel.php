@@ -14,7 +14,7 @@ use Lemuria\Validate;
 
 final class AttackOnVessel extends AbstractUnitEffect
 {
-	private const VESSEL = 'vessel';
+	private const string VESSEL = 'vessel';
 
 	protected ?bool $isReassign = null;
 

@@ -27,8 +27,22 @@ class Guard implements Act
 
 	protected bool $isGuarding;
 
+	protected float $guardChance = self::GUARD;
+
+	protected float $unguardChance = self::UNGUARD;
+
 	public function IsGuarding(): bool {
 		return $this->isGuarding;
+	}
+
+	public function guard(float $chance): static {
+		$this->guardChance = $chance;
+		return $this;
+	}
+
+	public function unguard(float $chance): static {
+		$this->unguardChance = $chance;
+		return $this;
 	}
 
 	public function act(): static {
@@ -37,13 +51,13 @@ class Guard implements Act
 		} else {
 			$this->isGuarding = $this->unit->IsGuarding();
 			if ($this->isGuarding) {
-				if (randChance(self::UNGUARD)) {
+				if (randChance($this->unguardChance)) {
 					$this->isGuarding = false;
 					$this->unit->setIsGuarding(false);
 					$this->message(UnguardMessage::class, $this->unit);
 				}
 			} else {
-				if ($this->unit->BattleRow()->value >= BattleRow::Defensive->value && randChance(self::GUARD)) {
+				if ($this->unit->BattleRow()->value >= BattleRow::Defensive->value && randChance($this->guardChance)) {
 					$this->isGuarding = true;
 				}
 			}

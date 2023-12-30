@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Act;
 
+use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
@@ -14,6 +15,8 @@ use Lemuria\Model\Fantasya\Commodity\Monster\Wolf;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\People;
+use Lemuria\Model\Fantasya\Talent\Perception;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * A seeking monster tries to spot a random outdoor player unit in the region.
@@ -22,6 +25,10 @@ class Seek implements Act
 {
 	use ActTrait;
 	use MessageTrait;
+
+	protected int $minimumPerception = 0;
+
+	protected float $degradationChance = 1.0;
 
 	/**
 	 * @type array<string, array<string>>
@@ -41,6 +48,12 @@ class Seek implements Act
 		return $this->enemy;
 	}
 
+	public function setPerceptionChance(int $minimumPerception = 0, float $degradation = 0.5): static {
+		$this->minimumPerception = $minimumPerception;
+		$this->degradationChance = $degradation;
+		return $this;
+	}
+
 	public function act(): static {
 		$calculus = new Calculus($this->unit);
 		$races    = self::MONSTER[$this->unit->Race()::class] ?? [];
@@ -55,7 +68,7 @@ class Seek implements Act
 			if ($unit->Construction() || $unit->Vessel()) {
 				continue;
 			}
-			if ($unit->Size() > 0 && $calculus->canDiscover($unit)) {
+			if ($unit->Size() > 0 && $calculus->canDiscover($unit) && $this->hasSpotted($unit)) {
 				$this->enemy->add($unit);
 			}
 		}
@@ -63,5 +76,17 @@ class Seek implements Act
 			$this->message(SeekMessage::class, $this->unit)->e($region);
 		}
 		return $this;
+	}
+
+	protected function hasSpotted(Unit $unit): bool {
+		if ($this->degradationChance < 1.0) {
+			$calculus   = new Calculus($unit);
+			$perception = $calculus->knowledge(Perception::class)->Level() - $this->minimumPerception;
+			if ($perception > 0) {
+				$chance = $this->degradationChance ** $perception;
+				return randChance($chance);
+			}
+		}
+		return true;
 	}
 }

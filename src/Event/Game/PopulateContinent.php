@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Game;
 
+use Lemuria\Engine\Fantasya\Event\Behaviour\Monster\GiantFrog;
 use function Lemuria\randArray;
 use function Lemuria\randElement;
 use function Lemuria\randFloat;
@@ -12,7 +13,6 @@ use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Id;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Monster\Bear;
@@ -64,42 +64,45 @@ final class PopulateContinent extends AbstractEvent
 	 * @type array<string, string>
 	 */
 	private const array LANDSCAPE = [
-		Bear::class     => Forest::class,
-		Ent::class      => Forest::class,
-		Ghoul::class    => Swamp::class,
-		Goblin::class   => Plain::class,
-		Skeleton::class => Mountain::class,
-		Kraken::class   => Ocean::class,
-		Wolf::class     => Forest::class,
-		Zombie::class   => Highland::class
+		Bear::class      => Forest::class,
+		Ent::class       => Forest::class,
+		Ghoul::class     => Swamp::class,
+		GiantFrog::class => Swamp::class,
+		Goblin::class    => Plain::class,
+		Skeleton::class  => Mountain::class,
+		Kraken::class    => Ocean::class,
+		Wolf::class      => Forest::class,
+		Zombie::class    => Highland::class
 	];
 
 	/**
 	 * @type array<string, int>
 	 */
 	private const array SIZE = [
-		Bear::class     =>  1,
-		Ent::class      =>  4,
-		Ghoul::class    =>  8,
-		Goblin::class   => 10,
-		Skeleton::class =>  8,
-		Kraken::class   =>  1,
-		Wolf::class     =>  7,
-		Zombie::class   =>  6
+		Bear::class      =>  1,
+		Ent::class       =>  4,
+		Ghoul::class     =>  8,
+		GiantFrog::class =>  5,
+		Goblin::class    => 10,
+		Skeleton::class  =>  8,
+		Kraken::class    =>  1,
+		Wolf::class      =>  7,
+		Zombie::class    =>  6
 	];
 
 	/**
 	 * @type array<string, int>
 	 */
 	private const array CHANCE = [
-		Bear::class     =>  7,
-		Ent::class      => 25,
-		Ghoul::class    => 30,
-		Goblin::class   => 15,
-		Skeleton::class => 50,
-		Kraken::class   => 25,
-		Wolf::class     => 10,
-		Zombie::class   => 40
+		Bear::class      =>  7,
+		Ent::class       => 25,
+		Ghoul::class     => 30,
+		GiantFrog::class => 20,
+		Goblin::class    => 15,
+		Skeleton::class  => 50,
+		Kraken::class    => 25,
+		Wolf::class      => 10,
+		Zombie::class    => 40
 	];
 
 	private const float HAS_SHIELD = 0.5;

@@ -8,12 +8,15 @@ use Lemuria\Engine\Fantasya\Event\Game\CarriedOffWayfarer;
 use Lemuria\Engine\Fantasya\Event\Game\Drought;
 use Lemuria\Engine\Fantasya\Event\Game\FindWallet;
 use Lemuria\Engine\Fantasya\Event\Game\GoblinPlague;
+use Lemuria\Engine\Fantasya\Event\Game\PopulateContinent;
 use Lemuria\Engine\Fantasya\Event\Game\PotionGift;
 use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Event\Game\TheWildHunt;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Commodity\Monster\GiantFrog;
+use Lemuria\Model\Fantasya\Commodity\Monster\Sandworm;
 use Lemuria\Model\Fantasya\Commodity\Monster\Skeleton;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
@@ -77,6 +80,15 @@ final class Timer extends DelegatedEvent
 			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => '2il', Spawn::SIZE => 27, Spawn::RACE => Zombie::class]],
 			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => '2im', Spawn::SIZE => 13, Spawn::RACE => Zombie::class]],
 			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => '2gp', Spawn::SIZE => 33, Spawn::RACE => Zombie::class]]
+		],
+		155 => [
+			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [GiantFrog::class => 30]]],
+			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 2, PopulateContinent::CHANCES => [GiantFrog::class => 20]]],
+			['class' => Spawn::class, 'options' => [Spawn::REGION => 'ya', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
+			['class' => Spawn::class, 'options' => [Spawn::REGION => '141', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
+			['class' => Spawn::class, 'options' => [Spawn::REGION => '1dv', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
+			['class' => Spawn::class, 'options' => [Spawn::REGION => '1o2', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
+			['class' => Spawn::class, 'options' => [Spawn::REGION => '2mp', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]]
 		]
 	];
 

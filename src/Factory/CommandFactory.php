@@ -183,8 +183,10 @@ use Lemuria\Model\Fantasya\Commodity\Luxury\Spice;
 use Lemuria\Model\Fantasya\Commodity\Monster\Bear;
 use Lemuria\Model\Fantasya\Commodity\Monster\Ent;
 use Lemuria\Model\Fantasya\Commodity\Monster\Ghoul;
+use Lemuria\Model\Fantasya\Commodity\Monster\GiantFrog;
 use Lemuria\Model\Fantasya\Commodity\Monster\Goblin;
 use Lemuria\Model\Fantasya\Commodity\Monster\Kraken;
+use Lemuria\Model\Fantasya\Commodity\Monster\Sandworm;
 use Lemuria\Model\Fantasya\Commodity\Monster\Skeleton;
 use Lemuria\Model\Fantasya\Commodity\Monster\Wolf;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
@@ -215,6 +217,7 @@ use Lemuria\Model\Fantasya\Commodity\Protection\Woodshield;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Commodity\Stone;
 use Lemuria\Model\Fantasya\Commodity\Trophy\Carnassial;
+use Lemuria\Model\Fantasya\Commodity\Trophy\EbonyTooth;
 use Lemuria\Model\Fantasya\Commodity\Trophy\GoblinEar;
 use Lemuria\Model\Fantasya\Commodity\Trophy\GriffinFeather;
 use Lemuria\Model\Fantasya\Commodity\Trophy\PegasusFeather;
@@ -573,6 +576,9 @@ class CommandFactory
 		'Elefant'                    => Elephant::class,
 		'Elefanten'                  => Elephant::class,
 		'Elefantenpanzer'            => ElephantArmor::class,
+		'Elfenbeinzahn'              => EbonyTooth::class,
+		'Elfenbeinzaehne'            => EbonyTooth::class,
+		'Elfenbeinzähne'             => EbonyTooth::class,
 		'Elfenliebe'                 => Elvendear::class,
 		'Elixier der macht'          => ElixirOfPower::class,
 		'Elixiere der macht'         => ElixirOfPower::class,
@@ -758,38 +764,43 @@ class CommandFactory
 	 * @var array<string, string>
 	 */
 	protected array $races = [
-		'Aquaner'    => Aquan::class,
-		'Baer'       => Bear::class,
-		'Baeren'     => Bear::class,
-		'Bär'        => Bear::class,
-		'Bären'      => Bear::class,
-		'Baumhirten' => Ent::class,
-		'Baumhirte'  => Ent::class,
-		'Elf'        => Elf::class,
-		'Elfen'      => Elf::class,
-		'Ghoul'      => Ghoul::class,
-		'Ghoule'     => Ghoul::class,
-		'Halbling'   => Halfling::class,
-		'Halblinge'  => Halfling::class,
-		'Kobold'     => Goblin::class,
-		'Kobolde'    => Goblin::class,
-		'Krake'      => Kraken::class,
-		'Kraken'     => Kraken::class,
-		'Mensch'     => Human::class,
-		'Menschen'   => Human::class,
-		'Ork'        => Orc::class,
-		'Orks'       => Orc::class,
-		'Skelett'    => Skeleton::class,
-		'Skelette'   => Skeleton::class,
-		'Troll'      => Troll::class,
-		'Trolle'     => Troll::class,
-		'Wolf'       => Wolf::class,
-		'Woelfe'     => Wolf::class,
-		'Wölfe'      => Wolf::class,
-		'Zombie'     => Zombie::class,
-		'Zombies'    => Zombie::class,
-		'Zwerg'      => Dwarf::class,
-		'Zwerge'     => Dwarf::class
+		'Aquaner'        => Aquan::class,
+		'Baer'           => Bear::class,
+		'Baeren'         => Bear::class,
+		'Bär'            => Bear::class,
+		'Bären'          => Bear::class,
+		'Baumhirten'     => Ent::class,
+		'Baumhirte'      => Ent::class,
+		'Elf'            => Elf::class,
+		'Elfen'          => Elf::class,
+		'Ghoul'          => Ghoul::class,
+		'Ghoule'         => Ghoul::class,
+		'Halbling'       => Halfling::class,
+		'Halblinge'      => Halfling::class,
+		'Kobold'         => Goblin::class,
+		'Kobolde'        => Goblin::class,
+		'Krake'          => Kraken::class,
+		'Kraken'         => Kraken::class,
+		'Mensch'         => Human::class,
+		'Menschen'       => Human::class,
+		'Ork'            => Orc::class,
+		'Orks'           => Orc::class,
+		'Riesenfrosch'   => GiantFrog::class,
+		'Riesenfroesche' => GiantFrog::class,
+		'Riesenfrösche'  => GiantFrog::class,
+		'Sandwurm'       => Sandworm::class,
+		'Sandwürmer'     => Sandworm::class,
+		'Skelett'        => Skeleton::class,
+		'Skelette'       => Skeleton::class,
+		'Troll'          => Troll::class,
+		'Trolle'         => Troll::class,
+		'Wolf'           => Wolf::class,
+		'Woelfe'         => Wolf::class,
+		'Wölfe'          => Wolf::class,
+		'Zombie'         => Zombie::class,
+		'Zombies'        => Zombie::class,
+		'Zwerg'          => Dwarf::class,
+		'Zwerge'         => Dwarf::class
 	];
 
 	/**
