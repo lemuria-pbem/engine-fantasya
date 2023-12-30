@@ -95,12 +95,15 @@ final class MiningDiscovery extends AbstractEvent
 		$product = $miner->getCommodity();
 		$chance  = self::CHANCE[$product::class] ?? 0.0;
 		if ($chance > 0.0) {
-			$unit      = $miner->Unit();
-			$landscape = $unit->Region()->Landscape();
-			if (isset(self::CHANCE[$landscape::class])) {
-				$size = $chance * sqrt($unit->Size());
-				if ($size > 0.0) {
-					$this->addSize($unit, $size);
+			$unit = $miner->Unit();
+			foreach ($miner->getRegions() as $id => $percent) {
+				$region    = Region::get(new Id($id));
+				$landscape = $region->Landscape();
+				if (isset(self::CHANCE[$landscape::class])) {
+					$size = $chance * sqrt($percent * $unit->Size());
+					if ($size > 0.0) {
+						$this->addSize($region, $unit, $size);
+					}
 				}
 			}
 		}
@@ -148,13 +151,13 @@ final class MiningDiscovery extends AbstractEvent
 		$this->message(MiningDiscoveryMessage::class, $this->unit)->e($region)->s($landscape)->i($this->discovery);
 	}
 
-	private function addSize(Unit $unit, float $size): void {
-		$region = $unit->Region()->Id()->Id();
-		if (!isset($this->people[$region])) {
-			$this->people[$region] = new People();
-			$this->size[$region]   = 0.0;
+	private function addSize(Region $region, Unit $unit, float $size): void {
+		$id = $region->Id()->Id();
+		if (!isset($this->people[$id])) {
+			$this->people[$id] = new People();
+			$this->size[$id]   = 0.0;
 		}
-		$this->people[$region]->add($unit);
-		$this->size[$region] += $size;
+		$this->people[$id]->add($unit);
+		$this->size[$id] += $size;
 	}
 }

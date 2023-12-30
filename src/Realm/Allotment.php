@@ -88,8 +88,9 @@ class Allotment
 			$fleetTotal = $this->calculateFleetTotal($commodity);
 			$local      = $this->availability[$this->center];
 			$total      = $fleetTotal + $local;
+			$parts      = [];
 			if ($total > 0) {
-				$rate = min(1.0, $demand / array_sum($this->availability));
+				$rate  = min(1.0, $demand / array_sum($this->availability));
 				foreach ($this->region as $id => $region) {
 					if ($id === $this->center) {
 						continue;
@@ -110,7 +111,8 @@ class Allotment
 						$availability->remove(new Quantity($commodity, $part));
 						$partQuantity = new Quantity($commodity, $part);
 						$resources->add($partQuantity);
-						$demand -= $part;
+						$demand    -= $part;
+						$parts[$id] = $part;
 						Lemuria::Log()->debug('Allotment of ' . $partQuantity . ' in region ' . $id . ' for consumer ' . $consumer->getId() . '.');
 					}
 				}
@@ -122,7 +124,12 @@ class Allotment
 				$availability->remove(new Quantity($commodity, $remaining));
 				$partQuantity = new Quantity($commodity, $remaining);
 				$resources->add($partQuantity);
+				$parts[$this->center] = $demand;
 				Lemuria::Log()->debug('Allotment of ' . $partQuantity . ' in region ' . $this->center . ' for consumer ' . $consumer->getId() . '.');
+			}
+			$total = array_sum($parts);
+			foreach ($parts as $id => $part) {
+				$consumer->addRegion($this->region[$id], $part / $total);
 			}
 		}
 		$consumer->allocate($resources);

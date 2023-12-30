@@ -15,6 +15,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -34,6 +35,11 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	protected ?Allotment $allotment = null;
 
 	protected ?array $lastCheck = null;
+
+	/**
+	 * @var array<int, float>
+	 */
+	protected array $regions = [];
 
 	protected bool $isRunCentrally;
 
@@ -63,6 +69,13 @@ abstract class AllocationCommand extends UnitCommand implements Consumer
 	 */
 	public function getQuota(): float {
 		return self::QUOTA;
+	}
+
+	/**
+	 * Add a production region and rate.
+	 */
+	public function addRegion(Region $region, float $rate): void {
+		$this->regions[$region->Id()->Id()] = $rate;
 	}
 
 	/**

@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -25,6 +26,11 @@ interface Consumer extends Command
 	 * Get the requested resource quota that is available for allocation.
 	 */
 	public function getQuota(): float;
+
+	/**
+	 * Add a production region and rate.
+	 */
+	public function addRegion(Region $region, float $rate);
 
 	/**
 	 * Check diplomacy between the unit and region owner and guards.

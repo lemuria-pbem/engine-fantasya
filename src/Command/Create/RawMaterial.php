@@ -85,6 +85,13 @@ class RawMaterial extends AllocationCommand implements Activity
 		throw new LemuriaException($resource . ' is not a commodity.');
 	}
 
+	/**
+	 * @return array<int, float>
+	 */
+	public function getRegions(): array {
+		return $this->regions;
+	}
+
 	protected function initialize(): void {
 		$this->checkForDoubleProductionFacility();
 		if ($this->isInDoublingFacility) {

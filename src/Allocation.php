@@ -113,6 +113,7 @@ final class Allocation
 			foreach ($this->rounds[$round] as $id) {
 				$this->allocate($this->consumers[$id]);
 			}
+			$consumer->addRegion($this->Region(), 1.0);
 		}
 	}
 
