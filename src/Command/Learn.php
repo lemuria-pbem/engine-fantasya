@@ -80,8 +80,8 @@ final class Learn extends UnitCommand implements Activity
 			Entertaining::class => 0.2, Navigation::class => 0.2, Perception::class => 0.5
 		],
 		Longboat::class   => [
-			Bladefighting::class => 0.2, Entertaining::class => 0.5, Spearfighting::class => 0.2,
-			Navigation::class    => 0.5, Perception::class   => 0.5
+			Bladefighting::class => 0.2,  Entertaining::class => 0.5, Spearfighting::class => 0.2,
+			Navigation::class    => 0.75, Perception::class   => 0.5
 		],
 		Dragonship::class => [
 			Archery::class       => 0.5,  Bladefighting::class => 0.75, Crossbowing::class => 0.5,
