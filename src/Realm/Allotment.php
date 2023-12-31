@@ -80,7 +80,6 @@ class Allotment
 		$resources  = new Resources();
 		$quota      = $consumer->getQuota();
 		foreach ($consumer->getDemand() as $quantity) {
-			// TODO: Herb commodities must be more flexible here.
 			$commodity = $quantity->Commodity();
 			$piece     = $commodity->Weight();
 			$demand    = $quantity->Count();
@@ -90,7 +89,7 @@ class Allotment
 			$total      = $fleetTotal + $local;
 			$parts      = [];
 			if ($total > 0) {
-				$rate  = min(1.0, $demand / array_sum($this->availability));
+				$rate = min(1.0, $demand / array_sum($this->availability));
 				foreach ($this->region as $id => $region) {
 					if ($id === $this->center) {
 						continue;

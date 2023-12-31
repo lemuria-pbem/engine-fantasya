@@ -33,6 +33,7 @@ use Lemuria\Model\Fantasya\Commodity\Herb\TangyTemerity;
 use Lemuria\Model\Fantasya\Commodity\Herb\Waterfinder;
 use Lemuria\Model\Fantasya\Commodity\Herb\WhiteHemlock;
 use Lemuria\Model\Fantasya\Commodity\Herb\Windbag;
+use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Herb;
 use Lemuria\Model\Fantasya\Herbage;
@@ -196,16 +197,41 @@ final class Regrow extends AbstractEvent
 	private function determineRate(Region $region): float {
 		if ($this->rate < 0.0) {
 			foreach ($region->Estate() as $construction) {
-				if ($construction->Building() === $this->greenhouse && !$this->isSieged($construction)) {
-					$owner = $construction->Inhabitants()->Owner();
-					if ($owner && $this->context->getCalculus($owner)->isInMaintainedConstruction()) {
-						Lemuria::Log()->debug('Rate in ' . $region . ' is 0.0 due to greenhouse.');
-						return 0.0;
+				if ($this->isActiveGreenhouse($construction)) {
+					Lemuria::Log()->debug('Rate in ' . $region . ' is 0.0 due to greenhouse.');
+					return 0.0;
+				}
+			}
+
+			$id        = $region->Id()->Id();
+			$territory = $region->Realm()?->Territory();
+			$central   = $territory->Central();
+			foreach ($central->Estate() as $construction) {
+				if ($this->isActiveGreenhouse($construction)) {
+					$size = $construction->Size();
+					$i    = 0;
+					$territory->rewind();
+					while ($i++ < $size && $territory->valid()) {
+						if ($territory->key() === $id) {
+							Lemuria::Log()->debug('Rate in ' . $region . ' is 0.0 due to greenhouse in realm.');
+							return 0.0;
+						}
+						$territory->next();
 					}
 				}
 			}
 		}
 		return $this->rate;
+	}
+
+	private function isActiveGreenhouse(Construction $construction): bool {
+		if ($construction->Building() === $this->greenhouse && !$this->isSieged($construction)) {
+			$owner = $construction->Inhabitants()->Owner();
+			if ($owner && $this->context->getCalculus($owner)->isInMaintainedConstruction()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private function getNeighbourLandscapes(Region $region): array {
