@@ -1025,6 +1025,7 @@
 		"VesselFinishedMessage": "Das Schiff $id ist nun fertiggestellt.",
 		"VesselLootMessage": "Die Einheit $id liest $loot als Beute aus der Schlacht auf dem Schiff $environment auf.",
 		"VesselMessage": "Die Einheit $id erbaut {g/akk:ein:$ship}.",
+		"VesselOffBoardMessage": "Die Einheit $id muss an Bord des Schiffes sein, um es weiterzubauen.",
 		"VesselOnlyMessage": "Die Einheit $id kann nur {$size:Größenpunkt} am Schiff $vessel bauen.",
 		"VesselResourcesMessage": "Die Einheit $id hat kein Baumaterial, um am Schiff $vessel zu bauen.",
 		"VesselSpaceMessage": "Die Einheit $id kann {g/akk:kein:$ship} bauen - es ist nicht genügend Platz im Hafen vorhanden.",

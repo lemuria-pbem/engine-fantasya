@@ -13,6 +13,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\VesselBuildMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselCreateMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\VesselOffBoardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselResourcesMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VesselSpaceMessage;
@@ -53,7 +54,11 @@ final class Vessel extends AbstractProduct
 	}
 
 	protected function run(): void {
-		$ship   = $this->getShip();
+		$ship = $this->getShip();
+		if ($ship instanceof AnyShip) {
+			$this->message(VesselOffBoardMessage::class);
+			return;
+		}
 		$vessel = $this->leaveCurrentVesselFor($ship);
 		if (!$vessel && !$this->canBuildVesselHere($ship)) {
 			$this->message(VesselSpaceMessage::class)->s($ship);

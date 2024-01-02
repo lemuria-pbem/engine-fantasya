@@ -4,14 +4,11 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message\Result;
-use Lemuria\Engine\Message\Section;
 use Lemuria\Singleton;
 
-class VesselMessage extends AbstractUnitMessage
+class VesselMessage extends VesselOffBoardMessage
 {
 	protected Result $result = Result::Success;
-
-	protected Section $section = Section::Production;
 
 	protected Singleton $ship;
 
