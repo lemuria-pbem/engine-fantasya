@@ -5,12 +5,14 @@ namespace Lemuria\Engine\Fantasya\Command\Create;
 use function Lemuria\getClass;
 use function Lemuria\randArray;
 use Lemuria\Engine\Fantasya\Activity;
+use Lemuria\Engine\Fantasya\Availability;
 use Lemuria\Engine\Fantasya\Command\AllocationCommand;
 use Lemuria\Engine\Fantasya\Command\Explore;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Herb as HerbModel;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
+use Lemuria\Engine\Fantasya\Factory\Model\RealmQuota;
 use Lemuria\Engine\Fantasya\Message\Party\HerbPreventMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HerbExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\HerbGuardedMessage;
@@ -157,16 +159,17 @@ final class Herb extends AllocationCommand implements Activity
 	private function createCentralDemand(): void {
 		$herbs = [];
 		foreach ($this->allotment->Realm()->Territory() as $region) {
-			$next = $this->determineHerbage($region)?->Herb();
-			if ($next) {
-				$class = $next::class;
-				if (!isset($herbs[$class])) {
-					$herbs[$class] = 0;
+			$herbage = $this->determineHerbage($region);
+			if ($herbage) {
+				$herb       = $herbage->Herb();
+				$occurrence = (int)round($herbage->Occurrence() * Availability::HERBS_PER_REGION);
+				$threshold  = (int)round($this->determineThreshold($herb, $region) * Availability::HERBS_PER_REGION);
+				if ($occurrence > $threshold) {
+					$herbs[$herb::class] = true;
 				}
-				$herbs[$class]++;
 			}
 		}
-		$herbs = array_values($herbs);
+		$herbs = array_keys($herbs);
 		$n     = count($herbs);
 		if ($n > 0) {
 			$this->addToWorkload($this->production);
@@ -225,5 +228,21 @@ final class Herb extends AllocationCommand implements Activity
 			return $herbalBook->getHerbage($region);
 		}
 		return null;
+	}
+
+	private function determineThreshold(Commodity $herb, Region $region): float {
+		if (is_float($this->threshold)) {
+			return $this->threshold;
+		}
+		if ($this->allotment) {
+			$quotas = new RealmQuota($this->allotment->Realm());
+			$quota  = $quotas->getQuota($region, $herb)->Threshold();
+			return is_float($quota) ? $quota : 0.0;
+		}
+		$quota = $this->unit->Party()->Regulation()->getQuotas($region)?->getQuota($herb)?->Threshold();
+		if (is_float($quota)) {
+			return $quota;
+		}
+		return 0.0;
 	}
 }
