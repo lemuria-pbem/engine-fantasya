@@ -91,10 +91,10 @@ class Allotment
 					if ($id === $this->center) {
 						continue;
 					}
-					$part = (int)ceil($rate * $this->availability[$id]);
-					if ($part > $demand) {
-						$part = $demand;
-					}
+					$availability = $this->state->getAvailability($region);
+					$available    = $availability->getResource($commodity)->Count();
+					$part         = (int)ceil($rate * $this->availability[$id]);
+					$part         = min($part, $demand, $available);
 					if ($part > 0) {
 						if ($this->isFleetEnabled) {
 							if ($commodity instanceof Animal) {
@@ -104,7 +104,7 @@ class Allotment
 								$part   = (int)floor($weight / $piece);
 							}
 						}
-						$this->state->getAvailability($region)->remove(new Quantity($commodity, $part));
+						$availability->remove(new Quantity($commodity, $part));
 						$partQuantity = new Quantity($commodity, $part);
 						$resources->add($partQuantity);
 						$demand -= $part;
@@ -112,10 +112,12 @@ class Allotment
 					}
 				}
 			}
-			$demand = min($demand, $local);
-			if ($demand > 0) {
-				$this->state->getAvailability($this->region[$this->center])->remove(new Quantity($commodity, $demand));
-				$partQuantity = new Quantity($commodity, $demand);
+			$availability = $this->state->getAvailability($this->region[$this->center]);
+			$available    = $availability->getResource($commodity)->Count();
+			$remaining    = min($demand, $available, $local);
+			if ($remaining > 0) {
+				$availability->remove(new Quantity($commodity, $remaining));
+				$partQuantity = new Quantity($commodity, $remaining);
 				$resources->add($partQuantity);
 				Lemuria::Log()->debug('Allotment of ' . $partQuantity . ' in region ' . $this->center . ' for consumer ' . $consumer->getId() . '.');
 			}
