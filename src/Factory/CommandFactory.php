@@ -276,6 +276,7 @@ use Lemuria\Model\Fantasya\Spell\AstralPassage;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
 use Lemuria\Model\Fantasya\Spell\CivilCommotion;
 use Lemuria\Model\Fantasya\Spell\Daydream;
+use Lemuria\Model\Fantasya\Spell\DetectMetals;
 use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
 use Lemuria\Model\Fantasya\Spell\ElementalBeing;
@@ -288,6 +289,8 @@ use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\Quickening;
+use Lemuria\Model\Fantasya\Spell\RaiseTheDead;
+use Lemuria\Model\Fantasya\Spell\RestInPeace;
 use Lemuria\Model\Fantasya\Spell\RingOfInvisibility as RingOfInvisibilitySpell;
 use Lemuria\Model\Fantasya\Spell\RustyMist;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
@@ -808,8 +811,8 @@ class CommandFactory
 	 */
 	protected array $spells = [
 		'Adlerauge'               => EagleEye::class,
-		'Astrales chaos'          => AstralChaos::class,
-		'Astraler weg'            => AstralPassage::class,
+		'Astrales Chaos'          => AstralChaos::class,
+		'Astraler Weg'            => AstralPassage::class,
 		'Aufruhr verursachen'     => CivilCommotion::class,
 		'Auratransfer'            => AuraTransfer::class,
 		'Beschleunigung'          => Quickening::class,
@@ -817,22 +820,25 @@ class CommandFactory
 		'Blick des Greifen'       => GazeOfTheGriffin::class,
 		'Elementarwesen'          => ElementalBeing::class,
 		'Erdbeben'                => Earthquake::class,
-		'Erwecke baumhirten'      => SummonEnts::class,
+		'Erwecke Baumhirten'      => SummonEnts::class,
 		'Fernsicht'               => Farsight::class,
 		'Feuerball'               => Fireball::class,
 		'Friedenslied'            => SongOfPeace::class,
 		'Geisterkaempfer'         => GhostEnemy::class,
 		'Geisterkämpfer'          => GhostEnemy::class,
-		'Lautloser schatten'      => SoundlessShadow::class,
+		'Lautloser Schatten'      => SoundlessShadow::class,
+		'Metalle entdecken'       => DetectMetals::class,
 		'Monster aufhetzen'       => InciteMonster::class,
 		'Ring der Unsichtbarkeit' => RingOfInvisibilitySpell::class,
 		'Rosthauch'               => RustyMist::class,
+		'Ruhe in Frieden'         => RestInPeace::class,
 		'Schockwelle'             => ShockWave::class,
 		'Steinhaut'               => StoneSkin::class,
 		'Sturmboe'                => GustOfWind::class,
 		'Sturmböe'                => GustOfWind::class,
 		'Tagtraum'                => Daydream::class,
 		'Teleportation'           => Teleportation::class,
+		'Untote erwecken'         => RaiseTheDead::class,
 		'Wunderdoktor'            => Quacksalver::class
 	];
 

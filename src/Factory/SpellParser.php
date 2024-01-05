@@ -20,6 +20,7 @@ use Lemuria\Model\Fantasya\Spell\AstralPassage;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
 use Lemuria\Model\Fantasya\Spell\CivilCommotion;
 use Lemuria\Model\Fantasya\Spell\Daydream;
+use Lemuria\Model\Fantasya\Spell\DetectMetals;
 use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
 use Lemuria\Model\Fantasya\Spell\ElementalBeing;
@@ -32,6 +33,8 @@ use Lemuria\Model\Fantasya\Spell\GustOfWind;
 use Lemuria\Model\Fantasya\Spell\InciteMonster;
 use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\Quickening;
+use Lemuria\Model\Fantasya\Spell\RaiseTheDead;
+use Lemuria\Model\Fantasya\Spell\RestInPeace;
 use Lemuria\Model\Fantasya\Spell\RingOfInvisibility;
 use Lemuria\Model\Fantasya\Spell\RustyMist;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
@@ -101,6 +104,7 @@ class SpellParser
 		AuraTransfer::class       => self::LEVEL_AND_TARGET,
 		CivilCommotion::class     => self::NONE,
 		Daydream::class           => self::LEVEL_AND_TARGET,
+		DetectMetals::class       => self::NONE,
 		EagleEye::class           => self::LEVEL,
 		Earthquake::class         => self::LEVEL,
 		ElementalBeing::class     => self::NONE,
@@ -113,6 +117,8 @@ class SpellParser
 		InciteMonster::class      => self::TARGET,
 		Quacksalver::class        => self::LEVEL,
 		Quickening::class         => self::LEVEL,
+		RaiseTheDead::class       => self::LEVEL,
+		RestInPeace::class        => self::NONE,
 		RingOfInvisibility::class => self::NONE,
 		RustyMist::class          => self::LEVEL,
 		ShockWave::class          => self::LEVEL,
@@ -142,15 +148,18 @@ class SpellParser
 		'Geisterkaempfer' => GhostEnemy::class,
 		'Geisterkämpfer'  => GhostEnemy::class,
 		'Lautloser'       => ['Schatten'    => SoundlessShadow::class],
+		'Metalle'         => ['entdecken'   => DetectMetals::class],
 		'Monster'         => ['aufhetzen'   => InciteMonster::class],
 		'Ring'            => ['der'         => ['Unsichtbarkeit' => RingOfInvisibility::class]],
 		'Rosthauch'       => RustyMist::class,
+		'Ruhe'            => ['in'          => ['Frieden'        => RestInPeace::class]],
 		'Schockwelle'     => ShockWave::class,
 		'Steinhaut'       => StoneSkin::class,
 		'Sturmboe'        => GustOfWind::class,
 		'Sturmböe'        => GustOfWind::class,
 		'Tagtraum'        => Daydream::class,
 		'Teleportation'   => Teleportation::class,
+		'Untote'          => ['erwecken'    => RaiseTheDead::class],
 		'Wunderdoktor'    => Quacksalver::class
 	];
 
