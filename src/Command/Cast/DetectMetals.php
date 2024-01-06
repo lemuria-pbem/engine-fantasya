@@ -2,9 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Cast;
 
-use Lemuria\Engine\Fantasya\Effect\CivilCommotionEffect;
+use Lemuria\Engine\Fantasya\Effect\DetectMetalsEffect;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
-use Lemuria\Engine\Fantasya\Message\Unit\Cast\CivilCommotionMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 
@@ -18,12 +17,15 @@ final class DetectMetals extends AbstractCast
 			$unit = $this->cast->Unit();
 			$unit->Aura()->consume($aura);
 			$region   = $unit->Region();
-			$effect   = new CivilCommotionEffect(State::getInstance());
-			$existing = Lemuria::Score()->find($effect->setRegion($region));
-			if (!$existing) {
+			$effect   = new DetectMetalsEffect(State::getInstance());
+			$existing = Lemuria::Score()->find($effect->setParty($unit->Party()));
+			if ($existing) {
+				$effect = $existing;
+			} else {
 				Lemuria::Score()->add($effect);
-				$this->message(CivilCommotionMessage::class, $region);
 			}
+			$effect->Regions()->add($region);
+
 		}
 	}
 }

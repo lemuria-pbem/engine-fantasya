@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Event\Game;
 
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Command\Create\RawMaterial;
+use Lemuria\Engine\Fantasya\Effect\DetectMetalsEffect;
 use Lemuria\Engine\Fantasya\Message\Unit\Event\MiningDiscoveryMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Gold;
@@ -100,6 +101,9 @@ final class MiningDiscovery extends AbstractEvent
 				$region    = Region::get(new Id($id));
 				$landscape = $region->Landscape();
 				if (isset(self::CHANCE[$landscape::class])) {
+					if ($this->withDetectMetals($region)) {
+						$percent *= 2.0;
+					}
 					$size = $chance * sqrt($percent * $unit->Size());
 					if ($size > 0.0) {
 						$this->addSize($region, $unit, $size);
@@ -159,5 +163,14 @@ final class MiningDiscovery extends AbstractEvent
 		}
 		$this->people[$id]->add($unit);
 		$this->size[$id] += $size;
+	}
+
+	private function withDetectMetals(Region $region): bool {
+		$effect   = new DetectMetalsEffect(State::getInstance());
+		$existing = Lemuria::Score()->find($effect->setParty($this->unit->Party()));
+		if ($existing instanceof DetectMetalsEffect) {
+			return $existing->Regions()->contains($region);
+		}
+		return false;
 	}
 }

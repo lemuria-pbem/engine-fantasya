@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Availability;
 use Lemuria\Engine\Fantasya\Command\AllocationCommand;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Effect\DetectMetalsEffect;
 use Lemuria\Engine\Fantasya\Event\Game\MiningDiscovery;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\LodgingTrait;
@@ -28,7 +29,9 @@ use Lemuria\Engine\Fantasya\Message\Unit\RawMaterialWantsMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SawmillUnmaintainedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SawmillUnusableMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Building\Mine;
 use Lemuria\Model\Fantasya\Building\Quarry;
@@ -169,6 +172,9 @@ class RawMaterial extends AllocationCommand implements Activity
 		$region       = $this->unit->Region();
 		$availability = $this->context->getAvailability($region);
 		$reserve      = $availability->getResource($commodity)->Count();
+		if ($commodity instanceof Iron && $this->withDetectMetals()) {
+			$reserve *= 2;
+		}
 		if ($this->job->hasThreshold()) {
 			$quota = $this->job->Threshold();
 		} else {
@@ -229,6 +235,10 @@ class RawMaterial extends AllocationCommand implements Activity
 		if ($this->knowledge->Level() < $talent->Level()) {
 			$this->knowledge = new Ability($this->knowledge->Talent(), 0);
 		}
+		$commodity = $this->getCommodity();
+		if (!$this->isRunCentrally && $commodity instanceof Iron && $this->withDetectMetals()) {
+			$factor *= 2;
+		}
 
 		$size             = $this->unit->Size();
 		$production       = (int)floor($this->potionBoost($size) * $size * $this->knowledge->Level() / $talent->Level());
@@ -246,7 +256,7 @@ class RawMaterial extends AllocationCommand implements Activity
 				$this->demand = max(0, $this->job->Count());
 				if ($this->demand <= $this->production) {
 					$this->production = (int)ceil($this->demand / $factor);
-					$quantity         = new Quantity($this->getCommodity(), $this->production);
+					$quantity         = new Quantity($commodity, $this->production);
 					$this->message(RawMaterialWantsMessage::class)->i($quantity);
 				} else {
 					$quantity = new Quantity($this->getCommodity(), $this->production);
@@ -304,5 +314,14 @@ class RawMaterial extends AllocationCommand implements Activity
 			default :
 				throw new LemuriaException('Unsupported resource ' . getClass($resource));
 		}
+	}
+
+	private function withDetectMetals(): bool {
+		$effect   = new DetectMetalsEffect(State::getInstance());
+		$existing = Lemuria::Score()->find($effect->setParty($this->unit->Party()));
+		if ($existing instanceof DetectMetalsEffect) {
+			return $existing->Regions()->contains($this->unit->Region());
+		}
+		return false;
 	}
 }

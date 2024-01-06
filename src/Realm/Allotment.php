@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Realm;
 
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Effect\DetectMetalsEffect;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\RealmQuota;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
@@ -11,6 +12,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\DistributorFleetMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Animal;
 use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Commodity\Iron;
 use Lemuria\Engine\Fantasya\Consumer;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Realm;
@@ -96,8 +98,11 @@ class Allotment
 					}
 					$availability = $this->state->getAvailability($region);
 					$available    = $availability->getResource($commodity)->Count();
-					$part         = (int)ceil($rate * $this->availability[$id]);
-					$part         = min($part, $demand, $available);
+					if ($commodity instanceof Iron && $this->withDetectMetals($region)) {
+						$available *= 2;
+					}
+					$part = (int)ceil($rate * $this->availability[$id]);
+					$part = min($part, $demand, $available);
 					if ($part > 0) {
 						if ($this->isFleetEnabled) {
 							if ($commodity instanceof Animal) {
@@ -116,9 +121,13 @@ class Allotment
 					}
 				}
 			}
-			$availability = $this->state->getAvailability($this->region[$this->center]);
+			$region       = $this->region[$this->center];
+			$availability = $this->state->getAvailability($region);
 			$available    = $availability->getResource($commodity)->Count();
-			$remaining    = min($demand, $available, $local);
+			if ($commodity instanceof Iron && $this->withDetectMetals($region)) {
+				$available *= 2;
+			}
+			$remaining = min($demand, $available, $local);
 			if ($remaining > 0) {
 				$availability->remove(new Quantity($commodity, $remaining));
 				$partQuantity = new Quantity($commodity, $remaining);
@@ -147,10 +156,13 @@ class Allotment
 			if ($this->isUnderSiege($region) || $this->getCheckByAgreement(Relation::RESOURCES)) {
 				continue;
 			}
-			$id                      = $region->Id()->Id();
-			$this->region[$id]       = $region;
-			$threshold               = $this->threshold !== null ? $this->threshold : $this->quotas->getQuota($region, $commodity)->Threshold();
-			$resource                = $this->state->getAvailability($region)->getQuotaResource($commodity, $threshold)->Count();
+			$id                = $region->Id()->Id();
+			$this->region[$id] = $region;
+			$threshold         = $this->threshold !== null ? $this->threshold : $this->quotas->getQuota($region, $commodity)->Threshold();
+			$resource          = $this->state->getAvailability($region)->getQuotaResource($commodity, $threshold)->Count();
+			if ($commodity instanceof Iron && $this->withDetectMetals($region)) {
+				$resource *= 2;
+			}
 			$this->availability[$id] = max(0, (int)floor($quota * $resource));
 		}
 	}
@@ -170,5 +182,14 @@ class Allotment
 			return min($availableSum, $fleetMaximum);
 		}
 		return $availableSum;
+	}
+
+	private function withDetectMetals(Region $region): bool {
+		$effect   = new DetectMetalsEffect(State::getInstance());
+		$existing = Lemuria::Score()->find($effect->setParty($this->unit->Party()));
+		if ($existing instanceof DetectMetalsEffect) {
+			return $existing->Regions()->contains($region);
+		}
+		return false;
 	}
 }
