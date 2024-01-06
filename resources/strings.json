@@ -755,6 +755,7 @@
 		"QuotaSetHerbMessage": "Die Einheit $id setzt eine Grenze von $quota für Kräuter in der Region $region.",
 		"QuotaSetMessage": "Die Einheit $id setzt eine Grenze von $quota in der Region $region.",
 		"QuotaUnknownHerbageMessage": "Wir kennen das Kräutervorkommen in der Region nicht, und können deshalb keine Grenze setzen.",
+		"RaiseTheDeadPeaceMessage": "Die Toten können nicht erweckt werden, denn sie ruhen in Frieden.",
 		"RawMaterialCanMessage": "Die Einheit $id kann $quantity produzieren.",
 		"RawMaterialCannotMessage": "Die Einheit $id kann nicht mehr als $quantity produzieren.",
 		"RawMaterialExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um {g/akk:ein:$material} zu produzieren.",
