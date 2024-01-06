@@ -6,12 +6,12 @@ use function Lemuria\randChance;
 use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
 use Lemuria\Engine\Fantasya\Event\Act\Create;
+use Lemuria\Engine\Fantasya\Effect\RestInPeaceEffect;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Factory\OptionsTrait;
 use Lemuria\Engine\Fantasya\Message\Region\Event\ZombieInfectionMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
-use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
@@ -111,6 +111,11 @@ final class ZombieInfection extends AbstractEvent
 	}
 
 	protected function run(): void {
+		if ($this->isRestInPeaceActive()) {
+			Lemuria::Log()->debug('In ' . $this->region . ' the dead rest in peace.');
+			return;
+		}
+
 		$resources = $this->region->Resources();
 		$peasants  = $resources[$this->peasant]->Count();
 		$zombies   = [];
@@ -132,5 +137,10 @@ final class ZombieInfection extends AbstractEvent
 				$this->message(ZombieInfectionMessage::class, $this->region)->i($remove);
 			}
 		}
+	}
+
+	private function isRestInPeaceActive(): bool {
+		$effect = new RestInPeaceEffect($this->state);
+		return Lemuria::Score()->find($effect->setRegion($this->region)) instanceof RestInPeaceEffect;
 	}
 }

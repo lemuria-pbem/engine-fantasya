@@ -814,6 +814,7 @@
 		"ReserveMessage": "Die Einheit $id reserviert $reserve aus dem Materialpool.",
 		"ReserveNothingMessage": "Die Einheit $id kann {g/akk:kein:$commodity} aus dem Materialpool reservieren.",
 		"ReserveOnlyMessage": "Die Einheit $id kann nur $reserve aus dem Materialpool reservieren.",
+		"RestInPeaceMessage": "In der Region $id werden die Toten in Frieden ruhen.",
 		"RetirementMessage": "Du hast heute Deine letzte Einheit verloren und beendest damit das Spiel. Lebe wohl!",
 		"RetirementPartyMessage": "Wie es scheint, hat die Partei $name [$party] diese Welt verlassen.",
 		"RingOfInvisibilityApplyMessage": "Die Einheit $id steckt {g/akk:das:$composition} $composition $unicum über den Finger und wird unsichtbar.",
