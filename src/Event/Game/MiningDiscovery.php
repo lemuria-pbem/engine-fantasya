@@ -23,6 +23,7 @@ use Lemuria\Id;
 use Lemuria\Model\Fantasya\Commodity\Iron;
 use Lemuria\Model\Fantasya\Commodity\Stone;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 
 /**
@@ -101,7 +102,7 @@ final class MiningDiscovery extends AbstractEvent
 				$region    = Region::get(new Id($id));
 				$landscape = $region->Landscape();
 				if (isset(self::CHANCE[$landscape::class])) {
-					if ($this->withDetectMetals($region)) {
+					if ($this->withDetectMetals($miner->Unit()->Party(), $region)) {
 						$percent *= 2.0;
 					}
 					$size = $chance * sqrt($percent * $unit->Size());
@@ -165,9 +166,9 @@ final class MiningDiscovery extends AbstractEvent
 		$this->size[$id] += $size;
 	}
 
-	private function withDetectMetals(Region $region): bool {
+	private function withDetectMetals(Party $party, Region $region): bool {
 		$effect   = new DetectMetalsEffect(State::getInstance());
-		$existing = Lemuria::Score()->find($effect->setParty($this->unit->Party()));
+		$existing = Lemuria::Score()->find($effect->setParty($party));
 		if ($existing instanceof DetectMetalsEffect) {
 			return $existing->Regions()->contains($region);
 		}
