@@ -186,7 +186,7 @@ final class Give extends UnitCommand implements Reassignment
 		}
 		$fromSize = $this->unit->Size();
 		if ($this->resourceCount <= 0 || $fromSize <= 0) {
-			$this->message(GiveNoPersonsMessage::class);
+			$this->message(GiveNoPersonsMessage::class)->e($this->recipient);
 			return;
 		}
 		$amount = min($this->resourceCount, $fromSize);
