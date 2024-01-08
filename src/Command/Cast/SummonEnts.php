@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Cast;
 
 use function Lemuria\randInt;
+use Lemuria\Engine\Fantasya\Effect\ControlEffect;
 use Lemuria\Engine\Fantasya\Effect\VanishEffect;
 use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Event\Behaviour\Monster\Ent as Behaviour;
@@ -47,8 +48,10 @@ final class SummonEnts extends AbstractCast
 		$unit->Aura()->consume($this->cast->Aura());
 		$create = new Create($party, $region);
 		foreach ($create->add(new Gang($race, $size))->act()->getUnits() as $ents) {
-			$effect = new VanishEffect(State::getInstance());
-			Lemuria::Score()->add($effect->setUnit($ents)->setSummoner($unit)->setWeeks(self::weeks()));
+			$effect = new ControlEffect($state);
+			Lemuria::Score()->add($effect->setUnit($ents)->setSummoner($unit));
+			$effect = new VanishEffect($state);
+			Lemuria::Score()->add($effect->setUnit($ents)->setWeeks(self::weeks()));
 			$this->message(SummonEntsMessage::class, $unit)->e($ents)->p($size);
 
 			$behaviour = new Behaviour($ents);

@@ -41,7 +41,6 @@ final class RaiseTheDead extends AbstractCast
 			$this->zombies = $this->cast->Level() * self::ZOMBIES;
 			$this->raiseStarvedPeasants($region, $unit);
 			$this->addRaiseEffectForCombat($region, $unit);
-			//TODO watch for effect in battles
 		}
 	}
 

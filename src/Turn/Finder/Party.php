@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Turn\Finder;
 
+use Lemuria\Model\Fantasya\Gathering;
 use function Lemuria\getClass;
 use Lemuria\Engine\Exception\EngineException;
 use Lemuria\Id;
@@ -21,6 +22,23 @@ class Party
 	 * @var array<string, Id>
 	 */
 	protected array $byRace = [];
+
+	public function Monster(): Gathering {
+		$monster = new Gathering();
+		foreach ($this->byType as $id) {
+			$party = Model::get($id);
+			if ($party->Type() === Type::Monster) {
+				$monster->add($party);
+			}
+		}
+		foreach ($this->byRace as $id) {
+			$party = Model::get($id);
+			if ($party->Type() === Type::Monster) {
+				$monster->add($party);
+			}
+		}
+		return $monster;
+	}
 
 	public function findByType(Type $type): Model {
 		$id = $this->byType[$type->value] ?? null;

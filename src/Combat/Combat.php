@@ -683,6 +683,7 @@ class Combat
 	 * @noinspection PhpStatementHasEmptyBodyInspection
 	 */
 	protected function removeTheDead(Ranks $ranks): void {
+		//TODO raise the dead
 		foreach ($ranks as $combatants) {
 			foreach ($combatants as $c => $combatant) {
 				$size               = $combatant->Size();

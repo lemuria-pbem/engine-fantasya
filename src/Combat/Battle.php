@@ -15,8 +15,8 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\TakeTrophiesMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\UnitDiedMessage;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\ConstructionLoot;
+use Lemuria\Engine\Fantasya\Effect\ControlEffect;
 use Lemuria\Engine\Fantasya\Effect\RegionLoot;
-use Lemuria\Engine\Fantasya\Effect\VanishEffect;
 use Lemuria\Engine\Fantasya\Effect\VesselLoot;
 use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
@@ -125,7 +125,7 @@ class Battle
 		$this->attackers[] = $unit;
 		$id                = $unit->Id()->Id();
 		if (isset($this->monsters[$id])) {
-			foreach ($this->monsters[$id] as $monster /** @var Unit $monster */) {
+			foreach ($this->monsters[$id] as $monster) {
 				$this->attackers[] = $monster;
 				Lemuria::Log()->debug('Monster ' . $monster . ' supports attacker in battle.');
 			}
@@ -143,7 +143,7 @@ class Battle
 		$this->defenders[] = $unit;
 		$id                = $unit->Id()->Id();
 		if (isset($this->monsters[$id])) {
-			foreach ($this->monsters[$id] as $monster /** @var Unit $monster */) {
+			foreach ($this->monsters[$id] as $monster) {
 				$this->defenders[] = $monster;
 				Lemuria::Log()->debug('Monster ' . $monster . ' supports defender in battle.');
 			}
@@ -448,16 +448,14 @@ class Battle
 
 	private function initMonsters(): void {
 		$state  = State::getInstance();
-		$finder = $state->getTurnOptions()->Finder()->Party();
 		$score  = Lemuria::Score();
-		$effect = new VanishEffect($state);
-		$party  = $finder->findByType(Type::Monster);
-		foreach ($this->intelligence->getUnits($party) as $monster) {
-			$existing = $score->find($effect->setUnit($monster));
-			if ($existing instanceof VanishEffect) {
-				$unit = $existing->Summoner();
-				if ($unit) {
-					$id = $unit->Id()->Id();
+		$effect = new ControlEffect($state);
+		$finder = $state->getTurnOptions()->Finder()->Party();
+		foreach ($finder->Monster() as $party) {
+			foreach ($this->intelligence->getUnits($party) as $monster) {
+				$existing = $score->find($effect->setUnit($monster));
+				if ($existing instanceof ControlEffect) {
+					$id = $existing->Summoner()->Id()->Id();
 					if (!isset($this->monsters[$id])) {
 						$this->monsters[$id] = [];
 					}
