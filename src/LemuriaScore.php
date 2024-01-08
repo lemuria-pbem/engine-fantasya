@@ -23,7 +23,7 @@ class LemuriaScore implements Score
 	private array $effects = [];
 
 	/**
-	 * @var array<Effect>
+	 * @var array<int, array>
 	 */
 	private array $aftercare = [];
 
@@ -119,7 +119,7 @@ class LemuriaScore implements Score
 		}
 		$this->effects[$namespace][$id][$class] = $effect;
 		if ($this->isLoaded && $effect instanceof Effect && $effect->needsAftercare()) {
-			$this->aftercare[] = $effect;
+			$this->aftercare[$namespace][$id][$class] = $effect;
 		}
 		return $this;
 	}
@@ -132,6 +132,9 @@ class LemuriaScore implements Score
 		$id        = $effect->Id()->Id();
 		$class     = getClass($effect);
 		unset($this->effects[$namespace][$id][$class]);
+		if ($effect instanceof Effect && $effect->needsAftercare()) {
+			unset($this->aftercare[$namespace][$id][$class]);
+		}
 		return $this;
 	}
 
@@ -169,6 +172,14 @@ class LemuriaScore implements Score
 	 * @return array<Effect>
 	 */
 	public function getAftercareEffects(): array {
-		return $this->aftercare;
+		$effects = [];
+		foreach ($this->aftercare as $ids) {
+			foreach ($ids as $classes) {
+				foreach ($classes as $effect) {
+					$effects[] = $effect;
+				}
+			}
+		}
+		return $effects;
 	}
 }

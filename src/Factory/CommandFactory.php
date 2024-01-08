@@ -27,10 +27,10 @@ use Lemuria\Engine\Fantasya\Command\Create;
 use Lemuria\Engine\Fantasya\Command\Create\Unicum;
 use Lemuria\Engine\Fantasya\Command\Demand;
 use Lemuria\Engine\Fantasya\Command\Describe;
-use Lemuria\Engine\Fantasya\Command\Destroy\Dismiss;
 use Lemuria\Engine\Fantasya\Command\Destroy\Lose;
 use Lemuria\Engine\Fantasya\Command\Destroy\Smash;
 use Lemuria\Engine\Fantasya\Command\Devastate;
+use Lemuria\Engine\Fantasya\Command\Disband;
 use Lemuria\Engine\Fantasya\Command\Disguise;
 use Lemuria\Engine\Fantasya\Command\End;
 use Lemuria\Engine\Fantasya\Command\Entertain;
@@ -995,7 +995,7 @@ class CommandFactory
 				'BOTSCHAFT'      => Announcement::class,
 				'EINHEIT'        => Unit::class,
 				'ENDE'           => End::class,
-				'ENTLASSEN'      => Dismiss::class,
+				'ENTLASSEN'      => Disband::class,
 				'ERLAUBEN'       => Allow::class,
 				'ERSCHAFFEN'     => Unicum::class,
 				'FOLGEN'         => Follow::class,

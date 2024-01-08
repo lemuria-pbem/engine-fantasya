@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use Lemuria\Engine\Fantasya\Effect\ControlEffect;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
@@ -9,6 +10,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Monster as MonsterModel;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * This event prepares the monsters' behaviour.
@@ -28,7 +30,7 @@ final class Monster extends AbstractEvent
 		foreach (Party::all() as $party) {
 			if ($party->Type() === Type::Monster) {
 				foreach ($party->People()->getClone() as $unit) {
-					if ($unit->Size() > 0) {
+					if (!$this->isControlled($unit) && $unit->Size() > 0) {
 						$race = $unit->Race();
 						if ($race instanceof MonsterModel) {
 							$behaviourClass = self::getBehaviour($race);
@@ -58,5 +60,14 @@ final class Monster extends AbstractEvent
 
 		}
 		return self::$behaviours[$class];
+	}
+
+	private function isControlled(Unit $unit): bool {
+		$effect = new ControlEffect($this->state);
+		if (Lemuria::Score()->find($effect->setUnit($unit))) {
+			Lemuria::Log()->debug('Controlled monster ' . $unit . ' does not follow its normal behaviour.');
+			return true;
+		}
+		return false;
 	}
 }

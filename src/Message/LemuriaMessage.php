@@ -20,6 +20,7 @@ use Lemuria\Item;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait as ModelBuilderTrait;
+use Lemuria\Model\Fantasya\Gang;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\SerializableTrait;
 use Lemuria\Validate;
@@ -202,20 +203,14 @@ class LemuriaMessage implements Message
 		return $entities;
 	}
 
+	public function getGang(?string $name = null): Gang {
+		$item = $this->parseItem($name);
+		return new Gang(self::createRace(key($item)), current($item));
+	}
+
 	public function getQuantity(?string $name = null): Quantity {
-		if (!$name) {
-			$name = self::ITEM;
-		}
-		if (!isset($this->items[$name])) {
-			throw new ItemNotSetException($this, $name);
-		}
-		$item  = $this->items[$name];
-		$class = key($item);
-		$count = current($item);
-		if (!is_string($class) || !is_int($count)) {
-			throw new LemuriaException('Item ' . $name . ' is invalid.');
-		}
-		return new Quantity(self::createCommodity($class), $count);
+		$item = $this->parseItem($name);
+		return new Quantity(self::createCommodity(key($item)), current($item));
 	}
 
 	public function getSingleton(?string $name = null): Singleton {
@@ -323,5 +318,21 @@ class LemuriaMessage implements Message
 		$this->validateIfExists($data, self::SINGLETONS, Validate::Array);
 		$this->validateIfExists($data, self::ITEMS, Validate::Array);
 		$this->validateIfExists($data, self::PARAMETERS, Validate::Array);
+	}
+
+	private function parseItem(?string $name = null): array {
+		if (!$name) {
+			$name = self::ITEM;
+		}
+		if (!isset($this->items[$name])) {
+			throw new ItemNotSetException($this, $name);
+		}
+		$item  = $this->items[$name];
+		$class = key($item);
+		$count = current($item);
+		if (!is_string($class) || !is_int($count)) {
+			throw new LemuriaException('Item ' . $name . ' is invalid.');
+		}
+		return $item;
 	}
 }
