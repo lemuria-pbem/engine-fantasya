@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Model\World\Direction;
 use function Lemuria\getClass;
 use function Lemuria\randDistribution23;
 use function Lemuria\randElement;
@@ -28,6 +30,9 @@ trait ActTrait
 		return $race instanceof Monster ? $race : null;
 	}
 
+	/**
+	 * @return array<string, array>
+	 */
 	protected function getPossibleRegions(bool $addCurrent = true): array {
 		$regions = [];
 
@@ -40,17 +45,17 @@ trait ActTrait
 			$regions[getClass($landscape)] = [];
 		}
 		$region = $this->unit->Region();
-		foreach (Lemuria::World()->getNeighbours($region) as $neighbour) {
+		foreach (Lemuria::World()->getNeighbours($region) as $direction => $neighbour) {
 			$landscape = getClass($neighbour->Landscape());
 			if (isset($regions[$landscape])) {
-				$regions[$landscape][] = $neighbour;
+				$regions[$landscape][$direction->value] = $neighbour;
 			}
 		}
 
 		if ($addCurrent) {
 			$landscape = getClass($region->Landscape());
 			if (isset($regions[$landscape])) {
-				$regions[$landscape][] = $region;
+				$regions[$landscape][Direction::None->value] = $region;
 			}
 		}
 
@@ -62,6 +67,10 @@ trait ActTrait
 		return array_values($regions);
 	}
 
+	/**
+	 * @param array<string, array> $regions
+	 * @return array<string, Region>
+	 */
 	protected function chooseLandscape(array $regions): array {
 		$random       = randFloat();
 		$distribution = randDistribution23(count($regions));
@@ -73,20 +82,21 @@ trait ActTrait
 		throw new LemuriaException();
 	}
 
-	protected function chooseRandomNeighbour(): ?Location {
+	protected function chooseRandomNeighbour(Direction &$direction): ?Location {
 		$neighbours = Lemuria::World()->getNeighbours($this->unit->Region());
 		$directions = $neighbours->getDirections();
-		/** @var Region $region */
-		$region = $neighbours[randElement($directions)];
-		return $region;
+		$direction  = randElement($directions);
+		return $neighbours[$direction->value];
 	}
 
-	protected function moveTo(Region $region): void {
+	protected function moveTo(Direction $direction, Region $region): void {
 		$this->unit->Construction()?->Inhabitants()->remove($this->unit);
 		$this->unit->Vessel()?->Passengers()->remove($this->unit);
 		$this->unit->Region()->Residents()->remove($this->unit);
 		$region->Residents()->add($this->unit);
 		$this->unit->Party()->Chronicle()->add($region);
+		$context = new Context(State::getInstance());
+		$context->getTravelRoute($this->unit)->add($direction);
 	}
 
 	protected function createRoamEffect(): void {

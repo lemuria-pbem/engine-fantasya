@@ -2,14 +2,17 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Act;
 
-use function Lemuria\randElement;
+use Lemuria\Engine\Fantasya\Factory\DirectionList;
+use function Lemuria\randKey;
 use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\RoamHereMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\RoamMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\RoamStayMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\World\Direction;
 
 /**
  * A monster will roam according to its preferred landscapes with decreasing possibility.
@@ -34,12 +37,14 @@ class Roam implements Act
 		if (empty($regions)) {
 			$this->noPossibleRegion($region);
 		} else {
-			$regions = $this->chooseLandscape($regions);
-			$target  = randElement($regions);
-			if ($target === $region) {
+			$regions   = $this->chooseLandscape($regions);
+			$key       = randKey($regions);
+			$direction = Direction::from($key);
+			$target    = $regions[$key];
+			if ($direction === Direction::None) {
 				$this->message(RoamHereMessage::class, $this->unit)->e($region);
 			} else {
-				$this->moveTo($target);
+				$this->moveTo($direction, $target);
 				$this->hasMoved = true;
 				$this->message(RoamMessage::class, $this->unit)->e($target);
 			}
