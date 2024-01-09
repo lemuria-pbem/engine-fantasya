@@ -17,6 +17,7 @@ use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\ConstructionLoot;
 use Lemuria\Engine\Fantasya\Effect\ControlEffect;
 use Lemuria\Engine\Fantasya\Effect\RegionLoot;
+use Lemuria\Engine\Fantasya\Effect\RestInPeaceEffect;
 use Lemuria\Engine\Fantasya\Effect\VesselLoot;
 use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
@@ -276,7 +277,7 @@ class Battle
 	}
 
 	protected function embattleForCombat(Context $context): Combat {
-		$combat = new Combat($context);
+		$combat = new Combat($context, $this->place);
 		foreach ($this->attackers as $unit) {
 			$combat->addAttacker($unit);
 		}
@@ -513,18 +514,21 @@ class Battle
 	}
 
 	private function createNewZombies(Combat $combat): static {
-		$size = $combat->getNewZombies();
-		if ($size > 0) {
-			$zombie = self::createRace(Zombie::class);
-			$region = $this->place->Region();
-			$id     = $region->Id()->Id();
-			$state  = State::getInstance();
-			$party  = (string)$state->getTurnOptions()->Finder()->Party()->findByRace($zombie)->Id();
-			$spawn  = new Spawn($state);
-			$state->injectIntoTurn($spawn->setOptions([
-				Spawn::PARTY => $party, Spawn::REGION => $id, Spawn::SIZE => $size, Spawn::RACE => Zombie::class
-			]));
-			$this->message(AttackInfectedZombiesMessage::class, $region)->p($size)->s($zombie);
+		$state  = State::getInstance();
+		$effect = new RestInPeaceEffect($state);
+		if (!Lemuria::Score()->find($effect->setRegion($this->place->Region()))) {
+			$size = $combat->getNewZombies();
+			if ($size > 0) {
+				$zombie = self::createRace(Zombie::class);
+				$region = $this->place->Region();
+				$id     = $region->Id()->Id();
+				$party  = (string)$state->getTurnOptions()->Finder()->Party()->findByRace($zombie)->Id();
+				$spawn  = new Spawn($state);
+				$state->injectIntoTurn($spawn->setOptions([
+					Spawn::PARTY => $party, Spawn::REGION => $id, Spawn::SIZE => $size, Spawn::RACE => Zombie::class
+				]));
+				$this->message(AttackInfectedZombiesMessage::class, $region)->p($size)->s($zombie);
+			}
 		}
 		return $this;
 	}

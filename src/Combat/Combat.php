@@ -36,13 +36,20 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\TacticsRoundMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\TriedToFleeFromBattleMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Participant;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Effect\ControlEffect;
+use Lemuria\Engine\Fantasya\Effect\RaiseTheDeadEffect;
+use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
+use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Commodity\Potion\HealingPotion;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Native;
+use Lemuria\Model\Fantasya\Distribution;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Gang;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
@@ -107,7 +114,7 @@ class Combat
 		};
 	}
 
-	public function __construct(private Context $context) {
+	public function __construct(private Context $context, private BattlePlace $place) {
 		$this->attacker = new Ranks(true);
 		$this->defender = new Ranks(false);
 		$this->effects  = new Effects();
@@ -683,7 +690,16 @@ class Combat
 	 * @noinspection PhpStatementHasEmptyBodyInspection
 	 */
 	protected function removeTheDead(Ranks $ranks): void {
-		//TODO raise the dead
+		$raiseTheDead   = new RaiseTheDeadEffect(State::getInstance());
+		$raiseAvailable = 0;
+		$raiseCount     = 0;
+		$existing       = Lemuria::Score()->find($raiseTheDead->setRegion($this->place->Region()));
+		if ($existing instanceof RaiseTheDeadEffect) {
+			$raiseTheDead   = $existing;
+			$summoner       = $raiseTheDead->Summoner();
+			$raiseAvailable = $raiseTheDead->Raise();
+		}
+
 		foreach ($ranks as $combatants) {
 			foreach ($combatants as $c => $combatant) {
 				$size               = $combatant->Size();
@@ -700,7 +716,10 @@ class Combat
 							Lemuria::Log()->debug('Fighter ' . $id . ' is dead.');
 							BattleLog::getInstance()->add(new FighterIsDeadMessage($id));
 							$combatant->hasDied($f);
-							if ($createZombies && $fighter->hasFeature(Feature::ZombieInfection)) {
+							if ($raiseAvailable > 0) {
+								$raiseCount++;
+								$raiseAvailable--;
+							} elseif ($createZombies && $fighter->hasFeature(Feature::ZombieInfection)) {
 								$this->newZombies++;
 							}
 						}
@@ -732,5 +751,38 @@ class Combat
 				}
 			}
 		}
+
+		if ($raiseCount > 0) {
+			$this->raiseFromTheDead($raiseCount, $summoner);
+			$raiseTheDead->setRaise($raiseAvailable);
+		}
+	}
+
+	protected function raiseFromTheDead(int $raise, Unit $summoner): void {
+		$unit = $this->createZombieUnit($raise, $summoner);
+		$id   = $summoner->Party()->Id()->Id();
+		if (isset($this->armies[$id])) {
+			// Summoner fights in this combat.
+			$army         = $this->getArmy($summoner);
+			$row          = $unit->BattleRow()->value;
+			$combatant    = new Combatant($army, $unit);
+			$distribution = new Distribution();
+			$combatant->setBattleRow(BattleRow::Front);
+			$combatant->setDistribution($distribution->setSize($raise));
+			$this->isAttacker[$id] ? $this->attacker[$row][] = $combatant : $this->defender[$row][] = $combatant;
+			$army->addCombatant($combatant);
+		}
+	}
+
+	private function createZombieUnit(int $size, Unit $summoner): Unit {
+		$state   = State::getInstance();
+		$zombie  = self::createRace(Zombie::class);
+		$zombies = $state->getTurnOptions()->Finder()->Party()->findByRace($zombie);
+		$create  = new Create($zombies, $this->place->Region());
+		$create->add(new Gang($zombie, $size));
+		$unit   = $create->act()->getUnits()[0];
+		$effect = new ControlEffect($state);
+		Lemuria::Score()->add($effect->setUnit($unit)->setSummoner($summoner)->setAura(0.2)); //TODO 0.2
+		return $unit;
 	}
 }

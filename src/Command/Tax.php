@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Combat\Army;
+use Lemuria\Engine\Fantasya\Combat\BattlePlace;
 use Lemuria\Engine\Fantasya\Combat\Combat;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Message\Party\TaxPreventMessage;
@@ -166,7 +167,7 @@ final class Tax extends AllocationCommand implements Activity
 
 	private function getNumberOfTaxCollectors(): int {
 		$size = 0;
-		$army = new Army($this->unit->Party(), new Combat($this->context));
+		$army = new Army($this->unit->Party(), new Combat($this->context, new BattlePlace($this->unit)));
 		foreach ($army->add($this->unit)->Combatants() as $combatant) {
 			if ($combatant->Weapon() && $combatant->WeaponSkill()->isGuard()) {
 				$size += $combatant->Size();
