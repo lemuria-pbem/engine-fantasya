@@ -921,7 +921,7 @@
 		"TaxNotFightingMessage": "Die Einheit $id kann keine Steuern eintreiben, wenn sie nicht kämpft.",
 		"TaxOnlyMessage": "Die Einheit kann nur $income mit $talent verdienen.",
 		"TaxPreventMessage": "Unsere Wache hat die Einheit $unit vom Steuereintreiben abgehalten.",
-		"TaxWithoutWeaponMessage": "Die Einheit $id kann keine Waffen verwenden, um das Steuereintreiben zu erzwingen.",
+		"TaxWithoutWeaponMessage": "Die Einheit $id hat keine Waffe, um das Eintreiben von Steuern zu erzwingen.",
 		"TeachBonusMessage": "Die Einheit $id hat $students Schüler (Bonus: $bonus).",
 		"TeachExceptionMessage": "Die Einheit $id kann nicht lehren: $error",
 		"TeachFleetMessage": "Die Einheit $id übernimmt Transporte im Reich und kann nur teilweise lehren.",
