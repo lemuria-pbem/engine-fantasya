@@ -475,6 +475,7 @@
 		"FightMessage": "Die Einheit $id wird $position.",
 		"FightUnguardMessage": "Die Einheit $id bewacht nicht länger die Region.",
 		"FindWalletMessage": "Die Einheit $unit hat einen verlorenen Silberbeutel mit $silver gefunden.",
+		"FollowFollowedMessage": "Die Einheit $leader folgt uns.",
 		"FollowMessage": "Die Einheit $id folgt der Einheit $leader auf ihrem Weg.",
 		"FollowNoMoveMessage": "Die Einheit $id folgt der Einheit $leader, welche sich jedoch nicht vom Fleck bewegt hat.",
 		"ForbidAllMessage": "Die Einheit $id verbietet den Handel mit allen Gütern.",

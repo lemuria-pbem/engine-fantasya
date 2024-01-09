@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\FollowFollowedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowNoMoveMessage;
 use Lemuria\Engine\Fantasya\Phrase;
@@ -26,6 +27,9 @@ final class Follow extends Travel implements Reassignment
 	protected function run(): void {
 		if ($this->directions->count()) {
 			$this->message(FollowMessage::class)->e($this->leader);
+			if (!$this->context->getTurnOptions()->IsSimulation() && $this->context->getCalculus($this->leader)->canDiscover($this->unit)) {
+				$this->message(FollowFollowedMessage::class, $this->leader)->e($this->unit);
+			}
 			parent::run();
 			return;
 		}
