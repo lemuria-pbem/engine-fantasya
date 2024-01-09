@@ -49,7 +49,7 @@ final class SummonEnts extends AbstractCast
 		$create = new Create($party, $region);
 		foreach ($create->add(new Gang($race, $size))->act()->getUnits() as $ents) {
 			$effect = new ControlEffect($state);
-			Lemuria::Score()->add($effect->setUnit($ents)->setSummoner($unit));
+			Lemuria::Score()->add($effect->setUnit($ents)->setSummoner($unit)->addReassignment());
 			$effect = new VanishEffect($state);
 			Lemuria::Score()->add($effect->setUnit($ents)->setWeeks(self::weeks()));
 			$this->message(SummonEntsMessage::class, $unit)->e($ents)->p($size);

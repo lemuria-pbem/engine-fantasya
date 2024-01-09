@@ -25,6 +25,8 @@ final class ControlEffect extends AbstractUnitEffect
 
 	private const string SUMMONER = 'summoner';
 
+	protected ?bool $isReassign = null;
+
 	private float $aura = 0.0;
 
 	private int $summoner;

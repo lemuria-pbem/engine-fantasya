@@ -75,7 +75,8 @@ final class RaiseTheDead extends AbstractCast
 
 	private function addControlEffect(State $state, Unit $summoner, float $aura, Unit $zombies): void {
 		$effect = new ControlEffect($state);
-		Lemuria::Score()->add($effect->setUnit($zombies)->setAura($aura)->setSummoner($summoner));
+		$effect->setUnit($zombies)->setAura($aura)->setSummoner($summoner);
+		Lemuria::Score()->add($effect->addReassignment());
 	}
 
 	private function addRaiseEffectForCombat($region, $unit): void {
