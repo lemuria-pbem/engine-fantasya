@@ -37,7 +37,6 @@ use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Building\Market;
 use Lemuria\Model\Fantasya\Building\Monument;
 use Lemuria\Model\Fantasya\Building\Port;
-use Lemuria\Model\Fantasya\Building\Ruin;
 use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Construction as ConstructionModel;
@@ -234,7 +233,7 @@ final class Construction extends AbstractProduct
 
 	private function replacePlaceholderJob(): void {
 		$building = $this->job->getObject();
-		if ($building instanceof Ruin) {
+		if ($building instanceof AbstractVenue) {
 			throw new InvalidCommandException($this);
 		}
 
