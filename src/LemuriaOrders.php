@@ -70,17 +70,7 @@ class LemuriaOrders implements Orders, Reassignment
 		if (!$this->isLoaded) {
 			$orders = Lemuria::Game()->getOrders();
 			$this->validateSerializedData($orders);
-			foreach ($orders[self::CURRENT] as $data) {
-				$this->validate($data, self::ID, Validate::Int);
-				$this->validate($data, self::ORDERS, Validate::Array);
-				$this->getCurrent(new Id($data[self::ID]))->unserialize($data[self::ORDERS]);
-			}
-			foreach ($orders[self::DEFAULT] as $data) {
-				$this->validate($data, self::ID, Validate::Int);
-				$this->validate($data, self::ORDERS, Validate::Array);
-				$this->getDefault(new Id($data[self::ID]))->unserialize($data[self::ORDERS]);
-			}
-			$this->isLoaded = true;
+			$this->loadData($orders);
 		}
 		return $this;
 	}
@@ -99,8 +89,8 @@ class LemuriaOrders implements Orders, Reassignment
 		foreach ($this->default as $id => $instructions /** @var Instructions $instructions */) {
 			$default[] = [self::ID => $id, self::ORDERS => $instructions->serialize()];
 		}
-		Lemuria::Game()->setOrders([self::CURRENT => $current, self::DEFAULT => $default]);
-		return $this;
+		$data = [self::CURRENT => $current, self::DEFAULT => $default];
+		return $this->saveData($data);
 	}
 
 	public function clear(): static {
@@ -140,5 +130,28 @@ class LemuriaOrders implements Orders, Reassignment
 	protected function validateSerializedData(array $data): void {
 		$this->validate($data, self::CURRENT, Validate::Array);
 		$this->validate($data, self::DEFAULT, Validate::Array);
+	}
+
+	protected function loadData(array $orders): static {
+		foreach ($orders[self::CURRENT] as $data) {
+			$this->validate($data, self::ID, Validate::Int);
+			$this->validate($data, self::ORDERS, Validate::Array);
+			$this->getCurrent(new Id($data[self::ID]))->unserialize($data[self::ORDERS]);
+		}
+		foreach ($orders[self::DEFAULT] as $data) {
+			$this->validate($data, self::ID, Validate::Int);
+			$this->validate($data, self::ORDERS, Validate::Array);
+			$this->getDefault(new Id($data[self::ID]))->unserialize($data[self::ORDERS]);
+		}
+		$this->isLoaded = true;
+		return $this;
+	}
+
+	/**
+	 * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection
+	 */
+	protected function saveData(array &$data): static {
+		Lemuria::Game()->setOrders($data);
+		return $this;
 	}
 }
