@@ -11,9 +11,9 @@ use Lemuria\Engine\Fantasya\Message\Construction\VesselFeeQuantityMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FeeNotApplicableMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FeeNotInsideMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FeeNotOwnerMessage;
+use Lemuria\Model\Fantasya\Building\Canal;
 use Lemuria\Model\Fantasya\Building\Market;
 use Lemuria\Model\Fantasya\Building\Port;
-use Lemuria\Model\Fantasya\Building\Quay;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Extension\Duty;
 use Lemuria\Model\Fantasya\Extension\Fee as FeeExtension;
@@ -45,20 +45,33 @@ final class Fee extends UnitCommand
 
 			$building = $this->construction->Building();
 			switch ($building::class) {
+				case Canal::class :
+					$this->setCanalFee($building);
+					break;
 				case Market::class :
 					$this->setMarketFee($building);
 					break;
 				case Port::class :
 					$this->setPortFeeOrDuty($building);
 					break;
-				case Quay::class :
-					$this->setQuayFee($building);
-					break;
 				default :
 					$this->message(FeeNotApplicableMessage::class)->s($building);
 			}
 		} else {
 			$this->message(FeeNotInsideMessage::class);
+		}
+	}
+
+	private function setCanalFee(Canal $building): void {
+		$fee = $this->parseFee();
+		/** @var FeeExtension $extension */
+		$extension = $this->construction->Extensions()->offsetGet(Fee::class);
+		if ($fee instanceof Quantity) {
+			$extension->setFee($fee);
+			$this->message(VesselFeeQuantityMessage::class, $this->construction)->s($building)->i($fee);
+		} else {
+			$extension->setFee(null);
+			$this->message(FeeNoneMessage::class, $this->construction)->s($building);
 		}
 	}
 
@@ -91,19 +104,6 @@ final class Fee extends UnitCommand
 		} else {
 			/** @var FeeExtension $extension */
 			$extension = $this->construction->Extensions()->offsetGet(Fee::class);
-			$extension->setFee(null);
-			$this->message(FeeNoneMessage::class, $this->construction)->s($building);
-		}
-	}
-
-	private function setQuayFee(Quay $building): void {
-		$fee = $this->parseFee();
-		/** @var FeeExtension $extension */
-		$extension = $this->construction->Extensions()->offsetGet(Fee::class);
-		if ($fee instanceof Quantity) {
-			$extension->setFee($fee);
-			$this->message(VesselFeeQuantityMessage::class, $this->construction)->s($building)->i($fee);
-		} else {
 			$extension->setFee(null);
 			$this->message(FeeNoneMessage::class, $this->construction)->s($building);
 		}

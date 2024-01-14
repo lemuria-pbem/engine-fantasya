@@ -31,11 +31,11 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\AbstractCastle;
+use Lemuria\Model\Fantasya\Building\Canal;
 use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Building\Market;
 use Lemuria\Model\Fantasya\Building\Monument;
 use Lemuria\Model\Fantasya\Building\Port;
-use Lemuria\Model\Fantasya\Building\Quay;
 use Lemuria\Model\Fantasya\Building\Ruin;
 use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Building\Site;
@@ -66,9 +66,9 @@ final class Construction extends AbstractProduct
 	private const FORBIDDEN = [Ruin::class, Signpost::class];
 
 	private const EXTENSIONS = [
+		Canal::class  => [Fee::class],
 		Market::class => [MarketExtension::class],
-		Port::class   => [Fee::class, Duty::class],
-		Quay::class   => [Fee::class]
+		Port::class   => [Fee::class, Duty::class]
 	];
 
 	private int $size;
