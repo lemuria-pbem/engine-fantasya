@@ -1447,6 +1447,14 @@
 			"p": ["der", "des", "dem", "den"],
 			"q": ["das", "des", "dem", "das"]
 		},
+		"die": {
+			"numerus": 1,
+			"f": ["die", "der", "den", "die"],
+			"m": ["die", "der", "den", "die"],
+			"n": ["die", "der", "den", "die"],
+			"p": ["die", "der", "den", "die"],
+			"q": ["die", "der", "den", "die"]
+		},
 		"ein": {
 			"numerus": 0,
 			"f": ["eine", "einer", "einer", "eine"],
@@ -1462,6 +1470,14 @@
 			"n": ["ein stillgelegtes", "eines stillgelegten", "einem stillgelegten", "ein stillgelegtes"],
 			"p": ["ein stillgelegtes", "eines stillgelegten", "einem stillgelegten", "ein stillgelegtes"],
 			"q": ["ein stillgelegtes", "eines stillgelegten", "einem stillgelegten", "ein stillgelegtes"]
+		},
+		"einige": {
+			"numerus": 1,
+			"f": ["einige", "einiger", "einigen", "einige"],
+			"m": ["einige", "einiger", "einigen", "einige"],
+			"n": ["einige", "einiger", "einigen", "einige"],
+			"p": ["einige", "einiger", "einigen", "einige"],
+			"q": ["einige", "einiger", "einigen", "einige"]
 		},
 		"im": {
 			"numerus": 0,
