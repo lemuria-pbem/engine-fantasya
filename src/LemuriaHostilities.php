@@ -46,10 +46,8 @@ class LemuriaHostilities implements Hostilities
 		$id = $location->Id()->Id();
 		if (isset($this->regionParty[$id])) {
 			$logs = [];
-			foreach ($this->regionParty[$id] as $parties) {
-				foreach ($parties as $battle) {
-					$logs[] = $this->logs[$battle];
-				}
+			foreach (array_unique($this->regionParty[$id]) as $battle) {
+				$logs[] = $this->logs[$battle];
 			}
 			return $logs;
 		}
