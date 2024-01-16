@@ -128,7 +128,7 @@ class Kraken extends AbstractBehaviour
 			if ($existing instanceof AttackOnVessel) {
 				$effect = $existing;
 			}
-			$effect->setVessel($vessel);
+			Lemuria::Score()->add($effect->setVessel($vessel));
 			return true;
 		}
 		return false;

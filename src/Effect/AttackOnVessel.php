@@ -16,10 +16,12 @@ final class AttackOnVessel extends AbstractUnitEffect
 {
 	private const VESSEL = 'vessel';
 
+	protected ?bool $isReassign = null;
+
 	private Id $vessel;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::After);
+		parent::__construct($state, Priority::Middle);
 	}
 
 	public function Vessel(): Vessel {
