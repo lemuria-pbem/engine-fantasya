@@ -39,13 +39,17 @@ final class Leave extends UnitCommand
 		$construction = $this->unit->Construction();
 		if ($construction) {
 			if ($this->initSiege($construction)->canEnterOrLeave($this->unit)) {
-				$construction->Inhabitants()->remove($this->unit);
+				$inhabitants = $construction->Inhabitants();
+				$owner       = $inhabitants->Owner();
+				$inhabitants->remove($this->unit);
 				$this->message(LeaveConstructionMessage::class)->e($construction);
-				$newOwner = $construction->Inhabitants()->Owner();
+				$newOwner = $inhabitants->Owner();
 				if ($newOwner) {
-					$this->message(LeaveNewOwnerMessage::class)->e($newOwner);
+					if ($newOwner !== $owner) {
+						$this->message(LeaveNewOwnerMessage::class, $construction)->e($newOwner);
+					}
 				} else {
-					$this->message(LeaveNoOwnerMessage::class);
+					$this->message(LeaveNoOwnerMessage::class, $construction);
 				}
 			} else {
 				$this->message(LeaveSiegeMessage::class);
@@ -57,13 +61,17 @@ final class Leave extends UnitCommand
 				if (Lemuria::Score()->find($effect->setVessel($vessel))) {
 					$this->message(LeaveVesselUnpaidDemurrageMessage::class)->e($vessel);
 				} else {
-					$vessel->Passengers()->remove($this->unit);
+					$passengers = $vessel->Passengers();
+					$captain    = $passengers->Owner();
+					$passengers->remove($this->unit);
 					$this->message(LeaveVesselMessage::class)->e($vessel);
-					$newCaptain = $vessel->Passengers()->Owner();
+					$newCaptain = $passengers->Owner();
 					if ($newCaptain) {
-						$this->message(LeaveNewCaptainMessage::class)->e($newCaptain);
+						if ($newCaptain !== $captain) {
+							$this->message(LeaveNewCaptainMessage::class, $vessel)->e($newCaptain);
+						}
 					} else {
-						$this->message(LeaveNoCaptainMessage::class);
+						$this->message(LeaveNoCaptainMessage::class, $vessel);
 					}
 					if ($this->unit->Region()->Landscape() instanceof Navigable) {
 						$this->loseExcessInventoryAtSea();
