@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Effect\Rumors;
+use Lemuria\Engine\Fantasya\Effect\VisitEffect;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\VisitNoMarketMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VisitNoRumorMessage;
@@ -53,7 +54,19 @@ final class Visit extends UnitCommand implements Reassignment
 	}
 
 	private function visit(Unit $unit): void {
-		$effect = new Rumors(State::getInstance());
+		$score = Lemuria::Score();
+		$state = State::getInstance();
+
+		$effect   = new VisitEffect($state);
+		$existing = $score->find($effect->setUnit($unit));
+		if ($existing instanceof VisitEffect) {
+			$effect = $existing;
+		} else {
+			$score->add($effect);
+		}
+		$effect->Parties()->add($this->unit->Party());
+
+		$effect = new Rumors($state);
 		$rumors = Lemuria::Score()->find($effect->setUnit($unit));
 		if ($rumors instanceof Rumors && !$this->context->getTurnOptions()->IsSimulation()) {
 			foreach ($rumors->Rumors() as $rumor) {
