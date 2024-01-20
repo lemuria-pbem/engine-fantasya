@@ -345,6 +345,10 @@ class Battle
 	protected function giveLootToHeirs(Heirs $heirs, Resources $loot): void {
 		foreach ($loot as $quantity) {
 			$unit  = $heirs->random();
+			if (!$unit) {
+				Lemuria::Log()->debug('Battlefield remains (' . $loot->count() . ' items) have no heirs.');
+				return;
+			}
 			$party = $unit->Party();
 			$type  = $party->Type();
 			if ($type === Type::Player) {
