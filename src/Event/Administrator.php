@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
 use Lemuria\Engine\Fantasya\Event\Administrator\FixOrcTalents;
+use Lemuria\Engine\Fantasya\Event\Administrator\HerbageFix;
 use Lemuria\Engine\Fantasya\Event\Administrator\MisplacedMonsters;
 use Lemuria\Engine\Fantasya\Event\Administrator\NameMonsters;
 use Lemuria\Engine\Fantasya\Event\Administrator\Overcrowded;
@@ -22,6 +23,7 @@ final class Administrator extends DelegatedEvent
 	protected function createDelegates(): void {
 		Lemuria::Log()->debug('Adding administrative events.');
 		$this->delegates[] = new FixOrcTalents($this->state);
+		$this->delegates[] = new HerbageFix($this->state);
 		$this->delegates[] = new MisplacedMonsters($this->state);
 		$this->delegates[] = new NameMonsters($this->state);
 		$this->delegates[] = new Overcrowded($this->state);
