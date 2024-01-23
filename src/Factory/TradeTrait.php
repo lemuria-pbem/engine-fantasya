@@ -2,8 +2,14 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
+use Lemuria\Engine\Fantasya\Message\Unit\TradeForbiddenPaymentMessage;
+use Lemuria\Exception\IdException;
+use Lemuria\Id;
 use Lemuria\Model\Fantasya\Extension\Market;
+use Lemuria\Model\Fantasya\Extension\Valuables;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Market\Deal;
+use Lemuria\Model\Fantasya\Unicum;
 
 trait TradeTrait
 {
@@ -32,5 +38,39 @@ trait TradeTrait
 			};
 		}
 		return (int)$amount;
+	}
+
+	protected function createUnicumOffer(): ?Unicum {
+		try {
+			$id = Id::fromId($this->phrase->getParameter());
+		} catch (IdException) {
+			return null;
+		}
+		$treasury = $this->unit->Treasury();
+		if (!$treasury->has($id)) {
+			return null;
+		}
+		$price = $this->parsePrice();
+
+		$unicum     = $treasury[$id];
+		$extensions = $this->unit->Extensions();
+		if ($extensions->offsetExists(Valuables::class)) {
+			$valuables = $extensions->offsetGet(Valuables::class);
+		} else {
+			$valuables = new Valuables($this->unit);
+			$extensions->add($valuables);
+		}
+		$valuables->add($unicum, $price);
+		return $unicum;
+	}
+
+	protected function parsePrice(): Deal {
+		$price      = $this->parseNumber($this->phrase->getParameter(2));
+		$payment    = $this->context->Factory()->commodity($this->phrase->getLine(3));
+		$tradeables = $this->getMarket()?->Tradeables();
+		if ($tradeables && !$tradeables->isAllowed($payment)) {
+			$this->message(TradeForbiddenPaymentMessage::class)->s($payment);
+		}
+		return is_int($price) ? new Deal($payment, $price) : new Deal($payment, $price[0], $price[1]);
 	}
 }
