@@ -758,7 +758,7 @@ class CommandFactory
 		'Kadaver'                 => Carcass::class,
 		'Kraeuteralmanach'        => HerbAlmanac::class,
 		'Kräuteralmanach'         => HerbAlmanac::class,
-		'Ring der Unsichtbarkeit' => RingOfInvisibility::class,
+		'Ring der unsichtbarkeit' => RingOfInvisibility::class,
 		'Schriftrolle'            => Scroll::class,
 		'Zauberbuch'              => Spellbook::class
 	];
@@ -811,27 +811,27 @@ class CommandFactory
 	 */
 	protected array $spells = [
 		'Adlerauge'               => EagleEye::class,
-		'Astrales Chaos'          => AstralChaos::class,
-		'Astraler Weg'            => AstralPassage::class,
+		'Astrales chaos'          => AstralChaos::class,
+		'Astraler weg'            => AstralPassage::class,
 		'Aufruhr verursachen'     => CivilCommotion::class,
 		'Auratransfer'            => AuraTransfer::class,
 		'Beschleunigung'          => Quickening::class,
-		'Blick des Basilisken'    => GazeOfTheBasilisk::class,
-		'Blick des Greifen'       => GazeOfTheGriffin::class,
+		'Blick des basilisken'    => GazeOfTheBasilisk::class,
+		'Blick des greifen'       => GazeOfTheGriffin::class,
 		'Elementarwesen'          => ElementalBeing::class,
 		'Erdbeben'                => Earthquake::class,
-		'Erwecke Baumhirten'      => SummonEnts::class,
+		'Erwecke baumhirten'      => SummonEnts::class,
 		'Fernsicht'               => Farsight::class,
 		'Feuerball'               => Fireball::class,
 		'Friedenslied'            => SongOfPeace::class,
 		'Geisterkaempfer'         => GhostEnemy::class,
 		'Geisterkämpfer'          => GhostEnemy::class,
-		'Lautloser Schatten'      => SoundlessShadow::class,
+		'Lautloser schatten'      => SoundlessShadow::class,
 		'Metalle entdecken'       => DetectMetals::class,
 		'Monster aufhetzen'       => InciteMonster::class,
-		'Ring der Unsichtbarkeit' => RingOfInvisibilitySpell::class,
+		'Ring der unsichtbarkeit' => RingOfInvisibilitySpell::class,
 		'Rosthauch'               => RustyMist::class,
-		'Ruhe in Frieden'         => RestInPeace::class,
+		'Ruhe in frieden'         => RestInPeace::class,
 		'Schockwelle'             => ShockWave::class,
 		'Steinhaut'               => StoneSkin::class,
 		'Sturmboe'                => GustOfWind::class,
@@ -1060,7 +1060,6 @@ class CommandFactory
 	}
 
 	public function isComposition(string $composition): bool {
-		$composition = str_replace('~', ' ', $composition);
 		return is_string($this->getCandidate($composition, $this->compositions, true));
 	}
 
