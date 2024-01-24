@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Factory\UnicumTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\ReadNoCompositionMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ReadNotFoundMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ReadNoUnicumMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ReadUnsupportedMessage;
 use Lemuria\Engine\Fantasya\Phrase;
@@ -30,9 +31,16 @@ final class Read extends UnitCommand implements Operator, Reassignment
 		$id = $this->parseUnicum();
 		if (!$this->unicum) {
 			$id = $this->findUnicum();
-			if ($this->composition instanceof Ownable) {
-				$this->message(ReadNoUnicumMessage::class)->p($id);
-				return;
+			if (!$this->unicum) {
+				$id = $this->isOfferedUnicum();
+				if (!$this->unicum) {
+					if ($this->composition instanceof Ownable) {
+						$this->message(ReadNoUnicumMessage::class)->p($id);
+						return;
+					}
+					$this->message(ReadNotFoundMessage::class)->p($id);
+					return;
+				}
 			}
 		}
 		$composition = $this->unicum->Composition();

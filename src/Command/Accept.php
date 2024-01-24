@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Effect\TradeEffect;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\Sales;
+use Lemuria\Engine\Fantasya\Factory\UnicumTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandAmountMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AcceptDemandPriceMessage;
@@ -62,6 +63,7 @@ use Lemuria\Model\Fantasya\Unit;
 final class Accept extends UnitCommand
 {
 	use CollectTrait;
+	use UnicumTrait;
 
 	/**
 	 * array<int, Market>
@@ -115,6 +117,9 @@ final class Accept extends UnitCommand
 				} else {
 					$this->message(AcceptDemandAlreadyMessage::class)->p((string)$this->id);
 				}
+				return;
+			}
+			if ($this->buyUnicumFromMerchant()) {
 				return;
 			}
 			$this->message(AcceptNoTradeMessage::class)->p((string)$this->id);

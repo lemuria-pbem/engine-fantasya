@@ -24,6 +24,9 @@ final class Take extends UnitCommand implements Operator, Reassignment
 	use UnicumTrait;
 
 	protected function run(): void {
+		if ($this->buyUnicumFromMerchant()) {
+			return;
+		}
 		$id = $this->findUnicumWithArguments();
 		if (!$this->unicum) {
 			$this->message(TakeNoUnicumMessage::class)->p($id);
