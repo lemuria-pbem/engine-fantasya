@@ -11,6 +11,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\VisitNoMarketMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VisitNoRumorMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VisitNoUnitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VisitRumorMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\VisitVisitMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
@@ -18,6 +19,7 @@ use Lemuria\Model\Fantasya\Extension\Market;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
+use Lemuria\StringList;
 
 /**
  * Visit a unit in the market or a NPC.
@@ -54,7 +56,7 @@ final class Visit extends UnitCommand implements Reassignment
 				return;
 			}
 		}
-		$this->message(VisitNoUnitMessage::class)->p($id);
+		$this->message(VisitNoUnitMessage::class)->p((string)$id);
 	}
 
 	protected function getReassignPhrase(string $old, string $new): ?Phrase {
@@ -81,13 +83,19 @@ final class Visit extends UnitCommand implements Reassignment
 				$this->message(VisitRumorMessage::class)->e($unit)->p($rumor);
 			}
 		} else {
-			if (!$this->visitFrom($unit)) {
+			$messages = $this->visitFrom($unit);
+			if ($messages) {
+				$this->message(VisitVisitMessage::class)->e($unit);
+				foreach ($messages as $message) {
+					$this->message(VisitMessage::class)->e($unit)->p($message);
+				}
+			} else {
 				$this->message(VisitNoRumorMessage::class)->e($unit);
 			}
 		}
 	}
 
-	private function visitFrom(Unit $unit): bool {
+	private function visitFrom(Unit $unit): ?StringList {
 		if ($unit->Party()->Type() === Type::NPC) {
 			$effect   = new WelcomeVisitor(State::getInstance());
 			$existing = Lemuria::Score()->find($effect->setUnit($unit));
@@ -95,13 +103,10 @@ final class Visit extends UnitCommand implements Reassignment
 				Lemuria::Log()->debug('Visiting NPC ' . $unit . '...');
 				$messages = $existing->Visitation()->from($this->unit);
 				if (!$messages->isEmpty()) {
-					foreach ($messages as $message) {
-						$this->message(VisitMessage::class)->p($message);
-					}
-					return true;
+					return $messages;
 				}
 			}
 		}
-		return false;
+		return null;
 	}
 }

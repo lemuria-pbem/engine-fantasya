@@ -5,6 +5,6 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 class VisitMessage extends VisitRumorMessage
 {
 	protected function create(): string {
-		return $this->rumor;
+		return 'Unit ' . $this->unit . ' says: „' . $this->rumor . '“';
 	}
 }

@@ -496,7 +496,7 @@ final class Accept extends UnitCommand
 		$unit     = AcceptOfferMessage::UNIT;
 		$pay      = AcceptOfferMessage::PAYMENT;
 		$this->message(AcceptOfferMessage::class, $merchant)->e($trade)->e($customer, $unit)->i($quantity)->i($payment, $pay);
-		$this->message(AcceptBoughtMessage::class)->e($trade)->e($merchant, $unit)->i($quantity)->i($payment, $pay);
+		$this->message(AcceptBoughtMessage::class, $customer)->e($trade)->e($merchant, $unit)->i($quantity)->i($payment, $pay);
 	}
 
 	private function demandMessages(Quantity $quantity, Quantity $payment): void {
@@ -506,7 +506,7 @@ final class Accept extends UnitCommand
 		$unit     = AcceptOfferMessage::UNIT;
 		$pay      = AcceptOfferMessage::PAYMENT;
 		$this->message(AcceptDemandMessage::class, $merchant)->e($trade)->e($customer, $unit)->i($quantity)->i($payment, $pay);
-		$this->message(AcceptSoldMessage::class)->e($trade)->e($merchant, $unit)->i($quantity)->i($payment, $pay);
+		$this->message(AcceptSoldMessage::class, $customer)->e($trade)->e($merchant, $unit)->i($quantity)->i($payment, $pay);
 	}
 
 	private function payFee(Unit $unit, Quantity $payment, float $rate): void {

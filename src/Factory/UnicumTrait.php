@@ -215,7 +215,7 @@ trait UnicumTrait
 		$price     = $valuables->getPrice($this->unicum);
 		if ($offer) {
 			if (!$this->context->getTurnOptions()->IsSimulation() && ($offer->Commodity() !== $price->Commodity() || $offer->Count() < $price->Minimum())) {
-				$this->message(TakeOfferPaymentMessage::class)->e($this->unicum)->e($merchant, TakeOfferPaymentMessage::UNIT);
+				$this->message(TakeOfferPaymentMessage::class, $this->unit)->e($this->unicum)->e($merchant, TakeOfferPaymentMessage::UNIT);
 				return true;
 			}
 			$quantity = new Quantity($offer->Commodity(), $offer->Count());
@@ -225,14 +225,14 @@ trait UnicumTrait
 
 		$payment = $this->context->getResourcePool($this->unit)->take($this->unit, $quantity);
 		if ($payment->Count() < $price->Minimum()) {
-			$this->message(TakeNotEnoughMessage::class)->e($this->unicum)->s($payment->Commodity());
+			$this->message(TakeNotEnoughMessage::class, $this->unit)->e($this->unicum)->s($payment->Commodity());
 			return true;
 		}
 		$this->unit->Inventory()->remove(new Quantity($payment->Commodity(), $payment->Count()));
 		$merchant->Inventory()->add(new Quantity($payment->Commodity(), $payment->Count()));
 		$merchant->Treasury()->remove($this->unicum);
 		$this->unit->Treasury()->add($this->unicum);
-		$this->message(TakeBoughtMessage::class)->e($this->unicum)->e($merchant, TakeOfferPaymentMessage::UNIT)->i($payment);
+		$this->message(TakeBoughtMessage::class, $this->unit)->e($this->unicum)->e($merchant, TakeOfferPaymentMessage::UNIT)->i($payment);
 		$this->message(TakeOfferMessage::class, $merchant)->e($this->unicum)->e($this->unit, TakeOfferPaymentMessage::UNIT)->i($payment);
 		return true;
 	}
@@ -241,7 +241,7 @@ trait UnicumTrait
 		$operate     = $this->context->Factory()->operateUnicum($this->unicum, $this);
 		$id          = (string)$this->unicum->Id();
 		$composition = $this->unicum->Composition();
-		$this->message(OperatePracticeMessage::class)->p($id)->s($composition)->p($practice->name, OperatePracticeMessage::PRACTICE);
+		$this->message(OperatePracticeMessage::class, $this->unit)->p($id)->s($composition)->p($practice->name, OperatePracticeMessage::PRACTICE);
 		return $operate;
 	}
 }

@@ -23,6 +23,7 @@ use Lemuria\Model\Fantasya\Spell\SongOfPeace;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Magic;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\SingletonSet;
 
 /**
  * Magicians gain new spells if their spell book is empty.
@@ -54,6 +55,14 @@ final class Obtainment extends AbstractEvent
 	private array $spell = [];
 
 	private Unit $magician;
+
+	public static function defaultSpells(): SingletonSet {
+		$set = new SingletonSet();
+		foreach (self::SPELL as $spell) {
+			$set->add(self::createSpell($spell));
+		}
+		return $set;
+	}
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);
