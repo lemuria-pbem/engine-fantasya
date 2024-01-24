@@ -4,7 +4,9 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Effect\Rumors;
 use Lemuria\Engine\Fantasya\Effect\VisitEffect;
+use Lemuria\Engine\Fantasya\Effect\WelcomeVisitor;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\VisitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VisitNoMarketMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VisitNoRumorMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VisitNoUnitMessage;
@@ -13,11 +15,12 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Extension\Market;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
 
 /**
- * Visit a unit in the market.
+ * Visit a unit in the market or a NPC.
  *
  * - BESUCHEN <unit>
  */
@@ -30,13 +33,18 @@ final class Visit extends UnitCommand implements Reassignment
 		$region = $this->unit->Region();
 		$units  = $region->Residents();
 		if ($units->has($id)) {
+			$unit = $units[$id];
+			if ($unit->Party()->Type() === Type::NPC) {
+				$this->visit($unit);
+				return;
+			}
 			$hasMarket = false;
 			foreach ($region->Estate() as $construction) {
 				$extensions = $construction->Extensions();
 				if ($extensions->offsetExists(Market::class)) {
 					$hasMarket = true;
 					if ($construction->Inhabitants()->has($id)) {
-						$this->visit($units[$id]);
+						$this->visit($unit);
 						return;
 					}
 				}
@@ -73,7 +81,27 @@ final class Visit extends UnitCommand implements Reassignment
 				$this->message(VisitRumorMessage::class)->e($unit)->p($rumor);
 			}
 		} else {
-			$this->message(VisitNoRumorMessage::class)->e($unit);
+			if (!$this->visitFrom($unit)) {
+				$this->message(VisitNoRumorMessage::class)->e($unit);
+			}
 		}
+	}
+
+	private function visitFrom(Unit $unit): bool {
+		if ($unit->Party()->Type() === Type::NPC) {
+			$effect   = new WelcomeVisitor(State::getInstance());
+			$existing = Lemuria::Score()->find($effect->setUnit($unit));
+			if ($existing instanceof WelcomeVisitor) {
+				Lemuria::Log()->debug('Visiting NPC ' . $unit . '...');
+				$messages = $existing->Visitation()->from($this->unit);
+				if (!$messages->isEmpty()) {
+					foreach ($messages as $message) {
+						$this->message(VisitMessage::class)->p($message);
+					}
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
