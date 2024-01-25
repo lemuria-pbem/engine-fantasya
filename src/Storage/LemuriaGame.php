@@ -23,7 +23,15 @@ class LemuriaGame extends JsonGame
 		return [];
 	}
 
+	public function getQuests(): array {
+		return [];
+	}
+
 	public function setScripts(array $scripts): static {
+		return $this;
+	}
+
+	public function setQuests(array $quests): static {
 		return $this;
 	}
 
