@@ -49,6 +49,10 @@ final class Acquaintance extends AbstractEvent
 				// First collect own units with their (maybe disguised) party.
 				$ids = [];
 				foreach ($census->getPeople($region) as $unit) {
+					$calculus = new Calculus($unit);
+					if ($calculus->isInvisible()) {
+						continue;
+					}
 					$id = $census->getParty($unit)?->Id()->Id();
 					if ($id) {
 						if ($unit->IsHiding()) {
@@ -125,6 +129,10 @@ final class Acquaintance extends AbstractEvent
 	 * @param array<int, array> $ids
 	 */
 	private function addToNetwork(array $ids, Unit $unit, Census $census): void {
+		$calculus = new Calculus($unit);
+		if ($calculus->isInvisible()) {
+			return; // Invisible units are not considered.
+		}
 		if ($unit->Party() === $census->Party()) {
 			return; // Disguised units from same parties know the truth.
 		}

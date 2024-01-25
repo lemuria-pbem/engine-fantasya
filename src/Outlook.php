@@ -51,6 +51,10 @@ final class Outlook
 		$units = new People();
 		$party = $this->census->Party();
 		foreach ($region->Residents() as $unit) {
+			$calculus = new Calculus($unit);
+			if ($calculus->isInvisible()) {
+				continue;
+			}
 			if (!$unit->Construction() && !$unit->Vessel()) {
 				$other = $unit->Party();
 				if ($other === $party) {
@@ -67,7 +71,6 @@ final class Outlook
 					if ($effect instanceof ContactEffect && $effect->From()->has($unit->Id())) {
 						$units->add($unit);
 					} else {
-						$calculus = new Calculus($unit);
 						if ($calculus->camouflage()->Level() <= $level) {
 							$units->add($unit);
 						}
@@ -94,6 +97,10 @@ final class Outlook
 		$units = new People();
 		$party = $this->census->Party();
 		foreach ($region->Residents() as $unit) {
+			$calculus = new Calculus($unit);
+			if ($calculus->isInvisible()) {
+				continue;
+			}
 			if ($unit->Construction()) {
 				$units->add($unit);
 			} elseif ($unit->Vessel()) {
@@ -109,7 +116,6 @@ final class Outlook
 					if ($effect instanceof ContactEffect && $effect->From()->has($unit->Id())) {
 						$units->add($unit);
 					} else {
-						$calculus = new Calculus($unit);
 						if ($calculus->camouflage()->Level() <= $level) {
 							$units->add($unit);
 						}

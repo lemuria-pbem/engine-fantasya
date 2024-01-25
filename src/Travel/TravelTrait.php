@@ -258,8 +258,9 @@ trait TravelTrait
 	}
 
 	protected function unitIsStoppedByGuards(Region $region): Gathering {
-		$guards = new Gathering();
-		if ($this->context->getTurnOptions()->IsSimulation()) {
+		$calculus = $this->calculus();
+		$guards   = new Gathering();
+		if ($this->context->getTurnOptions()->IsSimulation() || $calculus->isInvisible()) {
 			return $guards;
 		}
 		$effect = new SneakPastEffect(State::getInstance());
@@ -269,7 +270,7 @@ trait TravelTrait
 
 		$isOnVessel   = (bool)$this->unit->Vessel();
 		$intelligence = $this->context->getIntelligence($region);
-		$camouflage   = $this->calculus()->camouflage()->Level();
+		$camouflage   = $calculus->camouflage()->Level();
 		foreach ($intelligence->getGuards() as $guard) {
 			$guardParty = $guard->Party();
 			if ($guardParty !== $this->unit->Party()) {
@@ -292,7 +293,11 @@ trait TravelTrait
 	}
 
 	protected function unitIsBlockedByGuards(Region $region, Direction $direction): People {
-		$guards = new People();
+		$guards   = new People();
+		$calculus = $this->calculus();
+		if ($calculus->isInvisible()) {
+			return $guards;
+		}
 		$effect = new SneakPastEffect(State::getInstance());
 		if (Lemuria::Score()->find($effect->setUnit($this->unit))) {
 			return $guards;
@@ -302,7 +307,7 @@ trait TravelTrait
 		$blockade     = $isSimulation ? null : $this->context->getBlockade($region, $direction);
 		$isOnVessel   = (bool)$this->unit->Vessel();
 		$intelligence = $this->context->getIntelligence($region);
-		$camouflage   = $this->calculus()->camouflage()->Level();
+		$camouflage   = $calculus->camouflage()->Level();
 		foreach ($intelligence->getGuards() as $guard) {
 			$guardParty = $guard->Party();
 			if ($guardParty !== $this->unit->Party()) {

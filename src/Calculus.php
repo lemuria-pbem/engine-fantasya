@@ -2,13 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
-use Lemuria\Model\Fantasya\Commodity\Camel;
-use Lemuria\Model\Fantasya\Commodity\Carriage;
-use Lemuria\Model\Fantasya\Commodity\Elephant;
-use Lemuria\Model\Fantasya\Commodity\Griffin;
-use Lemuria\Model\Fantasya\Commodity\Pegasus;
-use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
-use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Combat\WeaponSkill;
 use Lemuria\Engine\Fantasya\Command\Learn;
@@ -16,6 +9,7 @@ use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Effect\Contagion;
 use Lemuria\Engine\Fantasya\Effect\PotionEffect;
 use Lemuria\Engine\Fantasya\Effect\TalentEffect;
+use Lemuria\Engine\Fantasya\Effect\UnicumActive;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\Factory\GearDistribution;
 use Lemuria\Engine\Fantasya\Factory\LodgingTrait;
@@ -33,9 +27,18 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\College;
+use Lemuria\Model\Fantasya\Commodity\Camel;
+use Lemuria\Model\Fantasya\Commodity\Carriage;
+use Lemuria\Model\Fantasya\Commodity\Elephant;
+use Lemuria\Model\Fantasya\Commodity\Griffin;
 use Lemuria\Model\Fantasya\Commodity\Horse;
+use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Potion\GoliathWater;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
+use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
+use Lemuria\Model\Fantasya\Composition;
+use Lemuria\Model\Fantasya\Composition\RingOfInvisibility;
 use Lemuria\Model\Fantasya\Distribution;
 use Lemuria\Model\Fantasya\DoubleAbility;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -349,16 +352,23 @@ final class Calculus
 	 * Check if this unit can discover given unit.
 	 */
 	public function canDiscover(Unit $unit): bool {
+		$calculus = new self($unit);
+		if ($calculus->isInvisible()) {
+			return false;
+		}
 		if ($unit->Construction() || $unit->Vessel()) {
 			return true;
 		}
 		if (!$unit->IsHiding() || $unit->IsGuarding()) {
 			return true;
 		}
-		$calculus   = new self($unit);
 		$camouflage = $calculus->knowledge(Camouflage::class);
 		$perception = $this->knowledge(Perception::class);
 		return $perception->Level() >= $camouflage->Level();
+	}
+
+	public function isInvisible(): bool {
+		return $this->hasUnicum(RingOfInvisibility::class, $this->unit->Size());
 	}
 
 	/**
@@ -466,6 +476,27 @@ final class Calculus
 			return $ride;
 		}
 		return new Caravan($this, $conveyance);
+	}
+
+	public function hasUnicum(Composition|string $composition, int $count = 1, bool $withActiveEffect = true): bool {
+		if (is_string($composition)) {
+			$composition = self::createComposition($composition);
+		}
+		foreach ($this->unit->Treasury() as $unicum) {
+			if ($count <= 0) {
+				return true;
+			}
+			if ($unicum->Composition() === $composition) {
+				if ($withActiveEffect) {
+					$effect = new UnicumActive(State::getInstance());
+					if (!Lemuria::Score()->find($effect->setUnicum($unicum))) {
+						continue;
+					}
+				}
+				$count--;
+			}
+		}
+		return $count <= 0;
 	}
 
 	private function parseTalent(Talent|string $talent): Talent {

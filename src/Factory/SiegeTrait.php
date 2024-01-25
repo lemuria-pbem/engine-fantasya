@@ -40,7 +40,7 @@ trait SiegeTrait
 		}
 		if ($this->isSieged() && !$this->context->getTurnOptions()->IsSimulation()) {
 			$calculus = new Calculus($unit);
-			return $calculus->camouflage()->Level() > $this->siege->Perception();
+			return $calculus->isInvisible() || $calculus->camouflage()->Level() > $this->siege->Perception();
 		}
 		return true;
 	}

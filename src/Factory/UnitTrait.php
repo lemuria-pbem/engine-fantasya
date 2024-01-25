@@ -42,11 +42,14 @@ trait UnitTrait
 	protected function getCheckByAgreementForUnit(Unit $unit, int $agreement): array {
 		$guardParties = [];
 		$party        = $unit->Party();
-		$context      = $this->context;
-		$intelligence = $context->getIntelligence($unit->Region());
-		$camouflage   = PHP_INT_MIN;
-		if (!$unit->Construction() && $unit->IsHiding() && !$unit->IsGuarding()) {
-			$camouflage = $context->getCalculus($unit)->camouflage()->Level();
+		$intelligence = $this->context->getIntelligence($unit->Region());
+		$calculus     = $this->context->getCalculus($unit);
+		if ($calculus->isInvisible()) {
+			$camouflage = PHP_INT_MAX;
+		} elseif (!$unit->Construction() && $unit->IsHiding() && !$unit->IsGuarding()) {
+			$camouflage = $calculus->camouflage()->Level();
+		} else {
+			$camouflage = PHP_INT_MIN;
 		}
 
 		foreach ($intelligence->getGuards() as $guard) {
@@ -55,7 +58,7 @@ trait UnitTrait
 				if ($this->context->getTurnOptions()->IsSimulation()) {
 					$guardParties[$guardParty->Id()->Id()] = $guardParty;
 				} elseif (!$guardParty->Diplomacy()->has($agreement, $unit)) {
-					$perception = $context->getCalculus($guard)->knowledge(Perception::class)->Level();
+					$perception = $this->context->getCalculus($guard)->knowledge(Perception::class)->Level();
 					if ($perception >= $camouflage) {
 						$guardParties[$guardParty->Id()->Id()] = $guardParty;
 					}
