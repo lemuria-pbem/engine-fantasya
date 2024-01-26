@@ -134,13 +134,17 @@ final class Herb extends AllocationCommand implements Activity
 			} else {
 				$region = $this->unit->Region();
 				$herb   = $this->determineHerbage($region)?->Herb();
-				if ($herb && $this->threshold === null) {
-					$this->reduceDemandByQuota($region, $herb);
+				if (!$herb) {
+					$this->message(HerbUnknownMessage::class)->e($region);
+				} else {
+					if ($herb && $this->threshold === null) {
+						$this->reduceDemandByQuota($region, $herb);
+					}
+					if ($herb && $job instanceof HerbModel) {
+						$job = $herb;
+					}
+					$this->createSimpleDemand($job);
 				}
-				if ($herb && $job instanceof HerbModel) {
-					$job = $herb;
-				}
-				$this->createSimpleDemand($job);
 			}
 		} else {
 			$this->message(HerbNoDemandMessage::class);
