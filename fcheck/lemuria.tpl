@@ -22,6 +22,8 @@
 ^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren) +partei( +[a-z0-9]{1,6})+$
 ^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren) +(aquaner|baer|baeren|bär|bären|baumhirten?|elf|elfen|ghoule?|halblinge?|kobolde?|kraken?|mensch|menschen|monster|orks?|skelette?|trolle?|wolf|woelfe|wölfe|zombies?|zwerge?)$
 
+^(au|auf|auft|auftr|auftra|auftrag) +[a-z0-9]{1,6}$
+
 ^(ba|ban|bann|banne|banner) +.*$
 
 ^(bee|been|beend|beende|beenden)( +[a-z0-9]{1,6})*$
@@ -73,6 +75,8 @@
 ^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9-]+$
 ^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9-]+[a-zäöüß ]+$
 ^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +[0-9]+[a-zäöüß ]+ [0-9]+[a-zäöüß ]+$
+^(ha|han|hand|hande|handel|handeln) +(kadaver|kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch) +[a-z0-9]{1,6}$
+^(ha|han|hand|hande|handel|handeln) +(kadaver|kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch) +[a-z0-9]{1,6} +[0-9]+[a-zäöüß ]+$
 
 ^@?(he|hel|helf|helfe|helfen|hi|hil|hilf|hilfe) +[a-z0-9]{1,6} +[a-z]+( +(region|nicht|region +nicht|nicht +region))?$
 
@@ -114,7 +118,9 @@
 ^(nä|näc|näch|nächs|nächst|nächste|nächster|nae|naec|naech|naechs|naechst|naechste|naechster)$
 
 ^@?(ne|neh|nehm|nehme|nehmen)( +(kadaver|kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}.*$
+^@?(ne|neh|nehm|nehme|nehmen)( +(kadaver|kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6} +[0-9]+[a-zäöüß ]+$
 ^@?(ni|nim|nimm)( +(kadaver|kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}.*$
+^@?(ni|nim|nimm)( +(kadaver|kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6} +[0-9]+[a-zäöüß ]+$
 
 ^@?(nu|num|numm|numme|nummer|i|id)( +(einheit|gebaeude|gebäude|burg|reich|schiff|partei))? +[a-z0-9]{1,6}$
 

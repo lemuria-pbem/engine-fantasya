@@ -58,6 +58,7 @@ use Lemuria\Engine\Fantasya\Command\Origin;
 use Lemuria\Engine\Fantasya\Command\Party;
 use Lemuria\Engine\Fantasya\Command\Presetting;
 use Lemuria\Engine\Fantasya\Command\Price;
+use Lemuria\Engine\Fantasya\Command\Quest;
 use Lemuria\Engine\Fantasya\Command\Quota;
 use Lemuria\Engine\Fantasya\Command\Read;
 use Lemuria\Engine\Fantasya\Command\Realm;
@@ -357,6 +358,7 @@ class CommandFactory
 		'ANGRIFF'        => 'ATTACKIEREN',
 		'ATTACKE'        => 'ATTACKIEREN',
 		'ATTACKIEREN'    => true,
+		'AUFTRAG'        => true,
 		'BANNER'         => true,
 		'BEENDEN'        => true,
 		'BEKLAUEN'       => 'STEHLEN',
@@ -982,6 +984,7 @@ class CommandFactory
 				'ALTERNATIVE'    => Alternative::class,
 				'ANGEBOT'        => Offer::class,
 				'ATTACKIEREN'    => Attack::class,
+				'AUFTRAG'        => Quest::class,
 				'BANNER'         => Banner::class,
 				'BEENDEN'        => Cancel::class,
 				'BELAGERN'       => Siege::class,
