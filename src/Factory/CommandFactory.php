@@ -39,6 +39,7 @@ use Lemuria\Engine\Fantasya\Command\Fee;
 use Lemuria\Engine\Fantasya\Command\Fight;
 use Lemuria\Engine\Fantasya\Command\Follow;
 use Lemuria\Engine\Fantasya\Command\Forbid;
+use Lemuria\Engine\Fantasya\Command\Forget;
 use Lemuria\Engine\Fantasya\Command\Gather;
 use Lemuria\Engine\Fantasya\Command\Handover;
 use Lemuria\Engine\Fantasya\Command\Handover\Grant;
@@ -440,6 +441,8 @@ class CommandFactory
 		'UNTERSUCHEN'    => 'LESEN',
 		'URSPRUNG'       => true,
 		'VERBIETEN'      => true,
+		'VERGESSEN'      => true,
+		'VERGISS'        => 'VERGESSEN',
 		'VERKAUFEN'      => true,
 		'VERLASSEN'      => true,
 		'VERLIEREN'      => true,
@@ -475,8 +478,6 @@ class CommandFactory
 		'SENDEN'         => 'NOT',
 		'SPRACHE'        => 'NOT',
 		'STIRB'          => 'NOT',
-		'VERGESSEN'      => 'NOT',
-		'VERGISS'        => 'NOT',
 		'ZEIGEN'         => 'NOT',
 		'ZÜCHTEN'        => 'NOT',
 		'NOT'            => true
@@ -1000,6 +1001,7 @@ class CommandFactory
 				'UNTERHALTEN'    => Entertain::class,
 				'URSPRUNG'       => Origin::class,
 				'VERBIETEN'      => Forbid::class,
+				'VERGESSEN'      => Forget::class,
 				'VERKAUFEN'      => Sell::class,
 				'VERLASSEN'      => Vacate::class,
 				'VERLIEREN'      => Lose::class,

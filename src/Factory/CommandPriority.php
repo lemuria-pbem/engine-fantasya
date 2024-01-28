@@ -109,7 +109,7 @@ final class CommandPriority
 		'Demand'         => 87,
 		'Amount'         => 88,
 		'Price'          => 89,
-		//90
+		'Forget'         => 90,
 		'Guard'          => 91,
 		'Sort'           => 92,
 		'Number'         => 93,

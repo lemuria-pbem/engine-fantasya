@@ -55,6 +55,8 @@
 ^@?(erf|erfor|erfors|erforsc|erforsch|erforsche|erforschen|for|fors|forsc|forsch|forsche|forschen)$
 ^@?(erf|erfor|erfors|erforsc|erforsch|erforsche|erforschen|for|fors|forsc|forsch|forsche|forschen) +(kraut|kräuter|kraeuter)$
 
+^(erl|erla|erlau|erlaub|erlaube|erlauben) +[a-z]+$
+
 ^@?(fol|folg|folge|folgen) +[a-z0-9]{1,6}$
 
 ^@?(ers|ersc|ersch|erscha|erschaf|erschaff|erschaffe|erschaffen) +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
@@ -139,8 +141,8 @@
 
 ^@?(sc|sch|schr|schre|schrei|schreib|schreibe|schreiben)( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}( +[a-zäöüß]+( [a-zäöüß]+)*)?$
 
-^@?(s|so|sor|sort|sorti|sortie|sortier|sortiere|sortieren|sortieru|sortierun|sortierung) +(anfang|erste|erster|zuerst|ende|letzte|letzter|zuletzt)$
-^@?(s|so|sor|sort|sorti|sortie|sortier|sortiere|sortieren|sortieru|sortierun|sortierung) +(vor|hinter|nach|austausch|austauschen|auswechseln|mit|tausch|tausche|tauschen|wechsel|wechseln)( +temp)? +[a-z0-9]{1,6}$
+^@?(so|sor|sort|sorti|sortie|sortier|sortiere|sortieren|sortieru|sortierun|sortierung) +(anfang|erste|erster|zuerst|ende|letzte|letzter|zuletzt)$
+^@?(so|sor|sort|sorti|sortie|sortier|sortiere|sortieren|sortieru|sortierun|sortierung) +(vor|hinter|nach|austausch|austauschen|auswechseln|mit|tausch|tausche|tauschen|wechsel|wechseln)( +temp)? +[a-z0-9]{1,6}$
 ^@?(tau|taus|tausc|tausch|tausche|tauschen) +(anfang|erste|erster|zuerst|ende|letzte|letzter|zuletzt)$
 ^@?(tau|taus|tausc|tausch|tausche|tauschen) +(vor|hinter|nach|austausch|austauschen|auswechseln|mit|tausch|tausche|tauschen|wechsel|wechseln)( +temp)? +[a-z0-9]{1,6}$
 
@@ -165,6 +167,11 @@
 ^@?(unterh|unterha|unterhal|unterhalt|unterhalte|unterhalten|unterhaltu|unterhaltun|unterhaltung)( +-?[0-9]+)?$
 
 ^@?(ur|urs|ursp|urspr|urspru|ursprun|ursprung)( +(partei|region) +[a-z0-9]{1,6})?$
+
+^(verb|verbi|verbie|verbiet|verbiete|verbieten) +[a-z]+$
+
+^(verg|verge|verges|vergess|vergesse|vergessen) +[a-z]+( +[0-9]+)?$
+^(vergi|vergis|vergiss) +[a-z]+( +[0-9]+)?$
 
 ^@?(verk|verkauf|verkaufe|verkaufen)( +[0-9]+)? +(balsam|balsame|gewürz|gewürze|gewuerz|gewuerze|juwel|juwelen|myrrhe|myrrhen|öl|öle|oel|oele|pelz|pelze|seide|seiden|weihrauch)$
 
@@ -195,5 +202,5 @@
 
 ^@?(za|zau|zaub|zaube|zauber|zaubere|zaubern) +(adlerauge|astraler weg|aufruhr verursachen|auratransfer|blick des greifen|erdbeben|erwecke baumhirten|fernsicht|g(ue|ü)nstige winde|lautloser schatten|luftschiff|monster aufhetzen|ring der unsichtbarkeit|tagtraum|teleportation|wunderdoktor)( +[0-9]+)?$
 
-^@?(zerstö|zerstör|zerstöre|zerstören) +(burg|gebäude|gebaeude|schiff|straße|strasse) +[a-z0-9]{1,6}$
+^@?(zerst|zerstö|zerstör|zerstöre|zerstören) +(burg|gebäude|gebaeude|schiff|straße|strasse) +[a-z0-9]{1,6}$
 ^@?(zerstoe|zerstoer|zerstoere|zerstoeren) +(burg|gebäude|gebaeude|schiff|straße|strasse) +[a-z0-9]{1,6}$
