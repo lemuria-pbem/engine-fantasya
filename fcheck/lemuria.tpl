@@ -98,7 +98,7 @@
 ^@?(ma|mac|mach|mache|machen) +(temp) +[a-z0-9]{1,6}$
 ^@?(ma|mac|mach|mache|machen) +[a-zäöüß]+$
 ^@?(ma|mac|mach|mache|machen) +-?[0-9]+ +[a-zäöüß]+$
-^@?(ma|mac|mach|mache|machen) +-[0-9]+% Kräuter$
+^@?(ma|mac|mach|mache|machen) +-[0-9]+% +kräuter$
 ^@?(ma|mac|mach|mache|machen) +(schiff|boot|drachenschiff|galeone|karavelle|langboot|trireme)( +[0-9]+)?$
 ^@?(ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|akropolis|alchemistenküche|bergwerk|greifenzucht|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|kamelzucht|kanal|leuchtturm|leuchttürme|magierturm|markt|minen|mine|monument|monumente|pferdezucht|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steingrube|steuerturm|taverne|wegweiser|werkstatt)( +[0-9]+)?$
 ^@?(ma|mac|mach|mache|machen) +(gebäude|gebaeude|burg|akropolis|alchemistenküche|bergwerk|greifenzucht|hafen|holzfällerhütte|holzfaellerhütte|holzfällerhuette|holzfaellerhuette|kamelzucht|kanal|leuchtturm|leuchttürme|magierturm|markt|minen|mine|monument|monumente|pferdezucht|ruinen|ruine|saegewerk|sägewerke|sägewerk|saegewerke|sattlerei|schiffswerft|schmiede|seehafen|steg|steinbruch|steingrube|steuerturm|taverne|wegweiser|werkstatt) +[a-z0-9]{1,6}( +[0-9]+)?$
