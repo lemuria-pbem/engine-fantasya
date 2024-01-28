@@ -85,7 +85,7 @@ trait UnicumTrait
 			$this->unicum        = $unicum;
 			$this->composition   = $unicum->Composition();
 			$this->argumentIndex = 2;
-		} else {
+		} elseif ($this->phrase->count() >= 2) {
 			$id     = $this->phrase->getParameter(2);
 			$unicum = $this->searchUnicum($id);
 			if ($unicum) {
@@ -95,6 +95,8 @@ trait UnicumTrait
 			} else {
 				throw new InvalidCommandException($this);
 			}
+		} else {
+			$this->unicum = null;
 		}
 		return $id;
 	}
