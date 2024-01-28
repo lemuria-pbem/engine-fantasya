@@ -1048,6 +1048,7 @@
 		"WoundshutMessage": "Die Einheit $id heilt ihre Wunden.",
 		"WoundshutNoneMessage": "Die Einheit $id benötigt keine $woundshut.",
 		"WriteNoCompositionMessage": "Die Einheit $id hat {g/akk:kein:$composition} mit der Nummer $unicum.",
+		"WriteNoneMessage": "Die Einheit $id kann {g/akk:kein:$composition} mehr beschreiben.",
 		"WriteNoUnicumMessage": "Die Einheit $id hat diesen Gegenstand nicht.",
 		"WriteUnsupportedMessage": "Die Einheit $id kann {g/akk:das:$composition} $unicum nicht beschreiben.",
 		"ZombieInfectionMessage": "Zombies greifen die Region $id an und verwandeln $peasants in Zombies."

@@ -45,6 +45,7 @@ final class Spellbook extends AbstractOperate
 		$knownSpells = $unit->Party()->SpellBook();
 		if (isset($knownSpells[$spell])) {
 			$spells->add($spell);
+			$unicum->setComposition($spellbook);
 			$this->message(SpellbookWriteMessage::class, $unit)->s($spellbook)->e($unicum)->s($spell, SpellbookWriteMessage::SPELL);
 		} else {
 			$this->message(SpellbookWriteUnknownMessage::class, $unit)->s($spellbook)->e($unicum)->s($spell, SpellbookWriteMessage::SPELL);

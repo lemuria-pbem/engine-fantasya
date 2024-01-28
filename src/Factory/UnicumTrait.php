@@ -59,7 +59,11 @@ trait UnicumTrait
 	}
 
 	private function parseUnicumWithArguments(): void {
+		$mapper = $this->context->UnicumMapper();
 		$id     = $this->phrase->getParameter();
+		if ($mapper->has($id)) {
+			$id = $mapper->get($id);
+		}
 		$unicum = $this->getUnicum($id);
 		if ($unicum) {
 			$this->unicum        = $unicum;
@@ -101,8 +105,10 @@ trait UnicumTrait
 		return $id;
 	}
 
-	private function getUnicum(string $id): ?Unicum {
-		$id       = Id::fromId($id);
+	private function getUnicum(string|Id $id): ?Unicum {
+		if (is_string($id)) {
+			$id = Id::fromId($id);
+		}
 		$treasury = $this->unit->Treasury();
 		if ($treasury->has($id)) {
 			return $treasury[$id];
@@ -110,8 +116,10 @@ trait UnicumTrait
 		return null;
 	}
 
-	private function searchUnicum(string $id): ?Unicum {
-		$id       = Id::fromId($id);
+	private function searchUnicum(string|Id $id): ?Unicum {
+		if (is_string($id)) {
+			$id = Id::fromId($id);
+		}
 		$treasury = $this->unit->Construction()?->Treasury();
 		if ($treasury && $treasury->has($id)) {
 			return $treasury[$id];

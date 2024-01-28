@@ -42,6 +42,7 @@ final class Scroll extends AbstractOperate
 		$knownSpells = $unit->Party()->SpellBook();
 		if (isset($knownSpells[$spell])) {
 			$scroll->setSpell($spell);
+			$unicum->setComposition($scroll);
 			$this->message(ScrollWriteMessage::class, $unit)->e($unicum)->s($scroll)->s($spell, ScrollWriteMessage::SPELL);
 		} else {
 			$this->message(ScrollWriteUnknownMessage::class, $unit)->e($unicum)->s($scroll)->s($spell, ScrollWriteMessage::SPELL);
