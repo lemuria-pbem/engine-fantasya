@@ -104,7 +104,9 @@ final class Accept extends UnitCommand
 
 	protected function run(): void {
 		if (empty($this->market)) {
-			$this->message(AcceptNoMarketMessage::class);
+			if (!$this->buyUnicumFromMerchant()) {
+				$this->message(AcceptNoMarketMessage::class, $this->unit);
+			}
 			return;
 		}
 
@@ -113,21 +115,21 @@ final class Accept extends UnitCommand
 			$closed = $this->context->getClosedTrades()[$this->id->Id()] ?? null;
 			if ($closed) {
 				if ($closed->Trade() === Trade::OFFER) {
-					$this->message(AcceptOfferAlreadyMessage::class)->p((string)$this->id);
+					$this->message(AcceptOfferAlreadyMessage::class, $this->unit)->p((string)$this->id);
 				} else {
-					$this->message(AcceptDemandAlreadyMessage::class)->p((string)$this->id);
+					$this->message(AcceptDemandAlreadyMessage::class, $this->unit)->p((string)$this->id);
 				}
 				return;
 			}
 			if ($this->buyUnicumFromMerchant()) {
 				return;
 			}
-			$this->message(AcceptNoTradeMessage::class)->p((string)$this->id);
+			$this->message(AcceptNoTradeMessage::class, $this->unit)->p((string)$this->id);
 			return;
 		}
 
 		if ($this->status === SalesModel::FORBIDDEN) {
-			$this->message(AcceptForbiddenTradeMessage::class)->e($this->trade);
+			$this->message(AcceptForbiddenTradeMessage::class, $this->unit)->e($this->trade);
 		} elseif ($this->status === SalesModel::UNSATISFIABLE && !$this->context->getTurnOptions()->IsSimulation()) {
 			$merchant = $this->trade->Unit();
 			$this->message(AcceptUnsatisfiableTradeMessage::class, $this->unit)->e($this->trade)->e($merchant, AcceptUnsatisfiableTradeMessage::MERCHANT);
@@ -193,9 +195,9 @@ final class Accept extends UnitCommand
 		$price = $this->trade->Price();
 		if (!$this->context->getTurnOptions()->IsSimulation() && $this->price < $price->Minimum()) {
 			if ($this->trade->Trade() === Trade::OFFER) {
-				$this->message(AcceptOfferPriceMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+				$this->message(AcceptOfferPriceMessage::class, $this->unit)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
 			} else {
-				$this->message(AcceptDemandPriceMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+				$this->message(AcceptDemandPriceMessage::class, $this->unit)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
 			}
 			return;
 		}
@@ -221,9 +223,9 @@ final class Accept extends UnitCommand
 			$minimum = $this->amount * $price->Minimum();
 			if (!$this->context->getTurnOptions()->IsSimulation() && $this->price < $minimum) {
 				if ($this->trade->Trade() === Trade::OFFER) {
-					$this->message(AcceptOfferPriceMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+					$this->message(AcceptOfferPriceMessage::class, $this->unit)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
 				} else {
-					$this->message(AcceptDemandPriceMessage::class)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+					$this->message(AcceptDemandPriceMessage::class, $this->unit)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
 				}
 				return;
 			}
@@ -377,9 +379,9 @@ final class Accept extends UnitCommand
 		$maximum = $goods->IsAdapting() ? $this->getAvailableMaximum(): $goods->Maximum();
 		if ($this->amount < $goods->Minimum() || $this->amount > $maximum) {
 			if ($this->trade->Trade() === Trade::OFFER) {
-				$this->message(AcceptOfferAmountMessage::class)->e($this->trade)->e($unit, AcceptOfferAmountMessage::UNIT);
+				$this->message(AcceptOfferAmountMessage::class, $this->unit)->e($this->trade)->e($unit, AcceptOfferAmountMessage::UNIT);
 			} else {
-				$this->message(AcceptDemandAmountMessage::class)->e($this->trade)->e($unit, AcceptOfferAmountMessage::UNIT);
+				$this->message(AcceptDemandAmountMessage::class, $this->unit)->e($this->trade)->e($unit, AcceptOfferAmountMessage::UNIT);
 			}
 			return null;
 		}
@@ -390,7 +392,7 @@ final class Accept extends UnitCommand
 			$reserve   = $inventory[$commodity];
 			if ($reserve->Count() < $this->amount) {
 				$demand = new Quantity($commodity, $this->amount);
-				$this->message(AcceptOfferReserveMessage::class)->e($this->trade)->s($commodity)->e($unit, AcceptOfferAmountMessage::UNIT);
+				$this->message(AcceptOfferReserveMessage::class, $this->unit)->e($this->trade)->s($commodity)->e($unit, AcceptOfferAmountMessage::UNIT);
 				$this->message(AcceptOfferUnableMessage::class, $unit)->e($this->trade)->i($demand)->e($this->unit, AcceptOfferAmountMessage::UNIT);
 				return null;
 			}
@@ -407,9 +409,9 @@ final class Accept extends UnitCommand
 		$range   = [max($this->range[0], $minimum), min($this->range[1], $maximum)];
 		if ($range[0] > $range[1]) {
 			if ($this->trade->Trade() === Trade::OFFER) {
-				$this->message(AcceptOfferAmountMessage::class)->e($this->trade)->e($unit, AcceptOfferAmountMessage::UNIT);
+				$this->message(AcceptOfferAmountMessage::class, $this->unit)->e($this->trade)->e($unit, AcceptOfferAmountMessage::UNIT);
 			} else {
-				$this->message(AcceptDemandAmountMessage::class)->e($this->trade)->e($unit, AcceptOfferAmountMessage::UNIT);
+				$this->message(AcceptDemandAmountMessage::class, $this->unit)->e($this->trade)->e($unit, AcceptOfferAmountMessage::UNIT);
 			}
 			return null;
 		}
@@ -422,7 +424,7 @@ final class Accept extends UnitCommand
 			if ($this->amount < $range[0]) {
 				$this->amount = $range[0];
 				$demand       = new Quantity($commodity, $this->amount);
-				$this->message(AcceptOfferReserveMessage::class)->e($this->trade)->s($commodity)->e($unit, AcceptOfferAmountMessage::UNIT);
+				$this->message(AcceptOfferReserveMessage::class, $this->unit)->e($this->trade)->s($commodity)->e($unit, AcceptOfferAmountMessage::UNIT);
 				$this->message(AcceptOfferUnableMessage::class, $unit)->e($this->trade)->i($demand)->e($this->unit, AcceptOfferAmountMessage::UNIT);
 				return null;
 			}
@@ -435,9 +437,9 @@ final class Accept extends UnitCommand
 		$payment = $this->collectQuantity($this->unit, $commodity, $price);
 		if ($payment->Count() < $price) {
 			if ($this->trade->Trade() === Trade::OFFER) {
-				$this->message(AcceptNoPaymentMessage::class)->s($commodity)->e($this->trade);
+				$this->message(AcceptNoPaymentMessage::class, $this->unit)->s($commodity)->e($this->trade);
 			} else {
-				$this->message(AcceptNoDeliveryMessage::class)->s($commodity)->e($this->trade);
+				$this->message(AcceptNoDeliveryMessage::class, $this->unit)->s($commodity)->e($this->trade);
 			}
 			return null;
 		}
@@ -516,10 +518,10 @@ final class Accept extends UnitCommand
 			$quantity = new Quantity($payment->Commodity(), $fee);
 			$unit->Inventory()->remove($quantity);
 			$owner->Inventory()->add(new Quantity($payment->Commodity(), $fee));
-			$this->message(AcceptFeePaidMessage::class)->e($owner)->i($quantity);
+			$this->message(AcceptFeePaidMessage::class, $this->unit)->e($owner)->i($quantity);
 			$this->message(AcceptFeeReceivedMessage::class, $owner)->e($this->unit)->i($quantity);
 		} else {
-			$this->message(AcceptNoFeeMessage::class)->e($this->trade);
+			$this->message(AcceptNoFeeMessage::class, $this->unit)->e($this->trade);
 			$this->message(AcceptNoFeeReceivedMessage::class, $owner)->e($this->trade)->e($this->unit, AcceptNoFeeReceivedMessage::UNIT);
 		}
 	}

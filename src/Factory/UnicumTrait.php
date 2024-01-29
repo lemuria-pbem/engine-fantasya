@@ -22,6 +22,7 @@ use Lemuria\Model\Fantasya\Unit;
 trait UnicumTrait
 {
 	use BuilderTrait;
+	use CollectTrait;
 	use MessageTrait;
 
 	protected ?Unicum $unicum;
@@ -205,7 +206,7 @@ trait UnicumTrait
 		$amount    = (int)$this->phrase->getParameter($this->argumentIndex);
 		$commodity = $this->phrase->getParameter($this->argumentIndex + 1);
 		if ($commodity) {
-			$offer = new Quantity(self::createCommodity($commodity), $amount);
+			$offer = new Quantity($this->context->Factory()->commodity($commodity), $amount);
 		}
 
 		/** @var Unit $merchant */
@@ -223,7 +224,7 @@ trait UnicumTrait
 			$quantity = new Quantity($price->Commodity(), $price->Maximum());
 		}
 
-		$payment = $this->context->getResourcePool($this->unit)->take($this->unit, $quantity);
+		$payment = $this->collectQuantity($this->unit, $quantity->Commodity(), $quantity->Count());
 		if ($payment->Count() < $price->Minimum()) {
 			$this->message(TakeNotEnoughMessage::class, $this->unit)->e($this->unicum)->s($payment->Commodity());
 			return true;

@@ -136,7 +136,7 @@ final class CommandPriority
 	/**
 	 * Priority of M-Events.
 	 */
-	private const int M_ACTION = 51;
+	private const int M_ACTION = 56;
 
 	/**
 	 * Priority of A-Events.
