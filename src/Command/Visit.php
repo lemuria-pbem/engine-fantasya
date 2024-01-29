@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Effect\Rumors;
 use Lemuria\Engine\Fantasya\Effect\VisitEffect;
 use Lemuria\Engine\Fantasya\Effect\WelcomeVisitor;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
+use Lemuria\Engine\Fantasya\Message\Announcement as Announce;
 use Lemuria\Engine\Fantasya\Message\Unit\VisitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VisitNoMarketMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VisitNoRumorMessage;
@@ -79,15 +80,19 @@ final class Visit extends UnitCommand implements Reassignment
 		$effect = new Rumors($state);
 		$rumors = Lemuria::Score()->find($effect->setUnit($unit));
 		if ($rumors instanceof Rumors && !$this->context->getTurnOptions()->IsSimulation()) {
+			$sender    = (string)$unit;
+			$recipient = (string)$this->unit;
 			foreach ($rumors->Rumors() as $rumor) {
-				$this->message(VisitRumorMessage::class)->e($unit)->p($rumor);
+				$this->message(VisitRumorMessage::class)->p($rumor)->p($sender, Announce::SENDER)->p($recipient, Announce::RECIPIENT);
 			}
 		} else {
 			$messages = $this->visitFrom($unit);
 			if ($messages) {
+				$sender    = (string)$unit;
+				$recipient = (string)$this->unit;
 				$this->message(VisitVisitMessage::class)->e($unit);
 				foreach ($messages as $message) {
-					$this->message(VisitMessage::class)->e($unit)->p($message);
+					$this->message(VisitMessage::class)->p($message)->p($sender, Announce::SENDER)->p($recipient, Announce::RECIPIENT);
 				}
 			} else {
 				$this->message(VisitNoRumorMessage::class)->e($unit);

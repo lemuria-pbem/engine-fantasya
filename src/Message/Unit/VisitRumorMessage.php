@@ -2,24 +2,9 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
-use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Fantasya\Message\Reliability;
-use Lemuria\Engine\Message\Result;
-
-class VisitRumorMessage extends VisitNoRumorMessage
+class VisitRumorMessage extends VisitMessage
 {
-	protected Result $result = Result::Event;
-
-	protected Reliability $reliability = Reliability::Determined;
-
-	protected string $rumor;
-
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' has heard a rumor from unit ' . $this->unit . ': ' . $this->rumor;
-	}
-
-	protected function getData(LemuriaMessage $message): void {
-		parent::getData($message);
-		$this->rumor = $message->getParameter();
+		return 'Unit ' . $this->id . ' has heard a rumor from unit ' . $this->sender . ': ' . $this->message;
 	}
 }
