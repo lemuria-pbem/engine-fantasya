@@ -1546,6 +1546,14 @@
 			"p": ["der", "des", "dem", "den"],
 			"q": ["die", "der", "den", "die"]
 		},
+		"unser": {
+			"numerus": 0,
+			"f": ["unsere", "unserer", "unserer", "unsere"],
+			"m": ["unser", "unseres", "unserem", "unseren"],
+			"n": ["unser", "unseres", "unserem", "unser"],
+			"p": ["unser", "unseres", "unserem", "unseren"],
+			"q": ["unser", "unseres", "unserem", "unser"]
+		},
 		"vom": {
 			"numerus": 0,
 			"f": ["von der", "von der", "von der", "von der"],
