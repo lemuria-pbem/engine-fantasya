@@ -50,6 +50,8 @@ final class Outlook
 
 		$units = new People();
 		$party = $this->census->Party();
+		$state = State::getInstance();
+		$score = Lemuria::Score();
 		foreach ($region->Residents() as $unit) {
 			$calculus = new Calculus($unit);
 			if ($calculus->isInvisible()) {
@@ -63,17 +65,15 @@ final class Outlook
 					continue;
 				} elseif (!$unit->IsHiding() || $unit->IsGuarding()) {
 					$units->add($unit);
-				} elseif ($unit->Party()->Diplomacy()->has(Relation::PERCEPTION, $this->census->Party())) {
+				} elseif ($other->Diplomacy()->has(Relation::PERCEPTION, $this->census->Party())) {
 					$units->add($unit);
 				} else {
-					$effect = new ContactEffect(State::getInstance());
-					$effect = Lemuria::Score()->find($effect->setParty($party));
+					$effect = new ContactEffect($state);
+					$effect = $score->find($effect->setParty($party));
 					if ($effect instanceof ContactEffect && $effect->From()->has($unit->Id())) {
 						$units->add($unit);
-					} else {
-						if ($calculus->camouflage()->Level() <= $level) {
-							$units->add($unit);
-						}
+					} elseif ($calculus->camouflage()->Level() <= $level) {
+						$units->add($unit);
 					}
 				}
 			}
@@ -96,6 +96,8 @@ final class Outlook
 
 		$units = new People();
 		$party = $this->census->Party();
+		$state = State::getInstance();
+		$score = Lemuria::Score();
 		foreach ($region->Residents() as $unit) {
 			$calculus = new Calculus($unit);
 			if ($calculus->isInvisible()) {
@@ -106,13 +108,14 @@ final class Outlook
 			} elseif ($unit->Vessel()) {
 				$units->add($unit);
 			} else {
-				if ($unit->Party() === $party || !$unit->IsHiding() || $unit->IsGuarding()) {
+				$other = $unit->Party();
+				if ($other === $party || !$unit->IsHiding() || $unit->IsGuarding()) {
 					$units->add($unit);
-				} elseif ($unit->Party()->Diplomacy()->has(Relation::PERCEPTION, $this->census->Party())) {
+				} elseif ($other->Diplomacy()->has(Relation::PERCEPTION, $this->census->Party())) {
 					$units->add($unit);
 				} else {
-					$effect = new ContactEffect(State::getInstance());
-					$effect = Lemuria::Score()->find($effect->setParty($party));
+					$effect = new ContactEffect($state);
+					$effect = $score->find($effect->setParty($party));
 					if ($effect instanceof ContactEffect && $effect->From()->has($unit->Id())) {
 						$units->add($unit);
 					} else {
@@ -131,10 +134,11 @@ final class Outlook
 	 */
 	public function getTravelled(Region $region): People {
 		$units = new People();
+		$party = $this->census->Party();
 		foreach ($region->Residents() as $unit) {
 			if (!$unit->IsHiding() && !$unit->Construction() && !$unit->Vessel() && !$this->hasTravelled($unit)) {
-				$party = $unit->Party();
-				if ($party !== $this->census->Party() && $party->Type() === Type::Monster && $this->isHibernating($unit)) {
+				$other = $unit->Party();
+				if ($other !== $party && $other->Type() === Type::Monster && $this->isHibernating($unit)) {
 					continue;
 				}
 				$units->add($unit);
