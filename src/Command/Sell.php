@@ -2,10 +2,9 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Factory\Supply;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\BuyMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\CommerceNotPossibleMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\CommerceSiegeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellOnlyMessage;
@@ -15,9 +14,10 @@ use Lemuria\Model\Fantasya\Quantity;
 /**
  * Sell goods on the market.
  *
- * VERKAUFEN <commodity>
- * VERKAUFEN [<amount>] <commodity>
- * VERKAUFEN Alle|Alles <commodity>
+ * - VERKAUFEN <commodity>
+ * - VERKAUFEN [<amount>] <commodity>
+ * - VERKAUFEN Alle|Alles <commodity>
+ * - VERKAUFEN <commodity> <min. price>
  */
 final class Sell extends CommerceCommand
 {
@@ -30,18 +30,6 @@ final class Sell extends CommerceCommand
 		return Merchant::SELL;
 	}
 
-	public function execute(): static {
-		parent::execute();
-		if (!$this->isTradePossible()) {
-			$this->message(CommerceNotPossibleMessage::class)->e($this->unit->Region());
-			return $this;
-		}
-		if ($this->isSieged($this->unit->Construction())) {
-			$this->message(CommerceSiegeMessage::class);
-		}
-		return $this;
-	}
-
 	public function trade(Luxury $good, int $price): bool {
 		if ($this->count < $this->amount && $price >= $this->threshold) {
 			$luxury = $this->collectQuantity($this->unit, $good, 1);
@@ -49,7 +37,7 @@ final class Sell extends CommerceCommand
 				$inventory = $this->unit->Inventory();
 				$this->traded->add($luxury);
 				$inventory->remove(new Quantity($good, 1));
-				$inventory->add(new Quantity($this->silver, $price));
+				$inventory->add(new Quantity(parent::$silver, $price));
 				$this->count++;
 				$this->bundle++;
 				$this->cost += $price;
@@ -82,6 +70,26 @@ final class Sell extends CommerceCommand
 		$this->bundle = 0;
 		$this->cost   = 0;
 		return $this;
+	}
+
+	protected function calculatePriceThresholdHere(int $price): int {
+		/** @var Luxury $luxury */
+		$luxury = $this->commodity;
+		$supply = $this->context->getSupply($this->unit->Region(), $luxury);
+		return $supply->calculate($price, Supply::PRICE_MINIMUM);
+	}
+
+	protected function calculatePriceThresholdInRealm(int $price): int {
+		$total = 0;
+		foreach ($this->distributor->Regions() as $region) {
+			/** @var Luxury $luxury */
+			$luxury = $this->commodity;
+			if ($region->Luxuries()?->offsetExists($luxury)) {
+				$amount = $this->context->getSupply($region, $luxury)->calculate($price, Supply::PRICE_MINIMUM);
+				$total += $amount;
+			}
+		}
+		return $total;
 	}
 
 	protected function getDemand(): Quantity {

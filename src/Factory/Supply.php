@@ -10,6 +10,10 @@ use Lemuria\Model\Fantasya\Region;
 
 class Supply implements \Countable
 {
+	public final const bool PRICE_MINIMUM = false;
+
+	public final const bool PRICE_MAXIMUM = true;
+
 	private ?Luxury $luxury = null;
 
 	private ?Offer $offer = null;
@@ -108,6 +112,33 @@ class Supply implements \Countable
 
 		$total += $rest * $price;
 		return (int)ceil($total);
+	}
+
+	public function calculate(int $thresholdPrice, bool $minOrMax): int {
+		$price = $this->Price();
+		if ($minOrMax === self::PRICE_MINIMUM && $price < $thresholdPrice || $minOrMax === self::PRICE_MAXIMUM && $price > $thresholdPrice) {
+			return 0;
+		}
+		$step = (int)ceil($this->step);
+		if ($step <= 0) {
+			return 0;
+		}
+
+		$value      = $this->Luxury()->Value();
+		$difference = abs($thresholdPrice - $price);
+		$times      = (int)ceil($difference / $value);
+		$count      = ($times + 1) * $step;
+
+		if ($minOrMax === self::PRICE_MINIMUM) {
+			while ($this->askPrice($count) < $thresholdPrice) {
+				$count--;
+			}
+		} else {
+			while ($this->askPrice($count) > $thresholdPrice) {
+				$count--;
+			}
+		}
+		return $count;
 	}
 
 	/**

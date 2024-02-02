@@ -12,6 +12,8 @@ use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\CommerceGuardedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\CommerceNotPossibleMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\CommerceSiegeMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\Realm\Distributor;
 use Lemuria\Lemuria;
@@ -23,6 +25,7 @@ use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Resources;
+use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Trading;
 
 /**
@@ -39,6 +42,10 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	 * @type array<string>
 	 */
 	private const array ALL = ['alle', 'alles'];
+
+	protected static ?Talent $trading = null;
+
+	protected static ?Commodity $silver = null;
 
 	protected Resources $goods;
 
@@ -60,8 +67,6 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 
 	protected ?array $lastCheck = null;
 
-	protected Commodity $silver;
-
 	protected Workload $trades;
 
 	protected Resources $traded;
@@ -79,7 +84,22 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 		parent::__construct($phrase, $context);
 		$this->goods  = new Resources();
 		$this->traded = new Resources();
-		$this->silver = self::createCommodity(Silver::class);
+		if (!self::$trading) {
+			self::$trading = self::createTalent(Trading::class);
+			self::$silver  = self::createCommodity(Silver::class);
+		}
+	}
+
+	public function execute(): static {
+		parent::execute();
+		if (!$this->isTradePossible()) {
+			$this->message(CommerceNotPossibleMessage::class)->e($this->unit->Region());
+			return $this;
+		}
+		if ($this->isSieged($this->unit->Construction())) {
+			$this->message(CommerceSiegeMessage::class);
+		}
+		return $this;
 	}
 
 	public function canBeCentralized(): bool {
@@ -196,16 +216,23 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 			$demand          = $this->getMaximumSupply();
 			$this->demand    = 0;
 		} elseif ($n === 2) {
-			$parameter = $this->phrase->getParameter();
-			if (in_array(strtolower($parameter), self::ALL)) {
-				$demand       = $this->getMaximum();
-				$this->demand = PHP_INT_MAX;
+			$first  = $this->phrase->getParameter();
+			$second = $this->phrase->getParameter(2);
+			$price  = (int)$second;
+			if ((string)$price === $second) {
+				$this->commodity = $this->context->Factory()->commodity($first);
+				$demand          = $this->commodity instanceof Luxury ? $this->calculateThreshold($price) : 0;
+				$this->demand    = $demand;
 			} else {
-				$demand       = max(0, (int)$parameter);
-				$this->demand = $demand;
+				if (in_array(strtolower($first), self::ALL)) {
+					$demand       = $this->getMaximum();
+					$this->demand = PHP_INT_MAX;
+				} else {
+					$demand       = max(0, (int)$first);
+					$this->demand = $demand;
+				}
+				$this->commodity = $this->context->Factory()->commodity($second);
 			}
-			$luxury          = $this->phrase->getParameter(2);
-			$this->commodity = $this->context->Factory()->commodity($luxury);
 		} else {
 			throw new UnknownCommandException($this);
 		}
@@ -217,12 +244,16 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 
 	protected function getMaximum(): int {
 		if ($this->maximum === null) {
-			$this->maximum = $this->unit->Size() * $this->calculus()->knowledge(Trading::class)->Level() * 10;
+			$this->maximum = $this->unit->Size() * $this->calculus()->knowledge(self::$trading)->Level() * 10;
 			$this->trades->setMaximum($this->maximum);
 			$this->remaining = max(0, $this->maximum - $this->trades->count());
 		}
 		return $this->remaining;
 	}
+
+	abstract protected function calculatePriceThresholdHere(int $price): int;
+
+	abstract protected function calculatePriceThresholdInRealm(int $price): int;
 
 	abstract protected function getMaximumSupplyInRealm(): int;
 
@@ -232,6 +263,10 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 		if ($this->isRunCentrally($this)) {
 			return $this->getMaximumSupplyInRealm();
 		}
+		return $this->getMaximumSupplyHere();
+	}
+
+	protected function getMaximumSupplyHere(): int {
 		$supply = $this->context->getSupply($this->unit->Region());
 		return $supply->getStep();
 	}
@@ -244,21 +279,31 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 		return $this->isTradePossible;
 	}
 
-	protected function calculateThreshold(): void {
+	protected function calculateThreshold(int $price = 0): int {
 		if ($this->distributor) {
-			$this->calculateRealmThreshold();
-		} else {
-			$luxuries = $this->unit->Region()->Luxuries();
-			$offer    = $luxuries->Offer();
-			if ($offer->Commodity() === $this->commodity) {
-				$this->threshold = $offer->Price();
-			} else {
-				$this->threshold = $luxuries[$this->commodity]->Price();
-			}
+			return $this->calculateRealmThreshold($price);
 		}
+		return $this->calculateThresholdHere($price);
 	}
 
-	public function calculateRealmThreshold(): void {
+	protected function calculateThresholdHere(int $price = 0): int {
+		if ($price > 0) {
+			return $this->calculatePriceThresholdHere($price);
+		}
+		$luxuries = $this->unit->Region()->Luxuries();
+		$offer    = $luxuries->Offer();
+		if ($offer->Commodity() === $this->commodity) {
+			$this->threshold = $offer->Price();
+		} else {
+			$this->threshold = $luxuries[$this->commodity]->Price();
+		}
+		return 0;
+	}
+
+	protected function calculateRealmThreshold(int $price = 0): int {
+		if ($price > 0) {
+			return $this->calculatePriceThresholdInRealm($price);
+		}
 		$threshold = [];
 		foreach ($this->distributor->Regions() as $region) {
 			$luxuries = $region->Luxuries();
@@ -270,6 +315,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 			}
 		}
 		$this->setRealmThreshold($threshold);
+		return 0;
 	}
 
 	protected function goods(): Quantity {
@@ -283,6 +329,6 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	}
 
 	protected function cost(): Quantity {
-		return new Quantity($this->silver, $this->cost);
+		return new Quantity(self::$silver, $this->cost);
 	}
 }
