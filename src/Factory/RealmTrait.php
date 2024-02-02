@@ -8,9 +8,12 @@ use Lemuria\Engine\Fantasya\Realm\Distributor;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Realm;
 use Lemuria\Model\Fantasya\Region;
+use Lemuria\Model\Fantasya\World\RoadTrait;
 
 trait RealmTrait
 {
+	use RoadTrait;
+
 	protected function isRealmCommand(UnitCommand $command): bool {
 		if (!$command->canBeCentralized()) {
 			return false;
@@ -64,7 +67,7 @@ trait RealmTrait
 		$central  = $realm->Territory()->Central();
 		$distance = Lemuria::World()->getDistance($central, $region);
 		return match ($distance) {
-			2       => $central->hasRoadTo($region),
+			2       => $this->hasCompletedRoadBetween($central, $region),
 			default => $distance < 2
 		};
 	}
