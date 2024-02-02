@@ -15,6 +15,8 @@ use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Market\Deal;
 use Lemuria\Model\Fantasya\Market\Trade;
+use Lemuria\Model\Fantasya\Talent;
+use Lemuria\Model\Fantasya\Talent\Trading;
 
 /**
  * Base command to create offers and demands for the market.
@@ -38,11 +40,27 @@ abstract class TradeCommand extends UnitCommand
 
 	protected final const int PAYMENT = 3;
 
-	protected Commodity $silver;
+	private static ?Talent $trading = null;
+
+	private static ?Commodity $silver = null;
 
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
-		$this->silver = self::createCommodity(Silver::class);
+		if (!self::$trading) {
+			self::$trading = self::createTalent(Trading::class);
+			self::$silver  = self::createCommodity(Silver::class);
+		}
+	}
+
+	protected function checkSize(): bool {
+		if (parent::checkSize()) {
+			$knowledge = $this->unit->Knowledge();
+			if (isset($knowledge[self::$trading])) {
+				return $knowledge[self::$trading]->Level() > 0;
+			}
+			Lemuria::Log()->debug('Unit has no trading talent.');
+		}
+		return false;
 	}
 
 	protected function createTrade(): Trade {
@@ -100,7 +118,7 @@ abstract class TradeCommand extends UnitCommand
 		$commodity              = implode(' ', $parts[self::COMMODITY]);
 		$parts[self::COMMODITY] = $factory->commodity($commodity);
 
-		$parts[self::PAYMENT] = $i <= $n ? $factory->commodity($this->phrase->getLine($i)) : $this->silver;
+		$parts[self::PAYMENT] = $i <= $n ? $factory->commodity($this->phrase->getLine($i)) : self::$silver;
 		return $parts;
 	}
 }
