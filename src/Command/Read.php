@@ -35,23 +35,23 @@ final class Read extends UnitCommand implements Operator, Reassignment
 				$id = $this->isOfferedUnicum();
 				if (!$this->unicum) {
 					if ($this->composition instanceof Ownable) {
-						$this->message(ReadNoUnicumMessage::class)->p($id);
+						$this->message(ReadNoUnicumMessage::class, $this->unit)->p($id);
 						return;
 					}
-					$this->message(ReadNotFoundMessage::class)->p($id);
+					$this->message(ReadNotFoundMessage::class, $this->unit)->p($id);
 					return;
 				}
 			}
 		}
 		$composition = $this->unicum->Composition();
 		if ($composition !== $this->composition) {
-			$this->message(ReadNoCompositionMessage::class)->s($this->composition)->p($id);
+			$this->message(ReadNoCompositionMessage::class, $this->unit)->s($this->composition)->p($id);
 			return;
 		}
 		if ($composition->supports(Practice::Read)) {
 			$this->getOperate(Practice::Read)->read();
 		} else {
-			$this->message(ReadUnsupportedMessage::class)->e($this->unicum)->s($this->unicum->Composition());
+			$this->message(ReadUnsupportedMessage::class, $this->unit)->e($this->unicum)->s($this->unicum->Composition());
 		}
 	}
 
