@@ -41,7 +41,8 @@ final class Integrity extends AbstractEvent
 	}
 
 	protected function run(): void {
-		$world = Lemuria::World();
+		$world       = Lemuria::World();
+		$lostRegions = new Landmass();
 		foreach (Realm::all() as $realm) {
 			// Sort regions by ring.
 			$this->realm     = $realm;
@@ -58,70 +59,62 @@ final class Integrity extends AbstractEvent
 					$ring[$r]->add($region);
 				}
 			}
+			ksort($ring);
 			$r = $this->validateRings($ring);
 
 			// Check central region.
-			$lostRegions = new Landmass();
 			$governor = $this->getGovernor($central);
 			if ($governor !== $this->governor) {
 				$this->dissolveRealm($central, $governor);
 				continue;
 			}
-			if ($r < 1) {
-				continue;
-			}
 
-			$centralBlock = $this->getBlockedDirections($central);
-			$neighbours   = $world->getNeighbours($central);
-			foreach ($ring[1] as $region) {
-				if ($this->getGovernor($region) === $this->governor) {
-					$direction = $neighbours->getDirection($region);
-					if (in_array($direction, $centralBlock)) {
-						$lostRegions->add($region);
-					} else {
-						$blocked = $this->getBlockedDirections($region);
-						if (in_array($direction->getOpposite(), $blocked)) {
-							$lostRegions->add($region);
+			if ($r >= 1) {
+				$lostRegions->clear();
+				$centralBlock = $this->getBlockedDirections($central);
+				$neighbours   = $world->getNeighbours($central);
+				foreach ($ring[1] as $region) {
+					$isBlocked = true;
+					if ($this->getGovernor($region) === $this->governor) {
+						$direction = $neighbours->getDirection($region);
+						if (!in_array($direction, $centralBlock)) {
+							$blocked = $this->getBlockedDirections($region);
+							if (!in_array($direction->getOpposite(), $blocked)) {
+								$isBlocked = false;
+							}
 						}
 					}
-				} else {
-					$lostRegions->add($region);
+					if ($isBlocked) {
+						$lostRegions->add($region);
+					}
 				}
 			}
-			if ($r < 2) {
-				continue;
-			}
 
-			foreach ($ring[2] as $region) {
-				if ($this->getGovernor($region) === $this->governor) {
-					$ways  = $world->findPath($central, $region, ShortestPath::class)->getAll();
-					$valid = $ways->count();
-					foreach ($ways as $way) {
-						/** @var Region $neighbour */
-						$neighbour = $way[1];
-						if ($lostRegions->has($neighbour->Id())) {
-							$valid--;
-						} else {
-							$neighbours = $world->getNeighbours($neighbour);
-							$direction  = $neighbours->getDirection($region);
-							$blocked    = $this->getBlockedDirections($neighbour);
-							if (in_array($direction, $blocked)) {
-								$valid--;
-							} else {
-								$blocked = $this->getBlockedDirections($region);
-								if (in_array($direction->getOpposite(), $blocked)) {
-									$valid--;
-								} elseif (!$this->hasCompletedRoad($way)) {
-									$valid--;
+			if ($r >= 2) {
+				foreach ($ring[2] as $region) {
+					$hasNoRoad = true;
+					if ($this->getGovernor($region) === $this->governor) {
+						$ways = $world->findPath($central, $region, ShortestPath::class)->getAll();
+						foreach ($ways as $way) {
+							/** @var Region $neighbour */
+							$neighbour = $way[1];
+							if (!$lostRegions->has($neighbour->Id())) {
+								$neighbours = $world->getNeighbours($neighbour);
+								$direction  = $neighbours->getDirection($region);
+								$blocked    = $this->getBlockedDirections($neighbour);
+								if (!in_array($direction, $blocked)) {
+									$blocked = $this->getBlockedDirections($region);
+									if (!in_array($direction->getOpposite(), $blocked) && $this->hasCompletedRoad($way)) {
+										$hasNoRoad = false;
+										break;
+									}
 								}
 							}
 						}
 					}
-					if ($valid <= 0) {
+					if ($hasNoRoad) {
 						$lostRegions->add($region);
 					}
-				} else {
-					$lostRegions->add($region);
 				}
 			}
 
@@ -173,9 +166,11 @@ final class Integrity extends AbstractEvent
 		$blocked      = [];
 		$intelligence = new Intelligence($region);
 		foreach ($intelligence->getGuards() as $unit) {
-			$direction = $unit->GuardDirection();
-			if ($direction !== Direction::None) {
-				$blocked[$direction->value] = $direction;
+			if ($unit->Party() !== $this->governor) {
+				$direction = $unit->GuardDirection();
+				if ($direction !== Direction::None) {
+					$blocked[$direction->value] = $direction;
+				}
 			}
 		}
 		return array_values($blocked);
