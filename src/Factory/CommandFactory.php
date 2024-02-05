@@ -65,6 +65,7 @@ use Lemuria\Engine\Fantasya\Command\Realm;
 use Lemuria\Engine\Fantasya\Command\Recruit;
 use Lemuria\Engine\Fantasya\Command\Repeat;
 use Lemuria\Engine\Fantasya\Command\Reserve;
+use Lemuria\Engine\Fantasya\Command\Rob;
 use Lemuria\Engine\Fantasya\Command\Route;
 use Lemuria\Engine\Fantasya\Command\Rumor;
 use Lemuria\Engine\Fantasya\Command\Sell;
@@ -359,6 +360,7 @@ class CommandFactory
 		'ATTACKE'        => 'ATTACKIEREN',
 		'ATTACKIEREN'    => true,
 		'AUFTRAG'        => true,
+		'AUSRAUBEN'      => true,
 		'BANNER'         => true,
 		'BEENDEN'        => true,
 		'BEKLAUEN'       => 'STEHLEN',
@@ -452,6 +454,8 @@ class CommandFactory
 		'TEXT'           => 'BESCHREIBUNG',
 		'TRANSPORTIEREN' => true,
 		'TREIBEN'        => true,
+		'ÜBERFALLEN'     => 'AUSRAUBEN',
+		'UEBERFALLEN'    => 'AUSRAUBEN',
 		'UNTERHALTEN'    => true,
 		'UNTERHALTUNG'   => 'UNTERHALTEN',
 		'UNTERSUCHEN'    => 'LESEN',
@@ -985,6 +989,7 @@ class CommandFactory
 				'ANGEBOT'        => Offer::class,
 				'ATTACKIEREN'    => Attack::class,
 				'AUFTRAG'        => Quest::class,
+				'AUSRAUBEN'      => Rob::class,
 				'BANNER'         => Banner::class,
 				'BEENDEN'        => Cancel::class,
 				'BELAGERN'       => Siege::class,

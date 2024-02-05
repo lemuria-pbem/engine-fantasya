@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 use function Lemuria\randElement;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerWonMessage;
@@ -120,6 +121,15 @@ class Battle
 
 	public function Vessel(): Vessel|false|null {
 		return $this->vessel;
+	}
+
+	public function isSurrender(): bool {
+		foreach ($this->defenders as $unit) {
+			if ($unit->BattleRow()->value > BattleRow::Bystander) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public function addAttacker(Unit $unit): static {

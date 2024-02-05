@@ -20,9 +20,19 @@
 
 ^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren)( +[a-z0-9]{1,6})+$
 ^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren) +partei( +[a-z0-9]{1,6})+$
-^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren) +(aquaner|baer|baeren|bär|bären|baumhirten?|elf|elfen|ghoule?|halblinge?|kobolde?|kraken?|mensch|menschen|monster|orks?|skelette?|trolle?|wolf|woelfe|wölfe|zombies?|zwerge?)$
+^@?(angr|angre|angrei|angreif|angreife|angreifen|angri|angrif|angriff|at|att|atta|attac|attack|attacke|attacki|attackie|attackier|attackiere|attackieren) +(aquaner|baer|baeren|bär|bären|baumhirten?|elf|elfen|ghoule?|halblinge?|kobolde?|kraken?|mensch|menschen|monster|orks?|riesenfrosch|riesenfrösche|riesenfroesche|sandwurm|sandwürmer|sandwuermer|skelette?|trolle?|wolf|woelfe|wölfe|zombies?|zwerge?)$
 
-^(au|auf|auft|auftr|auftra|auftrag) +[a-z0-9]{1,6}$
+^(auf|auft|auftr|auftra|auftrag) +[a-z0-9]{1,6}$
+
+^@?(aus|ausr|ausra|ausrau|ausraub|ausraube|ausrauben)( +[a-z0-9]{1,6})+$
+^@?(aus|ausr|ausra|ausrau|ausraub|ausraube|ausrauben) +partei( +[a-z0-9]{1,6})+$
+^@?(aus|ausr|ausra|ausrau|ausraub|ausraube|ausrauben) +(aquaner|baer|baeren|bär|bären|baumhirten?|elf|elfen|ghoule?|halblinge?|kobolde?|kraken?|mensch|menschen|monster|orks?|riesenfrosch|riesenfrösche|riesenfroesche|sandwurm|sandwürmer|sandwuermer|skelette?|trolle?|wolf|woelfe|wölfe|zombies?|zwerge?)$
+^@?(ü|üb|übe|über|überf|überfa|überfal|überfall|überfalle|überfallen)( +[a-z0-9]{1,6})+$
+^@?(ü|üb|übe|über|überf|überfa|überfal|überfall|überfalle|überfallen) +partei( +[a-z0-9]{1,6})+$
+^@?(ü|üb|übe|über|überf|überfa|überfal|überfall|überfalle|überfallen) +(aquaner|baer|baeren|bär|bären|baumhirten?|elf|elfen|ghoule?|halblinge?|kobolde?|kraken?|mensch|menschen|monster|orks?|riesenfrosch|riesenfrösche|riesenfroesche|sandwurm|sandwürmer|sandwuermer|skelette?|trolle?|wolf|woelfe|wölfe|zombies?|zwerge?)$
+^@?(ue|ueb|uebe|ueber|ueberf|ueberfa|ueberfal|ueberfall|ueberfalle|ueberfallen)( +[a-z0-9]{1,6})+$
+^@?(ue|ueb|uebe|ueber|ueberf|ueberfa|ueberfal|ueberfall|ueberfalle|ueberfallen) +partei( +[a-z0-9]{1,6})+$
+^@?(ue|ueb|uebe|ueber|ueberf|ueberfa|ueberfal|ueberfall|ueberfalle|ueberfallen) +(aquaner|baer|baeren|bär|bären|baumhirten?|elf|elfen|ghoule?|halblinge?|kobolde?|kraken?|mensch|menschen|monster|riesenfrosch|riesenfrösche|riesenfroesche|sandwurm|sandwürmer|sandwuermer|orks?|skelette?|trolle?|wolf|woelfe|wölfe|zombies?|zwerge?)$
 
 ^(ba|ban|bann|banne|banner) +.*$
 

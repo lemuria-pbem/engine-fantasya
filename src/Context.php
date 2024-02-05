@@ -312,6 +312,10 @@ final class Context implements Reassignment
 		$this->state->resetResourcePools();
 	}
 
+	public function resetCampaign(Region $region): void {
+		$this->state->resetCampaign($region);
+	}
+
 	public function getSiege(Construction $construction): Besieger {
 		$id = $construction->Id()->Id();
 		if (!isset($this->sieges)) {

@@ -70,8 +70,8 @@ final class CommandPriority
 		'Reserve'        => 46,
 		'Dismiss'        => 47,
 		'Lose'           => 48,
-		//49
-		'Cast'           => 50,
+		'Cast'           => 49,
+		'Rob'            => 50,
 		'Griffinegg'     => 51,
 		'Attack'         => 52,
 		'Transport'      => 53,
