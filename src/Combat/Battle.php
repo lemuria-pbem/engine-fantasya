@@ -125,7 +125,7 @@ class Battle
 
 	public function isSurrender(): bool {
 		foreach ($this->defenders as $unit) {
-			if ($unit->BattleRow()->value > BattleRow::Bystander) {
+			if ($unit->BattleRow()->value > BattleRow::Bystander->value) {
 				return false;
 			}
 		}

@@ -61,10 +61,11 @@ final class Rob extends AssaultCommand
 				$ids = [];
 				foreach ($this->units as $unit) {
 					$ids[] = (string)$unit->Id();
+					$this->message(RobFailsMessage::class, $unit);
 				}
 				$phrase = new Phrase('ANGREIFEN ' . implode(' ', $ids));
 				$attack = new Attack($phrase, $this->context);
-				State::getInstance()->injectIntoTurn($attack);
+				State::getInstance()->injectIntoTurn($attack->from($this->unit));
 				$this->message(RobFailsMessage::class);
 			}
 		}
