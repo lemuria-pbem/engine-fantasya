@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
+use Lemuria\Model\Fantasya\Party\Type;
 use function Lemuria\randChance;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultHitMessage;
@@ -123,6 +124,9 @@ class Combatant
 
 	public function canFlee(): float {
 		$chance = $this->attack->getFlightChance();
+		if ($this->unit->Party()->Type() === Type::NPC && $this->battleRow === BattleRow::Refugee) {
+			return $chance;
+		}
 		return randChance($chance) ? $chance : -$chance;
 	}
 
