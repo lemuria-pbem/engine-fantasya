@@ -62,12 +62,13 @@ final class Growth extends AbstractEvent
 			$trees     = $resources[$this->tree]->Count();
 
 			if ($this->isSeason) {
-				$place = (int)round($landscape->Workplaces() / Workplaces::TREE);
+				$place = $this->getPlaceForTrees($region);
 				if ($place <= 0) {
 					$this->placeMetrics(Subject::Trees, $region);
 					continue;
 				}
 
+				$place       = (int)round($landscape->Workplaces() / Workplaces::TREE);
 				$hasForester = $this->checkForRegionBuilding($region, self::createBuilding(ForesterLodge::class));
 				$rate        = $trees < $place ? ($hasForester ? self::FORESTER : self::RATE) : self::RATE / 10;
 				$growth      = (int)ceil($rate * $trees);

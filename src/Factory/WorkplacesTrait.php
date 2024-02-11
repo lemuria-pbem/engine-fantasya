@@ -11,6 +11,7 @@ use Lemuria\Model\Fantasya\Commodity\Camel;
 use Lemuria\Model\Fantasya\Commodity\Elephant;
 use Lemuria\Model\Fantasya\Commodity\Horse;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Commodity\Pegasus;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Potion;
@@ -22,6 +23,12 @@ trait WorkplacesTrait
 	use SiegeTrait;
 
 	private Workplaces $workplaces;
+
+	private function getPlaceForTrees(Region $region): int {
+		$workplaces = $region->Landscape()->Workplaces();
+		$used       = $this->getUsedWorkplaces($region);
+		return max(0, $workplaces - $used);
+	}
 
 	private function getAvailableWorkplaces(Region $region): int {
 		$workplaces = $region->Landscape()->Workplaces();
@@ -53,9 +60,10 @@ trait WorkplacesTrait
 		$resources = $region->Resources();
 		$trees     = $resources[self::createCommodity(Wood::class)]->Count();
 		$horses    = $resources[self::createCommodity(Horse::class)]->Count();
+		$pegasi    = $resources[self::createCommodity(Pegasus::class)]->Count();
 		$camels    = $resources[self::createCommodity(Camel::class)]->Count();
 		$elephants = $resources[self::createCommodity(Elephant::class)]->Count();
-		return $this->workplaces->getUsed($horses, $camels, $elephants, $trees);
+		return $this->workplaces->getUsed($horses, $pegasi, $camels, $elephants, $trees);
 	}
 
 	private function getCultivatedWorkplaces(Region $region): int {
