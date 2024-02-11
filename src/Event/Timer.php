@@ -89,6 +89,9 @@ final class Timer extends DelegatedEvent
 			['class' => Spawn::class, 'options' => [Spawn::REGION => '1dv', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
 			['class' => Spawn::class, 'options' => [Spawn::REGION => '1o2', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
 			['class' => Spawn::class, 'options' => [Spawn::REGION => '2mp', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]]
+		],
+		155 => [
+			['class' => Drought::class, 'options' => [Drought::RATE => 0.35]]
 		]
 	];
 

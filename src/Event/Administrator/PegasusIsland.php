@@ -15,7 +15,7 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 
 /**
- * This event removes monsters from regions that should not be at that landscape.
+ * This event creates the pegasus island in a big lake.
  */
 final class PegasusIsland extends AbstractEvent
 {
