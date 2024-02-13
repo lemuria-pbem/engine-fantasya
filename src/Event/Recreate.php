@@ -39,11 +39,14 @@ final class Recreate extends AbstractEvent
 						}
 					}
 					break;
+				case Type::NPC :
+					if ($unit->Aura()) {
+						$this->recreateAura($unit);
+					}
+					break;
 				case Type::Monster :
 					$this->recreateMonster($unit);
 					break;
-				default :
-					Lemuria::Log()->debug('Unit ' . $unit . ' of party type ' . $type->name . ' has no recreation yet.');
 			}
 		}
 	}
