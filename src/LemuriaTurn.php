@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Engine\Exception\EngineException;
 use Lemuria\Engine\Fantasya\Command\CompositeCommand;
+use Lemuria\Engine\Fantasya\Command\DelegatedCommand;
 use Lemuria\Engine\Fantasya\Command\Initiate;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Event\DelegatedEvent;
@@ -165,16 +166,25 @@ class LemuriaTurn implements Turn
 	 * Inject an action into the running turn.
 	 */
 	public function inject(Action $action): void {
-		$priority = $this->priority->getPriority($action);
-		if (!$this->state->getTurnOptions()->CherryPicker()->pickPriority($priority)) {
-			Lemuria::Log()->critical('Injecting action ' . $action . ' rejected by cherry picker.');
-			return;
+		if ($action instanceof DelegatedCommand) {
+			$action = $action->getDelegate();
 		}
-		if ($priority <= $this->currentPriority) {
-			throw new LemuriaException('Cannot inject action into this running evaluation.');
+		$actions = $action instanceof CompositeCommand ? $action->getCommands() : [$action];
+		foreach ($actions as $action) {
+			if ($action instanceof DelegatedCommand) {
+				$action = $action->getDelegate();
+			}
+			$priority = $this->priority->getPriority($action);
+			if (!$this->state->getTurnOptions()->CherryPicker()->pickPriority($priority)) {
+				Lemuria::Log()->critical('Injecting action ' . $action . ' rejected by cherry picker.');
+				return;
+			}
+			if ($priority <= $this->currentPriority) {
+				throw new LemuriaException('Cannot inject action into this running evaluation.');
+			}
+			$this->addPlannedActivities($this->enqueue($action));
+			Lemuria::Log()->debug('New action injected: ' . $action, ['command' => $action]);
 		}
-		$this->addPlannedActivities($this->enqueue($action));
-		Lemuria::Log()->debug('New action injected: ' . $action, ['command' => $action]);
 	}
 
 	/**
