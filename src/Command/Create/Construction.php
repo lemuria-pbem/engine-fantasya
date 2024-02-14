@@ -22,6 +22,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\ConstructionExperienceMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionResourcesMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ConstructionSizeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionUnableMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionMessage;
 use Lemuria\Engine\Fantasya\Phrase;
@@ -79,6 +80,8 @@ final class Construction extends AbstractProduct
 
 	private int $size;
 
+	private int $remainingSize = PHP_INT_MAX;
+
 	private bool $hasMarket = false;
 
 	private ?ConstructionModel $fromOutside;
@@ -110,13 +113,14 @@ final class Construction extends AbstractProduct
 			return;
 		}
 
-		$construction     = $this->leaveCurrentConstructionFor($building);
-		$this->size       = $construction?->Size() ?? 0;
+		$construction = $this->leaveCurrentConstructionFor($building);
+		$this->size   = $construction?->Size() ?? 0;
+		$this->calculateRemainingSize();
 		$demand           = $this->job->Count();
 		$talent           = $building->getCraft()->Talent();
 		$this->capability = $this->calculateProduction($building->getCraft());
 		$reserve          = $this->calculateResources($building->getMaterial());
-		$production       = min($this->capability, $reserve);
+		$production       = min($this->capability, $reserve, $this->remainingSize);
 		if ($production > 0) {
 			$yield = min($production, $demand);
 			foreach ($building->getMaterial() as $quantity) {
@@ -154,10 +158,14 @@ final class Construction extends AbstractProduct
 			$this->addConstructionEffects($construction);
 		} else {
 			if ($this->capability > 0) {
-				if ($construction) {
-					$this->message(ConstructionResourcesMessage::class)->e($construction);
+				if ($this->remainingSize > 0) {
+					if ($construction) {
+						$this->message(ConstructionResourcesMessage::class)->e($construction);
+					} else {
+						$this->message(ConstructionCreateMessage::class)->s($building);
+					}
 				} else {
-					$this->message(ConstructionCreateMessage::class)->s($building);
+					$this->message(ConstructionSizeMessage::class)->s($building);
 				}
 			} else {
 				if ($construction) {
@@ -209,6 +217,17 @@ final class Construction extends AbstractProduct
 			return $production;
 		}
 		return parent::calculateProduction($craft);
+	}
+
+	private function calculateRemainingSize(): void {
+		/** @var Building $building */
+		$building = $this->job->getObject();
+		if (!($building instanceof Castle)) {
+			$maxSize = $building->MaxSize();
+			if ($maxSize !== Building::IS_UNLIMITED) {
+				$this->remainingSize = max(0, $maxSize - $this->size);
+			}
+		}
 	}
 
 	private function prepareBuildingFromOutside(): ?ConstructionModel {
