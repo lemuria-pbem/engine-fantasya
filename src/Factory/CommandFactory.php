@@ -117,6 +117,7 @@ use Lemuria\Model\Fantasya\Building\GriffinBreeding;
 use Lemuria\Model\Fantasya\Building\HerbalHut;
 use Lemuria\Model\Fantasya\Building\HorseBreeding;
 use Lemuria\Model\Fantasya\Building\HuntingLodge;
+use Lemuria\Model\Fantasya\Building\Hut;
 use Lemuria\Model\Fantasya\Building\Lighthouse;
 use Lemuria\Model\Fantasya\Building\Magespire;
 use Lemuria\Model\Fantasya\Building\Market;
@@ -524,6 +525,8 @@ class CommandFactory
 		'Hafen'             => Port::class,
 		'Holzfällerhütte'   => Cabin::class,
 		'Holzfaellerhuette' => Cabin::class,
+		'Hütte'             => Hut::class,
+		'Huette'            => Hut::class,
 		'Jagdhaus'          => HuntingLodge::class,
 		'Kamelzucht'        => CamelBreeding::class,
 		'Kanal'             => Canal::class,

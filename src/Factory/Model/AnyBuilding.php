@@ -27,6 +27,10 @@ class AnyBuilding implements Building
 		return 0;
 	}
 
+	public function MaxSize(): int {
+		return Building::IS_UNLIMITED;
+	}
+
 	public function Talent(): int {
 		return 0;
 	}

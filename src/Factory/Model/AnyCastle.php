@@ -10,10 +10,6 @@ final class AnyCastle extends AnyBuilding implements Castle
 		return 0;
 	}
 
-	public function MaxSize(): int {
-		return 0;
-	}
-
 	public function MinSize(): int {
 		return 0;
 	}
