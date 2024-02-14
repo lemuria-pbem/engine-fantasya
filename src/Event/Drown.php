@@ -22,7 +22,7 @@ final class Drown extends AbstractEvent
 		foreach (Region::all() as $region) {
 			if ($region->Landscape() instanceof Navigable) {
 				foreach ($region->Residents() as $unit) {
-					if ($unit->Size() > 0 && $unit->Party()->Type() === Type::Player && !$unit->Vessel()) {
+					if ($unit->Size() > 0 && $unit->Party()->Type() !== Type::Monster && !$unit->Vessel()) {
 						$unit->setHealth(0.0);
 						$unit->setSize(0);
 						$this->message(DrownMessage::class, $unit)->e($region);

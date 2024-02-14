@@ -355,24 +355,13 @@ class Battle
 
 	protected function giveLootToHeirs(Heirs $heirs, Resources $loot): void {
 		foreach ($loot as $quantity) {
-			$unit  = $heirs->random();
+			$unit = $heirs->random();
 			if (!$unit) {
 				Lemuria::Log()->debug('Battlefield remains (' . $loot->count() . ' items) have no heirs.');
 				return;
 			}
 			$party = $unit->Party();
-			$type  = $party->Type();
-			if ($type === Type::Player) {
-				$commodity = $quantity->Commodity();
-				if ($party->Loot()->wants($commodity)) {
-					$unit->Inventory()->add(new Quantity($commodity, $quantity->Count()));
-					Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
-					BattleLog::getInstance()->add(new TakeLootMessage($unit, $quantity));
-				} else {
-					$this->battlefieldRemains->add($quantity);
-					Lemuria::Log()->debug($unit . ' scorns loot ' . $quantity . ', added to battlefield remains.');
-				}
-			} elseif ($type === Type::Monster) {
+			if ($party->Type() === Type::Monster) {
 				$race = $unit->Race();
 				if ($race instanceof Monster) {
 					$commodity = $quantity->Commodity();
@@ -384,6 +373,16 @@ class Battle
 						$this->battlefieldRemains->add($quantity);
 						Lemuria::Log()->debug($unit . ' scorns loot ' . $quantity . ', added to battlefield remains.');
 					}
+				}
+			} else {
+				$commodity = $quantity->Commodity();
+				if ($party->Loot()->wants($commodity)) {
+					$unit->Inventory()->add(new Quantity($commodity, $quantity->Count()));
+					Lemuria::Log()->debug($unit . ' takes loot: ' . $quantity);
+					BattleLog::getInstance()->add(new TakeLootMessage($unit, $quantity));
+				} else {
+					$this->battlefieldRemains->add($quantity);
+					Lemuria::Log()->debug($unit . ' scorns loot ' . $quantity . ', added to battlefield remains.');
 				}
 			}
 		}

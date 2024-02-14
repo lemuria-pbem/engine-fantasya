@@ -138,7 +138,7 @@ final class Acquaintance extends AbstractEvent
 		}
 		foreach ($ids as $id => $camouflage) {
 			$foreign = $census->getParty($unit);
-			if ($foreign?->Type() === Type::Player) {
+			if ($foreign?->Type() !== Type::Monster) {
 				$fid                        = $foreign ? $foreign->Id()->Id() : 0;
 				$this->network[$id][$fid][] = [$census, $unit, $camouflage];
 			}

@@ -155,7 +155,7 @@ class Campaign
 	private function addDefenderOtherUnits(array $defenders): void {
 		foreach ($defenders as $partyId) {
 			$party = Party::get(new Id($partyId));
-			if ($party->Type() === Type::Player) {
+			if ($party->Type() !== Type::Monster) {
 				foreach ($this->intelligence->getUnits($party) as $unit) {
 					if ($unit->BattleRow()->value >= BattleRow::Defensive->value) {
 						$id = $unit->Id()->Id();

@@ -230,7 +230,7 @@ abstract class AssaultCommand extends UnitCommand implements Reassignment
 	private function addAttackFromMessage(Unit $unit): void {
 		$id    = $unit->Id()->Id();
 		$party = $this->unit->Party();
-		if ($party->Type() === Type::Player) {
+		if ($party->Type() !== Type::Monster) {
 			if (!self::isAttacked($id, $party->Id()->Id())) {
 				$this->entityMessage('From', $party, $unit);
 				//$this->message(AttackFromMessage::class, $unit)->e($party);
