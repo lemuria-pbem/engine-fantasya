@@ -65,14 +65,14 @@ final class CommandPriority
 		'Dismiss'        => 43,
 		'Lose'           => 44,
 		'Cast'           => 45,
-		//46
-		'Griffinegg'     => 47,
-		'Attack'         => 48,
+		'Griffinegg'     => 46,
+		'Attack'         => 47,
+		'Transport'      => 48,
 		'Recruit'        => 49,
 		'EFFECT_MIDDLE'  => 50,
 		'EVENT_MIDDLE'   => 51,
 		'Siege'          => 52,
-		'Transport'      => 53,
+		//53
 		'Smash'          => 54,
 		'Operate'        => 55,
 		//56
