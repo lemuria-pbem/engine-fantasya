@@ -5,16 +5,20 @@ namespace Lemuria\Engine\Fantasya\Realm;
 use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Id;
+use Lemuria\Identifiable;
 use Lemuria\Lemuria;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Animal;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Realm;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\Model\Reassignment;
 
 /**
  * The fleet of a realm is the set of all available units that have no activity.
  */
-class Fleet
+class Fleet implements Reassignment
 {
 	protected const ALLOWED_ACTIVITIES = [Learn::class => true, Teach::class => true];
 
@@ -51,8 +55,35 @@ class Fleet
 				}
 			}
 		}
-		arsort($this->incoming);
-		arsort($this->outgoing);
+		if (count($this->wagoner)) {
+			arsort($this->incoming);
+			arsort($this->outgoing);
+			Lemuria::Catalog()->addReassignment($this);
+		}
+	}
+
+	public function reassign(Id $oldId, Identifiable $identifiable): void {
+		if ($identifiable->Catalog() === Domain::Unit) {
+			$old = $oldId->Id();
+			$new = $identifiable->Id()->Id();
+			if (isset($this->wagoner[$old])) {
+				$this->wagoner[$new] = $this->wagoner[$old];
+				unset($this->wagoner[$old]);
+				$this->incoming[$new] = $this->incoming[$old];
+				unset($this->incoming[$old]);
+				$this->outgoing[$new] = $this->outgoing[$old];
+				unset($this->outgoing[$old]);
+			}
+		}
+	}
+
+	public function remove(Identifiable $identifiable): void {
+		if ($identifiable->Catalog() === Domain::Unit) {
+			$id = $identifiable->Id()->Id();
+			unset($this->wagoner[$id]);
+			unset($this->incoming[$id]);
+			unset($this->outgoing[$id]);
+		}
 	}
 
 	public function Incoming(): int {
