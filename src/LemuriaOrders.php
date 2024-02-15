@@ -5,12 +5,15 @@ namespace Lemuria\Engine\Fantasya;
 use Lemuria\Engine\Instructions;
 use Lemuria\Engine\Orders;
 use Lemuria\Id;
+use Lemuria\Identifiable;
 use Lemuria\Lemuria;
+use Lemuria\Model\Domain;
+use Lemuria\Model\Reassignment;
 use Lemuria\SerializableTrait;
 use Lemuria\StringList;
 use Lemuria\Validate;
 
-class LemuriaOrders implements Orders
+class LemuriaOrders implements Orders, Reassignment
 {
 	use SerializableTrait;
 
@@ -33,6 +36,10 @@ class LemuriaOrders implements Orders
 	private array $default = [];
 
 	private bool $isLoaded = false;
+
+	public function __construct() {
+		Lemuria::Catalog()->addReassignment($this);
+	}
 
 	/**
 	 * Get the list of current orders for an entity.
@@ -100,6 +107,29 @@ class LemuriaOrders implements Orders
 		$this->current = [];
 		$this->default = [];
 		return $this;
+	}
+
+	public function reassign(Id $oldId, Identifiable $identifiable): void {
+		if ($identifiable->Catalog() === Domain::Unit) {
+			$old = $oldId->Id();
+			$new = $identifiable->Id()->Id();
+			if (isset($this->current[$old])) {
+				$this->current[$new] = $this->current[$old];
+				unset($this->current[$old]);
+			}
+			if (isset($this->default[$old])) {
+				$this->default[$new] = $this->default[$old];
+				unset($this->default[$old]);
+			}
+		}
+	}
+
+	public function remove(Identifiable $identifiable): void {
+		if ($identifiable->Catalog() === Domain::Unit) {
+			$id = $identifiable->Id()->Id();
+			unset($this->current[$id]);
+			unset($this->default[$id]);
+		}
 	}
 
 	/**
