@@ -3,9 +3,11 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Realm;
 
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\RealmQuota;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Factory\UnitTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\DistributorFleetMessage;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Animal;
 use Lemuria\Model\Fantasya\Commodity;
@@ -22,6 +24,7 @@ use Lemuria\Engine\Fantasya\State;
  */
 class Allotment
 {
+	use MessageTrait;
 	use SiegeTrait;
 	use UnitTrait;
 
@@ -149,11 +152,15 @@ class Allotment
 	protected function calculateFleetTotal(Commodity $commodity): int {
 		$availableSum = array_sum($this->availability) - $this->availability[$this->center];
 		if ($this->isFleetEnabled) {
+			$capacity = $this->fleet->Incoming();
 			if ($commodity instanceof Animal) {
 				$fleetMaximum = $this->fleet->getMounts($commodity);
+				$capacity     = min($capacity, $this->fleet->Outgoing());
 			} else {
-				$fleetMaximum = (int)floor($this->fleet->Incoming() / $commodity->Weight());
+				$fleetMaximum = (int)floor($capacity / $commodity->Weight());
 			}
+			$quantity = new Quantity($commodity, $fleetMaximum);
+			$this->message(DistributorFleetMessage::class, $this->unit)->p($capacity)->i($quantity);
 			return min($availableSum, $fleetMaximum);
 		}
 		return $availableSum;
