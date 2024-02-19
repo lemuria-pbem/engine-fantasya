@@ -13,8 +13,8 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Composition\RingOfInvisibility as RingOfInvisibilityComposition;
-use Lemuria\Model\Fantasya\Spell\RingOfInvisibility;
+use Lemuria\Model\Fantasya\Composition\RingOfInvisibility;
+use Lemuria\Model\Fantasya\Spell\RingOfInvisibilitySpell;
 use Lemuria\Model\Fantasya\Wizardry;
 use Lemuria\Validate;
 
@@ -34,7 +34,7 @@ final class Enchantment extends AbstractUnitEffect
 	 * @type array<string, string>
 	 */
 	private const array CREATE = [
-		RingOfInvisibility::class => RingOfInvisibilityComposition::class
+		RingOfInvisibilitySpell::class => RingOfInvisibility::class
 	];
 
 	private const string ENCHANTMENTS = 'enchantments';

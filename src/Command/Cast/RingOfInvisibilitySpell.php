@@ -12,7 +12,7 @@ use Lemuria\Model\Fantasya\Enchantment;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
 
-final class RingOfInvisibility extends AbstractCast
+final class RingOfInvisibilitySpell extends AbstractCast
 {
 	use BuilderTrait;
 	use MessageTrait;

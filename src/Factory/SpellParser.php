@@ -15,6 +15,7 @@ use Lemuria\Id;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Spell;
+use Lemuria\Model\Fantasya\Spell\Airship;
 use Lemuria\Model\Fantasya\Spell\AstralChaos;
 use Lemuria\Model\Fantasya\Spell\AstralPassage;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
@@ -25,6 +26,7 @@ use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
 use Lemuria\Model\Fantasya\Spell\ElementalBeing;
 use Lemuria\Model\Fantasya\Spell\Farsight;
+use Lemuria\Model\Fantasya\Spell\FavorableWinds;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\GazeOfTheBasilisk;
 use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
@@ -35,7 +37,7 @@ use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\Quickening;
 use Lemuria\Model\Fantasya\Spell\RaiseTheDead;
 use Lemuria\Model\Fantasya\Spell\RestInPeace;
-use Lemuria\Model\Fantasya\Spell\RingOfInvisibility;
+use Lemuria\Model\Fantasya\Spell\RingOfInvisibilitySpell;
 use Lemuria\Model\Fantasya\Spell\RustyMist;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
@@ -99,34 +101,36 @@ class SpellParser
 	 * @type array<string, int>
 	 */
 	protected final const array SYNTAX = [
-		AstralChaos::class        => self::LEVEL,
-		AstralPassage::class      => self::DOMAIN_AND_TARGET,
-		AuraTransfer::class       => self::LEVEL_AND_TARGET,
-		CivilCommotion::class     => self::NONE,
-		Daydream::class           => self::LEVEL_AND_TARGET,
-		DetectMetals::class       => self::NONE,
-		EagleEye::class           => self::LEVEL,
-		Earthquake::class         => self::LEVEL,
-		ElementalBeing::class     => self::NONE,
-		Farsight::class           => self::REGION,
-		Fireball::class           => self::LEVEL,
-		GazeOfTheBasilisk::class  => self::LEVEL,
-		GazeOfTheGriffin::class   => self::DIRECTIONS,
-		GhostEnemy::class         => self::LEVEL,
-		GustOfWind::class         => self::NONE,
-		InciteMonster::class      => self::TARGET,
-		Quacksalver::class        => self::LEVEL,
-		Quickening::class         => self::LEVEL,
-		RaiseTheDead::class       => self::LEVEL,
-		RestInPeace::class        => self::NONE,
-		RingOfInvisibility::class => self::NONE,
-		RustyMist::class          => self::LEVEL,
-		ShockWave::class          => self::LEVEL,
-		SongOfPeace::class        => self::LEVEL,
-		SoundlessShadow::class    => self::LEVEL,
-		StoneSkin::class          => self::LEVEL,
-		SummonEnts::class         => self::LEVEL,
-		Teleportation::class      => self::TARGET_AND_LEVEL
+		Airship::class                 => self::NONE,
+		AstralChaos::class             => self::LEVEL,
+		AstralPassage::class           => self::DOMAIN_AND_TARGET,
+		AuraTransfer::class            => self::LEVEL_AND_TARGET,
+		CivilCommotion::class          => self::NONE,
+		Daydream::class                => self::LEVEL_AND_TARGET,
+		DetectMetals::class            => self::NONE,
+		EagleEye::class                => self::LEVEL,
+		Earthquake::class              => self::LEVEL,
+		ElementalBeing::class          => self::NONE,
+		Farsight::class                => self::REGION,
+		FavorableWinds::class          => self::NONE,
+		Fireball::class                => self::LEVEL,
+		GazeOfTheBasilisk::class       => self::LEVEL,
+		GazeOfTheGriffin::class        => self::DIRECTIONS,
+		GhostEnemy::class              => self::LEVEL,
+		GustOfWind::class              => self::NONE,
+		InciteMonster::class           => self::TARGET,
+		Quacksalver::class             => self::LEVEL,
+		Quickening::class              => self::LEVEL,
+		RaiseTheDead::class            => self::LEVEL,
+		RestInPeace::class             => self::NONE,
+		RingOfInvisibilitySpell::class => self::NONE,
+		RustyMist::class               => self::LEVEL,
+		ShockWave::class               => self::LEVEL,
+		SongOfPeace::class             => self::LEVEL,
+		SoundlessShadow::class         => self::LEVEL,
+		StoneSkin::class               => self::LEVEL,
+		SummonEnts::class              => self::LEVEL,
+		Teleportation::class           => self::TARGET_AND_LEVEL
 	];
 
 	/**
@@ -145,18 +149,21 @@ class SpellParser
 		'Fernsicht'       => Farsight::class,
 		'Feuerball'       => Fireball::class,
 		'Friedenslied'    => SongOfPeace::class,
-		'Geisterkaempfer' => GhostEnemy::class,
 		'Geisterkämpfer'  => GhostEnemy::class,
+		'Geisterkaempfer' => GhostEnemy::class,
+		'Günstige'        => ['Winde'       => FavorableWinds::class],
+		'Guenstige'       => ['Winde'       => FavorableWinds::class],
 		'Lautloser'       => ['Schatten'    => SoundlessShadow::class],
+		'Luftschiff'      => Airship::class,
 		'Metalle'         => ['entdecken'   => DetectMetals::class],
 		'Monster'         => ['aufhetzen'   => InciteMonster::class],
-		'Ring'            => ['der'         => ['Unsichtbarkeit' => RingOfInvisibility::class]],
+		'Ring'            => ['der'         => ['Unsichtbarkeit' => RingOfInvisibilitySpell::class]],
 		'Rosthauch'       => RustyMist::class,
 		'Ruhe'            => ['in'          => ['Frieden'        => RestInPeace::class]],
 		'Schockwelle'     => ShockWave::class,
 		'Steinhaut'       => StoneSkin::class,
-		'Sturmboe'        => GustOfWind::class,
 		'Sturmböe'        => GustOfWind::class,
+		'Sturmboe'        => GustOfWind::class,
 		'Tagtraum'        => Daydream::class,
 		'Teleportation'   => Teleportation::class,
 		'Untote'          => ['erwecken'    => RaiseTheDead::class],
@@ -193,11 +200,11 @@ class SpellParser
 			foreach ($spells as $key => &$value) {
 				if (mb_strtolower($key) === $part) {
 					if (is_string($value)) {
-						$spell[] = $key;
-						$config  = self::SYNTAX[$value];
+						$config = self::SYNTAX[$value];
 					} else {
 						$spells = $value;
 					}
+					$spell[] = $key;
 					break;
 				}
 			}

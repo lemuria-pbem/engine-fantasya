@@ -274,6 +274,7 @@ use Lemuria\Model\Fantasya\Ship\Galleon;
 use Lemuria\Model\Fantasya\Ship\Longboat;
 use Lemuria\Model\Fantasya\Ship\Trireme;
 use Lemuria\Model\Fantasya\Spell;
+use Lemuria\Model\Fantasya\Spell\Airship;
 use Lemuria\Model\Fantasya\Spell\AstralChaos;
 use Lemuria\Model\Fantasya\Spell\AstralPassage;
 use Lemuria\Model\Fantasya\Spell\AuraTransfer;
@@ -284,6 +285,7 @@ use Lemuria\Model\Fantasya\Spell\EagleEye;
 use Lemuria\Model\Fantasya\Spell\Earthquake;
 use Lemuria\Model\Fantasya\Spell\ElementalBeing;
 use Lemuria\Model\Fantasya\Spell\Farsight;
+use Lemuria\Model\Fantasya\Spell\FavorableWinds;
 use Lemuria\Model\Fantasya\Spell\Fireball;
 use Lemuria\Model\Fantasya\Spell\GazeOfTheBasilisk;
 use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
@@ -294,7 +296,7 @@ use Lemuria\Model\Fantasya\Spell\Quacksalver;
 use Lemuria\Model\Fantasya\Spell\Quickening;
 use Lemuria\Model\Fantasya\Spell\RaiseTheDead;
 use Lemuria\Model\Fantasya\Spell\RestInPeace;
-use Lemuria\Model\Fantasya\Spell\RingOfInvisibility as RingOfInvisibilitySpell;
+use Lemuria\Model\Fantasya\Spell\RingOfInvisibilitySpell;
 use Lemuria\Model\Fantasya\Spell\RustyMist;
 use Lemuria\Model\Fantasya\Spell\ShockWave;
 use Lemuria\Model\Fantasya\Spell\SongOfPeace;
@@ -835,7 +837,10 @@ class CommandFactory
 		'Friedenslied'            => SongOfPeace::class,
 		'Geisterkaempfer'         => GhostEnemy::class,
 		'Geisterkämpfer'          => GhostEnemy::class,
+		'Günstige winde'          => FavorableWinds::class,
+		'Guenstige winde'         => FavorableWinds::class,
 		'Lautloser schatten'      => SoundlessShadow::class,
+		'Luftschiff'              => Airship::class,
 		'Metalle entdecken'       => DetectMetals::class,
 		'Monster aufhetzen'       => InciteMonster::class,
 		'Ring der unsichtbarkeit' => RingOfInvisibilitySpell::class,
