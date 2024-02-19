@@ -14,16 +14,13 @@ use Lemuria\Engine\Fantasya\Event\Game\TheWildHunt;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Commodity\Monster\Skeleton;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
-use Lemuria\Model\Fantasya\Commodity\Potion\DrinkOfCreation;
-use Lemuria\Model\Fantasya\Commodity\Potion\ElixirOfPower;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
 use Lemuria\Model\Fantasya\Race\Human;
-use Lemuria\Model\Fantasya\Spell\AstralPassage;
 use Lemuria\Model\Fantasya\Spell\Farsight;
-use Lemuria\Model\Fantasya\Spell\GazeOfTheGriffin;
 
 /**
  * The Timer event adds other events at predefined rounds.
@@ -38,7 +35,6 @@ final class Timer extends DelegatedEvent
 				CarriedOffWayfarer::REGION => '', CarriedOffWayfarer::RACE => Human::class,
 				CarriedOffWayfarer::INVENTORY => [Silver::class => 30, Sword::class => 1]
 			]],
-			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => '', Spawn::SIZE => 1, Spawn::RACE => Zombie::class]],
 			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => '', BlownByTheWind::SPELL => Farsight::class]],
 			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => '', PotionGift::POTION => Brainpower::class]]
 		],
@@ -61,6 +57,22 @@ final class Timer extends DelegatedEvent
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 'ause']], // lem
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 'elem']], // mw
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => '231']]   // renn
+		],
+		154 => [
+			// Vorbereitungen für den Nekromanten-NPC
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => 'm', Spawn::REGION => '2gn', Spawn::SIZE => 78, Spawn::RACE => Skeleton::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => 'm', Spawn::REGION => '2go', Spawn::SIZE => 85, Spawn::RACE => Skeleton::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => 'm', Spawn::REGION => '2er', Spawn::SIZE => 82, Spawn::RACE => Skeleton::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => 'm', Spawn::REGION => '2eq', Spawn::SIZE => 100, Spawn::RACE => Skeleton::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => '2gn', Spawn::SIZE => 30, Spawn::RACE => Zombie::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => '2go', Spawn::SIZE => 30, Spawn::RACE => Zombie::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => '2er', Spawn::SIZE => 30, Spawn::RACE => Zombie::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => '2eq', Spawn::SIZE => 50, Spawn::RACE => Zombie::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => '2eq', Spawn::SIZE => 50, Spawn::RACE => Zombie::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => '2eq', Spawn::SIZE => 50, Spawn::RACE => Zombie::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => '2il', Spawn::SIZE => 27, Spawn::RACE => Zombie::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => '2im', Spawn::SIZE => 13, Spawn::RACE => Zombie::class]],
+			['class' => Spawn::class, 'options' => [Spawn::PARTY => Spawn::ZOMBIES, Spawn::REGION => '2gp', Spawn::SIZE => 33, Spawn::RACE => Zombie::class]]
 		]
 	];
 
