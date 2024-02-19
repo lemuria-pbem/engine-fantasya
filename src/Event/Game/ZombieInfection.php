@@ -38,11 +38,11 @@ final class ZombieInfection extends AbstractEvent
 
 	public final const CHANCE = 'chance';
 
-	private const MAX_ZOMBIE_COUNT = 15;
+	private const MAX_ZOMBIE_COUNT = 30;
 
-	private const MAX_ZOMBIE_SIZE = 450;
+	private const MAX_ZOMBIE_SIZE = 1000;
 
-	private const MAX_ZOMBIE_REGIONS = 8;
+	private const MAX_ZOMBIE_REGIONS = 25;
 
 	private Region $region;
 
