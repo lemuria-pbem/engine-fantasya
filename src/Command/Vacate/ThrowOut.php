@@ -49,7 +49,7 @@ final class ThrowOut extends UnitCommand
 	use GiftTrait;
 	use SiegeTrait;
 
-	private const int SUPERIORITY = 10;
+	private const int SUPERIORITY = 6;
 
 	protected function run(): void {
 		if ($this->phrase->count() !== 1) {
