@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
+use Lemuria\Engine\Fantasya\Message\Unit\ConstructionFarmMessage;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Effect\DecayEffect;
@@ -35,6 +36,7 @@ use Lemuria\Model\Fantasya\Building\AbstractCastle;
 use Lemuria\Model\Fantasya\Building\AbstractVenue;
 use Lemuria\Model\Fantasya\Building\Canal;
 use Lemuria\Model\Fantasya\Building\Castle;
+use Lemuria\Model\Fantasya\Building\Farm;
 use Lemuria\Model\Fantasya\Building\Market;
 use Lemuria\Model\Fantasya\Building\Monument;
 use Lemuria\Model\Fantasya\Building\Port;
@@ -111,6 +113,14 @@ final class Construction extends AbstractProduct
 			$dependency = $building->Dependency();
 			$this->message(ConstructionDependencyMessage::class)->s($building)->s($dependency, ConstructionDependencyMessage::DEPENDENCY);
 			return;
+		}
+		if ($building instanceof Farm) {
+			$landscapes = $building->Landscapes();
+			$landscape  = $this->unit->Region()->Landscape();
+			if (!isset($landscapes[$landscape])) {
+				$this->message(ConstructionFarmMessage::class)->s($building)->s($landscape, ConstructionFarmMessage::LANDSCAPE);
+				return;
+			}
 		}
 
 		$construction = $this->leaveCurrentConstructionFor($building);

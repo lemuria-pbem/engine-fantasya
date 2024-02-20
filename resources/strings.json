@@ -350,6 +350,7 @@
 		"ConstructionCreateMessage": "Die Einheit $id hat kein Baumaterial für {g/akk:ein:$building}.",
 		"ConstructionDependencyMessage": "Die Einheit $id kann {g/akk:kein:$building} bauen - die Partei besitzt {g/akk:kein:$dependency}.",
 		"ConstructionExperienceMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um am Gebäude $construction zu bauen.",
+		"ConstructionFarmMessage": "In {g/dat:ein:$landscape} kann {g/akk:kein:$building} errichtet werden.",
 		"ConstructionLootMessage": "Die Einheit $id liest $loot als Beute aus der Schlacht im Gebäude $environment auf.",
 		"ConstructionMessage": "Die Einheit $id erbaut {g/akk:ein:$building}.",
 		"ConstructionOnlyMessage": "Die Einheit $id kann nur {$size:Größenpunkt} am Gebäude $construction bauen.",

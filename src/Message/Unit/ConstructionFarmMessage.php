@@ -6,32 +6,32 @@ use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message\Result;
 use Lemuria\Singleton;
 
-class ConstructionDependencyMessage extends AbstractUnitMessage
+class ConstructionFarmMessage extends AbstractUnitMessage
 {
-	public final const string DEPENDENCY = 'dependency';
+	public final const string LANDSCAPE = 'landscape';
 
 	protected Result $result = Result::Failure;
 
 	protected Singleton $building;
 
-	protected Singleton $dependency;
+	protected Singleton $landscape;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' cannot build a ' . $this->building . ' - the party does not own a ' . $this->dependency . '.';
+		return 'A ' . $this->building . ' cannot be built in a ' . $this->landscape . '.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
-		$this->building   = $message->getSingleton();
-		$this->dependency = $message->getSingleton(self::DEPENDENCY);
+		$this->building  = $message->getSingleton();
+		$this->landscape = $message->getSingleton(self::LANDSCAPE);
 	}
 
 	protected function getTranslation(string $name): string {
 		if ($name === 'building') {
 			return $this->singleton($name, 'building');
 		}
-		if ($name === self::DEPENDENCY) {
-			return $this->singleton($name, self::DEPENDENCY);
+		if ($name === self::LANDSCAPE) {
+			return $this->singleton($name, self::LANDSCAPE);
 		}
 		return parent::getTranslation($name);
 	}
