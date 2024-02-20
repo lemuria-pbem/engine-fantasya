@@ -78,7 +78,10 @@ final class Timer extends DelegatedEvent
 			['class' => Spawn::class, 'options' => [Spawn::REGION => '2eq', Spawn::SIZE => 50, Spawn::RACE => Zombie::class]],
 			['class' => Spawn::class, 'options' => [Spawn::REGION => '2il', Spawn::SIZE => 27, Spawn::RACE => Zombie::class]],
 			['class' => Spawn::class, 'options' => [Spawn::REGION => '2im', Spawn::SIZE => 13, Spawn::RACE => Zombie::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2gp', Spawn::SIZE => 33, Spawn::RACE => Zombie::class]],
+			['class' => Spawn::class, 'options' => [Spawn::REGION => '2gp', Spawn::SIZE => 33, Spawn::RACE => Zombie::class]]
+		],
+		155 => [
+			['class' => Drought::class, 'options' => [Drought::RATE => 0.35]],
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [GiantFrog::class => 30]]],
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 2, PopulateContinent::CHANCES => [GiantFrog::class => 20]]],
 			['class' => Spawn::class, 'options' => [Spawn::REGION => 'ya', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
@@ -86,9 +89,6 @@ final class Timer extends DelegatedEvent
 			['class' => Spawn::class, 'options' => [Spawn::REGION => '1dv', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
 			['class' => Spawn::class, 'options' => [Spawn::REGION => '1o2', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
 			['class' => Spawn::class, 'options' => [Spawn::REGION => '2mp', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]]
-		],
-		155 => [
-			['class' => Drought::class, 'options' => [Drought::RATE => 0.35]]
 		]
 	];
 
