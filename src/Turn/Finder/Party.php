@@ -50,7 +50,7 @@ class Party
 
 	public function findByRace(Race $race): Model {
 		$class = getClass($race);
-		$id    = $this->byType[$class] ?? null;
+		$id    = $this->byRace[$class] ?? null;
 		if (!$id) {
 			if ($race instanceof Monster) {
 				return $this->findByType(Type::Monster);
