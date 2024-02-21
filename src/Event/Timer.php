@@ -15,6 +15,8 @@ use Lemuria\Engine\Fantasya\Event\Game\TheWildHunt;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Commodity\Monster\Ent;
+use Lemuria\Model\Fantasya\Commodity\Monster\Ghoul;
 use Lemuria\Model\Fantasya\Commodity\Monster\GiantFrog;
 use Lemuria\Model\Fantasya\Commodity\Monster\Sandworm;
 use Lemuria\Model\Fantasya\Commodity\Monster\Skeleton;
@@ -78,7 +80,10 @@ final class Timer extends DelegatedEvent
 			['class' => Spawn::class, 'options' => [Spawn::REGION => '2eq', Spawn::SIZE => 50, Spawn::RACE => Zombie::class]],
 			['class' => Spawn::class, 'options' => [Spawn::REGION => '2il', Spawn::SIZE => 27, Spawn::RACE => Zombie::class]],
 			['class' => Spawn::class, 'options' => [Spawn::REGION => '2im', Spawn::SIZE => 13, Spawn::RACE => Zombie::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2gp', Spawn::SIZE => 33, Spawn::RACE => Zombie::class]]
+			['class' => Spawn::class, 'options' => [Spawn::REGION => '2gp', Spawn::SIZE => 33, Spawn::RACE => Zombie::class]],
+			// NPC-/Quest-Release - diverse Monster aussetzen
+			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]],
+			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 2, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]]
 		],
 		155 => [
 			['class' => Drought::class, 'options' => [Drought::RATE => 0.35]],
