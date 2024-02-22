@@ -6,11 +6,20 @@ use Lemuria\Engine\Fantasya\Effect\CivilCommotionEffect;
 use Lemuria\Engine\Fantasya\Effect\Unemployment;
 use Lemuria\Engine\Fantasya\Event\Population;
 use Lemuria\Engine\Fantasya\Factory\Model\Herb;
+use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Herb as HerbInterface;
+use Lemuria\Model\Fantasya\Landscape\Desert;
+use Lemuria\Model\Fantasya\Landscape\Forest;
+use Lemuria\Model\Fantasya\Landscape\Glacier;
+use Lemuria\Model\Fantasya\Landscape\Highland;
+use Lemuria\Model\Fantasya\Landscape\Mountain;
+use Lemuria\Model\Fantasya\Landscape\Plain;
+use Lemuria\Model\Fantasya\Landscape\Swamp;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\RawMaterial;
 use Lemuria\Model\Fantasya\Region;
@@ -20,7 +29,12 @@ class Availability
 {
 	use BuilderTrait;
 
-	public final const int HERBS_PER_REGION = 100;
+	protected const array HERBS = [
+		Glacier::class  => 40,
+		Desert::class   => 50,
+		Mountain::class => 100, Forest::class => 100, Highland::class => 100, Plain::class => 100,
+		Swamp::class    => 120
+	];
 
 	protected readonly Resources $available;
 
@@ -32,6 +46,17 @@ class Availability
 
 	public function Region(): Region {
 		return $this->region;
+	}
+
+	public function MaxHerbs(): int {
+		$landscape = $this->region->Landscape();
+		$class     = $landscape::class;
+		$maximum   = self::HERBS[$class] ?? 0;
+		return match ($class) {
+			Plain::class, Highland::class => $this->calculateHerbMaximum($maximum, -1.0),
+			Forest::class                 => $this->calculateHerbMaximum($maximum, 1.0),
+			default                       => $maximum
+		};
 	}
 
 	public function getResource(mixed $offset): Quantity {
@@ -71,7 +96,7 @@ class Availability
 		if ($commodity instanceof HerbInterface) {
 			$herbage = $this->region->Herbage();
 			if ($commodity === $herbage->Herb()) {
-				$herbage->setOccurrence($available->Count() / self::HERBS_PER_REGION);
+				$herbage->setOccurrence($available->Count() / $this->MaxHerbs());
 				return;
 			}
 		}
@@ -101,6 +126,14 @@ class Availability
 		return new Quantity($commodity, $count);
 	}
 
+	protected function calculateHerbMaximum(int $maximum, float $treeWeight): int {
+		$workplaces    = $this->region->Landscape()->Workplaces();
+		$maxTrees      = $workplaces / Workplaces::TREE;
+		$trees         = $this->region->Resources()->offsetGet(Wood::class)->Count();
+		$treeInfluence = min(1.0, $trees / $maxTrees) * $treeWeight;
+		return (int)round($maximum * ($treeInfluence < 0 ? 1.0 - $treeInfluence : $treeInfluence));
+	}
+
 	private function getUnemployedPeasants(int $totalPeasants): int {
 		$state  = State::getInstance();
 		$effect = new CivilCommotionEffect($state);
@@ -125,7 +158,7 @@ class Availability
 				$occurrence -= $this->quota;
 				$occurrence  = max(0.0, $occurrence);
 			}
-			return (int)round($occurrence * self::HERBS_PER_REGION);
+			return (int)round($occurrence * $this->MaxHerbs());
 		}
 		return 0;
 	}

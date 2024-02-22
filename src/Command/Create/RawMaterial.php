@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Command\Create;
 
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
-use Lemuria\Engine\Fantasya\Availability;
 use Lemuria\Engine\Fantasya\Command\AllocationCommand;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\DetectMetalsEffect;
@@ -184,7 +183,7 @@ class RawMaterial extends AllocationCommand implements Activity
 			return max(0, $reserve - $quota);
 		}
 		if (is_float($quota) && $quota < 1.0) {
-			$pieces = (int)floor(Availability::HERBS_PER_REGION * $quota);
+			$pieces = (int)floor($availability->MaxHerbs() * $quota);
 			return max(0, $reserve - $pieces);
 		}
 		return $reserve;

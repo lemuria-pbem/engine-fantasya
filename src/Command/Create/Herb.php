@@ -5,7 +5,6 @@ namespace Lemuria\Engine\Fantasya\Command\Create;
 use function Lemuria\getClass;
 use function Lemuria\randArray;
 use Lemuria\Engine\Fantasya\Activity;
-use Lemuria\Engine\Fantasya\Availability;
 use Lemuria\Engine\Fantasya\Command\AllocationCommand;
 use Lemuria\Engine\Fantasya\Command\Explore;
 use Lemuria\Engine\Fantasya\Context;
@@ -134,16 +133,16 @@ final class Herb extends AllocationCommand implements Activity
 			} else {
 				$region = $this->unit->Region();
 				$herb   = $this->determineHerbage($region)?->Herb();
-				if (!$herb) {
-					$this->message(HerbUnknownMessage::class)->e($region);
-				} else {
-					if ($herb && $this->threshold === null) {
+				if ($herb) {
+					if ($this->threshold === null) {
 						$this->reduceDemandByQuota($region, $herb);
 					}
-					if ($herb && $job instanceof HerbModel) {
+					if ($job instanceof HerbModel) {
 						$job = $herb;
 					}
 					$this->createSimpleDemand($job);
+				} else {
+					$this->message(HerbUnknownMessage::class)->e($region);
 				}
 			}
 		} else {
@@ -166,8 +165,9 @@ final class Herb extends AllocationCommand implements Activity
 			$herbage = $this->determineHerbage($region);
 			if ($herbage) {
 				$herb       = $herbage->Herb();
-				$occurrence = (int)round($herbage->Occurrence() * Availability::HERBS_PER_REGION);
-				$threshold  = (int)round($this->determineThreshold($herb, $region) * Availability::HERBS_PER_REGION);
+				$maximum    = $this->context->getAvailability($region)->MaxHerbs();
+				$occurrence = (int)round($herbage->Occurrence() * $maximum);
+				$threshold  = (int)round($this->determineThreshold($herb, $region) * $maximum);
 				if ($occurrence > $threshold) {
 					$herbs[$herb::class] = true;
 				}
