@@ -39,6 +39,7 @@ use Lemuria\Model\Reassignment;
  *
  * - GIB <Unit>
  * - GIB <Unit> Alles
+ * - GIB <Unit> Einheit
  * - GIB <Unit> <commodity>
  * - GIB <Unit> Alles <commodity>
  * - GIB <Unit> <amount> <commodity>
@@ -98,7 +99,8 @@ final class Give extends UnitCommand implements Reassignment
 
 		if ($this->commodity instanceof Everything) {
 			$this->giveEverything();
-			if ($this->phrase->count() === 1) {
+			$n = $this->phrase->count();
+			if ($n === 1 || $n === 2 && strtolower($this->phrase->getParameter(2)) === 'einheit') {
 				$this->givePersons();
 			}
 		} elseif ($this->commodity instanceof Container) {

@@ -51,7 +51,7 @@ trait GiftTrait
 			}
 		}
 		$this->commodity = match (strtolower($commodity)) {
-			''                   => new Everything(),
+			'', 'einheit'        => new Everything(),
 			'person', 'personen' => $this->context->Factory()->person(),
 			default              => $this->parseCommodity($commodity)
 		};

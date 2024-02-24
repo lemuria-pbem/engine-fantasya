@@ -14,6 +14,7 @@ use Lemuria\Exception\IdException;
 use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
+use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Implementation of command GEBEN.
@@ -23,6 +24,7 @@ use Lemuria\Model\Domain;
  * Give:
  * - GEBEN <Unit>
  * - GEBEN <Unit> Alles
+ * - GEBEN <Unit> Einheit to own unit
  * - GEBEN <Unit> <commodity>
  * - GEBEN <Unit> Person|Personen
  * - GEBEN <Unit> Alles <commodity>
@@ -33,7 +35,7 @@ use Lemuria\Model\Domain;
  * - GEBEN <Unit> Kommando
  *
  * Migrate:
- * - GEBEN <Unit> Einheit
+ * - GEBEN <Unit> Einheit to foreign unit
  *
  * Dismiss (Alias: ENTLASSEN)
  * - GEBEN Bauern|Region
@@ -74,7 +76,16 @@ final class Handover extends DelegatedCommand
 				case 'kommando' :
 					return new Grant($this->phrase, $this->context);
 				case 'einheit' :
-					return new Migrate($this->phrase, $this->context);
+					try {
+						$id = Id::fromId($this->phrase->getParameter());
+						if (Lemuria::Catalog()->has($id, Domain::Unit)) {
+							if (Unit::get($id)->Party() !== $this->unit->Party()) {
+								return new Migrate($this->phrase, $this->context);
+							}
+						}
+					} catch (IdException) {
+					}
+					return new Give($this->phrase, $this->context);
 			}
 		}
 		if ($n === 3) {
