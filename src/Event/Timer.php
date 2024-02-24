@@ -37,7 +37,6 @@ final class Timer extends DelegatedEvent
 	 */
 	private const array SCHEDULE = [
 		130 => [
-			['class' => Drought::class, 'options' => [Drought::RATE => 0.476]],
 			['class' => GoblinPlague::class, 'options' => [GoblinPlague::REGION => '', GoblinPlague::DURATION => 3]],
 			['class' => CarriedOffWayfarer::class, 'options' => [
 				CarriedOffWayfarer::REGION => '', CarriedOffWayfarer::RACE => Human::class,
@@ -66,27 +65,11 @@ final class Timer extends DelegatedEvent
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 'elem']], // mw
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => '231']]   // renn
 		],
-		154 => [
-			// Vorbereitungen für den Nekromanten-NPC
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2gn', Spawn::SIZE => 78, Spawn::RACE => Skeleton::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2go', Spawn::SIZE => 85, Spawn::RACE => Skeleton::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2er', Spawn::SIZE => 82, Spawn::RACE => Skeleton::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2eq', Spawn::SIZE => 100, Spawn::RACE => Skeleton::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2gn', Spawn::SIZE => 30, Spawn::RACE => Zombie::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2go', Spawn::SIZE => 30, Spawn::RACE => Zombie::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2er', Spawn::SIZE => 30, Spawn::RACE => Zombie::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2eq', Spawn::SIZE => 50, Spawn::RACE => Zombie::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2eq', Spawn::SIZE => 50, Spawn::RACE => Zombie::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2eq', Spawn::SIZE => 50, Spawn::RACE => Zombie::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2il', Spawn::SIZE => 27, Spawn::RACE => Zombie::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2im', Spawn::SIZE => 13, Spawn::RACE => Zombie::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2gp', Spawn::SIZE => 33, Spawn::RACE => Zombie::class]],
-			// NPC-/Quest-Release - diverse Monster aussetzen
-			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]],
-			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 2, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]]
-		],
 		155 => [
 			['class' => Drought::class, 'options' => [Drought::RATE => 0.35]],
+			// NPC-/Quest-Release - diverse Monster aussetzen
+			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]],
+			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 2, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]],
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [GiantFrog::class => 30]]],
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 2, PopulateContinent::CHANCES => [GiantFrog::class => 20]]],
 			['class' => Spawn::class, 'options' => [Spawn::REGION => 'ya', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
