@@ -307,6 +307,7 @@
 		"BerserkBloodMessage": "Die Einheit $id bekommt einen Blutrausch.",
 		"BestowMessage": "Die Einheit $id überreicht der Einheit $unit {g/akk:das:$composition} $unicum.",
 		"BestowReceivedMessage": "Die Einheit $id erhält {g/akk:das:$composition} $unicum von der Einheit $unit.",
+		"BestowReceivedForeignMessage": "Die Einheit $id erhält {g/akk:das:$composition} $unicum von der Einheit $unit.",
 		"BestowRejectedMessage": "Die Einheit $recipient hat versucht, einen Gegenstand an die Einheit $id zu übergeben, doch wir haben abgelehnt.",
 		"BoardAlreadyMessage": "Die Einheit $id ist bereits an Bord des Schiffes $vessel.",
 		"BoardDeniedMessage": "Die Einheit $id kann das Schiff $vessel nicht ohne die Erlaubnis des Kapitäns betreten.",

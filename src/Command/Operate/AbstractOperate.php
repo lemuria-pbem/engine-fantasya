@@ -11,6 +11,7 @@ use Lemuria\Engine\Fantasya\Effect\UnicumRemoval;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Party\ReadMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BestowMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\BestowReceivedForeignMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BestowReceivedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LoseUnicumMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TakeMessage;
@@ -137,7 +138,11 @@ abstract class AbstractOperate
 		$unit->Treasury()->remove($unicum);
 		$recipient->Treasury()->add($unicum);
 		$this->message(BestowMessage::class, $unit)->s($unicum->Composition())->e($recipient)->e($unicum, BestowMessage::UNICUM);
-		$this->message(BestowReceivedMessage::class, $recipient)->s($unicum->Composition())->e($unit)->e($unicum, BestowMessage::UNICUM);
+		if ($recipient->Party() === $unit->Party()) {
+			$this->message(BestowReceivedMessage::class, $recipient)->s($unicum->Composition())->e($unit)->e($unicum, BestowMessage::UNICUM);
+		} else {
+			$this->message(BestowReceivedForeignMessage::class, $recipient)->s($unicum->Composition())->e($unit)->e($unicum, BestowMessage::UNICUM);
+		}
 	}
 
 	private function addReadEffect(): UnicumRead {
