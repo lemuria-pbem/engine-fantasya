@@ -9,6 +9,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\ReserveInvalidMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ReserveMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ReserveNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ReserveOnlyMessage;
+use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Quantity;
 
 /**
@@ -29,7 +30,7 @@ final class Reserve extends UnitCommand
 
 		$amount = (int)$count; // RESERVIEREN <amount> <commodity>
 		if ((string)$amount !== $count) {
-			if (!str_starts_with(strtolower($count), 'alle')) { // RESERVIEREN Alles
+			if (!in_array(strtolower($count), ['alle', 'alles'])) { // RESERVIEREN Alles
 				$commodity = trim($count . ' ' . $commodity); // RESERVIEREN <commodity> (every piece of a commodity)
 			}
 			$amount = PHP_INT_MAX;
@@ -42,6 +43,20 @@ final class Reserve extends UnitCommand
 
 		$resourcePool = $this->context->getResourcePool($this->unit);
 		if ($commodity) {
+			if ($amount === PHP_INT_MAX) {
+				$container = $this->context->Factory()->kind($commodity);
+				if ($container) {
+					foreach ($container->fill()->Commodities() as $commodity) {
+						/** @var Commodity $commodity */
+						$reserved = $resourcePool->reserve($this->unit, new Quantity($commodity, PHP_INT_MAX));
+						if ($reserved->Count() > 0) {
+							$this->message(ReserveAllMessage::class)->s($commodity)->i($reserved);
+						}
+					}
+					return;
+				}
+			}
+
 			$commodity = $this->context->Factory()->commodity($commodity);
 			$quantity  = new Quantity($commodity, $amount);
 			if ($amount > 0) {
