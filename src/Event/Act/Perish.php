@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Act;
 
+use function Lemuria\randElement;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Effect\PerishEffect;
 use Lemuria\Engine\Fantasya\Event\Act;
@@ -18,7 +19,6 @@ use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Distribution;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
-use function Lemuria\randElement;
 
 /**
  * Old, ill or wounded individuals may perish and create a Cadaver unicum.

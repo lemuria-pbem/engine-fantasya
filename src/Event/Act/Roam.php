@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event\Act;
 
-use Lemuria\Engine\Fantasya\Factory\DirectionList;
 use function Lemuria\randKey;
 use Lemuria\Engine\Fantasya\Event\Act;
 use Lemuria\Engine\Fantasya\Event\ActTrait;
@@ -10,7 +9,6 @@ use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\RoamHereMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\RoamMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Act\RoamStayMessage;
-use Lemuria\Engine\Fantasya\State;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\World\Direction;
 

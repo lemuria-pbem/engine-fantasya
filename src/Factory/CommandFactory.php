@@ -987,7 +987,6 @@ class CommandFactory
 	 * Create a Command.
 	 *
 	 * @throws UnknownCommandException
-	 *
 	 */
 	public function create(Phrase $phrase): AbstractCommand {
 		$verb = $this->identifyVerb($phrase->getVerb());
@@ -1083,6 +1082,9 @@ class CommandFactory
 		return self::createCommodity(Peasant::class);
 	}
 
+	/**
+	 * @throws UnknownItemException
+	 */
 	public function domain(string $domain): Domain {
 		$domain = ucfirst(mb_strtolower($domain));
 		if (!isset($this->domains[$domain])) {
@@ -1094,7 +1096,7 @@ class CommandFactory
 	/**
 	 * Create an artifact.
 	 *
-	 * @throws UnknownCommandException
+	 * @throws UnknownItemException
 	 */
 	public function resource(string $artifact): Singleton {
 		$artifact  = str_replace('~', ' ', $artifact);
@@ -1126,7 +1128,7 @@ class CommandFactory
 	/**
 	 * Create a Building.
 	 *
-	 * @throws UnknownCommandException
+	 * @throws UnknownItemException
 	 */
 	public function building(string $building): Building {
 		$buildingClass = $this->identifySingleton($building, $this->buildings);
@@ -1136,7 +1138,7 @@ class CommandFactory
 	/**
 	 * Create a Commodity.
 	 *
-	 * @throws UnknownCommandException
+	 * @throws UnknownItemException
 	 */
 	public function commodity(string $commodity): Commodity {
 		$commodity      = str_replace('~', ' ', $commodity);
@@ -1158,7 +1160,7 @@ class CommandFactory
 	/**
 	 * Create a Composition.
 	 *
-	 * @throws UnknownCommandException
+	 * @throws UnknownItemException
 	 */
 	public function composition(string $composition): Composition {
 		$composition      = str_replace('~', ' ', $composition);
@@ -1169,7 +1171,7 @@ class CommandFactory
 	/**
 	 * Create a Spell.
 	 *
-	 * @throws UnknownCommandException
+	 * @throws UnknownItemException
 	 */
 	public function spell(string $spell): Spell {
 		$spell      = str_replace('~', ' ', $spell);
@@ -1187,9 +1189,7 @@ class CommandFactory
 	/**
 	 * Validate a direction.
 	 *
-	 * @param string $direction
-	 * @return string
-	 * @throws UnknownCommandException
+	 * @throws UnknownItemException
 	 */
 	public function direction(string $direction): Direction {
 		if (strlen($direction) <= 2) {
@@ -1207,7 +1207,7 @@ class CommandFactory
 	/**
 	 * Create a Ship.
 	 *
-	 * @throws UnknownCommandException
+	 * @throws UnknownItemException
 	 */
 	public function ship(string $ship): Ship {
 		$shipClass = $this->identifySingleton($ship, $this->ships);
@@ -1217,13 +1217,16 @@ class CommandFactory
 	/**
 	 * Create a Talent.
 	 *
-	 * @throws UnknownCommandException
+	 * @throws UnknownItemException
 	 */
 	public function talent(string $talent): Talent {
 		$talentClass = $this->identifySingleton($talent, $this->talents);
 		return self::createTalent($talentClass);
 	}
 
+	/**
+	 * @throws UnknownCommandException
+	 */
 	public function battleRow(string $position): BattleRow {
 		return match(strtolower($position)) {
 			'aggressiv'                   => BattleRow::Aggressive,
@@ -1308,6 +1311,8 @@ class CommandFactory
 
 	/**
 	 * Match a Singleton.
+	 *
+	 * @throws UnknownItemException
 	 */
 	protected function identifySingleton(string $singleton, array $map): string {
 		$candidate = $this->getCandidate($singleton, $map);

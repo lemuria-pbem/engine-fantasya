@@ -48,17 +48,13 @@ final class Timer extends DelegatedEvent
 		140 => [
 			['class' => ResetGatherUnits::class, 'options' => [ResetGatherUnits::PARTY => '', ResetGatherUnits::IS_LOOTING => false]]
 		],
-		144 => [
-			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => '', FindWallet::SILVER => 300]]
-		],
 		145 => [
-			// 2, 8, c keine Geschenke
+			// 2, 8, b, c keine Geschenke
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => '12o']],  // 3
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => '9']],    // 4
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 'zp']],   // 5
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 'gls']],  // 7
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 'cod1']], // 9
-			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => '2kd']],  // b
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => '3on']],  // cala
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 'gna']],  // d
 			['class' => TheWildHunt::class, 'options' => [TheWildHunt::UNIT => 'ause']], // lem
@@ -67,7 +63,7 @@ final class Timer extends DelegatedEvent
 		],
 		155 => [
 			['class' => Drought::class, 'options' => [Drought::RATE => 0.35]],
-			// NPC-/Quest-Release - diverse Monster aussetzen
+			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 'xe', FindWallet::SILVER => 68]],
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]],
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 2, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]],
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [GiantFrog::class => 30]]],

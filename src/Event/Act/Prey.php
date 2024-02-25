@@ -27,7 +27,7 @@ class Prey extends Seek
 		$smallest = PHP_INT_MAX;
 		$prey     = null;
 		foreach ($region->Residents() as $unit) {
-			if ($unit->Party()->Type() === Type::Monster) {
+			if ($unit->Party()->Type() !== Type::Player) {
 				continue;
 			}
 			if ($unit->Construction() || $unit->Vessel()) {

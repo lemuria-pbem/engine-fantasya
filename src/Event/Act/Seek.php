@@ -59,7 +59,11 @@ class Seek implements Act
 		$races    = self::MONSTER[$this->unit->Race()::class] ?? [];
 		$region   = $this->unit->Region();
 		foreach ($region->Residents() as $unit) {
-			if ($unit->Party()->Type() === Type::Monster) {
+			$type = $unit->Party()->Type();
+			if ($type === Type::NPC) {
+				continue;
+			}
+			if ($type === Type::Monster) {
 				if (in_array($unit->Race()::class, $races) && $unit->Size() > 0) {
 					$this->enemy->add($unit);
 				}
