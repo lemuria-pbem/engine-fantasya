@@ -3,8 +3,6 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Message\Unit\QuestAssignedMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\QuestChoiceMessage;
-use Lemuria\Engine\Fantasya\Message\Unit\QuestFinishedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\QuestNotAssignedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\QuestNotFinishedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\QuestNotHereMessage;
@@ -43,11 +41,7 @@ final class Quest extends UnitCommand
 		if ($controller->isAssignedTo($this->unit)) {
 			$canFinish = $controller->canBeFinishedBy($this->unit);
 			if ($canFinish) {
-				if ($controller->callFrom($this->unit)->isCompletedBy($this->unit)) {
-					$this->message(QuestFinishedMessage::class)->e($quest);
-				} else {
-					$this->message(QuestChoiceMessage::class)->e($quest);
-				}
+				$controller->callFrom($this->unit)->isCompletedBy($this->unit);
 			} else {
 				$this->message(QuestNotFinishedMessage::class)->e($quest);
 			}
