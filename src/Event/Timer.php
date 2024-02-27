@@ -64,6 +64,7 @@ final class Timer extends DelegatedEvent
 		155 => [
 			['class' => Drought::class, 'options' => [Drought::RATE => 0.35]],
 			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 'xe', FindWallet::SILVER => 68]],
+			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 'ffoc', FindWallet::SILVER => 200]],
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]],
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 2, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]],
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [GiantFrog::class => 30]]],
