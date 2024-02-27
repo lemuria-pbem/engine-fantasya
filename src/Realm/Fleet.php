@@ -72,8 +72,12 @@ class Fleet implements Reassignment
 			if (isset($this->wagoner[$old])) {
 				$this->wagoner[$new] = $this->wagoner[$old];
 				unset($this->wagoner[$old]);
+			}
+			if (isset($this->incoming[$old])) {
 				$this->incoming[$new] = $this->incoming[$old];
 				unset($this->incoming[$old]);
+			}
+			if (isset($this->outgoing[$old])) {
 				$this->outgoing[$new] = $this->outgoing[$old];
 				unset($this->outgoing[$old]);
 			}
