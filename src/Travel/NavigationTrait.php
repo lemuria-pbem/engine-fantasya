@@ -14,6 +14,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\EnterPortDutyPaidMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterPortSmuggleMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TravelGuardCancelMessage;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Engine\Fantasya\Travel\Trip\Cruise;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Extension\Duty;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -147,6 +148,7 @@ trait NavigationTrait
 		if ($this->airshipped) {
 			$this->message(TravelAirshipMessage::class, $region)->p((string)$this->vessel);
 		} else {
+			Cruise::entered($destination);
 			$this->message(TravelVesselMessage::class, $region)->p((string)$this->vessel);
 		}
 		if ($this->vessel->Port()) {

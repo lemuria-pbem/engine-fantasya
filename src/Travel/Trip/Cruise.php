@@ -5,11 +5,28 @@ namespace Lemuria\Engine\Fantasya\Travel\Trip;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Travel\Movement;
 use Lemuria\Exception\LemuriaException;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Vessel;
 
 class Cruise extends AbstractTrip
 {
 	protected Vessel $vessel;
+
+	/**
+	 * @var array<int, Seafarer>
+	 */
+	private static array $seafarer = [];
+
+	public static function engage(Seafarer $seafarer): void {
+		self::$seafarer[$seafarer->getId()] = $seafarer;
+	}
+
+	public static function entered(Region $region): void {
+		foreach (self::$seafarer as $seafarer) {
+			/** @var Seafarer $seafarer */
+			$seafarer->sailedTo($region);
+		}
+	}
 
 	public function __construct(Calculus $calculus) {
 		$vessel = $calculus->Unit()->Vessel();
