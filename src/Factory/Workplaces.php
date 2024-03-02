@@ -26,7 +26,7 @@ final class Workplaces
 
 	public function getAdditional(Building $building, int $size, int $workplaces, int $trees): int {
 		return match ($building::class) {
-			HuntingLodge::class                    => (int)floor(0.5 * $trees),
+			HuntingLodge::class                    => (int)floor(0.5 * $trees * self::TREE),
 			MushroomCave::class, Plantation::class => (int)floor(min(1.0, $size / 100) * $workplaces),
 			Oasis::class                           => $workplaces,
 			default                                => 0

@@ -17,10 +17,7 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Monster\Ent;
 use Lemuria\Model\Fantasya\Commodity\Monster\Ghoul;
-use Lemuria\Model\Fantasya\Commodity\Monster\GiantFrog;
 use Lemuria\Model\Fantasya\Commodity\Monster\Sandworm;
-use Lemuria\Model\Fantasya\Commodity\Monster\Skeleton;
-use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
@@ -64,16 +61,8 @@ final class Timer extends DelegatedEvent
 		155 => [
 			['class' => Drought::class, 'options' => [Drought::RATE => 0.35]],
 			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 'xe', FindWallet::SILVER => 68]],
-			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 'ffoc', FindWallet::SILVER => 200]],
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]],
-			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 2, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]],
-			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [GiantFrog::class => 30]]],
-			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 2, PopulateContinent::CHANCES => [GiantFrog::class => 20]]],
 			['class' => Spawn::class, 'options' => [Spawn::REGION => 'ya', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '141', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '1dv', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '1o2', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2mp', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]]
 		]
 	];
 
