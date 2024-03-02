@@ -43,6 +43,8 @@ final class ActivityProtocol
 	 */
 	private array $comments = [];
 
+	private bool $canAddDefaultActivity = true;
+
 	/**
 	 * Create new activity protocol for a unit.
 	 */
@@ -116,7 +118,8 @@ final class ActivityProtocol
 		if ($command instanceof Comment) {
 			$this->comments[] = $command;
 		} elseif ($command instanceof Activity) {
-			$this->defaultActivities[] = $command;
+			$this->defaultActivities[]   = $command;
+			$this->canAddDefaultActivity = false;
 		} else {
 			$this->defaults[] = $command;
 		}
@@ -126,9 +129,11 @@ final class ActivityProtocol
 	 * Add the new default of an Activity.
 	 */
 	public function addNewDefaults(Activity $activity): void {
-		foreach ($activity->getNewDefaults() as $default) {
-			if ($default instanceof Activity) {
-				$this->defaultActivities[] = $default;
+		if ($this->canAddDefaultActivity) {
+			foreach ($activity->getNewDefaults() as $default) {
+				if ($default instanceof Activity) {
+					$this->defaultActivities[] = $default;
+				}
 			}
 		}
 	}
