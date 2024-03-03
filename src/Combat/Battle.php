@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use Lemuria\Model\Fantasya\Combat\BattleRow;
 use function Lemuria\randElement;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerWonMessage;
@@ -29,6 +28,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\AttackEnterAfterCombatMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\AttackUnguardMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
@@ -204,6 +204,15 @@ class Battle
 	}
 
 	public function integrateOpposite(Battle $battle): ?Battle {
+		$ids = [];
+		foreach ($this->attackers as $unit) {
+			$ids[$unit->Id()->Id()] = true;
+		}
+		foreach ($battle->defenders as $unit) {
+			if (isset($ids[$unit->Id()->Id()])) {
+				return $this->mergeInverted($battle);
+			}
+		}
 		if (count($battle->attackers) <= count($this->defenders) && count($battle->defenders) <= count($this->attackers)) {
 			$ids = [];
 			foreach ($this->defenders as $unit) {
@@ -214,18 +223,8 @@ class Battle
 					return null;
 				}
 			}
-			$ids = [];
-			foreach ($this->attackers as $unit) {
-				$ids[$unit->Id()->Id()] = true;
-			}
-			foreach ($battle->defenders as $unit) {
-				if (!isset($ids[$unit->Id()->Id()])) {
-					return null;
-				}
-			}
-			return $this;
 		}
-		return null;
+		return $this;
 	}
 
 	public function merge(Battle $battle): static {
@@ -243,6 +242,28 @@ class Battle
 			$armies[$unit->Id()->Id()] = $unit;
 		}
 		foreach ($battle->defenders as $unit) {
+			$armies[$unit->Id()->Id()] = $unit;
+		}
+		$this->defenders = array_values($armies);
+
+		return $this;
+	}
+
+	public function mergeInverted(Battle $battle): static {
+		$armies = [];
+		foreach ($this->attackers as $unit) {
+			$armies[$unit->Id()->Id()] = $unit;
+		}
+		foreach ($battle->defenders as $unit) {
+			$armies[$unit->Id()->Id()] = $unit;
+		}
+		$this->attackers = array_values($armies);
+
+		$armies = [];
+		foreach ($this->defenders as $unit) {
+			$armies[$unit->Id()->Id()] = $unit;
+		}
+		foreach ($battle->attackers as $unit) {
 			$armies[$unit->Id()->Id()] = $unit;
 		}
 		$this->defenders = array_values($armies);
