@@ -224,7 +224,7 @@ final class Fauna extends AbstractEvent
 			$d                = $direction->value;
 			$distribution[$d] = -$rate / self::MAX_RATE * $available;
 		}
-		asort($distribution);
+		asort($distribution, SORT_NUMERIC);
 		return $distribution;
 	}
 

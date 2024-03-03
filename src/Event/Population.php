@@ -177,7 +177,7 @@ final class Population extends AbstractEvent
 			$d                = $direction->value;
 			$distribution[$d] = $this->calculateMigrants($peasants, $workplaces, $years);
 		}
-		asort($distribution);
+		asort($distribution, SORT_NUMERIC);
 		return $distribution;
 	}
 

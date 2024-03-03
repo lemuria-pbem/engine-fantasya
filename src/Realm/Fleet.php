@@ -59,8 +59,8 @@ class Fleet implements Reassignment
 			}
 		}
 		if (count($this->wagoner)) {
-			arsort($this->incoming);
-			arsort($this->outgoing);
+			arsort($this->incoming, SORT_NUMERIC);
+			arsort($this->outgoing, SORT_NUMERIC);
 			Lemuria::Catalog()->addReassignment($this);
 		}
 	}
@@ -173,7 +173,7 @@ class Fleet implements Reassignment
 			if ($weight <= $capacity) {
 				$this->incoming[$id] = $transport->fetch($weight);
 				$fetch              += $weight;
-				arsort($this->incoming);
+				arsort($this->incoming, SORT_NUMERIC);
 				Lemuria::Log()->debug('Wagoner ' . $transport->Unit()->Id() . ' fetches ' . ($weight / 100) . ' GE, ' . ($this->incoming[$id] / 100) .' GE remain.');
 				return $fetch;
 			}
@@ -220,7 +220,7 @@ class Fleet implements Reassignment
 			if ($weight <= $capacity) {
 				$this->outgoing[$id] = $transport->send($weight);
 				$send               += $weight;
-				arsort($this->outgoing);
+				arsort($this->outgoing, SORT_NUMERIC);
 				Lemuria::Log()->debug('Wagoner ' . $transport->Unit()->Id() . ' sends ' . ($weight / 100) . ' GE, ' . ($this->outgoing[$id] / 100) .' GE remain.');
 				return $send;
 			}
@@ -290,7 +290,7 @@ class Fleet implements Reassignment
 				$remove[] = $id;
 			}
 		}
-		arsort($riders);
+		arsort($riders, SORT_NUMERIC);
 		$this->removeWagoners($remove);
 		return $riders;
 	}

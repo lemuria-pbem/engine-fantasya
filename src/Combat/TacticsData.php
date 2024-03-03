@@ -54,7 +54,7 @@ class TacticsData implements \Countable
 			$average         = ($talent / $this->sizes[$party]);
 			$tactics[$party] = $average < 1.0 ? $average : $average ** self::ONE_THIRD;
 		}
-		arsort($tactics);
+		arsort($tactics, SORT_NUMERIC);
 
 		$attackers = [];
 		$attSize   = 0;

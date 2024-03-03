@@ -324,7 +324,7 @@ final class Calculus
 		$order[]  = 0;
 		$skills[] = new WeaponSkill(new Ability(self::createTalent(Stoning::class), max($minimum, $distant)));
 		$order[]  = 0;
-		arsort($order);
+		arsort($order, SORT_NUMERIC);
 		$weaponSkills = [];
 		foreach (array_keys($order) as $i) {
 			$weaponSkills[] = $skills[$i];

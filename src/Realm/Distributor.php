@@ -111,7 +111,7 @@ class Distributor
 				$max[$id]          = $supply->count();
 				$this->supply[$id] = $supply;
 			}
-			arsort($step);
+			arsort($step, SORT_NUMERIC);
 
 			$plan = [];
 			while ($total > 0) {
@@ -121,9 +121,9 @@ class Distributor
 					break;
 				}
 				if ($isBuy) {
-					asort($price);
+					asort($price, SORT_NUMERIC);
 				} else {
-					arsort($price);
+					arsort($price, SORT_NUMERIC);
 				}
 				$id = key($price);
 				if ($max[$id] <= 0) {
