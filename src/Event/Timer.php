@@ -12,6 +12,7 @@ use Lemuria\Engine\Fantasya\Event\Game\PopulateContinent;
 use Lemuria\Engine\Fantasya\Event\Game\PotionGift;
 use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Event\Game\TheWildHunt;
+use Lemuria\Engine\Fantasya\Event\Game\TransportMonster;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
@@ -63,6 +64,14 @@ final class Timer extends DelegatedEvent
 			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 'xe', FindWallet::SILVER => 68]],
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]],
 			['class' => Spawn::class, 'options' => [Spawn::REGION => 'ya', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
+		],
+		156 => [
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2ib', TransportMonster::REGION => '2cx']],
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2o4', TransportMonster::REGION => '2gr']],
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '4iz', TransportMonster::REGION => '2gq']],
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2uk', TransportMonster::REGION => '2in']],
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2xt', TransportMonster::REGION => '2in']],
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2vu', TransportMonster::REGION => '2il']]
 		]
 	];
 
