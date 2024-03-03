@@ -21,8 +21,6 @@ final class Administrator extends DelegatedEvent
 
 	protected function createDelegates(): void {
 		Lemuria::Log()->debug('Adding administrative events.');
-		$this->delegates[] = new DesertStones($this->state);
-		$this->delegates[] = new HerbageFix($this->state);
 		$this->delegates[] = new Overcrowded($this->state);
 		$this->delegates[] = new PegasusIsland($this->state);
 	}
