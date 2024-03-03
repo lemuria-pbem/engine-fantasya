@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Message\Unit\BuyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BuyNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BuyOnlyMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
 use Lemuria\Model\Fantasya\Luxury;
@@ -25,6 +26,8 @@ final class Buy extends CommerceCommand
 	use StatisticsTrait;
 
 	protected int $threshold = PHP_INT_MAX;
+
+	private static bool $resetSupplies = true;
 
 	/**
 	 * Get the type of trade.
@@ -77,6 +80,14 @@ final class Buy extends CommerceCommand
 		$this->bundle = 0;
 		$this->cost   = 0;
 		return $this;
+	}
+
+	protected function initialize(): void {
+		if (self::$resetSupplies) {
+			State::getInstance()->resetSupplies();
+			self::$resetSupplies = false;
+		}
+		parent::initialize();
 	}
 
 	protected function calculatePriceThresholdHere(int $price): int {

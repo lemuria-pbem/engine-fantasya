@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\BuyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellOnlyMessage;
+use Lemuria\Engine\Fantasya\State;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Quantity;
 
@@ -22,6 +23,8 @@ use Lemuria\Model\Fantasya\Quantity;
 final class Sell extends CommerceCommand
 {
 	protected int $threshold = 0;
+
+	private static bool $resetSupplies = true;
 
 	/**
 	 * Get the type of trade.
@@ -70,6 +73,14 @@ final class Sell extends CommerceCommand
 		$this->bundle = 0;
 		$this->cost   = 0;
 		return $this;
+	}
+
+	protected function initialize(): void {
+		if (self::$resetSupplies) {
+			State::getInstance()->resetSupplies();
+			self::$resetSupplies = false;
+		}
+		parent::initialize();
 	}
 
 	protected function calculatePriceThresholdHere(int $price): int {

@@ -166,13 +166,16 @@ class Distributor
 				$regionSilver = $resources[Silver::class]->Count();
 				if (!$isBuy) {
 					Lemuria::Log()->debug('The peasants in ' . $region . ' have ' . $regionSilver . ' left for trading.');
+					if ($regionSilver <= 0) {
+						continue;
+					}
 				}
 				$traded = 0;
 				$silver = 0;
 				for ($i = 0; $i < $amount; $i++) {
 					if ($trades->CanWork()) {
 						$price = $supply->ask();
-						if ($isBuy && $regionSilver < $price) {
+						if (!$isBuy && $regionSilver < $price) {
 							Lemuria::Log()->debug('The peasants have no more silver to buy luxuries.');
 							break;
 						}
