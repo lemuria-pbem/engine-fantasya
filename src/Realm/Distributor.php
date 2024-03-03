@@ -20,7 +20,6 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Realm;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
-use Lemuria\Model\Fantasya\Unit;
 
 /**
  * Helper for central luxury trade in realms.
@@ -55,11 +54,13 @@ class Distributor
 	 */
 	private array $supply = [];
 
+	private int $threshold = 0;
+
 	private Commodity $silver;
 
-	public function __construct(Unit $unit, protected Context $context) {
-		$this->unit   = $unit;
-		$this->realm  = $unit->Region()->Realm();
+	public function __construct(protected Merchant $merchant, protected Context $context) {
+		$this->unit   = $merchant->Unit();
+		$this->realm  = $this->unit->Region()->Realm();
 		$this->center = $this->realm->Territory()->Central()->Id()->Id();
 		$this->state  = State::getInstance();
 		$this->fleet  = State::getInstance()->getRealmFleet($this->realm);
@@ -82,15 +83,22 @@ class Distributor
 		return $this->regions;
 	}
 
-	public function distribute(Merchant $merchant): void {
+	public function setThreshold(int $price): static {
+		if ($price > 0) {
+			$this->threshold = $price;
+		}
+		return $this;
+	}
+
+	public function distribute(): void {
 		if (empty($this->regions)) {
 			Lemuria::Log()->debug('There is no supply to trade in realm ' . $this->realm . '.');
 			return;
 		}
 
-		$unit  = $merchant->Unit();
-		$isBuy = $merchant->Type() === Merchant::BUY;
-		foreach ($merchant->getGoods() as $demand) {
+		$unit  = $this->merchant->Unit();
+		$isBuy = $this->merchant->Type() === Merchant::BUY;
+		foreach ($this->merchant->getGoods() as $demand) {
 			$capacity = $isBuy ? $this->fleet->Incoming() : $this->fleet->Outgoing();
 			/** @var Luxury $luxury */
 			$luxury   = $demand->Commodity();
@@ -105,11 +113,14 @@ class Distributor
 			$step  = [];
 			$max   = [];
 			foreach ($this->regions as $id => $region) {
-				$supply            = $this->state->getSupply($region, $luxury);
-				$price[$id]        = $supply->Price();
-				$step[$id]         = $supply->getStep();
-				$max[$id]          = $supply->count();
-				$this->supply[$id] = $supply;
+				/** @var Region $region */
+				if ($this->isValidFor($region, $luxury, $isBuy)) {
+					$supply            = $this->state->getSupply($region, $luxury);
+					$price[$id]        = $supply->Price();
+					$step[$id]         = $supply->getStep();
+					$max[$id]          = $supply->count();
+					$this->supply[$id] = $supply;
+				}
 			}
 			arsort($step, SORT_NUMERIC);
 
@@ -130,9 +141,9 @@ class Distributor
 					Lemuria::Log()->debug('There is no more supply for ' . $luxury . ' in realm ' . $this->realm . '.');
 					break;
 				}
-				$next = min($step[$id], $fleet);
+				$next = min($step[$id], $max[$id], $fleet);
 				if ($next < $total) {
-					$price[$id] += $value;
+					$price[$id] += $isBuy ? $value : -$value;
 					$plan[$id][] = $next;
 					$max[$id]   -= $next;
 					$total      -= $next;
@@ -144,7 +155,7 @@ class Distributor
 					$total       = 0;
 				}
 			}
-			if ($total > 0) {
+			if ($total > 0 && isset($this->supply[$this->center])) {
 				$plan[$this->center][] = $total;
 			}
 
@@ -155,7 +166,7 @@ class Distributor
 				$trade[$id] = $amount;
 				$total     += $this->supply[$id]->estimate($amount);
 			}
-			$merchant->costEstimation($total);
+			$this->merchant->costEstimation($total);
 			Lemuria::Log()->debug('Cost estimation to ' . ($isBuy ? 'buy ' : 'sell ') . $luxury . ' in realm ' . $this->realm . ' is ' . $total . ' silver.');
 
 			$trades = $this->state->getWorkload($unit);
@@ -174,12 +185,20 @@ class Distributor
 				$silver = 0;
 				for ($i = 0; $i < $amount; $i++) {
 					if ($trades->CanWork()) {
-						$price = $supply->ask();
-						if (!$isBuy && $regionSilver < $price) {
-							Lemuria::Log()->debug('The peasants have no more silver to buy luxuries.');
+						if (!$supply->hasMore()) {
+							if ($isBuy) {
+								Lemuria::Log()->debug('The peasants have no more ' . $luxury . ' to sell.');
+							} else {
+								Lemuria::Log()->debug('The peasants do not want to buy any more ' . $luxury . '.');
+							}
 							break;
 						}
-						if ($merchant->trade($luxury, $price)) {
+						$price = $supply->ask();
+						if (!$isBuy && $regionSilver < $price) {
+							Lemuria::Log()->debug('The peasants have no more silver to pay luxuries.');
+							break;
+						}
+						if ($this->merchant->trade($luxury, $price)) {
 							$supply->one();
 							if ($isBuy) {
 								$resources->add(new Quantity($this->silver, $price));
@@ -192,10 +211,10 @@ class Distributor
 							$traded++;
 							$silver += $price;
 						} else {
-							Lemuria::Log()->debug('Merchant ' . $merchant . ' cannot trade any more ' . $luxury . '.');
+							Lemuria::Log()->debug('Merchant ' . $this->merchant . ' cannot trade any more ' . $luxury . '.');
 						}
 					} else {
-						Lemuria::Log()->debug('Merchant ' . $merchant . ' has no more trades.');
+						Lemuria::Log()->debug('Merchant ' . $this->merchant . ' has no more trades.');
 					}
 				}
 				if ($id !== $this->center) {
@@ -207,10 +226,19 @@ class Distributor
 						$this->fleet->fetch($silver * $this->silver->Weight());
 					}
 				}
-				$merchant->finish();
-				Lemuria::Log()->debug('Merchant ' . $merchant . ' has ' . ($isBuy ? 'bought' : 'sold') . ' ' . $traded . ' ' . $luxury . ' in region ' . $region . '.');
+				$this->merchant->finish($region);
+				Lemuria::Log()->debug('Merchant ' . $this->merchant . ' has ' . ($isBuy ? 'bought' : 'sold') . ' ' . $traded . ' ' . $luxury . ' in region ' . $region . '.');
 			}
 		}
+	}
+
+	private function isValidFor(Region $region, Luxury $luxury, bool $isBuy): bool {
+		$luxuries = $region->Luxuries();
+		if ($luxuries) {
+			$offer = $luxuries->Offer()->Commodity();
+			return $isBuy ? $offer === $luxury : $offer !== $luxury;
+		}
+		return false;
 	}
 
 	private function isTradePossible(Region $region): bool {

@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Message\Result;
 use Lemuria\Engine\Message\Section;
+use Lemuria\Id;
 use Lemuria\Item;
 
 class BuyMessage extends AbstractUnitMessage
@@ -15,16 +16,19 @@ class BuyMessage extends AbstractUnitMessage
 
 	protected Section $section = Section::Production;
 
+	protected Id $region;
+
 	protected Item $goods;
 
 	protected Item $payment;
 
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' buys ' . $this->goods . ' from the peasants for ' . $this->payment . '.';
+		return 'Unit ' . $this->id . ' buys ' . $this->goods . ' from the peasants in region ' . $this->region . ' for ' . $this->payment . '.';
 	}
 
 	protected function getData(LemuriaMessage $message): void {
 		parent::getData($message);
+		$this->region  = $message->get();
 		$this->goods   = $message->getQuantity();
 		$this->payment = $message->getQuantity(self::PAYMENT);
 	}

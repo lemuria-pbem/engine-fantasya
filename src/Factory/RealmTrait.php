@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
+use Lemuria\Engine\Fantasya\Merchant;
 use Lemuria\Engine\Fantasya\Realm\Allotment;
 use Lemuria\Engine\Fantasya\Realm\Distributor;
 use Lemuria\Lemuria;
@@ -36,8 +37,8 @@ trait RealmTrait
 		return $allotment->setThreshold($this->getImplicitThreshold());
 	}
 
-	protected function createDistributor(UnitCommand $command): Distributor {
-		return new Distributor($command->Unit(), $this->context);
+	protected function createDistributor(Merchant $merchant): Distributor {
+		return new Distributor($merchant, $this->context);
 	}
 
 	protected function calculateInfrastructure(Region $region): int {

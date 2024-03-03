@@ -5,6 +5,6 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 class SellNoneMessage extends BuyNoneMessage
 {
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' cannot sell any ' . $this->goods . ' to the peasants.';
+		return 'Unit ' . $this->id . ' cannot sell any ' . $this->goods . ' to the peasants in region ' . $this->region . '.';
 	}
 }

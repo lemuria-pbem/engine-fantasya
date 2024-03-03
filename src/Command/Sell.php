@@ -8,9 +8,9 @@ use Lemuria\Engine\Fantasya\Message\Unit\BuyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SellOnlyMessage;
-use Lemuria\Engine\Fantasya\State;
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Region;
 
 /**
  * Sell goods on the market.
@@ -23,8 +23,6 @@ use Lemuria\Model\Fantasya\Quantity;
 final class Sell extends CommerceCommand
 {
 	protected int $threshold = 0;
-
-	private static bool $resetSupplies = true;
 
 	/**
 	 * Get the type of trade.
@@ -60,27 +58,27 @@ final class Sell extends CommerceCommand
 	/**
 	 * Finish trade, create messages.
 	 */
-	public function finish(): static {
-		if ($this->count > 0) {
-			if ($this->demand > 0 && $this->count < $this->demand && $this->demand < PHP_INT_MAX) {
-				$this->message(SellOnlyMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
-			} else {
-				$this->message(SellMessage::class)->i($this->goods())->i($this->cost(), BuyMessage::PAYMENT);
+	public function finish(Region $region): static {
+		$bundle = new Quantity($this->goods()->Commodity(), $this->bundle);
+		if ($this->distributor) {
+			if ($this->bundle > 0) {
+				$this->message(SellMessage::class)->e($region)->i($bundle)->i($this->cost(), BuyMessage::PAYMENT);
 			}
+			$this->traded->clear();
 		} else {
-			$this->message(SellNoneMessage::class)->s($this->goods()->Commodity());
+			if ($this->count > 0) {
+				if ($this->demand > 0 && $this->count < $this->demand && $this->demand < PHP_INT_MAX) {
+					$this->message(SellOnlyMessage::class)->e($region)->i($bundle)->i($this->cost(), BuyMessage::PAYMENT);
+				} else {
+					$this->message(SellMessage::class)->e($region)->i($bundle)->i($this->cost(), BuyMessage::PAYMENT);
+				}
+			} else {
+				$this->message(SellNoneMessage::class)->e($region)->s($this->goods()->Commodity());
+			}
 		}
 		$this->bundle = 0;
 		$this->cost   = 0;
 		return $this;
-	}
-
-	protected function initialize(): void {
-		if (self::$resetSupplies) {
-			State::getInstance()->resetSupplies();
-			self::$resetSupplies = false;
-		}
-		parent::initialize();
 	}
 
 	protected function calculatePriceThresholdHere(int $price): int {

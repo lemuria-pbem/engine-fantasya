@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya;
 
 use Lemuria\Model\Fantasya\Luxury;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Resources;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -54,5 +55,5 @@ interface Merchant extends Command
 	/**
 	 * Finish trade, create messages.
 	 */
-	public function finish(): static;
+	public function finish(Region $region): static;
 }

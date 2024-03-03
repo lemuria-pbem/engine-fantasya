@@ -239,7 +239,7 @@ final class Commerce
 	private function finish(int $round): void {
 		foreach ($this->rounds[$round] as $id) {
 			$merchant = $this->merchants[$id];
-			$merchant->finish();
+			$merchant->finish($this->region);
 		}
 	}
 }

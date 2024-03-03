@@ -173,7 +173,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 	protected function run(): void {
 		if (count($this->goods)) {
 			if ($this->distributor) {
-				$this->distributor->distribute($this);
+				$this->distributor->distribute();
 			} else {
 				$this->context->getCommerce($this->unit->Region())->distribute($this);
 			}
@@ -281,6 +281,7 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 
 	protected function calculateThreshold(int $price = 0): int {
 		if ($this->distributor) {
+			$this->distributor->setThreshold($price);
 			return $this->calculateRealmThreshold($price);
 		}
 		return $this->calculateThresholdHere($price);

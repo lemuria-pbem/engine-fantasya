@@ -5,6 +5,6 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 class SellOnlyMessage extends BuyOnlyMessage
 {
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' can only sell ' . $this->goods . ' to the peasants for ' . $this->payment . '.';
+		return 'Unit ' . $this->id . ' can only sell ' . $this->goods . ' to the peasants in region ' . $this->region . ' for ' . $this->payment . '.';
 	}
 }

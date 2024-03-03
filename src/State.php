@@ -469,10 +469,6 @@ final class State implements Reassignment
 		unset($this->campaigns[$region->Id()->Id()]);
 	}
 
-	public function resetSupplies(): void {
-		$this->supply = [];
-	}
-
 	private static function resourcePoolId(Unit $unit): string {
 		return $unit->Party()->Id()->Id() . '-' . $unit->Region()->Id()->Id();
 	}
