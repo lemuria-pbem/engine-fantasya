@@ -77,9 +77,10 @@ final class Visit extends UnitCommand implements Reassignment
 		}
 		$effect->Parties()->add($this->unit->Party());
 
-		$effect = new Rumors($state);
-		$rumors = Lemuria::Score()->find($effect->setUnit($unit));
-		if ($rumors instanceof Rumors && !$this->context->getTurnOptions()->IsSimulation()) {
+		$isSimulation = $this->context->getTurnOptions()->IsSimulation();
+		$effect       = new Rumors($state);
+		$rumors       = Lemuria::Score()->find($effect->setUnit($unit));
+		if ($rumors instanceof Rumors && !$isSimulation) {
 			$sender    = (string)$unit;
 			$recipient = (string)$this->unit;
 			foreach ($rumors->Rumors() as $rumor) {
@@ -87,7 +88,7 @@ final class Visit extends UnitCommand implements Reassignment
 			}
 		} else {
 			$messages = $this->visitFrom($unit);
-			if ($messages) {
+			if (!$isSimulation && $messages) {
 				$sender    = (string)$unit;
 				$recipient = (string)$this->unit;
 				$this->message(VisitVisitMessage::class)->e($unit);
@@ -106,8 +107,8 @@ final class Visit extends UnitCommand implements Reassignment
 			$existing = Lemuria::Score()->find($effect->setUnit($unit));
 			if ($existing instanceof WelcomeVisitor) {
 				Lemuria::Log()->debug('Visiting NPC ' . $unit . '...');
-				$messages = $existing->Visitation()->from($this->unit);
-				if (!$messages->isEmpty()) {
+				$messages = $existing->Visitation()?->from($this->unit);
+				if ($messages && !$messages->isEmpty()) {
 					return $messages;
 				}
 			}

@@ -15,7 +15,7 @@ final class WelcomeVisitor extends AbstractUnitEffect
 		parent::__construct($state, Priority::Before);
 	}
 
-	public function Visitation(): Visitation {
+	public function Visitation(): ?Visitation {
 		return $this->visitation;
 	}
 
