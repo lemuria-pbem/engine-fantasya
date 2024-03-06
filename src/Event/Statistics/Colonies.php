@@ -24,7 +24,7 @@ final class Colonies extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Party::all() as $party) {
-			if ($party->Type() === Type::Player && !$party->hasRetired()) {
+			if ($party->Type() !== Type::Monster && !$party->hasRetired()) {
 				$census = new Census($party);
 				foreach ($census->getAtlas() as $region) {
 					$people = $census->getPeople($region);

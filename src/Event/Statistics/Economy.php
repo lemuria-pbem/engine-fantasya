@@ -24,7 +24,7 @@ final class Economy extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Party::all() as $party) {
-			if ($party->Type() === Type::Player && !$party->hasRetired()) {
+			if ($party->Type() !== Type::Monster && !$party->hasRetired()) {
 				$this->placeMetrics(Subject::MaterialPool, $party);
 
 				$census = new Census($party);
