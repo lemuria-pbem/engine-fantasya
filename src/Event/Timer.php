@@ -61,11 +61,11 @@ final class Timer extends DelegatedEvent
 		],
 		155 => [
 			['class' => Drought::class, 'options' => [Drought::RATE => 0.35]],
-			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 'xe', FindWallet::SILVER => 68]],
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]],
 			['class' => Spawn::class, 'options' => [Spawn::REGION => 'ya', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
 		],
 		156 => [
+			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 'af', FindWallet::SILVER => 100]],
 			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2ib', TransportMonster::REGION => '2cx']],
 			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2o4', TransportMonster::REGION => '2gr']],
 			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '4iz', TransportMonster::REGION => '2gq']],
