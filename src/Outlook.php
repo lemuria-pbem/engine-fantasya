@@ -40,12 +40,16 @@ final class Outlook
 	 * @noinspection DuplicatedCode
 	 */
 	public function getApparitions(Region $region): People {
-		$perception = self::createTalent(Perception::class);
-		$level      = PHP_INT_MIN;
-		foreach ($this->census->getPeople($region) as $unit) {
-			$calculus = new Calculus($unit);
-			$level    = max($level, $calculus->knowledge($perception)->Level());
-			$level    = max($level, $this->getFarsightPerception($region));
+		if ($this->census->getAtlas()->has($region->Id())) {
+			$perception = self::createTalent(Perception::class);
+			$level      = PHP_INT_MIN;
+			foreach ($this->census->getPeople($region) as $unit) {
+				$calculus = new Calculus($unit);
+				$level    = max($level, $calculus->knowledge($perception)->Level());
+				$level    = max($level, $this->getFarsightPerception($region));
+			}
+		} else {
+			$level = $this->getFarsightPerception($region);
 		}
 
 		$units = new People();
