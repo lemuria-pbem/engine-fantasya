@@ -94,6 +94,7 @@
 ^@?(kam|kamp|kampf|kampfz|kampfza|kampfzau|kampfzaub|kampfzaube|kampfzauber) +(aus|kein|keine|keiner|keinen|nicht)$
 
 ^@?(kau|kauf|kaufe|kaufen)( +[0-9]+)? +(balsam|balsame|gewürz|gewürze|gewuerz|gewuerze|juwel|juwelen|myrrhe|myrrhen|öl|öle|oel|oele|pelz|pelze|seide|seiden|weihrauch)$
+^@?(kau|kauf|kaufe|kaufen) +(balsam|balsame|gewürz|gewürze|gewuerz|gewuerze|juwel|juwelen|myrrhe|myrrhen|öl|öle|oel|oele|pelz|pelze|seide|seiden|weihrauch) +[0-9]+$
 
 ^@?(kä|käm|kämp|kämpf|kämpfe|kämpfen|kae|kaem|kaemp|kaempf|kaempfe|kaempfen|ka|kam|kamp|kampf) +(aggressiv|defensiv|fliehe|fliehen|flucht|hinten|nicht|vorn|vorne|vorsichtig)?$
 
@@ -190,6 +191,7 @@
 ^(vergi|vergis|vergiss) +[a-z]+( +[0-9]+)?$
 
 ^@?(verk|verkauf|verkaufe|verkaufen)( +[0-9]+)? +(balsam|balsame|gewürz|gewürze|gewuerz|gewuerze|juwel|juwelen|myrrhe|myrrhen|öl|öle|oel|oele|pelz|pelze|seide|seiden|weihrauch)$
+^@?(verk|verkauf|verkaufe|verkaufen) +(balsam|balsame|gewürz|gewürze|gewuerz|gewuerze|juwel|juwelen|myrrhe|myrrhen|öl|öle|oel|oele|pelz|pelze|seide|seiden|weihrauch) +[0-9]+$
 
 ^@?(verla|verlas|verlass|verlasse|verlassen)$
 
