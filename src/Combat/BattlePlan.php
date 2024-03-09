@@ -16,6 +16,15 @@ class BattlePlan
 	 */
 	protected array $places = [];
 
+	public static function canAttack(Unit $attacker, Unit $defender): Place {
+		$place = new BattlePlace($defender);
+		if ($place->Place() === Place::Region) {
+			return Place::Region;
+		}
+		$from = new BattlePlace($attacker);
+		return $from->__toString() === $place->__toString() ? $place->Place() : Place::None;
+	}
+
 	public function __construct(array &$battles) {
 		$this->battles = &$battles;
 	}
@@ -40,12 +49,11 @@ class BattlePlan
 		return $id;
 	}
 
-	public static function canAttack(Unit $attacker, Unit $defender): Place {
-		$place = new BattlePlace($defender);
-		if ($place->Place() === Place::Region) {
-			return Place::Region;
+	public function replaceBattleId(int $old, int $new): void {
+		foreach (array_keys($this->places) as $place) {
+			if ($this->places[$place] === $old) {
+				$this->places[$place] = $new;
+			}
 		}
-		$from = new BattlePlace($attacker);
-		return $from->__toString() === $place->__toString() ? $place->Place() : Place::None;
 	}
 }
