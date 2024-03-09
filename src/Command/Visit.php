@@ -65,8 +65,10 @@ final class Visit extends UnitCommand implements Reassignment
 	}
 
 	private function visit(Unit $unit): void {
-		$score = Lemuria::Score();
-		$state = State::getInstance();
+		$score        = Lemuria::Score();
+		$state        = State::getInstance();
+		$isSimulation = $this->context->getTurnOptions()->IsSimulation();
+		$news         = [];
 
 		$effect   = new VisitEffect($state);
 		$existing = $score->find($effect->setUnit($unit));
@@ -77,26 +79,26 @@ final class Visit extends UnitCommand implements Reassignment
 		}
 		$effect->Parties()->add($this->unit->Party());
 
-		$isSimulation = $this->context->getTurnOptions()->IsSimulation();
-		$effect       = new Rumors($state);
-		$rumors       = Lemuria::Score()->find($effect->setUnit($unit));
+		$effect = new Rumors($state);
+		$rumors = Lemuria::Score()->find($effect->setUnit($unit));
 		if ($rumors instanceof Rumors && !$isSimulation) {
+			$news[VisitRumorMessage::class] = $rumors->Rumors();
+		}
+		$messages = $this->visitFrom($unit);
+		if (!$isSimulation && $messages) {
+			$news[VisitMessage::class] = $messages;
+		}
+
+		if (empty($news)) {
+			$this->message(VisitNoRumorMessage::class)->e($unit);
+		} else {
+			$this->message(VisitVisitMessage::class)->e($unit);
 			$sender    = (string)$unit;
 			$recipient = (string)$this->unit;
-			foreach ($rumors->Rumors() as $rumor) {
-				$this->message(VisitRumorMessage::class)->p($rumor)->p($sender, Announce::SENDER)->p($recipient, Announce::RECIPIENT);
-			}
-		} else {
-			$messages = $this->visitFrom($unit);
-			if (!$isSimulation && $messages) {
-				$sender    = (string)$unit;
-				$recipient = (string)$this->unit;
-				$this->message(VisitVisitMessage::class)->e($unit);
+			foreach ($news as $messageClass => $messages) {
 				foreach ($messages as $message) {
-					$this->message(VisitMessage::class)->p($message)->p($sender, Announce::SENDER)->p($recipient, Announce::RECIPIENT);
+					$this->message($messageClass)->p($message)->p($sender, Announce::SENDER)->p($recipient, Announce::RECIPIENT);
 				}
-			} else {
-				$this->message(VisitNoRumorMessage::class)->e($unit);
 			}
 		}
 	}
