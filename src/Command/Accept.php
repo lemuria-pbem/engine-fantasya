@@ -45,6 +45,7 @@ use Lemuria\Model\Fantasya\Extension\Market;
 use Lemuria\Model\Fantasya\Market\Deal;
 use Lemuria\Model\Fantasya\Market\Sales as SalesModel;
 use Lemuria\Model\Fantasya\Market\Trade;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Unit;
 
@@ -104,13 +105,17 @@ final class Accept extends UnitCommand
 
 	protected function run(): void {
 		if (empty($this->market)) {
-			if (!$this->buyUnicumFromMerchant()) {
-				$this->message(AcceptNoMarketMessage::class, $this->unit);
+			if ($this->buyUnicumFromMerchant()) {
+				return;
 			}
-			return;
+			if (!$this->parseMerchantTrade()) {
+				$this->message(AcceptNoMarketMessage::class, $this->unit);
+				return;
+			}
+		} else {
+			$this->parseTrade();
 		}
 
-		$this->parseTrade();
 		if (!$this->trade) {
 			$closed = $this->context->getClosedTrades()[$this->id->Id()] ?? null;
 			if ($closed) {
@@ -256,6 +261,23 @@ final class Accept extends UnitCommand
 			}
 		} catch (NotRegisteredException|SalesException) {
 		}
+	}
+
+	private function parseMerchantTrade(): bool {
+		if ($this->phrase->count() <= 0) {
+			throw new InvalidCommandException($this);
+		}
+		$this->id = $this->parseId();
+		try {
+			$trade = Trade::get($this->id);
+			if ($trade->Unit()->Party()->Type() === Type::NPC) {
+				$this->trade  = $trade;
+				$this->status = $trade->IsSatisfiable() ? Sales::AVAILABLE : Sales::UNSATISFIABLE;
+				return true;
+			}
+		} catch (NotRegisteredException|SalesException) {
+		}
+		return false;
 	}
 
 	private function parseParameters(): void {
@@ -466,7 +488,7 @@ final class Accept extends UnitCommand
 			$customer->add(new Quantity($quantity->Commodity(), $quantity->Count()));
 		}
 
-		$fee = $this->market[$this->index]->Fee();
+		$fee = is_int($this->index) ? $this->market[$this->index]->Fee() : null;
 		if (is_float($fee) && $fee > 0.0) {
 			$this->payFee($unit, $payment, $fee);
 		}
