@@ -22,6 +22,8 @@ use Lemuria\Model\Fantasya\Region;
  */
 final class Sell extends CommerceCommand
 {
+	public const float QUOTA = 0.05;
+
 	protected int $threshold = 0;
 
 	/**

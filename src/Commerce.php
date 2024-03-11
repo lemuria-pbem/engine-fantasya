@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya;
 
+use Lemuria\Engine\Fantasya\Command\Sell;
 use Lemuria\Engine\Fantasya\Exception\CommerceException;
 use Lemuria\Engine\Fantasya\Factory\CommandPriority;
 use Lemuria\Engine\Fantasya\Factory\Supply;
@@ -155,7 +156,7 @@ final class Commerce
 			}
 		}
 		$resources          = $this->region->Resources();
-		$this->regionSilver = $resources[$this->silver]->Count();
+		$this->regionSilver = (int)floor(Sell::QUOTA * $resources[$this->silver]->Count());
 		Lemuria::Log()->debug('The peasants have ' . $this->regionSilver . ' left for trading.');
 	}
 
