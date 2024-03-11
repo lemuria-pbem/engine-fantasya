@@ -2,20 +2,20 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Fantasya\Context;
-use Lemuria\Engine\Fantasya\Phrase;
-use Lemuria\Model\Fantasya\Region;
+use Lemuria\Engine\Fantasya\Effect\InvisibleEnemy;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Combat\BattlePlan;
 use Lemuria\Engine\Fantasya\Combat\Place;
 use Lemuria\Engine\Fantasya\Combat\Side;
+use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\NonAggressionPact;
 use Lemuria\Engine\Fantasya\Exception\Command\InvalidIdException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
 use Lemuria\Engine\Fantasya\Factory\CamouflageTrait;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Outlook;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Entity;
 use Lemuria\Exception\IdException;
@@ -30,6 +30,7 @@ use Lemuria\Model\Fantasya\Navigable;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\People;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
@@ -270,6 +271,7 @@ abstract class AssaultCommand extends UnitCommand implements Reassignment
 		}
 		$isMonsterCombat = $we->Type() === Type::Monster && $party->Type() === Type::Monster;
 		if (!$isMonsterCombat && !$this->checkVisibility($this->unit, $unit)) {
+			$this->addInvisibleEnemyEffect($unit);
 			$this->parameterMessage('NotFound', (string)$unit->Id());
 			//$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
 			return Place::None;
@@ -322,6 +324,18 @@ abstract class AssaultCommand extends UnitCommand implements Reassignment
 	private function isProtectedFromAttacks(Party $party): bool {
 		$effect = new NonAggressionPact(State::getInstance());
 		return (bool)Lemuria::Score()->find($effect->setParty($party));
+	}
+
+	private function addInvisibleEnemyEffect(Unit $unit): void {
+		$effect   = new InvisibleEnemy(State::getInstance());
+		$existing = Lemuria::Score()->find($effect->setUnit($unit));
+		if ($existing instanceof InvisibleEnemy) {
+			$effect = $existing;
+		} else {
+			Lemuria::Score()->add($effect);
+		}
+		$effect->From()->add($this->unit);
+		Lemuria::Log()->debug($unit . ' added as invisible enemy of ' . $this->unit . '.');
 	}
 
 	private function emptyMessage(string $name, ?Entity $target = null): void {

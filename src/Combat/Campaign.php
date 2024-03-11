@@ -113,11 +113,11 @@ class Campaign
 		$this->addDefenderOtherUnits($defenders);
 		$this->addDefenderAlliedUnits();
 		$this->mergeAttackerBattles();
-		$this->mergeOpposedBattles();
 		$this->battles = array_values($this->battles);
-		$n             = count($this->battles);
+		$this->mergeOpposedBattles();
+		$n = count($this->battles);
 		for ($i = 0; $i < $n; $i++) {
-			$this->battles[$i]->counter = $i + 1;
+			$this->battles[$i]->addFromInvisibleEnemies()->counter = $i + 1;
 		}
 		Lemuria::Log()->debug('Campaign in ' . $this->region . ' consists of ' . count($this->battles) . ' battles.');
 		return true;
@@ -249,8 +249,9 @@ class Campaign
 	}
 
 	private function mergeAttackerBattles(): void {
-		$n = count($this->battles);
-		while ($n > 1) {
+		$preventEndlessLoop = 50000;
+		$n                  = count($this->battles);
+		while (--$preventEndlessLoop > 0 && $n > 1) {
 			foreach ($this->attackers as $defenders) {
 				$merged       = false;
 				$battlePlaces = [];
@@ -271,7 +272,8 @@ class Campaign
 						$first = $battles[0];
 						Lemuria::Log()->debug('Merging ' . $count . ' battles #' . $all . ' into #' . $first . ' for common attacker.');
 					}
-					while (count($battles) > 1) {
+
+					while (--$preventEndlessLoop > 0 && count($battles) > 1) {
 						$second = array_pop($battles);
 						$first  = array_pop($battles);
 						/** @var Battle $firstBattle */
@@ -288,6 +290,7 @@ class Campaign
 							$plan->replaceBattleId($second, $first);
 						}
 					}
+
 					if ($n < 2) {
 						if ($merged) {
 							break 2;
@@ -297,9 +300,13 @@ class Campaign
 				}
 			}
 		}
+		if ($preventEndlessLoop <= 1) {
+			Lemuria::Log()->critical('Endless loop detected in ' . __METHOD__ . '.');
+		}
 	}
 
 	private function mergeOpposedBattles(): void {
+		$preventEndlessLoop = 100;
 		do {
 			$n = count($this->battles);
 			for ($first = 0; $first < $n - 1; $first++) {
@@ -312,7 +319,10 @@ class Campaign
 					break;
 				}
 			}
-		} while ($n > 1);
+		} while (--$preventEndlessLoop > 0 && $n > 1);
+		if ($preventEndlessLoop <= 1) {
+			Lemuria::Log()->critical('Endless loop detected in ' . __METHOD__ . '.');
+		}
 	}
 
 	protected function unit(int $id): Unit {

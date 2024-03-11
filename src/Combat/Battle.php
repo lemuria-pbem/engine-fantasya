@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
+use Lemuria\Engine\Fantasya\Effect\InvisibleEnemy;
 use function Lemuria\randElement;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerWonMessage;
@@ -166,6 +167,28 @@ class Battle
 		$vessel = $unit->Vessel();
 		if ($this->vessel !== null) {
 			$this->vessel = $vessel;
+		}
+		return $this;
+	}
+
+	public function addFromInvisibleEnemies(): static {
+		$effect = new InvisibleEnemy(State::getInstance());
+		$score  = Lemuria::Score();
+		foreach ($this->attackers as $attacker) {
+			$existing = $score->find($effect->setUnit($attacker));
+			if ($existing instanceof InvisibleEnemy) {
+				foreach ($existing->From() as $defender) {
+					$this->addDefender($defender);
+				}
+			}
+		}
+		foreach ($this->defenders as $defender) {
+			$existing = $score->find($effect->setUnit($defender));
+			if ($existing instanceof InvisibleEnemy) {
+				foreach ($existing->From() as $attacker) {
+					$this->addAttacker($attacker);
+				}
+			}
 		}
 		return $this;
 	}
