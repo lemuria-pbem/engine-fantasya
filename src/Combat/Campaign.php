@@ -74,6 +74,11 @@ class Campaign
 	}
 
 	public function addAttack(Unit $attacker, Unit $defender): Side {
+		$side = $this->addAttackAlreadyInvolved($attacker, $defender);
+		if ($side) {
+			return $side;
+		}
+
 		$attackId = $attacker->Id()->Id();
 		$defendId = $defender->Id()->Id();
 		if (isset($this->defenders[$attackId])) {
@@ -93,6 +98,8 @@ class Campaign
 		$this->attackers[$attackId][] = $defendId;
 		$this->defenders[$defendId][] = $attackId;
 		Lemuria::Log()->debug($attacker . ' attacks ' . $defender . ' in ' . $this->region . '.');
+		$this->status[$attacker->Party()->Id()->Id()] = Stake::Attacker;
+		$this->status[$defender->Party()->Id()->Id()] = Stake::Defender;
 		return Side::Attacker;
 	}
 
@@ -114,6 +121,54 @@ class Campaign
 		}
 		Lemuria::Log()->debug('Campaign in ' . $this->region . ' consists of ' . count($this->battles) . ' battles.');
 		return true;
+	}
+
+	private function addAttackAlreadyInvolved(Unit $attacker, Unit $defender): ?Side {
+		$attackId = $attacker->Id()->Id();
+		$aId      = $attacker->Party()->Id()->Id();
+		$aStake   = $this->status[$aId];
+		$defendId = $defender->Id()->Id();
+		$dId      = $defender->Party()->Id()->Id();
+		$dStake   = $this->status[$dId];
+		if ($aStake !== Stake::Neutral || $dStake !== Stake::Neutral) {
+			$this->armies[$attackId] = $attacker;
+			$this->armies[$defendId] = $defender;
+			if ($aStake === Stake::Attacker && $dStake !== Stake::Attacker) {
+				$this->attackers[$attackId][] = $defendId;
+				$this->defenders[$defendId][] = $attackId;
+				$this->status[$dId]           = Stake::Defender;
+				Lemuria::Log()->debug($attacker . ' attacks ' . $defender . ' (attacker party is already attacking).');
+				return Side::Attacker;
+			}
+			if ($dStake === Stake::Defender && $aStake !== Stake::Defender) {
+				$this->attackers[$attackId][] = $defendId;
+				$this->defenders[$defendId][] = $attackId;
+				$this->status[$aId]           = Stake::Attacker;
+				Lemuria::Log()->debug($attacker . ' attacks ' . $defender . ' (defender party is already defending).');
+				return Side::Attacker;
+			}
+			if ($aStake === Stake::Defender && $dStake !== Stake::Defender) {
+				$this->defenders[$attackId][] = $defendId;
+				$this->attackers[$defendId][] = $attackId;
+				$this->status[$dId]           = Stake::Attacker;
+				Lemuria::Log()->debug($attacker . ' defends against ' . $defender . ' (attacker party is already defending).');
+				return Side::Defender;
+			}
+			if ($dStake === Stake::Attacker && $aStake !== Stake::Attacker) {
+				$this->defenders[$attackId][] = $defendId;
+				$this->attackers[$defendId][] = $attackId;
+				$this->status[$aId]           = Stake::Defender;
+				Lemuria::Log()->debug($attacker . ' defends against ' . $defender . ' (defender party is already attacking).');
+				return Side::Defender;
+			}
+			if ($aStake === Stake::Attacker) {
+				Lemuria::Log()->debug($attacker . ' and ' . $defender . ' are both in attacking parties.');
+			} else {
+				Lemuria::Log()->debug($attacker . ' and ' . $defender . ' are both in defending parties.');
+			}
+			return Side::Defender;
+		}
+		return null;
 	}
 
 	/**

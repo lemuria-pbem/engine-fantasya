@@ -41,6 +41,7 @@ use Lemuria\Engine\Fantasya\Effect\RaiseTheDeadEffect;
 use Lemuria\Engine\Fantasya\Event\Act\Create;
 use Lemuria\Engine\Fantasya\Factory\Model\BattleSpellGrade;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Exception\ItemSetException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
@@ -737,9 +738,13 @@ class Combat
 					}
 					$inventory = $unit->Inventory();
 					foreach ($combatant->Distribution()->lose($deceased) as $quantity) {
-						$inventory->remove($quantity);
-						$army->Loss()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
-						// Lemuria::Log()->debug('Unit ' . $unit . ' loses ' . $quantity . '.');
+						try {
+							$inventory->remove($quantity);
+							$army->Loss()->add(new Quantity($quantity->Commodity(), $quantity->Count()));
+							// Lemuria::Log()->debug('Unit ' . $unit . ' loses ' . $quantity . '.');
+						} catch (ItemSetException) {
+							Lemuria::Log()->critical('Combatant ' . $combatant->Id() . ' loses ' . $quantity . ', but unit has not enough of it.');
+						}
 					}
 					if ($combatant->Size() <= 0) {
 						unset($combatants[$c]);
