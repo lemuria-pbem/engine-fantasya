@@ -38,20 +38,15 @@ trait WorkplacesTrait
 	}
 
 	private function getAdditionalWorkplaces(Region $region): int {
-		$workplaces = $region->Landscape()->Workplaces();
 		$additional = 0;
+		$workplaces = $region->Landscape()->Workplaces();
 		$trees      = $region->Resources()[Wood::class]->Count();
-		foreach ($region->Estate() as $construction) {
-			$building = $construction->Building();
-			if ($building instanceof AbstractFarm) {
-				$size = $construction->Size();
-				if ($size >= $building->UsefulSize() && !$this->isSieged($construction)) {
-					$owner = $construction->Inhabitants()->Owner();
-					if ($owner && $this->context->getCalculus($owner)->isInMaintainedConstruction()) {
-						$additional = max($additional, $this->workplaces->getAdditional($building, $size, $workplaces, $trees));
-					}
-				}
-			}
+		$farms      = $this->getAllFarms($region);
+		foreach ($farms as $class => $sizes) {
+			$building   = self::createBuilding($class);
+			$count      = count($sizes);
+			$maxSize    = max($sizes);
+			$additional = max($additional, $this->workplaces->getAdditional($building, $count, $maxSize, $workplaces, $trees));
 		}
 		return $additional;
 	}
@@ -94,5 +89,22 @@ trait WorkplacesTrait
 			}
 		}
 		return false;
+	}
+
+	private function getAllFarms(Region $region): array {
+		$farms = [];
+		foreach ($region->Estate() as $construction) {
+			$building = $construction->Building();
+			if ($building instanceof AbstractFarm) {
+				$size = $construction->Size();
+				if ($size >= $building->UsefulSize() && !$this->isSieged($construction)) {
+					$owner = $construction->Inhabitants()->Owner();
+					if ($owner && $this->context->getCalculus($owner)->isInMaintainedConstruction()) {
+						$farms[$building::class][] = $size;
+					}
+				}
+			}
+		}
+		return $farms;
 	}
 }
