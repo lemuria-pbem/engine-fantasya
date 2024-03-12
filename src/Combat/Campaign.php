@@ -249,11 +249,11 @@ class Campaign
 	}
 
 	private function mergeAttackerBattles(): void {
-		$preventEndlessLoop = 50000;
-		$n                  = count($this->battles);
-		while (--$preventEndlessLoop > 0 && $n > 1) {
+		$preventEndlessLoop = 10000;
+
+		while (--$preventEndlessLoop > 0 && count($this->battles) > 1) {
+			$merged = false;
 			foreach ($this->attackers as $defenders) {
-				$merged       = false;
 				$battlePlaces = [];
 				foreach ($defenders as $defId) {
 					$unit                            = $this->unit($defId);
@@ -282,24 +282,23 @@ class Campaign
 						$secondBattle = $this->battles[$second];
 						$firstBattle->merge($secondBattle);
 						unset($this->battles[$second]);
-						$n         = count($this->battles);
-						$battles[] = $first;
-						$merged    = true;
+						array_unshift($battles, $first);
+						$merged = true;
 						foreach ($this->partyBattle as $plan) {
-							/** @var BattlePlan $plan */
 							$plan->replaceBattleId($second, $first);
 						}
 					}
+				}
 
-					if ($n < 2) {
-						if ($merged) {
-							break 2;
-						}
-						break;
-					}
+				if (count($this->battles) < 2) {
+					break;
 				}
 			}
+			if (!$merged) {
+				break;
+			}
 		}
+
 		if ($preventEndlessLoop <= 1) {
 			Lemuria::Log()->critical('Endless loop detected in ' . __METHOD__ . '.');
 		}
