@@ -68,9 +68,7 @@ final class Temp extends UnitCommand implements Immediate
 		$region->Residents()->add($this->createdUnit);
 		if ($region->Landscape() instanceof Navigable) {
 			$vessel = $this->creator->Vessel();
-			if ($vessel) {
-				$vessel->Passengers()->add($this->createdUnit);
-			}
+			$vessel?->Passengers()->add($this->createdUnit);
 		}
 
 		$this->context->UnitMapper()->map($this);

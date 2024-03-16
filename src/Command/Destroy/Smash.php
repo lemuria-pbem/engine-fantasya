@@ -205,7 +205,7 @@ final class Smash extends UnitCommand implements Activity, Reassignment
 		}
 		$roads = $region->Roads();
 		if (!isset($roads[$direction])) {
-			$this->message(SmashNoRoadToMessage::class)->e($region)->p($direction);
+			$this->message(SmashNoRoadToMessage::class)->e($region)->p($direction->value);
 			return;
 		}
 		if ($this->context->getTurnOptions()->IsSimulation() || $this->getCheckByAgreement(Relation::GUARD)) {
@@ -225,11 +225,11 @@ final class Smash extends UnitCommand implements Activity, Reassignment
 		if ($remains > 0) {
 			$roads[$direction] = $remains / $roadStones;
 			$regain            = new Quantity($stone, $damage);
-			$this->message(SmashDestroyRoadMessage::class)->e($region)->p($direction)->i($regain);
+			$this->message(SmashDestroyRoadMessage::class)->e($region)->p($direction->value)->i($regain);
 		} else {
 			unset($roads[$direction]);
 			$this->newDefault = null;
-			$this->message(SmashDestroyRoadMessage::class)->e($region)->p($direction);
+			$this->message(SmashDestroyRoadMessage::class)->e($region)->p($direction->value);
 		}
 	}
 

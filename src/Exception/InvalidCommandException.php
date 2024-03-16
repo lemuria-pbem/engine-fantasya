@@ -10,7 +10,7 @@ use Lemuria\Engine\Fantasya\Message\Exception;
  */
 class InvalidCommandException extends CommandException
 {
-	private const PLACEHOLDER = '$command';
+	private const string PLACEHOLDER = '$command';
 
 	public function __construct(private readonly Command|string $command, ?string $explanation = null, ?\Throwable $previous = null) {
 		$message = 'Error in command "' . $command . '"' . ($explanation ? ': ' . $explanation : '.');

@@ -17,7 +17,7 @@ final class UnicumRead extends AbstractPartyEffect
 {
 	private const string TREASURY = 'treasury';
 
-	private const INVENTORY = 'inventory';
+	private const string INVENTORY = 'inventory';
 
 	private Treasury $treasury;
 

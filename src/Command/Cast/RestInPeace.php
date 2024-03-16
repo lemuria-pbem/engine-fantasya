@@ -2,10 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Cast;
 
-use Lemuria\Engine\Fantasya\Effect\CivilCommotionEffect;
 use Lemuria\Engine\Fantasya\Effect\RestInPeaceEffect;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
-use Lemuria\Engine\Fantasya\Message\Unit\Cast\CivilCommotionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\Cast\RestInPeaceMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;

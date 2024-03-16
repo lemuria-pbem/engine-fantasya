@@ -25,7 +25,7 @@ final class Quest extends UnitCommand
 			$this->message(QuestUnknownMessage::class)->p((string)$id);
 			return;
 		}
-		if ($quest->Unit()->Region() !== $this->unit->Region()) {
+		if ($quest->Owner()->Region() !== $this->unit->Region()) {
 			$this->message(QuestNotHereMessage::class)->e($quest);
 			return;
 		}
