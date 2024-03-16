@@ -197,9 +197,10 @@ final class Accept extends UnitCommand
 			throw new InvalidCommandException($this);
 		}
 
-		$price = $this->trade->Price();
+		$isOffer = $this->trade->Trade() === Trade::OFFER;
+		$price   = $this->trade->Price();
 		if (!$this->context->getTurnOptions()->IsSimulation() && $this->price < $price->Minimum()) {
-			if ($this->trade->Trade() === Trade::OFFER) {
+			if ($isOffer) {
 				$this->message(AcceptOfferPriceMessage::class, $this->unit)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
 			} else {
 				$this->message(AcceptDemandPriceMessage::class, $this->unit)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
@@ -207,10 +208,18 @@ final class Accept extends UnitCommand
 			return;
 		}
 
-		$payment = $this->collectPayment($price->Commodity(), $this->price);
+		$goods = $this->trade->Goods();
+		if ($isOffer) {
+			$payment = $this->collectPayment($price->Commodity(), $this->price);
+		} else {
+			$payment = $this->collectPayment($goods->Commodity(), $goods->Amount());
+		}
 		if ($payment) {
-			$goods    = $this->trade->Goods();
-			$quantity = new Quantity($goods->Commodity(), $goods->Amount());
+			if ($isOffer) {
+				$quantity = new Quantity($goods->Commodity(), $goods->Amount());
+			} else {
+				$quantity = new Quantity($price->Commodity(), $this->price);
+			}
 			$this->exchange($quantity, $payment);
 			$this->tradeMessages($quantity, $payment);
 			$this->addTradeEffect();
@@ -224,20 +233,36 @@ final class Accept extends UnitCommand
 
 		$goods = $this->checkPieces();
 		if ($goods) {
-			$price   = $this->trade->Price();
-			$minimum = $this->amount * $price->Minimum();
-			if (!$this->context->getTurnOptions()->IsSimulation() && $this->price < $minimum) {
-				if ($this->trade->Trade() === Trade::OFFER) {
-					$this->message(AcceptOfferPriceMessage::class, $this->unit)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+			$isOffer  = $this->trade->Trade() === Trade::OFFER;
+			$proposal = $this->amount * $this->price;
+			$price    = $this->trade->Price();
+			if (!$this->context->getTurnOptions()->IsSimulation()) {
+				if ($isOffer) {
+					$minimum = $this->amount * $price->Minimum();
+					if ($proposal < $minimum) {
+						$this->message(AcceptOfferPriceMessage::class, $this->unit)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+						return;
+					}
 				} else {
-					$this->message(AcceptDemandPriceMessage::class, $this->unit)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+					$maximum = $this->amount * $price->Maximum();
+					if ($proposal > $maximum) {
+						$this->message(AcceptDemandPriceMessage::class, $this->unit)->e($this->trade)->e($this->trade->Unit(), AcceptOfferAmountMessage::UNIT);
+						return;
+					}
 				}
-				return;
 			}
 
-			$payment = $this->collectPayment($price->Commodity(), $this->price);
+			if ($isOffer) {
+				$payment = $this->collectPayment($price->Commodity(), $proposal);
+			} else {
+				$payment = $this->collectPayment($goods->Commodity(), $this->amount);
+			}
 			if ($payment) {
-				$quantity = new Quantity($goods->Commodity(), $this->amount);
+				if ($isOffer) {
+					$quantity = new Quantity($goods->Commodity(), $this->amount);
+				} else {
+					$quantity = new Quantity($price->Commodity(), $proposal);
+				}
 				$this->exchange($quantity, $payment);
 				$this->tradeMessages($quantity, $payment);
 				$this->addTradeEffect();
@@ -297,26 +322,22 @@ final class Accept extends UnitCommand
 			$i         = 3;
 			$commodity = $this->parseCommodity($i, $n);
 			if ($i < $n) {
-				if ($i + 1 < $n) {
-					if ($commodity !== $goods->Commodity()) {
-						throw new InvalidCommandException($this);
-					}
+				if ($commodity !== $goods->Commodity()) {
+					throw new InvalidCommandException($this);
+				}
 
-					$parameter = $this->phrase->getParameter($i++);
-					$number    = (int)$parameter;
-					if ((string)$number !== $parameter) {
-						throw new InvalidCommandException($this);
-					}
-					$this->price = $number;
+				$parameter = $this->phrase->getParameter($i++);
+				$number    = (int)$parameter;
+				if ((string)$number !== $parameter) {
+					throw new InvalidCommandException($this);
+				}
+				$this->price = $number;
 
-					$payment = $this->parseCommodity($i, $n);
-					if ($i <= $n) {
-						throw new InvalidCommandException($this);
-					}
-					if ($payment !== $price->Commodity()) {
-						throw new InvalidCommandException($this);
-					}
-				} else {
+				$payment = $this->parseCommodity($i, $n);
+				if ($i < $n) {
+					throw new InvalidCommandException($this);
+				}
+				if ($payment !== $price->Commodity()) {
 					throw new InvalidCommandException($this);
 				}
 			} else {
@@ -359,7 +380,7 @@ final class Accept extends UnitCommand
 		} else {
 			$number = $this->parsePositiveAmount($parameter);
 		}
-		if ($goods->IsVariable() && !$price->IsVariable()) {
+		if ($goods->IsVariable()) {
 			if ($number === '*') {
 				$this->amount = $goods->Maximum();
 				$this->range  = [$goods->Minimum(), $this->amount];
@@ -469,11 +490,13 @@ final class Accept extends UnitCommand
 	}
 
 	private function exchange(Quantity $quantity, Quantity $payment): void {
+		/*
 		if ($this->trade->Trade() === Trade::DEMAND) {
 			$temp     = $quantity;
 			$quantity = $payment;
 			$payment  = $temp;
 		}
+		*/
 		$unit     = $this->trade->Unit();
 		$merchant = $unit->Inventory();
 		$customer = $this->unit->Inventory();
@@ -509,7 +532,7 @@ final class Accept extends UnitCommand
 		if ($this->trade->Trade() === Trade::OFFER) {
 			$this->offerMessages($quantity, $payment);
 		} else {
-			$this->demandMessages($quantity, $payment);
+			$this->demandMessages($payment, $quantity);
 		}
 	}
 

@@ -202,6 +202,11 @@ trait UnicumTrait
 			$this->composition   = $this->unicum->Composition();
 			$this->argumentIndex = 2;
 		}
+		$collector = $this->unicum->Collector();
+		if (!($collector instanceof Unit) || $collector->Region() !== $this->unit->Region()) {
+			return false;
+		}
+
 		$offer     = null;
 		$amount    = (int)$this->phrase->getParameter($this->argumentIndex);
 		$commodity = $this->phrase->getParameter($this->argumentIndex + 1);
