@@ -148,7 +148,11 @@ final class Commerce
 				if ($luxury instanceof Luxury) {
 					$demand = $quantity->Count();
 					if (!isset($this->goods[$class])) {
-						$supply              = State::getInstance()->getSupply($this->region, $luxury);
+						$supply = State::getInstance()->getSupply($this->region, $luxury);
+						if ($supply->Amount() > 0) {
+							Lemuria::Log()->debug('There has been commerce with ' . $luxury . ' in ' . $this->region . ' already.');
+							continue;
+						}
 						$this->goods[$class] = ['demand' => [], 'good' => $luxury, 'supply' => $supply];
 					}
 					$this->goods[$class]['demand'][$id] = $demand;
