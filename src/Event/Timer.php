@@ -19,6 +19,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Monster\Ent;
 use Lemuria\Model\Fantasya\Commodity\Monster\Ghoul;
 use Lemuria\Model\Fantasya\Commodity\Monster\Sandworm;
+use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
@@ -61,17 +62,14 @@ final class Timer extends DelegatedEvent
 		],
 		155 => [
 			['class' => Drought::class, 'options' => [Drought::RATE => 0.35]],
-			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => 'ya', Spawn::SIZE => 1, Spawn::RACE => Sandworm::class]],
+			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]]
 		],
 		156 => [
 			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 'af', FindWallet::SILVER => 100]],
-			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2ib', TransportMonster::REGION => '2cx']],
-			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2o4', TransportMonster::REGION => '2gr']],
-			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '4iz', TransportMonster::REGION => '2gq']],
-			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2uk', TransportMonster::REGION => '2in']],
-			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2xt', TransportMonster::REGION => '2in']],
-			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2vu', TransportMonster::REGION => '2il']]
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2ib', TransportMonster::REGION => '2cx']]
+		],
+		158 => [
+			['class' => Spawn::class, 'options' => [Spawn::REGION => '2in', Spawn::SIZE => 84, Spawn::RACE => Zombie::class]],
 		]
 	];
 
