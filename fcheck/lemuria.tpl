@@ -142,7 +142,7 @@
 
 ^(pr|pre|prei|preis) +[a-z0-9]{1,6} +([0-9-]+|\*) +[a-zäöüß ]+$
 
-^(reic|reich) +[a-z0-9]{1,6}$
+^(reic|reich) +[a-z0-9]{1,6}( +nicht)?$
 
 ^@?(reis|reise|reisen|nac|nach)( +(e|ne|no|nw|o|so|sw|w|east|nordosten|nordwesten|northeast|northwest|osten|suedosten|suedwesten|southeast|southwest|westen|west))+$
 
