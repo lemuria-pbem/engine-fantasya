@@ -178,7 +178,9 @@ class Battle
 			$existing = $score->find($effect->setUnit($attacker));
 			if ($existing instanceof InvisibleEnemy) {
 				foreach ($existing->From() as $defender) {
-					$this->addDefender($defender);
+					if ($defender->Size() > 0) {
+						$this->addDefender($defender);
+					}
 				}
 			}
 		}
@@ -186,7 +188,9 @@ class Battle
 			$existing = $score->find($effect->setUnit($defender));
 			if ($existing instanceof InvisibleEnemy) {
 				foreach ($existing->From() as $attacker) {
-					$this->addAttacker($attacker);
+					if ($attacker->Size() > 0) {
+						$this->addAttacker($attacker);
+					}
 				}
 			}
 		}
