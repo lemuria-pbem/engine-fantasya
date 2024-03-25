@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command\Create;
 
-use Lemuria\Engine\Fantasya\Message\Unit\ConstructionFarmMessage;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\Effect\DecayEffect;
@@ -20,6 +19,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\ConstructionBuildMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionCreateMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionDependencyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionExperienceMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\ConstructionFarmMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionOnlyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionResourcesMessage;
@@ -244,7 +244,8 @@ final class Construction extends AbstractProduct
 		$building = $this->job->getObject();
 		if ($building::class === AnyBuilding::class) {
 			$knowledge = $this->unit->Knowledge();
-			$ability   = $knowledge[$building->getCraft()->Talent()];
+			$talent    = $building->getCraft()->Talent();
+			$ability   = $knowledge[$talent];
 			if ($ability->Count() > 0 && $this->phrase->count() >= 2) {
 				$id     = $this->parseId(2);
 				$estate = $this->unit->Region()->Estate();
