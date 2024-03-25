@@ -62,7 +62,7 @@ final class Growth extends AbstractEvent
 			$trees     = $resources[$this->tree]->Count();
 
 			if ($this->isSeason) {
-				$place = $this->getPlaceForTrees($region);
+				$place = $this->getPlaceForGrowing($region);
 				if ($place <= 0) {
 					$this->placeMetrics(Subject::Trees, $region);
 					continue;

@@ -24,7 +24,7 @@ trait WorkplacesTrait
 
 	private Workplaces $workplaces;
 
-	private function getPlaceForTrees(Region $region): int {
+	private function getPlaceForGrowing(Region $region): int {
 		$workplaces = $region->Landscape()->Workplaces();
 		$used       = $this->getUsedWorkplaces($region);
 		return max(0, $workplaces - $used);
