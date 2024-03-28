@@ -4,10 +4,12 @@ namespace Lemuria\Engine\Fantasya\Effect;
 
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Event\Support;
+use Lemuria\Engine\Fantasya\Factory\Model\HungerMalus;
 use Lemuria\Engine\Fantasya\Message\Unit\HungerMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Quantity;
@@ -20,6 +22,12 @@ final class Hunger extends AbstractUnitEffect
 	private const float FEED_THRESHOLD = 0.5;
 
 	private const float HEALTH_THRESHOLD = 0.9;
+
+	private const MALUS_THRESHOLD = 0.5;
+
+	private const float MINIMUM_HEALTH = 0.15;
+
+	private const float BEG_SILVER = 0.5;
 
 	protected ?bool $isReassign = null;
 
@@ -39,6 +47,10 @@ final class Hunger extends AbstractUnitEffect
 			$this->setNewHealth();
 		}
 		return $this;
+	}
+
+	public function getMalus(Ability $ability): ?HungerMalus {
+		return $this->hunger < self::MALUS_THRESHOLD ? null : new HungerMalus($ability);
 	}
 
 	protected function run(): void {
@@ -66,10 +78,34 @@ final class Hunger extends AbstractUnitEffect
 		$calculus     = new Calculus($unit);
 		$hitpoints    = $calculus->hitpoints();
 		$hunger       = $factor * $calculus->hunger($unit, $this->hunger);
-		$newHitpoints = $unit->Health() * $hitpoints - $hunger;
-		$health       = max(0.0, round($newHitpoints / $hitpoints, 2));
-		$unit->setHealth($health);
-		Lemuria::Log()->debug('Unit ' . $unit . ' takes ' . $hunger . ' damage from hunger.');
-		$this->message(HungerMessage::class, $unit)->p($health);
+		$health       = $unit->Health();
+		$newHitpoints = $health * $hitpoints - $hunger;
+		$newHealth    = round($newHitpoints / $hitpoints, 2);
+		if ($newHealth < self::MINIMUM_HEALTH) {
+			if ($this->canBegFromPeasants($unit)) {
+				$newHealth = self::MINIMUM_HEALTH;
+			} else {
+				$newHealth = max(0.0, $newHealth);
+			}
+		}
+		if ($newHealth < $health) {
+			$unit->setHealth($newHealth);
+			$hunger = (int)floor($health * $hitpoints - $newHealth * $hitpoints);
+			Lemuria::Log()->debug('Unit ' . $unit . ' takes ' . $hunger . ' damage from hunger.');
+			$this->message(HungerMessage::class, $unit)->p($newHealth);
+		}
+	}
+
+	private function canBegFromPeasants(Unit $unit): bool {
+		$need      = (int)ceil($this->Unit()->Size() * self::BEG_SILVER * Support::SILVER);
+		$resources = $unit->Region()->Resources();
+		$available = $resources[Silver::class]->Count();
+		if ($available > 0) {
+			$silver = new Quantity(self::createCommodity(Silver::class), min($available, $need));
+			$resources->remove($silver);
+			Lemuria::Log()->debug('Unit ' . $unit . ' scrounges ' . $silver . ' from the peasants.');
+			return true;
+		}
+		return false;
 	}
 }

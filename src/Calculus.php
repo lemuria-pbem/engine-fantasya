@@ -7,12 +7,14 @@ use Lemuria\Engine\Fantasya\Combat\WeaponSkill;
 use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Teach;
 use Lemuria\Engine\Fantasya\Effect\Contagion;
+use Lemuria\Engine\Fantasya\Effect\Hunger;
 use Lemuria\Engine\Fantasya\Effect\PotionEffect;
 use Lemuria\Engine\Fantasya\Effect\TalentEffect;
 use Lemuria\Engine\Fantasya\Effect\UnicumActive;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\Factory\GearDistribution;
 use Lemuria\Engine\Fantasya\Factory\LodgingTrait;
+use Lemuria\Engine\Fantasya\Factory\Model\HungerMalus;
 use Lemuria\Engine\Fantasya\Factory\Model\Teacher;
 use Lemuria\Engine\Fantasya\Travel\Conveyance;
 use Lemuria\Engine\Fantasya\Travel\StaminaBonus;
@@ -186,6 +188,10 @@ final class Calculus
 
 				$race         = $this->unit->Race();
 				$modification = $race->Modifications()->offsetGet($talent);
+				if ($modification instanceof Modification) {
+					$ability = $modification->getModified($ability);
+				}
+				$modification = $this->hungerEffect()?->getMalus($ability);
 				if ($modification instanceof Modification) {
 					$ability = $modification->getModified($ability);
 				}
@@ -525,6 +531,12 @@ final class Calculus
 		$effect = new Contagion(State::getInstance());
 		$effect = Lemuria::Score()->find($effect->setRegion($this->unit->Region()));
 		return $effect instanceof Contagion ? $effect : null;
+	}
+
+	private function hungerEffect(): ?Hunger {
+		$effect = new Hunger(State::getInstance());
+		$effect = Lemuria::Score()->find($effect->setUnit($this->unit));
+		return $effect instanceof Hunger ? $effect : null;
 	}
 
 	private function getPayloadBoost(): int {
