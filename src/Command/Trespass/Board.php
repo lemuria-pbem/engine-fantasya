@@ -16,6 +16,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselDebugMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\BoardNotFoundMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveVesselUnpaidDemurrageMessage;
+use Lemuria\Engine\Fantasya\Message\Vessel\BoardNotAllowedMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
@@ -59,6 +60,7 @@ final class Board extends UnitCommand implements Reassignment
 		$newVessel = Vessel::get($id);
 		if (!$this->hasPermission($newVessel->Passengers())) {
 			$this->message(BoardDeniedMessage::class)->e($newVessel);
+			$this->message(BoardNotAllowedMessage::class, $newVessel)->p($this->unit->Name());
 			return;
 		}
 

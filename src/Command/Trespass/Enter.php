@@ -7,6 +7,8 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\FreeSpaceTrait;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
+use Lemuria\Engine\Fantasya\Message\Construction\EnterNoSpaceMessage;
+use Lemuria\Engine\Fantasya\Message\Construction\EnterNotAllowedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterAlreadyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterDeniedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\EnterForbiddenMessage;
@@ -81,11 +83,13 @@ final class Enter extends UnitCommand implements Reassignment
 		}
 		if ($this->isTooSmall($newConstruction, $this->unit)) {
 			$this->message(EnterTooLargeMessage::class)->e($newConstruction);
+			$this->message(EnterNoSpaceMessage::class, $newConstruction)->p($this->unit->Name())->s($building);
 			return;
 		}
 		$agreement = $building instanceof Market ? Relation::MARKET : Relation::ENTER;
 		if (!$this->hasPermission($newConstruction->Inhabitants(), $agreement)) {
 			$this->message(EnterDeniedMessage::class)->e($newConstruction);
+			$this->message(EnterNotAllowedMessage::class, $newConstruction)->p($this->unit->Name())->s($building);
 			return;
 		}
 
