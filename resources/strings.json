@@ -972,6 +972,7 @@
 		"SupportPayMessage": "Die Einheit $id gibt $support für den Unterhalt aus.",
 		"SupportPayOnlyMessage": "Die Einheit $id kann nur $support für den Unterhalt ausgeben.",
 		"TakeBoughtMessage": "Die Einheit $id kauft den Gegenstand $unicum für $payment von der Einheit $unit.",
+		"TakeDemandMessage": "Die Einheit $unit hat uns den Gegenstand $unicum für $payment verkauft.",
 		"TakeMessage": "Die Einheit $id hat {g/akk:das:$composition} $unicum in Besitz genommen.",
 		"TakeNoCompositionMessage": "Die Einheit $id kann {g/akk:kein:$composition} mit der Nummer $unicum finden.",
 		"TakeNotEnoughMessage": "Die Einheit $id hat nicht genügend $payment, um den Gegenstand mit der Nummer $unicum zu erwerben.",
