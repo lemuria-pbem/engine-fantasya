@@ -209,8 +209,8 @@ class SpellParser
 				}
 			}
 		} while ($config === null && $part);
-		if (!$config) {
-			throw new UnknownItemException($phrase);
+		if ($config === null) {
+			throw new UnknownItemException($phrase->getLine());
 		}
 		$this->parseParameters($phrase, $i, $config, $spell);
 	}
@@ -238,6 +238,8 @@ class SpellParser
 	protected function parseParameters(Phrase $phrase, int $next, int $config, array $spell): void {
 		$this->spell = implode(' ', $spell);
 		switch ($config) {
+			case self::NONE :
+				break;
 			case self::LEVEL :
 				$this->level = $this->parseOptionalLevel($phrase, $next);
 				break;
