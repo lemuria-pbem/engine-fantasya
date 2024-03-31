@@ -10,6 +10,7 @@ use Lemuria\Engine\Fantasya\Factory\Workplaces;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity;
 use Lemuria\Model\Fantasya\Commodity\Peasant;
+use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Herb as HerbInterface;
@@ -120,6 +121,7 @@ class Availability
 		$commodity = $quantity->Commodity();
 		$count     = match ($commodity::class) {
 			Peasant::class => $this->getUnemployedPeasants($quantity->Count()),
+			Silver::class  => $this->getSilverCount($quantity),
 			Herb::class    => $this->getHerbCount(),
 			default        => $this->getDefaultCount($quantity)
 		};
@@ -150,6 +152,15 @@ class Availability
 		return $recruits;
 	}
 
+	private function getSilverCount(Quantity $quantity): int {
+		$state  = State::getInstance();
+		$effect = new CivilCommotionEffect($state);
+		if (Lemuria::Score()->find($effect->setRegion($this->region))) {
+			return 0;
+		}
+		return $this->getQuotaCount($quantity);
+	}
+
 	private function getHerbCount(?HerbInterface $herb = null):int {
 		$herbage = $this->region->Herbage();
 		if ($herbage && (!$herb || $herb === $herbage->Herb())) {
@@ -168,6 +179,10 @@ class Availability
 		if ($commodity instanceof HerbInterface) {
 			return $this->getHerbCount($commodity);
 		}
+		return $this->getQuotaCount($quantity);
+	}
+
+	private function getQuotaCount(Quantity $quantity) {
 		$count = $quantity->Count();
 		if (is_int($this->quota)) {
 			$count -= $this->quota;
