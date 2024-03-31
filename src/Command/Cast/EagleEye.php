@@ -31,11 +31,13 @@ final class EagleEye extends AbstractCast
 	}
 
 	private function getEffect(Unit $unit): TalentEffect {
-		$effect   = new TalentEffect(State::getInstance());
+		$state    = State::getInstance();
+		$effect   = new TalentEffect($state);
 		$existing = Lemuria::Score()->find($effect->setUnit($unit));
 		if ($existing instanceof TalentEffect) {
 			return $existing;
 		}
+		$state->injectIntoTurn($effect);
 		Lemuria::Score()->add($effect);
 		return $effect;
 	}
