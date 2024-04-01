@@ -133,7 +133,7 @@ class Availability
 		$maxTrees      = $workplaces / Workplaces::TREE;
 		$trees         = $this->region->Resources()->offsetGet(Wood::class)->Count();
 		$treeInfluence = min(1.0, $trees / $maxTrees) * $treeWeight;
-		return (int)round($maximum * ($treeInfluence < 0 ? 1.0 - $treeInfluence : $treeInfluence));
+		return (int)round($maximum * (1.0 + ($treeInfluence > 0 ? -$treeInfluence : $treeInfluence)));
 	}
 
 	private function getUnemployedPeasants(int $totalPeasants): int {
