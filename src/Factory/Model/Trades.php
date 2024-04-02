@@ -3,16 +3,21 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Model;
 
 use Lemuria\Engine\Fantasya\Effect\UnpaidFee;
+use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Extension\Market;
 use Lemuria\Model\Fantasya\Market\Sales;
 use Lemuria\Model\Fantasya\Market\Trade;
 use Lemuria\Model\Fantasya\Unit;
+use Lemuria\SortMode;
 
 class Trades implements \Countable
 {
+	use GrammarTrait;
+
 	protected ?Sales $sales = null;
 
 	protected bool $hasPaid;
@@ -79,6 +84,17 @@ class Trades implements \Countable
 		return $this;
 	}
 
+	public function sort(SortMode $mode = SortMode::Alphabetically): static {
+		switch ($mode) {
+			case SortMode::Alphabetically :
+				$this->sortAlphabetically();
+				break;
+			default :
+				throw new LemuriaException('Unsupported sort mode: ' . $mode->name);
+		}
+		return $this;
+	}
+
 	/**
 	 * @return array<Trade>
 	 */
@@ -103,5 +119,53 @@ class Trades implements \Countable
 	protected function checkIfUnitHasPaidFee(Unit $unit): void {
 		$effect        = new UnpaidFee(State::getInstance());
 		$this->hasPaid = !Lemuria::Score()->find($effect->setUnit($unit));
+	}
+
+	/**
+	 * Sort the set using specified order.
+	 */
+	protected function sortAlphabetically(): void {
+		$this->initDictionary();
+		if (!empty($this->available)) {
+			$this->available = $this->sortTrades($this->available);
+		}
+		if (!empty($this->forbidden)) {
+			$this->forbidden = $this->sortTrades($this->forbidden);
+		}
+		if (!empty($this->impossible)) {
+			$this->impossible = $this->sortTrades($this->impossible);
+		}
+	}
+
+	/**
+	 * @param array<Trade> $trades
+	 * @return array<Trade>
+	 * @noinspection DuplicatedCode
+	 */
+	private function sortTrades(array $trades): array {
+		$offers  = [];
+		$demands = [];
+		$ids     = [];
+		foreach ($trades as $trade) {
+			/** @var Trade $trade */
+			$id       = $trade->Id()->Id();
+			$ids[$id] = $trade;
+			if ($trade->Trade() === Trade::OFFER) {
+				$offers[$id] = $this->translateSingleton($trade->Goods()->Commodity());
+			} else {
+				$demands[$id] = $this->translateSingleton($trade->Goods()->Commodity());
+			}
+		}
+		asort($offers, SORT_LOCALE_STRING);
+		asort($demands, SORT_LOCALE_STRING);
+
+		$trades = [];
+		foreach (array_keys($offers) as $id) {
+			$trades[] = $ids[$id];
+		}
+		foreach (array_keys($demands) as $id) {
+			$trades[] = $ids[$id];
+		}
+		return $trades;
 	}
 }

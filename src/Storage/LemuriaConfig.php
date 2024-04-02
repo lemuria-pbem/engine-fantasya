@@ -42,6 +42,8 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 
 	public final const string MDD = 'mdd';
 
+	public final const string LOCALE = 'locale';
+
 	public final const string CONFIG_FILE = 'config.json';
 
 	public final const string LOG_DIR = 'log';
@@ -52,8 +54,9 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 	 * @type array<string, int>
 	 */
 	private const array DEFAULTS = [
-		self::ROUND => 0,
-		self::MDD   => 0
+		self::ROUND  => 0,
+		self::MDD    => 0,
+		self::LOCALE => ''
 	];
 
 	protected array $defaults;
@@ -118,6 +121,10 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 		}
 		$this->config[$offset] = $this->defaults[$offset];
 		$this->hasChanged      = true;
+	}
+
+	public function Locale(): string {
+		return $this->config[self::LOCALE];
 	}
 
 	public function Builder(): Builder {
