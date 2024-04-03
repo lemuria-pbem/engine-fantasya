@@ -18,7 +18,7 @@ final class TalentEffect extends AbstractUnitEffect
 	private Knowledge $modifications;
 
 	public function __construct(State $state) {
-		parent::__construct($state, Priority::After);
+		parent::__construct($state, Priority::Before);
 		$this->modifications = new Knowledge();
 	}
 
