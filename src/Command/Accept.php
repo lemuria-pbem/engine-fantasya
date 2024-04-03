@@ -162,12 +162,12 @@ final class Accept extends UnitCommand
 			throw new InvalidCommandException($this);
 		}
 
-		$price = $this->trade->Trade() === Trade::OFFER ? $this->trade->Price() : $this->trade->Goods();
-		if ($this->collectPayment($price->Commodity(), $price->Amount())) {
-			$goods    = $this->trade->Goods();
-			$price    = $this->trade->Price();
+		$isOffer = $this->trade->Trade() === Trade::OFFER;
+		$price   = $isOffer ? $this->trade->Price() : $this->trade->Goods();
+		$payment = $this->collectPayment($price->Commodity(), $price->Amount());
+		if ($payment) {
+			$goods    = $isOffer ? $this->trade->Goods() : $this->trade->Price();
 			$quantity = new Quantity($goods->Commodity(), $goods->Amount());
-			$payment  = new Quantity($price->Commodity(), $price->Amount());
 			$this->exchange($quantity, $payment);
 			$this->tradeMessages($quantity, $payment);
 			$this->addTradeEffect();
@@ -181,10 +181,19 @@ final class Accept extends UnitCommand
 
 		$goods = $this->range ? $this->checkRange() : $this->checkPieces();
 		if ($goods) {
+			$isOffer = $this->trade->Trade() === Trade::OFFER;
 			$price   = $this->trade->Price();
-			$payment = $this->collectPayment($price->Commodity(), $this->amount * $price->Amount());
+			if ($isOffer) {
+				$payment = $this->collectPayment($price->Commodity(), $this->amount * $price->Amount());
+			} else {
+				$payment = $this->collectPayment($goods->Commodity(), $this->amount * $goods->Amount());
+			}
 			if ($payment) {
-				$quantity = new Quantity($goods->Commodity(), $this->amount);
+				if ($isOffer) {
+					$quantity = new Quantity($goods->Commodity(), $this->amount);
+				} else {
+					$quantity = new Quantity($price->Commodity(), $this->amount * $price->Amount());
+				}
 				$this->exchange($quantity, $payment);
 				$this->tradeMessages($quantity, $payment);
 				$this->addTradeEffect();
