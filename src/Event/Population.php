@@ -56,6 +56,17 @@ final class Population extends AbstractEvent
 
 	private Building $foresterLodge;
 
+	public static function addDeceasedPeasants(Region $region, int $peasants): void {
+		$effect   = new DeceasedPeasants(State::getInstance());
+		$existing = Lemuria::Score()->find($effect->setRegion($region));
+		if ($existing instanceof DeceasedPeasants) {
+			$effect = $existing;
+		} else {
+			Lemuria::Score()->add($effect);
+		}
+		$effect->setPeasants($effect->Peasants() + $peasants);
+	}
+
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);
 		$this->workplaces    = new Workplaces();
@@ -115,7 +126,7 @@ final class Population extends AbstractEvent
 				if ($hungry > 0) {
 					$quantity = new Quantity($this->peasant, $hungry);
 					$resources->remove($quantity);
-					$this->addDeceasedPeasants($region, $hungry);
+					self::addDeceasedPeasants($region, $hungry);
 					$this->message(PopulationHungerMessage::class, $region)->i($quantity);
 				}
 			}
@@ -250,16 +261,5 @@ final class Population extends AbstractEvent
 
 		$this->placeDataMetrics(Subject::Joblessness, $percent, $region);
 		//Lemuria::Log()->debug('Unemployment in region ' . $region->Id() . ' is ' . round($percent, 1) . '%.');
-	}
-
-	private function addDeceasedPeasants(Region $region, int $peasants): void {
-		$effect   = new DeceasedPeasants($this->state);
-		$existing = Lemuria::Score()->find($effect->setRegion($region));
-		if ($existing instanceof DeceasedPeasants) {
-			$effect = $existing;
-		} else {
-			Lemuria::Score()->add($effect);
-		}
-		$effect->setPeasants($effect->Peasants() + $peasants);
 	}
 }

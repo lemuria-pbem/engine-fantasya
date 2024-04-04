@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Event;
 use Lemuria\Engine\Fantasya\Event\Administrator\ResetGatherUnits;
 use Lemuria\Engine\Fantasya\Event\Game\BlownByTheWind;
 use Lemuria\Engine\Fantasya\Event\Game\CarriedOffWayfarer;
+use Lemuria\Engine\Fantasya\Event\Game\ColorOutOfSpace;
 use Lemuria\Engine\Fantasya\Event\Game\Drought;
 use Lemuria\Engine\Fantasya\Event\Game\FindWallet;
 use Lemuria\Engine\Fantasya\Event\Game\GoblinPlague;
@@ -18,7 +19,6 @@ use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Commodity\Monster\Ent;
 use Lemuria\Model\Fantasya\Commodity\Monster\Ghoul;
-use Lemuria\Model\Fantasya\Commodity\Monster\Sandworm;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Silver;
@@ -70,6 +70,9 @@ final class Timer extends DelegatedEvent
 		],
 		158 => [
 			['class' => Spawn::class, 'options' => [Spawn::REGION => '2in', Spawn::SIZE => 84, Spawn::RACE => Zombie::class]],
+		],
+		160 => [
+			['class' => ColorOutOfSpace::class, 'options' => [ColorOutOfSpace::MOUNTAIN => '2kk', ColorOutOfSpace::REGION => '2og']]
 		]
 	];
 
