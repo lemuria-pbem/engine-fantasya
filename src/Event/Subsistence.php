@@ -30,8 +30,6 @@ final class Subsistence extends AbstractEvent
 
 	public const int SILVER = 10;
 
-	private Workplaces $workplaces;
-
 	private Commodity $peasant;
 
 	private Commodity $silver;
@@ -48,7 +46,9 @@ final class Subsistence extends AbstractEvent
 			$effect = new CivilCommotionEffect($this->state);
 			if (Lemuria::Score()->find($effect->setRegion($region))) {
 				$this->placeDataMetrics(Subject::Income, 0, $region);
-				return;
+				$this->placeDataMetrics(Subject::Workers, 0, $region);
+				Lemuria::Log()->debug('Civil commotion in ' . $region . ' - no income.');
+				continue;
 			}
 
 			$resources = $region->Resources();
@@ -57,9 +57,12 @@ final class Subsistence extends AbstractEvent
 				$wage      = new Wage($this->calculateInfrastructure($region));
 				$available = $this->getAvailableWorkplaces($region);
 				$workers   = min($peasants, $available);
-				$earnings  = $wage->getWage($workers);
-				$working   = new Quantity($this->peasant, $workers);
-				$silver    = new Quantity($this->silver, $earnings);
+				if ($workers <= 0) {
+					Lemuria::Log()->debug('No workers available in ' . $region . '.');
+				}
+				$earnings = $wage->getWage($workers);
+				$working  = new Quantity($this->peasant, $workers);
+				$silver   = new Quantity($this->silver, $earnings);
 				$resources->add($silver);
 				$this->message(SubsistenceMessage::class, $region)->i($working)->i($silver, SubsistenceMessage::SILVER)->p($wage->getWage());
 				$this->placeDataMetrics(Subject::Income, $earnings, $region);
