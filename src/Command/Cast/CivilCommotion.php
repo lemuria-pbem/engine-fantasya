@@ -20,10 +20,12 @@ final class CivilCommotion extends AbstractCast
 			$region   = $unit->Region();
 			$effect   = new CivilCommotionEffect(State::getInstance());
 			$existing = Lemuria::Score()->find($effect->setRegion($region));
-			if (!$existing) {
-				Lemuria::Score()->add($effect);
-				$this->message(CivilCommotionMessage::class, $region);
+			if ($existing instanceof CivilCommotionEffect) {
+				$existing->keep();
+			} else {
+				Lemuria::Score()->add($effect->keep());
 			}
+			$this->message(CivilCommotionMessage::class, $region);
 		}
 	}
 }

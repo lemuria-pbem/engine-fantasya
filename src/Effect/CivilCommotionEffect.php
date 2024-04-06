@@ -10,11 +10,20 @@ final class CivilCommotionEffect extends AbstractRegionEffect
 {
 	protected ?bool $isReassign = null;
 
+	private bool $dissolve = true;
+
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);
 	}
 
+	public function keep(): CivilCommotionEffect {
+		$this->dissolve = false;
+		return $this;
+	}
+
 	protected function run(): void {
-		Lemuria::Score()->remove($this);
+		if ($this->dissolve) {
+			Lemuria::Score()->remove($this);
+		}
 	}
 }
