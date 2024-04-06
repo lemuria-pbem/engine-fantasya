@@ -6,7 +6,7 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Knowledge;
+use Lemuria\Model\Fantasya\Modifications;
 use Lemuria\Validate;
 
 final class TalentEffect extends AbstractUnitEffect
@@ -15,14 +15,14 @@ final class TalentEffect extends AbstractUnitEffect
 
 	protected ?bool $isReassign = null;
 
-	private Knowledge $modifications;
+	private Modifications $modifications;
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::Before);
-		$this->modifications = new Knowledge();
+		$this->modifications = new Modifications();
 	}
 
-	public function Modifications(): Knowledge {
+	public function Modifications(): Modifications {
 		return $this->modifications;
 	}
 
