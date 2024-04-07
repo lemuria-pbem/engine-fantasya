@@ -4,11 +4,9 @@ namespace Lemuria\Engine\Fantasya\Command\Create;
 
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Activity;
-use Lemuria\Engine\Fantasya\Effect\DecayEffect;
-use Lemuria\Engine\Fantasya\Effect\SignpostEffect;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
+use Lemuria\Engine\Fantasya\Factory\ConstructionTrait;
 use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
-use Lemuria\Engine\Fantasya\Factory\MarketBuilder;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyBuilding;
 use Lemuria\Engine\Fantasya\Factory\Model\AnyCastle;
 use Lemuria\Engine\Fantasya\Factory\Model\Job;
@@ -27,25 +25,17 @@ use Lemuria\Engine\Fantasya\Message\Unit\ConstructionSizeMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ConstructionUnableMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\LeaveConstructionMessage;
 use Lemuria\Engine\Fantasya\Phrase;
-use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Building;
 use Lemuria\Model\Fantasya\Building\AbstractCastle;
 use Lemuria\Model\Fantasya\Building\AbstractVenue;
-use Lemuria\Model\Fantasya\Building\Canal;
 use Lemuria\Model\Fantasya\Building\Castle;
 use Lemuria\Model\Fantasya\Building\Farm;
-use Lemuria\Model\Fantasya\Building\Market;
-use Lemuria\Model\Fantasya\Building\Monument;
-use Lemuria\Model\Fantasya\Building\Port;
 use Lemuria\Model\Fantasya\Building\Signpost;
 use Lemuria\Model\Fantasya\Building\Site;
 use Lemuria\Model\Fantasya\Construction as ConstructionModel;
-use Lemuria\Model\Fantasya\Extension\Duty;
-use Lemuria\Model\Fantasya\Extension\Fee;
-use Lemuria\Model\Fantasya\Extension\Market as MarketExtension;
 use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Requirement;
 
@@ -63,6 +53,7 @@ use Lemuria\Model\Fantasya\Requirement;
  */
 final class Construction extends AbstractProduct
 {
+	use ConstructionTrait;
 	use GrammarTrait;
 	use ModifiedActivityTrait;
 
@@ -71,20 +62,9 @@ final class Construction extends AbstractProduct
 	 */
 	private const array FORBIDDEN = [Signpost::class];
 
-	/**
-	 * @type array<string, array<string>>
-	 */
-	private const array EXTENSIONS = [
-		Canal::class  => [Fee::class],
-		Market::class => [MarketExtension::class],
-		Port::class   => [Fee::class, Duty::class]
-	];
-
 	private int $size;
 
 	private int $remainingSize = PHP_INT_MAX;
-
-	private bool $hasMarket = false;
 
 	private ?ConstructionModel $fromOutside;
 
@@ -343,57 +323,5 @@ final class Construction extends AbstractProduct
 			$this->message(LeaveConstructionMessage::class)->e($construction);
 		}
 		return null;
-	}
-
-	private function initializeMarket(ConstructionModel $construction): void {
-		if ($this->hasMarket) {
-			return;
-		}
-		if ($construction->Building() instanceof Castle && $construction->Size() > Site::MAX_SIZE) {
-			$region = $construction->Region();
-			if ($region->Luxuries()) {
-				$marketBuilder = new MarketBuilder($this->context->getIntelligence($region));
-				$marketBuilder->initPrices();
-				Lemuria::Log()->debug('Market opens the first time in region ' . $region . ' - prices have been initialized.');
-			} else {
-				Lemuria::Log()->debug('Region ' . $region . ' produces no luxuries - no prices initialized.');
-			}
-		}
-	}
-
-	private function addConstructionExtensions(ConstructionModel $construction): void {
-		$extensions      = $construction->Extensions();
-		$building        = $construction->Building();
-		$extensionsToAdd = self::EXTENSIONS[$building::class] ?? [];
-		foreach ($extensionsToAdd as $class) {
-			if (!$extensions->offsetExists($class)) {
-				$extensions->add(new $class());
-			}
-		}
-	}
-
-	private function addConstructionEffects(ConstructionModel $construction): void {
-		$building = $construction->Building();
-		if ($building instanceof Monument) {
-			$effect = $this->monumentEffect($construction);
-			Lemuria::Score()->add($effect->resetAge());
-		} elseif ($building instanceof Signpost) {
-			$effect = $this->signpostEffect($construction);
-			Lemuria::Score()->add($effect->resetAge());
-		}
-	}
-
-	private function monumentEffect(ConstructionModel $monument): DecayEffect {
-		$effect = new DecayEffect(State::getInstance());
-		/** @var DecayEffect $monumentEffect */
-		$monumentEffect = Lemuria::Score()->find($effect->setConstruction($monument)->setInterval(DecayEffect::MONUMENT));
-		return $monumentEffect ?? $effect;
-	}
-
-	private function signpostEffect(ConstructionModel $signpost): SignpostEffect {
-		$effect = new SignpostEffect(State::getInstance());
-		/** @var SignpostEffect $signpostEffect */
-		$signpostEffect = Lemuria::Score()->find($effect->setConstruction($signpost));
-		return $signpostEffect ?? $effect;
 	}
 }
