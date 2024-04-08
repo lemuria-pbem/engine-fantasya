@@ -36,8 +36,6 @@ final class Outlook
 
 	/**
 	 * Find units in a region that are not camouflaged.
-	 *
-	 * @noinspection DuplicatedCode
 	 */
 	public function getApparitions(Region $region): People {
 		if ($this->census->getAtlas()->has($region->Id())) {
@@ -87,8 +85,6 @@ final class Outlook
 
 	/**
 	 * Find units in a region that are available for contacting.
-	 *
-	 * @noinspection DuplicatedCode
 	 */
 	public function getContacts(Region $region): People {
 		$perception = self::createTalent(Perception::class);

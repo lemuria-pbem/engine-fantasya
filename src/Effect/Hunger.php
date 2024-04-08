@@ -23,7 +23,7 @@ final class Hunger extends AbstractUnitEffect
 
 	private const float HEALTH_THRESHOLD = 0.9;
 
-	private const MALUS_THRESHOLD = 0.5;
+	private const float MALUS_THRESHOLD = 0.5;
 
 	private const float MINIMUM_HEALTH = 0.15;
 

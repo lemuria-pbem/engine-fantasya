@@ -14,7 +14,6 @@ use Lemuria\Engine\Fantasya\Effect\UnicumActive;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
 use Lemuria\Engine\Fantasya\Factory\GearDistribution;
 use Lemuria\Engine\Fantasya\Factory\LodgingTrait;
-use Lemuria\Engine\Fantasya\Factory\Model\HungerMalus;
 use Lemuria\Engine\Fantasya\Factory\Model\Teacher;
 use Lemuria\Engine\Fantasya\Travel\Conveyance;
 use Lemuria\Engine\Fantasya\Travel\StaminaBonus;

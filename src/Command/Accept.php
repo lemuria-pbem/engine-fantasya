@@ -400,7 +400,7 @@ final class Accept extends UnitCommand
 			}
 			return;
 		}
-		if (!$goods->IsVariable() && $price->IsVariable()) {
+		if ($price->IsVariable()) {
 			$this->price = $number === '*' ? $price->Maximum() : $number;
 			return;
 		}

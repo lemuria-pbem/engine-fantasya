@@ -6,7 +6,7 @@ use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 
 class ColorOutOfSpaceDownInMessage extends ColorOutOfSpaceWellInMessage
 {
-	public final const DIRECTION = 'direction';
+	public final const string DIRECTION = 'direction';
 
 	protected string $direction;
 
