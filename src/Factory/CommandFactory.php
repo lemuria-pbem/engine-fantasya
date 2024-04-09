@@ -248,6 +248,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\WarElephant;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Warhammer;
 use Lemuria\Model\Fantasya\Commodity\Wood;
 use Lemuria\Model\Fantasya\Composition;
+use Lemuria\Model\Fantasya\Composition\AuraPortal;
 use Lemuria\Model\Fantasya\Composition\Carcass;
 use Lemuria\Model\Fantasya\Composition\HerbAlmanac;
 use Lemuria\Model\Fantasya\Composition\RingOfInvisibility;
@@ -766,6 +767,7 @@ class CommandFactory
 	 * @var array<string, string>
 	 */
 	protected array $compositions = [
+		'Auraportal'              => AuraPortal::class,
 		'Kadaver'                 => Carcass::class,
 		'Kraeuteralmanach'        => HerbAlmanac::class,
 		'Kräuteralmanach'         => HerbAlmanac::class,
