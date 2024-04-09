@@ -143,7 +143,7 @@ final class ColorOutOfSpaceEffect extends AbstractRegionEffect
 						$reported->add($party);
 						$way       = Lemuria::World()->findPath($region, $this->target, ShortestPath::class)->getBest();
 						$direction = Lemuria::World()->getDirection($way)->value;
-						$this->message(ColorOutOfSpaceDownInMessage::class, $party)->p($name)->p($direction, ColorOutOfSpaceDownInMessage::DIRECTION);
+						$this->message(ColorOutOfSpaceDownInMessage::class, $party)->p($region->Name())->p($direction, ColorOutOfSpaceDownInMessage::DIRECTION);
 					}
 				}
 			}
