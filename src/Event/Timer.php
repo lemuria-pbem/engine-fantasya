@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
+use Lemuria\Engine\Fantasya\Command\Cast\InciteMonster;
 use Lemuria\Engine\Fantasya\Event\Administrator\ResetGatherUnits;
 use Lemuria\Engine\Fantasya\Event\Game\BlownByTheWind;
 use Lemuria\Engine\Fantasya\Event\Game\CarriedOffWayfarer;
@@ -41,7 +42,6 @@ final class Timer extends DelegatedEvent
 				CarriedOffWayfarer::REGION => '', CarriedOffWayfarer::RACE => Human::class,
 				CarriedOffWayfarer::INVENTORY => [Silver::class => 30, Sword::class => 1]
 			]],
-			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => '', BlownByTheWind::SPELL => Farsight::class]],
 			['class' => PotionGift::class, 'options' => [PotionGift::UNIT => '', PotionGift::POTION => Brainpower::class]]
 		],
 		140 => [
@@ -65,14 +65,20 @@ final class Timer extends DelegatedEvent
 			['class' => PopulateContinent::class, 'options' => [PopulateContinent::CONTINENT => 1, PopulateContinent::CHANCES => [Ent::class => 35, Ghoul::class => 30]]]
 		],
 		156 => [
-			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 'af', FindWallet::SILVER => 100]],
-			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2ib', TransportMonster::REGION => '2cx']]
-		],
-		158 => [
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2in', Spawn::SIZE => 84, Spawn::RACE => Zombie::class]],
+			['class' => FindWallet::class, 'options' => [FindWallet::UNIT => 'af', FindWallet::SILVER => 100]]
 		],
 		160 => [
 			['class' => ColorOutOfSpace::class, 'options' => [ColorOutOfSpace::MOUNTAIN => '2kk', ColorOutOfSpace::REGION => '2og']]
+		],
+		161 => [
+			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => '2ml', BlownByTheWind::SPELL => InciteMonster::class]],
+			['class' => Spawn::class, 'options' => [Spawn::REGION => '2kk', Spawn::SIZE => 84, Spawn::RACE => Zombie::class]],
+			['class' => Spawn::class, 'options' => [Spawn::REGION => '2in', Spawn::SIZE => 107, Spawn::RACE => Zombie::class]],
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2uj', TransportMonster::REGION => '2kk']],
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2vt', TransportMonster::REGION => '2kk']],
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2f0', TransportMonster::REGION => '2kk']],
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2qz', TransportMonster::REGION => '2kk']],
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2ib', TransportMonster::REGION => '2kk']]
 		]
 	];
 
