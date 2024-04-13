@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Factory;
 use Lemuria\Engine\Fantasya\Activity;
 use Lemuria\Engine\Fantasya\ActivityProtocol;
 use Lemuria\Engine\Fantasya\Command;
+use Lemuria\Model\Fantasya\Party\Type;
 
 class DefaultResolver
 {
@@ -53,7 +54,7 @@ class DefaultResolver
 	}
 
 	protected function promoteAlternative(): array {
-		if (!$this->protocol->hasAlternativeActivity()) {
+		if ($this->protocol->Unit()->Party()->Type() === Type::Player && !$this->protocol->hasAlternativeActivity()) {
 			$first = null;
 			foreach ($this->defaults as $command) {
 				if ($command instanceof Activity) {
