@@ -9,7 +9,7 @@ enum Feature : int
 {
 	public final const int SIZE = 256;
 
-	case Shockwave = 1;
+	case ShockWave = 1;
 
 	case StoneSkin = 2;
 

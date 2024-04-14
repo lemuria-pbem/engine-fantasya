@@ -549,13 +549,13 @@ class Combat
 	protected function unsetFighterFeatures(): void {
 		foreach ($this->attacker as $rank) {
 			foreach ($rank as $combatant) {
-				$combatant->unsetFeatures([Feature::Shockwave]);
+				$combatant->unsetFeatures([Feature::ShockWave]);
 				$combatant->unsetFeatures([Feature::GazeOfTheBasilisk]);
 			}
 		}
 		foreach ($this->defender as $rank) {
 			foreach ($rank as $combatant) {
-				$combatant->unsetFeatures([Feature::Shockwave]);
+				$combatant->unsetFeatures([Feature::ShockWave]);
 				$combatant->unsetFeatures([Feature::GazeOfTheBasilisk]);
 			}
 		}

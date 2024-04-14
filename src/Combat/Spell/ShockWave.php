@@ -8,7 +8,7 @@ use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
 use Lemuria\Model\Fantasya\Talent\Magic;
 
-class Shockwave extends AbstractBattleSpell
+class ShockWave extends AbstractBattleSpell
 {
 	protected const int VICTIMS = 5;
 
@@ -16,9 +16,9 @@ class Shockwave extends AbstractBattleSpell
 		$grade = parent::cast();
 		if ($grade > 0) {
 			$level    = $this->calculus->knowledge(Magic::class)->Level();
-			$fighters = $grade * self::VICTIMS * sqrt($level);
-			$fighters = $this->featureFighters($this->caster[BattleRow::Front->value], $fighters, Feature::Shockwave);
-			$this->featureFighters($this->caster[BattleRow::Back->value], $fighters, Feature::Shockwave);
+			$fighters = (int)floor($grade * self::VICTIMS * sqrt($level));
+			$fighters = $this->featureFighters($this->caster[BattleRow::Front->value], $fighters, Feature::ShockWave);
+			$this->featureFighters($this->caster[BattleRow::Back->value], $fighters, Feature::ShockWave);
 		}
 		return $grade;
 	}
