@@ -146,7 +146,7 @@ abstract class AbstractBattleSpell
 			$next  = 0;
 			$count = 0;
 			while ($fighters > 0 && $next < $size) {
-				$fighter = $combatant->fighters[$next++];
+				$fighter = $combatant->fighter($next++);
 				if ($fighter->hasFeature($feature)) {
 					continue;
 				}

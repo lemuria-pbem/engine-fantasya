@@ -17,8 +17,8 @@ class ShockWave extends AbstractBattleSpell
 		if ($grade > 0) {
 			$level    = $this->calculus->knowledge(Magic::class)->Level();
 			$fighters = (int)floor($grade * self::VICTIMS * sqrt($level));
-			$fighters = $this->featureFighters($this->caster[BattleRow::Front->value], $fighters, Feature::ShockWave);
-			$this->featureFighters($this->caster[BattleRow::Back->value], $fighters, Feature::ShockWave);
+			$fighters = $this->featureFighters($this->victim[BattleRow::Front->value], $fighters, Feature::ShockWave);
+			$this->featureFighters($this->victim[BattleRow::Back->value], $fighters, Feature::ShockWave);
 		}
 		return $grade;
 	}
