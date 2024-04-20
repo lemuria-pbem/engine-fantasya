@@ -40,6 +40,7 @@ use Lemuria\Id;
 use Lemuria\Lemuria;
 use Lemuria\Model\Exception\NotRegisteredException;
 use Lemuria\Model\Fantasya\Commodity;
+use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Exception\SalesException;
 use Lemuria\Model\Fantasya\Extension\Market;
 use Lemuria\Model\Fantasya\Market\Deal;
@@ -72,7 +73,7 @@ final class Accept extends UnitCommand
 	protected array $market = [];
 
 	/**
-	 * array<int, Sales>
+	 * array<int, Construction>
 	 */
 	protected array $sales = [];
 
@@ -98,7 +99,7 @@ final class Accept extends UnitCommand
 				/** @var Market $market */
 				$market         = $extensions[Market::class];
 				$this->market[] = $market;
-				$this->sales[]  = new Sales($construction);
+				$this->sales[]  = $construction;
 			}
 		}
 	}
@@ -286,7 +287,8 @@ final class Accept extends UnitCommand
 		$this->id = $this->parseId();
 		try {
 			$trade = Trade::get($this->id);
-			foreach ($this->sales as $index => $sales /** @var Sales $sales */) {
+			foreach ($this->sales as $index => $construction /** @var Construction $construction */) {
+				$sales = new Sales($construction);
 				if ($sales->has($trade)) {
 					$this->index  = $index;
 					$this->status = $sales->getStatus($trade);
