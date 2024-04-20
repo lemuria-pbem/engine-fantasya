@@ -190,7 +190,7 @@ final class ColorOutOfSpaceEffect extends AbstractRegionEffect
 			if ($deceased > 0) {
 				$quantity = new Quantity($peasant, $deceased);
 				$resources->remove($quantity);
-				Population::addDeceasedPeasants($this->target, $deceased);
+				Population::addDeceasedPeasants($region, $deceased);
 				$this->message(ColorOutOfSpacePoisonMessage::class, $region)->i($quantity);
 				Lemuria::Log()->debug('The Color Out Of Space has poisoned ' . $peasants . ' peasants in ' . $region . '.');
 			}
