@@ -64,6 +64,9 @@ abstract class AbstractBehaviour implements Behaviour
 	}
 
 	public function finish(): static {
+		if ($this->roam instanceof Roam) {
+			$this->roam->act();
+		}
 		if ($this->guard instanceof Guard) {
 			if ($this->guard->IsGuarding()) {
 				$this->unit->setIsGuarding(true);
@@ -122,7 +125,7 @@ abstract class AbstractBehaviour implements Behaviour
 	protected function roam(bool $leave = false): static {
 		if (!$this->perish && $this->unit->Size() > 0) {
 			$this->roam = new Roam($this);
-			$this->roam->setLeave($leave)->act();
+			$this->roam->setLeave($leave);
 		}
 		return $this;
 	}

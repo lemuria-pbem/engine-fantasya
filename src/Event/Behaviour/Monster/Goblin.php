@@ -91,8 +91,8 @@ class Goblin extends AbstractBehaviour
 	}
 
 	public function finish(): static {
+		parent::finish();
 		if (!$this->hasContagionEffect()) {
-			parent::finish();
 			return $this->scatter(self::SCATTER_UNITS, self::SCATTER_PERSONS);
 		}
 		return $this;
