@@ -23,7 +23,6 @@ trait UnicumTrait
 {
 	use BuilderTrait;
 	use CollectTrait;
-	use MessageTrait;
 
 	protected ?Unicum $unicum;
 
