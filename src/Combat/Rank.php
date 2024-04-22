@@ -23,6 +23,19 @@ class Rank implements \ArrayAccess, \Countable, \Iterator
 
 	private bool $isUnset = false;
 
+	public function AttackSurface(): float {
+		$totalWeight = 0;
+		$totalSize   = 0;
+		foreach ($this->combatants as $combatant) {
+			$size = $combatant->Size();
+			if ($size > 0) {
+				$totalWeight += $size * $combatant->Unit()->Race()->Weight();
+				$totalSize   += $size;
+			}
+		}
+		return $totalSize > 0 ? $totalWeight / $totalSize : 0.0;
+	}
+
 	public function Size(): int {
 		$size = 0;
 		foreach ($this->combatants as $combatant) {

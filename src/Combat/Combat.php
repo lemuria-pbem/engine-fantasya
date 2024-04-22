@@ -66,7 +66,11 @@ class Combat
 	 */
 	public final const array ROW_NAME = [Rank::REFUGEE => 'refugees', Rank::BYSTANDER => 'bystanders', Rank::BACK => 'back', Rank::FRONT => 'front'];
 
+	protected const float LIMIT = 6;
+
 	protected const float OVERRUN = 3.0;
+
+	private const float ONE_THIRD = 1.0 / 3.0;
 
 	protected int $round = 0;
 
@@ -618,17 +622,17 @@ class Combat
 	 * @noinspection PhpUnusedParameterInspection
 	 */
 	protected function attackRowAgainstRow(Rank $attacker, Rank $defender, string $message): int {
-		$a  = count($attacker);
-		$a1 = $attacker->Hits();
-		if ($a <= 0 || $a1 <= 0) {
+		$a     = count($attacker);
+		$aHits = $attacker->Hits();
+		if ($a <= 0 || $aHits <= 0) {
 			return 0;
 		}
 		// Lemuria::Log()->debug($message);
 
 		$charge = new Charge();
 		$d      = count($defender);
-		$d1     = $defender->Size();
-		$rate   = $d1 / $a1;
+		$dSize  = $defender->Size();
+		$rate   = $this->calculateLimitedRate($aHits, $attacker->AttackSurface(), $dSize, $defender->AttackSurface());
 		$nextA  = 0;
 		$nextD  = 0;
 		$sum    = 0;
@@ -685,6 +689,15 @@ class Combat
 
 		$attacker->addRound();
 		return $charge->Damage();
+	}
+
+	protected function calculateLimitedRate(int $hits, float $attackerSurface, int $size, float $defenderSurface): float {
+		if ($size > 0) {
+			$rate  = $size / $hits;
+			$limit = (1.0 / round(self::LIMIT * ($defenderSurface / $attackerSurface) ** self::ONE_THIRD));
+			return max($rate, $limit);
+		}
+		return 0.0;
 	}
 
 	/**
