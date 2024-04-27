@@ -2,8 +2,8 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Event;
 
-use Lemuria\Engine\Fantasya\Effect\ControlEffect;
 use function Lemuria\getClass;
+use Lemuria\Engine\Fantasya\Effect\ControlEffect;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;

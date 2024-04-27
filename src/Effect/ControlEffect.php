@@ -8,6 +8,8 @@ use Lemuria\Engine\Fantasya\Factory\CommandPriority;
 use Lemuria\Engine\Fantasya\Message\Unit\ControlEffectMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ControlEffectNoneMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\ControlEffectOnlyMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\FollowFollowedMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\FollowMessage;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\UnserializeEntityException;
@@ -103,7 +105,7 @@ final class ControlEffect extends AbstractUnitEffect
 	protected function run(): void {
 		if ($this->state->getCurrentPriority() > CommandPriority::AFTER_EFFECT) {
 			$this->checkSummoner();
-		} else {
+		} elseif (!$this->hasRunAway(0)) {
 			$this->maintainControl();
 		}
 	}
@@ -114,13 +116,29 @@ final class ControlEffect extends AbstractUnitEffect
 			Lemuria::Score()->remove($this);
 			Lemuria::Log()->debug($this->Unit() . ' is delivered as its summoner ' . $summoner . ' does not exist anymore.');
 		} else {
-			$from = $this->Unit()->Region();
-			$to   = $summoner->Region();
-			if ($to !== $from && Lemuria::World()->getDistance($from, $to) > 1) {
+			$this->hasRunAway();
+		}
+	}
+
+	private function hasRunAway(int $maximumDistance = 1): bool {
+		$summoner = $this->Summoner();
+		$unit     = $this->Unit();
+		$from     = $unit->Region();
+		$to       = $summoner->Region();
+		if ($to !== $from) {
+			if ($to !== $from && Lemuria::World()->getDistance($from, $to) > $maximumDistance) {
 				Lemuria::Score()->remove($this);
 				Lemuria::Log()->debug($this->Unit() . ' is delivered as its summoner ' . $summoner . ' has run away.');
+				return true;
 			}
+			$unit->Construction()?->Inhabitants()->remove($unit);
+			$unit->Vessel()?->Passengers()->remove($unit);
+			$from->Residents()->remove($unit);
+			$to->Residents()->add($unit);
+			$this->message(FollowMessage::class, $unit)->e($summoner);
+			$this->message(FollowFollowedMessage::class, $summoner)->e($unit);
 		}
+		return false;
 	}
 
 	private function maintainControl(): void {
