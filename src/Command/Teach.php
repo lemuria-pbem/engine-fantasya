@@ -13,6 +13,7 @@ use Lemuria\Engine\Fantasya\Factory\RealmTrait;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Factory\SiegeTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachBonusMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TeachEmptyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachExceptionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachFleetMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachFleetNothingMessage;
@@ -170,6 +171,10 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 	}
 
 	private function checkUnit(Unit $unit): bool {
+		if ($unit->Size() <= 0) {
+			$this->message(TeachEmptyMessage::class)->e($unit);
+			return false;
+		}
 		if ($unit->Region() !== $this->unit->Region()) {
 			if (!$this->isAlternative()) {
 				$this->message(TeachRegionMessage::class)->e($unit);

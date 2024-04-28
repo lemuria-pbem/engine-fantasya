@@ -1004,6 +1004,7 @@
 		"TaxPreventMessage": "Unsere Wache hat die Einheit $unit vom Steuereintreiben abgehalten.",
 		"TaxWithoutWeaponMessage": "Die Einheit $id hat keine Waffe, um das Eintreiben von Steuern zu erzwingen.",
 		"TeachBonusMessage": "Die Einheit $id hat $students Schüler (Bonus: $bonus).",
+		"TeachEmptyMessage": "Die Einheit $student hat keine Schüler.",
 		"TeachExceptionMessage": "Die Einheit $id kann nicht lehren: $error",
 		"TeachFleetMessage": "Die Einheit $id übernimmt Transporte im Reich und kann nur teilweise lehren.",
 		"TeachFleetNothingMessage": "Die Einheit $id ist mit Transporten im Reich zu beschäftigt, um zu lehren.",
