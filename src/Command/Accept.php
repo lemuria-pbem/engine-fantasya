@@ -396,14 +396,14 @@ final class Accept extends UnitCommand
 				$this->amount = $goods->Maximum();
 				$this->range  = [$goods->Minimum(), $this->amount];
 			} elseif ($number === '-') {
-				$this->amount = $this->range[0];
+				$this->amount = $this->range[1];
 			} else {
 				$this->amount = $number;
 			}
 			return;
 		}
 		if ($price->IsVariable()) {
-			$this->price = $number === '*' ? $price->Maximum() : $number;
+			$this->price = is_int($number) ? $number : $price->Maximum();
 			return;
 		}
 		throw new InvalidCommandException($this);
