@@ -2,10 +2,10 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory\Scenario;
 
+use Lemuria\Engine\Fantasya\Factory\Model\Buzzes;
 use Lemuria\Model\Fantasya\Unit;
-use Lemuria\StringList;
 
 interface Visitation
 {
-	public function from(Unit $unit): StringList;
+	public function from(Unit $unit): Buzzes;
 }

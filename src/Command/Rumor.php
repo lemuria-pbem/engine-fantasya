@@ -2,11 +2,8 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Fantasya\Effect\Rumors;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
-use Lemuria\Engine\Fantasya\Message\Unit\RumorMessage;
-use Lemuria\Engine\Fantasya\State;
-use Lemuria\Lemuria;
+use Lemuria\Engine\Fantasya\Factory\RumorTrait;
 
 /**
  * Add a rumor for visiting units.
@@ -15,21 +12,14 @@ use Lemuria\Lemuria;
  */
 final class Rumor extends UnitCommand
 {
-	protected function run(): void {
-		$effect   = new Rumors(State::getInstance());
-		$existing = Lemuria::Score()->find($effect->setUnit($this->unit));
-		if ($existing instanceof Rumors) {
-			$effect = $existing;
-		} else {
-			Lemuria::Score()->add($effect);
-		}
+	use RumorTrait;
 
+	protected function run(): void {
 		$rumor = Describe::trimDescription($this->phrase->getLine());
-		if (!$rumor) {
+		if ($rumor) {
+			$this->createRumor($this->unit, $rumor);
+		} else {
 			throw new InvalidCommandException($this);
 		}
-		$rumors = $effect->Rumors();
-		$rumors[$rumors->count()] = $rumor;
-		$this->message(RumorMessage::class)->p($rumor);
 	}
 }
