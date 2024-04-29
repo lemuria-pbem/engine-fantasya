@@ -23,6 +23,6 @@ trait RumorTrait
 
 		$buzz = new Buzz($rumor);
 		$effect->Rumors()->add($buzz->setOrigin($from ?: $creator->Party()));
-		$this->message(RumorMessage::class)->p($rumor);
+		$this->message(RumorMessage::class, $creator)->p($rumor);
 	}
 }
