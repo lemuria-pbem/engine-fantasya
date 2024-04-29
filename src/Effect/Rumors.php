@@ -6,7 +6,7 @@ use Lemuria\Engine\Fantasya\Factory\Model\Buzzes;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Unit;
 
 class Rumors extends AbstractUnitEffect
 {
@@ -21,11 +21,13 @@ class Rumors extends AbstractUnitEffect
 		return $this->rumors;
 	}
 
-	public function getRumorsFor(Party $party): Buzzes {
+	public function getRumorsFor(Unit $unit): Buzzes {
 		$buzzes = new Buzzes();
 		$i      = 0;
+		$party  = $unit->Party();
+		$region = $unit->Region();
 		foreach ($this->rumors as $rumor) {
-			if ($rumor->Origin() !== $party) {
+			if ($rumor->Origin() !== $party && $rumor->Locality() !== $region) {
 				$buzzes[$i++] = $rumor;
 			}
 		}

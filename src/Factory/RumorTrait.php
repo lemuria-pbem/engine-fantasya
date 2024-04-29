@@ -8,11 +8,12 @@ use Lemuria\Engine\Fantasya\Message\Unit\RumorMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
 
 trait RumorTrait
 {
-	protected function createRumor(Unit $creator, string $rumor, ?Party $from = null): void {
+	protected function createRumor(Unit $creator, string $rumor, ?Party $from = null, ?Region $in = null): void {
 		$effect   = new Rumors(State::getInstance());
 		$existing = Lemuria::Score()->find($effect->setUnit($creator));
 		if ($existing instanceof Rumors) {
@@ -23,6 +24,9 @@ trait RumorTrait
 
 		$buzz = new Buzz($rumor);
 		$effect->Rumors()->add($buzz->setOrigin($from ?: $creator->Party()));
+		if ($in) {
+			$buzz->setLocality($in);
+		}
 		$this->message(RumorMessage::class, $creator)->p($rumor);
 	}
 }

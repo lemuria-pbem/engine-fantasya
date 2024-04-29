@@ -82,7 +82,10 @@ final class Visit extends UnitCommand implements Reassignment
 		$effect = new Rumors($state);
 		$rumors = Lemuria::Score()->find($effect->setUnit($unit));
 		if ($rumors instanceof Rumors && !$isSimulation) {
-			$news[VisitRumorMessage::class] = $rumors->getRumorsFor($this->unit->Party());
+			$buzzes = $rumors->getRumorsFor($this->unit);
+			if (!$buzzes->isEmpty()) {
+				$news[VisitRumorMessage::class] = $buzzes;
+			}
 		}
 		$messages = $this->visitFrom($unit);
 		if (!$isSimulation && $messages) {
