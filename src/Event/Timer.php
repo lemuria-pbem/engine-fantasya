@@ -25,7 +25,6 @@ use Lemuria\Model\Fantasya\Commodity\Potion\Brainpower;
 use Lemuria\Model\Fantasya\Commodity\Silver;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Sword;
 use Lemuria\Model\Fantasya\Race\Human;
-use Lemuria\Model\Fantasya\Spell\Farsight;
 
 /**
  * The Timer event adds other events at predefined rounds.

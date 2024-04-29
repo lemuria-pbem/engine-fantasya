@@ -23,7 +23,6 @@ class Cruise extends AbstractTrip
 
 	public static function entered(Region $region): void {
 		foreach (self::$seafarer as $seafarer) {
-			/** @var Seafarer $seafarer */
 			$seafarer->sailedTo($region);
 		}
 	}

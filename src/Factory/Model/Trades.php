@@ -147,7 +147,6 @@ class Trades implements \Countable
 		$demands = [];
 		$ids     = [];
 		foreach ($trades as $trade) {
-			/** @var Trade $trade */
 			$id       = $trade->Id()->Id();
 			$ids[$id] = $trade;
 			if ($trade->Trade() === Trade::OFFER) {

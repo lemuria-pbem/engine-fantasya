@@ -126,7 +126,7 @@ final class ControlEffect extends AbstractUnitEffect
 		$from     = $unit->Region();
 		$to       = $summoner->Region();
 		if ($to !== $from) {
-			if ($to !== $from && Lemuria::World()->getDistance($from, $to) > $maximumDistance) {
+			if (Lemuria::World()->getDistance($from, $to) > $maximumDistance) {
 				Lemuria::Score()->remove($this);
 				Lemuria::Log()->debug($this->Unit() . ' is delivered as its summoner ' . $summoner . ' has run away.');
 				return true;
