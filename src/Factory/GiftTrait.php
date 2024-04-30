@@ -139,7 +139,7 @@ trait GiftTrait
 		}
 	}
 
-	private function giftToRandomUnit(Item $quantity, Unit $unit = null): ?Unit {
+	private function giftToRandomUnit(Item $quantity, ?Unit $unit = null): ?Unit {
 		if (!$unit) {
 			$unit = $this->unit;
 		}

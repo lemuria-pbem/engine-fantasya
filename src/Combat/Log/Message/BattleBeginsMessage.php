@@ -28,7 +28,7 @@ class BattleBeginsMessage extends AbstractMessage
 	 */
 	protected array $defenders = [];
 
-	public function __construct(Battle $battle = null) {
+	public function __construct(?Battle $battle = null) {
 		parent::__construct();
 		if ($battle) {
 			$this->region = new Entity($battle->Place()->Region());

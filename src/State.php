@@ -125,7 +125,7 @@ final class State implements Reassignment
 	 */
 	private array $monsters = [];
 
-	public static function getInstance(LemuriaTurn $turn = null): State {
+	public static function getInstance(?LemuriaTurn $turn = null): State {
 		if (!self::$instance) {
 			self::$instance = new self();
 			Lemuria::Catalog()->addReassignment(self::$instance);
