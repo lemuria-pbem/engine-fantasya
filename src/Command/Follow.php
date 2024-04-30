@@ -27,8 +27,10 @@ final class Follow extends Travel implements Reassignment
 	protected function run(): void {
 		if ($this->directions->count()) {
 			$this->message(FollowMessage::class)->e($this->leader);
-			if (!$this->context->getTurnOptions()->IsSimulation() && $this->context->getCalculus($this->leader)->canDiscover($this->unit)) {
-				$this->message(FollowFollowedMessage::class, $this->leader)->e($this->unit);
+			if (!$this->context->getTurnOptions()->IsSimulation()) {
+				if ($this->leader->Party() !== $this->unit->Party() && $this->context->getCalculus($this->leader)->canDiscover($this->unit)) {
+					$this->message(FollowFollowedMessage::class, $this->leader)->e($this->unit);
+				}
 			}
 			parent::run();
 			return;
