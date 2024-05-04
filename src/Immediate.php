@@ -11,4 +11,11 @@ interface Immediate extends Command
 	 * Skip the command.
 	 */
 	public function skip(): static;
+
+	/**
+	 * Execute the command when injected.
+	 *
+	 * @throw NotInjectableException
+	 */
+	public function inject(): static;
 }

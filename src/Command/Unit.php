@@ -4,6 +4,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Command\Exception\UnitException;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Exception\NotInjectableException;
 use Lemuria\Engine\Fantasya\Immediate;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnitMessage;
@@ -28,6 +29,10 @@ final class Unit extends AbstractCommand implements Immediate
 
 	public function skip(): static {
 		return $this;
+	}
+
+	public function inject(): never {
+		throw new NotInjectableException();
 	}
 
 	/**

@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command\Create;
 use Lemuria\Engine\Fantasya\Command\Exception\TempUnitExistsException;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Exception\NotInjectableException;
 use Lemuria\Engine\Fantasya\Immediate;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TempMessage;
@@ -41,6 +42,10 @@ final class Temp extends UnitCommand implements Immediate
 
 	public function skip(): static {
 		return $this;
+	}
+
+	public function inject(): never {
+		throw new NotInjectableException();
 	}
 
 	protected function run(): void {

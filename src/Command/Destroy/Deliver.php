@@ -31,8 +31,13 @@ final class Deliver extends UnitCommand implements Immediate
 		return $this;
 	}
 
+	public function inject(): static {
+		$this->run();
+		return $this;
+	}
+
 	protected function run(): void {
-		$n      = $this->phrase->count();
+		$n = $this->phrase->count();
 		if ($n !== 1) {
 			throw new InvalidCommandException($this);
 		}

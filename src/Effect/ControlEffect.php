@@ -17,6 +17,7 @@ use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
+use Lemuria\Model\Fantasya\Commodity\Monster\Zombie as ZombieRace;
 use Lemuria\Model\Fantasya\Gang;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Validate;
@@ -176,8 +177,10 @@ final class ControlEffect extends AbstractUnitEffect
 	}
 
 	private function addZombieBehaviour(Unit $unit): void {
-		$behaviour = new Zombie($unit);
-		$this->state->addMonster($behaviour->prepare());
-		Lemuria::Log()->debug('Behaviour for uncontrolled zombies has been added.');
+		if ($unit->Race() instanceof ZombieRace) {
+			$behaviour = new Zombie($unit);
+			$this->state->addMonster($behaviour->prepare());
+			Lemuria::Log()->debug('Behaviour for uncontrolled zombies has been added.');
+		}
 	}
 }

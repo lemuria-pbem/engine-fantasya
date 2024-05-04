@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Exception\NotInjectableException;
 use Lemuria\Engine\Fantasya\Immediate;
 use Lemuria\Engine\Fantasya\Message\Unit\EndMessage;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
@@ -19,6 +20,10 @@ final class End extends UnitCommand implements Immediate
 	public function skip(): static {
 		$this->context->Parser()->skip(false);
 		return $this;
+	}
+
+	public function inject(): never {
+		throw new NotInjectableException();
 	}
 
 	protected function run(): void {

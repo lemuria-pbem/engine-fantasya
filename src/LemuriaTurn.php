@@ -174,6 +174,10 @@ class LemuriaTurn implements Turn
 			if ($action instanceof DelegatedCommand) {
 				$action = $action->getDelegate();
 			}
+			if ($action instanceof Immediate) {
+				$action->inject();
+				continue;
+			}
 			$priority = $this->priority->getPriority($action);
 			if (!$this->state->getTurnOptions()->CherryPicker()->pickPriority($priority)) {
 				Lemuria::Log()->critical('Injecting action ' . $action . ' rejected by cherry picker.');
