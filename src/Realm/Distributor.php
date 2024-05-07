@@ -121,6 +121,7 @@ class Distributor
 			$step  = [];
 			$max   = [];
 			foreach ($this->regions as $id => $region) {
+				$max[$id] = 0;
 				if ($this->isValidFor($region, $luxury, $isBuy)) {
 					$supply            = $this->state->getSupply($region, $luxury);
 					$price[$id]        = $supply->Price();
@@ -132,34 +133,36 @@ class Distributor
 			arsort($step, SORT_NUMERIC);
 
 			$plan = [];
-			while ($total > 0) {
-				$fleet = (int)floor($capacity / $weight);
-				if ($fleet <= 0) {
-					Lemuria::Log()->debug('There is no more transport capacity in realm ' . $this->realm . '.');
-					break;
-				}
-				if ($isBuy) {
-					asort($price, SORT_NUMERIC);
-				} else {
-					arsort($price, SORT_NUMERIC);
-				}
-				$id = key($price);
-				if ($max[$id] <= 0) {
-					Lemuria::Log()->debug('There is no more supply for ' . $luxury . ' in realm ' . $this->realm . '.');
-					break;
-				}
-				$next = min($step[$id], $max[$id], $fleet);
-				if ($next < $total) {
-					$price[$id] += $isBuy ? $value : -$value;
-					$plan[$id][] = $next;
-					$max[$id]   -= $next;
-					$total      -= $next;
-					if ($id !== $this->center) {
-						$capacity -= $next * $weight;
+			if (!empty($price)) {
+				while ($total > 0) {
+					$fleet = (int)floor($capacity / $weight);
+					if ($fleet <= 0) {
+						Lemuria::Log()->debug('There is no more transport capacity in realm ' . $this->realm . '.');
+						break;
 					}
-				} else {
-					$plan[$id][] = $total;
-					$total       = 0;
+					if ($isBuy) {
+						asort($price, SORT_NUMERIC);
+					} else {
+						arsort($price, SORT_NUMERIC);
+					}
+					$id = key($price);
+					if ($max[$id] <= 0) {
+						Lemuria::Log()->debug('There is no more supply for ' . $luxury . ' in realm ' . $this->realm . '.');
+						break;
+					}
+					$next = min($step[$id], $max[$id], $fleet);
+					if ($next < $total) {
+						$price[$id]  += $isBuy ? $value : -$value;
+						$plan[$id][] = $next;
+						$max[$id]    -= $next;
+						$total       -= $next;
+						if ($id !== $this->center) {
+							$capacity -= $next * $weight;
+						}
+					} else {
+						$plan[$id][] = $total;
+						$total       = 0;
+					}
 				}
 			}
 			if ($total > 0 && isset($this->supply[$this->center])) {
