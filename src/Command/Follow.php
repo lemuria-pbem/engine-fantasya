@@ -49,7 +49,7 @@ final class Follow extends Travel implements Reassignment
 		$i            = 1;
 		$this->leader = $this->nextId($i);
 		if ($this->calculus()->canDiscover($this->leader)) {
-			$route = $this->context->getTravelRoute($this->leader);
+			$route = $this->context->getTravelRoute($this->leader)->rewind();
 			while ($route->hasMore()) {
 				$this->directions->add($route->next()->value);
 			}

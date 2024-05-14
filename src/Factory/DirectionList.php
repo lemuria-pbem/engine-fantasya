@@ -140,6 +140,11 @@ class DirectionList implements \Countable
 		return $route;
 	}
 
+	public function rewind(): static {
+		$this->index = 0;
+		return $this;
+	}
+
 	private function routeDirection(int $i): string {
 		/** @var Direction $direction */
 		$direction = $this->directions[$i];
