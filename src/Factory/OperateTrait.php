@@ -7,17 +7,17 @@ use Lemuria\Engine\Fantasya\Command\Operator;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Message\Unit\OperateNoCompositionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\OperateNoUnicumMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\OperatePossessionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\OperatePracticeMessage;
 use Lemuria\Id;
 use Lemuria\Model\Fantasya\Composition;
+use Lemuria\Model\Fantasya\Ownable;
 use Lemuria\Model\Fantasya\Practice;
 use Lemuria\Model\Fantasya\Unicum;
 
 trait OperateTrait
 {
-	protected readonly Unicum $unicum;
-
-	private readonly int $argumentIndex;
+	use UnicumTrait;
 
 	public function ArgumentIndex(): int {
 		return $this->argumentIndex;
@@ -35,6 +35,10 @@ trait OperateTrait
 				$unicum = $treasury[$id];
 				return $unicum->Composition();
 			}
+			$unicum = $this->searchUnicum($id);
+			if ($unicum) {
+				return $unicum->Composition();
+			}
 		} else {
 			$composition = $this->context->Factory()->composition($this->phrase->getParameter());
 			$id          = Id::fromId($this->phrase->getParameter(2));
@@ -43,6 +47,10 @@ trait OperateTrait
 				if ($composition === $unicum->Composition()) {
 					return $composition;
 				}
+			}
+			$unicum = $this->searchUnicum($id);
+			if ($composition === $unicum?->Composition()) {
+				return $unicum->Composition();
 			}
 		}
 		throw new InvalidCommandException($this, 'Composition could not be determined.');
@@ -57,12 +65,20 @@ trait OperateTrait
 	}
 
 	private function parseAbstractOperate(Practice $practice, int $offset = 0): ?AbstractOperate {
-		$unicum   = null;
 		$treasury = $this->unit->Treasury();
 		if ($this->phrase->count() === 1 + $offset) {
 			$id = Id::fromId($this->phrase->getParameter(1 + $offset));
 			if ($treasury->has($id)) {
 				$unicum = $treasury[$id];
+			} else {
+				$unicum = $this->searchUnicum($id);
+				if ($unicum) {
+					$composition = $unicum->Composition();
+					if ($composition instanceof Ownable) {
+						$this->message(OperatePossessionMessage::class)->s($composition)->p((string)$id);
+						return null;
+					}
+				}
 			}
 			$this->argumentIndex = $offset + 2;
 		} else {
@@ -70,10 +86,16 @@ trait OperateTrait
 			$id          = Id::fromId($this->phrase->getParameter(2 + $offset));
 			if ($treasury->has($id)) {
 				$unicum = $treasury[$id];
-				if ($composition !== $unicum->Composition()) {
-					$this->message(OperateNoCompositionMessage::class)->s($composition)->p((string)$id);
+			} else {
+				$unicum = $this->searchUnicum($id);
+				if ($unicum?->Composition() instanceof Ownable) {
+					$this->message(OperatePossessionMessage::class)->s($composition)->p((string)$id);
 					return null;
 				}
+			}
+			if ($unicum && $composition !== $unicum->Composition()) {
+				$this->message(OperateNoCompositionMessage::class)->s($composition)->p((string)$id);
+				return null;
 			}
 			$this->argumentIndex = $offset + 3;
 		}

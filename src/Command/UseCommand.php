@@ -10,8 +10,11 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\OperateTrait;
 use Lemuria\Exception\IdException;
 use Lemuria\Id;
+use Lemuria\Lemuria;
+use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Composition\Scroll;
 use Lemuria\Model\Fantasya\Composition\Spellbook;
+use Lemuria\Model\Fantasya\Unicum;
 
 /**
  * Implementation of command BENUTZEN.
@@ -47,8 +50,8 @@ final class UseCommand extends DelegatedCommand
 		if ($n === 1) {
 			try {
 				$id = Id::fromId($param);
-				if ($this->unit->Treasury()->has($id)) {
-					return $this->createOperateCommand();
+				if (Lemuria::Catalog()->has($id, Domain::Unicum)) {
+					return $this->createOperateCommand($id);
 				}
 			} catch (IdException) {
 			}
@@ -59,12 +62,18 @@ final class UseCommand extends DelegatedCommand
 		if ((string)$amount === $param) {
 			return new Apply($this->phrase, $this->context);
 		}
-		return $this->createOperateCommand();
+
+		try {
+			$id = Id::fromId($this->phrase->getParameter(2));
+			return $this->createOperateCommand($id);
+		} catch (IdException $e) {
+			throw new InvalidCommandException($this, previous: $e);
+		}
 	}
 
-	private function createOperateCommand(): UnitCommand {
-		$composition = $this->parseComposition()::class;
-		$isActivity  = isset(self::ACTIVITY_COMPOSITE[$composition]);
+	private function createOperateCommand(Id $id): UnitCommand {
+		$composition = Unicum::get($id)->Composition();
+		$isActivity  = isset(self::ACTIVITY_COMPOSITE[$composition::class]);
 		return $isActivity ? new Operate($this->phrase, $this->context) : new Excert($this->phrase, $this->context);
 	}
 }

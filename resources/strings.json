@@ -718,6 +718,7 @@
 		"OfferUnicumMessage": "Die Einheit $id erstellt ein neues Angebot für den Gegenstand $trade.",
 		"OperateNoCompositionMessage": "Die Einheit $id hat {g/akk:kein:$composition} mit der Nummer $unicum.",
 		"OperateNoUnicumMessage": "Die Einheit $id hat keinen Gegenstand mit der Nummer $unicum.",
+		"OperatePossessionMessage": "Die Einheit $id muss {g/akk:das:$composition} mit der Nummer $unicum für die Benutzung besitzen.",
 		"OperatePracticeMessage": "Die Einheit $id praktiziert $practice mit {g/dat:das:$composition} $unicum.",
 		"OriginMessage": "Der neue Kartenursprung liegt nun in der Region $name [$region].",
 		"OriginNotVisitedMessage": "Der Kartenursprung kann nicht auf die Region $region gesetzt werden - wir haben sie noch nicht besucht.",
