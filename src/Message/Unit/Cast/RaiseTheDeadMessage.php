@@ -24,4 +24,8 @@ class RaiseTheDeadMessage extends AbstractCastMessage
 		$this->unit = $message->get();
 		$this->gang = $message->getGang();
 	}
+
+	protected function getTranslation(string $name): string {
+		return $this->item($name, 'gang') ?? parent::getTranslation($name);
+	}
 }
