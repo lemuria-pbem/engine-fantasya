@@ -16,6 +16,8 @@ final class FollowEffect extends AbstractUnitEffect
 {
 	private const string LEADER = 'leader';
 
+	protected ?bool $isReassign = null;
+
 	private Unit $leader;
 
 	public function __construct(State $state) {

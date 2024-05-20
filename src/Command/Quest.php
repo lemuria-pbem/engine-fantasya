@@ -30,8 +30,13 @@ final class Quest extends UnitCommand
 			return;
 		}
 
+		if ($this->context->getTurnOptions()->IsSimulation()) {
+			return;
+		}
+
 		$controller = $quest->Controller()->setPayload($quest);
-		if (!$controller->isAssignedTo($this->unit)) {
+		$isAssigned = $controller->isAssignedTo($this->unit);
+		if (!$isAssigned) {
 			if ($controller->callFrom($this->unit)->isAssignedTo($this->unit)) {
 				$this->message(QuestAssignedMessage::class)->e($quest);
 			} else {
@@ -42,7 +47,7 @@ final class Quest extends UnitCommand
 			$canFinish = $controller->canBeFinishedBy($this->unit);
 			if ($canFinish) {
 				$controller->callFrom($this->unit)->isCompletedBy($this->unit);
-			} else {
+			} elseif ($isAssigned) {
 				$this->message(QuestNotFinishedMessage::class)->e($quest);
 			}
 		}

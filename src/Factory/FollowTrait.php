@@ -22,13 +22,13 @@ trait FollowTrait
 
 	private function startFollowing(Unit $leader, Unit $follower): void {
 		$follow = new FollowEffect(State::getInstance());
-		Lemuria::Score()->add($follow->setUnit($follower)->setLeader($leader));
+		Lemuria::Score()->add($follow->setUnit($follower)->setLeader($leader)->addReassignment());
 		Lemuria::Log()->debug($follower . ' will follow ' . $leader . ' from now on.');
 		/** @var Followers $followers */
 		$followers = $leader->Extensions()->init(Followers::class);
 		$followers->Followers()->add($follower);
-		$this->message(FollowerMessage::class, $follower)->e($leader);
-		$this->message(FollowingMessage::class, $leader)->e($follower);
+		$this->message(FollowerMessage::class, $leader)->e($follower);
+		$this->message(FollowingMessage::class, $follower)->e($leader);
 	}
 
 	private function ceaseFollowing(FollowEffect $follow, Unit $follower): void {
