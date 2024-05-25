@@ -15,7 +15,7 @@ trait WorkloadTrait
 {
 	use ContextTrait;
 
-	protected int $fullProduction;
+	protected int $fullProduction = 0;
 
 	protected Workload $workload;
 
@@ -33,11 +33,15 @@ trait WorkloadTrait
 	}
 
 	protected function addToWorkload(int $production): void {
-		$this->workload->add((int)round($production / $this->fullProduction * $this->workload->Maximum()));
+		if ($this->fullProduction > 0) {
+			$this->workload->add((int)round($production / $this->fullProduction * $this->workload->Maximum()));
+		}
 	}
 
 	protected function undoWorkload(int $production): void {
-		$this->workload->add(-(int)round($production / $this->fullProduction * $this->workload->Maximum()));
+		if ($this->fullProduction > 0) {
+			$this->workload->add(-(int)round($production / $this->fullProduction * $this->workload->Maximum()));
+		}
 	}
 
 	protected function potionBoost(int $unitSize): float {
