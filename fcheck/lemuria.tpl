@@ -70,6 +70,7 @@
 ^(erl|erla|erlau|erlaub|erlaube|erlauben) +[a-z]+$
 
 ^@?(fol|folg|folge|folgen) +[a-z0-9]{1,6}$
+^@?(fol|folg|folge|folgen) +einheit +[a-z0-9]{1,6}$
 
 ^@?(ers|ersc|ersch|erscha|erschaf|erschaff|erschaffe|erschaffen) +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
 

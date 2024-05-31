@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
@@ -16,6 +17,7 @@ use Lemuria\Model\Reassignment;
  * Implementation of command FOLGEN (follow other unit).
  *
  * - FOLGEN <unit>
+ * - FOLGEN Einheit <unit>
  */
 final class Follow extends Travel implements Reassignment
 {
@@ -43,11 +45,15 @@ final class Follow extends Travel implements Reassignment
 	}
 
 	protected function initDirections(): void {
-		if ($this->phrase->count() !== 1) {
-			throw new UnknownCommandException($this);
+		$n = $this->phrase->count();
+		if ($n < 1 || $n > 2) {
+			throw new InvalidCommandException($this);
 		}
-		$i            = 1;
-		$this->leader = $this->nextId($i);
+		if ($n === 2 && strtolower($this->phrase->getParameter()) !== 'einheit') {
+			throw new InvalidCommandException($this);
+		}
+
+		$this->leader = $this->nextId($n);
 		if ($this->calculus()->canDiscover($this->leader)) {
 			$route = $this->context->getTravelRoute($this->leader)->rewind();
 			while ($route->hasMore()) {
