@@ -44,7 +44,8 @@ final class Growth extends AbstractEvent
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);
-		$this->tree = self::createCommodity(Wood::class);
+		$this->workplaces = new Workplaces();
+		$this->tree       = self::createCommodity(Wood::class);
 	}
 
 	protected function initialize(): void {
