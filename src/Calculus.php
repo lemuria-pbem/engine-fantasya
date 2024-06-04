@@ -357,6 +357,9 @@ final class Calculus
 	 * Check if this unit can discover given unit.
 	 */
 	public function canDiscover(Unit $unit): bool {
+		if ($unit->Party() === $this->unit->Party()) {
+			return true;
+		}
 		$calculus = new self($unit);
 		if ($calculus->isInvisible()) {
 			return false;
