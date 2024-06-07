@@ -188,8 +188,8 @@
 
 ^(verb|verbi|verbie|verbiet|verbiete|verbieten) +[a-z]+$
 
-^(verg|verge|verges|vergess|vergesse|vergessen) +[a-z]+( +[0-9]+)?$
-^(vergi|vergis|vergiss) +[a-z]+( +[0-9]+)?$
+^(verg|verge|verges|vergess|vergesse|vergessen) +[a-zäöüß]+( +[0-9]+)?$
+^(vergi|vergis|vergiss) +[a-zäöüß]+( +[0-9]+)?$
 
 ^@?(verk|verkauf|verkaufe|verkaufen)( +[0-9]+)? +(balsam|balsame|gewürz|gewürze|gewuerz|gewuerze|juwel|juwelen|myrrhe|myrrhen|öl|öle|oel|oele|pelz|pelze|seide|seiden|weihrauch)$
 ^@?(verk|verkauf|verkaufe|verkaufen) +(balsam|balsame|gewürz|gewürze|gewuerz|gewuerze|juwel|juwelen|myrrhe|myrrhen|öl|öle|oel|oele|pelz|pelze|seide|seiden|weihrauch) +[0-9]+$
