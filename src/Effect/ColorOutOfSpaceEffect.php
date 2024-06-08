@@ -165,10 +165,14 @@ final class ColorOutOfSpaceEffect extends AbstractRegionEffect
 			$landscape = $this->target->Landscape();
 			if ($landscape instanceof Navigable) {
 				$regions = $this->getTargetRegions();
+				$parties = [];
 				foreach ($regions as $region) {
 					$this->message(ColorOutOfSpaceUpMessage::class, $region);
-					foreach ($this->state->getIntelligence($region)->getParties() as $party) {
-						$this->message(ColorOutOfSpaceUpInMessage::class, $party)->p($name);
+					foreach ($this->state->getIntelligence($region)->getParties() as $id => $party) {
+						if (!isset($parties[$id])) {
+							$this->message(ColorOutOfSpaceUpInMessage::class, $party)->p($region->Name());
+							$parties[$id] = true;
+						}
 					}
 				}
 			} else {
