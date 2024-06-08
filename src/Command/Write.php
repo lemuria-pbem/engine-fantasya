@@ -56,7 +56,8 @@ final class Write extends UnitCommand implements Activity, Operator, Reassignmen
 			return;
 		}
 		if ($composition->supports(Practice::Write)) {
-			$production = $this->calculus()->knowledge(Magic::class)->Level();
+			$craft      = $composition->getCraft();
+			$production = (int)floor($this->calculus()->knowledge($craft->Talent())->Level() / $craft->Level());
 			$production = $this->reduceByWorkload($production);
 			if ($production > 0) {
 				$this->getOperate(Practice::Write)->write();
