@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
 use function Lemuria\randChance;
+use function Lemuria\randFloat;
 use function Lemuria\randInt;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AssaultBlockMessage;
@@ -29,6 +30,7 @@ use Lemuria\Model\Fantasya\Commodity\Weapon\Catapult;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Claymore;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Crossbow;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Halberd;
+use Lemuria\Model\Fantasya\Commodity\Weapon\Native;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\BentHalberd;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\RustyClaymore;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Repairable\SkewedCatapult;
@@ -115,6 +117,11 @@ class Attack
 	 * @type array<float>
 	 */
 	protected const array FLIGHT = [1.0, 0.9, 0.9, 0.9, 0.2, 0.2, 0.0];
+
+	/**
+	 * @type array<float, int>
+	 */
+	protected const array LUCK = [3 => 0.01, 2 => 0.05];
 
 	protected const float BLOCK_EFFECT = 0.5;
 
@@ -301,7 +308,8 @@ class Attack
 		$damage  = $this->combatant->Weapon()->Damage();
 		$bonus   = self::DAMAGE_BONUS[$weapon::class] ?? 0.0;
 		$b       = $bonus > 0.0 ? (int)floor($bonus * $skill) : 0;
-		$attack  = $damage->Count() * randInt(1, $damage->Dice() + $b) + $damage->Addition();
+		$luck    = $this->shuffleLuck();
+		$attack  = $luck * ($damage->Count() * randInt(1, $damage->Dice() + $b) + $damage->Addition());
 		$block  += $this->getBlockValue($shield) + $this->getBlockValue($armor);
 		// Lemuria::Log()->debug('Damage calculation: ' . getClass($weapon) . ':' . $damage . ' bonus:' . $b . ' damage:' . $attack . '-' . $block);
 		return max(0, $attack - $block);
@@ -314,5 +322,18 @@ class Attack
 			return randInt($min, $max);
 		}
 		return 0;
+	}
+
+	private function shuffleLuck(): int {
+		if ($this->combatant->Weapon() instanceof Native) {
+			$luck = 1.0 - randFloat();
+			foreach (self::LUCK as $bonus => $chance) {
+				if ($luck <= $chance) {
+					Lemuria::Log()->debug($this->combatant->Id() . ' shuffled luck (' . $chance . ' / bonus ' . $bonus . ').');
+					return $bonus;
+				}
+			}
+		}
+		return 1;
 	}
 }
