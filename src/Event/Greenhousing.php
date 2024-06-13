@@ -133,7 +133,7 @@ final class Greenhousing extends AbstractEvent
 	 */
 	private function determineRates(Landscape $landscape): array {
 		$rates = [];
-		$index = array_keys(self::LANDSCAPES);
+		$index = array_flip(array_keys(self::LANDSCAPES));
 		$rate  = self::RATE[$landscape::class];
 		foreach (self::LANDSCAPES as $where => $herbs) {
 			$i = $index[$where];
@@ -152,16 +152,18 @@ final class Greenhousing extends AbstractEvent
 		$herbs->rewind();
 		$grows = new Resources();
 		$g     = min($herbs->count(), $production, $size);
-		$n     = (int)floor($production / $g);
-		$r     = $production % $g;
-		for ($i = 0; $i < $g; $i++) {
-			$current = $herbs->current();
-			$herb    = $current->Commodity();
-			$count   = $n + ($r-- > 0 ? 1 : 0);
-			$rate    = $rates[$herb::class];
-			$count   = max(1, (int)floor($rate * $count));
-			$grows->add(new Quantity($herb, $count));
-			$herbs->next();
+		if ($g > 0) {
+			$n = (int)floor($production / $g);
+			$r = $production % $g;
+			for ($i = 0; $i < $g; $i++) {
+				$current = $herbs->current();
+				$herb    = $current->Commodity();
+				$count   = $n + ($r-- > 0 ? 1 : 0);
+				$rate    = $rates[$herb::class];
+				$count   = max(1, (int)floor($rate * $count));
+				$grows->add(new Quantity($herb, $count));
+				$herbs->next();
+			}
 		}
 		return $grows;
 	}
