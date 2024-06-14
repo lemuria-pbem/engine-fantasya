@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Id;
 use function Lemuria\isInt;
 use function Lemuria\isPercentage;
 use Lemuria\Engine\Fantasya\Command;
@@ -64,9 +65,18 @@ final class Create extends DelegatedCommand
 			$size = $n === 2 ? max(0, (int)$this->phrase->getParameter(2)) : 0;
 			return new Vessel($this->phrase, $this->context, new Job(new AnyShip(), $size));
 		}
+		// MACHEN Burg <ID>
+		$isInConstruction = false;
+		if ($n === 2 && $lower === 'burg') {
+			$construction = $this->unit->Construction();
+			if ($construction) {
+				$id = (string)$construction->Id();
+				$isInConstruction = mb_strtolower($this->phrase->getParameter(2)) === $id;
+			}
+		}
 		// MACHEN Gebäude <size> | MACHEN Gebäude <ID> <size>
-		if ($lower === 'gebäude' || $lower === 'gebaeude') {
-			$size = $n >= 2 ? max(0, (int)$this->phrase->getParameter(0)) : 0;
+		if ($isInConstruction || $lower === 'gebäude' || $lower === 'gebaeude') {
+			$size = $isInConstruction ? 0 : ($n >= 2 ? max(0, (int)$this->phrase->getParameter(0)) : 0);
 			return new Construction($this->phrase, $this->context, new Job(new AnyBuilding(), $size));
 		}
 
