@@ -39,12 +39,16 @@ class CombatantWeaponMessage extends CombatantNoWeaponMessage
 
 	protected function translate(string $template): string {
 		$message = parent::translate($template);
-		$weapon  = $this->translateSingleton($this->weapon, $this->count > 1 ? 1 : 0, Casus::Dative);
-		return str_replace('$weapon', $weapon, $message);
+		return $this->translateWeapon($message);
 	}
 
 	protected function validateSerializedData(array $data): void {
 		parent::validateSerializedData($data);
 		$this->validate($data, self::WEAPON, Validate::String);
+	}
+
+	protected function translateWeapon(string $message): string {
+		$weapon  = $this->translateSingleton($this->weapon, $this->count > 1 ? 1 : 0, Casus::Dative);
+		return str_replace('$weapon', $weapon, $message);
 	}
 }
