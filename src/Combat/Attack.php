@@ -123,7 +123,7 @@ class Attack
 	 */
 	protected const array LUCK = [3 => 0.01, 2 => 0.05];
 
-	protected const float BLOCK_EFFECT = 0.5;
+	protected const float BLOCK_EFFECT = 0.3333;
 
 	protected const float INFECTION = 0.3;
 
@@ -317,9 +317,8 @@ class Attack
 
 	private function getBlockValue(?Protection $protection): int {
 		if ($protection) {
-			$max = $protection->Block();
-			$min = (int)ceil(self::BLOCK_EFFECT * $max);
-			return randInt($min, $max);
+			$max = (int)ceil(self::BLOCK_EFFECT * $protection->Block());
+			return randInt(0, $max);
 		}
 		return 0;
 	}

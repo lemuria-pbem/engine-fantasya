@@ -22,8 +22,8 @@ class Fireball extends AbstractBattleSpell
 	 * @type array<string, int>
 	 */
 	protected const array PROTECTION = [
-		Armor::class      => 3,
-		Ironshield::class => 5,
+		Armor::class      => 2,
+		Ironshield::class => 4,
 		Mail::class       => 1,
 		Woodshield::class => 2
 	];
