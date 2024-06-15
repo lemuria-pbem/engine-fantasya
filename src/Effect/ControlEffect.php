@@ -60,7 +60,8 @@ final class ControlEffect extends AbstractUnitEffect
 	public function remove(Identifiable $identifiable): void {
 		parent::remove($identifiable);
 		if ($identifiable->Catalog() === Domain::Unit && $this->summoner === $identifiable->Id()->Id()) {
-			$this->deliver();
+			Lemuria::Score()->remove($this);
+			Lemuria::Log()->debug($this->Unit() . ' is free now as its summoner has died.');
 		}
 	}
 

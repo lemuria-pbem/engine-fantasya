@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
+use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Log\Entity;
 use Lemuria\Engine\Fantasya\Combat\Log\Message;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerHasFledMessage;
@@ -45,7 +46,6 @@ use Lemuria\Exception\ItemSetException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\BattleSpell;
 use Lemuria\Model\Fantasya\Combat\BattleRow;
-use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Commodity\Potion\HealingPotion;
 use Lemuria\Model\Fantasya\Commodity\Weapon\Native;
 use Lemuria\Model\Fantasya\Distribution;
@@ -55,6 +55,7 @@ use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Quantity;
+use Lemuria\Model\Fantasya\Raiseable;
 use Lemuria\Model\Fantasya\Unit;
 
 class Combat
@@ -706,7 +707,7 @@ class Combat
 	protected function removeTheDead(Ranks $ranks): void {
 		$raiseTheDead   = new RaiseTheDeadEffect(State::getInstance());
 		$raiseAvailable = 0;
-		$raiseCount     = 0;
+		$raiseCount     = [];
 		$existing       = Lemuria::Score()->find($raiseTheDead->setRegion($this->place->Region()));
 		if ($existing instanceof RaiseTheDeadEffect) {
 			$raiseTheDead   = $existing;
@@ -718,7 +719,8 @@ class Combat
 			foreach ($combatants as $c => $combatant) {
 				$size               = $combatant->Size();
 				$combatant->hasCast = false;
-				$createZombies      = $combatant->Unit()->Party()->Type() !== Type::Monster;
+				$race               = $combatant->Unit()->Race();
+				$raiseUndead        = $race instanceof Raiseable ? getClass($race->getUndead()) : null;
 				foreach ($combatant->fighters as $f => $fighter) {
 					if ($fighter->health <= 0) {
 						if ($fighter->potion instanceof HealingPotion) {
@@ -730,10 +732,13 @@ class Combat
 							Lemuria::Log()->debug('Fighter ' . $id . ' is dead.');
 							BattleLog::getInstance()->add(new FighterIsDeadMessage($id));
 							$combatant->hasDied($f);
-							if ($raiseAvailable > 0) {
-								$raiseCount++;
+							if ($raiseAvailable > 0 && $raiseUndead) {
+								if (!isset($raiseCount[$raiseUndead])) {
+									$raiseCount[$raiseUndead] = 0;
+								}
+								$raiseCount[$raiseUndead]++;
 								$raiseAvailable--;
-							} elseif ($createZombies && $fighter->hasFeature(Feature::ZombieInfection)) {
+							} elseif ($raiseUndead && $fighter->hasFeature(Feature::ZombieInfection)) {
 								$this->newZombies++;
 							}
 						}
@@ -770,34 +775,39 @@ class Combat
 			}
 		}
 
-		if ($raiseCount > 0) {
+		if (!empty($raiseCount)) {
 			$this->raiseFromTheDead($raiseCount, $summoner);
 			$raiseTheDead->setRaise($raiseAvailable);
 		}
 	}
 
-	protected function raiseFromTheDead(int $raise, Unit $summoner): void {
-		$unit = $this->createZombieUnit($raise, $summoner);
-		$id   = $summoner->Party()->Id()->Id();
-		if (isset($this->armies[$id])) {
-			// Summoner fights in this combat.
-			$army         = $this->getArmy($summoner);
-			$row          = $unit->BattleRow()->value;
-			$combatant    = new Combatant($army, $unit);
-			$distribution = new Distribution();
-			$combatant->setBattleRow(BattleRow::Front);
-			$combatant->setDistribution($distribution->setSize($raise));
-			$this->isAttacker[$id] ? $this->attacker[$row][] = $combatant : $this->defender[$row][] = $combatant;
-			$army->addCombatant($combatant);
+	/**
+	 * @param array<string, int> $raise
+	 */
+	protected function raiseFromTheDead(array $raise, Unit $summoner): void {
+		foreach ($raise as $monster => $size) {
+			$unit = $this->createUndeadUnit($monster, $size, $summoner);
+			$id   = $summoner->Party()->Id()->Id();
+			if (isset($this->armies[$id])) {
+				// Summoner fights in this combat.
+				$army         = $this->getArmy($summoner);
+				$row          = self::getBattleRow($unit)->value;
+				$combatant    = new Combatant($army, $unit);
+				$distribution = new Distribution();
+				$combatant->setBattleRow(BattleRow::Front);
+				$combatant->setDistribution($distribution->setSize($size));
+				$rank = $this->isAttacker[$id] ? $this->attacker[$row] : $this->defender[$row];
+				$rank->add($combatant);
+				$army->addCombatant($combatant);
+			}
 		}
 	}
 
-	private function createZombieUnit(int $size, Unit $summoner): Unit {
-		$state   = State::getInstance();
-		$zombie  = self::createRace(Zombie::class);
-		$zombies = $state->getTurnOptions()->Finder()->Party()->findByRace($zombie);
-		$create  = new Create($zombies, $this->place->Region());
-		$create->add(new Gang($zombie, $size));
+	private function createUndeadUnit(string $monster, int $size, Unit $summoner): Unit {
+		$state  = State::getInstance();
+		$undead = self::createMonster($monster);
+		$create = new Create($summoner->Party(), $this->place->Region());
+		$create->add(new Gang($undead, $size));
 		$unit   = $create->act()->getUnits()[0];
 		$effect = new ControlEffect($state);
 		Lemuria::Score()->add($effect->setUnit($unit)->setSummoner($summoner)->setAura(0.2)); //TODO 0.2
