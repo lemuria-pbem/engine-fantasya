@@ -55,9 +55,10 @@ class ElementalBeing extends AbstractBattleSpell
 			$elemental = $create->act()->getUnits()[0];
 			$effect    = new DissolveEffect(State::getInstance());
 			Lemuria::Score()->add($effect->setUnit($elemental));
+			State::getInstance()->injectIntoTurn($effect);
 
-			$combatant                               = $this->createCombatant($unit, $elemental);
-			$this->caster[BattleRow::Front->value][] = $combatant;
+			$combatant = $this->createCombatant($unit, $elemental);
+			$this->caster[BattleRow::Front->value]->add($combatant);
 			BattleLog::getInstance()->add(new SummonBeingMessage(new Entity($elemental), $combatant, $unit->Size(), BattleRow::Front->value));
 			Lemuria::Log()->debug('New combatant ' . $combatant->Id() . ' for party ' . $party . ' consisting of one ' . $race . ' has been summoned.');
 		}
