@@ -15,9 +15,9 @@ final class DissolveEffect extends AbstractUnitEffect
 
 	protected function run(): void {
 		$unit = $this->Unit();
+		Lemuria::Catalog()->reassign($unit);
 		$unit->Region()->Residents()->remove($unit);
 		$unit->Party()->People()->remove($unit);
-		Lemuria::Catalog()->reassign($unit);
 		Lemuria::Catalog()->remove($unit);
 		Lemuria::Score()->remove($this);
 		$this->message(VanishEffectMessage::class, $unit);

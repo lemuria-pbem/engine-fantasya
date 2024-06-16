@@ -42,8 +42,8 @@ abstract class AbstractReinforcementMessage extends AbstractMessage
 
 	protected function getParameters(): array {
 		return [
-			self::UNIT  => $this->unit->id->Id(), self::NAME => $this->unit->name,
-			self::COMBATANT => $this->combatant, self::COUNT => $this->count,
+			self::UNIT       => $this->unit->id->Id(), self::NAME => $this->unit->name,
+			self::COMBATANT  => $this->combatant, self::COUNT     => $this->count,
 			self::BATTLE_ROW => $this->battleRow];
 	}
 

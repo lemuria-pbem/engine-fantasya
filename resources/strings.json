@@ -39,6 +39,7 @@
 		"battleRow": {
 			"back": "hinteren Reihe",
 			"bystanders": "Reihe der Unbeteiligten",
+			"front": "vorderen Reihe",
 			"position_0": "im Kampf fliehen",
 			"position_1": "nicht kämpfen",
 			"position_2": "defensiv kämpfen",
@@ -103,6 +104,7 @@
 			"ShockwaveHitMessage": "$count $fighter der Abteilung $combatant $will von einer Schockwelle abgelenkt.",
 			"SongOfPeaceCombatantMessage": "Die Abteilung $combatant verlässt friedlich das Schlachtfeld.",
 			"SongOfPeaceFighterMessage": "$fighter Kämpfer der Abteilung $combatant $leave friedlich das Schlachtfeld.",
+			"SummonBeingMessage": "Die Einheit $unit aus $count $fighter wurde beschworen und nimmt in der $battleRow als Abteilung $combatant an der Schlacht teil.",
 			"TacticsRoundMessage": "Taktikrunde",
 			"TakeLootMessage": "Die Einheit $unit erbeutet $loot.",
 			"TakeTrophiesMessage": "Die Einheit $unit sammelt $loot als Trophäe des Sieges über den Feind.",
