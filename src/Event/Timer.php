@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Event\Administrator\ResetGatherUnits;
 use Lemuria\Engine\Fantasya\Event\Game\BlownByTheWind;
 use Lemuria\Engine\Fantasya\Event\Game\CarriedOffWayfarer;
 use Lemuria\Engine\Fantasya\Event\Game\ColorOutOfSpace;
+use Lemuria\Engine\Fantasya\Event\Game\CorpseFungus;
 use Lemuria\Engine\Fantasya\Event\Game\Drought;
 use Lemuria\Engine\Fantasya\Event\Game\FindWallet;
 use Lemuria\Engine\Fantasya\Event\Game\GoblinPlague;
@@ -31,6 +32,8 @@ use Lemuria\Model\Fantasya\Race\Human;
  */
 final class Timer extends DelegatedEvent
 {
+	private const array CORPSE_FUNGUS_IN_SANO = ['class' => CorpseFungus::class, 'options' => [CorpseFungus::REGION => '2eq']];
+
 	/**
 	 * @type array<int, array<array>>
 	 */
@@ -72,13 +75,12 @@ final class Timer extends DelegatedEvent
 		161 => [
 			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => '2ml', BlownByTheWind::SPELL => InciteMonster::class]],
 			['class' => Spawn::class, 'options' => [Spawn::REGION => '2kk', Spawn::SIZE => 84, Spawn::RACE => Zombie::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2in', Spawn::SIZE => 107, Spawn::RACE => Zombie::class]],
-			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2uj', TransportMonster::REGION => '2kk']],
-			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2vt', TransportMonster::REGION => '2kk']],
-			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2f0', TransportMonster::REGION => '2kk']],
-			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2qz', TransportMonster::REGION => '2kk']],
-			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2ib', TransportMonster::REGION => '2kk']]
-		]
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2uj', TransportMonster::REGION => '2kk']]
+		],
+		171 => [self::CORPSE_FUNGUS_IN_SANO],
+		172 => [self::CORPSE_FUNGUS_IN_SANO],
+		173 => [self::CORPSE_FUNGUS_IN_SANO],
+		174 => [self::CORPSE_FUNGUS_IN_SANO]
 	];
 
 	public function __construct(State $state) {
