@@ -74,10 +74,16 @@ final class Timer extends DelegatedEvent
 		],
 		161 => [
 			['class' => BlownByTheWind::class, 'options' => [BlownByTheWind::REGION => '2ml', BlownByTheWind::SPELL => InciteMonster::class]],
-			['class' => Spawn::class, 'options' => [Spawn::REGION => '2kk', Spawn::SIZE => 84, Spawn::RACE => Zombie::class]],
-			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2uj', TransportMonster::REGION => '2kk']]
+			['class' => Spawn::class, 'options' => [Spawn::REGION => '2kk', Spawn::SIZE => 84, Spawn::RACE => Zombie::class]]
 		],
-		171 => [self::CORPSE_FUNGUS_IN_SANO],
+		171 => [
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '4j0', TransportMonster::REGION => '2gn']],
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '5ef', TransportMonster::REGION => '2go']],
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '59h', TransportMonster::REGION => '2er']],
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '5es', TransportMonster::REGION => '2ep']],
+			['class' => TransportMonster::class, 'options' => [TransportMonster::UNIT => '2m8', TransportMonster::REGION => '38n']],
+			self::CORPSE_FUNGUS_IN_SANO
+		],
 		172 => [self::CORPSE_FUNGUS_IN_SANO],
 		173 => [self::CORPSE_FUNGUS_IN_SANO],
 		174 => [self::CORPSE_FUNGUS_IN_SANO]
