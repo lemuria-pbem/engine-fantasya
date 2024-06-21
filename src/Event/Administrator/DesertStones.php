@@ -14,7 +14,7 @@ use Lemuria\Model\Fantasya\Quantity;
 use Lemuria\Model\Fantasya\Region;
 
 /**
- * This event removes monsters from regions that should not be at that landscape.
+ * This event adds a bunch of stones to the resources of every desert.
  */
 final class DesertStones extends AbstractEvent
 {

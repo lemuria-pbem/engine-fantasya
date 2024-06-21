@@ -25,6 +25,8 @@ final class PegasusIsland extends AbstractEvent
 
 	private const string NAME = 'Arvallon';
 
+	private const string DESCRIPTION = 'Wer die Gestade dieser Insel betritt, verspürt augenblicklich das seltsame Gefühl der Leichtigkeit, die über diesem zauberhaften Ort liegt.';
+
 	private const int PEGASI = 100;
 
 	private const int MAX_TREES = 300;
@@ -40,7 +42,7 @@ final class PegasusIsland extends AbstractEvent
 		$plain     = self::createLandscape(Plain::class);
 		$wood      = self::createCommodity(Wood::class);
 		if ($island->Landscape() !== $plain) {
-			$island->setLandscape($plain)->setName(self::NAME);
+			$island->setLandscape($plain)->setName(self::NAME)->setDescription(self::DESCRIPTION);
 			$pegasus = self::createCommodity(Pegasus::class);
 			$resources->add(new Quantity($pegasus, self::PEGASI));
 			$resources->add(new Quantity($wood, self::MAX_TREES));

@@ -19,7 +19,7 @@ use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Region;
 
 /**
- * This event is a one-time fix for regions that have no individual name.
+ * This event is a one-time fix for regions that grow the wrong herb.
  */
 final class HerbageFix extends AbstractEvent
 {
