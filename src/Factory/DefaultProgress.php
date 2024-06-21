@@ -93,6 +93,24 @@ class DefaultProgress implements Progress
 		$this->index = 0;
 	}
 
+	public function getAdministrator(): ?Administrator {
+		for ($i = 0; $i < $this->count; $i++) {
+			if ($this->events[$i] instanceof Administrator) {
+				return $this->events[$i];
+			}
+		}
+		return null;
+	}
+
+	public function getTimer(): ?Timer {
+		for ($i = 0; $i < $this->count; $i++) {
+			if ($this->events[$i] instanceof Timer) {
+				return $this->events[$i];
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Add an Event.
 	 *

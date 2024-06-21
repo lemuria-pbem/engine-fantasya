@@ -16,6 +16,8 @@ use Lemuria\Engine\Fantasya\Event\Game\PotionGift;
 use Lemuria\Engine\Fantasya\Event\Game\Spawn;
 use Lemuria\Engine\Fantasya\Event\Game\TheWildHunt;
 use Lemuria\Engine\Fantasya\Event\Game\TransportMonster;
+use Lemuria\Engine\Fantasya\Factory\Model\TimerEvent;
+use Lemuria\Engine\Fantasya\Factory\ReflectionTrait;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
@@ -32,6 +34,12 @@ use Lemuria\Model\Fantasya\Race\Human;
  */
 final class Timer extends DelegatedEvent
 {
+	use ReflectionTrait;
+
+	private const string EVENT = 'class';
+
+	private const string OPTIONS = 'options';
+
 	private const array CORPSE_FUNGUS_IN_SANO = ['class' => CorpseFungus::class, 'options' => [CorpseFungus::REGION => '2eq']];
 
 	/**
@@ -89,8 +97,19 @@ final class Timer extends DelegatedEvent
 		174 => [self::CORPSE_FUNGUS_IN_SANO]
 	];
 
+	private array $schedule = self::SCHEDULE;
+
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::Before);
+	}
+
+	public function add(int $round, TimerEvent $event): static {
+		$this->validateGameEventClass($event->class);
+		if (!isset($this->schedule[$round])) {
+			$this->schedule[$round] = [];
+		}
+		$this->schedule[$round][] = [self::EVENT => $event->class, self::OPTIONS => $event->options];
+		return $this;
 	}
 
 	protected function createDelegates(): void {
@@ -98,10 +117,10 @@ final class Timer extends DelegatedEvent
 		if (isset(self::SCHEDULE[$round])) {
 			Lemuria::Log()->debug('Adding timed events.');
 			foreach (self::SCHEDULE[$round] as $definition) {
-				$class = $definition['class'];
+				$class = $definition[self::EVENT];
 				$event = new $class($this->state);
-				if (isset($definition['options'])) {
-					$event->setOptions($definition['options']);
+				if (isset($definition[self::OPTIONS])) {
+					$event->setOptions($definition[self::OPTIONS]);
 				}
 				$this->delegates[] = $event;
 			}
