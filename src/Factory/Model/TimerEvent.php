@@ -4,6 +4,6 @@ namespace Lemuria\Engine\Fantasya\Factory\Model;
 
 final class TimerEvent
 {
-	public function __construct(public string $class, public array $options = []) {
+	public function __construct(public string $class, public ?array $options = null) {
 	}
 }
