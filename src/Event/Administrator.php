@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Event\Administrator\Overcrowded;
 use Lemuria\Engine\Fantasya\Factory\ReflectionTrait;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
+use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 
 /**
@@ -19,9 +20,20 @@ final class Administrator extends DelegatedEvent
 		parent::__construct($state, Priority::Before);
 	}
 
-	public function add(string $class): static {
-		$this->validateEventClass($class);
-		$this->delegates[] = $class;
+	public function add(string $class, ?array $options = null): static {
+		$withOptions       = !empty($options);
+		$expectOptions     = $this->validateEventClass($class);
+		$event             = new $class($this->state);
+		$this->delegates[] = $event;
+		if ($expectOptions) {
+			if ($withOptions) {
+				$event->setOptions($options);
+			} else {
+				throw new LemuriaException('This event requires options: ' . $class);
+			}
+		} elseif ($withOptions) {
+			throw new LemuriaException('This event does not expect options: ' . $class);
+		}
 		return $this;
 	}
 

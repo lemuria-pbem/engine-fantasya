@@ -12,9 +12,10 @@ trait ReflectionTrait
 	private const string GAME_EVENT_NAMESPACE = 'Lemuria\\Engine\\Fantasya\\Event\\Game';
 
 	/**
+	 * @return True if event expects options, false otherwise.
 	 * @throws ReflectionException
 	 */
-	private function validateEventClass(string $class): void {
+	private function validateEventClass(string $class): bool {
 		try {
 			$reflection = new \ReflectionClass($class);
 			if ($reflection->implementsInterface(Event::class)) {
@@ -22,7 +23,7 @@ trait ReflectionTrait
 				if (is_array($parameters) && count($parameters) === 1) {
 					$state = $parameters[0]->getType();
 					if ($state instanceof \ReflectionNamedType && $state->getName() === State::class) {
-						return;
+						return $reflection->hasMethod('setOptions');
 					}
 				}
 			}
@@ -36,7 +37,9 @@ trait ReflectionTrait
 	 * @throws ReflectionException
 	 */
 	private function validateGameEventClass(string $class): void {
-		$this->validateEventClass($class);
+		if (!$this->validateEventClass($class)) {
+			throw new ReflectionException('Expected game event with options', $class);
+		}
 		$namespace = getNamespace($class);
 		if ($namespace === self::GAME_EVENT_NAMESPACE || str_starts_with(self::GAME_EVENT_NAMESPACE . '\\', $namespace)) {
 			return;

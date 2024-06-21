@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Tests\Engine\Fantasya\Factory;
 
+use Lemuria\Engine\Fantasya\Event\Administrator\ResetGatherUnits;
 use PHPUnit\Framework\Attributes\Test;
 use SATHub\PHPUnit\Base;
 
@@ -17,9 +18,12 @@ class ReflectionTraitTest extends Base
 
 	#[Test]
 	public function validateAdministratorEvent(): void {
-		$this->validateEventClass(Overcrowded::class);
+		$this->assertFalse($this->validateEventClass(Overcrowded::class));
+	}
 
-		$this->pass();
+	#[Test]
+	public function validateAdministratorEventWithOptions(): void {
+		$this->assertTrue($this->validateEventClass(ResetGatherUnits::class));
 	}
 
 	#[Test]
