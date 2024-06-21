@@ -14,6 +14,8 @@ use Lemuria\Model\Fantasya\Unit;
 
 trait SiegeTrait
 {
+	private const int CAMOUFLAGE_IMPEDIMENT = 2;
+
 	private ?SiegeEffect $siege = null;
 
 	protected function initSiege(?Construction $construction = null): self {
@@ -40,7 +42,7 @@ trait SiegeTrait
 		}
 		if ($this->isSieged() && !$this->context->getTurnOptions()->IsSimulation()) {
 			$calculus = new Calculus($unit);
-			return $calculus->isInvisible() || $calculus->camouflage()->Level() > $this->siege->Perception();
+			return $calculus->isInvisible() || $calculus->camouflage()->Level() > $this->siege->Perception() + self::CAMOUFLAGE_IMPEDIMENT;
 		}
 		return true;
 	}
