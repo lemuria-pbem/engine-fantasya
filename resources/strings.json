@@ -508,6 +508,7 @@
 		"FollowFollowedMessage": "Die Einheit $leader folgt uns.",
 		"FollowMessage": "Die Einheit $id folgt der Einheit $leader auf ihrem Weg.",
 		"FollowNoMoveMessage": "Die Einheit $id folgt der Einheit $leader, welche sich jedoch nicht vom Fleck bewegt hat.",
+		"FollowSelfMessage": "Die Einheit $id kann sich nicht selbst folgen.",
 		"ForbidAllMessage": "Die Einheit $id verbietet den Handel mit allen Gütern.",
 		"ForbidCommodityMessage": "Die Einheit $id verbietet den Handel mit $commodity.",
 		"ForbidKindMessage": "Die Einheit $id verbietet den Handel mit $commodity.",

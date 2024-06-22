@@ -2,11 +2,14 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
+use Lemuria\Engine\Fantasya\Command\Follow;
+use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\FollowEffect;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowerMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowerNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowingNotMessage;
+use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Extension\Followers;
@@ -24,9 +27,16 @@ trait FollowTrait
 		$follow = new FollowEffect(State::getInstance());
 		Lemuria::Score()->add($follow->setUnit($follower)->setLeader($leader)->addReassignment());
 		Lemuria::Log()->debug($follower . ' will follow ' . $leader . ' from now on.');
+
 		/** @var Followers $followers */
 		$followers = $leader->Extensions()->init(Followers::class);
 		$followers->Followers()->add($follower);
+
+		$state   = State::getInstance();
+		$context = new Context($state);
+		$command = new Follow(new Phrase('FOLGEN ' . $leader->Id()), $context->setUnit($follower));
+		$state->injectIntoTurn($command);
+
 		$this->message(FollowerMessage::class, $leader)->e($follower);
 		$this->message(FollowingMessage::class, $follower)->e($leader);
 	}

@@ -3,12 +3,12 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
-use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowFollowedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowNoMoveMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\FollowSelfMessage;
 use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
@@ -37,7 +37,11 @@ final class Follow extends Travel implements Reassignment
 			parent::run();
 			return;
 		}
-		$this->message(FollowNoMoveMessage::class)->e($this->leader);
+		if ($this->leader === $this->unit) {
+			$this->message(FollowSelfMessage::class);
+		} else {
+			$this->message(FollowNoMoveMessage::class)->e($this->leader);
+		}
 	}
 
 	protected function getReassignPhrase(string $old, string $new): ?Phrase {
@@ -54,10 +58,12 @@ final class Follow extends Travel implements Reassignment
 		}
 
 		$this->leader = $this->nextId($n);
-		if ($this->calculus()->canDiscover($this->leader)) {
-			$route = $this->context->getTravelRoute($this->leader)->rewind();
-			while ($route->hasMore()) {
-				$this->directions->add($route->next()->value);
+		if ($this->leader !== $this->unit) {
+			if ($this->calculus()->canDiscover($this->leader)) {
+				$route = $this->context->getTravelRoute($this->leader)->rewind();
+				while ($route->hasMore()) {
+					$this->directions->add($route->next()->value);
+				}
 			}
 		}
 	}
