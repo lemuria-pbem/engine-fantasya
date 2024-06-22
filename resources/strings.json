@@ -380,7 +380,7 @@
 		"ControlEffectNoneMessage": "Die Einheit $id hat nicht genügend Aurapunkte, um die Kontrolle über die Einheit $unit aufrecht zu erhalten.",
 		"ControlEffectOnlyMessage": "Die Einheit $id kann nur {$aura:Aurapunkt} verbrauchen, um die Kontrolle über $gang der Einheit $unit aufrecht zu erhalten.",
 		"CorpseFungusHereMessage": "In der Region $id tritt der Leichenpilz auf und befällt die Toten, um ihnen das Fleisch von den Knochen zu fressen.",
-		"CorpseFungusMessage": "Die $persons der Einheit $id werden von Leichenpilz in $turned verwandelt.",
+		"CorpseFungusMessage": "Die $persons der Einheit $id werden vom Leichenpilz in $turned verwandelt.",
 		"CreateMessage": "Die Einheit $id hat die Welt betreten.",
 		"DaydreamConcentrateMessage": "Die Einheit $id ist unkonzentriert.",
 		"DaydreamGuardMessage": "Die Einheit $id ist unkonzentriert und verlässt ihren Wachtposten.",

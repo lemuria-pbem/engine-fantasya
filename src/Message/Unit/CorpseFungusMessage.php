@@ -3,11 +3,14 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
+use Lemuria\Engine\Message\Result;
 use Lemuria\Singleton;
 
 class CorpseFungusMessage extends AbstractUnitMessage
 {
 	public final const string TURNED = 'turned';
+
+	protected Result $result = Result::Event;
 
 	protected Singleton $persons;
 

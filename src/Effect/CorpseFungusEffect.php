@@ -40,13 +40,15 @@ final class CorpseFungusEffect extends AbstractUnitEffect
 	protected function run(): void {
 		$unit = $this->Unit();
 		if ($unit->Race() === $this->zombie) {
-			$name = $this->translateSingleton($this->skeleton, $unit->Size() === 1 ? 0 : 1, Casus::Nominative);
-			$unit->setRace($this->skeleton)->setName($name);
-			if ($unit->Party() === $this->zombies) {
-				$this->zombies->People()->remove($unit);
-				$this->monsters->People()->add($unit);
+			if ($unit->Size() > 0) {
+				$name = $this->translateSingleton($this->skeleton, $unit->Size() === 1 ? 0 : 1, Casus::Nominative);
+				$unit->setRace($this->skeleton)->setName($name);
+				if ($unit->Party() === $this->zombies) {
+					$this->zombies->People()->remove($unit);
+					$this->monsters->People()->add($unit);
+				}
+				$this->message(CorpseFungusMessage::class, $unit)->s($this->zombie)->s($this->skeleton, CorpseFungusMessage::TURNED);
 			}
-			$this->message(CorpseFungusMessage::class, $unit)->s($this->zombie)->s($this->skeleton, CorpseFungusMessage::TURNED);
 		} else {
 			throw new LemuriaException('How did ' . $unit . ' got infected with the Corpse Fungus?');
 		}
