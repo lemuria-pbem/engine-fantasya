@@ -92,6 +92,7 @@ final class RaiseTheDead extends AbstractCast
 				}
 			} else {
 				Lemuria::Score()->add($effect->setSummoner($unit)->setRaise($this->zombies));
+				State::getInstance()->injectIntoTurn($effect);
 				Lemuria::Log()->debug($unit . ' prepares Raise The Dead for ' . $this->zombies . ' fallen warriors.');
 			}
 		}
