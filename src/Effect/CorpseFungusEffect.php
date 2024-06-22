@@ -13,6 +13,8 @@ use Lemuria\Model\Fantasya\Commodity\Monster\Skeleton;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
+use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Party\Type;
 
 final class CorpseFungusEffect extends AbstractUnitEffect
 {
@@ -23,10 +25,16 @@ final class CorpseFungusEffect extends AbstractUnitEffect
 
 	private Monster $zombie;
 
+	private Party $monsters;
+
+	private Party $zombies;
+
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);
 		$this->skeleton = self::createMonster(Skeleton::class);
 		$this->zombie   = self::createMonster(Zombie::class);
+		$this->monsters = $state->getTurnOptions()->Finder()->Party()->findByType(Type::Monster);
+		$this->zombies  = $state->getTurnOptions()->Finder()->Party()->findByRace($this->zombie);
 	}
 
 	protected function run(): void {
@@ -34,6 +42,10 @@ final class CorpseFungusEffect extends AbstractUnitEffect
 		if ($unit->Race() === $this->zombie) {
 			$name = $this->translateSingleton($this->skeleton, $unit->Size() === 1 ? 0 : 1, Casus::Nominative);
 			$unit->setRace($this->skeleton)->setName($name);
+			if ($unit->Party() === $this->zombies) {
+				$this->zombies->People()->remove($unit);
+				$this->monsters->People()->add($unit);
+			}
 			$this->message(CorpseFungusMessage::class, $unit)->s($this->zombie)->s($this->skeleton, CorpseFungusMessage::TURNED);
 		} else {
 			throw new LemuriaException('How did ' . $unit . ' got infected with the Corpse Fungus?');
