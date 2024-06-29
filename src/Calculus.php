@@ -507,6 +507,15 @@ final class Calculus
 		return $count <= 0;
 	}
 
+	public function setAbility(Talent|string $talent, int $level): self {
+		$talent     = $this->parseTalent($talent);
+		$experience = Ability::getExperience($level) - $this->ability($talent)->Experience();
+		if ($experience > 0) {
+			$this->unit->Knowledge()->add(new Ability($talent, $experience));
+		}
+		return $this;
+	}
+
 	private function parseTalent(Talent|string $talent): Talent {
 		if (is_string($talent)) {
 			$talent = self::createTalent($talent);

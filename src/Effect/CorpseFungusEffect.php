@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Effect;
 
+use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Factory\GrammarTrait;
 use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\Unit\CorpseFungusMessage;
@@ -9,14 +10,12 @@ use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
-use Lemuria\Model\Fantasya\Ability;
 use Lemuria\Model\Fantasya\Commodity\Monster\Skeleton;
 use Lemuria\Model\Fantasya\Commodity\Monster\Zombie;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Monster;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
-use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Bladefighting;
 
 final class CorpseFungusEffect extends AbstractUnitEffect
@@ -30,19 +29,16 @@ final class CorpseFungusEffect extends AbstractUnitEffect
 
 	private Monster $zombie;
 
-	private Talent $bladefighting;
-
 	private Party $monsters;
 
 	private Party $zombies;
 
 	public function __construct(State $state) {
 		parent::__construct($state, Priority::After);
-		$this->skeleton      = self::createMonster(Skeleton::class);
-		$this->zombie        = self::createMonster(Zombie::class);
-		$this->bladefighting = self::createTalent(Bladefighting::class);
-		$this->monsters      = $state->getTurnOptions()->Finder()->Party()->findByType(Type::Monster);
-		$this->zombies       = $state->getTurnOptions()->Finder()->Party()->findByRace($this->zombie);
+		$this->skeleton = self::createMonster(Skeleton::class);
+		$this->zombie   = self::createMonster(Zombie::class);
+		$this->monsters = $state->getTurnOptions()->Finder()->Party()->findByType(Type::Monster);
+		$this->zombies  = $state->getTurnOptions()->Finder()->Party()->findByRace($this->zombie);
 	}
 
 	protected function run(): void {
@@ -51,10 +47,13 @@ final class CorpseFungusEffect extends AbstractUnitEffect
 			if ($unit->Size() > 0) {
 				$name = $this->translateSingleton($this->skeleton, $unit->Size() === 1 ? 0 : 1, Casus::Nominative);
 				$unit->setRace($this->skeleton)->setName($name);
+				$calculus = new Calculus($unit);
+				foreach (self::TALENTS as $talent => $level) {
+					$calculus->setAbility($talent, $level);
+				}
 				if ($unit->Party() === $this->zombies) {
 					$this->zombies->People()->remove($unit);
 					$this->monsters->People()->add($unit);
-					$unit->Knowledge()->add(new Ability($this->bladefighting, Ability::getExperience(self::TALENTS[Bladefighting::class])));
 				}
 				$this->message(CorpseFungusMessage::class, $unit)->s($this->zombie)->s($this->skeleton, CorpseFungusMessage::TURNED);
 			}
