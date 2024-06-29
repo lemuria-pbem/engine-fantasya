@@ -268,6 +268,8 @@ class LemuriaTurn implements Turn
 					} else {
 						Lemuria::Log()->debug('Unprepared action skipped.', ['action' => $action]);
 					}
+				} catch (AlternativeException) {
+					Lemuria::Log()->debug('Alternative activity failed.', ['activity' => $action]);
 				} catch (ActionException $e) {
 					Lemuria::Log()->error($e->getMessage(), ['stage' => 'execute', 'action' => $action]);
 					$this->addActionException($e, $action);
