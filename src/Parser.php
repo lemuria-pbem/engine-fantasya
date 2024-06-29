@@ -12,6 +12,13 @@ use Lemuria\Lemuria;
 class Parser
 {
 	/**
+	 * @type array<string, array<string>>
+	 */
+	private const array DEPRECATION = [
+		'VORLAGE * GEBEN' => ['LIEF', 'LIEFE', 'LIEFER', 'LIEFERE', 'LIEFERN']
+	];
+
+	/**
 	 * @var array<Phrase>
 	 */
 	protected array $phrases = [];
@@ -22,9 +29,23 @@ class Parser
 
 	private int $skipLevel = 0;
 
+	/**
+	 * @var array<string, string>
+	 */
+	private array $replacement = [];
+
+	public function __construct() {
+		foreach (self::DEPRECATION as $replacement => $variants) {
+			foreach ($variants as $variant) {
+				$this->replacement[$variant] = $replacement;
+			}
+		}
+	}
+
 	public function parse(Move $commands): static {
 		foreach ($commands as $command) {
 			$command = $this->replaceDefaultCommand($command);
+			$command = $this->replaceDeprecatedCommand($command);
 			$phrase  = new Phrase($command);
 			if ($phrase->getVerb()) {
 				$this->phrases[] = $phrase;
@@ -82,6 +103,18 @@ class Parser
 			throw new CommandParserException('Not in skipping mode; cannot reset.');
 		}
 		return $this;
+	}
+
+	protected function replaceDeprecatedCommand(string $command): string {
+		$i      = strpos($command, ' ');
+		$search = mb_strtoupper($i > 0 ? substr($command, 0, $i) : $command);
+		if (isset($this->replacement[$search])) {
+			if ($i > 0) {
+				return $this->replacement[$search] . substr($command, $i);
+			}
+			return $this->replacement[$search];
+		}
+		return $command;
 	}
 
 	/**
