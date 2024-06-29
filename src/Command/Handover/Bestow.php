@@ -49,9 +49,10 @@ final class Bestow extends UnitCommand implements Operator, Reassignment
 			if ($isVisible) {
 				$this->message(GiveFailedMessage::class)->e($this->recipient);
 				$this->message(BestowRejectedMessage::class, $this->recipient)->e($this->unit);
-				return;
+			} else {
+				$this->message(GiveNotFoundMessage::class)->e($this->recipient);
 			}
-			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
+			return;
 		}
 		if (!$isVisible) {
 			$this->message(GiveNotFoundMessage::class)->e($this->recipient);
