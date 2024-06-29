@@ -50,8 +50,11 @@ trait NavigationTrait
 	private function hasSufficientCrew(): bool {
 		$ship       = $this->vessel->Ship();
 		$passengers = $this->vessel->Passengers();
-		$captain    = $passengers->Owner();
-		$knowledge  = $this->context->getCalculus($captain)->knowledge($this->navigation)->Level();
+		if ($passengers->isEmpty()) {
+			return false;
+		}
+		$captain   = $passengers->Owner();
+		$knowledge = $this->context->getCalculus($captain)->knowledge($this->navigation)->Level();
 		if ($knowledge < $ship->Captain()) {
 			return false;
 		}
