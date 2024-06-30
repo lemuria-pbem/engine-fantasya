@@ -37,8 +37,12 @@ final class Quest extends UnitCommand
 		$controller = $quest->Controller()->setPayload($quest);
 		$isAssigned = $controller->isAssignedTo($this->unit);
 		if (!$isAssigned) {
-			if ($controller->callFrom($this->unit)->isAssignedTo($this->unit)) {
-				$this->message(QuestAssignedMessage::class)->e($quest);
+			if ($controller->isAvailableFor($this->unit)) {
+				if ($controller->callFrom($this->unit)->isAssignedTo($this->unit)) {
+					$this->message(QuestAssignedMessage::class)->e($quest);
+				} else {
+					$this->message(QuestNotAssignedMessage::class)->e($quest);
+				}
 			} else {
 				$this->message(QuestNotAssignedMessage::class)->e($quest);
 			}
