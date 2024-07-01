@@ -2,14 +2,19 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
+use Lemuria\Engine\Fantasya\Effect\FollowEffect;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
 use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\FollowerBehindMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\FollowerStoppedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowFollowedMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowNoMoveMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowSelfMessage;
 use Lemuria\Engine\Fantasya\Phrase;
+use Lemuria\Engine\Fantasya\State;
+use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
 
@@ -26,6 +31,13 @@ final class Follow extends Travel implements Reassignment
 
 	private ?Unit $leader;
 
+	public function getNewDefault(): ?UnitCommand {
+		if ($this->unit->Region() === $this->leader?->Region()) {
+			return parent::getNewDefault();
+		}
+		return null;
+	}
+
 	protected function run(): void {
 		if ($this->directions->count()) {
 			$this->message(FollowMessage::class)->e($this->leader);
@@ -35,6 +47,15 @@ final class Follow extends Travel implements Reassignment
 				}
 			}
 			parent::run();
+			$leader = $this->getLeaderFromFollowEffect();
+			$region = $this->unit->Region();
+			if ($leader && $region !== $leader->Region()) {
+				if ($this->unitIsStopped) {
+					$this->message(FollowerStoppedMessage::class, $leader)->e($this->unit)->e($region, FollowerStoppedMessage::REGION);
+				} else {
+					$this->message(FollowerBehindMessage::class, $leader)->e($this->unit)->e($region, FollowerStoppedMessage::REGION);
+				}
+			}
 			return;
 		}
 		if ($this->leader === $this->unit) {
@@ -69,5 +90,14 @@ final class Follow extends Travel implements Reassignment
 	}
 
 	protected function addToTravelRoute(string $direction): void {
+	}
+
+	private function getLeaderFromFollowEffect(): ?Unit {
+		$effect   = new FollowEffect(State::getInstance());
+		$existing = Lemuria::Score()->find($effect->setUnit($this->unit));
+		if ($existing instanceof FollowEffect) {
+			return $existing->Leader();
+		}
+		return null;
 	}
 }

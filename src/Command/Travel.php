@@ -71,6 +71,8 @@ class Travel extends UnitCommand implements Activity
 
 	protected Talent $riding;
 
+	protected bool $unitIsStopped = false;
+
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		$this->chronicle  = $this->unit->Party()->Chronicle();
@@ -209,6 +211,7 @@ class Travel extends UnitCommand implements Activity
 					$blockade = $this->unitIsBlockedByGuards($origin, $next);
 					if (!$blockade->isEmpty()) {
 						$this->directions->revert();
+						$this->unitIsStopped = true;
 						break;
 					}
 
@@ -254,8 +257,9 @@ class Travel extends UnitCommand implements Activity
 						$notPassGuards = $this->unitIsAllowedToPass($region, $guards);
 						if ($notPassGuards->count() > 0) {
 							$this->workload->add($regions);
-							$regions = 0;
-							$roadRegions = 0;
+							$regions             = 0;
+							$roadRegions         = 0;
+							$this->unitIsStopped = true;
 							// Guard message to the guards and the stopped unit.
 							foreach ($notPassGuards as $party) {
 								$this->message(TravelGuardMessage::class, $party)->e($region)->e($this->unit, TravelGuardMessage::UNIT);

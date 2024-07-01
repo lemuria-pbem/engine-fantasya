@@ -503,6 +503,8 @@
 		"FindWalletMessage": "Die Einheit $unit hat einen verlorenen Silberbeutel mit $silver gefunden.",
 		"FollowerMessage": "Die Einheit $follower folgt uns von jetzt an auf allen unseren Wegen.",
 		"FollowerNotMessage": "Die Einheit $follower folgt uns von jetzt an nicht länger.",
+		"FollowerBehindMessage": "Die Einheit $follower konnte nicht mit uns mithalten und bleibt in der Region $region zurück.",
+		"FollowerStoppedMessage": "Die Einheit $follower wurde in der Region $region von den Wachen gestoppt.",
 		"FollowingMessage": "Von jetzt an folgen wir der Einheit $leader überall hin.",
 		"FollowingNotMessage": "Wir folgen der Einheit $leader nicht länger.",
 		"FollowFollowedMessage": "Die Einheit $leader folgt uns.",
