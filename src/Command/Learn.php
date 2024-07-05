@@ -74,22 +74,26 @@ final class Learn extends UnitCommand implements Activity
 	 */
 	private const array EFFECTIVITY = [
 		''                => [
-			Alchemy::class       => 0.5,  Archery::class      => 0.5,  Bladefighting::class => 0.75,
-			Crossbowing::class   => 0.5,  Entertaining::class => 0.75, Magic::class        => 0.5,
-			Navigation::class    => 1.0,  Perception::class   => 0.75, Shipbuilding::class => 0.5,
+			Alchemy::class       => 0.5,  Archery::class      => 0.5,   Bladefighting::class => 0.75,
+			Crossbowing::class   => 0.5,  Entertaining::class => 0.75,  Magic::class         => 0.5,
+			Navigation::class    => 1.0,  Perception::class   => 0.75,  Shipbuilding::class  => 0.5,
 			Spearfighting::class => 0.75, Tactics::class      => 0.5
 		],
 		Boat::class       => [
-			Entertaining::class => 0.2, Navigation::class => 0.2, Perception::class => 0.5
+			                              Entertaining::class => 0.2,
+			Navigation::class    => 0.2,  Perception::class   => 0.5
 		],
 		Longboat::class   => [
-			Bladefighting::class => 0.2,  Entertaining::class => 0.5, Spearfighting::class => 0.2,
-			Navigation::class    => 0.75, Perception::class   => 0.5
+			Alchemy::class       => 0.2,                                Bladefighting::class => 0.2,
+			                              Entertaining::class => 0.5,
+			Navigation::class    => 0.5,  Perception::class   => 0.5,   Shipbuilding::class  => 0.2,
+			Spearfighting::class => 0.2
 		],
 		Dragonship::class => [
-			Archery::class       => 0.5,  Bladefighting::class => 0.75, Crossbowing::class => 0.5,
-			Entertaining::class  => 0.75, Navigation::class    => 1.0,  Perception::class  => 0.75,
-			Spearfighting::class => 0.75, Tactics::class       => 0.5
+			Alchemy::class       => 0.2,  Archery::class       => 0.2,  Bladefighting::class => 0.5,
+			Crossbowing::class   => 0.2,  Entertaining::class  => 0.5,  Magic::class         => 0.2,
+			Navigation::class    => 1.0,  Perception::class    => 0.75, Shipbuilding::class  => 0.5,
+			Spearfighting::class => 0.5,  Tactics::class       => 0.2
 		]
 	];
 
