@@ -43,12 +43,12 @@ final class HerbAlmanac extends AbstractOperate
 				return;
 			}
 		} else {
-			if ($herbalBook->count() <= 0) {
+			if ($almanac->count() <= 0) {
 				$this->message(HerbageApplyEmptyMessage::class, $this->unit)->e($unicum);
 				return;
 			}
 			$this->message(HerbageApplyAllMessage::class, $this->unit)->e($unicum);
-			foreach ($herbalBook as $region) {
+			foreach ($almanac as $region) {
 				$this->addHerbage($almanac, $region, $herbalBook, $chronicle);
 			}
 		}
@@ -96,14 +96,15 @@ final class HerbAlmanac extends AbstractOperate
 			$herbage = $almanac->getHerbage($region);
 			$visit   = $almanac->getVisit($region);
 			$round   = $visit->Round();
-			if ($herbalBook->getVisit($region)->Round() < $round) {
+			$last    = $herbalBook->getVisit($region);
+			if ($last && $last->Round() > $round) {
+				$unicum = $this->operator->Unicum();
+				$this->message(HerbageApplySkipMessage::class, $this->unit)->e($unicum)->e($region, HerbageApplyMessage::REGION);
+			} else {
 				$herb       = $herbage->Herb();
 				$occurrence = $herbage->Occurrence();
 				$herbage    = new Herbage($herb);
 				$herbalBook->record($region, $herbage->setOccurrence($occurrence), $round);
-			} else {
-				$unicum = $this->operator->Unicum();
-				$this->message(HerbageApplySkipMessage::class, $this->unit)->e($unicum)->e($region, HerbageApplyMessage::REGION);
 			}
 		} else {
 			$this->message(HerbageApplyUnknownMessage::class, $this->unit)->p((string)$region->Id());
