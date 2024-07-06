@@ -5,7 +5,6 @@ namespace Lemuria\Engine\Fantasya\Event;
 use Lemuria\Engine\Fantasya\Command\Create\Herb as HerbGrowing;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\Unmaintained;
-use Lemuria\Engine\Fantasya\Factory\Model\Herb;
 use Lemuria\Engine\Fantasya\Factory\WorkloadTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\GreenhousingMessage;
 use Lemuria\Engine\Fantasya\Priority;
@@ -35,6 +34,7 @@ use Lemuria\Model\Fantasya\Commodity\Herb\WhiteHemlock;
 use Lemuria\Model\Fantasya\Commodity\Herb\Windbag;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
+use Lemuria\Model\Fantasya\Herb;
 use Lemuria\Model\Fantasya\Inhabitants;
 use Lemuria\Model\Fantasya\Landscape;
 use Lemuria\Model\Fantasya\Landscape\Desert;
@@ -79,6 +79,8 @@ final class Greenhousing extends AbstractEvent
 		Swamp::class    => [0.2, 0.5, 0.5, 0.3, 0.3, 0.5, 1.0]
 	];
 
+	private const float FACTOR = 0.5;
+
 	private Talent $herballore;
 
 	private Unit $unit;
@@ -91,6 +93,7 @@ final class Greenhousing extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Construction::all() as $construction) {
+			/** @var Construction $construction */
 			$building = $construction->Building();
 			if ($building instanceof Greenhouse && $this->isMaintained($construction)) {
 				$inhabitants = $construction->Inhabitants();
@@ -100,7 +103,9 @@ final class Greenhousing extends AbstractEvent
 				$rates       = $this->determineRates($construction->Region()->Landscape());
 				$grows       = $this->determineGrows($herbs, $rates, $production, $construction->Size());
 				$owner       = $inhabitants->Owner();
+				$inventory   = $owner->Inventory();
 				foreach ($grows as $grow) {
+					$inventory->add($grow);
 					$this->message(GreenhousingMessage::class, $owner)->i($grow);
 				}
 			}
@@ -160,7 +165,7 @@ final class Greenhousing extends AbstractEvent
 				$herb    = $current->Commodity();
 				$count   = $n + ($r-- > 0 ? 1 : 0);
 				$rate    = $rates[$herb::class];
-				$count   = max(1, (int)floor($rate * $count));
+				$count   = max(1, (int)floor(self::FACTOR * $rate * $count));
 				$grows->add(new Quantity($herb, $count));
 				$herbs->next();
 			}
