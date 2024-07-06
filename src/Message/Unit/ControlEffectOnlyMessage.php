@@ -7,7 +7,7 @@ use Lemuria\Item;
 
 class ControlEffectOnlyMessage extends ControlEffectMessage
 {
-	private Item $gang;
+	protected Item $gang;
 
 	protected function create(): string {
 		return 'Unit ' . $this->id . ' can only consume ' . $this->aura . ' aura to maintain control over ' . $this->gang . ' of unit ' . $this->unit . '.';

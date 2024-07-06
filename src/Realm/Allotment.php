@@ -87,7 +87,7 @@ class Allotment
 			$demand    = $quantity->Count();
 			$this->calculateAvailability($commodity, $quota);
 			$fleetTotal = $this->calculateFleetTotal($commodity);
-			$local      = $this->availability[$this->center];
+			$local      = $this->availability[$this->center] ?? 0;
 			$total      = $fleetTotal + $local;
 			$parts      = [];
 			if ($total > 0) {
@@ -121,20 +121,24 @@ class Allotment
 					}
 				}
 			}
-			$region       = $this->region[$this->center];
-			$availability = $this->state->getAvailability($region);
-			$available    = $availability->getResource($commodity)->Count();
-			if ($commodity instanceof Iron && $this->withDetectMetals($region)) {
-				$available *= 2;
+
+			if (isset($this->region[$this->center])) {
+				$region       = $this->region[$this->center];
+				$availability = $this->state->getAvailability($region);
+				$available    = $availability->getResource($commodity)->Count();
+				if ($commodity instanceof Iron && $this->withDetectMetals($region)) {
+					$available *= 2;
+				}
+				$remaining = min($demand, $available, $local);
+				if ($remaining > 0) {
+					$availability->remove(new Quantity($commodity, $remaining));
+					$partQuantity = new Quantity($commodity, $remaining);
+					$resources->add($partQuantity);
+					$parts[$this->center] = $demand;
+					Lemuria::Log()->debug('Allotment of ' . $partQuantity . ' in region ' . $this->center . ' for consumer ' . $consumer->getId() . '.');
+				}
 			}
-			$remaining = min($demand, $available, $local);
-			if ($remaining > 0) {
-				$availability->remove(new Quantity($commodity, $remaining));
-				$partQuantity = new Quantity($commodity, $remaining);
-				$resources->add($partQuantity);
-				$parts[$this->center] = $demand;
-				Lemuria::Log()->debug('Allotment of ' . $partQuantity . ' in region ' . $this->center . ' for consumer ' . $consumer->getId() . '.');
-			}
+
 			$total = array_sum($parts);
 			foreach ($parts as $id => $part) {
 				$consumer->addRegion($this->region[$id], $part / $total);
@@ -168,7 +172,7 @@ class Allotment
 	}
 
 	protected function calculateFleetTotal(Commodity $commodity): int {
-		$availableSum = array_sum($this->availability) - $this->availability[$this->center];
+		$availableSum = array_sum($this->availability) - ($this->availability[$this->center] ?? 0);
 		if ($this->isFleetEnabled) {
 			$capacity = $this->fleet->Incoming();
 			if ($commodity instanceof Animal) {
