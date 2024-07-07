@@ -32,7 +32,11 @@ class ResourcePool
 	/**
 	 * @var array<int, Resources>
 	 */
-	protected array $reservations = [];
+	protected static array $reservations = [];
+
+	public static function resetReservations(): void {
+		self::$reservations = [];
+	}
 
 	public function __construct(Unit $unit) {
 		$this->party  = $unit->Party();
@@ -41,7 +45,10 @@ class ResourcePool
 		$this->units  = new People();
 		foreach ($intelligence->getUnits($this->party) as $unit) {
 			$this->units->add($unit);
-			$this->reservations[$unit->Id()->Id()] = new Resources();
+			$id = $unit->Id()->Id();
+			if (!isset(self::$reservations[$id])) {
+				self::$reservations[$id] = new Resources();
+			}
 		}
 	}
 
@@ -72,7 +79,7 @@ class ResourcePool
 
 			$nextId           = $next->Id();
 			$nextInventory    = $next->Inventory();
-			$nextReservations = $this->reservations[$nextId->Id()];
+			$nextReservations = self::$reservations[$nextId->Id()];
 			$nextQuantity     = $nextInventory->offsetGet($commodity);
 			$nextCount        = $nextQuantity->Count();
 			$nextReserved     = $nextReservations->offsetGet($commodity)->Count();
@@ -111,7 +118,7 @@ class ResourcePool
 		$commodity    = $quantity->Commodity();
 		$demand       = $quantity->Count();
 		$inventory    = $unit->Inventory();
-		$reservations = $this->reservations[$id->Id()];
+		$reservations = self::$reservations[$id->Id()];
 		$ownCount     = $inventory->offsetGet($commodity)->Count();
 		$reserved     = $reservations->offsetGet($commodity)->Count();
 		$available    = $ownCount - $reserved;
@@ -145,7 +152,7 @@ class ResourcePool
 		}
 
 		$inventory    = $unit->Inventory();
-		$reservations = $this->reservations[$id->Id()];
+		$reservations = self::$reservations[$id->Id()];
 		$ownCount     = $inventory->offsetGet($commodity)->Count();
 		$reserved     = $reservations->offsetGet($commodity)->Count();
 		$available    = $ownCount - $reserved;
@@ -174,7 +181,7 @@ class ResourcePool
 
 			$nextId           = $next->Id();
 			$nextInventory    = $next->Inventory();
-			$nextReservations = $this->reservations[$nextId->Id()];
+			$nextReservations = self::$reservations[$nextId->Id()];
 			$nextQuantity     = $nextInventory->offsetGet($commodity);
 			$nextCount        = $nextQuantity->Count();
 			$nextReserved     = $nextReservations->offsetGet($commodity)->Count();
@@ -213,7 +220,7 @@ class ResourcePool
 			throw new LemuriaException('Unit ' . $unit . ' is not a pool member.');
 		}
 		$inventory    = $unit->Inventory();
-		$reservations = $this->reservations[$id->Id()];
+		$reservations = self::$reservations[$id->Id()];
 		$reservations->clear();
 		foreach ($inventory as $quantity) {
 			$reservations->add($quantity);
@@ -230,7 +237,7 @@ class ResourcePool
 
 			$nextId           = $next->Id();
 			$nextInventory    = $next->Inventory();
-			$nextReservations = $this->reservations[$nextId->Id()];
+			$nextReservations = self::$reservations[$nextId->Id()];
 			$nextQuantities->clear();
 			foreach ($nextInventory as $quantity) {
 				$commodity = $quantity->Commodity();

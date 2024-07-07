@@ -8,6 +8,7 @@ use Lemuria\Engine\Fantasya\Factory\CollectTrait;
 use Lemuria\Engine\Fantasya\Message\Filter\TravelSimulationFilter;
 use Lemuria\Engine\Fantasya\Message\Unit\SupportNothingMessage;
 use Lemuria\Engine\Fantasya\Priority;
+use Lemuria\Engine\Fantasya\ResourcePool;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Turn\CherryPicker;
 use Lemuria\Lemuria;
@@ -43,6 +44,7 @@ final class Support extends AbstractEvent
 	}
 
 	protected function run(): void {
+		ResourcePool::resetReservations();
 		$hungry = new People();
 		foreach (Party::all() as $party) {
 			if (!$this->isValidParty($party)) {
@@ -64,7 +66,9 @@ final class Support extends AbstractEvent
 							break;
 						}
 					}
-					if ($filtered || !$this->payFromResourcePool($unit) && !$this->payFromRealmFund($unit)) {
+					if ($filtered) {
+						$this->message(SupportNothingMessage::class, $unit);
+					} elseif (!$this->payFromRealmFund($unit) || !$this->payFromResourcePool($unit)) {
 						$this->message(SupportNothingMessage::class, $unit);
 					}
 				}
