@@ -158,23 +158,20 @@ final class Describe extends UnitCommand implements Reassignment
 			return;
 		}
 
-		$home = $this->unit->Construction();
-		if ($home) {
-			$castle = null;
-			foreach ($estate as $construction) {
-				if ($construction->Building() instanceof Castle) {
-					if (!$castle || $construction->Size() >= $castle->Size()) {
-						$castle = $construction;
-					}
+		$castle = null;
+		foreach ($estate as $construction) {
+			if ($construction->Building() instanceof Castle) {
+				if (!$castle || $construction->Size() >= $castle->Size()) {
+					$castle = $construction;
 				}
 			}
-			if ($castle === $home && $home->Inhabitants()->Owner()->Party() === $this->unit->Party()) {
-				$region->setDescription($description);
-				$this->message(DescribeRegionMessage::class)->e($region);
-				return;
-			}
 		}
-		$this->message(DescribeCastleMessage::class)->setAssignee($region)->e($this->unit);
+		if ($this->unit->Party() === $castle->Inhabitants()->Owner()->Party()) {
+			$region->setDescription($description);
+			$this->message(DescribeRegionMessage::class, $region);
+			return;
+		}
+		$this->message(DescribeCastleMessage::class, $region)->e($this->unit);
 	}
 
 	private function describeVessel(string $description): void {

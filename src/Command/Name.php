@@ -175,21 +175,19 @@ final class Name extends UnitCommand implements Reassignment
 			return;
 		}
 
-		$home = $this->unit->Construction();
-		if ($home) {
-			$castle = null;
-			foreach ($estate as $construction) {
-				if ($construction->Building() instanceof Castle) {
-					if (!$castle || $construction->Size() >= $castle->Size()) {
-						$castle = $construction;
-					}
+		$castle = null;
+		foreach ($estate as $construction) {
+			if ($construction->Building() instanceof Castle) {
+				if (!$castle || $construction->Size() >= $castle->Size()) {
+					$castle = $construction;
 				}
 			}
-			if ($castle === $home && $home->Inhabitants()->Owner()->Party() === $this->unit->Party()) {
-				$region->setName($name);
-				$this->message(NameRegionMessage::class, $region)->p($name);
-				return;
-			}
+		}
+
+		if ($this->unit->Party() === $castle->Inhabitants()->Owner()->Party()) {
+			$region->setName($name);
+			$this->message(NameRegionMessage::class, $region)->p($name);
+			return;
 		}
 		$this->message(NameCastleMessage::class, $region)->e($this->unit);
 	}
