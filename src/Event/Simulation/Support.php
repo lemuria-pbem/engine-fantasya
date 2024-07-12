@@ -68,7 +68,7 @@ final class Support extends AbstractEvent
 					}
 					if ($filtered) {
 						$this->message(SupportNothingMessage::class, $unit);
-					} elseif (!$this->payFromRealmFund($unit) || !$this->payFromResourcePool($unit)) {
+					} elseif (!$this->payFromRealmFund($unit) && !$this->payFromResourcePool($unit)) {
 						$this->message(SupportNothingMessage::class, $unit);
 					}
 				}
