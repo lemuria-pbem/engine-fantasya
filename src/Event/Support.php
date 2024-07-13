@@ -11,7 +11,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\SupportNothingMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SupportPayMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\SupportPayOnlyMessage;
 use Lemuria\Engine\Fantasya\Priority;
-use Lemuria\Engine\Fantasya\ResourcePool;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Engine\Fantasya\Statistics\StatisticsTrait;
 use Lemuria\Engine\Fantasya\Statistics\Subject;
@@ -50,7 +49,6 @@ final class Support extends AbstractEvent
 	}
 
 	protected function run(): void {
-		ResourcePool::resetReservations();
 		$this->pay();
 		if ($this->hungryUnits->count()) {
 			Lemuria::Log()->debug($this->hungryUnits->count() . ' parties have units that cannot pay their support.');

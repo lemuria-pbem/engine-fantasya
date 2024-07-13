@@ -39,9 +39,14 @@ use Lemuria\Model\Domain;
  */
 final class Number extends UnitCommand
 {
+	private static bool $poolsHaveBeenReset = false;
+
 	protected function initialize(): void {
 		parent::initialize();
-		$this->context->resetResourcePools();
+		if (!self::$poolsHaveBeenReset) {
+			$this->context->resetResourcePools();
+			self::$poolsHaveBeenReset = true;
+		}
 	}
 
 	protected function run(): void {

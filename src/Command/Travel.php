@@ -73,6 +73,8 @@ class Travel extends UnitCommand implements Activity
 
 	protected bool $unitIsStopped = false;
 
+	private static bool $poolsHaveBeenReset = false;
+
 	public function __construct(Phrase $phrase, Context $context) {
 		parent::__construct($phrase, $context);
 		$this->chronicle  = $this->unit->Party()->Chronicle();
@@ -117,7 +119,10 @@ class Travel extends UnitCommand implements Activity
 
 	protected function initialize(): void {
 		parent::initialize();
-		$this->context->resetResourcePools();
+		if (!self::$poolsHaveBeenReset) {
+			$this->context->resetResourcePools();
+			self::$poolsHaveBeenReset = true;
+		}
 		$this->exploring = $this->unit->Party()->Presettings()->Exploring();
 		$this->vessel    = $this->unit->Vessel();
 		$this->trip      = $this->calculus()->getTrip();
