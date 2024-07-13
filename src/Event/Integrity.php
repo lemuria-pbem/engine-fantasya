@@ -44,6 +44,7 @@ final class Integrity extends AbstractEvent
 		$world       = Lemuria::World();
 		$lostRegions = new Landmass();
 		foreach (Realm::all() as $realm) {
+			$lostRegions->clear();
 			// Sort regions by ring.
 			$this->realm     = $realm;
 			$this->governor  = $realm->Party();
