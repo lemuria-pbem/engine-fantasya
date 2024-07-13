@@ -139,11 +139,11 @@ final class Cast extends UnitCommand implements Reassignment
 		$this->spell        = $this->context->Factory()->spell($parser->Spell());
 		$this->level        = $parser->Level();
 		$syntax             = SpellParser::getSyntax($this->spell);
-		$this->target       = ($syntax | SpellParser::TARGET) && $target ? Unit::get($target) : null;
-		$this->region       = ($syntax | SpellParser::REGION) && $target ? Region::get($target) : null;
-		$this->region       = ($syntax | SpellParser::DOMAIN) && in_array($domain, [null, Domain::Location]) && $target ? Region::get($target) : null;
-		$this->construction = ($syntax | SpellParser::DOMAIN) && $domain === Domain::Construction && $target ? Construction::get($target) : null;
-		$this->vessel       = ($syntax | SpellParser::DOMAIN) && $domain === Domain::Vessel && $target ? Vessel::get($target) : null;
+		$this->target       = ($syntax & SpellParser::TARGET) && $target ? Unit::get($target) : null;
+		$this->region       = ($syntax & SpellParser::REGION) && $target ? Region::get($target) : null;
+		$this->region       = ($syntax & SpellParser::DOMAIN) && in_array($domain, [null, Domain::Location]) && $target ? Region::get($target) : $this->region;
+		$this->construction = ($syntax & SpellParser::DOMAIN) && $domain === Domain::Construction && $target ? Construction::get($target) : null;
+		$this->vessel       = ($syntax & SpellParser::DOMAIN) && $domain === Domain::Vessel && $target ? Vessel::get($target) : null;
 		$this->directions   = $parser->Directions();
 		$this->context->getCasts()->add($this);
 	}
