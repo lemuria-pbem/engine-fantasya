@@ -166,7 +166,8 @@ final class Describe extends UnitCommand implements Reassignment
 				}
 			}
 		}
-		if ($this->unit->Party() === $castle->Inhabitants()->Owner()->Party()) {
+		$governor = $castle?->Inhabitants()->Owner()?->Party();
+		if (!$governor || $this->unit->Party() === $governor) {
 			$region->setDescription($description);
 			$this->message(DescribeRegionMessage::class, $region);
 			return;

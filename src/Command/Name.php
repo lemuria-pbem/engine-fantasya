@@ -183,8 +183,8 @@ final class Name extends UnitCommand implements Reassignment
 				}
 			}
 		}
-
-		if ($this->unit->Party() === $castle->Inhabitants()->Owner()->Party()) {
+		$governor = $castle?->Inhabitants()->Owner()?->Party();
+		if (!$governor || $this->unit->Party() === $governor) {
 			$region->setName($name);
 			$this->message(NameRegionMessage::class, $region)->p($name);
 			return;
