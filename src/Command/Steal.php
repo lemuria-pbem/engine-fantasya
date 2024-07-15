@@ -64,6 +64,7 @@ final class Steal extends UnitCommand implements Activity, Reassignment
 
 		if ($this->context->getTurnOptions()->IsSimulation()) {
 			$this->message(StealNothingMessage::class)->e($unit);
+			return;
 		}
 
 		$outlook = new Outlook(new Census($party));
