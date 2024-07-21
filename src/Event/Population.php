@@ -42,6 +42,8 @@ final class Population extends AbstractEvent
 
 	private const float RATE = 0.01;
 
+	private const float STATIC = 0.08;
+
 	private const float MIGRATION = 0.1;
 
 	private const int WEALTH = 24;
@@ -141,13 +143,15 @@ final class Population extends AbstractEvent
 	}
 
 	private function calculateGrowth(int $peasants, int $available, float $years, float $work, Region $region): int {
-		$rate = self::RATE;
-		if ($available > 0) {
-			$rate += $years * self::RATE;
-		} elseif ($years < 0.1) {
+		if ($years < self::STATIC) {
 			$rate = 0.0;
-		} elseif ($years < 1.0) {
-			$rate /= 10;
+		} else {
+			$rate = self::RATE;
+			if ($available > 0) {
+				$rate += $years * self::RATE;
+			} elseif ($years < 1.0) {
+				$rate /= 10;
+			}
 		}
 		$boostPeasants = $this->hasApplied(PeasantJoy::class, $region) * PeasantJoy::PEASANTS;
 		$boost         = min(1.0, $boostPeasants / $peasants);
@@ -175,6 +179,7 @@ final class Population extends AbstractEvent
 	private function getMigrantDistribution(Neighbours $neighbours): array {
 		$distribution = [];
 		foreach ($neighbours as $direction => $neighbour) {
+			/** @var Region $neighbour */
 			if ($neighbour->Landscape()->Workplaces() <= 0 || $this->checkForRegionBuilding($neighbour, $this->foresterLodge)) {
 				continue;
 			}
@@ -260,6 +265,5 @@ final class Population extends AbstractEvent
 		$unemployment->setPeasants($region, $unemployed);
 
 		$this->placeDataMetrics(Subject::Joblessness, $percent, $region);
-		//Lemuria::Log()->debug('Unemployment in region ' . $region->Id() . ' is ' . round($percent, 1) . '%.');
 	}
 }
