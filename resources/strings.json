@@ -1046,6 +1046,7 @@
 		"TradeNotOursMessage": "Die Einheit $id kann das fremde Handelsangebot $trade nicht verändern.",
 		"TransporterCheckNoRidingMessage": "Die Einheit $id hat nicht genügend Erfahrung in Reiten für die Übernahme von Transporten.",
 		"TransporterCheckTooHeavyMessage": "Die Einheit $id ist überladen und kann keine Transporte übernehmen.",
+		"TransportImpossibleMessage": "Die Einheit $id kann in dieser Woche nichts transportieren.",
 		"TransportMessage": "Die Einheit $id nimmt an Reichstransporten teil.",
 		"TransportNotMessage": "Die Einheit $id nimmt nicht an Reichstransporten teil.",
 		"TravelAirshipMessage": "Das Schiff $vessel hat die Region $id überflogen.",

@@ -4,6 +4,8 @@ namespace Lemuria\Engine\Fantasya\Realm;
 
 use Lemuria\Engine\Fantasya\Command\Learn;
 use Lemuria\Engine\Fantasya\Command\Teach;
+use Lemuria\Engine\Fantasya\Factory\MessageTrait;
+use Lemuria\Engine\Fantasya\Message\Unit\TransportImpossibleMessage;
 use Lemuria\Engine\Fantasya\State;
 use Lemuria\Id;
 use Lemuria\Identifiable;
@@ -20,6 +22,8 @@ use Lemuria\Model\Reassignment;
  */
 class Fleet implements Reassignment
 {
+	use MessageTrait;
+
 	/**
 	 * @type array<string, true>
 	 */
@@ -48,13 +52,17 @@ class Fleet implements Reassignment
 		}
 		$party = $realm->Party();
 		foreach ($realm->Territory()->Central()->Residents() as $unit) {
-			if ($unit->Party() === $party && !$unit->Vessel() && $unit->IsTransporting() && $this->isAvailable($unit)) {
-				$wagoner = new Wagoner($unit);
-				if ($wagoner->Maximum() > 0) {
-					$id                  = $unit->Id()->Id();
-					$this->wagoner[$id]  = $wagoner;
-					$this->incoming[$id] = $wagoner->Incoming();
-					$this->outgoing[$id] = $wagoner->Outgoing();
+			if ($unit->Party() === $party && $unit->IsTransporting()) {
+				if ($this->isAvailable($unit) && !$unit->Vessel()) {
+					$wagoner = new Wagoner($unit);
+					if ($wagoner->Maximum() > 0) {
+						$id                  = $unit->Id()->Id();
+						$this->wagoner[$id]  = $wagoner;
+						$this->incoming[$id] = $wagoner->Incoming();
+						$this->outgoing[$id] = $wagoner->Outgoing();
+					}
+				} else {
+					$this->message(TransportImpossibleMessage::class, $unit);
 				}
 			}
 		}
@@ -311,6 +319,7 @@ class Fleet implements Reassignment
 				unset($this->wagoner[$id]);
 				unset($this->incoming[$id]);
 				unset($this->outgoing[$id]);
+				$this->message(TransportImpossibleMessage::class, Unit::get(new Id($id)));
 			}
 		}
 	}
