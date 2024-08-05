@@ -184,7 +184,7 @@ abstract class AssaultCommand extends UnitCommand implements Reassignment
 		$outlook = new Outlook(new Census($we));
 		foreach ($outlook->getApparitions($this->unit->Region()) as $unit) {
 			$party = $this->getApparentParty($unit);
-			if ($parties->has($party->Id())) {
+			if ($party && $parties->has($party->Id())) {
 				$this->addAttackedUnit($unit);
 			}
 		}
