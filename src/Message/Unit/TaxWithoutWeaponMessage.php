@@ -11,7 +11,9 @@ class TaxWithoutWeaponMessage extends AbstractUnitMessage
 
 	protected Section $section = Section::Production;
 
+	protected string $weapon = 'weapon';
+
 	protected function create(): string {
-		return 'Unit ' . $this->id . ' cannot use a weapon to enforce tax payment.';
+		return 'Unit ' . $this->id . ' cannot use a ' . $this->weapon . ' to enforce tax payment.';
 	}
 }
