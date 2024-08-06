@@ -74,11 +74,16 @@ final class Follow extends Travel implements Reassignment
 		if ($n < 1 || $n > 2) {
 			throw new InvalidCommandException($this);
 		}
-		if ($n === 2 && strtolower($this->phrase->getParameter()) !== 'einheit') {
-			throw new InvalidCommandException($this);
+		$p = $n;
+		if ($n === 2) {
+			$p = match (strtolower($this->phrase->getParameter())) {
+				'temp'    => 1,
+				'einheit' => 2,
+				default   => throw new InvalidCommandException($this)
+			};
 		}
+		$this->leader = $this->nextId($p);
 
-		$this->leader = $this->nextId($n);
 		if ($this->leader !== $this->unit) {
 			if ($this->calculus()->canDiscover($this->leader)) {
 				$route = $this->context->getTravelRoute($this->leader)->rewind();
