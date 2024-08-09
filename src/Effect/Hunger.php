@@ -53,6 +53,17 @@ final class Hunger extends AbstractUnitEffect
 		return $this->hunger < self::MALUS_THRESHOLD ? null : new HungerMalus($ability);
 	}
 
+	public function recover(): self {
+		$unit = $this->Unit();
+		if ($unit->Health() <= 0.0 && $this->hunger < self::FEED_THRESHOLD) {
+			$unit->setHealth(PHP_FLOAT_MIN);
+		}
+		if ($this->hunger <= 0.0) {
+			Lemuria::Score()->remove($this);
+		}
+		return $this;
+	}
+
 	protected function run(): void {
 		$unit = $this->Unit();
 		$feed = $this->canBeFed($unit);

@@ -61,11 +61,11 @@ final class Support extends AbstractEvent
 				if ($hunger >= 1.0) {
 					$this->message(SupportNothingMessage::class, $unit);
 				}
-				$effect = $this->effect($unit)->setHunger($hunger);
+				$effect = $this->effect($unit)->setHunger($hunger)->recover();
 				Lemuria::Score()->add($effect);
 				$this->message(SupportHungerMessage::class, $unit);
 			} else {
-				Lemuria::Score()->remove($this->effect($unit));
+				$this->existingEffect($unit)?->setHunger(0.0)->recover();
 			}
 		}
 	}
@@ -220,5 +220,12 @@ final class Support extends AbstractEvent
 		/** @var Hunger $hunger */
 		$hunger = Lemuria::Score()->find($effect->setUnit($unit));
 		return $hunger ?? $effect;
+	}
+
+	private function existingEffect(Unit $unit): ?Hunger {
+		$effect = new Hunger($this->state);
+		/** @var Hunger|null $hunger */
+		$hunger = Lemuria::Score()->find($effect->setUnit($unit));
+		return $hunger;
 	}
 }
