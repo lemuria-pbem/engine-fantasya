@@ -18,6 +18,7 @@ use Lemuria\Model\Fantasya\Commodity\Monster\FireElemental;
 use Lemuria\Model\Fantasya\Commodity\Monster\WaterElemental;
 use Lemuria\Model\Fantasya\Distribution;
 use Lemuria\Model\Fantasya\Gang;
+use Lemuria\Model\Fantasya\Race;
 use Lemuria\Model\Fantasya\Unit;
 
 class ElementalBeing extends AbstractBattleSpell
@@ -27,6 +28,9 @@ class ElementalBeing extends AbstractBattleSpell
 	 */
 	private const array ELEMENTALS = [AirElemental::class, EarthElemental::class, FireElemental::class, WaterElemental::class];
 
+	/**
+	 * @var array<Race>|null
+	 */
 	private static ?array $races = null;
 
 	public function __construct(BattleSpellGrade $grade) {
@@ -50,9 +54,7 @@ class ElementalBeing extends AbstractBattleSpell
 			$region    = $unit->Region();
 			$landscape = $region->Landscape();
 			$race      = self::$races[$landscape::class];
-			$create    = new Create($party, $region);
-			$create->add(new Gang($race));
-			$elemental = $create->act()->getUnits()[0];
+			$elemental = $this->summonElemental($unit, $race);
 			$effect    = new DissolveEffect(State::getInstance());
 			Lemuria::Score()->add($effect->setUnit($elemental));
 			State::getInstance()->injectIntoTurn($effect);
@@ -62,6 +64,16 @@ class ElementalBeing extends AbstractBattleSpell
 			Lemuria::Log()->debug('New combatant ' . $combatant->Id() . ' for party ' . $party . ' consisting of one ' . $race . ' has been summoned.');
 		}
 		return $grade;
+	}
+
+	private function summonElemental(Unit $summoner, Race $race): Unit {
+		$party  = $summoner->Party();
+		$region = $summoner->Region();
+		$create = new Create($party, $region);
+		$create->add(new Gang($race));
+		/** @var Unit $elemental */
+		$elemental = $create->act()->getUnits()[0];
+		return $elemental->setIsLooting(false);
 	}
 
 	private function createCombatant(Unit $unit, Unit $elemental): Combatant {
