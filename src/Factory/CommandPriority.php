@@ -46,7 +46,7 @@ final class CommandPriority
 		'Quest'          => 22,
 		'Visit'          => 23,
 		'Announcement'   => 24,
-		//25
+		'Fief'           => 25,
 		'ThrowOut'       => 26,
 		'Abandon'        => 27,
 		'Enter'          => 28,
