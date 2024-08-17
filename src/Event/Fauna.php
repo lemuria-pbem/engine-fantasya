@@ -308,7 +308,7 @@ final class Fauna extends AbstractEvent
 		$inventory = new Resources();
 		if ($animal instanceof TrophySource) {
 			$trophy = $animal->Trophy();
-			if ($trophy && isset(Operate::WITH_TROPHY[$trophy::class])) {
+			if ($trophy && isset(Operate::WITH_TROPHY[$animal::class])) {
 				$inventory->add(new Quantity($trophy));
 			}
 		}
