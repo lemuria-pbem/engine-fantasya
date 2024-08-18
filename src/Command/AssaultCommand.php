@@ -2,13 +2,13 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Engine\Fantasya\Effect\InvisibleEnemy;
 use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Combat\BattlePlan;
 use Lemuria\Engine\Fantasya\Combat\Place;
 use Lemuria\Engine\Fantasya\Combat\Side;
 use Lemuria\Engine\Fantasya\Context;
+use Lemuria\Engine\Fantasya\Effect\InvisibleEnemy;
 use Lemuria\Engine\Fantasya\Effect\NonAggressionPact;
 use Lemuria\Engine\Fantasya\Exception\Command\InvalidIdException;
 use Lemuria\Engine\Fantasya\Exception\CommandException;
@@ -269,8 +269,7 @@ abstract class AssaultCommand extends UnitCommand implements Reassignment
 			//$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
 			return Place::None;
 		}
-		$isMonsterCombat = $we->Type() === Type::Monster && $party->Type() === Type::Monster;
-		if (!$isMonsterCombat && !$this->checkVisibility($this->unit, $unit)) {
+		if (!$this->checkAttackVisibility($this->unit, $unit)) {
 			$this->addInvisibleEnemyEffect($unit);
 			$this->parameterMessage('NotFound', (string)$unit->Id());
 			//$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());

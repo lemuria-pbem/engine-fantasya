@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Message\Unit;
 
+use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
 use Lemuria\Item;
 
@@ -19,7 +20,7 @@ class GriffineggReturnMessage extends GriffineggReturnsMessage
 	}
 
 	protected function getTranslation(string $name): string {
-		return $this->item($name, 'griffins', $this->index()) ?? parent::getTranslation($name);
+		return $this->item($name, 'griffins', $this->index(), Casus::Dative) ?? parent::getTranslation($name);
 	}
 
 	protected function index(): int {
