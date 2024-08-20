@@ -6,6 +6,7 @@ use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Command\Destroy\Dismiss;
 use Lemuria\Engine\Fantasya\Command\Destroy\Lose;
 use Lemuria\Engine\Fantasya\Command\Handover\Bestow;
+use Lemuria\Engine\Fantasya\Command\Handover\Fief;
 use Lemuria\Engine\Fantasya\Command\Handover\Give;
 use Lemuria\Engine\Fantasya\Command\Handover\Grant;
 use Lemuria\Engine\Fantasya\Command\Handover\Migrate;
@@ -36,6 +37,10 @@ use Lemuria\Model\Fantasya\Unit;
  *
  * Migrate:
  * - GEBEN <Unit> Einheit to foreign unit
+ *
+ * Fief:
+ * - GEBEN <Unit> Reich
+ * - GEBEN <Unit> Reich Vollständig
  *
  * Dismiss (Alias: ENTLASSEN)
  * - GEBEN Bauern|Region
@@ -70,8 +75,11 @@ final class Handover extends DelegatedCommand
 			throw new InvalidCommandException($this, 'No recipient parameter in handover.');
 		}
 
+		$param = strtolower($this->phrase->getParameter(2));
+		if ($n >= 2 && $n <= 3 && $param === 'reich') {
+			return new Fief($this->phrase, $this->context);
+		}
 		if ($n === 2) {
-			$param = strtolower($this->phrase->getParameter(2));
 			switch ($param) {
 				case 'kommando' :
 					return new Grant($this->phrase, $this->context);
