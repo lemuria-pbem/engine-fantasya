@@ -140,8 +140,10 @@ class Allotment
 			}
 
 			$total = array_sum($parts);
-			foreach ($parts as $id => $part) {
-				$consumer->addRegion($this->region[$id], $part / $total);
+			if ($total > 0) {
+				foreach ($parts as $id => $part) {
+					$consumer->addRegion($this->region[$id], $part / $total);
+				}
 			}
 		}
 		$consumer->allocate($resources);
