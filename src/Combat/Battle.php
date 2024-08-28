@@ -174,26 +174,31 @@ class Battle
 	public function addFromInvisibleEnemies(): static {
 		$effect = new InvisibleEnemy(State::getInstance());
 		$score  = Lemuria::Score();
+
+		$ids = $this->getUnitIds($this->defenders);
 		foreach ($this->attackers as $attacker) {
 			$existing = $score->find($effect->setUnit($attacker));
 			if ($existing instanceof InvisibleEnemy) {
 				foreach ($existing->From() as $defender) {
-					if ($defender->Size() > 0) {
+					if ($defender->Size() > 0 && !isset($ids[$defender->Id()->Id()])) {
 						$this->addDefender($defender);
 					}
 				}
 			}
 		}
+
+		$ids = $this->getUnitIds($this->attackers);
 		foreach ($this->defenders as $defender) {
 			$existing = $score->find($effect->setUnit($defender));
 			if ($existing instanceof InvisibleEnemy) {
 				foreach ($existing->From() as $attacker) {
-					if ($attacker->Size() > 0) {
+					if ($attacker->Size() > 0 && !isset($ids[$attacker->Id()->Id()])) {
 						$this->addAttacker($attacker);
 					}
 				}
 			}
 		}
+
 		return $this;
 	}
 
@@ -502,6 +507,15 @@ class Battle
 				Lemuria::Log()->debug('Unit ' . $unit . ' of army ' . $army->Id() . ' has health ' . $health . '.');
 			}
 		}
+	}
+
+	private function getUnitIds(array $units): array {
+		$ids = [];
+		foreach ($units as $unit) {
+			/** @var Unit $unit */
+			$ids[$unit->Id()->Id()] = true;
+		}
+		return $ids;
 	}
 
 	private function initMonsters(): void {
