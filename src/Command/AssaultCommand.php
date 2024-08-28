@@ -251,18 +251,10 @@ abstract class AssaultCommand extends UnitCommand implements Reassignment
 			//$this->message(AttackSelfMessage::class);
 			return Place::None;
 		}
-		$we    = $this->unit->Party();
-		$party = $this->getApparentParty($unit);
-		if ($party === $we) {
-			$this->parameterMessage('OwnUnit', (string)$unit->Id());
-			//$this->message(AttackOwnUnitMessage::class)->p((string)$unit->Id());
+		if ($this->isProtectedFromAttacks($unit)) {
 			return Place::None;
 		}
-		if ($this->isProtectedFromAttacks($party)) {
-			$this->parameterMessage('ProtectedParty', (string)$unit->Id());
-			//$this->message(AttackProtectedPartyMessage::class)->p((string)$unit->Id());
-			return Place::None;
-		}
+
 		$region = $unit->Region();
 		if ($region !== $this->unit->Region()) {
 			$this->parameterMessage('NotFound', (string)$unit->Id());
@@ -275,7 +267,7 @@ abstract class AssaultCommand extends UnitCommand implements Reassignment
 			//$this->message(AttackNotFoundMessage::class)->p((string)$unit->Id());
 			return Place::None;
 		}
-		if ($we->Diplomacy()->has(Relation::COMBAT, $unit)) {
+		if ($this->unit->Party()->Diplomacy()->has(Relation::COMBAT, $unit)) {
 			$this->parameterMessage('Ally', (string)$unit->Id());
 			//$this->message(AttackAllyMessage::class)->p((string)$unit->Id());
 			return Place::None;
@@ -320,9 +312,25 @@ abstract class AssaultCommand extends UnitCommand implements Reassignment
 		return $party === false ? $unit->Party() : $party;
 	}
 
-	private function isProtectedFromAttacks(Party $party): bool {
+	private function isProtectedFromAttacks(Unit $unit): bool {
+		$party = $this->getApparentParty($unit);
+		if ($party) {
+			if ($party === $this->unit->Party()) {
+				$this->parameterMessage('OwnUnit', (string)$unit->Id());
+				//$this->message(AttackOwnUnitMessage::class)->p((string)$unit->Id());
+				return true;
+			}
+		} else {
+			$party = $unit->Party();
+		}
+
 		$effect = new NonAggressionPact(State::getInstance());
-		return (bool)Lemuria::Score()->find($effect->setParty($party));
+		if (Lemuria::Score()->find($effect->setParty($party))) {
+			$this->parameterMessage('ProtectedParty', (string)$unit->Id());
+			//$this->message(AttackProtectedPartyMessage::class)->p((string)$unit->Id());
+			return true;
+		}
+		return false;
 	}
 
 	private function addInvisibleEnemyEffect(Unit $unit): void {
