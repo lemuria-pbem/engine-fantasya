@@ -69,6 +69,7 @@
 			"AttackerSplitWeaponMessage": "Die angreifende Einheit $unit schickt $count $fighter aus der Abteilung $from in der $battleRow als Abteilung $to (mit $weapon) an die Front.",
 			"AttackerTacticsRoundMessage": "Die Angreifer haben den taktischen Vorteil auf ihrer Seite.",
 			"AttackerWonMessage": "Die angreifende Seite hat den Kampf gewonnen, die Verteidiger sind besiegt.",
+			"AuraPortalStabilizesMessage": "Der Effekt des Auraportals stabilisiert das astrale Feld und gleicht die Störung aus.",
 			"BattleBeginsMessage": "In der Region $region findet ein Kampf statt: Die $aParty $attacker $attack die $dParty $defender an.",
 			"BattleEndedInDrawMessage": "Der Kampf endet unentschieden, beide Seiten haben sich gegenseitig besiegt.",
 			"BattleEndsMessage": "Kampfende",
