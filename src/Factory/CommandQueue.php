@@ -2,14 +2,13 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
+use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Command\UnitCommand;
 use Lemuria\Lemuria;
 
 class CommandQueue
 {
-	use RealmTrait;
-
 	/**
 	 * @var array<int, array>
 	 */
@@ -54,9 +53,6 @@ class CommandQueue
 	}
 
 	public function shuffle(int $priority): static {
-		if (!$this->priority->canShuffle($priority)) {
-			return $this;
-		}
 		if (empty($this->queue[$priority])) {
 			return $this;
 		}
@@ -64,27 +60,9 @@ class CommandQueue
 			return $this;
 		}
 
-		Lemuria::Log()->debug('Shuffling queue ' . $priority . '.');
-		$queue = [];
-		$units = [];
-		foreach ($this->queue[$priority] as $action) {
-			if ($this->isRealmCommand($action)) {
-				$queue[] = $action;
-				continue;
-			}
-
-			$id = $action->Unit()->Id()->Id();
-			if (!isset($units[$id])) {
-				$units[$id] = [];
-			}
-			$units[$id][] = $action;
-		}
-
-		shuffle($units);
-		foreach ($units as $actions) {
-			array_push($queue, ...$actions);
-		}
-		$this->queue[$priority] = $queue;
+		$shuffle = $this->priority->getQueueStrategy($priority);
+		Lemuria::Log()->debug('Shuffling queue ' . $priority . ' with ' . getClass($shuffle) . ' strategy.');
+		$this->queue[$priority] = $shuffle->shuffle($this->queue[$priority]);
 		return $this;
 	}
 }

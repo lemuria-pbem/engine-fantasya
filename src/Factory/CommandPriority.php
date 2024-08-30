@@ -7,6 +7,10 @@ use Lemuria\Engine\Fantasya\Action;
 use Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Effect;
 use Lemuria\Engine\Fantasya\Event;
+use Lemuria\Engine\Fantasya\Factory\Queue\Shuffle;
+use Lemuria\Engine\Fantasya\Factory\Queue\Shuffle\Attack;
+use Lemuria\Engine\Fantasya\Factory\Queue\Shuffle\DefaultShuffle;
+use Lemuria\Engine\Fantasya\Factory\Queue\Shuffle\NullShuffle;
 use Lemuria\Engine\Fantasya\Priority;
 use Lemuria\Exception\LemuriaException;
 
@@ -143,6 +147,8 @@ final class CommandPriority
 	 */
 	private const int A_ACTION = 99;
 
+	private const string ATTACK = 'Attack';
+
 	private static ?CommandPriority $instance = null;
 
 	public static function getInstance(): CommandPriority {
@@ -152,13 +158,20 @@ final class CommandPriority
 		return self::$instance;
 	}
 
-	public function canShuffle(int $priority): bool {
-		return match($priority) {
-			self::B_ACTION - 1, self::B_ACTION,
-			self::M_ACTION - 1, self::M_ACTION,
-			self::A_ACTION - 1, self::A_ACTION => false,
-			default                            => true
-		};
+	/**
+	 * Constructor is private in this singleton class.
+	 */
+	private function __construct() {
+	}
+
+	public function getQueueStrategy(int $priority): Shuffle {
+		if (!$this->canShuffle($priority)) {
+			return new NullShuffle();
+		}
+		if ($priority === self::ORDER[self::ATTACK]) {
+			return new Attack();
+		}
+		return new DefaultShuffle();
 	}
 
 	/**
@@ -202,9 +215,12 @@ final class CommandPriority
 		return 0;
 	}
 
-	/**
-	 * Constructor is private in this singleton class.
-	 */
-	private function __construct() {
+	private function canShuffle(int $priority): bool {
+		return match($priority) {
+			self::B_ACTION - 1, self::B_ACTION,
+			self::M_ACTION - 1, self::M_ACTION,
+			self::A_ACTION - 1, self::A_ACTION => false,
+			default                            => true
+		};
 	}
 }
