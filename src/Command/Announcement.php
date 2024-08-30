@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Command;
 use Lemuria\Engine\Fantasya\Census;
 use Lemuria\Engine\Fantasya\Exception\UnknownCommandException;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
+use Lemuria\Engine\Fantasya\Factory\VisitTrait;
 use Lemuria\Engine\Fantasya\Message\Announcement as Announce;
 use Lemuria\Engine\Fantasya\Message\Construction\AnnouncementConstructionMessage;
 use Lemuria\Engine\Fantasya\Message\Party\AnnouncementPartyMessage;
@@ -28,6 +29,7 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Party;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
 use Lemuria\Model\Reassignment;
@@ -44,6 +46,7 @@ use Lemuria\Model\Reassignment;
 final class Announcement extends UnitCommand implements Reassignment
 {
 	use ReassignTrait;
+	use VisitTrait;
 
 	private int $reassignParameter;
 
@@ -118,6 +121,7 @@ final class Announcement extends UnitCommand implements Reassignment
 				$sender = (string)$this->unit;
 				$this->message(AnnouncementUnitMessage::class, $unit)->p($message)->p($sender, Announce::SENDER)->p($recipient, Announce::RECIPIENT);
 				$this->message(AnnouncementToUnitMessage::class)->p($message)->e($unit);
+				$this->visitNPC($unit);
 			} else {
 				$this->message(AnnouncementAnonymousMessage::class, $unit)->p($message)->p('', Announce::SENDER)->p($recipient, Announce::RECIPIENT);
 				$this->message(AnnouncementToUnitAnonymousMessage::class)->p($message)->e($unit);
@@ -201,5 +205,13 @@ final class Announcement extends UnitCommand implements Reassignment
 	private function getMessage(int $i = 3): string {
 		$message = $this->phrase->getLine($i);
 		return trim($message, "\"'\t ");
+	}
+
+	private function visitNPC(Unit $unit): void {
+		if (!$this->context->getTurnOptions()->IsSimulation()) {
+			if ($unit->Party()->Type() === Type::NPC) {
+				$this->visitFrom($unit);
+			}
+		}
 	}
 }

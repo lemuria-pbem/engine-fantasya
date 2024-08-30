@@ -3,10 +3,8 @@ declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Effect\Rumors;
-use Lemuria\Engine\Fantasya\Effect\VisitEffect;
-use Lemuria\Engine\Fantasya\Effect\WelcomeVisitor;
-use Lemuria\Engine\Fantasya\Factory\Model\Buzzes;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
+use Lemuria\Engine\Fantasya\Factory\VisitTrait;
 use Lemuria\Engine\Fantasya\Message\Announcement as Announce;
 use Lemuria\Engine\Fantasya\Message\Unit\VisitMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\VisitNoMarketMessage;
@@ -30,6 +28,7 @@ use Lemuria\Model\Reassignment;
 final class Visit extends UnitCommand implements Reassignment
 {
 	use ReassignTrait;
+	use VisitTrait;
 
 	protected function run(): void {
 		$id     = $this->parseId();
@@ -65,21 +64,12 @@ final class Visit extends UnitCommand implements Reassignment
 	}
 
 	private function visit(Unit $unit): void {
-		$score        = Lemuria::Score();
-		$state        = State::getInstance();
 		$isSimulation = $this->context->getTurnOptions()->IsSimulation();
 		$news         = [];
 
-		$effect   = new VisitEffect($state);
-		$existing = $score->find($effect->setUnit($unit));
-		if ($existing instanceof VisitEffect) {
-			$effect = $existing;
-		} else {
-			$score->add($effect);
-		}
-		$effect->Parties()->add($this->unit->Party());
+		$this->addVisitEffect($unit);
 
-		$effect = new Rumors($state);
+		$effect = new Rumors(State::getInstance());
 		$rumors = Lemuria::Score()->find($effect->setUnit($unit));
 		if ($rumors instanceof Rumors && !$isSimulation) {
 			$buzzes = $rumors->getRumorsFor($this->unit);
@@ -87,6 +77,7 @@ final class Visit extends UnitCommand implements Reassignment
 				$news[VisitRumorMessage::class] = $buzzes;
 			}
 		}
+
 		$messages = $this->visitFrom($unit);
 		if (!$isSimulation && $messages) {
 			$news[VisitMessage::class] = $messages;
@@ -104,20 +95,5 @@ final class Visit extends UnitCommand implements Reassignment
 				}
 			}
 		}
-	}
-
-	private function visitFrom(Unit $unit): ?Buzzes {
-		if ($unit->Party()->Type() === Type::NPC) {
-			$effect   = new WelcomeVisitor(State::getInstance());
-			$existing = Lemuria::Score()->find($effect->setUnit($unit));
-			if ($existing instanceof WelcomeVisitor) {
-				Lemuria::Log()->debug('Visiting NPC ' . $unit . '...');
-				$messages = $existing->Visitation()?->from($this->unit);
-				if ($messages && !$messages->isEmpty()) {
-					return $messages;
-				}
-			}
-		}
-		return null;
 	}
 }
