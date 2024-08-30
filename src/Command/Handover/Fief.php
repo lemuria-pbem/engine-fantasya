@@ -20,7 +20,6 @@ use Lemuria\Engine\Fantasya\Message\Unit\GrantMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\GrantTakeoverMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TransportNotMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\UnguardMessage;
-use Lemuria\Exception\NotImplementedException;
 use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Quota;
@@ -65,8 +64,6 @@ final class Fief extends UnitCommand
 			return;
 		}
 		$n === 3 ? $this->handOverCompletely() : $this->handOverMinimum();
-
-		throw new NotImplementedException();
 	}
 
 	private function checkRealm(): bool {
@@ -97,7 +94,7 @@ final class Fief extends UnitCommand
 		$i    = 1;
 		$id   = null;
 		$unit = $this->nextId($i, $id);
-		if (!$unit || $this->calculus()->canDiscover($unit)) {
+		if (!$unit || !$this->calculus()->canDiscover($unit)) {
 			$this->message(FiefNotFoundMessage::class)->p((string)$id);
 			return false;
 		}
@@ -180,19 +177,21 @@ final class Fief extends UnitCommand
 		$regulation = $this->party->Regulation();
 		foreach ($this->realm->Territory() as $region) {
 			foreach ($region->Residents() as $unit) {
-				if ($isHuman || $unit->Race() === $race) {
-					$from->remove($unit);
-					$to->add($unit);
-					$this->message(MigrateFromMessage::class, $former)->e($unit)->e($this->party, MigrateFromMessage::PARTY);
-					$this->message(MigrateToMessage::class, $this->party)->e($unit);
-				} else {
-					if ($unit->IsGuarding()) {
-						$unit->setIsGuarding(false);
-						$this->message(UnguardMessage::class, $unit);
-					}
-					if ($unit->IsTransporting()) {
-						$unit->setIsTransporting(false);
-						$this->message(TransportNotMessage::class, $unit);
+				if ($unit->Party() === $former) {
+					if ($isHuman || $unit->Race() === $race) {
+						$from->remove($unit);
+						$to->add($unit);
+						$this->message(MigrateFromMessage::class, $former)->e($unit)->e($this->party, MigrateFromMessage::PARTY);
+						$this->message(MigrateToMessage::class, $this->party)->e($unit);
+					} else {
+						if ($unit->IsGuarding()) {
+							$unit->setIsGuarding(false);
+							$this->message(UnguardMessage::class, $unit);
+						}
+						if ($unit->IsTransporting()) {
+							$unit->setIsTransporting(false);
+							$this->message(TransportNotMessage::class, $unit);
+						}
 					}
 				}
 			}
