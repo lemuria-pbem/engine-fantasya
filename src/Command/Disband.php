@@ -17,6 +17,8 @@ use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
  *
  * Dismiss summoned and controlled unit:
  * - ENTLASSEN <monster id>
+ *
+ * Delegates to Dismiss for commodities.
  */
 final class Disband extends DelegatedCommand
 {
@@ -28,14 +30,15 @@ final class Disband extends DelegatedCommand
 		if ($n < 1) {
 			throw new InvalidCommandException($this, 'No recipient parameter in disband.');
 		}
+
 		if ($n > 1) {
-			throw new InvalidCommandException($this, 'Invalid surplus parameter in disband.');
+			return new Dismiss($this->phrase, $this->context);
 		}
 
 		$unit = $this->nextId($n);
 		if ($unit->Party() !== $this->context->Party()) {
 			return new Deliver($this->phrase, $this->context);
 		}
-		return new Dismiss($this->phrase, $this->context);
+		throw new InvalidCommandException($this);
 	}
 }
