@@ -5,6 +5,9 @@ namespace Lemuria\Engine\Fantasya\Combat\Log\Message;
 use Lemuria\Engine\Fantasya\Combat\Combatant;
 use Lemuria\Validate;
 
+/**
+ * @deprecated This message is not used anymore since version 1.5.26.
+ */
 class SongOfPeaceFighterMessage extends SongOfPeaceCombatantMessage
 {
 	private const string FIGHTER = 'fighter';
