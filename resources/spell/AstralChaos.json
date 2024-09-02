@@ -1,6 +1,7 @@
 {
 	"description": [
 		"Dieses Ritual, ausgeführt vor einem Kampf, verwirbelt die astralen Energien auf dem Schlachtfeld und macht es so allen Magiern schwieriger, ihre Zauber zu wirken.",
-		"Je stärker das astrale Chaos ist, umso geringer wird die Wirkung anderer Kampfzauber sein, wenn diese nicht sogar gänzlich fehlschlagen."
+		"Je stärker das astrale Chaos ist, umso geringer wird die Wirkung anderer Kampfzauber sein, wenn diese nicht sogar gänzlich fehlschlagen. Die Stärke des Chaos berechnet sich nach C = Zauberstufe * Magietalent.",
+		"Die Stärke eines zu störenden Zaubers berechnet sich nach S = Zauberstufe * Aura pro Stufe * Schwierigkeit. Um den Zauber sicher zu neutralisieren, muss C ≥ S sein."
 	]
 }

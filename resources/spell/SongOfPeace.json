@@ -1,6 +1,7 @@
 {
 	"description": [
 		"Dieser Zauber zähmt selbst den wildesten Ork und macht ihn friedfertig und sanftmütig. Unbehelligt kann der Magier seines Weges ziehen.",
-		"Je mehr Gegner besänftigt werden müssen, umso stärker muss dieser Zauberspruch ausgesprochen werden, wenn der Magier alle Gegner zähmen möchte."
+		"Je mehr Gegner besänftigt werden müssen, umso stärker muss dieser Zauberspruch ausgesprochen werden, damit der Magier dem Kampf aus dem Wege gehen kann.",
+		"Die benötigte Stufe des Zaubers berechnet sich nach S = Feindstärke / (10 * Magietalent) und muss nicht angegeben werden. Hat der Magier zu wenig Aura, kann er den Kampf nicht vermeiden."
 	]
 }
