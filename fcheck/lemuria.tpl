@@ -80,6 +80,7 @@
 ^@?(gi|gib|geb|gebe|geben) +[a-z0-9]{1,6}( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^@?(gr|gre|gren|grenz|grenze) +[0-9]+%? +[a-zäöüß ]+$
+^@?(gr|gre|gren|grenz|grenze) +[a-zäöüß ]+ +nicht$
 
 ^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6}$
 ^(ha|han|hand|hande|handel|handeln) +[a-z0-9]{1,6} +(\*|alle|alles)$
