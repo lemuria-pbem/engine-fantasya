@@ -4,13 +4,10 @@ namespace Lemuria\Engine\Fantasya\Message\Unit;
 
 use Lemuria\Engine\Fantasya\Message\Casus;
 use Lemuria\Engine\Fantasya\Message\LemuriaMessage;
-use Lemuria\Engine\Message\Result;
 use Lemuria\Model\Fantasya\Quantity;
 
 class QuotaSetMessage extends QuotaRemoveHerbMessage
 {
-	protected Result $result = Result::Success;
-
 	protected Quantity $quota;
 
 	public function create(): string {

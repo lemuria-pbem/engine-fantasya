@@ -9,7 +9,7 @@ use Lemuria\Id;
 
 class QuotaRemoveHerbMessage extends AbstractUnitMessage
 {
-	protected Result $result = Result::Failure;
+	protected Result $result = Result::Success;
 
 	protected Section $section = Section::Economy;
 
