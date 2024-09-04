@@ -108,24 +108,26 @@ final class Leave extends UnitCommand
 		ksort($sorted);
 
 		$payload = $this->calculus()->payload();
-		foreach ($sorted as $quantity) {
-			/** @var Quantity $quantity */
-			$commodity = $quantity->Commodity();
-			if ($commodity instanceof Silver) {
-				if ($silver > 100.0) {
-					$count = 100 * $this->unit->Size();
-					$lose  = $quantity->Count() - $count;
-					$inventory->remove(new Quantity($commodity, $lose));
-					$this->giftToRandomUnit(new Quantity($commodity, $lose));
-					$quantity = new Quantity($commodity, $count);
+		foreach ($sorted as $items) {
+			foreach ($items as $quantity) {
+				/** @var Quantity $quantity */
+				$commodity = $quantity->Commodity();
+				if ($commodity instanceof Silver) {
+					if ($silver > 100.0) {
+						$count = 100 * $this->unit->Size();
+						$lose  = $quantity->Count() - $count;
+						$inventory->remove(new Quantity($commodity, $lose));
+						$this->giftToRandomUnit(new Quantity($commodity, $lose));
+						$quantity = new Quantity($commodity, $count);
+					}
 				}
+				if ($quantity->Weight() > $payload) {
+					$count = $quantity->Count() - (int)floor($payload / $commodity->Weight());
+					$inventory->remove(new Quantity($commodity, $count));
+					$this->giftToRandomUnit(new Quantity($commodity, $count));
+				}
+				$payload -= $quantity->Weight();
 			}
-			if ($quantity->Weight() > $payload) {
-				$count = $quantity->Count() - (int)floor($payload / $commodity->Weight());
-				$inventory->remove(new Quantity($commodity, $count));
-				$this->giftToRandomUnit(new Quantity($commodity, $count));
-			}
-			$payload -= $quantity->Weight();
 		}
 	}
 
