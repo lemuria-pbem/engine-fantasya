@@ -27,6 +27,8 @@ use Lemuria\Model\Fantasya\Quotas;
 use Lemuria\Model\Fantasya\Race\Human;
 use Lemuria\Model\Fantasya\Realm;
 use Lemuria\Model\Fantasya\Relation;
+use Lemuria\Model\Fantasya\Talent\Herballore;
+use Lemuria\Model\Fantasya\Talent\Magic;
 use Lemuria\Model\Fantasya\Unit;
 
 /**
@@ -170,17 +172,28 @@ final class Fief extends UnitCommand
 		$this->party->Possessions()->add($this->realm);
 		$this->message(FiefPartyMessage::class, $this->party)->p($this->realm->Name());
 
-		$from       = $former->People();
-		$to         = $this->party->People();
-		$race       = $this->party->Race();
-		$isHuman    = $race instanceof Human;
-		$regulation = $this->party->Regulation();
+		$from          = $former->People();
+		$to            = $this->party->People();
+		$race          = $this->party->Race();
+		$isHuman       = $race instanceof Human;
+		$regulation    = $this->party->Regulation();
+		$magic         = self::createTalent(Magic::class);
+		$hasMages      = false;
+		$herballore    = self::createTalent(Herballore::class);
+		$hasHerbalists = false;
 		foreach ($this->realm->Territory() as $region) {
 			foreach ($region->Residents() as $unit) {
 				if ($unit->Party() === $former) {
 					if ($isHuman || $unit->Race() === $race) {
 						$from->remove($unit);
 						$to->add($unit);
+						$knowledge = $unit->Knowledge();
+						if ($knowledge->offsetExists($magic)) {
+							$hasMages = true;
+						}
+						if ($knowledge->offsetExists($herballore)) {
+							$hasHerbalists = true;
+						}
 						$this->message(MigrateFromMessage::class, $former)->e($unit)->e($this->party, MigrateFromMessage::PARTY);
 						$this->message(MigrateToMessage::class, $this->party)->e($unit);
 					} else {
@@ -205,6 +218,13 @@ final class Fief extends UnitCommand
 			}
 			$oldQuotas->clear();
 			$formerRegulation->offsetUnset($region->Id());
+		}
+
+		if ($hasMages) {
+			$this->handOverSpellsFrom($former);
+		}
+		if ($hasHerbalists) {
+			$this->handOverHerbagesFrom($former);
 		}
 
 		foreach ($castles as $castle) {
@@ -272,6 +292,30 @@ final class Fief extends UnitCommand
 			$existing->setThreshold($quota->Threshold());
 		} else {
 			$quotas->add(new Quota($commodity, $quota->Threshold()));
+		}
+	}
+
+	private function handOverSpellsFrom(Party $former): void {
+		$spellBook = $this->party->SpellBook();
+		foreach ($former->SpellBook() as $spell) {
+			if (!$spellBook->offsetExists($spell)) {
+				$spellBook->add($spell);
+			}
+		}
+	}
+
+	private function handOverHerbagesFrom(Party $former): void {
+		$herbalBook = $this->party->HerbalBook();
+		$source     = $former->HerbalBook();
+		foreach ($source as $region) {
+			if ($herbalBook->has($region->Id())) {
+				$round = $source->getVisit($region)->Round();
+				if ($round > $herbalBook->getVisit($region)->Round()) {
+					$herbalBook->record($region, $source->getHerbage($region), $round);
+				}
+			} else {
+				$herbalBook->record($region, $source->getHerbage($region), $source->getVisit($region)->Round());
+			}
 		}
 	}
 }
