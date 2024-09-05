@@ -71,7 +71,7 @@ final class Griffinegg extends AllocationCommand implements Activity
 				}
 				$this->demand = min($this->demand, $eggCount);
 				$chance       = 1.0;
-				$personRate   = $resources[Griffin::class]->Count() / $this->unit->Size();
+				$personRate   = sqrt($resources[Griffin::class]->Count() / $this->unit->Size());
 				if ($personRate > 0) {
 					$camouflage = $this->calculus()->knowledge(Camouflage::class)->Level();
 					$chance     = $camouflage > 0 ? $this->demand * $personRate / $camouflage : 0.0;
