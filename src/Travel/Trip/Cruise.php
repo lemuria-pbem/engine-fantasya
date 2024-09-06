@@ -5,6 +5,7 @@ namespace Lemuria\Engine\Fantasya\Travel\Trip;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Travel\Movement;
 use Lemuria\Exception\LemuriaException;
+use Lemuria\Id;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Vessel;
 
@@ -21,9 +22,12 @@ class Cruise extends AbstractTrip
 		self::$seafarer[$seafarer->getId()] = $seafarer;
 	}
 
-	public static function entered(Region $region): void {
-		foreach (self::$seafarer as $seafarer) {
-			$seafarer->sailedTo($region);
+	public static function entered(Vessel $vessel, Region $region): void {
+		foreach (self::$seafarer as $id => $seafarer) {
+			$id = new Id($id);
+			if ($vessel->Passengers()->has($id)) {
+				$seafarer->sailedTo($region);
+			}
 		}
 	}
 

@@ -151,7 +151,7 @@ trait NavigationTrait
 		if ($this->airshipped) {
 			$this->message(TravelAirshipMessage::class, $region)->p((string)$this->vessel);
 		} else {
-			Cruise::entered($destination);
+			Cruise::entered($this->vessel, $destination);
 			$this->message(TravelVesselMessage::class, $region)->p((string)$this->vessel);
 		}
 		if ($this->vessel->Port()) {
