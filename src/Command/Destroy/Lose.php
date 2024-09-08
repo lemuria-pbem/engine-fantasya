@@ -150,12 +150,13 @@ final class Lose extends UnitCommand implements Operator, Reassignment
 		if ($this->amount === PHP_INT_MAX) {
 			$this->amount = $this->unit->Inventory()[$commodity]->Count();
 		}
+		$this->unit->Inventory()->remove(new Quantity($commodity, $this->amount));
+
 		$quantity = new Quantity($commodity, $this->amount);
-		$unit     = $this->giftToRandomUnit($quantity);
+		$this->message(LoseMessage::class)->i($quantity);
+		$unit = $this->giftToRandomUnit($quantity);
 		if ($unit) {
 			$this->message(LoseToUnitMessage::class, $unit)->e($this->unit)->i($quantity);
-		} else {
-			$this->message(LoseMessage::class)->i($quantity);
 		}
 	}
 

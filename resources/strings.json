@@ -664,7 +664,7 @@
 		"LoseOnlyMessage": "Die Einheit $id kann nur $quantity wegwerfen.",
 		"LoseSiegeMessage": "Die Einheit $id kann nichts wegwerfen, das Gebäude wird belagert.",
 		"LoseToNoneMessage": "Die Einheit $id wirft ihren gesamten Besitz weg.",
-		"LoseToUnitMessage": "Die Einheit $id erbt $quantity von der aufgelösten Einheit $from.",
+		"LoseToUnitMessage": "Die Einheit $id erbt $quantity von der Einheit $from.",
 		"LoseUnicumMessage": "Die Einheit $id wirft {g/akk:das:$composition} $unicum weg.",
 		"LurkMessage": "Die Einheit $id lauert in der Region $region auf Beute.",
 		"MagicRingActiveMessage": "Der Effekt {g/gen:das:$composition} $composition $unicum hält weiterhin an.",
