@@ -125,6 +125,10 @@ final class State implements Reassignment
 	 */
 	private array $monsters = [];
 
+	public static function isInitialized(): bool {
+		return self::$instance && self::$instance->turnOptions;
+	}
+
 	public static function getInstance(?LemuriaTurn $turn = null): State {
 		if (!self::$instance) {
 			self::$instance = new self();
