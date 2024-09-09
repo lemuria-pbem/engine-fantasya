@@ -52,6 +52,12 @@ class Rank implements \ArrayAccess, \Countable, \Iterator
 		return $hits;
 	}
 
+	public function BattleRow(): BattleRow {
+		/** @var Combatant $combatant */
+		$combatant = $this->combatants[0] ?? null;
+		return $combatant ? $combatant->BattleRow() : BattleRow::Bystander;
+	}
+
 	/**
 	 * @param int $offset
 	 * @return bool

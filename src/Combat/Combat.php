@@ -623,17 +623,15 @@ class Combat
 	 * @noinspection PhpUnusedParameterInspection
 	 */
 	protected function attackRowAgainstRow(Rank $attacker, Rank $defender, string $message): int {
-		$a     = count($attacker);
-		$aHits = $attacker->Hits();
-		if ($a <= 0 || $aHits <= 0) {
+		$a = count($attacker);
+		if ($a <= 0 || $attacker->Hits() <= 0) {
 			return 0;
 		}
 		// Lemuria::Log()->debug($message);
 
 		$charge = new Charge();
 		$d      = count($defender);
-		$dSize  = $defender->Size();
-		$rate   = $this->calculateLimitedRate($aHits, $attacker->AttackSurface(), $dSize, $defender->AttackSurface());
+		$rate   = $this->calculateLimitedRate($attacker, $defender);
 		$nextA  = 0;
 		$nextD  = 0;
 		$sum    = 0;
@@ -692,13 +690,27 @@ class Combat
 		return $charge->Damage();
 	}
 
-	protected function calculateLimitedRate(int $hits, float $attackerSurface, int $size, float $defenderSurface): float {
-		if ($size > 0) {
+	protected function calculateLimitedRate(Rank $attacker, Rank $defender): float {
+		$hits = $attacker->Hits();
+		$size = $defender->Size();
+		if ($attacker->BattleRow() === BattleRow::Defensive) {
+			return $this->calculateSecondRowRate($hits, $attacker, $size, $defender);
+		}
+		return $this->calculateMeleeRate($hits, $attacker->AttackSurface(), $size, $defender->AttackSurface());
+	}
+
+	protected function calculateMeleeRate(int $hits, float $attackerSurface, int $size, float $defenderSurface): float {
+		if ($size > 0 && $hits > 0) {
 			$rate  = $size / $hits;
 			$limit = (1.0 / round(self::LIMIT * ($defenderSurface / $attackerSurface) ** self::ONE_THIRD));
 			return max($rate, $limit);
 		}
 		return 0.0;
+	}
+
+	protected function calculateSecondRowRate(int $aHits, Rank $attacker, int $dSize, Rank$defender): float {
+		//TODO Increase limit for tactically advanced attackers.
+		return $aHits > 0 ? $dSize / $aHits : 0.0;
 	}
 
 	/**
