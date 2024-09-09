@@ -190,7 +190,7 @@ final class Learn extends UnitCommand implements Activity
 				}
 			}
 
-			$oldLevel = $this->calculus->knowledge($this->talent)->Level();
+			$oldLevel = $this->calculus->ability($this->talent)->Level();
 
 			$this->unit->Knowledge()->add($this->progress);
 			foreach ($this->calculus->getTeachers() as $teacher) {
@@ -211,7 +211,7 @@ final class Learn extends UnitCommand implements Activity
 			}
 
 			if ($this->talent instanceof Magic) {
-				$newLevel = $this->calculus->knowledge($this->talent)->Level();
+				$newLevel = $this->calculus->ability($this->talent)->Level();
 				if ($newLevel > 0 && $newLevel > $oldLevel) {
 					$aura     = $this->unit->Aura() ?? new Aura();
 					$addition = $newLevel ** 2 - $oldLevel ** 2;
