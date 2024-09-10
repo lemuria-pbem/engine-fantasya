@@ -28,21 +28,19 @@ class TacticsData implements \Countable
 	/**
 	 * @param array<Unit> $units
 	 */
-	public function add(array $units, bool $isAttacker): TacticsData {
+	public function add(array $units, bool $isAttacker): static {
 		foreach ($units as $unit) {
-			$party = $unit->Party()->Id()->Id();
-			if (!isset($this->sizes[$party])) {
-				$this->sizes[$party]      = 0;
-				$this->tactics[$party]    = 0;
-				$this->isAttacker[$party] = $isAttacker;
-			}
-			$calculus               = new Calculus($unit);
-			$level                  = $calculus->knowledge(Tactics::class)->Level();
-			$size                   = $unit->Size();
-			$this->sizes[$party]   += $size;
-			$this->tactics[$party] += $size * $level ** 3;
+			$this->addUnit($unit, $isAttacker);
 		}
 		return $this;
+	}
+
+	public function addAttacker(Unit $unit): static {
+		return $this->addUnit($unit, true);
+	}
+
+	public function addDefender(Unit $unit): static {
+		return $this->addUnit($unit, false);
 	}
 
 	/**
@@ -81,6 +79,35 @@ class TacticsData implements \Countable
 			return $this->createCandidates($defenders, $tactics);
 		}
 		return [];
+	}
+
+	public function getTacticsDifference(): TacticsDifference {
+		$attacker = 0.0;
+		$defender = 0.0;
+		foreach ($this->tactics as $party => $talent) {
+			$average = ($talent / $this->sizes[$party]);
+			if ($this->isAttacker[$party]) {
+				$attacker = max($attacker, $average);
+			} else {
+				$defender = max($defender, $average);
+			}
+		}
+		return new TacticsDifference($attacker, $defender);
+	}
+
+	protected function addUnit(Unit $unit, bool $isAttacker): static {
+		$party = $unit->Party()->Id()->Id();
+		if (!isset($this->sizes[$party])) {
+			$this->sizes[$party]      = 0;
+			$this->tactics[$party]    = 0;
+			$this->isAttacker[$party] = $isAttacker;
+		}
+		$calculus               = new Calculus($unit);
+		$level                  = $calculus->knowledge(Tactics::class)->Level();
+		$size                   = $unit->Size();
+		$this->sizes[$party]   += $size;
+		$this->tactics[$party] += $size * $level ** 3;
+		return $this;
 	}
 
 	/**

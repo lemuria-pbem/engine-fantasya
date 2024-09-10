@@ -79,6 +79,10 @@ class Combat
 
 	protected Ranks $defender;
 
+	protected TacticsData $tactics;
+
+	protected TacticsDifference $tacticsDifference;
+
 	/**
 	 * @var array<int, bool>
 	 */
@@ -123,6 +127,7 @@ class Combat
 	public function __construct(private Context $context, private BattlePlace $place) {
 		$this->attacker = new Ranks(true);
 		$this->defender = new Ranks(false);
+		$this->tactics  = new TacticsData();
 		$this->effects  = new Effects();
 	}
 
@@ -138,6 +143,7 @@ class Combat
 		$army                  = $this->getArmy($unit)->add($unit);
 		$id                    = $army->Party()->Id()->Id();
 		$this->isAttacker[$id] = true;
+		$this->tactics->addAttacker($unit);
 		return $army;
 	}
 
@@ -145,6 +151,7 @@ class Combat
 		$army                  = $this->getArmy($unit)->add($unit);
 		$id                    = $army->Party()->Id()->Id();
 		$this->isAttacker[$id] = false;
+		$this->tactics->addDefender($unit);
 		return $army;
 	}
 
@@ -190,6 +197,10 @@ class Combat
 		return $armies;
 	}
 
+	public function getTactics(): TacticsData {
+		return $this->tactics;
+	}
+
 	public function embattle(): static {
 		$log = BattleLog::getInstance();
 		$log->add(new AttackerSideMessage($this->attackParticipants));
@@ -204,6 +215,7 @@ class Combat
 				$log->add($this->getCombatantMessage($combatant));
 			}
 		}
+		$this->tacticsDifference = $this->tactics->getTacticsDifference();
 		return $this;
 	}
 
@@ -241,10 +253,10 @@ class Combat
 			$this->fleeFromBattle($this->defender[Rank::REFUGEE], 'Defender', true);
 			if ($this->isAttacker[$party->Id()->Id()]) {
 				Lemuria::Log()->debug('Attacker gets first strike in tactics round.');
-				$this->attack($this->attacker, $this->defender, 'Attacker');
+				$this->attack($this->attacker, $this->defender, $this->tacticsDifference->Attacker(), 'Attacker');
 			} else {
 				Lemuria::Log()->debug('Defender gets first strike in tactics round.');
-				$this->attack($this->defender, $this->attacker, 'Defender');
+				$this->attack($this->defender, $this->attacker, $this->tacticsDifference->Defender(), 'Defender');
 			}
 		} else {
 			BattleLog::getInstance()->add(new EveryoneHasFledMessage());
@@ -264,8 +276,8 @@ class Combat
 			$this->round++;
 			BattleLog::getInstance()->add(new CombatRoundMessage($this->round));
 			$this->castCombatSpells();
-			$damage  = $this->attack($this->attacker, $this->defender, 'Attacker');
-			$damage += $this->attack($this->defender, $this->attacker, 'Defender');
+			$damage  = $this->attack($this->attacker, $this->defender, $this->tacticsDifference->Attacker(), 'Attacker');
+			$damage += $this->attack($this->defender, $this->attacker, $this->tacticsDifference->Defender(), 'Defender');
 			Lemuria::Log()->debug($damage . ' damage done in round ' . $this->round . '.');
 			return $damage;
 		} else {
@@ -608,12 +620,11 @@ class Combat
 		}
 	}
 
-	protected function attack(Ranks $attacker, Ranks $defender, string $who): int {
-
+	protected function attack(Ranks $attacker, Ranks $defender, float $tacticsDifference, string $who): int {
 		$message = $who . ': Front row attacks.';
-		$damage  = $this->attackRowAgainstRow($attacker[Rank::FRONT], $defender[Rank::FRONT], $message);
+		$damage  = $this->attackRowAgainstRow($attacker[Rank::FRONT], $defender[Rank::FRONT], $tacticsDifference, $message);
 		$message = $who . ': Back row attacks.';
-		$damage += $this->attackRowAgainstRow($attacker[Rank::BACK], $defender[Rank::FRONT], $message);
+		$damage += $this->attackRowAgainstRow($attacker[Rank::BACK], $defender[Rank::FRONT], $tacticsDifference, $message);
 		$this->removeTheDead($attacker);
 		$this->removeTheDead($defender);
 		return $damage;
@@ -622,7 +633,7 @@ class Combat
 	/**
 	 * @noinspection PhpUnusedParameterInspection
 	 */
-	protected function attackRowAgainstRow(Rank $attacker, Rank $defender, string $message): int {
+	protected function attackRowAgainstRow(Rank $attacker, Rank $defender, float $tacticsDifference, string $message): int {
 		$a = count($attacker);
 		if ($a <= 0 || $attacker->Hits() <= 0) {
 			return 0;
@@ -631,7 +642,7 @@ class Combat
 
 		$charge = new Charge();
 		$d      = count($defender);
-		$rate   = $this->calculateLimitedRate($attacker, $defender);
+		$rate   = $this->calculateLimitedRate($attacker, $defender, $tacticsDifference);
 		$nextA  = 0;
 		$nextD  = 0;
 		$sum    = 0;
@@ -690,27 +701,24 @@ class Combat
 		return $charge->Damage();
 	}
 
-	protected function calculateLimitedRate(Rank $attacker, Rank $defender): float {
-		$hits = $attacker->Hits();
-		$size = $defender->Size();
-		if ($attacker->BattleRow() === BattleRow::Defensive) {
-			return $this->calculateSecondRowRate($hits, $attacker, $size, $defender);
+	protected function calculateLimitedRate(Rank $attacker, Rank $defender, float $tacticsDifference): float {
+		$rate = $this->calculateMeleeRate($attacker, $defender);
+		if ($rate > 0.0 && $attacker->BattleRow() === BattleRow::Defensive) {
+			return $tacticsDifference * $rate;
 		}
-		return $this->calculateMeleeRate($hits, $attacker->AttackSurface(), $size, $defender->AttackSurface());
+		return $rate;
 	}
 
-	protected function calculateMeleeRate(int $hits, float $attackerSurface, int $size, float $defenderSurface): float {
-		if ($size > 0 && $hits > 0) {
+	protected function calculateMeleeRate(Rank $attacker, Rank $defender): float {
+		$hits    = $attacker->Hits();
+		$size    = $defender->Size();
+		$surface = $attacker->AttackSurface();
+		if ($size > 0 && $hits > 0 && $surface > 0.0) {
 			$rate  = $size / $hits;
-			$limit = (1.0 / round(self::LIMIT * ($defenderSurface / $attackerSurface) ** self::ONE_THIRD));
+			$limit = (1.0 / round(self::LIMIT * ($defender->AttackSurface() / $surface) ** self::ONE_THIRD));
 			return max($rate, $limit);
 		}
 		return 0.0;
-	}
-
-	protected function calculateSecondRowRate(int $aHits, Rank $attacker, int $dSize, Rank$defender): float {
-		//TODO Increase limit for tactically advanced attackers.
-		return $aHits > 0 ? $dSize / $aHits : 0.0;
 	}
 
 	/**

@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Combat;
 
-use Lemuria\Engine\Fantasya\Effect\InvisibleEnemy;
 use function Lemuria\randElement;
 use Lemuria\Engine\Fantasya\Calculus;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\AttackerWonMessage;
@@ -17,6 +16,7 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\UnitDiedMessage;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\ConstructionLoot;
 use Lemuria\Engine\Fantasya\Effect\ControlEffect;
+use Lemuria\Engine\Fantasya\Effect\InvisibleEnemy;
 use Lemuria\Engine\Fantasya\Effect\RegionLoot;
 use Lemuria\Engine\Fantasya\Effect\RestInPeaceEffect;
 use Lemuria\Engine\Fantasya\Effect\VesselLoot;
@@ -211,7 +211,7 @@ class Battle
 		}
 
 		$combat = $this->embattleForCombat($context);
-		$party  = $this->getBestTacticsParty();
+		$party  = $this->getBestTacticsParty($combat->getTactics());
 		$combat->castPreparationSpells($party);
 		if ($party) {
 			$combat->tacticsRound($party);
@@ -325,9 +325,8 @@ class Battle
 		return $parties;
 	}
 
-	protected function getBestTacticsParty(): ?Party {
-		$tactics = new TacticsData();
-		$n       = $tactics->add($this->attackers, true)->add($this->defenders, false)->count();
+	protected function getBestTacticsParty(TacticsData $tactics): ?Party {
+		$n = $tactics->add($this->attackers, true)->add($this->defenders, false)->count();
 		if ($n <= 0) {
 			return null;
 		}
