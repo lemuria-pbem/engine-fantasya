@@ -79,18 +79,6 @@ final class Calculus
 
 	private static ?Talent $stamina = null;
 
-	/**
-	 * @var array<Learn>
-	 */
-	private array $students = [];
-
-	/**
-	 * @var array<int, Teach>
-	 */
-	private array $teachers = [];
-
-	private ?Teacher $teacher = null;
-
 	public function __construct(private readonly Unit $unit) {
 	}
 
@@ -102,7 +90,7 @@ final class Calculus
 	 * Add student status for teaching.
 	 */
 	public function addStudent(Learn $student): Calculus {
-		$this->students[] = $student;
+		State::getInstance()->getStudies($this->unit)->addStudent($student);
 		return $this;
 	}
 
@@ -110,8 +98,7 @@ final class Calculus
 	 * Add a teacher unit for learning.
 	 */
 	public function addTeacher(Teach $teacher): Calculus {
-		$id                  = $teacher->Unit()->Id()->Id();
-		$this->teachers[$id] = $teacher;
+		State::getInstance()->getStudies($this->unit)->addTeacher($teacher);
 		return $this;
 	}
 
@@ -119,7 +106,7 @@ final class Calculus
 	 * Get student status.
 	 */
 	public function getStudents(): array {
-		return $this->students;
+		return State::getInstance()->getStudies($this->unit)->getStudents();
 	}
 
 	/**
@@ -128,17 +115,14 @@ final class Calculus
 	 * @return array<int, Teach>
 	 */
 	public function getTeachers(): array {
-		return $this->teachers;
+		return State::getInstance()->getStudies($this->unit)->getTeachers();
 	}
 
 	/**
 	 * Get the Teacher object.
 	 */
 	public function getTeacher(): Teacher {
-		if (!$this->teacher) {
-			$this->teacher = new Teacher($this->unit);
-		}
-		return $this->teacher;
+		return State::getInstance()->getStudies($this->unit)->getTeacher();
 	}
 
 	/**
@@ -267,7 +251,7 @@ final class Calculus
 		$isInCollege  = ($building instanceof College) && $this->isInMaintainedConstruction();
 		$regularBonus = 0.0;
 		$collegeBonus = 0.0;
-		foreach ($this->teachers as $teach) {
+		foreach ($this->getTeachers() as $teach) {
 			if ($isInCollege) {
 				$teacher   = $teach->Unit();
 				$inCollege = $teacher->Construction()?->Building() instanceof College;

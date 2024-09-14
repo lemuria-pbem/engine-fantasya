@@ -6,6 +6,7 @@ use function Lemuria\getClass;
 use Lemuria\Engine\Fantasya\Combat\Campaign;
 use Lemuria\Engine\Fantasya\Event\Behaviour;
 use Lemuria\Engine\Fantasya\Factory\DirectionList;
+use Lemuria\Engine\Fantasya\Factory\Model\Studies;
 use Lemuria\Engine\Fantasya\Factory\Supply;
 use Lemuria\Engine\Fantasya\Factory\Workload;
 use Lemuria\Engine\Fantasya\Realm\Fleet;
@@ -99,6 +100,11 @@ final class State implements Reassignment
 	 * @var array<int, DirectionList>
 	 */
 	private array $travelRoute = [];
+
+	/**
+	 * @var array<int, Studies>
+	 */
+	private array $studies = [];
 
 	/**
 	 * @var array<int, Campaign>
@@ -367,6 +373,17 @@ final class State implements Reassignment
 	public function getTravelRoute(Unit $unit): ?DirectionList {
 		$id = $unit->Id()->Id();
 		return $this->travelRoute[$id] ?? null;
+	}
+
+	/**
+	 * Get the studies of a unit.
+	 */
+	public function getStudies(Unit $unit): Studies {
+		$id = $unit->Id()->Id();
+		if (!isset($this->studies[$id])) {
+			$this->studies[$id] = new Studies($unit);
+		}
+		return $this->studies[$id];
 	}
 
 	/**

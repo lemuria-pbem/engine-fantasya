@@ -27,6 +27,7 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Id;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
+use Lemuria\Model\Fantasya\Party\Type;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Reassignment;
 
@@ -204,7 +205,7 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 		$size = 0;
 		if ($unit->Id()->Id() !== $this->unit->Id()->Id()) {
 			if ($unit->Region()->Id()->Id() === $this->unit->Region()->Id()->Id()) {
-				if ($unit->Party()->Id()->Id() === $this->unit->Party()->Id()->Id()) {
+				if ($this->isAllowedToTeach($unit)) {
 					$check = $this->hasGreaterLevelThan($unit);
 					if ($check === null) {
 						return $size;
@@ -229,6 +230,19 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 			$this->message(TeachSelfMessage::class);
 		}
 		return $size;
+	}
+
+	private function isAllowedToTeach(Unit $student): bool {
+		$party = $this->unit->Party();
+		// Teacher and student of the same party is always allowed.
+		if ($student->Party()->Id()->Id() === $party->Id()->Id()) {
+			return true;
+		}
+		// If teacher is NPC, there is a teaching quest active.
+		if ($party->Type() === Type::NPC) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

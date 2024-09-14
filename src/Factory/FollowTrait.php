@@ -3,6 +3,8 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
 use Lemuria\Engine\Fantasya\Command\Follow;
+use Lemuria\Engine\Fantasya\Command\Trespass\Board;
+use Lemuria\Engine\Fantasya\Command\Trespass\Enter;
 use Lemuria\Engine\Fantasya\Context;
 use Lemuria\Engine\Fantasya\Effect\FollowEffect;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowerMessage;
@@ -55,5 +57,23 @@ trait FollowTrait
 		}
 		Lemuria::Score()->remove($follow);
 		Lemuria::Log()->debug($follower . ' will not follow ' . $leader . ' any longer.');
+	}
+
+	private function enterForLeader(Unit $leader, Unit $follower): void {
+		$construction = $leader->Construction();
+		if ($construction && $construction !== $follower->Construction()) {
+			$state   = State::getInstance();
+			$context = new Context($state);
+			$command = new Enter(new Phrase('BETRETEN ' . $construction->Id()), $context->setUnit($follower));
+			$state->injectIntoTurn($command);
+		} else {
+			$vessel = $leader->Vessel();
+			if ($vessel && $vessel !== $follower->Vessel()) {
+				$state   = State::getInstance();
+				$context = new Context($state);
+				$command = new Board(new Phrase('BESTEIGEN ' . $vessel->Id()), $context->setUnit($follower));
+				$state->injectIntoTurn($command);
+			}
+		}
 	}
 }
