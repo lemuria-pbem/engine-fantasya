@@ -185,6 +185,7 @@ class Travel extends UnitCommand implements Activity
 		$route              = [$this->unit->Region()];
 		$regions            = $speed - $this->workload->count();
 		$roadRegions        = 2 * $regions;
+		$isNotFlying        = $movement !== Movement::Fly;
 		$isSimulation       = $this->context->getTurnOptions()->IsSimulation();
 		$numberOfDirections = $this->directions->getNumberOfDirections();
 		$invalidDirections  = 0;
@@ -220,7 +221,7 @@ class Travel extends UnitCommand implements Activity
 						break;
 					}
 
-					$overRoad = $this->overRoad($origin, $next, $region);
+					$overRoad = $isNotFlying && $this->overRoad($origin, $next, $region);
 					if ($overRoad) {
 						if ($this->roadsLeft > 0) {
 							$this->message(TravelRoadMessage::class);
