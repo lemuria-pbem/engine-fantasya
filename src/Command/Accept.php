@@ -241,7 +241,7 @@ final class Accept extends UnitCommand
 			throw new InvalidCommandException($this);
 		}
 
-		$goods = $this->checkPieces();
+		$goods = $goods = $this->range ? $this->checkRange() : $this->checkPieces();
 		if ($goods) {
 			$isOffer  = $this->trade->Trade() === Trade::OFFER;
 			$proposal = $this->amount * $this->price;
