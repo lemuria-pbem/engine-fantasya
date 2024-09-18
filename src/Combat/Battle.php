@@ -326,7 +326,7 @@ class Battle
 	}
 
 	protected function getBestTacticsParty(TacticsData $tactics): ?Party {
-		$n = $tactics->add($this->attackers, true)->add($this->defenders, false)->count();
+		$n = $tactics->count();
 		if ($n <= 0) {
 			return null;
 		}

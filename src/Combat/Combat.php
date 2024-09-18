@@ -702,21 +702,20 @@ class Combat
 	}
 
 	protected function calculateLimitedRate(Rank $attacker, Rank $defender, float $tacticsDifference): float {
-		$rate = $this->calculateMeleeRate($attacker, $defender);
-		if ($rate > 0.0 && $attacker->BattleRow() === BattleRow::Defensive) {
-			return $tacticsDifference * $rate;
+		$hits = $attacker->Hits();
+		if ($attacker->BattleRow() === BattleRow::Back) {
+			$factor = self::LIMIT * $hits / $attacker->Size();
+		} else {
+			$tacticsDifference = 1.0;
+			$factor            = self::LIMIT;
 		}
-		return $rate;
-	}
 
-	protected function calculateMeleeRate(Rank $attacker, Rank $defender): float {
-		$hits    = $attacker->Hits();
 		$size    = $defender->Size();
 		$surface = $attacker->AttackSurface();
 		if ($size > 0 && $hits > 0 && $surface > 0.0) {
 			$rate  = $size / $hits;
-			$limit = (1.0 / round(self::LIMIT * ($defender->AttackSurface() / $surface) ** self::ONE_THIRD));
-			return max($rate, $limit);
+			$limit = 1.0 / ($factor * ($defender->AttackSurface() / $surface) ** self::ONE_THIRD);
+			return $tacticsDifference * max($rate, $limit);
 		}
 		return 0.0;
 	}
