@@ -272,7 +272,9 @@ final class Learn extends UnitCommand implements Activity
 				$this->message(LearnTeachersMessage::class)->p(count($this->calculus->getTeachers()));
 			}
 			$this->progress = $this->calculus->progress($this->talent, (1.0 - $this->fleetTime) * $this->effectivity());
-			$this->expense  = (int)round((1.0 - $this->fleetTime) * $this->unit->Size() * $this->talent->getExpense($level));
+			$knowledge      = $this->unit->Knowledge();
+			$costLevel      = $knowledge[$this->talent] instanceof Ability ? $knowledge[$this->talent]->Level() : 0;
+			$this->expense  = (int)round((1.0 - $this->fleetTime) * $this->unit->Size() * $this->talent->getExpense($costLevel));
 			return true;
 		}
 		return false;
