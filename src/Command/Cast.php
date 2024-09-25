@@ -97,22 +97,23 @@ final class Cast extends UnitCommand implements Reassignment
 	}
 
 	public function cast(): void {
-		$demandLevel     = $this->level;
-		$this->level     = min($this->level, $this->getMaxLevel());
 		$this->knowledge = $this->calculus()->knowledge(Magic::class)->Level();
-
-		if ($this->spell instanceof BattleSpell) {
-			$this->message(CastBattleSpellMessage::class)->s($this->spell);
-			return;
-		}
 		if ($this->knowledge <= 0) {
 			$this->message(CastNoMagicianMessage::class);
+			return;
+		}
+		if ($this->spell instanceof BattleSpell) {
+			$this->message(CastBattleSpellMessage::class)->s($this->spell);
 			return;
 		}
 		if ($this->knowledge < $this->spell->Difficulty()) {
 			$this->message(CastExperienceMessage::class)->s($this->spell);
 			return;
 		}
+
+		$demandLevel     = $this->level;
+		$this->level     = min($this->level, $this->getMaxLevel());
+
 		if ($this->level <= 0) {
 			$this->message(CastNoAuraMessage::class)->s($this->spell);
 			return;
