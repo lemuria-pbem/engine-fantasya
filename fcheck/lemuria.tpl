@@ -92,7 +92,7 @@
 
 ^@?(he|hel|helf|helfe|helfen|hi|hil|hilf|hilfe) +[a-z0-9]{1,6} +[a-z]+( +(region|nicht|region +nicht|nicht +region))?$
 
-^@?(kam|kamp|kampf|kampfz|kampfza|kampfzau|kampfzaub|kampfzaube|kampfzauber) +(astrales chaos|beschleunigung|blick des basilisken|elementarwesen|feuerball|friedenslied|geisterk(ae|ä)mpfer|rosthauch|schockwelle|steinhaut)( +(([0-9]+)|aus|nicht))?$
+^@?(kam|kamp|kampf|kampfz|kampfza|kampfzau|kampfzaub|kampfzaube|kampfzauber) +(astrales chaos|beschleunigung|blick des basilisken|elementarwesen|feuerball|friedenslied|geisterk(ae|ä)mpfer|rosthauch|schockwelle|steinhaut|sturmb(oe|ö)e)( +(([0-9]+)|aus|nicht))?$
 ^@?(kam|kamp|kampf|kampfz|kampfza|kampfzau|kampfzaub|kampfzaube|kampfzauber) +(aus|kein|keine|keiner|keinen|nicht)$
 
 ^@?(kau|kauf|kaufe|kaufen)( +[0-9]+)? +(balsam|balsame|gewürz|gewürze|gewuerz|gewuerze|juwel|juwelen|myrrhe|myrrhen|öl|öle|oel|oele|pelz|pelze|seide|seiden|weihrauch)$
@@ -220,7 +220,7 @@
 ^(w|wi|wie|wied|wiede|wieder|wiederh|wiederho|wiederhol|wiederhole|wiederholen) +[a-z0-9]{1,6}( +nicht)?$
 ^(w|wi|wie|wied|wiede|wieder|wiederh|wiederho|wiederhol|wiederhole|wiederholen)( +(alle|alles|nicht|nichts)?$
 
-^@?(za|zau|zaub|zaube|zauber|zaubere|zaubern) +(adlerauge|astraler weg|aufruhr verursachen|auratransfer|blick des greifen|erdbeben|erwecke baumhirten|fernsicht|g(ue|ü)nstige winde|lautloser schatten|luftschiff|monster aufhetzen|ring der unsichtbarkeit|tagtraum|teleportation|wunderdoktor)( +[0-9]+)?$
+^@?(za|zau|zaub|zaube|zauber|zaubere|zaubern) +(adlerauge|astraler weg|aufruhr verursachen|auratransfer|blick des greifen|erdbeben|erwecke baumhirten|fernsicht|g(ue|ü)nstige winde|lautloser schatten|luftschiff|metalle entdecken|monster aufhetzen|ring der unsichtbarkeit|ruhe in frieden|tagtraum|teleportation|untote erwecken|wunderdoktor)( +[0-9]+)?$
 
 ^@?(zerst|zerstö|zerstör|zerstöre|zerstören) +(burg|gebäude|gebaeude|schiff|straße|strasse) +[a-z0-9]{1,6}$
 ^@?(zerstoe|zerstoer|zerstoere|zerstoeren) +(burg|gebäude|gebaeude|schiff|straße|strasse) +[a-z0-9]{1,6}$
