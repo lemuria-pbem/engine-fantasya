@@ -7,6 +7,7 @@ use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellCastMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellFailedMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\BattleSpellNoAuraMessage;
 use Lemuria\Engine\Fantasya\Combat\Log\Message\SongOfPeaceCombatantMessage;
+use Lemuria\Engine\Fantasya\Exception\Combat\BattleEndsException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Talent\Magic;
 use Lemuria\Model\Fantasya\Unit;
@@ -21,24 +22,27 @@ class SongOfPeace extends AbstractBattleSpell
 		$grade        = $this->modifyReliability($initialGrade);
 		$grade        = $this->getAvailableGrade($unit, $grade);
 		$this->consume($unit, $grade);
-		if ($grade > 0) {
-			if ($grade < $initialGrade) {
-				BattleLog::getInstance()->add(new BattleSpellFailedMessage($unit, $this->grade->Spell()));
-			} else {
-				Lemuria::Log()->debug('Unit ' . $unit . ' casts ' . $this->grade->Spell() . ' with grade ' . $grade . '.');
-				BattleLog::getInstance()->add(new BattleSpellCastMessage($unit, $this->grade->Spell(), $grade));
-				foreach ($this->victim as $combatants) {
-					foreach ($combatants as $combatant) {
-						Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' leaves the battlefield in peace.');
-						BattleLog::getInstance()->add(new SongOfPeaceCombatantMessage($combatant));
-					}
-				}
-			}
 
-		} else {
+		if ($grade <= 0) {
 			BattleLog::getInstance()->add(new BattleSpellNoAuraMessage($unit, $this->grade->Spell()));
+			return 0;
 		}
-		return $grade;
+
+		if ($grade < $initialGrade) {
+			BattleLog::getInstance()->add(new BattleSpellFailedMessage($unit, $this->grade->Spell()));
+			return $grade;
+		}
+
+		Lemuria::Log()->debug('Unit ' . $unit . ' casts ' . $this->grade->Spell() . ' with grade ' . $grade . '.');
+		BattleLog::getInstance()->add(new BattleSpellCastMessage($unit, $this->grade->Spell(), $grade));
+		foreach ($this->victim as $combatants) {
+			foreach ($combatants as $combatant) {
+				Lemuria::Log()->debug('Combatant ' . $combatant->Id() . ' leaves the battlefield in peace.');
+				BattleLog::getInstance()->add(new SongOfPeaceCombatantMessage($combatant));
+			}
+			$combatants->clear();
+		}
+		throw new BattleEndsException('The Song of Peace ends the battle.');
 	}
 
 	protected function grade(Unit $unit): int {

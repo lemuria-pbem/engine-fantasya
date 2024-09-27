@@ -136,4 +136,11 @@ class Rank implements \ArrayAccess, \Countable, \Iterator
 		}
 		return $this;
 	}
+
+	public function clear(): static {
+		while ($this->count() > 0) {
+			$this->offsetUnset(0);
+		}
+		return $this;
+	}
 }

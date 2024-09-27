@@ -21,6 +21,7 @@ use Lemuria\Engine\Fantasya\Effect\RegionLoot;
 use Lemuria\Engine\Fantasya\Effect\RestInPeaceEffect;
 use Lemuria\Engine\Fantasya\Effect\VesselLoot;
 use Lemuria\Engine\Fantasya\Event\Game\Spawn;
+use Lemuria\Engine\Fantasya\Exception\Combat\BattleEndsException;
 use Lemuria\Engine\Fantasya\Factory\MessageTrait;
 use Lemuria\Engine\Fantasya\Factory\Model\DisguisedParty;
 use Lemuria\Engine\Fantasya\Message\Region\AttackInfectedZombiesMessage;
@@ -212,12 +213,16 @@ class Battle
 
 		$combat = $this->embattleForCombat($context);
 		$party  = $this->getBestTacticsParty($combat->getTactics());
-		$combat->castPreparationSpells($party);
-		if ($party) {
-			$combat->tacticsRound($party);
-		} else {
-			Lemuria::Log()->debug('Both sides are tactically equal.');
-			BattleLog::getInstance()->add(new NoTacticsRoundMessage());
+		try {
+			$combat->castPreparationSpells($party);
+			if ($party) {
+				$combat->tacticsRound($party);
+			} else {
+				Lemuria::Log()->debug('Both sides are tactically equal.');
+				BattleLog::getInstance()->add(new NoTacticsRoundMessage());
+			}
+		} catch (BattleEndsException $e) {
+			Lemuria::Log()->info($e->getMessage());
 		}
 		$countNoDamage = 0;
 		while ($combat->hasAttackers() && $combat->hasDefenders()) {
