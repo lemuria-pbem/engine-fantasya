@@ -715,7 +715,7 @@ class Combat
 		if ($size > 0 && $hits > 0 && $surface > 0.0) {
 			$rate  = $size / $hits;
 			$limit = 1.0 / ($factor * ($defender->AttackSurface() / $surface) ** self::ONE_THIRD);
-			return $tacticsDifference * max($rate, $limit);
+			return max($rate, $limit) / $tacticsDifference;
 		}
 		return 0.0;
 	}
