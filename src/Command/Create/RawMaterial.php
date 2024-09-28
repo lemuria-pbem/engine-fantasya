@@ -71,6 +71,8 @@ class RawMaterial extends AllocationCommand implements Activity
 
 	protected bool $hasLodging = false;
 
+	protected float $allocationFactor = 1.0;
+
 	public function __construct(Phrase $phrase, Context $context, protected Job $job) {
 		parent::__construct($phrase, $context);
 	}
@@ -111,7 +113,9 @@ class RawMaterial extends AllocationCommand implements Activity
 			$this->runForEmptyDemand($talent, $resource);
 		} else {
 			$this->resources->rewind();
-			$quantity = $this->resources->current();
+			$quantity   = $this->resources->current();
+			$allocated  = (int)round($this->allocationFactor * $quantity->Count());
+			$quantity   = new Quantity($quantity->Commodity(), $allocated);
 			$production = $this->production;
 			if ($this->hasLodging) {
 				$quantity->multiply(2);
@@ -229,6 +233,7 @@ class RawMaterial extends AllocationCommand implements Activity
 	}
 
 	private function createMultipleDemand(int $factor = 1): void {
+		$capacity        = $factor;
 		$talent          = $this->getRequiredTalent();
 		$this->knowledge = $this->getProductivity($talent);
 		if ($this->knowledge->Level() < $talent->Level()) {
@@ -236,13 +241,14 @@ class RawMaterial extends AllocationCommand implements Activity
 		}
 		$commodity = $this->getCommodity();
 		if (!$this->isRunCentrally && $commodity instanceof Iron && $this->withDetectMetals()) {
-			$factor *= 2;
+			$capacity               *= 2;
+			$this->allocationFactor *= 2.0;
 		}
 
 		$size             = $this->unit->Size();
 		$production       = (int)floor($this->potionBoost($size) * $size * $this->knowledge->Level() / $talent->Level());
 		$this->production = $this->reduceByWorkload($production);
-		$this->available  = $factor * $this->getAvailability();
+		$this->available  = $capacity * $this->getAvailability();
 
 		if ($this->production > 0 && $this->available > 0) {
 			if ($this->available < $this->production) {
@@ -258,22 +264,23 @@ class RawMaterial extends AllocationCommand implements Activity
 					$quantity         = new Quantity($commodity, $this->production);
 					$this->message(RawMaterialWantsMessage::class)->i($quantity);
 				} else {
-					$quantity = new Quantity($this->getCommodity(), $this->production);
+					$quantity = new Quantity($commodity, $this->production);
 					$this->message(RawMaterialCannotMessage::class)->i($quantity);
 				}
 				$this->addToWorkload($this->production);
-				$this->resources->add($quantity);
+				$allocation = (int)ceil(round($this->production / $this->allocationFactor, 2));
+				$this->resources->add(new Quantity($commodity, $allocation));
 			} else {
 				$debugProduction  = $this->production;
 				$this->production = (int)ceil($this->production / $factor);
 				if ($this->production > 0) {
-					$quantity = new Quantity($this->getCommodity(), $this->production);
 					$this->addToWorkload($this->production);
-					$this->resources->add($quantity);
-					$quantity = new Quantity($this->getCommodity(), $debugProduction);
+					$allocation = (int)ceil(round($this->production / $this->allocationFactor, 2));
+					$this->resources->add(new Quantity($commodity, $allocation));
+					$quantity = new Quantity($commodity, $debugProduction);
 					$this->message(RawMaterialCanMessage::class)->i($quantity);
 				} else {
-					$this->message(RawMaterialNoDemandMessage::class)->s($this->getCommodity());
+					$this->message(RawMaterialNoDemandMessage::class)->s($commodity);
 				}
 			}
 		} else {
