@@ -12,6 +12,7 @@ use Lemuria\Model\Fantasya\Commodity\Luxury\Gem;
 use Lemuria\Model\Fantasya\Landscape\Glacier;
 use Lemuria\Model\Fantasya\Landscape\Mountain;
 use Lemuria\Model\Fantasya\People;
+use Lemuria\Model\Fantasya\RawMaterial as Product;
 use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Engine\Fantasya\Event\AbstractEvent;
@@ -94,6 +95,7 @@ final class MiningDiscovery extends AbstractEvent
 	}
 
 	public function addMiner(RawMaterial $miner): void {
+		/** @var Product $product */
 		$product = $miner->getCommodity();
 		$chance  = self::CHANCE[$product::class] ?? 0.0;
 		if ($chance > 0.0) {
@@ -105,7 +107,9 @@ final class MiningDiscovery extends AbstractEvent
 					if ($this->withDetectMetals($miner->Unit()->Party(), $region)) {
 						$percent *= 2.0;
 					}
-					$size = $chance * sqrt($percent * $unit->Size());
+					$talent  = $product->getCraft()->Talent();
+					$ability = $this->context->getCalculus($unit)->ability($talent);
+					$size    = $chance * sqrt($percent * $unit->Size() * sqrt(2 * $ability->Level()));
 					if ($size > 0.0) {
 						$this->addSize($region, $unit, $size);
 					}
