@@ -14,6 +14,10 @@ final class TravelEffect extends AbstractUnitEffect
 		parent::__construct($state, Priority::Before);
 	}
 
+	public function supportsSimulation(): bool {
+		return true;
+	}
+
 	protected function run(): void {
 		Lemuria::Score()->remove($this);
 	}

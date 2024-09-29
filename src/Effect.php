@@ -14,4 +14,9 @@ interface Effect extends Action, Identifiable, Serializable
 	 * This flag can be set to execute newly created effects when the turn ends.
 	 */
 	public function needsAftercare(): bool;
+
+	/**
+	 * This flag can be set to execute the effect in a simulation run.
+	 */
+	public function supportsSimulation(): bool;
 }
