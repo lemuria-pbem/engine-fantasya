@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpUnusedPrivateMethodInspection */
 declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Factory;
 
@@ -19,6 +20,8 @@ use Lemuria\Model\Fantasya\Unit;
 
 trait FollowTrait
 {
+	use MessageTrait;
+
 	private function getExistingFollower(Unit $follower): ?FollowEffect {
 		$follow = new FollowEffect(State::getInstance());
 		$follow = Lemuria::Score()->find($follow->setUnit($follower));

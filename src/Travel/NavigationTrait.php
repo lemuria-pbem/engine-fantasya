@@ -74,6 +74,7 @@ trait NavigationTrait
 	private function getCoastline(Neighbours $neighbours): Neighbours {
 		$coastlines = new Neighbours();
 		foreach ($neighbours as $direction => $region) {
+			/** @var Region $region */
 			if (!($region->Landscape() instanceof Navigable)) {
 				$coastlines[$direction] = $region;
 			}

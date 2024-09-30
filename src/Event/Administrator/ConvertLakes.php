@@ -55,6 +55,7 @@ final class ConvertLakes extends AbstractEvent
 
 	private function isLake(Region $region): bool {
 		foreach (Lemuria::World()->getNeighbours($region) as $region) {
+			/** @var Region $region */
 			if ($region->Landscape() instanceof Ocean) {
 				return false;
 			}

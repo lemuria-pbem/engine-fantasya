@@ -8,7 +8,7 @@ use Lemuria\Lemuria;
 
 trait MessageTrait
 {
-	use BuilderTrait;
+	use MessageBuilderTrait;
 
 	protected function message(string $messageType, ?Entity $target = null): LemuriaMessage {
 		$id      = Lemuria::Report()->nextId();

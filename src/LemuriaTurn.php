@@ -102,7 +102,7 @@ class LemuriaTurn implements Turn
 				$command         = $originalCommand->getDelegate();
 				Lemuria::Log()->debug('New command: ' . $originalCommand, ['command' => $command]);
 			} catch (InvalidCommandException $e) {
-				Lemuria::Log()->error($e->getMessage(), ['command' => $originalCommand, 'exception' => $e]);
+				Lemuria::Log()->error($e->getMessage(), ['command' => $originalCommand ?? null, 'exception' => $e]);
 				$this->addExceptionMessage($e, $context);
 				if ($this->throwExceptions(ThrowOption::ADD)) {
 					throw $e;

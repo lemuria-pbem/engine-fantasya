@@ -794,7 +794,7 @@ class Combat
 			}
 		}
 
-		if (!empty($raiseCount)) {
+		if (isset($summoner) && !empty($raiseCount)) {
 			$this->raiseFromTheDead($raiseCount, $summoner);
 			$raiseTheDead->setRaise($raiseAvailable);
 		}

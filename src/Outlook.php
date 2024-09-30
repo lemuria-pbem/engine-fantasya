@@ -164,6 +164,7 @@ final class Outlook
 		// Add direct neighbours and collect directions.
 		$directions = [];
 		foreach ($world->getNeighbours($region) as $direction => $neighbour) {
+			/** @var Region $neighbour */
 			if ($neighbour->Landscape() instanceof Navigable) {
 				$directions[] = $direction;
 				if ($hasLighthouse) {

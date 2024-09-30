@@ -15,6 +15,7 @@ use Lemuria\Model\Fantasya\Commodity\Peasant;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Unit;
 
 class Goblin extends AbstractBehaviour
@@ -123,6 +124,7 @@ class Goblin extends AbstractBehaviour
 		$peasants   = $region->Resources()[Peasant::class]->Count();
 		$units      = $region->Residents()->Size();
 		foreach ($neighbours as $neighbour) {
+			/** @var Region $neighbour */
 			$peasants += $neighbour->Resources()[Peasant::class]->Count();
 			$units    += $neighbour->Residents()->Size();
 		}

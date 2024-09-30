@@ -71,7 +71,6 @@ class ElementalBeing extends AbstractBattleSpell
 		$region = $summoner->Region();
 		$create = new Create($party, $region);
 		$create->add(new Gang($race));
-		/** @var Unit $elemental */
 		$elemental = $create->act()->getUnits()[0];
 		return $elemental->setIsLooting(false);
 	}

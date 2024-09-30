@@ -241,7 +241,7 @@ final class Accept extends UnitCommand
 			throw new InvalidCommandException($this);
 		}
 
-		$goods = $goods = $this->range ? $this->checkRange() : $this->checkPieces();
+		$goods = $this->range ? $this->checkRange() : $this->checkPieces();
 		if ($goods) {
 			$isOffer  = $this->trade->Trade() === Trade::OFFER;
 			$proposal = $this->amount * $this->price;
@@ -308,7 +308,7 @@ final class Accept extends UnitCommand
 			$trade = Trade::get($this->id);
 			if ($trade->Unit()->Party()->Type() === Type::NPC) {
 				$this->trade  = $trade;
-				$this->status = $trade->IsSatisfiable() ? Sales::AVAILABLE : Sales::UNSATISFIABLE;
+				$this->status = $trade->IsSatisfiable() ? SalesModel::AVAILABLE : SalesModel::UNSATISFIABLE;
 				return true;
 			}
 		} catch (NotRegisteredException|SalesException) {

@@ -134,6 +134,7 @@ final class Recruit extends AllocationCommand
 			if (!$isImplicitQuota) {
 				$quota = $this->unit->Party()->Regulation()->getQuotas($region)?->getQuota($peasant)?->Threshold();
 			}
+			/** @noinspection PhpUndefinedVariableInspection */
 			if (is_int($quota) && $quota > 0) {
 				$peasants  = $region->Resources()[$peasant]->Count();
 				$available = max(0, $peasants - $quota);

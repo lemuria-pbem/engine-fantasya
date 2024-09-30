@@ -93,7 +93,6 @@ final class Greenhousing extends AbstractEvent
 
 	protected function run(): void {
 		foreach (Construction::all() as $construction) {
-			/** @var Construction $construction */
 			$building = $construction->Building();
 			if ($building instanceof Greenhouse && $this->isMaintained($construction)) {
 				$inhabitants = $construction->Inhabitants();

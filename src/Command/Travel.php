@@ -46,6 +46,7 @@ use Lemuria\Engine\Fantasya\Travel\Movement;
 use Lemuria\Engine\Fantasya\Travel\NavigationTrait;
 use Lemuria\Engine\Fantasya\Travel\Transport;
 use Lemuria\Engine\Fantasya\Travel\TravelTrait;
+use Lemuria\Exception\LemuriaException;
 use Lemuria\Lemuria;
 use Lemuria\Model\Fantasya\Party\Exploring;
 use Lemuria\Model\Fantasya\Spell\FavorableWinds;
@@ -313,6 +314,9 @@ class Travel extends UnitCommand implements Activity
 				}
 			} else {
 				if (!$blockade->isEmpty()) {
+					if (!isset($origin) || !isset($next)) {
+						throw new LemuriaException('Regions origin or next not set, this should never happen.');
+					}
 					$parties = [];
 					foreach ($blockade as $guard) {
 						$parties[$guard->Party()->Id()->Id()] = $guard->Party();

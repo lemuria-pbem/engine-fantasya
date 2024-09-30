@@ -15,6 +15,7 @@ use Lemuria\Id;
 use Lemuria\Model\Fantasya\Factory\BuilderTrait;
 use Lemuria\Model\Fantasya\Party;
 use Lemuria\Model\Fantasya\Party\Type;
+use Lemuria\Model\Fantasya\Region;
 use Lemuria\Model\Fantasya\Relation;
 use Lemuria\Model\Fantasya\Talent;
 use Lemuria\Model\Fantasya\Talent\Perception;
@@ -65,19 +66,22 @@ final class Acquaintance extends AbstractEvent
 						$ids[$id] = min($previous, $camouflage);
 					}
 				}
+
 				// Then collect foreign units for telling of information later.
-				foreach ($region->Estate() as $construction) {
-					foreach ($construction->Inhabitants() as $unit) {
+				if ($region instanceof Region) {
+					foreach ($region->Estate() as $construction) {
+						foreach ($construction->Inhabitants() as $unit) {
+							$this->addToNetwork($ids, $unit, $census);
+						}
+					}
+					foreach ($region->Fleet() as $vessel) {
+						foreach ($vessel->Passengers() as $unit) {
+							$this->addToNetwork($ids, $unit, $census);
+						}
+					}
+					foreach ($outlook->getApparitions($region) as $unit) {
 						$this->addToNetwork($ids, $unit, $census);
 					}
-				}
-				foreach ($region->Fleet() as $vessel) {
-					foreach ($vessel->Passengers() as $unit) {
-						$this->addToNetwork($ids, $unit, $census);
-					}
-				}
-				foreach ($outlook->getApparitions($region) as $unit) {
-					$this->addToNetwork($ids, $unit, $census);
 				}
 			}
 		}

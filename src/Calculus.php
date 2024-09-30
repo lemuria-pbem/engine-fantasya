@@ -431,6 +431,7 @@ final class Calculus
 		$party   = $this->unit->Party();
 		$race    = $this->unit->Race();
 		foreach (Lemuria::World()->getNeighbours($this->unit->Region()) as $region) {
+			/** @var Region $region */
 			foreach ($region->Residents() as $unit) {
 				if ($unit !== $this->unit && $unit->Party() === $party && $unit->Race() === $race) {
 					$kinsmen->add($unit);

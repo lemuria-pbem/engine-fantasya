@@ -2,7 +2,6 @@
 declare (strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Command;
 
-use Lemuria\Id;
 use function Lemuria\isInt;
 use function Lemuria\isPercentage;
 use Lemuria\Engine\Fantasya\Command;

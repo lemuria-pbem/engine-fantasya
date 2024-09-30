@@ -16,7 +16,6 @@ use Lemuria\Engine\Fantasya\Phrase;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Fantasya\Composition;
 use Lemuria\Model\Fantasya\Practice;
-use Lemuria\Model\Fantasya\Talent\Magic;
 use Lemuria\Model\Reassignment;
 
 /**
