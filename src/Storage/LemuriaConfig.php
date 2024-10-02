@@ -129,7 +129,8 @@ abstract class LemuriaConfig implements \ArrayAccess, Config
 
 	public function Builder(): Builder {
 		$builder = new DefaultBuilder();
-		return $builder->register(new ModelSingletonCatalog())->register(new EngineSingletonCatalog());
+		$builder->register(new ModelSingletonCatalog())->register(new EngineSingletonCatalog());
+		return $builder->profileRegistrationDone();
 	}
 
 	public function Catalog(): Catalog {
