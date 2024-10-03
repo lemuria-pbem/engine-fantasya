@@ -9,12 +9,14 @@ use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Domain;
 use Lemuria\Model\Reassignment;
+use Lemuria\ProfileTrait;
 use Lemuria\SerializableTrait;
 use Lemuria\StringList;
 use Lemuria\Validate;
 
 class LemuriaOrders implements Orders, Reassignment
 {
+	use ProfileTrait;
 	use SerializableTrait;
 
 	private const string CURRENT = 'current';
@@ -71,6 +73,7 @@ class LemuriaOrders implements Orders, Reassignment
 			$orders = Lemuria::Game()->getOrders();
 			$this->validateSerializedData($orders);
 			$this->loadData($orders);
+			$this->profileAndLog(__METHOD__);
 		}
 		return $this;
 	}
@@ -90,7 +93,9 @@ class LemuriaOrders implements Orders, Reassignment
 			$default[] = [self::ID => $id, self::ORDERS => $instructions->serialize()];
 		}
 		$data = [self::CURRENT => $current, self::DEFAULT => $default];
-		return $this->saveData($data);
+		$this->saveData($data);
+		$this->profileAndLog(__METHOD__);
+		return $this;
 	}
 
 	public function clear(): static {

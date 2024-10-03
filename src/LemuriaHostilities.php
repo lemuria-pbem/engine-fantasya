@@ -9,9 +9,12 @@ use Lemuria\Engine\Hostilities;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
 use Lemuria\Model\Location;
+use Lemuria\ProfileTrait;
 
 class LemuriaHostilities implements Hostilities
 {
+	use ProfileTrait;
+
 	/**
 	 * @var array<int, array>
 	 */
@@ -111,6 +114,7 @@ class LemuriaHostilities implements Hostilities
 				$this->add($log);
 			}
 			$this->isLoaded = true;
+			$this->profileAndLog(__METHOD__);
 		}
 		return $this;
 	}
@@ -124,6 +128,7 @@ class LemuriaHostilities implements Hostilities
 			$battles[] = $log->serialize();
 		}
 		Lemuria::Game()->setHostilities($battles);
+		$this->profileAndLog(__METHOD__);
 		return $this;
 	}
 }

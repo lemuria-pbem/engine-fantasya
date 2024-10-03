@@ -9,10 +9,12 @@ use Lemuria\Engine\Score;
 use Lemuria\Exception\LemuriaException;
 use Lemuria\Identifiable;
 use Lemuria\Lemuria;
+use Lemuria\ProfileTrait;
 use Lemuria\SerializableTrait;
 
 class LemuriaScore implements Score
 {
+	use ProfileTrait;
 	use SerializableTrait;
 
 	private readonly EffectFactory $factory;
@@ -148,6 +150,7 @@ class LemuriaScore implements Score
 				$this->add($this->factory->create($data));
 			}
 			$this->isLoaded = true;
+			$this->profileAndLog(__METHOD__);
 		}
 		return $this;
 	}
@@ -165,6 +168,7 @@ class LemuriaScore implements Score
 			}
 		}
 		Lemuria::Game()->setEffects($effects);
+		$this->profileAndLog(__METHOD__);
 		return $this;
 	}
 

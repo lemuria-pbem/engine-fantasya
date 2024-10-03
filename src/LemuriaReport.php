@@ -17,11 +17,13 @@ use Lemuria\Model\Fantasya\Construction;
 use Lemuria\Model\Fantasya\Unit;
 use Lemuria\Model\Fantasya\Vessel;
 use Lemuria\Model\Reassignment;
+use Lemuria\ProfileTrait;
 use Lemuria\SerializableTrait;
 use Lemuria\Validate;
 
 class LemuriaReport implements Reassignment, Report
 {
+	use ProfileTrait;
 	use SerializableTrait;
 
 	private const string MESSAGES = 'messages';
@@ -107,6 +109,7 @@ class LemuriaReport implements Reassignment, Report
 
 			$this->removed  = $report[self::REMOVED];
 			$this->isLoaded = true;
+			$this->profileAndLog(__METHOD__);
 		}
 		return $this;
 	}
@@ -120,6 +123,7 @@ class LemuriaReport implements Reassignment, Report
 			$messages[] = $message->serialize();
 		}
 		Lemuria::Game()->setMessages([self::MESSAGES => $messages, self::REMOVED => $this->removed]);
+		$this->profileAndLog(__METHOD__);
 		return $this;
 	}
 
