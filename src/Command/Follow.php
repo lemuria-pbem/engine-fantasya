@@ -4,7 +4,6 @@ namespace Lemuria\Engine\Fantasya\Command;
 
 use Lemuria\Engine\Fantasya\Effect\FollowEffect;
 use Lemuria\Engine\Fantasya\Exception\InvalidCommandException;
-use Lemuria\Engine\Fantasya\Factory\DefaultActivityTrait;
 use Lemuria\Engine\Fantasya\Factory\ReassignTrait;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowerBehindMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\FollowerStoppedMessage;
@@ -26,14 +25,14 @@ use Lemuria\Model\Reassignment;
  */
 final class Follow extends Travel implements Reassignment
 {
-	use DefaultActivityTrait;
 	use ReassignTrait;
 
 	private ?Unit $leader;
 
 	public function getNewDefault(): ?UnitCommand {
 		if ($this->unit->Region() === $this->leader?->Region()) {
-			return parent::getNewDefault();
+			$this->preventDefault = false;
+			return $this->createNewDefault();
 		}
 		return null;
 	}
@@ -69,13 +68,27 @@ final class Follow extends Travel implements Reassignment
 		return $this->getReassignPhraseForParameter(1, $old, $new);
 	}
 
+	protected function createNewDefault(): self {
+		$n = $this->phrase->count();
+		if ($n >= 2 && strtolower($this->phrase->getParameter($n - 1)) === 'temp') {
+			$unitMapper = $this->context->UnitMapper();
+			$tempNumber = $this->phrase->getParameter($n);
+			if ($unitMapper->has($tempNumber)) {
+				$id     = $unitMapper->get($tempNumber)->getUnit()->Id();
+				$phrase = $this->phrase->getVerb() . ' ' . ($n > 2 ? $this->phrase->getParameter() . ' ' : '') . $id;
+				return new self(new Phrase($phrase), $this->context);
+			}
+		}
+		return parent::createNewDefault();
+	}
+
 	protected function initDirections(): void {
 		$n = $this->phrase->count();
-		if ($n < 1 || $n > 2) {
+		if ($n < 1 || $n > 3) {
 			throw new InvalidCommandException($this);
 		}
 		$p = $n;
-		if ($n === 2) {
+		if ($n >= 2) {
 			$p = match (strtolower($this->phrase->getParameter())) {
 				'temp'    => 1,
 				'einheit' => 2,

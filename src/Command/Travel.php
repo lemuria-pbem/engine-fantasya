@@ -355,12 +355,16 @@ class Travel extends UnitCommand implements Activity
 		if ($protocol->hasActivity($this)) {
 			$protocol->logCurrent($command);
 			if ($command->isAlternative()) {
-				$this->newDefault = $this;
+				$this->newDefault = $this->createNewDefault();
 				$protocol->addNewDefaults($this);
 				throw new AlternativeException($command);
 			}
 			throw new ActivityException($command);
 		}
+	}
+
+	protected function createNewDefault(): self {
+		return $this;
 	}
 
 	protected function initDirections(): void {
