@@ -69,15 +69,15 @@
 
 ^(erl|erla|erlau|erlaub|erlaube|erlauben) +[a-z]+$
 
-^@?(fol|folg|folge|folgen) +[a-z0-9]{1,6}$
-^@?(fol|folg|folge|folgen) +einheit +[a-z0-9]{1,6}$
+^@?(fol|folg|folge|folgen) +(temp +)?+[a-z0-9]{1,6}$
+^@?(fol|folg|folge|folgen) +einheit +(temp +)?+[a-z0-9]{1,6}$
 
 ^@?(ers|ersc|ersch|erscha|erschaf|erschaff|erschaffe|erschaffen) +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch)( +[a-z0-9]{1,6})?$
 
 ^@?(ger|gerü|gerüc|gerüch|gerücht|geru|gerue|geruec|geruech|geruecht).+$
 
-^@?(gi|gib|geb|gebe|geben) +[a-z0-9]{1,6}( +.*)?$
-^@?(gi|gib|geb|gebe|geben) +[a-z0-9]{1,6}( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
+^@?(gi|gib|geb|gebe|geben) +(temp +)?+[a-z0-9]{1,6}( +.*)?$
+^@?(gi|gib|geb|gebe|geben) +(temp +)?+[a-z0-9]{1,6}( +(kräuteralmanach|kraeuteralmanach|ring der unsichtbarkeit|schriftrolle|zauberbuch))? +[a-z0-9]{1,6}$
 
 ^@?(gr|gre|gren|grenz|grenze) +[0-9]+%? +[a-zäöüß ]+$
 ^@?(gr|gre|gren|grenz|grenze) +[a-zäöüß ]+ +nicht$
@@ -105,7 +105,7 @@
 
 ^@?(kon|kont|konta|kontak|kontakt|kontakti|kontaktie|kontaktier|kontaktiere|kontaktieren)( +[a-z0-9]{1,6})+$
 
-^@?(leh|lehr|lehre|lehren|lehrer)( +[a-z0-9]{1,6})+$
+^@?(leh|lehr|lehre|lehren|lehrer)( +(temp +)?+[a-z0-9]{1,6})+$
 
 ^@?(ler|lern|lerne|lernen) +(alchemie|armbrustschießen|armbrustschiessen|ausdauer|bergbau|bogenbau|bogenschießen|bogenschiessen|burgenbau|handel|handeln|hiebwaffen|holzfaellen|holzfällen|juwelierkunst|juwelierskunst|katapultbedienung|katapultschießen|katapultschiessen|kräuterkunde|kraeuterkunde|magie|navigation|navigieren|pferdedressur|reiten|ruestungsbau|rüstungsbau|schiffbau|segeln|speerkämpfen|speerkaempfen|speerkampf|spionage|spionieren|stangenwaffen|steinbau|steuereintreiben|steuereintreibung|strassenbau|straßenbau|taktik|tarnen|tarnung|unterhalten|unterhaltung|waffenbauen|waffenbau|wagenbau|wahrnehmen|wahrnehmung)( +[0-9]+)?$
 
