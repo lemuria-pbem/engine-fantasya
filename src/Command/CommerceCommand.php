@@ -305,8 +305,13 @@ abstract class CommerceCommand extends UnitCommand implements Activity, Merchant
 		if ($price > 0) {
 			return $this->calculatePriceThresholdInRealm($price);
 		}
+		$regions = $this->distributor->Regions();
+		if (empty($regions)) {
+			return 0;
+		}
+
 		$threshold = [];
-		foreach ($this->distributor->Regions() as $region) {
+		foreach ($regions as $region) {
 			$luxuries = $region->Luxuries();
 			$offer    = $luxuries->Offer();
 			if ($offer->Commodity() === $this->commodity) {
