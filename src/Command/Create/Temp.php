@@ -117,11 +117,10 @@ final class Temp extends UnitCommand implements Immediate
 	 * Create new ID for created Unit.
 	 */
 	private function createId(): Id {
-		$id     = null;
-		$temp   = $this->getTempNumber();
-		$number = (int)$temp;
-		if ($number > 0) {
-			$id = new Id($number);
+		$id   = null;
+		$temp = $this->getTempNumber();
+		if (preg_match('/^\d+$/', $temp) === 1) {
+			$id = new Id((int)$temp);
 		} else {
 			try {
 				$id = Id::fromId($temp);
