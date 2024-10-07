@@ -21,8 +21,12 @@ class BattlePlan
 		if ($place->Place() === Place::Region) {
 			return Place::Region;
 		}
-		$from = new BattlePlace($attacker);
-		return $from->__toString() === $place->__toString() ? $place->Place() : Place::None;
+		$from   = new BattlePlace($attacker);
+		$isSame = $from->__toString() === $place->__toString();
+		if ($isSame) {
+			return $place->Place();
+		}
+		return $defender->IsGuarding() ? Place::Region : Place::None;
 	}
 
 	public function __construct(array &$battles) {

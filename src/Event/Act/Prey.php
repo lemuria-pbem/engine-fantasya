@@ -30,7 +30,7 @@ class Prey extends Seek
 			if ($unit->Party()->Type() !== Type::Player) {
 				continue;
 			}
-			if ($unit->Construction() || $unit->Vessel()) {
+			if (($unit->Construction() || $unit->Vessel()) && !$unit->IsGuarding()) {
 				continue;
 			}
 			if ($this->mustNotBeAttacked($unit)) {

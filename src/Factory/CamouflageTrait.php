@@ -25,12 +25,9 @@ trait CamouflageTrait
 		if ($other === $party) {
 			return true;
 		}
-
-		$construction = $unit->Construction();
-		if ($construction && $target->Construction() === $construction) {
+		if ($target->Construction() || $target->Vessel()) {
 			return true;
 		}
-
 		$outlook     = new Outlook(new Census($party));
 		$apparitions = $outlook->getApparitions($target->Region());
 		if ($apparitions->has($target->Id())) {

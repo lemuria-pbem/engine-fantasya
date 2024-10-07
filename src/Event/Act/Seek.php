@@ -69,7 +69,7 @@ class Seek implements Act
 				}
 				continue;
 			}
-			if ($unit->Construction() || $unit->Vessel()) {
+			if (($unit->Construction() || $unit->Vessel()) && !$unit->IsGuarding()) {
 				continue;
 			}
 			if ($unit->Size() > 0 && $calculus->canDiscover($unit) && $this->hasSpotted($unit)) {

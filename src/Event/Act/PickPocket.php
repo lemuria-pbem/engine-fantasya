@@ -47,9 +47,6 @@ class PickPocket implements Act
 		while (!$this->enemy->isEmpty() && $triesLeft-- > 0) {
 			$enemy = $this->enemy->random();
 			$this->enemy->remove($enemy);
-			if ($enemy->Construction()) {
-				continue;
-			}
 
 			$calculus = new Calculus($enemy);
 			if ($calculus->canDiscover($this->unit)) {
