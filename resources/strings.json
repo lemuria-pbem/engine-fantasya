@@ -1144,7 +1144,7 @@
 		"VesselResourcesMessage": "Die Einheit $id hat kein Baumaterial, um am Schiff $vessel zu bauen.",
 		"VesselSpaceMessage": "Die Einheit $id kann {g/akk:kein:$ship} bauen - es ist nicht genügend Platz im Hafen vorhanden.",
 		"VesselUnableMessage": "Die Einheit $id hat nicht genügend Erfahrung in $talent, um {g/akk:ein:$ship} zu bauen.",
-		"VisitMessage": "Die Einheit $id sagt: „$message“",
+		"VisitMessage": "Die Einheit $sender sagt: „$message“",
 		"VisitNoMarketMessage": "Die Einheit $id kann niemanden besuchen - es gibt hier keinen Markt.",
 		"VisitNoRumorMessage": "Die Einheit $id hat sich mit der Einheit $unit unterhalten, aber nichts außergewöhnliches dabei erfahren.",
 		"VisitNoUnitMessage": "Die Einheit $id kann die Einheit $unit nicht finden, um sie zu besuchen.",
