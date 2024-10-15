@@ -17,6 +17,7 @@ use Lemuria\Engine\Fantasya\Message\Unit\TeachEmptyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachExceptionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachFleetMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachFleetNothingMessage;
+use Lemuria\Engine\Fantasya\Message\Unit\TeachForeignMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachPartyMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachRegionMessage;
 use Lemuria\Engine\Fantasya\Message\Unit\TeachSelfMessage;
@@ -83,8 +84,14 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 	}
 
 	public function hasTaught(Learn $student): void {
+		$unit = $student->Unit();
+		if ($this->unit->Party() !== $unit->Party()) {
+			$talent = $student->getTalent();
+			$level  = $this->context->getCalculus($unit)->ability($talent)->Level();
+			$this->message(TeachForeignMessage::class)->e($unit)->s($talent)->p($level);
+		}
 		if (!$this->canTeach($student) && $student->getLevel() <= 0) {
-			$id = $student->Unit()->Id()->Id();
+			$id = $unit->Id()->Id();
 			unset($this->students[$id]);
 			$ids = [];
 			foreach ($this->students as $student) {

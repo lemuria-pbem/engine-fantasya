@@ -1028,6 +1028,7 @@
 		"TeachExceptionMessage": "Die Einheit $id kann nicht lehren: $error",
 		"TeachFleetMessage": "Die Einheit $id übernimmt Transporte im Reich und kann nur teilweise lehren.",
 		"TeachFleetNothingMessage": "Die Einheit $id ist mit Transporten im Reich zu beschäftigt, um zu lehren.",
+		"TeachForeignMessage": "Unser Schüler $student beherrscht jetzt $talent auf Stufe $ability.",
 		"TeachPartyMessage": "Die Einheit $id kann die Einheit $unit der Partei $party nicht lehren.",
 		"TeachRegionMessage": "Die Einheit $id kann die Einheit $student nicht lehren: Sie ist nicht in der Region.",
 		"TeachSelfMessage": "Die Einheit $id kann sich nicht selbst lehren.",
