@@ -63,6 +63,8 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 
 	private bool $logCommit = false;
 
+	private bool $abortTeaching = false;
+
 	public function reassign(Id $oldId, Identifiable $identifiable): void {
 		if ($this->checkReassignmentDomain($identifiable->Catalog())) {
 			$old       = (string)$oldId;
@@ -138,13 +140,20 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 		} else {
 			// Add all units in region as possible students.
 			foreach ($this->unit->Region()->Residents() as $unit) {
-				$this->size += $this->teach($unit);
-				$ids[]       = $unit->Id();
+				if ($this->checkUnit($unit)) {
+					$this->size += $this->teach($unit);
+					$ids[]       = $unit->Id();
+				}
 			}
 		}
-		$this->createNewDefault($ids);
-		$this->logCommit = true;
-		$this->commitCommand($this);
+		if (empty($ids)) {
+			$this->abortTeaching = true;
+			Lemuria::Log()->debug('Teach command execution skipped due to missing students.', ['command' => $this]);
+		} else {
+			$this->createNewDefault($ids);
+			$this->logCommit = true;
+			$this->commitCommand($this);
+		}
 	}
 
 	protected function run(): void {
@@ -178,6 +187,10 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 		}
 	}
 
+	protected function checkSize(): bool {
+		return parent::checkSize() && !$this->abortTeaching;
+	}
+
 	private function checkUnit(Unit $unit): bool {
 		if ($unit->Size() <= 0) {
 			$this->message(TeachEmptyMessage::class)->e($unit);
@@ -194,7 +207,7 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 			return false;
 		}
 		if ($unit->Party() === $this->unit->Party()) {
-			return true;
+			return !$this->teacher->hasStudent($unit);
 		}
 		if (!$this->checkVisibility($this->unit, $unit)) {
 			if (!$this->isAlternative()) {
@@ -202,7 +215,7 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 			}
 			return false;
 		}
-		return true;
+		return !$this->teacher->hasStudent($unit);
 	}
 
 	/**
@@ -266,7 +279,7 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 				if ($this->canTeach($learn)) {
 					$calculus->addTeacher($this);
 					$this->students[$unit->Id()->Id()] = $learn;
-					$this->teacher->addStudents($learn->Unit()->Size());
+					$this->teacher->addStudent($learn->Unit());
 					return true;
 				}
 				return false;
