@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace Lemuria\Engine\Fantasya\Storage;
 
 use Lemuria\Engine\Debut;
-use Lemuria\Engine\Fantasya\Factory\LemuriaCatalog;
 use Lemuria\Engine\Fantasya\Factory\Namer\DefaultNamer;
 use Lemuria\Engine\Fantasya\LemuriaDebut;
 use Lemuria\Engine\Fantasya\LemuriaHostilities;
@@ -26,6 +25,7 @@ use Lemuria\Model\Calendar;
 use Lemuria\Model\Catalog;
 use Lemuria\Model\Config;
 use Lemuria\Model\Calendar\BaseCalendar;
+use Lemuria\Model\Fantasya\Factory\LemuriaCatalog;
 use Lemuria\Model\Game;
 use Lemuria\Model\Fantasya\Exception\JsonException;
 use Lemuria\Model\Fantasya\Factory\LemuriaRegistry;
