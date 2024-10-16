@@ -253,9 +253,14 @@ final class Teach extends UnitCommand implements Activity, Reassignment
 	}
 
 	private function isAllowedToTeach(Unit $student): bool {
-		$party = $this->unit->Party();
+		$party   = $this->unit->Party();
+		$foreign = $student->Party();
 		// Teacher and student of the same party is always allowed.
-		if ($student->Party()->Id()->Id() === $party->Id()->Id()) {
+		if ($foreign->Id()->Id() === $party->Id()->Id()) {
+			return true;
+		}
+		// A teacher that has been contacted is allowed.
+		if ($foreign->Diplomacy()->hasContact($this->unit)) {
 			return true;
 		}
 		// If teacher is NPC, there is a teaching quest active.
